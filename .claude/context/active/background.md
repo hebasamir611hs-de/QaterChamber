@@ -219,8 +219,12 @@ Dev / QA / UAT / Prod — not detailed in the BRD; confirm with the client/iHori
   chatbot, TTS, sitemap, and search. Bilingual fields are the default for nearly
   every content type in this BRD — treat a missing Arabic field as a real defect,
   not an edge case.
-- **Accessibility:** keyboard navigation, header contrast toggle, zoom in/out are
-  explicit BRD requirements (not just nice-to-have).
+- **Accessibility:** keyboard navigation, header contrast toggle (Normal/High
+  Contrast), zoom in/out are explicit BRD requirements (not just nice-to-have).
+- **Theme:** Light/Dark mode toggle exists on the live site *(confirmed by QA
+  Manager 2026-08-12 — not documented in the BRD text itself)*. Treat as core,
+  same coverage tier as bilingual and contrast — not a gap just because the BRD
+  is silent on it.
 
 ## Scope Boundaries — Critical for Analysis
 The BRD includes an explicit **"Approved Out of Scope" list** (iHorizons will build
