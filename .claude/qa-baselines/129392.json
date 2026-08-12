@@ -1,0 +1,670 @@
+{
+  "analysed": "2026-08-12",
+  "mode": "Normal",
+  "budget": 83,
+  "delivered": 83,
+  "categories": {
+    "UI": 17,
+    "Compatibility": 5,
+    "Auth": 5,
+    "Functional-High": 14,
+    "Functional-Low": 38,
+    "Edge": 4
+  },
+  "inventory": {
+    "OBJ": 10,
+    "FLD": 13,
+    "CTL": 10,
+    "ST": 10,
+    "ROL": 4,
+    "MSG": 5,
+    "AC": 18,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 4
+  },
+  "basis": "Description only - no AC; Figma verified via REST (1579-26248 EN, 1579-26281 AR). Rev 2 2026-08-12: dark mode confirmed in scope by QA Manager, ENV-4 added with TC-080/081/082/083 (+4). Browser matrix, cache TTL, fallback language and default open behaviour CLOSED by QA Manager (forget it). Dark cases assert theme behaviour not hex tokens (Figma quota exhausted).",
+  "case_ids": [
+    "ABOUT-QATARCHAMBER-TC-001",
+    "ABOUT-QATARCHAMBER-TC-002",
+    "ABOUT-QATARCHAMBER-TC-003",
+    "ABOUT-QATARCHAMBER-TC-004",
+    "ABOUT-QATARCHAMBER-TC-005",
+    "ABOUT-QATARCHAMBER-TC-006",
+    "ABOUT-QATARCHAMBER-TC-007",
+    "ABOUT-QATARCHAMBER-TC-008",
+    "ABOUT-QATARCHAMBER-TC-009",
+    "ABOUT-QATARCHAMBER-TC-010",
+    "ABOUT-QATARCHAMBER-TC-011",
+    "ABOUT-QATARCHAMBER-TC-012",
+    "ABOUT-QATARCHAMBER-TC-013",
+    "ABOUT-QATARCHAMBER-TC-014",
+    "ABOUT-QATARCHAMBER-TC-015",
+    "ABOUT-QATARCHAMBER-TC-016",
+    "ABOUT-QATARCHAMBER-TC-017",
+    "ABOUT-QATARCHAMBER-TC-018",
+    "ABOUT-QATARCHAMBER-TC-019",
+    "ABOUT-QATARCHAMBER-TC-020",
+    "ABOUT-QATARCHAMBER-TC-021",
+    "ABOUT-QATARCHAMBER-TC-022",
+    "ABOUT-QATARCHAMBER-TC-023",
+    "ABOUT-QATARCHAMBER-TC-024",
+    "ABOUT-QATARCHAMBER-TC-025",
+    "ABOUT-QATARCHAMBER-TC-026",
+    "ABOUT-QATARCHAMBER-TC-027",
+    "ABOUT-QATARCHAMBER-TC-028",
+    "ABOUT-QATARCHAMBER-TC-029",
+    "ABOUT-QATARCHAMBER-TC-030",
+    "ABOUT-QATARCHAMBER-TC-031",
+    "ABOUT-QATARCHAMBER-TC-032",
+    "ABOUT-QATARCHAMBER-TC-033",
+    "ABOUT-QATARCHAMBER-TC-034",
+    "ABOUT-QATARCHAMBER-TC-035",
+    "ABOUT-QATARCHAMBER-TC-036",
+    "ABOUT-QATARCHAMBER-TC-037",
+    "ABOUT-QATARCHAMBER-TC-038",
+    "ABOUT-QATARCHAMBER-TC-039",
+    "ABOUT-QATARCHAMBER-TC-040",
+    "ABOUT-QATARCHAMBER-TC-041",
+    "ABOUT-QATARCHAMBER-TC-042",
+    "ABOUT-QATARCHAMBER-TC-043",
+    "ABOUT-QATARCHAMBER-TC-044",
+    "ABOUT-QATARCHAMBER-TC-045",
+    "ABOUT-QATARCHAMBER-TC-046",
+    "ABOUT-QATARCHAMBER-TC-047",
+    "ABOUT-QATARCHAMBER-TC-048",
+    "ABOUT-QATARCHAMBER-TC-049",
+    "ABOUT-QATARCHAMBER-TC-050",
+    "ABOUT-QATARCHAMBER-TC-051",
+    "ABOUT-QATARCHAMBER-TC-052",
+    "ABOUT-QATARCHAMBER-TC-053",
+    "ABOUT-QATARCHAMBER-TC-054",
+    "ABOUT-QATARCHAMBER-TC-055",
+    "ABOUT-QATARCHAMBER-TC-056",
+    "ABOUT-QATARCHAMBER-TC-057",
+    "ABOUT-QATARCHAMBER-TC-058",
+    "ABOUT-QATARCHAMBER-TC-059",
+    "ABOUT-QATARCHAMBER-TC-060",
+    "ABOUT-QATARCHAMBER-TC-061",
+    "ABOUT-QATARCHAMBER-TC-062",
+    "ABOUT-QATARCHAMBER-TC-063",
+    "ABOUT-QATARCHAMBER-TC-064",
+    "ABOUT-QATARCHAMBER-TC-065",
+    "ABOUT-QATARCHAMBER-TC-066",
+    "ABOUT-QATARCHAMBER-TC-067",
+    "ABOUT-QATARCHAMBER-TC-068",
+    "ABOUT-QATARCHAMBER-TC-069",
+    "ABOUT-QATARCHAMBER-TC-070",
+    "ABOUT-QATARCHAMBER-TC-071",
+    "ABOUT-QATARCHAMBER-TC-072",
+    "ABOUT-QATARCHAMBER-TC-073",
+    "ABOUT-QATARCHAMBER-TC-074",
+    "ABOUT-QATARCHAMBER-TC-075",
+    "ABOUT-QATARCHAMBER-TC-076",
+    "ABOUT-QATARCHAMBER-TC-077",
+    "ABOUT-QATARCHAMBER-TC-078",
+    "ABOUT-QATARCHAMBER-TC-079",
+    "ABOUT-QATARCHAMBER-TC-080",
+    "ABOUT-QATARCHAMBER-TC-081",
+    "ABOUT-QATARCHAMBER-TC-082",
+    "ABOUT-QATARCHAMBER-TC-083"
+  ],
+  "cases": {
+    "ABOUT-QATARCHAMBER-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "AC-1",
+        "ENV-1",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-002": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-10",
+        "AC-1",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "AC-3",
+        "ENV-1",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-004": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-3",
+        "ENV-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-9",
+        "ENV-1",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-006": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-8",
+        "AC-2",
+        "ENV-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-007": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-4",
+        "AC-4"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-008": {
+      "category": "UI",
+      "traceability": [
+        "AC-5"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-009": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1",
+        "AC-8"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-010": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2",
+        "AC-8"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-011": {
+      "category": "UI",
+      "traceability": [
+        "AC-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-012": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-013": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-014": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-3"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-015": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-016": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-017": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3",
+        "AC-10"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-018": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-019": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-4",
+        "MSG-4"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-020": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-8",
+        "ST-2",
+        "OBJ-1",
+        "AC-9",
+        "AC-13",
+        "MSG-5"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-021": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-022": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-9",
+        "ST-3"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-023": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-6",
+        "ST-1",
+        "AC-7",
+        "AC-14"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-024": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-7",
+        "ST-4",
+        "AC-12"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-025": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-8",
+        "OBJ-6",
+        "OBJ-7",
+        "AC-15"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-026": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-3",
+        "OBJ-5",
+        "AC-6"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-027": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-5"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-028": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-5"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-029": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-10"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-030": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-10"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-031": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-032": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-4"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-033": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-8",
+        "AC-9"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-034": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-035": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-036": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-037": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-038": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-039": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-040": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-041": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-042": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-043": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "MSG-3",
+        "AC-11"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-044": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "MSG-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-045": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-046": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-047": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5",
+        "MSG-3"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-048": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5",
+        "MSG-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-049": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-050": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-051": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-052": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-053": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-054": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-055": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-056": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-057": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-058": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-059": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-060": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-061": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-062": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-063": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-064": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-065": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-066": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10",
+        "AC-11"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-067": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-068": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-069": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-070": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-071": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1",
+        "FLD-12",
+        "FLD-13"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-072": {
+      "category": "Edge",
+      "traceability": [
+        "ST-5",
+        "AC-16"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-073": {
+      "category": "Edge",
+      "traceability": [
+        "ST-6",
+        "AC-17"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-074": {
+      "category": "Edge",
+      "traceability": [
+        "ST-7",
+        "AC-18"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-075": {
+      "category": "Edge",
+      "traceability": [
+        "ST-9",
+        "ST-10",
+        "AC-6"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-076": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-10",
+        "LNG-2",
+        "AC-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-077": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-10",
+        "LNG-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-078": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-8",
+        "LNG-2",
+        "AC-8"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-079": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-8",
+        "LNG-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-080": {
+      "category": "UI",
+      "traceability": [
+        "ENV-4",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-081": {
+      "category": "UI",
+      "traceability": [
+        "ENV-4",
+        "LNG-2"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-082": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-4",
+        "ENV-1"
+      ]
+    },
+    "ABOUT-QATARCHAMBER-TC-083": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-4",
+        "ENV-3"
+      ]
+    }
+  }
+}

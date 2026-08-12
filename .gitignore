@@ -1,27 +1,47 @@
-# Secrets - NEVER commit. (This file must stay UTF-8: git cannot read a UTF-16
-# .gitignore, which is how a live PAT nearly got committed once.)
+# --- Secrets ---
 .env
-.env.*
-!.env.example
+.auth/
 *.pat
 *.token
 
-# Machine-local Claude Code config (plugin install paths, personal permissions)
+
+## --- Settings ---
 .claude/settings.local.json
 
-# Project QA context IS committed - the team shares it:
-#   .claude/context/active/background.md
-#   .claude/context/active/standards.md
 
-# Environment / cache
+
+# --- Generated test artifacts ---
+reports/
+.playwright-mcp/
+Temp/
+allure-results/
+allure-report/
+*.webm
+*.mp4
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+# --- Local Environment ---
+.vscode/
 .venv/
 __pycache__/
 .pytest_cache/
 
-# Outputs
+
+# --- Outputs ---
 outputs/
 deliverables/
 *.log
+temp/
 
-# QA coverage baselines are COMMITTED - they are the anti-regression record
-# (.claude/qa-baselines/<PBI>.json). Do not ignore them.
+
+
+
+
+

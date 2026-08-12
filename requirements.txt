@@ -1,0 +1,18 @@
+# QA Automation Framework — pinned dependencies
+# --- Test runner + reporting (every surface) ---
+pytest==8.3.3
+pytest-base-url==2.1.0
+pytest-xdist==3.6.1
+python-dotenv==1.0.1
+allure-pytest==2.13.5
+
+# --- Web (Playwright) ---
+playwright==1.47.0
+pytest-playwright==0.5.2
+
+# --- Accessibility contrast audit (PBI 133381 "QC-GBL-003 — Accessibility
+#     Tools", GLOBAL-ACCESSIBILITY-TC-005) — NEW dependency added by this
+#     batch, NOT installed in the authoring session (disclosed in
+#     web/tests/header/test_accessibility.py). Run `pip install -r
+#     requirements.txt` before executing that test. ---
+axe-playwright-python==0.1.4

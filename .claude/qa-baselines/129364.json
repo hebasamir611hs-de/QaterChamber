@@ -1,456 +1,225 @@
 {
-  "pbi": "129364",
-  "analysed": "2026-08-11",
+  "analysed": "2026-08-12",
   "mode": "Normal",
-  "budget": 51,
-  "delivered": 51,
+  "budget": 41,
+  "delivered": 41,
   "categories": {
     "UI": 13,
-    "Compatibility": 8,
+    "Compatibility": 3,
     "Auth": 1,
-    "Functional-High": 10,
-    "Functional-Low": 17,
-    "Edge": 2
+    "Functional-High": 6,
+    "Functional-Low": 15,
+    "Edge": 3
   },
-  "inventory": {
-    "OBJ": 5,
-    "CTL": 8,
-    "FLD": 3,
-    "ST": 11,
-    "ROL": 3,
-    "MSG": 9,
-    "SUR": 3
-  },
+  "inventory": {},
+  "basis": "QC-GBL-003 Accessibility Tools. FIRST baseline, written 2026-08-12 retroactively after Phase 2 injection completed - the PBI was analysed and injected before any baseline was persisted. INCOMPLETE BY CONSTRUCTION: cases TC-001..TC-033 are recovered Revision-1 cases that carry NO per-case traceability, so the requirement inventory cannot be reconstructed and is recorded empty; audit_coverage cannot be run faithfully against this snapshot. The categories and case_ids ARE authoritative - derived from the injected payload (inject_129364.json), 41/41 matching Azure work items 134628-134668. Backfilling traceability on TC-001..TC-033 is the honest fix if a full coverage gate run is ever wanted. validate_test_case_tags PASSED 41/41 (0 hard, 32 soft warnings on the Accessibility tag, since cleared - Accessibility added to standards.md Axis-5 on 2026-08-12). High contrast vs dark mode precedence is undefined in the spec; TC-041 asserts determinism and legibility rather than a winner. NOTE: PBI 133381 is a byte-identical copy of this PBI in the QA AI\\Qatar Chamber - Demo iteration - QA Manager confirmed it was a drill, disregard it; 129364 is the live target.",
   "case_ids": [
-    "QC-A11Y-TC-001",
-    "QC-A11Y-TC-002",
-    "QC-A11Y-TC-003",
-    "QC-A11Y-TC-004",
-    "QC-A11Y-TC-005",
-    "QC-A11Y-TC-006",
-    "QC-A11Y-TC-007",
-    "QC-A11Y-TC-008",
-    "QC-A11Y-TC-009",
-    "QC-A11Y-TC-010",
-    "QC-A11Y-TC-011",
-    "QC-A11Y-TC-012",
-    "QC-A11Y-TC-013",
-    "QC-A11Y-TC-014",
-    "QC-A11Y-TC-015",
-    "QC-A11Y-TC-016",
-    "QC-A11Y-TC-017",
-    "QC-A11Y-TC-018",
-    "QC-A11Y-TC-019",
-    "QC-A11Y-TC-020",
-    "QC-A11Y-TC-021",
-    "QC-A11Y-TC-022",
-    "QC-A11Y-TC-023",
-    "QC-A11Y-TC-024",
-    "QC-A11Y-TC-025",
-    "QC-A11Y-TC-026",
-    "QC-A11Y-TC-027",
-    "QC-A11Y-TC-028",
-    "QC-A11Y-TC-029",
-    "QC-A11Y-TC-030",
-    "QC-A11Y-TC-031",
-    "QC-A11Y-TC-032",
-    "QC-A11Y-TC-033",
-    "QC-A11Y-TC-034",
-    "QC-A11Y-TC-035",
-    "QC-A11Y-TC-036",
-    "QC-A11Y-TC-037",
-    "QC-A11Y-TC-038",
-    "QC-A11Y-TC-039",
-    "QC-A11Y-TC-040",
-    "QC-A11Y-TC-041",
-    "QC-A11Y-TC-042",
-    "QC-A11Y-TC-043",
-    "QC-A11Y-TC-044",
-    "QC-A11Y-TC-045",
-    "QC-A11Y-TC-046",
-    "QC-A11Y-TC-047",
-    "QC-A11Y-TC-048",
-    "QC-A11Y-TC-049",
-    "QC-A11Y-TC-050",
-    "QC-A11Y-TC-051"
+    "GLOBAL-ACCESSIBILITY-TC-001",
+    "GLOBAL-ACCESSIBILITY-TC-002",
+    "GLOBAL-ACCESSIBILITY-TC-003",
+    "GLOBAL-ACCESSIBILITY-TC-004",
+    "GLOBAL-ACCESSIBILITY-TC-005",
+    "GLOBAL-ACCESSIBILITY-TC-006",
+    "GLOBAL-ACCESSIBILITY-TC-007",
+    "GLOBAL-ACCESSIBILITY-TC-008",
+    "GLOBAL-ACCESSIBILITY-TC-009",
+    "GLOBAL-ACCESSIBILITY-TC-010",
+    "GLOBAL-ACCESSIBILITY-TC-011",
+    "GLOBAL-ACCESSIBILITY-TC-012",
+    "GLOBAL-ACCESSIBILITY-TC-013",
+    "GLOBAL-ACCESSIBILITY-TC-014",
+    "GLOBAL-ACCESSIBILITY-TC-015",
+    "GLOBAL-ACCESSIBILITY-TC-016",
+    "GLOBAL-ACCESSIBILITY-TC-017",
+    "GLOBAL-ACCESSIBILITY-TC-018",
+    "GLOBAL-ACCESSIBILITY-TC-019",
+    "GLOBAL-ACCESSIBILITY-TC-020",
+    "GLOBAL-ACCESSIBILITY-TC-021",
+    "GLOBAL-ACCESSIBILITY-TC-022",
+    "GLOBAL-ACCESSIBILITY-TC-023",
+    "GLOBAL-ACCESSIBILITY-TC-024",
+    "GLOBAL-ACCESSIBILITY-TC-025",
+    "GLOBAL-ACCESSIBILITY-TC-026",
+    "GLOBAL-ACCESSIBILITY-TC-027",
+    "GLOBAL-ACCESSIBILITY-TC-028",
+    "GLOBAL-ACCESSIBILITY-TC-029",
+    "GLOBAL-ACCESSIBILITY-TC-030",
+    "GLOBAL-ACCESSIBILITY-TC-031",
+    "GLOBAL-ACCESSIBILITY-TC-032",
+    "GLOBAL-ACCESSIBILITY-TC-033",
+    "GLOBAL-ACCESSIBILITY-TC-034",
+    "GLOBAL-ACCESSIBILITY-TC-035",
+    "GLOBAL-ACCESSIBILITY-TC-036",
+    "GLOBAL-ACCESSIBILITY-TC-037",
+    "GLOBAL-ACCESSIBILITY-TC-038",
+    "GLOBAL-ACCESSIBILITY-TC-039",
+    "GLOBAL-ACCESSIBILITY-TC-040",
+    "GLOBAL-ACCESSIBILITY-TC-041"
   ],
   "cases": {
-    "QC-A11Y-TC-001": {
+    "GLOBAL-ACCESSIBILITY-TC-001": {
       "category": "UI",
-      "traceability": [
-        "OBJ-1",
-        "CTL-1",
-        "FLD-1",
-        "ROL-1"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-002": {
+    "GLOBAL-ACCESSIBILITY-TC-002": {
       "category": "UI",
-      "traceability": [
-        "CTL-1",
-        "OBJ-2"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-003": {
+    "GLOBAL-ACCESSIBILITY-TC-003": {
       "category": "UI",
-      "traceability": [
-        "CTL-1",
-        "OBJ-2"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-004": {
+    "GLOBAL-ACCESSIBILITY-TC-004": {
       "category": "UI",
-      "traceability": [
-        "CTL-1",
-        "ST-2"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-005": {
+    "GLOBAL-ACCESSIBILITY-TC-005": {
       "category": "UI",
-      "traceability": [
-        "OBJ-1",
-        "SUR-1"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-006": {
+    "GLOBAL-ACCESSIBILITY-TC-006": {
       "category": "UI",
-      "traceability": [
-        "CTL-2",
-        "OBJ-2"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-007": {
+    "GLOBAL-ACCESSIBILITY-TC-007": {
       "category": "UI",
-      "traceability": [
-        "CTL-3",
-        "CTL-4",
-        "OBJ-2"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-008": {
+    "GLOBAL-ACCESSIBILITY-TC-008": {
       "category": "UI",
-      "traceability": [
-        "CTL-5",
-        "OBJ-2"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-009": {
+    "GLOBAL-ACCESSIBILITY-TC-009": {
       "category": "UI",
-      "traceability": [
-        "ST-1",
-        "FLD-1"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-010": {
-      "category": "UI",
-      "traceability": [
-        "CTL-1",
-        "ROL-1"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-010": {
+      "category": "Functional-High",
+      "traceability": []
     },
-    "QC-A11Y-TC-011": {
-      "category": "UI",
-      "traceability": [
-        "CTL-6",
-        "OBJ-3",
-        "SUR-2",
-        "ST-8",
-        "ROL-2"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-011": {
+      "category": "Functional-High",
+      "traceability": []
     },
-    "QC-A11Y-TC-012": {
-      "category": "UI",
-      "traceability": [
-        "FLD-2",
-        "FLD-3",
-        "OBJ-4",
-        "SUR-3"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-012": {
+      "category": "Functional-High",
+      "traceability": []
     },
-    "QC-A11Y-TC-013": {
-      "category": "UI",
-      "traceability": [
-        "OBJ-1",
-        "SUR-1"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-013": {
+      "category": "Functional-High",
+      "traceability": []
     },
-    "QC-A11Y-TC-014": {
-      "category": "Compatibility",
-      "traceability": [
-        "SUR-1"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-014": {
+      "category": "Functional-High",
+      "traceability": []
     },
-    "QC-A11Y-TC-015": {
-      "category": "Compatibility",
-      "traceability": [
-        "SUR-1"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-015": {
+      "category": "Functional-High",
+      "traceability": []
     },
-    "QC-A11Y-TC-016": {
-      "category": "Compatibility",
-      "traceability": [
-        "SUR-1"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-016": {
+      "category": "Functional-Low",
+      "traceability": []
     },
-    "QC-A11Y-TC-017": {
-      "category": "Compatibility",
-      "traceability": [
-        "SUR-1"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-017": {
+      "category": "Functional-Low",
+      "traceability": []
     },
-    "QC-A11Y-TC-018": {
-      "category": "Compatibility",
-      "traceability": [
-        "SUR-1"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-018": {
+      "category": "Functional-Low",
+      "traceability": []
     },
-    "QC-A11Y-TC-019": {
-      "category": "Compatibility",
-      "traceability": [
-        "SUR-1"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-019": {
+      "category": "Functional-Low",
+      "traceability": []
     },
-    "QC-A11Y-TC-020": {
-      "category": "Compatibility",
-      "traceability": [
-        "SUR-1"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-020": {
+      "category": "Functional-Low",
+      "traceability": []
     },
-    "QC-A11Y-TC-021": {
-      "category": "Compatibility",
-      "traceability": [
-        "SUR-1"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-021": {
+      "category": "Functional-Low",
+      "traceability": []
     },
-    "QC-A11Y-TC-022": {
+    "GLOBAL-ACCESSIBILITY-TC-022": {
+      "category": "Functional-Low",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-023": {
+      "category": "Functional-Low",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-024": {
+      "category": "Functional-Low",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-025": {
+      "category": "Functional-Low",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-026": {
+      "category": "Functional-Low",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-027": {
+      "category": "Functional-Low",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-028": {
+      "category": "Functional-Low",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-029": {
+      "category": "Functional-Low",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-030": {
+      "category": "Functional-Low",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-031": {
       "category": "Auth",
-      "traceability": [
-        "ROL-3",
-        "MSG-3",
-        "MSG-4",
-        "SUR-2"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-023": {
-      "category": "Functional-High",
-      "traceability": [
-        "CTL-2",
-        "ST-3"
-      ]
-    },
-    "QC-A11Y-TC-024": {
-      "category": "Functional-High",
-      "traceability": [
-        "CTL-3",
-        "ST-4"
-      ]
-    },
-    "QC-A11Y-TC-025": {
-      "category": "Functional-High",
-      "traceability": [
-        "CTL-4",
-        "ST-4"
-      ]
-    },
-    "QC-A11Y-TC-026": {
-      "category": "Functional-High",
-      "traceability": [
-        "CTL-5",
-        "ST-3",
-        "ST-4"
-      ]
-    },
-    "QC-A11Y-TC-027": {
-      "category": "Functional-High",
-      "traceability": [
-        "ST-5",
-        "OBJ-5"
-      ]
-    },
-    "QC-A11Y-TC-028": {
-      "category": "Functional-High",
-      "traceability": [
-        "ROL-1",
-        "CTL-1",
-        "CTL-2",
-        "CTL-3",
-        "CTL-4",
-        "CTL-5"
-      ]
-    },
-    "QC-A11Y-TC-029": {
-      "category": "Functional-High",
-      "traceability": [
-        "ST-1",
-        "ST-9",
-        "SUR-2",
-        "SUR-1",
-        "MSG-8"
-      ]
-    },
-    "QC-A11Y-TC-030": {
-      "category": "Functional-High",
-      "traceability": [
-        "FLD-2",
-        "ROL-1"
-      ]
-    },
-    "QC-A11Y-TC-031": {
-      "category": "Functional-High",
-      "traceability": [
-        "FLD-3",
-        "ROL-1"
-      ]
-    },
-    "QC-A11Y-TC-032": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-1",
-        "CTL-6",
-        "CTL-7",
-        "ROL-2",
-        "MSG-8"
-      ]
-    },
-    "QC-A11Y-TC-033": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-1",
-        "CTL-6",
-        "CTL-7",
-        "ROL-2",
-        "MSG-9"
-      ]
-    },
-    "QC-A11Y-TC-034": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-1"
-      ]
-    },
-    "QC-A11Y-TC-035": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-1"
-      ]
-    },
-    "QC-A11Y-TC-036": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-2",
-        "FLD-3",
-        "CTL-8",
-        "ST-7",
-        "ST-9"
-      ]
-    },
-    "QC-A11Y-TC-037": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-2",
-        "MSG-7",
-        "ST-7",
-        "ST-9"
-      ]
-    },
-    "QC-A11Y-TC-038": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-3",
-        "MSG-5",
-        "MSG-6",
-        "ST-7",
-        "ST-9"
-      ]
-    },
-    "QC-A11Y-TC-039": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-2",
-        "FLD-3",
-        "MSG-1",
-        "MSG-2",
-        "ST-7",
-        "ST-9"
-      ]
-    },
-    "QC-A11Y-TC-040": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-2"
-      ]
-    },
-    "QC-A11Y-TC-041": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-3"
-      ]
-    },
-    "QC-A11Y-TC-042": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-2"
-      ]
-    },
-    "QC-A11Y-TC-043": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-2",
-        "FLD-3"
-      ]
-    },
-    "QC-A11Y-TC-044": {
-      "category": "Functional-Low",
-      "traceability": [
-        "FLD-2"
-      ]
-    },
-    "QC-A11Y-TC-045": {
-      "category": "Functional-Low",
-      "traceability": [
-        "CTL-2"
-      ]
-    },
-    "QC-A11Y-TC-046": {
-      "category": "Functional-Low",
-      "traceability": [
-        "CTL-3"
-      ]
-    },
-    "QC-A11Y-TC-047": {
+    "GLOBAL-ACCESSIBILITY-TC-032": {
       "category": "Edge",
-      "traceability": [
-        "ST-6",
-        "CTL-2"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-048": {
+    "GLOBAL-ACCESSIBILITY-TC-033": {
       "category": "Edge",
-      "traceability": [
-        "CTL-2"
-      ]
+      "traceability": []
     },
-    "QC-A11Y-TC-049": {
-      "category": "Functional-Low",
-      "traceability": [
-        "ST-10"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-034": {
+      "category": "UI",
+      "traceability": []
     },
-    "QC-A11Y-TC-050": {
-      "category": "Functional-Low",
-      "traceability": [
-        "ST-10"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-035": {
+      "category": "UI",
+      "traceability": []
     },
-    "QC-A11Y-TC-051": {
-      "category": "Functional-High",
-      "traceability": [
-        "ST-11",
-        "ST-3",
-        "ST-4",
-        "ST-5"
-      ]
+    "GLOBAL-ACCESSIBILITY-TC-036": {
+      "category": "Compatibility",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-037": {
+      "category": "Compatibility",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-038": {
+      "category": "UI",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-039": {
+      "category": "UI",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-040": {
+      "category": "Compatibility",
+      "traceability": []
+    },
+    "GLOBAL-ACCESSIBILITY-TC-041": {
+      "category": "Edge",
+      "traceability": []
     }
-  },
-  "basis": "Description-only (has_ac=False, no AC field on PBI) + Figma-verified header-icon screenshots (8 combinations: EN/AR x light/dark x desktop/mobile) supplied by user after Figma API rate-limit (429). Panel-content layout not Figma-verified (no open-panel screenshot available) - written as standard/expected rendering. Prior run (2026-07-29) had 14 fabricated AC-n rows on this no-AC PBI - corrected in this run per hard gate rule. ENV-1..3 and LNG-1..2 explicitly not reintroduced - no BRD basis found (background.md flags browser/OS matrix as unconfirmed); folded into existing Compatibility category and SUR-1 instead. 2 of 4 flagged prior ST rows (multi-tab/concurrent-session, OS-level reduced-motion) not reconstructed - no BRD evidence."
+  }
 }
