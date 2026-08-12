@@ -1,0 +1,159 @@
+{
+  "pbi": "129365",
+  "analysed": "2026-08-11",
+  "mode": "Normal",
+  "budget": 16,
+  "delivered": 16,
+  "categories": {
+    "Functional-High": 5,
+    "UI": 3,
+    "Edge": 2,
+    "Auth": 1,
+    "Functional-Low": 2,
+    "Compatibility": 3
+  },
+  "inventory": {
+    "OBJ": 5,
+    "CTL": 1,
+    "ST": 9,
+    "ROL": 1,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 3
+  },
+  "case_ids": [
+    "GLOBAL-LANGSWITCHER-TC-001",
+    "GLOBAL-LANGSWITCHER-TC-002",
+    "GLOBAL-LANGSWITCHER-TC-003",
+    "GLOBAL-LANGSWITCHER-TC-004",
+    "GLOBAL-LANGSWITCHER-TC-005",
+    "GLOBAL-LANGSWITCHER-TC-006",
+    "GLOBAL-LANGSWITCHER-TC-007",
+    "GLOBAL-LANGSWITCHER-TC-008",
+    "GLOBAL-LANGSWITCHER-TC-009",
+    "GLOBAL-LANGSWITCHER-TC-010",
+    "GLOBAL-LANGSWITCHER-TC-011",
+    "GLOBAL-LANGSWITCHER-TC-012",
+    "GLOBAL-LANGSWITCHER-TC-013",
+    "GLOBAL-LANGSWITCHER-TC-014",
+    "GLOBAL-LANGSWITCHER-TC-015",
+    "GLOBAL-LANGSWITCHER-TC-016"
+  ],
+  "cases": {
+    "GLOBAL-LANGSWITCHER-TC-001": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-1",
+        "ST-1",
+        "ST-2",
+        "ST-5",
+        "OBJ-1",
+        "OBJ-2",
+        "SUR-1"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-002": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-1",
+        "ST-5",
+        "OBJ-2"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "ST-3",
+        "OBJ-3",
+        "OBJ-2"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-004": {
+      "category": "Edge",
+      "traceability": [
+        "ST-4",
+        "OBJ-3",
+        "OBJ-2",
+        "SUR-2"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-005": {
+      "category": "Edge",
+      "traceability": [
+        "ST-6",
+        "OBJ-4"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-006": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-7",
+        "OBJ-5"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-007": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-8",
+        "ST-1",
+        "OBJ-5"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-008": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-9",
+        "OBJ-5"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-009": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-010": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-011": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-012": {
+      "category": "Functional-Low",
+      "traceability": [
+        "LNG-1"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-013": {
+      "category": "Functional-Low",
+      "traceability": [
+        "LNG-2"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-014": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-1"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-015": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-2"
+      ]
+    },
+    "GLOBAL-LANGSWITCHER-TC-016": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-3"
+      ]
+    }
+  },
+  "basis": "Description + Frontend Workflow + Given/When/Then narrative only — no formal AC (Azure returned 'No AC'). Design source: Figma link found and verified (scoped fetch of Header component #1118:15038 confirmed a real text-label language-switch control showing the target language, e.g. 'AR' when English is active); the initial broad top-level node fetch (849:15904) was the whole homepage, not scoped, and was superseded by the scoped fetch."
+}
