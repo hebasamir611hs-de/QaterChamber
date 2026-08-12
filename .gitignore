@@ -1,6 +1,5 @@
 # --- Secrets ---
 .env
-.env.*
 .auth/
 *.pat
 *.token
@@ -10,9 +9,6 @@
 .claude/settings.local.json
 
 
-
-## --- Business context ---
-.claude/context/
 
 # --- Generated test artifacts ---
 reports/
@@ -42,7 +38,7 @@ __pycache__/
 outputs/
 deliverables/
 *.log
-
+temp/
 
 
 
