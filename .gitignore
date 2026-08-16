@@ -45,3 +45,8 @@ temp/
 
 
 
+# QA coverage baselines are COMMITTED - they are the anti-regression record
+# (.claude/qa-baselines/<PBI>.json). Do not ignore them.
+qa/cms-automation/.env
+qa/cms-automation/runs/
+qa/cms-automation/node_modules/
