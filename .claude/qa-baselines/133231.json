@@ -1,0 +1,31 @@
+{
+  "pbi": "133231",
+  "analysed": "2026-08-11",
+  "mode": "Normal",
+  "budget": 188,
+  "delivered": 184,
+  "categories": {
+    "Functional-Low": 148,
+    "UI": 11,
+    "Auth": 3,
+    "Functional-High": 13,
+    "Edge": 6,
+    "Compatibility": 3
+  },
+  "inventory": {
+    "OBJ": 11,
+    "FLD": 39,
+    "CTL": 8,
+    "ST": 8,
+    "ROL": 4,
+    "AC": 24,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 3
+  },
+  "case_ids": [
+    "GLOBAL-FOOTER-TC-001",
+    "GLOBAL-FOOTER-TC-184"
+  ],
+  "basis": "Description-only PBI (AC field empty); Figma primary frame (EN Desktop Light, node 849:15904) verified and used for UI token cases; 7 sibling AR/mobile/dark Figma frames not deep-verified"
+}
