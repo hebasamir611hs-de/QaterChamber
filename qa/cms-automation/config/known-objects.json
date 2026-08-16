@@ -1,0 +1,557 @@
+[
+ {
+  "name": "ATACarnetCTA",
+  "erc": "QCDEMO-129402-ATA_CARNET_CTA",
+  "id": 88557
+ },
+ {
+  "name": "ATACarnetPage",
+  "erc": "QCDEMO-129402-ATA_CARNET_PAGE",
+  "id": 81663
+ },
+ {
+  "name": "ATAChecklistItem",
+  "erc": "QCDEMO-129402-ATA_CHECKLIST_ITEM",
+  "id": 88314
+ },
+ {
+  "name": "ATACoveredCategory",
+  "erc": "QCDEMO-129402-ATA_COVERED_CATEGORY",
+  "id": 88263
+ },
+ {
+  "name": "ATAEligibleTile",
+  "erc": "QCDEMO-129402-ATA_ELIGIBLE_TILE",
+  "id": 88360
+ },
+ {
+  "name": "ATAFeeRow",
+  "erc": "QCDEMO-129402-ATA_FEE_ROW",
+  "id": 88460
+ },
+ {
+  "name": "ATAMemberCountry",
+  "erc": "QCDEMO-129402-ATA_MEMBER_COUNTRY",
+  "id": 88409
+ },
+ {
+  "name": "ATAOperatingHour",
+  "erc": "QCDEMO-129402-ATA_OPERATING_HOUR",
+  "id": 88509
+ },
+ {
+  "name": "ATAQuickFact",
+  "erc": "QCDEMO-129402-ATA_QUICK_FACT",
+  "id": 88159
+ },
+ {
+  "name": "ATASection",
+  "erc": "QCDEMO-129402-ATA_SECTION",
+  "id": 88209
+ },
+ {
+  "name": "AboutHeroBanner",
+  "erc": "QCDEMO-ABOUT-HERO-BANNER",
+  "id": 79334
+ },
+ {
+  "name": "AboutQatarChamberPage",
+  "erc": "QCDEMO-129392-ABOUT_QATAR_CHAMBER_PAGE",
+  "id": 77427
+ },
+ {
+  "name": "AboutUsCounter",
+  "erc": "QCDEMO-129389-about-us-counter",
+  "id": 52004
+ },
+ {
+  "name": "AboutUsSection",
+  "erc": "QCDEMO-129389-about-us-section",
+  "id": 51812
+ },
+ {
+  "name": "AccessibilityHeaderConfiguration",
+  "erc": "QCDEMO-129364-accessibility-header-configuration",
+  "id": 45327
+ },
+ {
+  "name": "AchievementCounter",
+  "erc": "QCDEMO-129367-ACHIEVEMENT_COUNTER",
+  "id": 45566
+ },
+ {
+  "name": "ApplyOnlineCTA",
+  "erc": "QCDEMO-129402-APPLY_ONLINE_CTA",
+  "id": 81803
+ },
+ {
+  "name": "BoardMember",
+  "erc": "QCDEMO-129398-board-member",
+  "id": 80051
+ },
+ {
+  "name": "BottomBarLink",
+  "erc": "QCDEMO-129366-BOTTOM_BAR_LINK",
+  "id": 46541
+ },
+ {
+  "name": "BusinessEvent",
+  "erc": "QCDEMO-129383-business-event",
+  "id": 49263
+ },
+ {
+  "name": "COOCta",
+  "erc": "QCDEMO-130947-COO_CTA",
+  "id": 86720
+ },
+ {
+  "name": "COODocumentRequirement",
+  "erc": "QCDEMO-130947-COO_DOCUMENT_REQUIREMENT",
+  "id": 86938
+ },
+ {
+  "name": "COODownloadCard",
+  "erc": "QCDEMO-130947-COO_DOWNLOAD_CARD",
+  "id": 87035
+ },
+ {
+  "name": "COOFinderDocument",
+  "erc": "QCDEMO-130947-COO_FINDER_DOCUMENT",
+  "id": 87457
+ },
+ {
+  "name": "COOFinderOption",
+  "erc": "QCDEMO-130947-COO_FINDER_OPTION",
+  "id": 87089
+ },
+ {
+  "name": "COOInfoCard",
+  "erc": "QCDEMO-130947-COO_INFO_CARD",
+  "id": 86887
+ },
+ {
+  "name": "COOPageContent",
+  "erc": "QCDEMO-130947-COO_PAGE_CONTENT",
+  "id": 86628
+ },
+ {
+  "name": "COOProcessStep",
+  "erc": "QCDEMO-130947-COO_PROCESS_STEP",
+  "id": 86987
+ },
+ {
+  "name": "COOQuickFact",
+  "erc": "QCDEMO-130947-COO_QUICK_FACT",
+  "id": 86770
+ },
+ {
+  "name": "COOSection",
+  "erc": "QCDEMO-130947-COO_SECTION",
+  "id": 86822
+ },
+ {
+  "name": "ChairmanMessagePage",
+  "erc": "QCDEMO-129393-CHAIRMAN_MESSAGE_PAGE",
+  "id": 78084
+ },
+ {
+  "name": "CollapsibleSection",
+  "erc": "QCDEMO-129402-COLLAPSIBLE_SECTION",
+  "id": 81753
+ },
+ {
+  "name": "CommunityPartner",
+  "erc": "QC_COMMUNITY_PARTNER",
+  "id": 45665
+ },
+ {
+  "name": "CommunityPartnersConfiguration",
+  "erc": "QC_COMMUNITY_PARTNERS_CONFIGURATION",
+  "id": 45816
+ },
+ {
+  "name": "ConsultationRequest",
+  "erc": "QCDEMO-129404-CONSULTATION_REQUEST",
+  "id": 82565
+ },
+ {
+  "name": "CopyrightBar",
+  "erc": "QCDEMO-129366-COPYRIGHT_BAR",
+  "id": 46493
+ },
+ {
+  "name": "Department",
+  "erc": "QCDEMO-129399-department",
+  "id": 80610
+ },
+ {
+  "name": "DownloadableResourceItem",
+  "erc": "QCDEMO-130949-DOWNLOADABLE_RESOURCE_ITEM",
+  "id": 94688
+ },
+ {
+  "name": "DynamicWidget",
+  "erc": "QCDEMO-129384-dynamic-widget",
+  "id": 49566
+ },
+ {
+  "name": "EconomicConsultancyAreaCard",
+  "erc": "QCDEMO-129406-EC_AREA_CARD",
+  "id": 91071
+ },
+ {
+  "name": "EconomicConsultancyFAQItem",
+  "erc": "QCDEMO-129406-EC_FAQ_ITEM",
+  "id": 91542
+ },
+ {
+  "name": "EconomicConsultancyHighlightItem",
+  "erc": "QCDEMO-129406-EC_HIGHLIGHT_ITEM",
+  "id": 91024
+ },
+ {
+  "name": "EconomicConsultancyInfoCard",
+  "erc": "QCDEMO-129406-EC_INFO_CARD",
+  "id": 90972
+ },
+ {
+  "name": "EconomicConsultancyPage",
+  "erc": "QCDEMO-129406-EC_PAGE",
+  "id": 90814
+ },
+ {
+  "name": "EconomicConsultancyQuickFact",
+  "erc": "QCDEMO-129406-EC_QUICK_FACT",
+  "id": 90869
+ },
+ {
+  "name": "EconomicConsultancyScopeItem",
+  "erc": "QCDEMO-129406-EC_SCOPE_ITEM",
+  "id": 91124
+ },
+ {
+  "name": "EconomicConsultancySection",
+  "erc": "QCDEMO-129406-EC_SECTION",
+  "id": 90921
+ },
+ {
+  "name": "EconomicResearchListingPage",
+  "erc": "QCDEMO-129407-ECONOMIC_RESEARCH_LISTING_PAGE",
+  "id": 94225
+ },
+ {
+  "name": "EconomicResearchReport",
+  "erc": "QCDEMO-129407-ECONOMIC_RESEARCH_REPORT",
+  "id": 94375
+ },
+ {
+  "name": "FilterTab",
+  "erc": "QCDEMO-129371-FILTER_TAB",
+  "id": 48032
+ },
+ {
+  "name": "FooterConfiguration",
+  "erc": "QC_FOOTER_CONFIGURATION",
+  "id": 44794
+ },
+ {
+  "name": "FooterLink",
+  "erc": "QC_FOOTER_LINK",
+  "id": 45195
+ },
+ {
+  "name": "FooterNavigationColumn",
+  "erc": "QCDEMO-129366-FOOTER_NAVIGATION_COLUMN",
+  "id": 46203
+ },
+ {
+  "name": "FooterNavigationLink",
+  "erc": "QCDEMO-129366-FOOTER_NAVIGATION_LINK",
+  "id": 46257
+ },
+ {
+  "name": "GeneralManagerMessage",
+  "erc": "QCDEMO-129397-GENERAL_MANAGER_MESSAGE",
+  "id": 79727
+ },
+ {
+  "name": "HeaderConfiguration",
+  "erc": "QCDEMO-129363-HEADER_CONFIGURATION",
+  "id": 44720
+ },
+ {
+  "name": "HeroBannerSlide",
+  "erc": "QCDEMO-129367-HERO_BANNER_SLIDE",
+  "id": 45374
+ },
+ {
+  "name": "InquiryCategory",
+  "erc": "QCDEMO-129390-INQUIRY_CATEGORY",
+  "id": 52436
+ },
+ {
+  "name": "LawEntry",
+  "erc": "QCDEMO-129394-LAW_ENTRY",
+  "id": 78508
+ },
+ {
+  "name": "LegalConsultationPage",
+  "erc": "QCDEMO-129404-LEGAL_PAGE",
+  "id": 89623
+ },
+ {
+  "name": "LegalCriteria",
+  "erc": "QCDEMO-129404-LEGAL_CRITERIA",
+  "id": 89848
+ },
+ {
+  "name": "LegalFaqItem",
+  "erc": "QCDEMO-129404-LEGAL_FAQ_ITEM",
+  "id": 89990
+ },
+ {
+  "name": "LegalInfoCard",
+  "erc": "QCDEMO-129404-LEGAL_INFO_CARD",
+  "id": 89797
+ },
+ {
+  "name": "LegalProcessStep",
+  "erc": "QCDEMO-129404-LEGAL_PROCESS_STEP",
+  "id": 89942
+ },
+ {
+  "name": "LegalQuickFact",
+  "erc": "QCDEMO-129404-LEGAL_QUICK_FACT",
+  "id": 89686
+ },
+ {
+  "name": "LegalScopeItem",
+  "erc": "QCDEMO-129404-LEGAL_SCOPE_ITEM",
+  "id": 89895
+ },
+ {
+  "name": "LegalSection",
+  "erc": "QCDEMO-129404-LEGAL_SECTION",
+  "id": 89739
+ },
+ {
+  "name": "MediaItem",
+  "erc": "QCDEMO-129388-media-item",
+  "id": 50743
+ },
+ {
+  "name": "MediationBenefitCard",
+  "erc": "QCDEMO-129405-MEDIATION_BENEFIT_CARD",
+  "id": 90574
+ },
+ {
+  "name": "MediationCriteria",
+  "erc": "QCDEMO-129405-MEDIATION_CRITERIA",
+  "id": 90625
+ },
+ {
+  "name": "MediationFaqItem",
+  "erc": "QCDEMO-129405-MEDIATION_FAQ_ITEM",
+  "id": 90765
+ },
+ {
+  "name": "MediationPage",
+  "erc": "QCDEMO-129405-MEDIATION_PAGE",
+  "id": 90039
+ },
+ {
+  "name": "MediationPrepareItem",
+  "erc": "QCDEMO-129405-MEDIATION_PREPARE_ITEM",
+  "id": 90671
+ },
+ {
+  "name": "MediationProcessStep",
+  "erc": "QCDEMO-129405-MEDIATION_PROCESS_STEP",
+  "id": 90717
+ },
+ {
+  "name": "MediationQuickFact",
+  "erc": "QCDEMO-129405-MEDIATION_QUICK_FACT",
+  "id": 90104
+ },
+ {
+  "name": "MediationRequest",
+  "erc": "QCDEMO-129405-MEDIATION_REQUEST",
+  "id": 83298
+ },
+ {
+  "name": "MediationSection",
+  "erc": "QCDEMO-129405-MEDIATION_SECTION",
+  "id": 90512
+ },
+ {
+  "name": "MemberService",
+  "erc": "QCDEMO-129400-MEMBER_SERVICE",
+  "id": 81019
+ },
+ {
+  "name": "MemberServicesPage",
+  "erc": "QCDEMO-129400-MEMBER_SERVICES_PAGE",
+  "id": 81165
+ },
+ {
+  "name": "NavItem",
+  "erc": "QCDEMO-129363-NAV_ITEM",
+  "id": 44631
+ },
+ {
+  "name": "NewsArticle",
+  "erc": "QCDEMO-129372-NEWS_ARTICLE",
+  "id": 48649
+ },
+ {
+  "name": "Newsletter",
+  "erc": "QCDEMO-129566-NEWSLETTER",
+  "id": 46653
+ },
+ {
+  "name": "NewsletterSubscriber",
+  "erc": "QCDEMO-129566-NEWSLETTER_SUBSCRIBER",
+  "id": 46600
+ },
+ {
+  "name": "OverviewSectionAndInfoCard",
+  "erc": "QCDEMO-130949-OVERVIEW_SECTION_AND_INFO_CARD",
+  "id": 94583
+ },
+ {
+  "name": "PodcastEpisode",
+  "erc": "QCDEMO-129387-podcast-episode",
+  "id": 50342
+ },
+ {
+  "name": "PromotionalBanner",
+  "erc": "QCDEMO-129368-PROMOTIONAL_BANNER",
+  "id": 47506
+ },
+ {
+  "name": "ProposalForResearchPage",
+  "erc": "QCDEMO-130949-PROPOSAL_FOR_RESEARCH_PAGE",
+  "id": 94431
+ },
+ {
+  "name": "ProposalResearchQuickFactsTile",
+  "erc": "QCDEMO-130949-QUICK_FACTS_TILE",
+  "id": 94483
+ },
+ {
+  "name": "ProposalResearchSectionIndexEntry",
+  "erc": "QCDEMO-130949-SECTION_INDEX_ENTRY",
+  "id": 94535
+ },
+ {
+  "name": "Publication",
+  "erc": "QCDEMO-129386-publication",
+  "id": 49925
+ },
+ {
+  "name": "QuickFactsTile",
+  "erc": "QCDEMO-129407-QUICK_FACTS_TILE",
+  "id": 94276
+ },
+ {
+  "name": "QuickLink",
+  "erc": "QCDEMO-129366-QUICK_LINK",
+  "id": 46421
+ },
+ {
+  "name": "SectionIndexEntry",
+  "erc": "QCDEMO-129407-SECTION_INDEX_ENTRY",
+  "id": 94328
+ },
+ {
+  "name": "ServiceCard",
+  "erc": "QCDEMO-129371-SERVICE_CARD",
+  "id": 47976
+ },
+ {
+  "name": "ServiceInformationGroup",
+  "erc": "QCDEMO-130949-SERVICE_INFORMATION_GROUP",
+  "id": 94638
+ },
+ {
+  "name": "ServiceInformationGroupItem",
+  "erc": "QCDEMO-130949-SERVICE_INFORMATION_GROUP_ITEM",
+  "id": 95186
+ },
+ {
+  "name": "SocialMediaIcon",
+  "erc": "QCDEMO-129366-SOCIAL_MEDIA_ICON",
+  "id": 45866
+ },
+ {
+  "name": "StrategicPartner",
+  "erc": "QCDEMO-129391-STRATEGIC_PARTNER",
+  "id": 53108
+ },
+ {
+  "name": "StrategicPillarCard",
+  "erc": "QCDEMO-129381-STRATEGIC_PILLAR_CARD",
+  "id": 48938
+ },
+ {
+  "name": "TIRBenefitCard",
+  "erc": "QCDEMO-129403-TIR_BENEFIT_CARD",
+  "id": 88768
+ },
+ {
+  "name": "TIRCarnetPage",
+  "erc": "QCDEMO-129403-TIR_CARNET_PAGE",
+  "id": 82292
+ },
+ {
+  "name": "TIRCriteria",
+  "erc": "QCDEMO-129403-TIR_CRITERIA",
+  "id": 88819
+ },
+ {
+  "name": "TIRFaqItem",
+  "erc": "QCDEMO-129403-TIR_FAQ_ITEM",
+  "id": 89398
+ },
+ {
+  "name": "TIRPrepareItem",
+  "erc": "QCDEMO-129403-TIR_PREPARE_ITEM",
+  "id": 89304
+ },
+ {
+  "name": "TIRProcessStep",
+  "erc": "QCDEMO-129403-TIR_PROCESS_STEP",
+  "id": 89350
+ },
+ {
+  "name": "TIRQuickFact",
+  "erc": "QCDEMO-129403-TIR_QUICK_FACT",
+  "id": 88607
+ },
+ {
+  "name": "TIRResource",
+  "erc": "QCDEMO-129403-TIR_RESOURCE",
+  "id": 89445
+ },
+ {
+  "name": "TIRSection",
+  "erc": "QCDEMO-129403-TIR_SECTION",
+  "id": 88660
+ },
+ {
+  "name": "TIRStatistic",
+  "erc": "QCDEMO-129403-TIR_STATISTIC",
+  "id": 88720
+ },
+ {
+  "name": "UpcomingEventPin",
+  "erc": "QCDEMO-129382-upcoming-event-pin",
+  "id": 49124
+ },
+ {
+  "name": "VmoSection",
+  "erc": "QCDEMO-129395-VMO_SECTION",
+  "id": 78736
+ }
+]

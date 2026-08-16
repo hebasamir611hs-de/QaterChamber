@@ -1,0 +1,15 @@
+{
+  "name": "qc-cms-qa",
+  "version": "0.1.0",
+  "description": "Qatar Chamber — CMS QA automation foundation (Phases 1-3 + vertical slice)",
+  "private": true,
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test test/unit.test.js test/phase1.test.js",
+    "preflight": "node tools/preflight.js",
+    "fingerprint": "node tools/fingerprint.js",
+    "cleanup": "node tools/cleanup.js",
+    "slice": "node scenarios/news-article.slice.js"
+  },
+  "dependencies": {}
+}
