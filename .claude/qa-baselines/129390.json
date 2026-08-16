@@ -1,0 +1,263 @@
+{
+  "pbi": "129390",
+  "analysed": "2026-08-13",
+  "mode": "Normal",
+  "budget": 104,
+  "delivered": 104,
+  "categories": {
+    "UI": 13,
+    "Auth": 4,
+    "Functional-Low": 77,
+    "Edge": 4,
+    "Functional-High": 6
+  },
+  "inventory": {
+    "OBJ": 6,
+    "FLD": 22,
+    "CTL": 6,
+    "ST": 5,
+    "ROL": 2,
+    "MSG": 12,
+    "AC": 37,
+    "SUR": 2,
+    "LNG": 2
+  },
+  "case_ids": [
+    "GLOBAL-HOMECONTACT-TC-001",
+    "GLOBAL-HOMECONTACT-TC-002",
+    "GLOBAL-HOMECONTACT-TC-003",
+    "GLOBAL-HOMECONTACT-TC-004",
+    "GLOBAL-HOMECONTACT-TC-005",
+    "GLOBAL-HOMECONTACT-TC-006",
+    "GLOBAL-HOMECONTACT-TC-007",
+    "GLOBAL-HOMECONTACT-TC-008",
+    "GLOBAL-HOMECONTACT-TC-009",
+    "GLOBAL-HOMECONTACT-TC-010",
+    "GLOBAL-HOMECONTACT-TC-012",
+    "GLOBAL-HOMECONTACT-TC-013",
+    "GLOBAL-HOMECONTACT-TC-014",
+    "GLOBAL-HOMECONTACT-TC-015",
+    "GLOBAL-HOMECONTACT-TC-016",
+    "GLOBAL-HOMECONTACT-TC-017",
+    "GLOBAL-HOMECONTACT-TC-018",
+    "GLOBAL-HOMECONTACT-TC-019",
+    "GLOBAL-HOMECONTACT-TC-020",
+    "GLOBAL-HOMECONTACT-TC-021",
+    "GLOBAL-HOMECONTACT-TC-022",
+    "GLOBAL-HOMECONTACT-TC-023",
+    "GLOBAL-HOMECONTACT-TC-024",
+    "GLOBAL-HOMECONTACT-TC-025",
+    "GLOBAL-HOMECONTACT-TC-026",
+    "GLOBAL-HOMECONTACT-TC-027",
+    "GLOBAL-HOMECONTACT-TC-028",
+    "GLOBAL-HOMECONTACT-TC-029",
+    "GLOBAL-HOMECONTACT-TC-030",
+    "GLOBAL-HOMECONTACT-TC-031",
+    "GLOBAL-HOMECONTACT-TC-032",
+    "GLOBAL-HOMECONTACT-TC-033",
+    "GLOBAL-HOMECONTACT-TC-034",
+    "GLOBAL-HOMECONTACT-TC-035",
+    "GLOBAL-HOMECONTACT-TC-036",
+    "GLOBAL-HOMECONTACT-TC-037",
+    "GLOBAL-HOMECONTACT-TC-038",
+    "GLOBAL-HOMECONTACT-TC-039",
+    "GLOBAL-HOMECONTACT-TC-040",
+    "GLOBAL-HOMECONTACT-TC-041",
+    "GLOBAL-HOMECONTACT-TC-042",
+    "GLOBAL-HOMECONTACT-TC-043",
+    "GLOBAL-HOMECONTACT-TC-044",
+    "GLOBAL-HOMECONTACT-TC-045",
+    "GLOBAL-HOMECONTACT-TC-046",
+    "GLOBAL-HOMECONTACT-TC-047",
+    "GLOBAL-HOMECONTACT-TC-048",
+    "GLOBAL-HOMECONTACT-TC-049",
+    "GLOBAL-HOMECONTACT-TC-050",
+    "GLOBAL-HOMECONTACT-TC-051",
+    "GLOBAL-HOMECONTACT-TC-052",
+    "GLOBAL-HOMECONTACT-TC-053",
+    "GLOBAL-HOMECONTACT-TC-054",
+    "GLOBAL-HOMECONTACT-TC-055",
+    "GLOBAL-HOMECONTACT-TC-056",
+    "GLOBAL-HOMECONTACT-TC-057",
+    "GLOBAL-HOMECONTACT-TC-058",
+    "GLOBAL-HOMECONTACT-TC-059",
+    "GLOBAL-HOMECONTACT-TC-060",
+    "GLOBAL-HOMECONTACT-TC-061",
+    "GLOBAL-HOMECONTACT-TC-062",
+    "GLOBAL-HOMECONTACT-TC-063",
+    "GLOBAL-HOMECONTACT-TC-064",
+    "GLOBAL-HOMECONTACT-TC-065",
+    "GLOBAL-HOMECONTACT-TC-066",
+    "GLOBAL-HOMECONTACT-TC-067",
+    "GLOBAL-HOMECONTACT-TC-068",
+    "GLOBAL-HOMECONTACT-TC-069",
+    "GLOBAL-HOMECONTACT-TC-070",
+    "GLOBAL-HOMECONTACT-TC-071",
+    "GLOBAL-HOMECONTACT-TC-072",
+    "GLOBAL-HOMECONTACT-TC-073",
+    "GLOBAL-HOMECONTACT-TC-074",
+    "GLOBAL-HOMECONTACT-TC-075",
+    "GLOBAL-HOMECONTACT-TC-076",
+    "GLOBAL-HOMECONTACT-TC-077",
+    "GLOBAL-HOMECONTACT-TC-078",
+    "GLOBAL-HOMECONTACT-TC-079",
+    "GLOBAL-HOMECONTACT-TC-080",
+    "GLOBAL-HOMECONTACT-TC-081",
+    "GLOBAL-HOMECONTACT-TC-082",
+    "GLOBAL-HOMECONTACT-TC-083",
+    "GLOBAL-HOMECONTACT-TC-084",
+    "GLOBAL-HOMECONTACT-TC-085",
+    "GLOBAL-HOMECONTACT-TC-086",
+    "GLOBAL-HOMECONTACT-TC-087",
+    "GLOBAL-HOMECONTACT-TC-088",
+    "GLOBAL-HOMECONTACT-TC-089",
+    "GLOBAL-HOMECONTACT-TC-090",
+    "GLOBAL-HOMECONTACT-TC-091",
+    "GLOBAL-HOMECONTACT-TC-092",
+    "GLOBAL-HOMECONTACT-TC-093",
+    "GLOBAL-HOMECONTACT-TC-094",
+    "GLOBAL-HOMECONTACT-TC-095",
+    "GLOBAL-HOMECONTACT-TC-096",
+    "GLOBAL-HOMECONTACT-TC-097",
+    "GLOBAL-HOMECONTACT-TC-098",
+    "GLOBAL-HOMECONTACT-TC-099",
+    "GLOBAL-HOMECONTACT-TC-100",
+    "GLOBAL-HOMECONTACT-TC-101",
+    "GLOBAL-HOMECONTACT-TC-102",
+    "GLOBAL-HOMECONTACT-TC-103",
+    "GLOBAL-HOMECONTACT-TC-104",
+    "GLOBAL-HOMECONTACT-TC-105"
+  ],
+  "cases": {
+    "GLOBAL-HOMECONTACT-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "AC-1",
+        "AC-2",
+        "AC-3",
+        "AC-4",
+        "AC-5",
+        "AC-6",
+        "AC-12",
+        "AC-24",
+        "FLD-1",
+        "FLD-2",
+        "FLD-3",
+        "FLD-4",
+        "FLD-5",
+        "CTL-1"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-002": {
+      "category": "UI",
+      "traceability": [
+        "AC-1",
+        "AC-2",
+        "AC-3",
+        "AC-4",
+        "AC-5",
+        "LNG-2"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-010": {
+      "category": "UI",
+      "traceability": [
+        "AC-16",
+        "AC-17",
+        "AC-18",
+        "AC-19",
+        "AC-20",
+        "AC-21",
+        "CTL-2",
+        "CTL-3",
+        "CTL-4",
+        "CTL-5",
+        "CTL-6"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-019": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1",
+        "AC-7",
+        "MSG-1"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-025": {
+      "category": "Edge",
+      "traceability": [
+        "ST-3",
+        "AC-14"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-026": {
+      "category": "Edge",
+      "traceability": [
+        "ST-4",
+        "AC-15"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-027": {
+      "category": "Edge",
+      "traceability": [
+        "ST-5",
+        "AC-13",
+        "MSG-7"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-029": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-28",
+        "AC-29",
+        "AC-30",
+        "AC-31",
+        "OBJ-5"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-031": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-33",
+        "AC-34",
+        "AC-35",
+        "AC-36",
+        "OBJ-6"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-033": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-16",
+        "AC-17",
+        "AC-18",
+        "AC-19",
+        "AC-20",
+        "AC-21",
+        "AC-22",
+        "AC-23",
+        "CTL-2",
+        "CTL-3",
+        "CTL-4",
+        "ST-1",
+        "ST-2",
+        "CTL-5",
+        "CTL-6"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-034": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-24",
+        "FLD-20"
+      ]
+    },
+    "GLOBAL-HOMECONTACT-TC-090": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    }
+  },
+  "basis": "Description with formal AC (GWT + bullet + 4 artifact-shaped email templates, 37 clauses fully mapped AC-1..AC-37); Figma design verified (file J3e1thav8NIu6a3XhC6Wcl, node 1232:16176, EN Desktop Light only — AR/mobile/dark variants unverified, treated as RTL/responsive-rule assumption); no images on this PBI."
+}

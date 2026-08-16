@@ -138,11 +138,6 @@ A single project domain keyword when it helps later filtering, e.g. `Webform`,
 `Bilingual`, `Workflow`, `Redirect`, `Chatbot`, `LookupData`, `Newsletter`,
 `Subscription`, `Approval`, `Accessibility`.
 
-> `Accessibility` added 2026-08-12 — the BRD makes keyboard navigation, contrast
-> toggle and zoom explicit requirements, and PBI 129364 (QC-GBL-003) uses the keyword
-> across its set. It was in use before it was listed here; listing it makes the
-> taxonomy match what the suite actually carries.
-
 ### Do not re-add the provenance tag
 The MCP **automatically** applies `Ai_MCP_Injected` at injection — do **not** include
 it in your `Tags`. There are **no** other auto-applied tags — `test_type`,
@@ -181,7 +176,7 @@ form feature, always:
 
 ## Definition of Done (coverage)
 A feature's analysis is complete only when ALL are addressed **for the active
-analysis mode** (Normal default / Deep — see `analysis-framework.md` — *Analysis
+analysis mode** (Normal default / Deep — see `analysis-framework.md` → *Analysis
 Modes*):
 - Every **in-scope** analysis-framework category covered (or explicitly marked N/A
   with a reason). *In Normal mode, API, the Additional/Conditional category, and all
@@ -206,65 +201,6 @@ Modes*):
   it or explicitly scope the analysis down to only the core FR behavior, noting the
   exclusion in the sign-off.
 
-## Dev-Environment Navigation Quirks (apply on every page load, Web + Control_Panel)
-Confirmed live on qcdev.ihorizons.com 2026-08-12 — handle both before any test
-interacts with the page, same as the website flow:
-- **Announcement popup dialog** (e.g. "إشعار عطلة عيد الأضحى") — appears on
-  fresh page loads on both Web and Control_Panel. Click its `×` (`إغلاق`)
-  close button first; it intercepts pointer events and blocks clicks
-  underneath if left open.
-- **Liferay "developer mode connection limit" license page**
-  (`/c/portal/license_activation`) — a dev-instance-only quirk (too many
-  concurrent dev connections), not a real license/product blocker. When
-  Control_Panel navigation lands here, click the **"here"** link
-  (`/c/portal/license?cmd=resetState&resetToken=...`) to reset connections;
-  it redirects through to the intended page (e.g. `/home`). Dismiss the
-  announcement popup first if it's also present.
-
-## Automation Structure — Project Deviation from the Plugin Default
-Two deviations from the shipped `automation-standards.md`:
-
-**1. The framework lives at the PROJECT ROOT, not under `./automation/`**
-(flattened 2026-08-11 at the QA Manager's request). `config/`, `core/`, `tools/`,
-and `web/` are top-level packages; `conftest.py`, `pytest.ini`, and
-`requirements.txt` sit beside them. Consequences to respect:
-- `config/settings.py` loads the root `.env` by absolute path (`Path(__file__)
-  .resolve().parent.parent`) — never by directory search.
-- `pytest.ini` needs `norecursedirs` to keep collection out of `.claude/`,
-  `.playwright-mcp/`, and `reports/`.
-- The standards' "framework is an untracked generated artifact" rule cannot be
-  applied at the root; see the comment block in `.gitignore`.
-- `scaffold-automation-framework` regenerates into `automation/` — it will NOT
-  write into this layout. Re-scaffolding requires a manual re-flatten.
-
-**2. Test files split by Platform within each page's existing folder** —
-deviating from the single module-per-page rule, but keeping the single
-top-level `web/` tree (no separate `control_panel/` tree — that alternative
-was considered and explicitly rejected 2026-08-11):
-```
-<project root>/
-├─ config/                        # settings.py — env loading + URL building
-├─ core/                          # shared generic wrappers — unchanged
-├─ tools/                         # extract_locators.py, save_auth.py
-├─ web/
-│  ├─ pages/<page>/                # Page Objects still grouped by page, not by platform
-│  │  ├─ <page>_page.py            #   public-frontend locators/actions
-│  │  └─ <page>_admin_page.py      #   CMS/Control_Panel locators/actions (already this project's pattern)
-│  └─ tests/<page>/                # one folder per page, as before
-│     ├─ test_<page>_web.py            # only this page's Web-tagged cases
-│     └─ test_<page>_control_panel.py  # only this page's Control_Panel-tagged cases
-```
-- A case tagged **both** `Web` and `Control_Panel` gets **two tests**, one in each file
-  (`test_<page>_web.py` and `test_<page>_control_panel.py`), same traceability ID on
-  both, each keeping only the steps/assertions relevant to its own surface.
-- Page Objects are unaffected by this split — `<page>_page.py` / `<page>_admin_page.py`
-  already separates by surface; only the **test module** naming/count changes per
-  folder (two files instead of one).
-- Rationale: requested by the QA Manager 2026-08-11 so `pytest -k _web` / `pytest -k
-  _control_panel` (or path-based `pytest web/tests/*/test_*_web.py`) can target one
-  surface's regression run without touching the other, while keeping everything under
-  one `web/` tree.
-
 ## Writing Rules
 - **Titles:** action + condition (e.g. "Submit Tender EOI with missing Commercial
   Registration Number").
@@ -280,16 +216,6 @@ was considered and explicitly rejected 2026-08-11):
   for the corresponding admin/CMS management cases of the same feature.
 - **Languages:** Arabic (RTL) + English (LTR) unless told otherwise — this project
   treats bilingual coverage as core, not optional.
-- **Theme:** Light mode + Dark mode unless told otherwise. Not in the BRD, but
-  confirmed live on the actual site 2026-08-12 — treat as core, same tier as
-  bilingual.
-- **Contrast:** Normal + High-Contrast toggle unless told otherwise. BRD requires
-  the toggle exists ([background.md](background.md) Accessibility); test it as a
-  core dual-mode axis, not a cosmetic P4 afterthought.
-- For UI-category cases on `Web`, the full default matrix is **2 languages × 2
-  themes × 2 contrast modes**. Not every case needs all 8 combos re-verified —
-  apply judgement (e.g. a pure backend/webform-storage case doesn't need a
-  theme/contrast pass) but UI-rendering cases do.
 
 ## Do / Don't
 - ✅ State assumptions when requirements are incomplete (the BRD itself flags several
