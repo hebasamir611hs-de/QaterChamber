@@ -5,11 +5,17 @@ ADO Test Case 134658: "Verify that a CMS user without Header Management
 permission is denied access when attempting to change Accessibility
 Settings."
 
-Likely part of PBI 133381 (GLOBAL-ACCESSIBILITY family,
-.claude/qa-baselines/133381.json) based on that baseline's Auth-category
-count (=1) matching this case's Auth tag — NOT confirmed via the ADO
-parent-work-item link. The traceability marker below is a placeholder, not
-a confirmed human case_id — do not treat it as final.
+PBI: NO-PBI. Earlier draft carried @pytest.mark.pbi_133381, inferred only
+from PBI 133381's baseline (.claude/qa-baselines/133381.json) having the
+same Auth-category count (=1) as this case — circumstantial, never
+confirmed via the ADO parent-work-item link. Per automate-test-case's own
+rule ("if no backlog ID is resolvable, write NO-PBI ... never guess an
+ID"), the pbi_* marker is removed and no traceability marker is applied
+either, since the local <SERVICE>-<FEATURE>-TC-<NNN> case_id would depend
+on that same unconfirmed PBI link. The ADO work item id (134658) itself
+IS confirmed (screenshot review, 2026-08-17) and is referenced by number
+in this docstring and the Allure title/feature — that is the only
+traceability claim being made until the real PBI/case_id is confirmed.
 
 Tags confirmed live from ADO (screenshot, 2026-08-17): Accessibility,
 Ai_MCP_Injected, Auth, Automation, Control_Panel, GLOBAL, Regression, UAT.
@@ -47,15 +53,15 @@ EXPECTED_ACCESS_DENIED_AR = "تم رفض الوصول. ليس لديك صلاح�
 @allure.feature("Header Management")
 @allure.story("Accessibility Settings — permission enforcement")
 @allure.severity(allure.severity_level.CRITICAL)  # P1 in ADO — RBAC/permission bypass (standards.md)
-@allure.title("CMS user without Header Management permission is denied access to Accessibility Settings")
+@allure.title("CMS user without Header Management permission is denied access to Accessibility Settings (ADO-134658)")
 @pytest.mark.control_panel
 @pytest.mark.global_
 @pytest.mark.auth
 @pytest.mark.regression
 @pytest.mark.accessibility
-@pytest.mark.pbi_133381
-@pytest.mark.traceability("TODO-CONFIRM-CASE-ID-ADO-134658")
 def test_restricted_role_denied_accessibility_settings(page):
+    # NO-PBI — see module docstring. No pbi_* marker applied: no confirmed
+    # backlog parent-link. Do not add one back without a real ADO link.
     restricted_user = os.getenv("TEST_USER_RESTRICTED", "")
     restricted_password = os.getenv("TEST_PASSWORD_RESTRICTED", "")
     if not restricted_user or not restricted_password:
