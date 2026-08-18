@@ -265,6 +265,46 @@ was considered and explicitly rejected 2026-08-11):
   surface's regression run without touching the other, while keeping everything under
   one `web/` tree.
 
+**3. Section folder naming — Sprint 1 (Home page), agreed 2026-08-18.** Skeleton
+folders (empty, `__init__.py` only) were pre-created under `web/pages/` and
+`web/tests/` ahead of `automate-test-case`, one per PBI below. Phase 1 (now) fills in
+`<section>_page.py` / `test_<section>_web.py`; Phase 2 (later) adds
+`<section>_admin_page.py` / `test_<section>_control_panel.py` in the same folders —
+no new subfolders, per deviation #2 above.
+
+Cross-page globals (GLOBAL service) → `pages/components/` / `tests/components/`
+(shared, per the plugin's component exception — flat inside `components/`, not their
+own page folder):
+
+| PBI | Section | File base |
+|---|---|---|
+| QC-GBL-001 | Site Header | `header` |
+| QC-GBL-004 | Site Footer & Social Media Icons | `footer` |
+| QC-GBL-002 | Language Switcher | `language_switcher` |
+| QC-GBL-003 | Accessibility Tools | `accessibility_tools` |
+| QC-GBL-005 | Newsletter Subscription | `newsletter_subscription` |
+
+Home-page sections (each its own page/module folder):
+
+| PBI | Section | Folder |
+|---|---|---|
+| QC-HOME-001 | Hero Banner | `home_hero_banner` |
+| QC-HOME-002 | Promotional Banners / Ad Slots | `home_promo_banners` |
+| QC-HOME-003 | Our Services Section | `home_services` |
+| QC-HOME-004A | Latest News Section | `home_latest_news` |
+| QC-HOME-004B | Social Media Icons (homepage widget — distinct from GBL-004's footer icons unless confirmed otherwise) | `home_social_icons` |
+| QC-HOME-005 | Strategic Direction Section | `home_strategic_direction` |
+| QC-HOME-006 | Upcoming Featured Event | `home_featured_event` |
+| QC-HOME-007 | Business Events Section | `home_business_events` |
+| QC-HOME-008 | Dynamic Widgets (Weather, Marhaba Guide, B2B) | `home_dynamic_widgets` |
+| QC-HOME-009 | Community Partners | `home_community_partners` |
+| QC-HOME-010 | Publications Section | `home_publications` |
+| QC-HOME-011 | Qatar Chamber Podcast Section | `home_podcast` |
+| QC-HOME-012 | Media Gallery Section | `home_media_gallery` |
+| QC-HOME-013 | About Us Section & Last Year Achievements Counters (bundled as one Page Object — split later if the PBI is split) | `home_about_summary` |
+| QC-HOME-014 | Quick Contact Us Section | `home_quick_contact` |
+| QC-HOME-015 | Strategic Partners | `home_strategic_partners` |
+
 ## Writing Rules
 - **Titles:** action + condition (e.g. "Submit Tender EOI with missing Commercial
   Registration Number").
