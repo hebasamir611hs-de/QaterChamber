@@ -201,6 +201,31 @@ Modes*):
   it or explicitly scope the analysis down to only the core FR behavior, noting the
   exclusion in the sign-off.
 
+## Dev-Environment Navigation Quirks (apply on every page load, Web + Control_Panel)
+Confirmed live on qcdev.ihorizons.com 2026-08-12 — handle both before any test
+interacts with the page, same as the website flow. Restored 2026-08-18: this
+section was silently dropped by commit `55a5c91` ("baselines from Phase 1/2 PBI
+runs", 2026-08-16) — a routine baseline-sync commit that overwrote local
+additions to this file. If you run `analyze-pbi`/baseline-sync tooling again,
+diff this file afterward rather than assuming it's untouched.
+- **Announcement popup dialog** (e.g. "إشعار عطلة عيد الأضحى") — appears on
+  fresh page loads on both Web and Control_Panel. Click its `×` (`إغلاق`)
+  close button first; it intercepts pointer events and blocks clicks
+  underneath if left open.
+- **Liferay "developer mode connection limit" license page**
+  (`/c/portal/license_activation`) — a dev-instance-only quirk (too many
+  concurrent dev connections), not a real license/product blocker. When
+  Control_Panel navigation lands here, click the **"here"** link
+  (`/c/portal/license?cmd=resetState&resetToken=...`) to reset connections;
+  it redirects through to the intended page (e.g. `/home`). Dismiss the
+  announcement popup first if it's also present. **The reset is scoped to the
+  browser session/cookies that clicked it, not the whole server** — a fresh,
+  cookie-less request (e.g. `curl`, or a new automated session) will hit the
+  same block again even right after a successful reset elsewhere (confirmed
+  2026-08-18, cost real time to re-diagnose). Automated runs must perform the
+  reset-then-navigate sequence themselves, in the same browser context, not
+  assume a prior manual reset carries over.
+
 ## Writing Rules
 - **Titles:** action + condition (e.g. "Submit Tender EOI with missing Commercial
   Registration Number").
@@ -216,6 +241,14 @@ Modes*):
   for the corresponding admin/CMS management cases of the same feature.
 - **Languages:** Arabic (RTL) + English (LTR) unless told otherwise — this project
   treats bilingual coverage as core, not optional.
+- **Theme + Contrast:** Light/Dark mode and the Normal/High-Contrast toggle are
+  BRD-confirmed requirements, same coverage tier as bilingual — see
+  `background.md`'s Accessibility/Theme entries for the source facts. (The
+  detailed "2 languages × 2 themes × 2 contrast" test-matrix methodology that
+  used to live here was lost in the same commit that dropped the section
+  above; UI-rendering cases should still get real theme/contrast coverage,
+  not just the default light/EN pass — restore the full matrix guidance here
+  if the team wants it written back out.)
 
 ## Do / Don't
 - ✅ State assumptions when requirements are incomplete (the BRD itself flags several
