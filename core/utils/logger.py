@@ -5,7 +5,6 @@ card numbers must never appear in plain text in logs or Allure attachments
 """
 
 import logging
-import re
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
@@ -17,14 +16,19 @@ def get_logger(name: str) -> logging.Logger:
 
 
 def mask(text: str) -> str:
-    """Best-effort masking for values known to be secret-shaped. Callers that
-    know a value is secret should still avoid logging it at all — this is a
-    safety net, not a substitute for not logging secrets."""
+    """Masking for values known to be secret-shaped. Callers that know a
+    value is secret should still avoid logging it at all — this is a safety
+    net, not a substitute for not logging secrets.
+
+    FULL mask, always. The earlier digits-only rule (re.fullmatch(r"\\d{4,}"))
+    silently returned any alphanumeric password verbatim, so every
+    type(PASSWORD_INPUT, ...) logged the real credential to stdout and the
+    Allure attachments. A fixed token leaks nothing — not even length. Partial
+    reveal (first2/last2) is deliberately NOT used: for short passwords that
+    discloses most of the secret."""
     if text is None:
         return text
-    if re.fullmatch(r"\d{4,}", text):
-        return text[:2] + "*" * max(0, len(text) - 4) + text[-2:]
-    return text
+    return "***MASKED***"
 
 
 def log_action(logger: logging.Logger, action: str, locator: str, value: str = None) -> None:

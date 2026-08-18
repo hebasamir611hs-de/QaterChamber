@@ -81,18 +81,25 @@ def page(request, browser, tmp_path):
     param = getattr(request, "param", None)
     # Indirect-parametrization param is either:
     #   - a (width, height) tuple -> viewport override (existing usage), or
-    #   - a dict {"viewport": (w, h), "locale": "ar-QA", "timezone_id": "Asia/Qatar"}
+    #   - a dict {"viewport": (w, h), "locale": "ar-QA", "timezone_id": "Asia/Qatar",
+    #     "auth": False}
     #     -> browser-locale cases (fresh Chrome/Safari with a given primary
     #     language, no prior cookie) that need a real Playwright-context
     #     locale rather than a second real browser.
+    #     "auth": False opts OUT of the cached storageState auto-load — REQUIRED
+    #     for tests whose subject is login/permissions (RBAC denial, TC-134658):
+    #     with the default, a cached admin session would pre-authenticate the
+    #     context and invalidate (or false-PASS) the permission assertion.
     if isinstance(param, dict):
         viewport = param.get("viewport")
         locale = param.get("locale")
         timezone_id = param.get("timezone_id")
+        use_auth_state = param.get("auth", True)
     else:
         viewport = param
         locale = None
         timezone_id = None
+        use_auth_state = True
     video_dir = str(tmp_path / "videos")
     context = new_context(
         browser,
@@ -100,6 +107,7 @@ def page(request, browser, tmp_path):
         record_video_dir=video_dir,
         locale=locale,
         timezone_id=timezone_id,
+        use_auth_state=use_auth_state,
     )
     pg = context.new_page()
     yield pg

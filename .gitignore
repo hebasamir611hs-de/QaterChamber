@@ -9,7 +9,6 @@
 .claude/settings.local.json
 
 
-
 # --- Generated test artifacts ---
 reports/
 .playwright-mcp/
@@ -29,10 +28,6 @@ venv/
 
 # --- Local Environment ---
 .vscode/
-.venv/
-__pycache__/
-.pytest_cache/
-
 
 # --- Outputs ---
 outputs/
@@ -40,13 +35,11 @@ deliverables/
 *.log
 temp/
 
-
-
-
-
-
 # QA coverage baselines are COMMITTED - they are the anti-regression record
 # (.claude/qa-baselines/<PBI>.json). Do not ignore them.
-qa/cms-automation/.env
-qa/cms-automation/runs/
-qa/cms-automation/node_modules/
+
+# Retired REST framework (qa/cms-automation/) was moved to _to_delete/ on
+# 2026-08-18 — its orphan .env held real values while gitignored, invisible
+# to any repo review. Delete _to_delete/ manually after confirming nothing
+# in it is needed.
+_to_delete/

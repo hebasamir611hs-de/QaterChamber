@@ -42,11 +42,26 @@ class AccessibilitySettingsPage(BasePage):
         self.open(control_panel_url(self.SETTINGS_PATH))
         return self
 
-    def access_denied_shown(self, locale: str = "en") -> bool:
+    def _denial_locator(self, locale: str = "en") -> str:
         name = "ACCESS_DENIED_MESSAGE_AR" if locale == "ar" else "ACCESS_DENIED_MESSAGE_EN"
         locator = getattr(self, name)
         self._require_verified(locator, name)
-        return self.is_visible(locator)
+        return locator
+
+    def wait_for_denial(self, locale: str = "en", timeout: int = 10000) -> None:
+        """Positive ANCHOR for the denial state — call this BEFORE any negative
+        assertion (form absent / toggle absent). BasePage.is_visible() is
+        zero-wait by design, so asserting `not settings_form_loaded()` straight
+        after navigation is a race: it can pass simply because nothing has
+        rendered yet. Waiting for the denial message first proves the page
+        reached a terminal state, which makes the negatives meaningful."""
+        self.wait_for(self._denial_locator(locale), timeout=timeout)
+
+    def access_denied_shown(self, locale: str = "en") -> bool:
+        return self.is_visible(self._denial_locator(locale))
+
+    def denial_text(self, locale: str = "en") -> str:
+        return self.text(self._denial_locator(locale))
 
     def settings_form_loaded(self) -> bool:
         self._require_verified(self.SETTINGS_FORM, "SETTINGS_FORM")

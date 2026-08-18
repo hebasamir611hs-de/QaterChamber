@@ -10,9 +10,8 @@ allure-pytest==2.13.5
 playwright==1.47.0
 pytest-playwright==0.5.2
 
-# --- Accessibility contrast audit (PBI 133381 "QC-GBL-003 — Accessibility
-#     Tools", GLOBAL-ACCESSIBILITY-TC-005) — NEW dependency added by this
-#     batch, NOT installed in the authoring session (disclosed in
-#     web/tests/header/test_accessibility.py). Run `pip install -r
-#     requirements.txt` before executing that test. ---
-axe-playwright-python==0.1.4
+# --- axe-playwright-python REMOVED (2026-08-18 mentor review): it was added
+#     for web/tests/header/test_accessibility.py, a file that does not exist
+#     in this tree — a dead dependency pointing at a dead reference. Re-add
+#     it (pinned) in the same commit that actually adds the contrast-audit
+#     test (PBI 133381 / GLOBAL-ACCESSIBILITY-TC-005), not before. ---

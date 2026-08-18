@@ -1,0 +1,74 @@
+# azure-pipelines.yml — minimal CI quality gate (added 2026-08-18, mentor review).
+#
+# Two stages, deliberately small:
+#   1. CollectGate — ALWAYS runs. Import/syntax/marker sanity via
+#      `pytest --collect-only`. Cheap, no browser, no secrets, catches broken
+#      imports / bad markers / placeholder regressions on every PR.
+#   2. LiveRun — OPT-IN via the `runLiveSuite` variable, because it needs
+#      network reach to qcdev and real secrets. Wire the secrets through an
+#      ADO variable group named `qa-automation-env` (create it in Pipelines →
+#      Library; mark TEST_PASSWORD* as secret). Do NOT put values here.
+#
+# Not covered on purpose (add when the suite has runnable tests worth gating):
+# scheduled nightly runs, Allure report publishing, flake-rate tracking.
+
+trigger:
+  branches:
+    include: [main]
+
+pr:
+  branches:
+    include: [main]
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  # Set to true on a manual run (or in a scheduled pipeline) to execute the
+  # real suite against qcdev. Defaults to collect-only.
+  runLiveSuite: false
+
+stages:
+  - stage: CollectGate
+    displayName: "Collect-only gate (imports / markers / placeholders)"
+    jobs:
+      - job: collect
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: "3.11"
+          - script: pip install -r requirements.txt
+            displayName: "Install pinned dependencies"
+          - script: pytest --collect-only -q
+            displayName: "pytest --collect-only"
+
+  - stage: LiveRun
+    displayName: "Live suite vs qcdev (opt-in)"
+    dependsOn: CollectGate
+    condition: and(succeeded(), eq(variables['runLiveSuite'], 'true'))
+    jobs:
+      - job: run
+        variables:
+          - group: qa-automation-env # WEB_BASE_URL, CONTROL_PANEL_URL, TEST_USER, TEST_PASSWORD, ...
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: "3.11"
+          - script: pip install -r requirements.txt
+            displayName: "Install pinned dependencies"
+          - script: playwright install --with-deps chromium
+            displayName: "Install browser"
+          - script: pytest -m regression
+            displayName: "Regression subset"
+            env:
+              WEB_BASE_URL: $(WEB_BASE_URL)
+              CONTROL_PANEL_URL: $(CONTROL_PANEL_URL)
+              TEST_USER: $(TEST_USER)
+              TEST_PASSWORD: $(TEST_PASSWORD)
+              HEADLESS: "true"
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Allure results + evidence"
+            condition: always()
+            inputs:
+              pathToPublish: reports
+              artifactName: qa-reports

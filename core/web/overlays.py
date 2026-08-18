@@ -40,10 +40,18 @@ MOUNT_GRACE_MS = 1500
 
 
 class Overlay:
-    def __init__(self, name: str, root: str, close: str):
+    def __init__(self, name: str, root: str, close: str, surfaces: tuple = ("web",)):
         self.name = name
         self.root = root
         self.close = close
+        # Which delivery surface(s) this overlay can appear on. The mount
+        # GRACE is only ever paid on a matching surface: the grace's full
+        # cost (MOUNT_GRACE_MS) is paid precisely when the overlay is ABSENT
+        # (wait_for runs to timeout), so an overlay scoped to the public
+        # site must not tax every Control Panel navigation — that was a
+        # guaranteed 1500ms per CMS-test navigation for an overlay that can
+        # never appear there (mentor review, 2026-08-18).
+        self.surfaces = surfaces
 
 
 OVERLAYS = [
@@ -51,8 +59,26 @@ OVERLAYS = [
         name="announcement",
         root="#qc-announcement-popup-root",
         close="#qc-announcement-popup-root button.qc-ann-close",
+        surfaces=("web",),  # public-site announcement — never renders in the Control Panel
     ),
 ]
+
+
+def _current_surface(page) -> str:
+    """Best-effort surface classification by URL prefix. CONTROL_PANEL_URL
+    may share the host with WEB_BASE_URL, so match on the full configured
+    control-panel base (which includes its path) — the longest, most
+    specific discriminator available without a page probe. Unset
+    CONTROL_PANEL_URL, or any error, classifies as "web" (the safe default:
+    at worst the grace is paid where it always was)."""
+    try:
+        from config.settings import settings
+        cp = (settings.control_panel_url or "").rstrip("/")
+        if cp and page.url.startswith(cp):
+            return "control_panel"
+    except Exception:  # noqa: BLE001 — classification must never break dismissal
+        pass
+    return "web"
 
 
 def _is_showing(page, overlay: Overlay) -> bool:
@@ -75,9 +101,13 @@ def dismiss_overlays(page, grace_ms: int = 0) -> bool:
     if anything was dismissed.
     """
     dismissed = False
+    surface = _current_surface(page)
 
     for overlay in OVERLAYS:
-        if grace_ms and not _is_showing(page, overlay):
+        # Off-surface overlays keep the FREE zero-wait check (safety net in
+        # case the surface classification or the overlay's real scope is
+        # wrong) but never pay the mount grace — see Overlay.surfaces.
+        if grace_ms and surface in overlay.surfaces and not _is_showing(page, overlay):
             try:
                 page.locator(overlay.root).first.wait_for(state="visible", timeout=grace_ms)
             except Exception:  # noqa: BLE001 — not shown on this page; nothing to do
