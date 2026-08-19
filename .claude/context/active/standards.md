@@ -226,6 +226,74 @@ diff this file afterward rather than assuming it's untouched.
   reset-then-navigate sequence themselves, in the same browser context, not
   assume a prior manual reset carries over.
 
+## Automation Structure — Project Deviation from the Plugin Default
+
+The section that used to live here was **lost in an accidental overwrite** (commit
+`55a5c91`, "baselines from Phase 1/2 PBI runs", 2026-08-16) — the same commit that
+also dropped the Dev-Environment Navigation Quirks section above (restored
+2026-08-18). While this doc was silently missing its rule, a `web/pages/control_panel/`
++ `web/pages/header/` tree was written directly against `qcdev` (real locators,
+one passing web test, one `Control_Panel` RBAC test) — a **separate-tree** pattern
+the original 2026-08-11 rule had explicitly rejected.
+
+**Re-confirmed 2026-08-19: the no-separate-tree rule stands.** `control_panel/` and
+`header/` were removed (their content is preserved in git history — commits up to
+`836cb23` on `origin/main` — if the locators/RBAC test need to be re-authored under
+the convention below). Going forward:
+
+- Framework lives at the **project root**, not `./automation/` (flattened
+  2026-08-11 at the QA Manager's request).
+- Test files split by **Platform suffix within each page's existing folder** — no
+  separate `control_panel/` tree:
+  ```
+  web/pages/<page>/<page>_page.py            # public-frontend locators/actions
+  web/pages/<page>/<page>_admin_page.py       # CMS/Control_Panel locators/actions
+  web/tests/<page>/test_<page>_web.py             # Web-tagged cases
+  web/tests/<page>/test_<page>_control_panel.py    # Control_Panel-tagged cases
+  ```
+  Rationale unchanged from 2026-08-11: `pytest -k _web` / `pytest -k _control_panel`
+  target one surface without needing two folder trees.
+
+**Section folder naming — Sprint 1 (Home page), agreed 2026-08-18.** Skeleton
+folders (empty, `__init__.py` only) were pre-created under `web/pages/` and
+`web/tests/` ahead of `automate-test-case`, one per PBI below, using the file-suffix
+pattern above. Phase 1 (now) fills in `<section>_page.py` / `test_<section>_web.py`;
+Phase 2 (later) adds `<section>_admin_page.py` / `test_<section>_control_panel.py`
+in the same folders — no new subfolders.
+
+Cross-page globals (GLOBAL service) → `pages/components/` / `tests/components/`
+(shared, per the plugin's component exception — flat inside `components/`, not their
+own page folder):
+
+| PBI | Section | File base |
+|---|---|---|
+| QC-GBL-001 | Site Header | `header` |
+| QC-GBL-004 | Site Footer & Social Media Icons | `footer` |
+| QC-GBL-002 | Language Switcher | `language_switcher` |
+| QC-GBL-003 | Accessibility Tools | `accessibility_tools` |
+| QC-GBL-005 | Newsletter Subscription | `newsletter_subscription` |
+
+Home-page sections (each its own page/module folder):
+
+| PBI | Section | Folder |
+|---|---|---|
+| QC-HOME-001 | Hero Banner | `home_hero_banner` |
+| QC-HOME-002 | Promotional Banners / Ad Slots | `home_promo_banners` |
+| QC-HOME-003 | Our Services Section | `home_services` |
+| QC-HOME-004A | Latest News Section | `home_latest_news` |
+| QC-HOME-004B | Social Media Icons (homepage widget — distinct from GBL-004's footer icons unless confirmed otherwise) | `home_social_icons` |
+| QC-HOME-005 | Strategic Direction Section | `home_strategic_direction` |
+| QC-HOME-006 | Upcoming Featured Event | `home_featured_event` |
+| QC-HOME-007 | Business Events Section | `home_business_events` |
+| QC-HOME-008 | Dynamic Widgets (Weather, Marhaba Guide, B2B) | `home_dynamic_widgets` |
+| QC-HOME-009 | Community Partners | `home_community_partners` |
+| QC-HOME-010 | Publications Section | `home_publications` |
+| QC-HOME-011 | Qatar Chamber Podcast Section | `home_podcast` |
+| QC-HOME-012 | Media Gallery Section | `home_media_gallery` |
+| QC-HOME-013 | About Us Section & Last Year Achievements Counters (bundled as one Page Object — split later if the PBI is split) | `home_about_summary` |
+| QC-HOME-014 | Quick Contact Us Section | `home_quick_contact` |
+| QC-HOME-015 | Strategic Partners | `home_strategic_partners` |
+
 ## Writing Rules
 - **Titles:** action + condition (e.g. "Submit Tender EOI with missing Commercial
   Registration Number").
