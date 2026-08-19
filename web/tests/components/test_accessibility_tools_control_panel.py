@@ -1,5 +1,5 @@
 """
-web/tests/header/test_accessibility_settings_control_panel.py
+web/tests/components/test_accessibility_tools_control_panel.py
 
 ADO Test Case 134658: "Verify that a CMS user without Header Management
 permission is denied access when attempting to change Accessibility
@@ -63,7 +63,7 @@ import allure
 import pytest
 
 from web.pages.control_panel.login_page import CmsLoginPage
-from web.pages.header.accessibility_settings_page import AccessibilitySettingsPage
+from web.pages.components.accessibility_tools_admin_component import AccessibilitySettingsPage
 
 EXPECTED_ACCESS_DENIED = {
     "en": "Access Denied. You do not have permission to perform this action.",
