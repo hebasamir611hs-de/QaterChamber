@@ -21,6 +21,7 @@ def new_context(
     record_video_dir: str = None,
     locale: str = None,
     timezone_id: str = None,
+    use_auth_state: bool = True,
 ):
     """`locale`/`timezone_id` map straight onto Playwright's
     `browser.new_context(locale=..., timezone_id=...)` — used by browser
@@ -38,9 +39,15 @@ def new_context(
     if timezone_id:
         kwargs["timezone_id"] = timezone_id
 
-    state_file = auth_state_path()
-    if state_file.exists():
-        kwargs["storage_state"] = str(state_file)
+    # `use_auth_state=False` is MANDATORY for any test whose subject is the
+    # login/permission flow itself (e.g. RBAC denial, ADO TC-134658). With the
+    # default auto-load, a cached admin storageState silently pre-authenticates
+    # the context — an RBAC test would then assert "denied" against an ADMIN
+    # session and could false-PASS (or false-fail) the permission check.
+    if use_auth_state:
+        state_file = auth_state_path()
+        if state_file.exists():
+            kwargs["storage_state"] = str(state_file)
 
     context = browser.new_context(**kwargs)
     context.tracing.start(screenshots=True, snapshots=True, sources=True)

@@ -30,6 +30,7 @@ Keys read by this framework (see the "Test automation framework" block in
 | `ARABIC_PATH_PREFIX` | Language path prefix (`/ar`) |
 | `CONTROL_PANEL_URL` | Liferay Control Panel base — control-panel tests only |
 | `TEST_USER` / `TEST_PASSWORD` | Credentials for `tools/save_auth.py` |
+| `TEST_USER_RESTRICTED` / `TEST_PASSWORD_RESTRICTED` | Restricted-role account (no Header Management permission) — RBAC cases only (ADO TC-134658). **Account not provisioned yet**; the test skips while unset |
 | `AUTH_STATE_PATH` | storageState location, resolved against the project root |
 | `VIEWPORT_WIDTH` / `VIEWPORT_HEIGHT` / `HEADLESS` | Browser defaults |
 
