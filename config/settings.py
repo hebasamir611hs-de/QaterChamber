@@ -94,7 +94,7 @@ def web_url(path: str = "/", locale: str = "en") -> str:
 
     `locale="ar"` applies ARABIC_PATH_PREFIX, because this site carries the
     active language in the URL path (`/ar/home` vs `/home`) rather than a
-    readable cookie — see web/pages/header/language_switcher_page.py.
+    readable cookie — see web/pages/components/language_switcher_component.py.
 
     Raises rather than returning a bare path when WEB_BASE_URL is unset: a
     missing base URL is a configuration error and must fail loudly at the

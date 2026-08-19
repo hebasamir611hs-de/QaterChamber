@@ -226,41 +226,40 @@ diff this file afterward rather than assuming it's untouched.
   reset-then-navigate sequence themselves, in the same browser context, not
   assume a prior manual reset carries over.
 
-## Automation Structure — OPEN QUESTION, needs a team decision
-The section that used to live here (`Automation Structure — Project Deviation from
-the Plugin Default`, written 2026-08-11) was **lost in the same accidental
-overwrite** as the Dev-Environment Navigation Quirks section above (commit
-`55a5c91`, "baselines from Phase 1/2 PBI runs", 2026-08-16) — nobody deliberately
-reversed it. It has **not** been restored yet, unlike the section above, so the
-original rule is reconstructed here from git history for visibility, alongside
-what's actually been built since:
+## Automation Structure — Project Deviation from the Plugin Default
 
-**The original 2026-08-11 rule said:** framework at the project root (not
-`./automation/`); test files split by **Platform suffix within each page's existing
-folder** — `pages/<page>/<page>_page.py` + `<page>_admin_page.py`,
-`tests/<page>/test_<page>_web.py` + `test_<page>_control_panel.py` — explicitly
-**rejecting** a separate `control_panel/` tree, so `pytest -k _web` / `pytest -k
-_control_panel` could target one surface without needing two folder trees.
+The section that used to live here was **lost in an accidental overwrite** (commit
+`55a5c91`, "baselines from Phase 1/2 PBI runs", 2026-08-16) — the same commit that
+also dropped the Dev-Environment Navigation Quirks section above (restored
+2026-08-18). While this doc was silently missing its rule, a `web/pages/control_panel/`
++ `web/pages/header/` tree was written directly against `qcdev` (real locators,
+one passing web test, one `Control_Panel` RBAC test) — a **separate-tree** pattern
+the original 2026-08-11 rule had explicitly rejected.
 
-**What's actually in the repo now contradicts that rule:** `web/pages/control_panel/`
-exists as its own top-level folder (`login_page.py`, added for the shared CMS auth
-flow), and `web/pages/header/` holds `site_header_page.py` +
-`accessibility_settings_page.py` directly (not the `pages/components/` split used by
-`web/pages/home_*`'s skeleton, added 2026-08-18 for the Sprint-1 home-page sections
-below). Since the doc was silently missing when that code was written, this may not
-have been a deliberate change of convention — it needs an explicit team decision:
-**restore the no-separate-tree rule and refold `control_panel/`/`header/` into the
-per-page file-suffix pattern, or formally adopt the separate-tree pattern already in
-use and update the Sprint-1 skeleton to match.** Until decided, both patterns
-coexist in the repo — do not add a third variant.
+**Re-confirmed 2026-08-19: the no-separate-tree rule stands.** `control_panel/` and
+`header/` were removed (their content is preserved in git history — commits up to
+`836cb23` on `origin/main` — if the locators/RBAC test need to be re-authored under
+the convention below). Going forward:
+
+- Framework lives at the **project root**, not `./automation/` (flattened
+  2026-08-11 at the QA Manager's request).
+- Test files split by **Platform suffix within each page's existing folder** — no
+  separate `control_panel/` tree:
+  ```
+  web/pages/<page>/<page>_page.py            # public-frontend locators/actions
+  web/pages/<page>/<page>_admin_page.py       # CMS/Control_Panel locators/actions
+  web/tests/<page>/test_<page>_web.py             # Web-tagged cases
+  web/tests/<page>/test_<page>_control_panel.py    # Control_Panel-tagged cases
+  ```
+  Rationale unchanged from 2026-08-11: `pytest -k _web` / `pytest -k _control_panel`
+  target one surface without needing two folder trees.
 
 **Section folder naming — Sprint 1 (Home page), agreed 2026-08-18.** Skeleton
 folders (empty, `__init__.py` only) were pre-created under `web/pages/` and
 `web/tests/` ahead of `automate-test-case`, one per PBI below, using the file-suffix
-pattern above (pending the open-question resolution just above). Phase 1 (now)
-fills in `<section>_page.py` / `test_<section>_web.py`; Phase 2 (later) adds
-`<section>_admin_page.py` / `test_<section>_control_panel.py` in the same folders —
-no new subfolders, unless the open question above is resolved the other way.
+pattern above. Phase 1 (now) fills in `<section>_page.py` / `test_<section>_web.py`;
+Phase 2 (later) adds `<section>_admin_page.py` / `test_<section>_control_panel.py`
+in the same folders — no new subfolders.
 
 Cross-page globals (GLOBAL service) → `pages/components/` / `tests/components/`
 (shared, per the plugin's component exception — flat inside `components/`, not their
