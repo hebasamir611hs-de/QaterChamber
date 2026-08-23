@@ -81,6 +81,22 @@ class BasePage:
         if is_overlay_showing(self.page):
             dismiss_overlays(self.page)
 
+    def select_option(self, locator: str, label: str = None, value: str = None) -> None:
+        self.page.locator(locator).select_option(label=label, value=value)
+        log_action(logger, "select_option", locator, label or value)
+
+    def set_checkbox(self, locator: str, checked: bool) -> None:
+        loc = self.page.locator(locator)
+        if checked:
+            loc.check()
+        else:
+            loc.uncheck()
+        log_action(logger, "set_checkbox", locator, str(checked))
+
+    def upload_file(self, locator: str, file_path: str) -> None:
+        self.page.locator(locator).set_input_files(file_path)
+        log_action(logger, "upload_file", locator, file_path)
+
     def press_key(self, key: str) -> None:
         self.page.keyboard.press(key)
         log_action(logger, "press_key", key)
