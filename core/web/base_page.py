@@ -9,6 +9,7 @@ from core.utils.logger import get_logger, log_action
 from core.utils.reporting import attach_screenshot
 from core.web.license_gate import clear_license_gate, is_gate_showing, remember_target
 from core.web.overlays import MOUNT_GRACE_MS, dismiss_overlays, is_overlay_showing
+from core.web.session_guard import is_login_form_showing, reauthenticate
 from config.settings import settings
 
 logger = get_logger("base_page")
@@ -24,24 +25,47 @@ class BasePage:
         # Site-wide interstitial guard (see core/web/license_gate.py). No-op
         # when the interstitial is absent, which is the normal path.
         clear_license_gate(self.page, url)
+        # qcdev's session drops roughly every ~30s under sustained automated
+        # traffic (see core/web/session_guard.py) — a reset can land back on
+        # the login form. No-op when already authenticated.
+        reauthenticate(self.page, url)
         # Site-wide blocking overlays (see core/web/overlays.py). Client-
         # rendered, so a mount grace is allowed here and only here.
         dismiss_overlays(self.page, grace_ms=MOUNT_GRACE_MS)
         log_action(logger, "open", url)
 
     def click(self, locator: str) -> None:
+        # The session can drop between two calls on this page (open_x() then
+        # click(), no wait_for() in between) — check before spending the
+        # click's own timeout on a page that's actually the license gate or
+        # the login form underneath.
+        if is_gate_showing(self.page):
+            clear_license_gate(self.page)
+        if is_login_form_showing(self.page):
+            reauthenticate(self.page)
         try:
             self.page.locator(locator).click()
         except Exception:
             # An overlay that mounted late (or reappeared after a click-driven
-            # navigation) intercepts the click. Dismiss and retry once before
-            # surfacing this as a real failure.
-            if not dismiss_overlays(self.page):
+            # navigation) intercepts the click, OR the session dropped mid-
+            # click. Clear whichever applies and retry once before surfacing
+            # this as a real failure.
+            recovered = dismiss_overlays(self.page)
+            recovered = clear_license_gate(self.page) or recovered
+            recovered = reauthenticate(self.page) or recovered
+            if not recovered:
                 raise
             self.page.locator(locator).click()
         log_action(logger, "click", locator)
 
     def type(self, locator: str, text: str) -> None:
+        # Same session-drop window as click() — a multi-field form fills
+        # several locators in a row, any of which can outlive one ~30s
+        # qcdev session window.
+        if is_gate_showing(self.page):
+            clear_license_gate(self.page)
+        if is_login_form_showing(self.page):
+            reauthenticate(self.page)
         loc = self.page.locator(locator)
         loc.clear()
         loc.fill(text)
@@ -52,11 +76,14 @@ class BasePage:
 
     def is_visible(self, locator: str) -> bool:
         try:
-            # An interstitial would make every locator report "not visible",
-            # which silently turns a blocked page into a passing negative
-            # assertion. Clear it first, then answer honestly.
+            # An interstitial or a dropped session would make every locator
+            # report "not visible", which silently turns a blocked page into
+            # a passing negative assertion. Clear both first, then answer
+            # honestly.
             if is_gate_showing(self.page):
                 clear_license_gate(self.page)
+            if is_login_form_showing(self.page):
+                reauthenticate(self.page)
             return self.page.locator(locator).is_visible()
         except Exception:  # noqa: BLE001 — never throws, per the wrapper contract
             return False
@@ -66,12 +93,17 @@ class BasePage:
         # element after every click), not just the explicit open() above.
         if is_gate_showing(self.page):
             clear_license_gate(self.page)
+        if is_login_form_showing(self.page):
+            reauthenticate(self.page)
         try:
             self.page.locator(locator).wait_for(state=state, timeout=timeout)
         except Exception:
-            # The interstitial can also arrive mid-wait; clear once and retry
-            # before surfacing the timeout as a real failure.
-            if not clear_license_gate(self.page):
+            # The interstitial or a dropped session can also arrive
+            # mid-wait; clear once and retry before surfacing the timeout as
+            # a real failure.
+            recovered = clear_license_gate(self.page)
+            recovered = reauthenticate(self.page) or recovered
+            if not recovered:
                 raise
             self.page.locator(locator).wait_for(state=state, timeout=timeout)
         # Checked AFTER the wait, zero-wait: click-driven navigation re-renders

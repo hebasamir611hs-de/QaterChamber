@@ -72,7 +72,7 @@ against qcdev, authenticated via CmsLoginPage / TEST_USER):
 """
 
 from core.web.base_page import BasePage
-from config.settings import control_panel_url
+from config.settings import control_panel_url, settings
 
 LIST_URL = control_panel_url(
     "/group/qatar-chamber/~/control_panel/manage"
@@ -92,6 +92,11 @@ def _field_after_label(label: str, tag: str = "input") -> str:
 
 
 class OrgStructureAdminPage(BasePage):
+    # ---- Menu navigation (see open_departments_list() docstring) ----------
+    PRODUCT_MENU_TOGGLE = '[data-qa-id="productMenu"]'
+    CONTENT_DATA_MENU_ITEM = '[role="menuitem"]:text-is("Content & Data")'
+    DEPARTMENTS_MENU_ITEM = '[role="menuitem"]:text-is("Departments")'
+
     # ---- List screen ------------------------------------------------------
     NEW_BUTTON = 'button:has-text("New")'
     SEARCH_INPUT = 'input[placeholder="Search"], input[type="search"]'
@@ -134,7 +139,49 @@ class OrgStructureAdminPage(BasePage):
 
     # ---- Navigation ---------------------------------------------------------
     def open_departments_list(self) -> "OrgStructureAdminPage":
-        self.open(LIST_URL)
+        """Navigate via Content & Data > Departments, NOT the saved LIST_URL.
+
+        Confirmed live 2026-08-24 (QA Manager, manual + automated repro):
+        LIST_URL embeds a Liferay portlet INSTANCE id
+        (...ObjectDefinitionsPortlet_J7R0...) that is randomly regenerated
+        per browser session. A URL captured in one session 404s to a
+        "Coming Soon" page in the next — this was the dominant cause of the
+        Control_Panel suite's failures (not a login/session-drop issue, and
+        not network flakiness). Menu navigation is the only path confirmed
+        stable across sessions; LIST_URL is kept only as a documented
+        artifact of what NOT to navigate to directly.
+        """
+        # The cached .auth/state.json storageState is not reliable here —
+        # qcdev's session drops fast enough (confirmed live 2026-08-24,
+        # roughly every ~30s under sustained traffic) that a state file
+        # captured earlier is routinely already dead. Rather than trust it,
+        # force a real, fresh login every time this is the entry point into
+        # the admin flow. Local import: avoids a circular import with
+        # CmsLoginPage (itself a BasePage subclass).
+        from web.pages.control_panel.login_page import CmsLoginPage
+
+        login = CmsLoginPage(self.page)
+        self.open(control_panel_url("/home"))
+        # CmsLoginPage.login_succeeded() checks for the top Control Menu bar,
+        # which is unreliable here — confirmed live 2026-08-24: an already-
+        # authenticated admin session showing the LEFT Product Menu sidebar
+        # (Design / Site Builder / Content & Data / ...) still read as
+        # "not logged in" by that check, causing an unneeded re-login that
+        # then hit /c/portal/login WHILE already authenticated and landed on
+        # a "Coming Soon" placeholder instead of a real login form. The
+        # reachability of the admin menu itself (either already expanded or
+        # its closed toggle button) is the reliable signal a public visitor
+        # never has either way.
+        if not (self.is_visible(self.CONTENT_DATA_MENU_ITEM) or self.is_visible(self.PRODUCT_MENU_TOGGLE)):
+            login.open_login().login(settings.test_user, settings.test_password)
+            self.open(control_panel_url("/home"))
+
+        if not self.is_visible(self.CONTENT_DATA_MENU_ITEM):
+            self.click(self.PRODUCT_MENU_TOGGLE)
+            self.wait_for(self.CONTENT_DATA_MENU_ITEM)
+        self.click(self.CONTENT_DATA_MENU_ITEM)
+        self.click(self.DEPARTMENTS_MENU_ITEM)
+        self.wait_for(self.NEW_BUTTON)
         return self
 
     def open_new_department_form(self) -> "OrgStructureAdminPage":
