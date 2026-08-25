@@ -65,16 +65,43 @@ OVERLAYS = [
 
 
 def _current_surface(page) -> str:
-    """Best-effort surface classification by URL prefix. CONTROL_PANEL_URL
-    may share the host with WEB_BASE_URL, so match on the full configured
-    control-panel base (which includes its path) — the longest, most
-    specific discriminator available without a page probe. Unset
-    CONTROL_PANEL_URL, or any error, classifies as "web" (the safe default:
-    at worst the grace is paid where it always was)."""
+    """Best-effort surface classification.
+
+    CONFIRMED LIVE, 2026-08-25 (qcdev): CONTROL_PANEL_URL and WEB_BASE_URL
+    are the IDENTICAL host in this project's .env
+    (https://qcdev.ihorizons.com, no distinguishing path prefix). A plain
+    `page.url.startswith(control_panel_url)` prefix match therefore matched
+    on every page, always classifying as "control_panel" — which meant
+    MOUNT_GRACE_MS was never actually paid anywhere (the grace branch below
+    is gated on `surface in overlay.surfaces`, and "web" never matched).
+    Every navigation raced the announcement overlay's async mount (66-98ms)
+    with a zero-wait check and normally lost, leaving clicks to recover only
+    through BasePage.click()'s slower exception-driven retry.
+
+    Liferay Control Panel URLs carry their own markers regardless of host —
+    `/c/portal/...`, a `p_p_id=` portlet-render query param, or the
+    `/control_panel/` path segment (see LIST_URL in
+    web/pages/org_structure/org_structure_admin_page.py) — none of which a
+    public content page carries. Classify on those instead of the base URL.
+    Ambiguous pages (e.g. an authenticated admin browsing plain /home) fall
+    through to "web", which is the surface the overlay is actually scoped
+    to and the safe default either way.
+
+    CONFIRMED LIVE, 2026-08-25 (second pass, full-suite run): the `p_p_id=`
+    marker over-fired on the LOGIN portlet's own redirect URL
+    (`/home?p_p_id=com_liferay_login_web_portlet_LoginPortlet_...`) — that
+    page IS on the "web" surface (it's where the public-facing announcement
+    overlay renders and blocks the username field, confirmed by screenshot),
+    not the admin Control Panel, even though it carries a `p_p_id=` query
+    param like every Liferay portlet render does. `com_liferay_login_web_portlet_LoginPortlet`
+    specifically must classify as "web" — check for it before the generic
+    `p_p_id=` marker, not after.
+    """
     try:
-        from config.settings import settings
-        cp = (settings.control_panel_url or "").rstrip("/")
-        if cp and page.url.startswith(cp):
+        url = page.url or ""
+        if "com_liferay_login_web_portlet_LoginPortlet" in url:
+            return "web"
+        if "/c/portal" in url or "p_p_id=" in url or "/control_panel/" in url:
             return "control_panel"
     except Exception:  # noqa: BLE001 — classification must never break dismissal
         pass

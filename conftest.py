@@ -114,16 +114,45 @@ def page(request, browser, tmp_path):
 
     failed = getattr(request.node, "rep_call", None) is not None and request.node.rep_call.failed
     test_case_id = extract_test_case_id(request.node)
-    video_path = pg.video.path() if pg.video else None
     trace_path = tmp_path / "trace.zip"
-    if failed:
-        context.tracing.stop(path=str(trace_path))
-    else:
-        context.tracing.stop()
-    context.close()  # Playwright only finalizes the video file once the context closes
+
+    # video_path/tracing.stop()/context.close() were previously unguarded:
+    # any one of them throwing (e.g. a page/context left in a bad state by a
+    # test that failed mid-navigation, such as a throttled-network timeout)
+    # aborted this whole teardown block BEFORE the attach_video/attach_trace
+    # calls below ever ran — silently costing a failing test ALL of its
+    # evidence (no screenshot beyond the makereport hook's own best-effort
+    # attempt, no video, no trace), with nothing surfaced to explain why.
+    # Each step is now isolated so one capture failing doesn't take the
+    # others down with it.
+    video_path = None
+    try:
+        video_path = pg.video.path() if pg.video else None
+    except Exception:  # noqa: BLE001 — evidence capture must never mask the real failure
+        pass
+
+    try:
+        if failed:
+            context.tracing.stop(path=str(trace_path))
+        else:
+            context.tracing.stop()
+    except Exception:  # noqa: BLE001
+        pass
+
+    try:
+        context.close()  # Playwright only finalizes the video file once the context closes
+    except Exception:  # noqa: BLE001
+        pass
+
     if failed and video_path:
-        attach_video(video_path, test_case_id, settings.project_name, ext="webm",
-                     reports_dir=settings.reports_dir)
+        try:
+            attach_video(video_path, test_case_id, settings.project_name, ext="webm",
+                         reports_dir=settings.reports_dir)
+        except Exception:  # noqa: BLE001
+            pass
     if failed and trace_path.exists():
-        attach_trace(str(trace_path), test_case_id, settings.project_name,
-                     reports_dir=settings.reports_dir)
+        try:
+            attach_trace(str(trace_path), test_case_id, settings.project_name,
+                         reports_dir=settings.reports_dir)
+        except Exception:  # noqa: BLE001
+            pass

@@ -102,7 +102,14 @@ class OrgStructurePage(BasePage):
         return self.is_visible(self.TOOLBAR)
 
     def is_chart_visible(self) -> bool:
-        return self.is_visible(".qc-org-node")
+        # CONFIRMED LIVE, 2026-08-25: the rendered chart has 8 top-level
+        # `.qc-org-node` cards, so the bare locator triggers a Playwright
+        # strict-mode violation ("resolved to 8 elements") on is_visible().
+        # BasePage.is_visible()'s blanket except-and-return-False swallowed
+        # that exception silently, reporting an actually-rendered chart as
+        # invisible. `>> nth=0` scopes to a single element without needing
+        # a bespoke locator.
+        return self.is_visible(".qc-org-node >> nth=0")
 
     # ---- Node locators / queries ----------------------------------------
     def _node(self, department_name: str):
@@ -174,10 +181,15 @@ class OrgStructurePage(BasePage):
         )
 
     def toggle_branch(self, department_name: str) -> "OrgStructurePage":
-        self.click(
-            f'.qc-org-node:has(.qc-org-node-dept:text-is("{department_name}")) '
-            'role=button[name="Toggle branch"]'
-        )
+        # CONFIRMED LIVE, 2026-08-25: string-concatenating plain CSS with a
+        # bare-space "role=..." engine prefix is not valid Playwright
+        # selector syntax outside of explicit ">>" chaining — Playwright
+        # parses the whole string as CSS and throws
+        # `Unexpected token "=" while parsing selector`. Reuse the
+        # correctly-written `_toggle_branch_button()` helper (chained
+        # `.locator().locator()` calls) instead of re-deriving a broken
+        # selector string here.
+        self._toggle_branch_button(department_name).click()
         return self
 
     def is_branch_expanded(self, department_name: str) -> bool:

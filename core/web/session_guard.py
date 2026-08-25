@@ -38,7 +38,11 @@ PASSWORD_INPUT = "#_com_liferay_login_web_portlet_LoginPortlet_password"
 SUBMIT_BUTTON = (
     '#_com_liferay_login_web_portlet_LoginPortlet_loginForm button[type="submit"]'
 )
-LOGIN_SUCCESS_INDICATOR = 'nav[aria-label="Control Menu"]'
+# OR'd with the Product Menu toggle (2026-08-25) — see
+# web/pages/control_panel/login_page.py's STATUS UPDATE (2026-08-25) for the
+# live evidence: both render together after a real login, ORing only guards
+# against a render-order race between the two nav elements.
+LOGIN_SUCCESS_INDICATOR = 'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'
 
 
 def is_login_form_showing(page) -> bool:
@@ -87,7 +91,12 @@ def reauthenticate(page, target_url: str = None, max_attempts: int = 3) -> bool:
             # before waiting on the success indicator, not after.
             if is_gate_showing(page):
                 clear_license_gate(page, target_url)
-            page.locator(LOGIN_SUCCESS_INDICATOR).wait_for(state="visible", timeout=15000)
+            # .first: the OR'd selector legitimately matches BOTH the
+            # Control Menu nav AND the Product Menu toggle button once
+            # logged in (confirmed live 2026-08-25) — Playwright strict
+            # mode rejects a 2-element match on a bare .wait_for(), which
+            # was silently failing every re-authentication attempt.
+            page.locator(LOGIN_SUCCESS_INDICATOR).first.wait_for(state="visible", timeout=15000)
             reauthenticated = True
             logger.info("session re-authenticated (attempt %s)", attempt)
         except Exception as exc:  # noqa: BLE001

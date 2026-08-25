@@ -67,8 +67,24 @@ class BasePage:
         if is_login_form_showing(self.page):
             reauthenticate(self.page)
         loc = self.page.locator(locator)
-        loc.clear()
-        loc.fill(text)
+        try:
+            loc.clear()
+            loc.fill(text)
+        except Exception:
+            # Same recovery as click(): a late-mounting overlay (or a
+            # session drop) can block a fill() the same way it blocks a
+            # click() — confirmed live 2026-08-25 (qcdev), the announcement
+            # overlay intercepting the login username field caused a bare
+            # 30s TimeoutError here with no recovery attempted, because
+            # type() previously had no retry path at all. Mirrors click()'s
+            # retry exactly rather than inventing a separate one.
+            recovered = dismiss_overlays(self.page)
+            recovered = clear_license_gate(self.page) or recovered
+            recovered = reauthenticate(self.page) or recovered
+            if not recovered:
+                raise
+            loc.clear()
+            loc.fill(text)
         log_action(logger, "type", locator, text)
 
     def text(self, locator: str) -> str:

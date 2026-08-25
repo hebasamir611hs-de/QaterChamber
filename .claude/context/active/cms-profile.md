@@ -33,20 +33,36 @@
 
 ## Publish / Propagation Latency Budget
 
-**UNVERIFIED.** No live measurement has been taken. `tools/propagation-probe.js` (and
-its Python port) was built specifically to measure this and has not yet been run
-against `qcdev`.
+**MEASURED** — 2026-08-25, via `tools/propagation_probe.py` against the live
+`/o/qc-board/members` JAX-RS endpoint (Board Members data source), manually
+triggered publish (admin Save on a Board Member's Short Bio field, unique
+`QCTEST-PROBE-*` marker), QA Manager + human tester live session.
 
-Until this section has real numbers:
-- No test may hardcode a timeout guess.
-- Any propagation assertion must poll against a timeout sourced from *this file*.
-- An empty budget here is a stop-and-report condition for the automation engineer,
-  not a "guess 30s and move on."
+- **Observed propagation delay: ~0s (sub-second, first poll after Save already
+  showed the new value).** No caching layer or reindex delay detected on this
+  endpoint.
+- **Budget to use in tests: poll with a 5s timeout, 0.5s interval**, as a safety
+  margin over the measured near-instant delivery (network/render variance,
+  not a real propagation mechanism) — still poll, never a bare `sleep()`.
+- Suspected mechanism: **no intermediate cache** between the Save action and the
+  JAX-RS endpoint response — Liferay serves this Object Definition data live,
+  not through a CDN/portal-cache layer. Not verified for every endpoint (only
+  the Board Members data source was probed) — re-measure per-endpoint if a
+  different content type shows different behavior.
 
-**Action item**: run the probe against `qcdev`, then fill in —
-- Observed propagation delay (typical / worst-case observed):
-- Suspected mechanism (portal cache / Elasticsearch reindex / other): **also
-  unverified — do not state as fact until measured**
+**Important scope note for automation**: the public Board of Directors pages
+are **client-rendered from this JAX-RS API** (`/o/qc-board/members`), not
+server-rendered HTML — confirmed live during this probe (plain `curl` on the
+page URL returns only the page shell/title, not member content; the data
+only appears via the API). Any propagation assertion for these pages should
+poll the rendered DOM after page load (through Playwright, which executes
+the client JS), not raw HTML fetch — a raw-HTML propagation check will always
+read stale/empty regardless of actual latency.
+
+**Not yet measured**: whether this ~0s figure holds for other content types on
+this project (e.g. rich-text CMS pages, other Object Definitions) — this
+budget is confirmed for the Board Members data source only. Re-probe before
+assuming it generalizes.
 
 ## Cache / CDN Behavior
 

@@ -148,6 +148,31 @@ def main():
         except Exception:
             pass
 
+        # Liferay dev "developer mode connection limit" interstitial (see
+        # core/web/license_gate.py) can answer ANY request, including this
+        # script's plain navigation. Mirror that module's detection/clear
+        # logic here since this standalone script does not go through
+        # BasePage. No-op when the gate is absent.
+        GATE_URL_MARKER = "/c/portal/license"
+        RESET_LINK = 'a[href*="cmd=resetState"]'
+        try:
+            gate_showing = GATE_URL_MARKER in page.url or page.locator(RESET_LINK).count() > 0
+        except Exception:
+            gate_showing = False
+        if gate_showing:
+            link = page.locator(RESET_LINK).first
+            try:
+                link.wait_for(state="attached", timeout=5000)
+                link.click(timeout=10000)
+                page.wait_for_load_state("domcontentloaded")
+                page.goto(args.url, wait_until="domcontentloaded")
+                try:
+                    page.wait_for_load_state("networkidle", timeout=5000)
+                except Exception:
+                    pass
+            except Exception as exc:
+                print(f"# WARNING: license gate detected but could not be cleared: {exc}")
+
         records = page.evaluate(JS_HARVEST, args.scope)
         rows, tier_rank = [], {t: i for i, t in enumerate(TIER_ORDER)}
         for rec in records:
