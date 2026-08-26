@@ -112,7 +112,11 @@ class BoardMembersAdminPage(BasePage):
     # ---- Edit/View form — role-confirmed live -------------------------------
     MEMBER_CATEGORY_COMBOBOX = '[role="combobox"]'
     DETAILED_BIOGRAPHY = '[role="textbox"][aria-label="Detailed Biography"], [aria-label="Detailed Biography"][contenteditable="true"]'
-    DISPLAY_ORDER = 'input[aria-label="Display Order"], [role="textbox"][aria-label="Display Order"]'
+    # No aria-label on this field at all (confirmed live 2026-08-26, unlike
+    # Short Bio/Professional Experience which do carry one) — Liferay's DDM
+    # id embeds the field's programmatic name instead:
+    # "..._ddm$$displayOrder$<hash>$0$$en_US". Match on that substring.
+    DISPLAY_ORDER = 'input[id*="ddm$$displayOrder$"]'
     SHORT_BIO = '[role="textbox"][aria-label="Short Bio"], textarea[aria-label="Short Bio"]'
     PROFESSIONAL_EXPERIENCE_ENTRIES = '[role="textbox"][aria-label="Professional Experience Entries"], textarea[aria-label="Professional Experience Entries"]'
     PHOTO_SELECT_FILE_BTN = 'button:has-text("Select File")'
@@ -153,7 +157,12 @@ class BoardMembersAdminPage(BasePage):
             self.wait_for(CONTENT_DATA_MENU_ITEM)
         self.click(CONTENT_DATA_MENU_ITEM)
         self.click(BOARD_MEMBERS_MENU_ITEM)
-        self.wait_for(self.LIST_ROW)
+        # LIST_ROW ("table tbody tr") matches all 18 live rows — BasePage.wait_for()
+        # resolves through Playwright's strict-mode waitForSelector, which throws
+        # on a multi-match locator (confirmed live 2026-08-25) the same way
+        # click()/fill() do. Scope to the first row's existence, not the bare
+        # multi-row selector.
+        self.wait_for(f"{self.LIST_ROW} >> nth=0")
         return self
 
     def open_member_edit_form_by_row_index(self, index: int = 0) -> "BoardMembersAdminPage":

@@ -14,6 +14,20 @@ from config.settings import settings
 
 logger = get_logger("base_page")
 
+# Marker for a navigation that is ITSELF the login flow (CmsLoginPage.open_login()
+# / the Liferay login portlet's own render/redirect URLs) — same string
+# overlays.py's _current_surface() already keys on for the identical reason.
+# The login form is expected to be showing on this URL; that is not a dropped
+# session, and reauthenticate()'s own login submission must not fire here or
+# it races CmsLoginPage.login()'s subsequent type()/click() calls on a page
+# that has since navigated away (confirmed live 2026-08-25 — see
+# session_guard.py's reentrancy note for the sibling fix in type()).
+_LOGIN_FLOW_MARKERS = ("/c/portal/login", "com_liferay_login_web_portlet_LoginPortlet")
+
+
+def _is_login_flow_url(url: str) -> bool:
+    return any(marker in (url or "") for marker in _LOGIN_FLOW_MARKERS)
+
 
 class BasePage:
     def __init__(self, page):
@@ -27,8 +41,10 @@ class BasePage:
         clear_license_gate(self.page, url)
         # qcdev's session drops roughly every ~30s under sustained automated
         # traffic (see core/web/session_guard.py) — a reset can land back on
-        # the login form. No-op when already authenticated.
-        reauthenticate(self.page, url)
+        # the login form. No-op when already authenticated. Skipped when the
+        # navigation target IS the login flow itself (see _is_login_flow_url).
+        if not _is_login_flow_url(url):
+            reauthenticate(self.page, url)
         # Site-wide blocking overlays (see core/web/overlays.py). Client-
         # rendered, so a mount grace is allowed here and only here.
         dismiss_overlays(self.page, grace_ms=MOUNT_GRACE_MS)
@@ -38,10 +54,16 @@ class BasePage:
         # The session can drop between two calls on this page (open_x() then
         # click(), no wait_for() in between) — check before spending the
         # click's own timeout on a page that's actually the license gate or
-        # the login form underneath.
+        # the login form underneath. Skipped on the login flow's own URL
+        # (see _is_login_flow_url) — CmsLoginPage.login() clicking its own
+        # submit button while its own form is visible is not a dropped
+        # session, and firing reauthenticate() here races login()'s own
+        # subsequent calls on a page that has since navigated away
+        # (confirmed live 2026-08-25 — same reentrancy bug as type() below).
+        on_login_flow = _is_login_flow_url(self.page.url)
         if is_gate_showing(self.page):
             clear_license_gate(self.page)
-        if is_login_form_showing(self.page):
+        if not on_login_flow and is_login_form_showing(self.page):
             reauthenticate(self.page)
         try:
             self.page.locator(locator).click()
@@ -52,7 +74,8 @@ class BasePage:
             # this as a real failure.
             recovered = dismiss_overlays(self.page)
             recovered = clear_license_gate(self.page) or recovered
-            recovered = reauthenticate(self.page) or recovered
+            if not on_login_flow:
+                recovered = reauthenticate(self.page) or recovered
             if not recovered:
                 raise
             self.page.locator(locator).click()
@@ -61,10 +84,16 @@ class BasePage:
     def type(self, locator: str, text: str) -> None:
         # Same session-drop window as click() — a multi-field form fills
         # several locators in a row, any of which can outlive one ~30s
-        # qcdev session window.
+        # qcdev session window. Skipped on the login flow's own URL (see
+        # click()'s comment and _is_login_flow_url) — filling the login
+        # form's own username/password fields must not trigger a redundant
+        # background reauthenticate() (confirmed live 2026-08-25: it logged
+        # in, navigated to an unrelated page, and left this type() call
+        # waiting 30s on a username field that no longer existed there).
+        on_login_flow = _is_login_flow_url(self.page.url)
         if is_gate_showing(self.page):
             clear_license_gate(self.page)
-        if is_login_form_showing(self.page):
+        if not on_login_flow and is_login_form_showing(self.page):
             reauthenticate(self.page)
         loc = self.page.locator(locator)
         try:
@@ -80,7 +109,8 @@ class BasePage:
             # retry exactly rather than inventing a separate one.
             recovered = dismiss_overlays(self.page)
             recovered = clear_license_gate(self.page) or recovered
-            recovered = reauthenticate(self.page) or recovered
+            if not on_login_flow:
+                recovered = reauthenticate(self.page) or recovered
             if not recovered:
                 raise
             loc.clear()

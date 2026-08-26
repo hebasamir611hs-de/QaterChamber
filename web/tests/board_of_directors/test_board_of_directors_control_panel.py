@@ -153,7 +153,6 @@ def board_member_row(page):
     # Chairman/General Manager — see docstring above for why.
     admin.click(f'{admin.LIST_ROW}:has-text("Board Member") >> nth=0 >> {admin.ROW_ID_LINK}')
     admin.wait_for(admin.SAVE_BUTTON)
-    member_name = admin.text(admin.ROW_ID_LINK) if admin.is_visible(admin.ROW_ID_LINK) else None
     yield admin
 
 
