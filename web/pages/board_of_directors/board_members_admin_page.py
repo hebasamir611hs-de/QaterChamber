@@ -124,18 +124,49 @@ class BoardMembersAdminPage(BasePage):
     SAVE_BUTTON = 'button:has-text("Save")'
     CANCEL_BUTTON = 'button:has-text("Cancel")'
 
-    # ---- Edit/View form — text-anchored, NOT independently role-confirmed --
-    FULL_NAME_EN = _field_after_label("Full Name (EN)")
-    FULL_NAME_AR = _field_after_label("Full Name (AR)")
-    POSITION_LABEL_EN = _field_after_label("Position Label (EN)")
-    POSITION_LABEL_AR = _field_after_label("Position Label (AR)")
-    ROLE_BADGE_LABEL_EN = _field_after_label("Role Badge Label (EN)")
-    ROLE_BADGE_LABEL_AR = _field_after_label("Role Badge Label (AR)")
-    PHOTO_ALT_TEXT_EN = _field_after_label("Photo Alt Text (EN)")
-    PHOTO_ALT_TEXT_AR = _field_after_label("Photo Alt Text (AR)")
+    # ---- Edit/View form — CONFIRMED LIVE 2026-08-26 (member-04, "Board
+    # Member" category, ERC QCDEMO-129398-member-04), superseding the
+    # earlier _NOT_ROLE_CONFIRMED text-anchored constants below. The
+    # `_field_after_label()` xpath helper NEVER resolved these six fields —
+    # confirmed root cause this session: xpath's `//` axis does not pierce
+    # the shadow root this Object Definition form renders inside, the same
+    # boundary `document.querySelectorAll()` also cannot cross. That is why
+    # get_by_role()/get_by_text() (which DO pierce shadow DOM) succeeded
+    # where raw xpath silently returned zero matches every time.
+    #
+    # There is NO separate "(EN)"/"(AR)" field pair for Full Name, Position
+    # Label, Role Badge Label, or Photo Alt Text — confirmed live via the
+    # rendered form and its accessibility snapshot. Each is ONE field with
+    # its own locale-toggle button beside it (LOCALE_TOGGLE_BUTTON, 7 pairs
+    # total on this form); switching locale re-targets the SAME input, it
+    # does not reveal a second one. The FULL_NAME_EN/AR-style constants below
+    # were therefore testing a field shape that doesn't exist. Confirmed via
+    # accessibility snapshot (interesting_only=False) + a live DOM id dump
+    # matching the SAME `ddm$$<camelCase>$<hash>$0$$en_US...` id pattern
+    # DISPLAY_ORDER already established as reliable for this form:
+    FULL_NAME = 'input[id*="ddm$$fullName$"]'
+    POSITION_LABEL = 'input[id*="ddm$$positionLabel$"]'
+    ROLE_BADGE_LABEL = 'input[id*="ddm$$roleBadgeLabel$"]'
+    PHOTO_ALT_TEXT = 'input[id*="ddm$$photoAltText$"]'
+    LOCALE_TOGGLE_BUTTON = '[data-testid="triggerButton"]'
+
+    # ---- Active Status / Enable Share Icons checkboxes — UNCONFIRMED this
+    # session, deliberately left as the old text-anchored constants rather
+    # than guessed. The accessibility snapshot (interesting_only=False)
+    # DID report both as role=checkbox with their exact names ("Active
+    # Status", "Enable Share Icons"), but neither `get_by_role("checkbox",
+    # name=...)` NOR any DOM query (`input[type=checkbox]`, `[role=checkbox]`,
+    # a class/id substring scan) could independently re-locate the same
+    # elements as a live Locator in 3 retries — a real reproducible gap
+    # between what the snapshot reports and what a Locator can resolve, not
+    # explained by shadow-DOM piercing (get_by_role already pierces it, per
+    # FULL_NAME above). Do not build a test on FULL_NAME_EN/AR-era
+    # `_field_after_label(..., "input")` for these two — it was never
+    # confirmed live either. See the batch report for the follow-up this
+    # needs (a slower/headed re-probe) before scripting Active Status /
+    # Enable Share Icons cases.
     ACTIVE_STATUS_CHECKBOX = _field_after_label("Active Status", "input")
     ENABLE_SHARE_ICONS_CHECKBOX = _field_after_label("Enable Share Icons", "input")
-    LOCALE_TOGGLE_BUTTON = '[data-testid="triggerButton"]'
 
     # ---- Navigation -----------------------------------------------------------
     def open_board_members_list(self) -> "BoardMembersAdminPage":
@@ -187,13 +218,9 @@ class BoardMembersAdminPage(BasePage):
     def fill_member_form(
         self,
         full_name_en: str = None,
-        full_name_ar: str = None,
         position_label_en: str = None,
-        position_label_ar: str = None,
         role_badge_label_en: str = None,
-        role_badge_label_ar: str = None,
         photo_alt_text_en: str = None,
-        photo_alt_text_ar: str = None,
         short_bio_en: str = None,
         detailed_biography_en: str = None,
         professional_experience_entries: str = None,
@@ -201,22 +228,18 @@ class BoardMembersAdminPage(BasePage):
         active_status: bool = None,
         enable_share_icons: bool = None,
     ) -> "BoardMembersAdminPage":
+        """EN-locale setters only — see FULL_NAME's docstring: there is no
+        separate AR field to fill, AR needs a locale-toggle click first
+        (see toggle_locale_for()), out of scope for the fields this batch
+        confirmed live."""
         if full_name_en is not None:
-            self.type(self.FULL_NAME_EN, full_name_en)
-        if full_name_ar is not None:
-            self.type(self.FULL_NAME_AR, full_name_ar)
+            self.type(self.FULL_NAME, full_name_en)
         if position_label_en is not None:
-            self.type(self.POSITION_LABEL_EN, position_label_en)
-        if position_label_ar is not None:
-            self.type(self.POSITION_LABEL_AR, position_label_ar)
+            self.type(self.POSITION_LABEL, position_label_en)
         if role_badge_label_en is not None:
-            self.type(self.ROLE_BADGE_LABEL_EN, role_badge_label_en)
-        if role_badge_label_ar is not None:
-            self.type(self.ROLE_BADGE_LABEL_AR, role_badge_label_ar)
+            self.type(self.ROLE_BADGE_LABEL, role_badge_label_en)
         if photo_alt_text_en is not None:
-            self.type(self.PHOTO_ALT_TEXT_EN, photo_alt_text_en)
-        if photo_alt_text_ar is not None:
-            self.type(self.PHOTO_ALT_TEXT_AR, photo_alt_text_ar)
+            self.type(self.PHOTO_ALT_TEXT, photo_alt_text_en)
         if short_bio_en is not None:
             self.type(self.SHORT_BIO, short_bio_en)
         if detailed_biography_en is not None:
@@ -250,11 +273,59 @@ class BoardMembersAdminPage(BasePage):
         return self
 
     # ---- State queries --------------------------------------------------------
+    # CONFIRMED LIVE 2026-08-26 (member-04, clearing Full Name then Save):
+    # `.alert-danger, [role="alert"]` (the OLD selector) matches NOTHING on
+    # this form — it produced 3 confirmed false-positive bugs earlier this
+    # session (see the module's CRITICAL LESSON note / batch report). What
+    # the form actually renders on a blocked save, confirmed via a raw
+    # inner_text() diff before/after clicking Save:
+    #   1. An inline per-field message, exact text "This field is required."
+    #      appearing directly under the offending field's label.
+    #   2. A page-level toast/banner, exact text starting
+    #      "This form is invalid. Check field <FieldName>." — this is the
+    #      reliable, field-name-agnostic signal used below (a plain text
+    #      match, not a CSS class, since no stable class/role was found for
+    #      either #1 or #2's container in the harvest).
+    SAVE_ERROR_BANNER_TEXT = "This form is invalid. Check field"
+    INLINE_REQUIRED_TEXT = "This field is required."
+
     def is_save_error_shown(self) -> bool:
-        return self.is_visible('.alert-danger, [role="alert"]')
+        body_text = self.page.locator("body").inner_text()
+        return self.SAVE_ERROR_BANNER_TEXT in body_text or self.INLINE_REQUIRED_TEXT in body_text
 
     def save_error_text(self) -> str:
-        return self.text('.alert-danger, [role="alert"]')
+        body_text = self.page.locator("body").inner_text()
+        idx = body_text.find(self.SAVE_ERROR_BANNER_TEXT)
+        if idx == -1:
+            idx = body_text.find(self.INLINE_REQUIRED_TEXT)
+        return body_text[idx: idx + 120] if idx != -1 else ""
+
+    def find_row_index_by_category(self, category_text: str, exclude: tuple = ()) -> int:
+        """Scan the LIST rows' own rendered text for one that mentions
+        `category_text` and none of `exclude` — safer than
+        `LIST_ROW:has-text(...) >> nth=0`, which the existing
+        `board_member_row` fixture uses and which this session found can
+        resolve to the WRONG category (see the batch report: that selector
+        landed on the Chairman record, not a true "Board Member", when
+        probing this same list) because a row's rendered text is not
+        guaranteed to contain only its own category. Returns -1 if none
+        matches."""
+        rows = self.page.locator(self.LIST_ROW)
+        for i in range(rows.count()):
+            txt = rows.nth(i).inner_text()
+            if category_text in txt and not any(bad in txt for bad in exclude):
+                return i
+        return -1
+
+    def open_member_edit_form_by_row_index_fresh(self, index: int) -> "BoardMembersAdminPage":
+        """Re-navigate to the list fresh, then open the row at `index` —
+        used by teardown finalizers so a revert never assumes the form the
+        test left open is still there/error-free (cms-profile.md's
+        data-hygiene lesson: a finalizer that types into a stale/broken
+        page state is exactly what stranded real content mutated earlier
+        this session)."""
+        self.open_board_members_list()
+        return self.open_member_edit_form_by_row_index(index)
 
     def row_visible(self, full_name: str) -> bool:
         return self.is_visible(f'{self.LIST_ROW}:has-text("{full_name}")')
