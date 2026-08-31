@@ -2,11 +2,13 @@
 web/tests/about_qatar_chamber/test_about_qatar_chamber_web.py — About Qatar
 Chamber (PBI 129392 / QC-ABOUT 001), Web platform.
 
-Source: all 43 approved, Automation-tagged, Web-platform cases in this batch
+Source: all 44 approved, Automation-tagged, Web-platform cases in this batch
 (scope: Category:UI OR Platform:Web, execution_type=Automated) — 134669-134683,
-134688-134701, 134730-134731, 134736, 134740-134751. 14 of these also carry
-the Control_Panel tag (134675, 134676, 134679, 134688, 134690, 134691, 134693,
-134694, 134697, 134698, 134701, 134730, 134731, 134736); per
+134688-134701, 134730-134731, 134736, 134740-134751. 134692 added 2026-08-31,
+confirmed Automation-tagged/Functional-High directly with the user. 15 of
+these also carry the Control_Panel tag (134675, 134676, 134679, 134688,
+134690, 134691, 134692, 134693, 134694, 134697, 134698, 134701, 134730,
+134731, 134736); per
 automation-standards.md's "one test per platform, sharing step intent" rule,
 their CMS-editing step is a SEPARATE test in the sibling
 test_about_qatar_chamber_control_panel.py (all 14 gated skip — blank
@@ -1029,6 +1031,44 @@ def test_draft_content_not_visible_on_public_page(page):
 
     # Assert
     assert not contains_draft_marker
+
+
+@allure.epic("ABOUT")
+@allure.feature("About Qatar Chamber")
+@allure.story("Preview renders draft without publishing (public verification half)")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Preview does not leak draft content to the public page, and the public page/record stay unchanged")
+@allure.description(
+    "Web-side verification half of ADO-134692 — the CMS-authoring "
+    "(set draft content + click Preview) half is a separate, gated test in "
+    "test_about_qatar_chamber_control_panel.py (blocked: blank "
+    "TEST_USER/TEST_PASSWORD). Verified here as a baseline regression guard: "
+    "the preview-only marker text was never authored/published this run, so "
+    "its absence does not itself exercise the real Preview mechanism, only "
+    "confirms the public page and its currently-published title stay "
+    "unchanged."
+)
+@allure.label("pbi", PBI)
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.functional_high
+@pytest.mark.workflow
+@pytest.mark.pbi_129392
+@pytest.mark.traceability("ADO-134692")
+def test_preview_draft_not_visible_on_public_page(page):
+    # ADO-134692 | PBI 129392 (public-page verification half)
+    # Arrange
+    about = AboutQatarChamberPage(page)
+
+    # Act
+    with allure.step("Open the About Qatar Chamber page in English and search for the preview-only draft marker"):
+        about.open_en()
+        contains_preview_marker = about.html_text_contains("PREVIEW-DRAFT-129392")
+        title = about.hero_title_text()
+
+    # Assert
+    assert not contains_preview_marker, "expected the Preview-only draft content to never leak to the public page"
+    assert title == "About Qatar Chamber", "expected the public page's published title/record to stay unchanged"
 
 
 @allure.epic("ABOUT")

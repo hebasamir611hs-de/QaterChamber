@@ -2,10 +2,13 @@
 web/tests/about_qatar_chamber/test_about_qatar_chamber_control_panel.py —
 About Qatar Chamber (PBI 129392 / QC-ABOUT 001), Control_Panel platform.
 
-Source: 14 approved, Automation-tagged, Web+Control_Panel-platform cases in
+Source: 15 approved, Automation-tagged, Web+Control_Panel-platform cases in
 this batch that also carry the Control_Panel tag — 134675, 134676, 134679
-(UI), 134688, 134690, 134691, 134693, 134694, 134697, 134698, 134701
-(Functional-High), 134730, 134731, 134736 (Functional-Low). Per
+(UI), 134688, 134690, 134691, 134692, 134693, 134694, 134697, 134698, 134701
+(Functional-High), 134730, 134731, 134736 (Functional-Low). 134692 added
+2026-08-31 — confirmed Automation-tagged and Functional-High directly with
+the user (same numeric batch its Functional-High siblings above already
+document as Functional-High). Per
 automation-standards.md ("A single QA test case that legitimately spans two
 platforms becomes one test per platform, each in its own module, sharing
 step intent"), each of these 14 cases' CMS-editing step lives HERE as its own
@@ -60,7 +63,7 @@ _UNRESOLVED = [
             "HERO_BANNER_IMAGE_UPLOAD", "HERO_BANNER_ALT_TEXT_INPUT", "HYPERLINK_TITLE_INPUT",
             "HYPERLINK_URL_INPUT", "HYPERLINK_OPEN_BEHAVIOUR_SELECT", "SAVE_DRAFT_BUTTON",
             "PUBLISH_BUTTON", "UNPUBLISH_BUTTON", "SUCCESS_TOAST", "AUDIT_LOG_NAV_LINK",
-            "AUDIT_LOG_ENTRY_ROW",
+            "AUDIT_LOG_ENTRY_ROW", "PREVIEW_BUTTON", "PREVIEW_PANEL", "RECORD_STATUS_LABEL",
         )),
     )
     for name in names
@@ -196,6 +199,24 @@ def test_save_draft_content_not_published(page):
         admin.set_page_content_en("<p>DRAFT-ONLY-129392</p>")
         admin.click_save_draft()
     assert admin.is_success_toast_visible()
+
+
+@_case("134692", "Preview renders unpublished About Qatar Chamber content without publishing it",
+       "Preview shows draft content without publishing", allure.severity_level.CRITICAL,
+       [pytest.mark.functional_high, pytest.mark.workflow])
+def test_preview_renders_draft_content_without_publishing(page):
+    # ADO-134692 | PBI 129392
+    login, admin = _login(page)
+    with allure.step("Add a draft-only paragraph and Save as Draft (do not publish)"):
+        admin.set_page_content_en("<p>PREVIEW-DRAFT-129392</p>")
+        admin.click_save_draft()
+    with allure.step("Record the entry's status before Preview"):
+        status_before = admin.record_status_text()
+    with allure.step("Click Preview"):
+        admin.click_preview()
+    assert admin.is_preview_panel_visible()
+    assert "PREVIEW-DRAFT-129392" in admin.preview_content_text()
+    assert admin.record_status_text() == status_before, "expected the record status to stay unchanged by Preview"
 
 
 @_case("134693", "Publish a change and confirm an audit log entry is written",

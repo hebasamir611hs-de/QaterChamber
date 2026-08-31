@@ -3,8 +3,11 @@ web/pages/about_qatar_chamber/about_qatar_chamber_admin_page.py —
 AboutQatarChamberAdminPage.
 
 PBI 129392 / QC-ABOUT 001 "About Qatar Chamber" — Control_Panel-tagged cases
-(14 of the 43 in this batch: 134675, 134676, 134679, 134688, 134690, 134691,
-134693, 134694, 134697, 134698, 134701, 134730, 134731, 134736). Sibling of
+(15 in this batch: 134675, 134676, 134679, 134688, 134690, 134691, 134692,
+134693, 134694, 134697, 134698, 134701, 134730, 134731, 134736 — 134692 added
+2026-08-31, confirmed Automation-tagged/Functional-High directly with the
+user, same numeric batch as its Functional-High siblings 134688/134690/
+134691/134693/134694/134697/134698/134701). Sibling of
 about_qatar_chamber_page.py (the public Web-platform Page Object for this
 same PBI, which already confirms live, via the page's own inline script, that
 the public site renders a single published `aboutqatarchamberpages` Liferay
@@ -68,6 +71,10 @@ class AboutQatarChamberAdminPage(BasePage):
     SUCCESS_TOAST = _todo("the Liferay generic success toast")
     AUDIT_LOG_NAV_LINK = _todo("the Liferay audit log nav item")
     AUDIT_LOG_ENTRY_ROW = _todo("an audit log entry row filtered to this page record")
+    # ADO-134692 — Preview renders unpublished draft content without publishing it
+    PREVIEW_BUTTON = _todo("the entry-edit screen's Preview action")
+    PREVIEW_PANEL = _todo("the Preview panel/iframe container that renders the draft content")
+    RECORD_STATUS_LABEL = _todo("the entry-edit screen's own record-status label (e.g. Draft/Unpublished)")
 
     def open_control_panel_home(self) -> "AboutQatarChamberAdminPage":
         self.open(control_panel_url("/group/qatar-chamber"))
@@ -117,3 +124,18 @@ class AboutQatarChamberAdminPage(BasePage):
 
     def is_audit_log_entry_visible(self) -> bool:
         return self.is_visible(self.AUDIT_LOG_ENTRY_ROW)
+
+    # ── Preview (ADO-134692) — renders unpublished draft content ─────────
+    def click_preview(self) -> "AboutQatarChamberAdminPage":
+        self.click(self.PREVIEW_BUTTON)
+        self.wait_for(self.PREVIEW_PANEL)
+        return self
+
+    def is_preview_panel_visible(self) -> bool:
+        return self.is_visible(self.PREVIEW_PANEL)
+
+    def preview_content_text(self) -> str:
+        return self.text(self.PREVIEW_PANEL)
+
+    def record_status_text(self) -> str:
+        return self.text(self.RECORD_STATUS_LABEL)
