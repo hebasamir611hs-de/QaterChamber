@@ -1,0 +1,31 @@
+{
+  "_comment": "Canonical MCP registry, copied from .mcp.json.example.",
+  "mcpServers": {
+    "appium": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "appium-mcp@latest"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
+    "figma": {
+      "_comment": "Reads FIGMA_API_KEY from .env automatically (loaded from the working directory). Do NOT put the key here. FRAMELINK_TELEMETRY=off disables the package's default usage analytics.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "--stdio"
+      ],
+      "env": {
+        "FRAMELINK_TELEMETRY": "off"
+      }
+    }
+  }
+}

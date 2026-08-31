@@ -24,6 +24,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config.settings import ENV_FILE, auth_state_path  # noqa: E402
 
+# Same site-wide announcement-overlay guard BasePage.open() applies (see
+# core/web/overlays.py). This script drives raw Playwright (it runs BEFORE
+# any authenticated Page Object exists to wrap it), so it has to dismiss the
+# overlay itself — found live 2026-08-31 automating PBI 129392: the
+# anonymous /c/portal/login page sits on the same host as CONTROL_PANEL_URL,
+# so #qc-announcement-popup-root mounts there too and intercepts the Sign In
+# click without this.
+from core.web.overlays import dismiss_overlays, MOUNT_GRACE_MS  # noqa: E402
+
 try:
     from playwright.sync_api import sync_playwright
 except ImportError:
@@ -36,18 +45,41 @@ def env(key, default=None):
 
 def login(page):
     """
-    Standard username/password login driven by env selectors. ADAPT this function for
-    the project's real flow (multi-step, OTP, SSO) — it is the one project-specific piece.
-    Selectors default to common ids; override via LOGIN_*_SELECTOR env vars.
+    Liferay CMS login — the project-specific piece, adapted from the generic
+    template default. Selectors match web/pages/components/cms_login_page.py
+    (CmsLoginPage), CLI-confirmed live against qcdev.ihorizons.com/c/portal/login
+    (commit 2cbbb4c, re-confirmed 2026-08-24/2026-08-31). Override any of them
+    via the matching LOGIN_*_SELECTOR / LOGIN_PATH env var if the CMS login
+    flow ever changes.
     """
     base = (env("WEB_BASE_URL", "") or "").rstrip("/")
-    page.goto(base + env("LOGIN_PATH", "/login"), wait_until="domcontentloaded")
-    page.fill(env("LOGIN_USER_SELECTOR", "#username"), env("TEST_USER", ""))
-    page.fill(env("LOGIN_PASS_SELECTOR", "#password"), env("TEST_PASSWORD", ""))
-    page.click(env("LOGIN_SUBMIT_SELECTOR", "button[type=submit]"))
-    success = env("LOGIN_SUCCESS_SELECTOR")   # a selector visible ONLY after a real login
+    page.goto(base + env("LOGIN_PATH", "/c/portal/login"), wait_until="domcontentloaded")
+    dismiss_overlays(page, grace_ms=MOUNT_GRACE_MS)
+    page.fill(
+        env("LOGIN_USER_SELECTOR", "#_com_liferay_login_web_portlet_LoginPortlet_login"),
+        env("TEST_USER", ""),
+    )
+    page.fill(
+        env("LOGIN_PASS_SELECTOR", "#_com_liferay_login_web_portlet_LoginPortlet_password"),
+        env("TEST_PASSWORD", ""),
+    )
+    submit_selector = env(
+        "LOGIN_SUBMIT_SELECTOR",
+        '#_com_liferay_login_web_portlet_LoginPortlet_loginForm button[type="submit"]',
+    )
+    dismiss_overlays(page)  # re-check: the overlay can (re)mount after fill() triggers JS
+    try:
+        page.click(submit_selector)
+    except Exception:
+        # Same retry-once-after-dismiss pattern as BasePage.click(): the
+        # overlay can remount again in the gap between the check above and
+        # the click actually landing (client-rendered, not on a fixed timer).
+        if not dismiss_overlays(page):
+            raise
+        page.click(submit_selector)
+    success = env("LOGIN_SUCCESS_SELECTOR", 'nav[aria-label="Control Menu"]')
     if success:
-        page.wait_for_selector(success, timeout=int(env("LOGIN_TIMEOUT", "15000")))
+        page.wait_for_selector(success, timeout=int(env("LOGIN_TIMEOUT", "20000")))
     else:
         page.wait_for_load_state("networkidle")
 

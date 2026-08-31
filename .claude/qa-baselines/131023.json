@@ -1,0 +1,253 @@
+{
+  "pbi": "131023",
+  "analysed": "2026-08-30",
+  "mode": "Normal",
+  "budget": 28,
+  "delivered": 28,
+  "categories": {
+    "UI": 5,
+    "Functional-High": 11,
+    "Functional-Low": 7,
+    "Edge": 5
+  },
+  "inventory": {
+    "OBJ": 5,
+    "FLD": 1,
+    "CTL": 4,
+    "ST": 10,
+    "ROL": 1,
+    "AC": 10,
+    "SUR": 1,
+    "LNG": 2
+  },
+  "case_ids": [
+    "CHATBOT-BOT003-TC-001",
+    "CHATBOT-BOT003-TC-002",
+    "CHATBOT-BOT003-TC-003",
+    "CHATBOT-BOT003-TC-004",
+    "CHATBOT-BOT003-TC-005",
+    "CHATBOT-BOT003-TC-006",
+    "CHATBOT-BOT003-TC-007",
+    "CHATBOT-BOT003-TC-008",
+    "CHATBOT-BOT003-TC-009",
+    "CHATBOT-BOT003-TC-010",
+    "CHATBOT-BOT003-TC-011",
+    "CHATBOT-BOT003-TC-012",
+    "CHATBOT-BOT003-TC-013",
+    "CHATBOT-BOT003-TC-014",
+    "CHATBOT-BOT003-TC-015",
+    "CHATBOT-BOT003-TC-016",
+    "CHATBOT-BOT003-TC-017",
+    "CHATBOT-BOT003-TC-018",
+    "CHATBOT-BOT003-TC-019",
+    "CHATBOT-BOT003-TC-020",
+    "CHATBOT-BOT003-TC-021",
+    "CHATBOT-BOT003-TC-022",
+    "CHATBOT-BOT003-TC-023",
+    "CHATBOT-BOT003-TC-024",
+    "CHATBOT-BOT003-TC-025",
+    "CHATBOT-BOT003-TC-026",
+    "CHATBOT-BOT003-TC-027",
+    "CHATBOT-BOT003-TC-028"
+  ],
+  "cases": {
+    "CHATBOT-BOT003-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-5",
+        "ST-7",
+        "SUR-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-002": {
+      "category": "UI",
+      "traceability": [
+        "ST-8"
+      ]
+    },
+    "CHATBOT-BOT003-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "ST-9",
+        "LNG-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-004": {
+      "category": "UI",
+      "traceability": [
+        "ST-10",
+        "LNG-2"
+      ]
+    },
+    "CHATBOT-BOT003-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "AC-2",
+        "OBJ-3"
+      ]
+    },
+    "CHATBOT-BOT003-TC-006": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-1",
+        "AC-3",
+        "AC-10",
+        "ST-1",
+        "ST-5",
+        "OBJ-2",
+        "OBJ-4",
+        "ROL-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-007": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-1",
+        "OBJ-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-008": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-4",
+        "ST-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-009": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-8",
+        "ST-2"
+      ]
+    },
+    "CHATBOT-BOT003-TC-010": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-8",
+        "ST-3"
+      ]
+    },
+    "CHATBOT-BOT003-TC-011": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-6",
+        "ST-4",
+        "CTL-4"
+      ]
+    },
+    "CHATBOT-BOT003-TC-012": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-6",
+        "ST-4"
+      ]
+    },
+    "CHATBOT-BOT003-TC-013": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-7",
+        "ST-6"
+      ]
+    },
+    "CHATBOT-BOT003-TC-014": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-9",
+        "ST-6"
+      ]
+    },
+    "CHATBOT-BOT003-TC-015": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-5",
+        "LNG-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-016": {
+      "category": "Functional-High",
+      "traceability": [
+        "AC-5",
+        "LNG-2"
+      ]
+    },
+    "CHATBOT-BOT003-TC-017": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-018": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-019": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-020": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-021": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-2"
+      ]
+    },
+    "CHATBOT-BOT003-TC-022": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-3"
+      ]
+    },
+    "CHATBOT-BOT003-TC-023": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-4"
+      ]
+    },
+    "CHATBOT-BOT003-TC-024": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-2",
+        "ST-1",
+        "ST-3"
+      ]
+    },
+    "CHATBOT-BOT003-TC-025": {
+      "category": "Edge",
+      "traceability": [
+        "ST-4",
+        "OBJ-2"
+      ]
+    },
+    "CHATBOT-BOT003-TC-026": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-2",
+        "ST-4"
+      ]
+    },
+    "CHATBOT-BOT003-TC-027": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-1"
+      ]
+    },
+    "CHATBOT-BOT003-TC-028": {
+      "category": "Edge",
+      "traceability": [
+        "ST-6",
+        "ST-5",
+        "AC-10"
+      ]
+    }
+  },
+  "basis": "Description + full embedded AC + named Edge/Negative scenarios + Postcondition. No Figma link or images attached (confirmed with human QA Manager) - text-only basis. Admin-side flow authoring explicitly scoped out (covered by QC-BOT-008)."
+}
