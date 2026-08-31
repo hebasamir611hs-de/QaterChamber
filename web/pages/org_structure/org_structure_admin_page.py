@@ -158,7 +158,7 @@ class OrgStructureAdminPage(BasePage):
         # force a real, fresh login every time this is the entry point into
         # the admin flow. Local import: avoids a circular import with
         # CmsLoginPage (itself a BasePage subclass).
-        from web.pages.control_panel.login_page import CmsLoginPage
+        from web.pages.components.cms_login_page import CmsLoginPage
 
         login = CmsLoginPage(self.page)
         self.open(control_panel_url("/home"))

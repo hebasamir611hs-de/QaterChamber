@@ -116,7 +116,7 @@ class BoardOfDirectorsAdminPage(BasePage):
         (there's no login form to detect, just a missing admin affordance).
         Force a real, fresh login whenever the Edit link isn't present.
         """
-        from web.pages.control_panel.login_page import CmsLoginPage
+        from web.pages.components.cms_login_page import CmsLoginPage
 
         login = CmsLoginPage(self.page)
         self.open(web_url(self.PUBLIC_LISTING_PATH))

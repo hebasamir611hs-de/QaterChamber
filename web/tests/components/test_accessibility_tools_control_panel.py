@@ -62,7 +62,7 @@ import os
 import allure
 import pytest
 
-from web.pages.control_panel.login_page import CmsLoginPage
+from web.pages.components.cms_login_page import CmsLoginPage
 from web.pages.components.accessibility_tools_admin_component import AccessibilitySettingsPage
 
 EXPECTED_ACCESS_DENIED = {

@@ -51,6 +51,33 @@ set to the same host as WEB_BASE_URL (https://qcdev.ihorizons.com) in .env,
 restoring the value this project's own git history already confirmed live
 (commit 2cbbb4c) — TEST_USER/TEST_PASSWORD were left untouched (never
 invent credentials).
+
+Merged 2026-08-31 with web/pages/control_panel/login_page.py, a duplicate
+CmsLoginPage that appeared in a separate control_panel/ tree after a
+git merge — standards.md's Automation Structure section already re-confirmed
+(2026-08-19) that a separate control_panel/ tree was tried and rejected, so
+the duplicate file was removed and its importers repointed here instead of
+keeping two. That file carried real, live-tested login diagnostics this one
+didn't have first-hand (2026-08-18 and 2026-08-25 sessions against qcdev),
+folded into the login()/login_succeeded() logic below:
+  - The Sign In button's own id carries a randomized suffix that changes
+    between page loads (confirmed two loads, same session: `_...rxme` vs
+    `_...buut`) — SUBMIT_BUTTON deliberately scopes by the login form's
+    stable id + type=submit instead, not the button's own id.
+  - LOGIN_SUCCESS_INDICATOR is OR'd with the Product Menu toggle
+    (`[data-qa-id="productMenu"]`) purely for robustness against a
+    render-order race between the two nav elements — both were confirmed
+    present together right after a real login, not because either one was
+    observed missing.
+  - Re-hitting LOGIN_PATH from an already-authenticated context redirects to
+    an unrelated, unbuilt page ("Coming Soon") while the Control
+    Menu/Product Menu toggle stay present — Liferay's normal
+    already-logged-in redirect landing on a page qcdev hasn't built yet, not
+    a logged-out state. Callers should check login_succeeded() before
+    calling login() again rather than assume a fresh call is always safe.
+  - Because LOGIN_SUCCESS_INDICATOR can legitimately match both nav elements
+    at once, `.first` is required — a bare `page.locator(...).wait_for()`
+    enforces Playwright strict mode and throws on a 2-element match.
 """
 
 from core.web.base_page import BasePage
@@ -58,11 +85,17 @@ from config.settings import control_panel_url
 
 
 class CmsLoginPage(BasePage):
-    LOGIN_PATH = "/c/portal/login"
+    LOGIN_PATH = "/c/portal/login"  # confirmed live 2026-08-18 — plain form, not SSO
     USERNAME_INPUT = "#_com_liferay_login_web_portlet_LoginPortlet_login"
     PASSWORD_INPUT = "#_com_liferay_login_web_portlet_LoginPortlet_password"
-    SUBMIT_BUTTON = '#_com_liferay_login_web_portlet_LoginPortlet_loginForm button[type="submit"]'
-    LOGIN_SUCCESS_INDICATOR = 'nav[aria-label="Control Menu"]'  # admin toolbar, authenticated-only
+    SUBMIT_BUTTON = (
+        '#_com_liferay_login_web_portlet_LoginPortlet_loginForm button[type="submit"]'
+    )
+    # OR'd with the Product Menu toggle (2026-08-25) — both were confirmed
+    # present together right after a real login, but ORing guards against a
+    # render-order race between the two nav elements rather than relying on
+    # either alone. See module docstring's "Merged 2026-08-31" note.
+    LOGIN_SUCCESS_INDICATOR = 'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'
 
     def open_login(self) -> "CmsLoginPage":
         self.open(control_panel_url(self.LOGIN_PATH))
@@ -72,8 +105,16 @@ class CmsLoginPage(BasePage):
         self.type(self.USERNAME_INPUT, username)
         self.type(self.PASSWORD_INPUT, password)
         self.click(self.SUBMIT_BUTTON)
-        self.page.wait_for_load_state("domcontentloaded")
+        # .first: LOGIN_SUCCESS_INDICATOR legitimately matches BOTH the
+        # Control Menu nav AND the Product Menu toggle once logged in.
+        # BasePage.wait_for()'s bare page.locator(...).wait_for() enforces
+        # Playwright strict mode and throws on a 2-element match, so it's
+        # called directly here rather than through the generic wrapper.
+        self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="visible", timeout=10000)
         return self
 
     def login_succeeded(self) -> bool:
-        return self.is_visible(self.LOGIN_SUCCESS_INDICATOR)
+        try:
+            return self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.is_visible()
+        except Exception:  # noqa: BLE001 — mirrors BasePage.is_visible's never-throws contract
+            return False

@@ -175,7 +175,7 @@ class BoardMembersAdminPage(BasePage):
         OrgStructureAdminPage.open_departments_list()'s documented reasoning:
         the rendered list URL embeds a per-session Liferay portlet instance
         id that is regenerated every session and 404s if reused."""
-        from web.pages.control_panel.login_page import CmsLoginPage
+        from web.pages.components.cms_login_page import CmsLoginPage
 
         login = CmsLoginPage(self.page)
         self.open(control_panel_url("/home"))
