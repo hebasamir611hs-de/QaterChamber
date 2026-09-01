@@ -23,10 +23,29 @@ dismissal is applied per-navigation rather than once per session.
 Registry-driven: adding another blocking overlay is one OVERLAYS entry, not
 new logic. Absent overlay == silent no-op, never an error.
 
-Known, deliberately NOT dismissed: #qcChatbot (.qc-chatbot, z-index 9999,
-390x645, bottom corner). It is a persistent widget rather than a modal and
-does not cover the page; closing it proactively would change page state.
-Add it here if it is ever found to intercept a real interaction.
+CONFIRMED LIVE INTERCEPTING (2026-08-31/09-01, follow-up session investigating
+the Business Events admin grid's row-kebab delete flow): #qcChatbot
+(.qc-chatbot, launcher button `button.qc-launcher[aria-label="Open chat"]`,
+bottom-right corner) DOES intercept a real click — a plain Playwright
+`.click()` on a row's Actions kebab button in the Business Events Object
+Definition list (Control Panel surface) hung Playwright's full 30s
+action-timeout with the error trace repeatedly naming
+`<button class="qc-launcher" ...>` as the element "subtree intercepts pointer
+events", alongside an invisible reCAPTCHA iframe also intercepting on retry.
+This is NOT the announcement modal's full-viewport-cover case the prior note
+above assumed — the chat launcher is a small, position:fixed corner widget,
+but its own overlay stacking apparently extends over nearby actionable
+elements on at least this admin grid's row-actions column when the button is
+scrolled into view. Registered below (CHATBOT_LAUNCHER) as a close-by-removal
+overlay: `dismiss_overlays()` cannot "close" a chat launcher the way it closes
+a modal, so this overlay's `close` is deliberately absent and dismissal is a
+DOM-removal fallback instead (see `_dismiss_chatbot_launcher()`) — the widget
+reappears on the next navigation regardless, so removing it is the same
+per-navigation, no-persisted-state shape as the announcement modal's own
+dismissal, not a state mutation that could affect a real assertion. Confirmed
+on the Control Panel surface; not yet confirmed to also intercept on the
+public web surface, so it is registered for both surfaces rather than
+narrowed, pending a case that shows it does NOT matter there.
 """
 
 from core.utils.logger import get_logger
@@ -62,6 +81,29 @@ OVERLAYS = [
         surfaces=("web",),  # public-site announcement — never renders in the Control Panel
     ),
 ]
+
+# The chat launcher widget — see module docstring's CONFIRMED LIVE
+# INTERCEPTING note. Handled OUTSIDE the OVERLAYS registry/Overlay class
+# because there is no "close" action for it (it is a persistent launcher
+# button, not a dismissible modal) — the fix is removing the DOM node, which
+# is safe because it carries no persisted dismissal state and simply
+# re-mounts on the next navigation, exactly like the announcement modal.
+CHATBOT_LAUNCHER_ROOT = "#qcChatbot"
+
+
+def _dismiss_chatbot_launcher(page) -> bool:
+    try:
+        launcher = page.locator(CHATBOT_LAUNCHER_ROOT)
+        if launcher.count() == 0:
+            return False
+        page.evaluate(
+            "(sel) => { const el = document.querySelector(sel); if (el) el.remove(); }",
+            CHATBOT_LAUNCHER_ROOT,
+        )
+        logger.info("removed intercepting chat launcher widget: %s", CHATBOT_LAUNCHER_ROOT)
+        return True
+    except Exception:  # noqa: BLE001 — best-effort only, never masks a real failure
+        return False
 
 
 def _current_surface(page) -> str:
@@ -116,12 +158,25 @@ def _is_showing(page, overlay: Overlay) -> bool:
 
 
 def is_overlay_showing(page) -> bool:
-    """Cheap, zero-wait check across the registry."""
+    """Cheap, zero-wait check across the registry (does not include the
+    chat launcher — it never fully covers the page, so it is not a
+    "something is blocking everything" signal the way the registry's modals
+    are)."""
     return any(_is_showing(page, o) for o in OVERLAYS)
 
 
 def dismiss_overlays(page, grace_ms: int = 0) -> bool:
     """Dismiss every registered overlay currently blocking the page.
+
+    Deliberately does NOT also remove the #qcChatbot launcher on every call
+    — this runs on EVERY navigation via BasePage.open(), and removing a
+    widget suite-wide on every page for one admin grid's confirmed-live
+    interception would be a much bigger behavior change than this session's
+    task called for (and could silently break a future test that asserts on
+    the launcher itself). Callers with live evidence the launcher is
+    actually blocking their own interaction (see
+    HomeBusinessEventsAdminPage.delete_row_by_title()) should call
+    `_dismiss_chatbot_launcher(page)` directly at that call site instead.
 
     `grace_ms` > 0 waits that long for a client-rendered overlay to appear
     before giving up on it — use it right after a navigation. Returns True

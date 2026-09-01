@@ -134,15 +134,26 @@ class BasePage:
         except Exception:  # noqa: BLE001 — never throws, per the wrapper contract
             return False
 
-    def wait_for(self, locator: str, state: str = "visible", timeout: int = 10000) -> None:
+    def wait_for(self, locator: str, state: str = "visible", timeout: int = 10000, first: bool = False) -> None:
         # Covers click-driven navigation too (the Page Objects wait on an
         # element after every click), not just the explicit open() above.
+        #
+        # `first`: pass True when the call is only confirming "at least one
+        # match rendered" (e.g. a grid that legitimately has >1 row) rather
+        # than targeting one specific element — without it, Playwright's
+        # strict mode throws on a locator matching more than one element.
+        # Kept inside this wrapper (not a raw `.first` at the call site) so
+        # every Page Object call still gets the gate/reauth handling below,
+        # including the post-recovery retry and the after-wait overlay
+        # check — none of that is optional, per this method's own docstring
+        # notes on click-driven navigation re-arming interstitials.
+        target = self.page.locator(locator).first if first else self.page.locator(locator)
         if is_gate_showing(self.page):
             clear_license_gate(self.page)
         if is_login_form_showing(self.page):
             reauthenticate(self.page)
         try:
-            self.page.locator(locator).wait_for(state=state, timeout=timeout)
+            target.wait_for(state=state, timeout=timeout)
         except Exception:
             # The interstitial or a dropped session can also arrive
             # mid-wait; clear once and retry before surfacing the timeout as
@@ -151,7 +162,7 @@ class BasePage:
             recovered = reauthenticate(self.page) or recovered
             if not recovered:
                 raise
-            self.page.locator(locator).wait_for(state=state, timeout=timeout)
+            target.wait_for(state=state, timeout=timeout)
         # Checked AFTER the wait, zero-wait: click-driven navigation re-renders
         # the announcement overlay (it stores no dismissal flag), and by the
         # time the awaited element exists the overlay has normally mounted too.
@@ -194,6 +205,43 @@ class BasePage:
                 return True
             self.press_key("Tab")
         return self.is_focused(locator)
+
+    def fill_iframe_editor(self, iframe_locator: str, text: str) -> None:
+        """Write into a classic (iframe-based) CKEditor's editable body —
+        e.g. `iframe[title="editor"]`. The field's own OUTER wrapper
+        (`[role="textbox"][aria-label=...]`) is a non-editable mount point
+        only; the real `[contenteditable]` document lives inside this
+        iframe and does not exist in the DOM until the wrapper is clicked
+        once to force the widget to mount (confirmed live on this project —
+        see home_strategic_direction_admin_page.py's PILLAR_DESCRIPTION
+        fields for the reproduction). Callers must click the wrapper (or
+        otherwise trigger the mount) and wait for the iframe to render
+        before calling this. Uses frame_locator (not `.content_frame()` on
+        a Locator, which this project's pinned Playwright version does not
+        expose) plus a real keyboard select-all + type — never
+        `page.evaluate()` into the frame, which would bypass CKEditor's own
+        input handling and prove nothing about the real widget."""
+        on_login_flow = _is_login_flow_url(self.page.url)
+        if is_gate_showing(self.page):
+            clear_license_gate(self.page)
+        if not on_login_flow and is_login_form_showing(self.page):
+            reauthenticate(self.page)
+        body = self.page.frame_locator(iframe_locator).locator("body")
+        body.wait_for(state="visible")
+        body.click()
+        self.page.keyboard.press("Control+A")
+        self.page.keyboard.type(text)
+        log_action(logger, "fill_iframe_editor", iframe_locator, text)
+
+    def iframe_editor_text(self, iframe_locator: str) -> str:
+        """Read the CURRENT (possibly unsaved) editable text out of a
+        classic CKEditor iframe's body — the live counterpart to
+        `fill_iframe_editor`. For reading a value that's already been
+        SAVED and reloaded, prefer a Page Object's own persisted-value
+        read (e.g. from the portlet's embedded field-config JSON) where
+        one exists — this method reflects only what's currently rendered
+        in the iframe on the open form."""
+        return self.page.frame_locator(iframe_locator).locator("body").inner_text()
 
     def screenshot(self, test_case_id: str = "NO-TC") -> bytes:
         png = self.page.screenshot()

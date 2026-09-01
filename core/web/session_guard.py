@@ -9,7 +9,7 @@ happens — clicking the reset link can land back on the Control Panel LOGIN
 FORM instead of the originally requested page, because the session backing
 that reset was itself invalidated.
 
-Per web/pages/control_panel/login_page.py's own history, submitting the
+Per cms/pages/control_panel/login_page.py's own history, submitting the
 login form can itself re-trip the connection limit once — so this retries
 the reset+login pair, not just a single login attempt.
 
@@ -29,7 +29,7 @@ from config.settings import settings
 logger = get_logger("session_guard")
 
 # Liferay's login portlet — same selectors as
-# web/pages/control_panel/login_page.py's CmsLoginPage, verified live
+# cms/pages/control_panel/login_page.py's CmsLoginPage, verified live
 # 2026-08-18. Kept as plain strings here (not an import of CmsLoginPage) to
 # avoid a circular import: CmsLoginPage extends BasePage, which is where
 # this guard is wired in.
@@ -39,7 +39,7 @@ SUBMIT_BUTTON = (
     '#_com_liferay_login_web_portlet_LoginPortlet_loginForm button[type="submit"]'
 )
 # OR'd with the Product Menu toggle (2026-08-25) — see
-# web/pages/control_panel/login_page.py's STATUS UPDATE (2026-08-25) for the
+# cms/pages/control_panel/login_page.py's STATUS UPDATE (2026-08-25) for the
 # live evidence: both render together after a real login, ORing only guards
 # against a render-order race between the two nav elements.
 LOGIN_SUCCESS_INDICATOR = 'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'
