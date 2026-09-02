@@ -69,8 +69,8 @@ import allure
 import pytest
 
 from web.pages.components.cms_login_page import CmsLoginPage
-from web.pages.home_community_partners.home_community_partners_admin_page import (
-    HomeCommunityPartnersAdminPage,
+from cms.pages.home_community_partners.home_community_partners_admin_page import (
+    CommunityPartnersAdminPage,
 )
 from web.pages.home_community_partners.home_community_partners_page import HomeCommunityPartnersPage
 
@@ -81,29 +81,18 @@ EXPECTED_AR_HEADING_TEXT = "شركاء المجتمع"
 EXPECTED_DESCRIPTION_TEXT = "Trusted by leading organizations across key industries"
 EXPECTED_AR_DESCRIPTION_TEXT = "موثوق بها من قبل المؤسسات الرائدة في القطاعات الرئيسية"
 
-# ── TC 135811 blocker-chain gate — same `_UNRESOLVED` collection-time skipif
-#    convention as test_home_featured_event_control_panel.py: skip (never
-#    RuntimeError) while ANY of HomeCommunityPartnersAdminPage's locators is
-#    still an unresolved TODO placeholder, and say WHICH ones. ──────────────
-_PLACEHOLDER_PREFIX = "TODO:"
-_UNRESOLVED = [
-    f"{cls.__name__}.{name}"
-    for cls, names in (
-        (HomeCommunityPartnersAdminPage, (
-            "HOME_PAGE_MANAGEMENT_LINK", "COMMUNITY_PARTNERS_MANAGEMENT_LINK",
-            "PARTNER_ENTRY_ROW", "PARTNER_ACTIVE_STATUS_TOGGLE", "SAVE_BUTTON",
-        )),
-    )
-    for name in names
-    if str(getattr(cls, name)).startswith(_PLACEHOLDER_PREFIX)
-]
-_UNRESOLVED_SKIP = pytest.mark.skipif(
-    bool(_UNRESOLVED),
+# ── TC 135811 gate — CommunityPartnersAdminPage (cms/pages/home_community_
+#    partners/home_community_partners_admin_page.py) is live-verified but only
+#    exposes a per-partner edit form (open_partner_edit_form_by_name/
+#    set_active/save), not the bulk deactivate-all/reactivate-all workflow
+#    this test's Arrange/teardown need. Skip rather than call methods that
+#    don't exist, or invent an unverified bulk-toggle loop against real CMS
+#    data. Unskip once that bulk workflow is built and verified live.
+_UNRESOLVED_SKIP = pytest.mark.skip(
     reason=(
-        "Unresolved locator placeholders on HomeCommunityPartnersAdminPage — run "
-        "tools/extract_locators.py (as an authenticated Site Content Editor) "
-        "against the live Community Partners content-management screen and replace: "
-        + ", ".join(_UNRESOLVED)
+        "CommunityPartnersAdminPage has no verified bulk deactivate-all/"
+        "reactivate-all workflow — needs to be built and verified live "
+        "against the CMS before this test can drive it."
     ),
 )
 
@@ -340,7 +329,7 @@ def test_no_empty_container_when_section_does_not_render(page):
 
     # Arrange
     login = CmsLoginPage(page)
-    admin = HomeCommunityPartnersAdminPage(page)
+    admin = CommunityPartnersAdminPage(page)
     cp = HomeCommunityPartnersPage(page)
 
     try:

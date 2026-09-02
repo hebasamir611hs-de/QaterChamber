@@ -122,6 +122,49 @@ observed value, per this project's established convention):
     literal expected result against the first configured partner's alt text;
     will fail honestly (wrong name AND missing " logo" suffix), not a
     framework defect.
+
+--- Merge note (folded in from origin/main's CommunityPartnersPage) ---
+
+CONFIRMED LIVE (2026-08-31, qcdev /en/home), consistent with the extraction
+pass above and worth restating explicitly for the methods it motivates:
+each partner's rendered `<img>` carries its own `qc-partner-logo` class (in
+addition to living inside `.qc-partner-link > .qc-partner-logo-wrap`), with
+`alt` equal to that partner's Partner Name (EN) — there is no separate
+authored Alt Text field (see the admin Page Object's module docstring); the
+carousel derives alt text from Partner Name (EN). Because the marquee
+duplicates each logo (12 `img.qc-partner-logo` elements live for 3 real
+partners, 4 copies each — consistent with the 6-nodes-per-strip x 2-strips
+structure documented above), any check against a specific partner by name
+must be presence/absence via `alt`, never a raw count of
+`img.qc-partner-logo`. `PARTNER_LOGO_BY_ALT`, `is_partner_logo_visible()`,
+and `reload_until_logo_matches()` below implement that check and are used by
+test_home_community_partners_control_panel.py's CMS authoring/toggle
+workflows (TC 135829, 135830, 135832).
+
+VERDICT (2026-09-01, framework-improvement review): a permanent dedicated
+"QA-TEST Partner" record was considered as a safer alternative to
+mutate-then-restore against the real "Qatar Airways" record for TC 135832.
+NOT adopted. Reasoning is NOT a fixed-N layout concern — the marquee's
+duplicated-loop rendering (3 real partners x 4 copies = 12 logos) is
+consistent with a variable-length loop that would render a 4th partner the
+same way it renders these 3, so no live evidence of count-based breakage
+was found or claimed. The reasoning is that a permanent test record would
+appear as a real logo in the LIVE public Home Page marquee for every real
+visitor, not just in a test context — genuine content pollution regardless
+of how gracefully the carousel scales. That is reason enough on its own.
+TC 135832 continues to mutate-then-restore the real Qatar Airways record,
+per cms-profile.md's TEST_OWNED-vs-real tradeoff — correctness over
+convenience.
+
+Class name / back-compat: this project's convention (HomeStrategicDirectionPage,
+HomePromoBannersPage, HomeSocialIconsPage, ...) is `Home<Section>Page`, and
+web/tests/home_community_partners/test_home_community_partners_web.py's 8
+Web-platform cases already depend on this class under that name with the
+fuller method set below. `CommunityPartnersPage` is kept as a plain alias
+(see bottom of this module) purely so
+cms/tests/home_community_partners/test_home_community_partners_control_panel.py
+— added independently on origin/main under its own shorter name — keeps
+importing without modification; it is not a second implementation.
 """
 
 from core.web.base_page import BasePage
@@ -138,6 +181,7 @@ class HomeCommunityPartnersPage(BasePage):
     LOGOS_STRIP = ".qc-partners-logos"          # 2 matches live — always scope with .first for "the" strip
     PARTNER_LINK = ".qc-partner-link"
     PARTNER_IMG = "img"
+    PARTNER_LOGO_BY_ALT = 'img.qc-partner-logo[alt="{name}"]'
     HTML_ROOT = "html"
 
     _TEXT_STYLE_JS = (
@@ -319,3 +363,31 @@ class HomeCommunityPartnersPage(BasePage):
 
     def section_box(self) -> dict:
         return self.page.locator(self.SECTION).bounding_box()
+
+    # ── Single-partner presence checks (folded in from origin/main; see
+    #    docstring's "Merge note" — used by the CMS control-panel workflow
+    #    tests, TC 135829/135830/135832) ───────────────────────────────────
+    def is_partner_logo_visible(self, partner_name: str) -> bool:
+        locator = self.PARTNER_LOGO_BY_ALT.format(name=partner_name)
+        return self.page.locator(locator).first.is_visible() if self.page.locator(locator).count() > 0 else False
+
+    def reload_until_logo_matches(self, partner_name: str, expected_visible: bool, timeout_ms: int = 8000, interval_ms: int = 1000) -> bool:
+        """Poll (reload + re-check), never a bare sleep — cms-profile.md's
+        confirmed ~0s propagation figure plus a conservative safety-margin
+        poll, mirroring home_strategic_direction_page.py's reload_until_
+        card_description_matches() precedent for this same class of
+        publish-then-verify check."""
+        import time
+
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_home()
+            if self.is_partner_logo_visible(partner_name) == expected_visible:
+                return True
+            if time.monotonic() >= deadline:
+                return self.is_partner_logo_visible(partner_name) == expected_visible
+            self.page.wait_for_timeout(interval_ms)
+
+
+# Back-compat alias — see module docstring's "Class name / back-compat" note.
+CommunityPartnersPage = HomeCommunityPartnersPage

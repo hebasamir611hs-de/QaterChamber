@@ -6,8 +6,9 @@ section/module folder per active/standards.md's Home-page sections table.
 This pass covers the 18 approved, Automation-tagged, UI-category,
 Web-platform cases scoped for this run (ADO TC 135634-135645, 135646-135650,
 135652 — 135651 is not part of the handed-off set). Control_Panel-tagged
-cases for this same PBI (135653-135657) are scripted separately in the
-sibling home_featured_event_admin_page.py / test_home_featured_event_control_panel.py.
+cases for this same PBI (135669-135670) are scripted separately in the
+sibling cms/pages/home_featured_event/home_featured_event_admin_page.py /
+cms/tests/home_featured_event/test_home_featured_event_control_panel.py.
 
 --- CLI-first extraction log (2026-08-24, live https://qcdev.ihorizons.com) ---
 
@@ -118,6 +119,13 @@ Manager, not silently corrected here):
     session — see the sibling admin Page Object's docstring) to unpin it —
     SKIPPED with a concrete reason below rather than fabricated as a pass,
     mirroring the sibling home_promo_banners_page.py's TC 135176 precedent.
+    NOTE (see 2026-08-31 addendum below): a later, credentialed CMS session
+    confirmed the section is in fact NEVER removed from the DOM even when
+    unpinned — `is_section_absent()` below is therefore only meaningful
+    against the pre-existing "count()==0" reading of TC 135645's wording;
+    the real, confirmed unpin mechanism is a `display:none` visibility
+    toggle, which `is_section_visible()` (not `is_section_absent()`) is the
+    correct check for.
   - TC 135646 (AR/RTL): confirmed live at https://qcdev.ihorizons.com/ar/home
     — `<html dir="rtl">`, the section's own computed `direction: rtl`,
     heading/description `text-align: start` (renders right-aligned under
@@ -148,6 +156,39 @@ Manager, not silently corrected here):
     loading placeholder during. Scripted per the case's literal expected
     result (a skeleton should appear) regardless of this finding — it will
     fail honestly against the live implementation, not routed around.
+
+--- Addendum (2026-08-31, credentialed Control_Panel session, merged in
+    from the sibling admin Page Object's own live verification) ---
+
+  - VISIBILITY MECHANISM — confirmed live this session: the section is
+    NEVER removed from the DOM. When the singleton's Active Status is
+    OFF, the section keeps rendering (with all its static heading/label
+    text) but gets an inline `style="display:none;"` on the outer
+    `section.qc-home-upcoming-event` element itself — its data-attribute
+    fields also render empty text in that state. `is_section_visible()`
+    below checks the ACTUAL rendered visibility (Playwright's own
+    `is_visible()`, which already accounts for `display:none`), not mere
+    DOM presence — a `locator(...).count() > 0` check would silently pass
+    even when the section is Active=No and hidden. Because of this,
+    `open_home()` waits for the section to be `state="attached"` rather
+    than the default `state="visible"` — the latter would time out
+    whenever the section is legitimately present-but-hidden, which is
+    exactly the state TC 135670 (sibling Control_Panel test) needs to
+    reach and assert against.
+  - This same session independently corroborated the `a.qc-ue-media` link
+    also exposing a `[data-qc-ue-media]` attribute whose `href` carries
+    `?id=<eventId>` — the only working event-URL format on this site (see
+    home_featured_event_admin_page.py's own docstring for the full
+    cross-reference); MEDIA below (the aria-label-based selector) already
+    resolves the same element and is left as the primary locator since it
+    is the one directly CLI-verified in this file's own extraction pass.
+  - `reload_until()` below (poll `open_home()` + a predicate until true or
+    timeout) was added to support the sibling Control_Panel test's
+    Save-then-verify flow, where a CMS Save must propagate to the public
+    Home Page before the section's visibility reflects the new Active
+    Status — it is a real, needed utility, not a substitute for this
+    file's own TC 135650 finding that the section's HTML itself is
+    server-rendered with no client-side fetch/skeleton.
 """
 
 import re
@@ -203,15 +244,26 @@ class HomeFeaturedEventPage(BasePage):
     # the loading state the case describes, resolvable but absent today.
     SKELETON_ANY = f'{SECTION} [class*="skeleton"], {SECTION} [class*="shimmer"], {SECTION} [class*="placeholder-loading"]'
 
+    # Poll budget for reload_until() below — mirrors the same conservative
+    # starting-point pattern already adopted project-wide (HomeBusinessEventsPage
+    # etc.), used by the sibling Control_Panel test's Save-then-verify flow.
+    RELOAD_POLL_TIMEOUT_MS = 8000
+    RELOAD_POLL_INTERVAL_MS = 500
+
     # ── Navigation ───────────────────────────────────────────────────────
     def open_home(self) -> "HomeFeaturedEventPage":
+        # `state="attached"` (not the default "visible") — the section is
+        # confirmed live to stay in the DOM but render `display:none` when
+        # unpinned/inactive (see docstring's Addendum); waiting on "visible"
+        # would time out in that legitimate state instead of letting
+        # is_section_visible() answer honestly.
         self.open(web_url("/home"))
-        self.wait_for(self.SECTION)
+        self.wait_for(self.SECTION, state="attached")
         return self
 
     def open_home_arabic(self) -> "HomeFeaturedEventPage":
         self.open(web_url("/home", locale="ar"))
-        self.wait_for(self.SECTION)
+        self.wait_for(self.SECTION, state="attached")
         return self
 
     def scroll_to_section(self) -> "HomeFeaturedEventPage":
@@ -230,8 +282,31 @@ class HomeFeaturedEventPage(BasePage):
         self.page.goto(web_url("/home"), wait_until="commit")
         return self
 
+    def reload_until(self, predicate, timeout_ms: int | None = None, interval_ms: int | None = None) -> bool:
+        """Poll open_home() + predicate(self) until True or timeout. Added
+        for the sibling Control_Panel test's Save-then-verify flow (a CMS
+        Save must propagate to the public Home Page before the section's
+        visibility reflects the new Active Status) — mirrors
+        HomeBusinessEventsPage.reload_until()'s shape (poll, never a bare
+        sleep)."""
+        import time
+
+        timeout_ms = timeout_ms if timeout_ms is not None else self.RELOAD_POLL_TIMEOUT_MS
+        interval_ms = interval_ms if interval_ms is not None else self.RELOAD_POLL_INTERVAL_MS
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_home()
+            if predicate(self):
+                return True
+            if time.monotonic() >= deadline:
+                return False
+            self.page.wait_for_timeout(interval_ms)
+
     # ── Section-level ────────────────────────────────────────────────────
     def is_section_visible(self) -> bool:
+        """Real rendered visibility (accounts for the confirmed-live
+        `display:none` toggle) — NOT mere DOM presence. See docstring's
+        Addendum / VISIBILITY MECHANISM note."""
         return self.is_visible(self.SECTION)
 
     def page_direction(self) -> str:
@@ -394,6 +469,12 @@ class HomeFeaturedEventPage(BasePage):
 
     # ── No-pinned-event state (TC 135645) ────────────────────────────────
     def is_section_absent(self) -> bool:
+        """DOM-presence check per TC 135645's literal wording. NOTE: the
+        confirmed-live unpin mechanism is a `display:none` visibility
+        toggle, not DOM removal (see docstring's Addendum) — prefer
+        `is_section_visible()` for any assertion about the unpin flow;
+        this method is kept for the case's own "...or is hidden entirely"
+        DOM-absence wording, not as the primary unpin check."""
         return self.page.locator(self.SECTION).count() == 0
 
     # ── RTL/LTR (TC 135646 / 135647) ─────────────────────────────────────

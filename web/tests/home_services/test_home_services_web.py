@@ -53,7 +53,7 @@ import allure
 import pytest
 
 from web.pages.components.cms_login_page import CmsLoginPage
-from web.pages.home_services.home_services_admin_page import HomeServicesAdminPage
+from cms.pages.home_services.home_services_admin_page import HomeServicesAdminPage
 from web.pages.home_services.home_services_page import HomeServicesPage
 
 PBI = "129371"

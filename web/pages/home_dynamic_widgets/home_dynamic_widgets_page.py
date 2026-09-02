@@ -180,6 +180,41 @@ asserted structurally instead of to a literal figure):
     icon order reverses) have no live DOM analog for the same flat-image
     reason as above, and are scripted to FAIL HONESTLY against the confirmed-
     absent sub-elements.
+
+--- ADDITIONAL VERIFIED FINDINGS (origin/main session, 2026-08-31, CMS
+    admin-to-delivery propagation — https://qcdev.ihorizons.com/en/home) ---
+
+Merged in from the parallel admin-side exploration (see
+home_dynamic_widgets_admin_page.py for the authoring-surface counterpart).
+These are real, independently-verified facts not covered by the batch above,
+because they concern how a specific admin-authored record propagates to the
+delivery DOM rather than the widget's static structure/styling:
+
+  - Each content card's `<a class="qc-dw-card">` was confirmed live with
+    `target="_blank" rel="noopener noreferrer"` when the admin record's "Open
+    in New Tab" toggle is enabled — the delivery-surface signal for that
+    admin field.
+  - `img.qc-dw-card-img`'s `src` embeds the record's own
+    `objectEntryExternalReferenceCode` query param (confirmed live, e.g.
+    `...objectEntryExternalReferenceCode=QCDEMO-129384-b2b-verified`) — the
+    SAME identifying ERC seen in the admin edit-form URL, so a test can
+    confirm "this specific admin record propagated to delivery" without
+    depending on card order or exact filename text. `card_by_entry_erc()`
+    below is built on this.
+  - Cards render in DOM order matching the object entries' admin-configured
+    Display Order (both rows confirmed at orders 100/200 this session; the
+    100-order "directory" card rendered first, the 200-order "b2b-verified"
+    card second) — consistent with Display Order controlling card position.
+  - Confirmed live via an inline HTML comment on the rendered page: "Weather
+    widget (PBI 129384 / T45): the maroon Doha weather card is rendered by
+    the qc-weather-widget Client Extension ... calls the Weather API for
+    Doha, and shows the bilingual 'Weather data unavailable.' fallback on
+    failure."
+  - No live "before Active/Display-Order write" vs "after write" comparison
+    was performed in that session (see the admin Page Object's own
+    SAVE_COMMIT_GRACE_MS disclosure — no live Save was exercised to avoid
+    mutating the shared qcdev rows before a restore path existed); those
+    facts are read-only-confirmed against the baseline state only.
 """
 
 import threading
@@ -282,6 +317,15 @@ class HomeDynamicWidgetsPage(BasePage):
             "els => els.map(el => el.getBoundingClientRect().x)"
         )
 
+    def is_weather_first_in_row(self) -> bool:
+        """True when the Weather mount is the FIRST child of `.qc-dw-row` —
+        the delivery-surface signal for "Display Order = 1" per admin
+        configuration (assert position, not the live weather VALUES, which
+        are non-deterministic — see docstring)."""
+        return self.page.locator(self.ROW).evaluate(
+            "row => row.firstElementChild && row.firstElementChild.matches('.qc-dw-weather')"
+        )
+
     # ── Weather widget ───────────────────────────────────────────────────
     def is_weather_widget_visible(self) -> bool:
         return self.is_visible(self.WEATHER_WIDGET)
@@ -379,6 +423,9 @@ class HomeDynamicWidgetsPage(BasePage):
     def card_locator(self, index: int):
         return self.page.locator(self.CARD).nth(index)
 
+    def card_count(self) -> int:
+        return self.page.locator(self.CARD).count()
+
     def card_box(self, index: int) -> dict:
         return self._box(self.card_locator(index))
 
@@ -410,3 +457,25 @@ class HomeDynamicWidgetsPage(BasePage):
         besides its single `<img>` — used to assert the case's claimed
         sub-elements (logo, badge/seal graphic, CTA button, footer row)."""
         return self.card_locator(index).locator(css).count() > 0
+
+    # ── Card identity by admin record (ERC) — CMS-to-delivery propagation ──
+    def card_by_entry_erc(self, erc: str):
+        """The `.qc-dw-card` whose image `src` embeds the given
+        `objectEntryExternalReferenceCode` — the stable, record-level
+        identity signal confirmed live (see docstring's "ADDITIONAL VERIFIED
+        FINDINGS" section), independent of card position/order. Lets a test
+        confirm a specific admin-authored record propagated to delivery
+        without depending on card order or exact filename text."""
+        return self.page.locator(f'{self.CARD} img[src*="objectEntryExternalReferenceCode={erc}"]').locator(
+            "xpath=ancestor::a[1]"
+        )
+
+    def is_card_visible_for_erc(self, erc: str) -> bool:
+        loc = self.card_by_entry_erc(erc)
+        return loc.count() > 0 and loc.first.is_visible()
+
+    def card_href_for_erc(self, erc: str) -> str:
+        return self.card_by_entry_erc(erc).first.get_attribute("href") or ""
+
+    def card_opens_new_tab_for_erc(self, erc: str) -> bool:
+        return self.card_by_entry_erc(erc).first.get_attribute("target") == "_blank"

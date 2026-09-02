@@ -236,23 +236,29 @@ also dropped the Dev-Environment Navigation Quirks section above (restored
 one passing web test, one `Control_Panel` RBAC test) — a **separate-tree** pattern
 the original 2026-08-11 rule had explicitly rejected.
 
-**Re-confirmed 2026-08-19: the no-separate-tree rule stands.** `control_panel/` and
-`header/` were removed (their content is preserved in git history — commits up to
-`836cb23` on `origin/main` — if the locators/RBAC test need to be re-authored under
-the convention below). Going forward:
+**Superseded 2026-09-01: the no-separate-tree rule no longer stands.** The
+2026-08-19 re-confirmation above is kept for history only — do not follow it.
+The QA Manager reviewed the co-located layout again and decided the CMS/Admin
+side deserved its own top-level tree after all, for clearer ownership between
+public-site and control-panel automation. Going forward:
 
 - Framework lives at the **project root**, not `./automation/` (flattened
-  2026-08-11 at the QA Manager's request).
-- Test files split by **Platform suffix within each page's existing folder** — no
-  separate `control_panel/` tree:
+  2026-08-11 at the QA Manager's request) — this part is unchanged.
+- **Separate top-level trees by surface**, each mirroring the same
+  `pages/<page>/` + `tests/<page>/` layout internally:
   ```
-  web/pages/<page>/<page>_page.py            # public-frontend locators/actions
-  web/pages/<page>/<page>_admin_page.py       # CMS/Control_Panel locators/actions
-  web/tests/<page>/test_<page>_web.py             # Web-tagged cases
-  web/tests/<page>/test_<page>_control_panel.py    # Control_Panel-tagged cases
+  web/pages/<page>/<page>_page.py             # public-frontend locators/actions
+  web/tests/<page>/test_<page>_web.py          # Web-tagged cases
+
+  cms/pages/<page>/<page>_admin_page.py        # CMS/Control_Panel locators/actions
+  cms/tests/<page>/test_<page>_control_panel.py # Control_Panel-tagged cases
   ```
-  Rationale unchanged from 2026-08-11: `pytest -k _web` / `pytest -k _control_panel`
-  target one surface without needing two folder trees.
+  `cms/pages/control_panel/login_page.py` (shared CMS login) lives under the
+  `cms/` tree too, not `web/`.
+  `pytest.ini`'s `testpaths` is `web cms` (both trees collected by default).
+  Marker-based selection (`pytest -m web` / `pytest -m control_panel`) still
+  targets one surface without depending on the folder split — the markers and
+  the trees are two independent, redundant ways to scope a run.
 
 **Section folder naming — Sprint 1 (Home page), agreed 2026-08-18.** Skeleton
 folders (empty, `__init__.py` only) were pre-created under `web/pages/` and
@@ -317,6 +323,151 @@ Home-page sections (each its own page/module folder):
   above; UI-rendering cases should still get real theme/contrast coverage,
   not just the default light/EN pass — restore the full matrix guidance here
   if the team wants it written back out.)
+
+## Execution Process Conventions (agreed 2026-09-01)
+
+**No full-batch reruns while actively fixing a failure.** While iterating on a fix for
+one or a handful of failing tests, run only those specific test(s) by marker/nodeid
+(e.g. `pytest -m tc_135453` or `pytest path::test_name`) — never the full suite or a
+whole module. Reserve full-batch runs for final confirmation once the targeted fix is
+verified green. A full rerun on every edit wastes qcdev session budget (see the
+session-drop note below) and produces noisy, hard-to-diff evidence for what is really a
+single-test question.
+
+**No concurrent live-browser agents against the shared qcdev session.** Live-browser
+exploration or mutation work against `qcdev.ihorizons.com` must run ONE agent at a time
+— never two or more background agents driving real browsers against it simultaneously,
+even though each uses its own separate Playwright browser instance. Confirmed live
+2026-08-31: running multiple background agents concurrently caused agents to land on
+each other's navigations mid-test. Root cause is that qcdev's `TEST_USER` session and
+Liferay's server-side portlet-instance IDs are shared, server-scoped state — they are
+NOT safely concurrent across independent browser processes, unlike a normal multi-tab
+local test run. This compounds with `core/web/session_guard.py`'s documented ~30s
+session-drop behavior under sustained automated traffic: concurrent agents multiply
+load on the same dev-mode connection limit that already causes single-agent runs to
+trip the license-activation gate. Sequence live qcdev work explicitly; parallelism is
+fine only for work that never touches a live browser session (e.g. reading/writing
+local files, static analysis).
+
+## Fast Dev-Loop / `--lf` / `-x` (agreed 2026-09-01)
+
+While iterating on a single fix, don't rerun the whole file or marker-set to get
+feedback — use pytest's own re-run filters instead:
+- `pytest --lf` — reruns only the tests that failed on the last invocation. Use this
+  after a fix attempt whose correctness you're not yet sure of, to get fast signal
+  before spending a full-batch run.
+- `pytest -x` — stops at the first failure. Use this when running a small targeted
+  set and you want to fail fast rather than let later tests in the same set burn
+  qcdev session budget after the thing you're actually diagnosing has already failed.
+Reserve a full-batch confirmation run (the whole marker set / module) for once the
+targeted fix is verified green under `--lf`/`-x` — same rationale as the existing
+"No full-batch reruns while actively fixing a failure" rule above, just naming the
+concrete flags.
+
+## Safe Parallelism — `xdist_group` and `--dist loadgroup` (agreed 2026-09-01)
+
+`pytest.ini`'s `addopts` now runs `-n 3 --dist loadgroup` (was plain `-n 3`, i.e.
+default load-balancing with no grouping guarantee). `--dist loadgroup` is required
+for `@pytest.mark.xdist_group(...)` to have any effect — without it the mark is
+inert and xdist load-balances across workers exactly as before.
+
+**Why loadgroup, not loadscope:** the real constraint on this project is "two tests
+must never touch the SAME shared qcdev record concurrently," not "two tests in the
+same file/class must never run concurrently." `loadscope` groups by module/class,
+which would either force far more tests onto one worker than necessary (coarser
+than the real constraint) or fail to protect a shared record touched by tests in
+two different modules. `loadgroup` lets you name the actual constraint.
+
+**The 4 shared/singleton qcdev records and their group tags** — every test that
+mutates one of these carries the matching `@pytest.mark.xdist_group(...)` so xdist
+never schedules two of them on different workers at the same time. Everything else
+is left ungrouped and free to parallelize normally:
+
+| Record | ID | Group tag | Tests carrying it |
+|---|---|---|---|
+| GM Message singleton | 79878 | `xdist_group("gm_message_79878")` | `tc_135453` |
+| Upcoming Event Pins singleton | 49205 | `xdist_group("pin_event_49205")` | `tc_135670` |
+| Mission pillar card | 49082 | `xdist_group("mission_49082")` | `tc_135557`, `tc_135562` |
+| Qatar Airways partner | 45776 | `xdist_group("qatar_airways_45776")` | `tc_135832` |
+
+A test can only belong to one `xdist_group` — before adding a new one, grep the test
+body for all 4 record IDs; if a test genuinely straddles two, merge those two
+records' groups into one shared group name rather than picking one and leaving a
+race on the other.
+
+**A live loadgroup-vs-serial timing comparison was attempted 2026-09-01 and was not
+obtainable — reported honestly rather than manufactured.** The `-n 0` serial baseline
+run of the 13 runnable tests from this batch (`tc_135669` is disclosed-unautomated,
+not a 14th runnable test) itself came back unusable: 6 errors, 3 failures, 3 passed,
+1 skipped, with real `playwright._impl._errors.TimeoutError: Timeout 30000ms
+exceeded` failures — the same class of qcdev session-drop this file's "No concurrent
+live-browser agents" section already documents. Root-cause investigation during this
+same session found an actual second agent/process concurrently restructuring this
+framework's directory tree (`web/pages/<page>/cms/...` → a new top-level `cms/`
+tree) while the serial run was executing — i.e. a real concurrency violation of the
+one-agent-at-a-time rule occurred, most plausibly explaining the timeouts rather
+than the grouping/addopts change itself. Running the 3-worker `loadgroup` comparison
+on top of an already-unstable baseline, and with another actor confirmed active on
+the same shared qcdev session, was assessed as compounding a known-bad condition
+rather than producing a trustworthy number, so it was not run. **Action for the next
+session:** confirm no other agent is active (re-check `git status`/file mtimes for
+unexpected concurrent changes) before attempting this comparison, then run the same
+13-marker set with `-n 0` and with the new `-n 3 --dist loadgroup` addopts
+back-to-back and report both wall-clock times here.
+
+**Default going forward:** `-n 3 --dist loadgroup` per `pytest.ini`'s `addopts`.
+Reserve `-n 0` for deep debugging (a single flaky test, or when qcdev's dev-mode
+connection-limit gate is firing often — per the existing pytest.ini comment, try
+`-n 1` before adding more gate-tolerance machinery) — not as the default posture.
+
+**Shared-record baseline re-verified live 2026-09-01** (sequential single-session
+probe, after the serial-run instability above): Mission (49082) Pillar Title =
+"Mission" (baseline); Qatar Airways (45776) Active = True (baseline); GM Message
+(79878) Status = Published (baseline); Upcoming Event Pin (49205) pinnedEvent =
+`/web/qatar-chamber/events/novgorod-delegation`, active = True (baseline). All 4
+confirmed at baseline — no restore was needed.
+
+## Wait-Strategy Audit (agreed 2026-09-01)
+
+Audited every Page Object built in the 2026-08-31 CMS batch
+(`gm_message_admin_page.py`, `home_business_events_admin_page.py`,
+`home_dynamic_widgets_admin_page.py`, `home_strategic_direction_admin_page.py`,
+`home_community_partners_admin_page.py`, `home_featured_event_admin_page.py`) for
+blind `wait_for_timeout(...)` calls. Findings:
+
+- **Converted:** `HomeBusinessEventsAdminPage.delete_row_by_title()`'s two fixed
+  sleeps (300ms before reading the kebab menu, 1500ms after confirming delete) were
+  replaced with condition-based waits — `delete_item.first.wait_for(state="visible")`
+  for the menu opening, and `row.first.wait_for(state="detached")` for the delete
+  commit — each keeping the old fixed value as the upper-bound timeout, not a
+  mandatory sleep. Live-verified 2026-09-01: ran the real teardown path end-to-end
+  against qcdev and confirmed via a direct admin-grid query that both
+  `QCTEST-135747`/`QCTEST-135748` rows were fully deleted (0 rows each) — the
+  teardown that exercises this method (`_best_effort_delete`) swallows exceptions,
+  so this direct grid check, not the pytest summary, is the real verification.
+- **Already condition-based with a bounded fallback (no change needed):**
+  `CommunityPartnersAdminPage.upload_partner_logo()` and
+  `HomeBusinessEventsAdminPage.upload_event_image()` both wait on the upload
+  modal iframe's `state="detached"` first, falling back to a short fixed sleep only
+  if that wait itself times out — already the target pattern, not a defect.
+  `HomeBusinessEventsAdminPage.save()` already waits on `wait_for_url(...
+  ENTRY_PERSISTED_URL_MARKER in url)` rather than a fixed sleep, with
+  `is_entry_persisted()` for the caller to assert on.
+- **Justified as genuinely fixed (left as-is, evidence-based, not a blind guess):**
+  `SAVE_COMMIT_GRACE_MS = 2000` (used in `GmMessageAdminPage`,
+  `CommunityPartnersAdminPage`, `HomeStrategicDirectionAdminPage`,
+  `HomeDynamicWidgetsAdminPage`) and `FORM_MOUNT_GRACE_MS = 2500`
+  (`HomeDynamicWidgetsAdminPage`) cover a confirmed-live Liferay write-vs-read-cache
+  propagation gap (the object-entry write commits synchronously, but the list/detail
+  read path a subsequent portlet render queries is served off an asynchronously
+  updated index that lags a beat) with **no observable DOM/network signal** — no
+  toast, spinner, or distinguishable request marks "the read-side index has caught
+  up." The exact window was measured live against qcdev, not guessed, and is
+  documented at each call site. `GmMessageAdminPage`'s extra 250ms settle after the
+  Status combobox listbox reports hidden is the same class of finding (the button's
+  own label re-render lags the popup-close event by ~100-250ms, confirmed live) and
+  is likewise left as a disclosed, evidence-based grace on top of the real wait, not
+  in place of it.
 
 ## Do / Don't
 - ✅ State assumptions when requirements are incomplete (the BRD itself flags several

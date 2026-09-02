@@ -85,7 +85,7 @@ import allure
 import pytest
 
 from web.pages.components.cms_login_page import CmsLoginPage
-from web.pages.home_strategic_partners.home_strategic_partners_admin_page import (
+from cms.pages.home_strategic_partners.home_strategic_partners_admin_page import (
     HomeStrategicPartnersAdminPage,
 )
 from web.pages.home_strategic_partners.home_strategic_partners_page import HomeStrategicPartnersPage
