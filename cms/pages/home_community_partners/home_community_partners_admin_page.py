@@ -353,6 +353,9 @@ class CommunityPartnersAdminPage(BasePage):
         self.page.locator(self.DISPLAY_ORDER_INPUT).fill(value)
         return self
 
+    def display_order_value(self) -> str:
+        return self.page.locator(self.DISPLAY_ORDER_INPUT).input_value()
+
     ACTIVE_CHECKBOX_ROLE_LOCATOR = 'role=checkbox[name="Active"]'
 
     def is_active(self) -> bool:

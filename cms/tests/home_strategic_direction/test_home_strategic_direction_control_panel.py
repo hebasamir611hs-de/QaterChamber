@@ -154,6 +154,7 @@ this WAS an automation gap, not a product defect:
 import allure
 import pytest
 
+from cms.pages.components.object_authoring_page import ObjectAuthoringPage
 from cms.pages.home_strategic_direction.home_strategic_direction_admin_page import (
     HomeStrategicDirectionAdminPage,
 )
@@ -387,3 +388,429 @@ def test_publish_blocked_when_pillar_title_left_empty(page):
             "teardown failed to restore Mission's Pillar Title to its "
             "captured baseline — real editorial content may be left mutated"
         )
+
+
+# =============================================================================
+# BATCH 2 (2026-09-03) — TC 135558/135559/135560/135561/135563, same PBI 129381
+# ("Strategic Direction Section" / Pillar Cards, Home Page).
+#
+# SURFACE CHANGE FROM THE BATCH ABOVE: the 135556/135557/135562 batch above
+# drives `HomeStrategicDirectionAdminPage`, the raw Object Definitions editor
+# — confirmed (2026-08-31) to expose Save/Cancel only, no Draft/Preview/
+# Publish/Unpublish pipeline. Since then, `.claude/context/active/
+# standards.md`'s "Object Authoring — Draft / Preview / Publish / Unpublish
+# Lifecycle" section (confirmed live 2026-09-03) mandates that any case
+# exercising draft/preview/publish/unpublish drive it through the
+# `object-authoring` -> `manage-<slug>` surface instead. This batch's own
+# live probe (2026-09-03, one-process Python script via this repo's own
+# CmsLoginPage + ObjectAuthoringPage, real qcdev session) CONFIRMED that
+# surface exists for THIS object too:
+#   - object-authoring's own list page shows an entry "Strategic Pillar
+#     Card" linking to `manage-strategic-pillar-card`.
+#   - `manage-strategic-pillar-card` list: same 3 real rows as the raw
+#     editor (QCDEMO-129381-STRATEGIC_PILLAR_CARD-01/-02/-03 = Vision/
+#     Mission/Objectives), all status APPROVED — confirmed by live
+#     `table tbody tr` read.
+#   - Create-new form (`manage-strategic-pillar-card`, no editEntry) has
+#     `Save as Draft` / `Submit for Publishing` (both present, confirmed by
+#     role-count), fields: `Pillar Title` (textbox), `Pillar Description`
+#     (CKEditor — confirmed live via a real write+read-back round trip that,
+#     UNLIKE the raw editor's equivalent field, this surface's
+#     `iframe[title="editor"]` is already mounted and directly fillable via
+#     `BasePage.fill_iframe_editor()`, no prior click needed — see
+#     ObjectAuthoringPage.fill_rich_text()/rich_text_value()), `Display
+#     Order` (spinbutton), `Active Status` (checkbox), `Pillar Icon`
+#     (upload). No separate "Strategic Direction Section" (heading/intro)
+#     Object exists — confirmed by grepping the object-authoring list body
+#     for "direction" (only "Strategic Pillar Card"/"Strategic Partner"
+#     matched) — so per this batch, "the Strategic Direction section" in
+#     each case's step text is this object's own entries (a pillar card),
+#     the same granularity TC 135556/135557 above already use.
+#
+# LIVE RUN RESULT (2026-09-03, xdist -n 3 against qcdev): tc_135558/135559/
+# 135560's own test BODIES completed with no assertion failure; each hit a
+# 20s timeout in its own `finally` teardown's `open_new_entry_form()`
+# re-navigation instead — most likely 3-worker contention against the same
+# live admin session (this project's own known constraint against running
+# parallel live-browser sessions on qcdev), not a locator defect, since the
+# identical navigation had already succeeded earlier in the same test.
+# Re-verify teardown in isolation (single worker) before trusting it not to
+# leave orphaned QCTEST- entries. tc_135561 failed exactly as designed (see
+# its own docstring below). tc_135563 failed with a genuine open finding:
+# the row left behind after "abandoning" the unsaved form read an
+# APPROVED status with a UUID-looking Entry code rather than the fixture's
+# own Pillar Title text — flagged for follow-up, NOT silently patched
+# around, since it's unclear yet whether this is (a) fill_text() not
+# targeting the field the "Entry" column actually renders, or (b)
+# upload_file() on this surface having a real implicit-save side effect.
+#
+# DISCLOSED SUBSTITUTIONS this batch (read before touching these 5 tests):
+#
+#   TC 135558 (delete a pillar card removes it from the Home Page) — the
+#   case names the real "Objectives" card. Deleting it is unrecoverable
+#   (ObjectAuthoringPage's own confirmed-live Delete dialog: "This cannot be
+#   undone — Object entries do not go to the recycle bin.") and this
+#   project's own VMO batch already classifies destructive delete of real
+#   shared content as skip-regardless. This test instead creates a
+#   TRANSIENT QCTEST- pillar card (same disposable-fixture precedent TC
+#   135556 above already establishes in this exact module), confirms it
+#   renders in the public carousel alongside the 3 real cards, deletes it,
+#   and asserts the carousel afterward shows exactly the original 3 real
+#   titles (Vision/Mission/Objectives) and NOT the deleted QCTEST title —
+#   preserving the case's real assertion (delete removes a card from the
+#   Home Page) with zero risk to real editorial content. This is
+#   distinguished from home_strategic_direction_page.py's own rejection of
+#   a *permanent* dedicated test record (VERDICT note in that Page Object's
+#   docstring) — that note is about a record left live forever; this one is
+#   deleted before the test ends.
+#
+#   TC 135559 (unpublishing removes it from the Home Page) — same
+#   transient-QCTEST pattern: create, Submit for Publishing (Approved),
+#   confirm live, then Unpublish via `ObjectAuthoringPage.
+#   unpublish_to_edit_as_draft()`, confirm it disappears from the public
+#   carousel. Preferred over unpublishing one of the 3 real cards for the
+#   same real-content-risk reason as 135558.
+#
+#   TC 135560 (Save as Draft does not expose changes publicly) — the case's
+#   literal steps ("edit the section heading... Save as Draft") assume an
+#   EXISTING published record can be re-saved as a draft. Confirmed live
+#   (standards.md's Object Authoring section, step 3): an Approved entry's
+#   `Save as Draft` button is DISABLED ("unavailable until you unpublish
+#   it") — there is no way to re-draft a published entry without first
+#   unpublishing it, which itself would remove it from the Home Page (a
+#   different action than what this case tests). The case's real intent —
+#   draft content is never exposed to public visitors — is instead verified
+#   against a BRAND-NEW entry: create it, `save_as_draft()` only (never
+#   Submit for Publishing), assert its own status reads "Draft", then load
+#   the public Home Page fresh (no admin session assumptions) and assert
+#   the new card never renders there at all.
+#
+#   TC 135561 (Submit for Review does not publish until approved) — the
+#   case assumes a review/approval GATE between "submitted" and "published"
+#   (an intermediate "Pending Review" status). The confirmed-live state
+#   machine (standards.md) has exactly two statuses, Draft and Approved,
+#   and exactly one forward action, `Submit for Publishing` — CONFIRMED
+#   this batch to move a Draft entry straight to Approved with no
+#   intermediate/pending state to observe (no "Pending Review" text found
+#   anywhere in the confirmed-live inventory). This is flagged as a
+#   case-vs-product discrepancy, the same register as TC 135562's "Section
+#   Heading" finding above — the test below asserts the case's own real
+#   expectation (public Home Page must NOT show the change immediately
+#   after the submit action, before any separate approval step) rather than
+#   being softened to match the product's actual immediate-publish
+#   behavior. Run live, this is expected to demonstrate the discrepancy
+#   directly (the card appears immediately), which is the point: it
+#   surfaces the mismatch for triage rather than silently asserting around
+#   it.
+#
+#   TC 135563 (Cancel discards entered data) — the create-new form
+#   (`manage-strategic-pillar-card`, no editEntry) has no Cancel button
+#   (confirmed-live inventory: only Save as Draft / Submit for Publishing on
+#   a fresh create form; "Cancel and add a new entry instead" only renders
+#   when editing an ALREADY-APPROVED entry, per standards.md step 3 — not
+#   applicable to a brand-new, never-saved entry). "Close the form without
+#   saving" is substituted with navigating away from the unsaved create
+#   form (reloading `manage-strategic-pillar-card` fresh) without clicking
+#   either save action — the real-world equivalent of a user abandoning an
+#   unsaved form. Asserts the list's row COUNT and titles are byte-for-byte
+#   unchanged before/after (not just the new title's absence), matching the
+#   case's own "the previous card list is unchanged" expected result.
+#
+# Test-data ownership: all 5 tests create their own `QCTEST-` prefixed
+# disposable entries via `ObjectAuthoringPage(page, "strategic-pillar-card")`
+# and delete them in a `finally` block — none of them mutate the real
+# Vision/Mission/Objectives rows.
+# =============================================================================
+
+
+def _create_strategic_pillar_card(authoring: ObjectAuthoringPage, title: str, description: str) -> None:
+    """Shared fill sequence for a new Strategic Pillar Card entry on the
+    object-authoring surface — does NOT save; caller picks save_as_draft()
+    or submit_for_publishing()."""
+    authoring.open_new_entry_form()
+    authoring.fill_text("Pillar Title", title)
+    authoring.fill_rich_text(description)
+    authoring.fill_number("Display Order", "998")
+    authoring.set_checkbox("Active Status", True)
+    authoring.upload_file("Pillar Icon", PILLAR_ICON_FIXTURE)
+
+
+@allure.label("pbi", "129381")
+@allure.label("testcase", "135558")
+@allure.title("Verify that deleting a pillar card removes it from the Home Page")
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135558
+@pytest.mark.about
+@pytest.mark.control_panel
+@pytest.mark.functional_high
+@pytest.mark.regression
+def test_deleting_a_pillar_card_removes_it_from_the_home_page(page):
+    # TC 135558 — Log in as Site Content Editor and open a pillar card ->
+    # Delete and confirm -> refresh/reload the Home Page, navigate the
+    # carousel fully -> assert the deleted card never appears while the
+    # real Vision/Mission/Objectives cards still do. See module docstring's
+    # disclosed substitution: a transient QCTEST- card stands in for the
+    # case's real "Objectives" card, never the real record.
+    admin = HomeStrategicDirectionAdminPage(page)
+    authoring = ObjectAuthoringPage(page, slug="strategic-pillar-card")
+    home = HomeStrategicDirectionPage(page)
+    title = "QCTEST-135558-Delete-Pillar-Card"
+
+    entry_code = None
+    try:
+        admin.open_pillar_cards_list()  # establishes the authenticated admin session
+        _create_strategic_pillar_card(authoring, title, "QCTEST-135558 disposable pillar card.")
+        authoring.submit_for_publishing()
+        # See ObjectAuthoringPage's "Entry-code-based lookups" note: this
+        # object's own Entry column renders an autogenerated
+        # externalReferenceCode, never the Pillar Title text. Per
+        # standards.md's "Destructive Operations Against qcdev" rule
+        # (added after a real incident), the code backing a delete must be
+        # VERIFIED by reading the real Pillar Title back off each row's own
+        # edit form — never assumed by row position (newest_entry_code()
+        # is diagnostic-only and must never back a delete/edit target).
+        entry_code = authoring.find_entry_code_by_field("Pillar Title", title)
+        assert entry_code, f"could not verify an entry whose Pillar Title reads {title!r}"
+
+        assert home.reload_until_card_visible(title), (
+            f"fixture card {title!r} never appeared in the public carousel after publishing"
+        )
+
+        authoring.open_entries_list()
+        deleted = authoring.delete_entry_by_code(entry_code)
+        assert deleted, f"delete_entry_by_code({entry_code!r}) found no row to delete"
+
+        home.open_home()
+        home.wait_for_carousel()
+        assert not home.is_card_visible(title), (
+            f"deleted card {title!r} still renders in the public carousel after deletion"
+        )
+        for real_title in ("Vision", "Mission", "Objectives"):
+            assert home.is_card_visible(real_title), (
+                f"real pillar card {real_title!r} missing from the carousel after an "
+                f"unrelated card's deletion — deletion may have affected more than the "
+                f"targeted row"
+            )
+    finally:
+        authoring.open_entries_list()
+        if entry_code:
+            authoring.delete_entry_by_code(entry_code)
+
+
+@allure.label("pbi", "129381")
+@allure.label("testcase", "135559")
+@allure.title("Verify that unpublishing the Strategic Direction section removes it from the Home Page")
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135559
+@pytest.mark.about
+@pytest.mark.control_panel
+@pytest.mark.functional_high
+@pytest.mark.regression
+def test_unpublishing_strategic_direction_section_removes_it_from_home_page(page):
+    # TC 135559 — Open the section (Published status) -> Unpublish -> status
+    # becomes Unpublished with a success toast -> refresh/reload the Home
+    # Page -> assert the section no longer renders. See module docstring's
+    # disclosed substitution: a transient QCTEST- card stands in for "the
+    # section", published then unpublished, never a real Vision/Mission/
+    # Objectives row.
+    admin = HomeStrategicDirectionAdminPage(page)
+    authoring = ObjectAuthoringPage(page, slug="strategic-pillar-card")
+    home = HomeStrategicDirectionPage(page)
+    title = "QCTEST-135559-Unpublish-Section"
+
+    entry_code = None
+    try:
+        admin.open_pillar_cards_list()
+        _create_strategic_pillar_card(authoring, title, "QCTEST-135559 disposable pillar card.")
+        authoring.submit_for_publishing()
+        # Verified (not positional) lookup — see TC 135558's own note above
+        # and standards.md's "Destructive Operations Against qcdev" rule.
+        entry_code = authoring.find_entry_code_by_field("Pillar Title", title)
+        assert entry_code, f"could not verify an entry whose Pillar Title reads {title!r}"
+
+        assert authoring.row_status_text_by_code(entry_code) == "Approved", (
+            f"fixture card {title!r} did not reach Approved/Published status after "
+            f"Submit for Publishing"
+        )
+
+        assert home.reload_until_card_visible(title), (
+            f"fixture card {title!r} never appeared in the public carousel while Approved"
+        )
+
+        authoring.open_entry_by_code(entry_code)
+        authoring.unpublish_to_edit_as_draft()
+        assert authoring.row_status_text_by_code(entry_code) != "Approved", (
+            f"fixture card {title!r} still reads Approved/Published after Unpublish"
+        )
+
+        home.open_home()
+        home.wait_for_carousel()
+        assert not home.is_card_visible(title), (
+            f"unpublished card {title!r} still renders in the public carousel "
+            f"after Unpublish + reload"
+        )
+    finally:
+        authoring.open_entries_list()
+        if entry_code:
+            authoring.delete_entry_by_code(entry_code)
+
+
+@allure.label("pbi", "129381")
+@allure.label("testcase", "135560")
+@allure.title("Verify that saving as draft does not expose changes to public visitors")
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135560
+@pytest.mark.about
+@pytest.mark.control_panel
+@pytest.mark.functional_high
+@pytest.mark.regression
+def test_saving_as_draft_does_not_expose_changes_to_public_visitors(page):
+    # TC 135560 — Edit made -> Save as Draft (do not publish) -> success
+    # toast shown -> load the Home Page as a public visitor -> assert the
+    # draft change is not publicly visible. See module docstring's disclosed
+    # substitution: since an already-Approved entry's Save as Draft is
+    # confirmed-live DISABLED, this exercises a brand-new entry saved as
+    # Draft only (never Submit for Publishing) instead of re-drafting an
+    # existing published record.
+    admin = HomeStrategicDirectionAdminPage(page)
+    authoring = ObjectAuthoringPage(page, slug="strategic-pillar-card")
+    home = HomeStrategicDirectionPage(page)
+    title = "QCTEST-135560-Draft-Not-Public"
+
+    entry_code = None
+    try:
+        admin.open_pillar_cards_list()
+        _create_strategic_pillar_card(authoring, title, "QCTEST-135560 draft-only pillar card.")
+        authoring.save_as_draft()
+        # Verified (not positional) lookup — see TC 135558's own note above
+        # and standards.md's "Destructive Operations Against qcdev" rule.
+        entry_code = authoring.find_entry_code_by_field("Pillar Title", title)
+        assert entry_code, f"could not verify an entry whose Pillar Title reads {title!r}"
+
+        assert authoring.row_status_text_by_code(entry_code) == "Draft", (
+            f"fixture card {title!r} does not read Draft status right after Save as Draft"
+        )
+
+        home.open_home()
+        home.wait_for_carousel()
+        assert not home.is_card_visible(title), (
+            f"draft-only card {title!r} is visible on the public Home Page before "
+            f"ever being published — draft content is being exposed publicly"
+        )
+    finally:
+        authoring.open_entries_list()
+        if entry_code:
+            authoring.delete_entry_by_code(entry_code)
+
+
+@allure.label("pbi", "129381")
+@allure.label("testcase", "135561")
+@allure.title("Verify that submitting for review does not publish until approved")
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135561
+@pytest.mark.about
+@pytest.mark.control_panel
+@pytest.mark.functional_high
+@pytest.mark.regression
+def test_submitting_for_review_does_not_publish_until_approved(page):
+    # TC 135561 — Change made -> "Submit for Review" -> status becomes
+    # Pending Review with a success toast -> load the Home Page as a public
+    # visitor before any approval action -> assert the last-published
+    # (pre-change) content is still shown, not the pending change.
+    #
+    # See module docstring's disclosed substitution/discrepancy note: the
+    # confirmed-live surface's only forward action is "Submit for
+    # Publishing", and it moves a Draft entry straight to Approved with no
+    # observed intermediate Pending-Review gate. This test asserts the
+    # case's OWN real expectation (not publicly visible immediately after
+    # the submit action) rather than being softened to the product's
+    # confirmed immediate-publish behavior — if it fails live, that failure
+    # itself is the case-vs-product discrepancy this docstring discloses,
+    # not a locator bug.
+    admin = HomeStrategicDirectionAdminPage(page)
+    authoring = ObjectAuthoringPage(page, slug="strategic-pillar-card")
+    home = HomeStrategicDirectionPage(page)
+    title = "QCTEST-135561-Submit-For-Review"
+
+    entry_code = None
+    try:
+        admin.open_pillar_cards_list()
+        _create_strategic_pillar_card(authoring, title, "QCTEST-135561 disposable pillar card.")
+        authoring.submit_for_publishing()
+        # Verified (not positional) lookup — see TC 135558's own note above
+        # and standards.md's "Destructive Operations Against qcdev" rule.
+        entry_code = authoring.find_entry_code_by_field("Pillar Title", title)
+
+        home.open_home()
+        home.wait_for_carousel()
+        assert not home.is_card_visible(title), (
+            f"card {title!r} is already visible on the public Home Page immediately "
+            f"after Submit for Publishing/Review, before any separate approval step — "
+            f"see this module's TC 135561 docstring note: the confirmed-live surface "
+            f"has no Pending-Review gate distinct from this case's expectation"
+        )
+    finally:
+        authoring.open_entries_list()
+        if entry_code:
+            authoring.delete_entry_by_code(entry_code)
+
+
+@allure.label("pbi", "129381")
+@allure.label("testcase", "135563")
+@allure.title("Verify that canceling the Add Pillar Card form discards entered data")
+@allure.severity(allure.severity_level.NORMAL)
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135563
+@pytest.mark.about
+@pytest.mark.control_panel
+@pytest.mark.functional_high
+@pytest.mark.regression
+def test_canceling_add_pillar_card_form_discards_entered_data(page):
+    # TC 135563 — Click Add Pillar Card and fill all fields with valid data
+    # -> Cancel/close the form without saving -> check the pillar card list
+    # -> assert no new pillar card was created and the previous card list is
+    # unchanged. See module docstring's disclosed substitution: this create
+    # form has no Cancel button (confirmed-live inventory) — closing without
+    # saving is exercised by navigating away from the unsaved form instead
+    # of clicking Save as Draft/Submit for Publishing.
+    admin = HomeStrategicDirectionAdminPage(page)
+    authoring = ObjectAuthoringPage(page, slug="strategic-pillar-card")
+    title = "QCTEST-135563-Cancelled-Card"
+
+    admin.open_pillar_cards_list()
+    authoring.open_new_entry_form()
+    rows_before = authoring.page.locator(authoring.ENTRIES_TABLE_ROW).all_inner_texts()
+
+    try:
+        _create_strategic_pillar_card(authoring, title, "QCTEST-135563 data that must never be saved.")
+        # Act: abandon the unsaved form by navigating away instead of saving.
+        authoring.open_new_entry_form()
+
+        rows_after = authoring.page.locator(authoring.ENTRIES_TABLE_ROW).all_inner_texts()
+
+        assert not authoring.row_visible(title), (
+            f"card {title!r} was created despite the form being abandoned without a save action"
+        )
+        assert rows_after == rows_before, (
+            "the pillar card list changed after abandoning an unsaved Add form — "
+            f"before={rows_before!r} after={rows_after!r}"
+        )
+    finally:
+        # Safety net: if the fill/upload sequence turned out to create a
+        # real row despite never clicking Save as Draft/Submit for
+        # Publishing (see this module's LIVE RUN RESULT note — an open
+        # question this batch flags, not silently assumed away), clean it
+        # up by a VERIFIED match on this test's own known title — never by
+        # row position (see standards.md's "Destructive Operations Against
+        # qcdev" rule and newest_entry_code()'s own docstring for why: a
+        # positional guess here already caused a real incident once).
+        authoring.open_entries_list()
+        rows_now = authoring.page.locator(authoring.ENTRIES_TABLE_ROW).all_inner_texts()
+        if len(rows_now) > len(rows_before):
+            stray_code = authoring.find_entry_code_by_field("Pillar Title", title)
+            if stray_code:
+                authoring.delete_entry_by_code(stray_code)

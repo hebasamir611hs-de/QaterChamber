@@ -210,3 +210,165 @@ def test_unpinning_the_featured_event_hides_the_home_page_section(page):
                 f"expected {admin.BASELINE_ACTIVE!r}, got "
                 f"{admin.is_active()!r}."
             )
+
+
+@allure.epic("Home Page")
+@allure.feature("Upcoming Event Pins")
+@allure.story("Replace the featured event")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("SKIPPED — depends on the same confirmed pinnedEvent propagation defect as TC 135669")
+@pytest.mark.control_panel
+@pytest.mark.event
+@pytest.mark.regression
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135671
+@pytest.mark.skip(
+    reason="CONFIRMED PRODUCT DEFECT, not an automation gap — same root "
+    "cause as TC 135669 (see module docstring): the Pinned Event field on "
+    "the Upcoming Event Pins singleton (record 49205) has already been "
+    "live-reproduced, twice, to not change the Home Page featured card "
+    "with two independent real, valid, in-format ('?id=<N>') candidate "
+    "values. TC 135671's own step-1 precondition ('Event A is currently "
+    "pinned and visible') is also not establishable: the baseline pinned "
+    "value 404s and the card only ever renders the widget's fallback. Per "
+    "the original writeup's own instruction, no third candidate value is "
+    "re-guessed without a product-side fix or clarification. File/confirm "
+    "a bug against PBI 129382 before re-attempting this TC."
+)
+def test_pinning_replaces_the_previously_featured_event():
+    """ADO-135671. Left deliberately unautomated/skipped — see module
+    docstring and this test's own skip reason for the full disclosure."""
+    pytest.fail(
+        "Not reached — see the skip reason: TC 135671 depends on the same "
+        "confirmed pinnedEvent propagation defect documented for TC 135669."
+    )
+
+
+@allure.epic("Home Page")
+@allure.feature("Upcoming Event Pins")
+@allure.story("Pin Configuration sources event details from the Events module")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Pin Configuration exposes only the Event Selector and Active Status — no manual content fields")
+@pytest.mark.control_panel
+@pytest.mark.event
+@pytest.mark.regression
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135672
+@pytest.mark.xdist_group("pin_event_49205")
+def test_pin_configuration_has_no_manual_event_detail_fields(page):
+    """ADO-135672.
+
+    Steps 1-2 only (self-sufficient, independent of the TC 135669/135671
+    Pinned Event propagation defect — see module docstring): log into the
+    CMS -> Content & Data -> Upcoming Event Pins -> open the singleton
+    record -> enumerate every `data-field-reference` on the edit form and
+    assert it is EXACTLY {"activeStatus", "pinnedEvent"} — i.e. no manual
+    title/date/time/location/description/image entry fields exist for
+    event details, per the case's own step-2 expectation. Read-only: opens
+    and Cancels, never Saves, so no baseline-restore burden — but it still
+    carries `xdist_group("pin_event_49205")` because concurrent navigation
+    to the same singleton's admin record from another worker (not just a
+    concurrent Save) was observed to make the list row miss its 20s render
+    timeout — confirmed live: this test and TC 135673 failed only when
+    xdist ran them in parallel, and both passed reliably serialized.
+
+    Step 3 ("Home Page displays the event's title/date/time/location/
+    description/image exactly as recorded") is BLOCKED by the same TC
+    135669/135671 defect (the admin's pin selection does not reach the Home
+    Page card at all) and is disclosed here, not scripted.
+    """
+    admin = HomeFeaturedEventAdminPage(page)
+
+    with allure.step("Open Content & Data > Upcoming Event Pins and open the singleton record"):
+        admin.open_upcoming_event_pins_list()
+        admin.open_pin_record()
+
+    with allure.step("Enumerate every data-field-reference on the edit form"):
+        refs = admin.field_references()
+
+    admin.cancel()
+
+    assert refs == {"activeStatus", "pinnedEvent"}, (
+        "Pin Configuration exposes unexpected fields — expected exactly "
+        f"{{'activeStatus', 'pinnedEvent'}}, got {refs!r}."
+    )
+
+
+@allure.epic("Home Page")
+@allure.feature("Upcoming Event Pins")
+@allure.story("Hide the section without unpinning")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Disabling Active Status hides the section even while an event remains pinned")
+@pytest.mark.control_panel
+@pytest.mark.event
+@pytest.mark.regression
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135673
+@pytest.mark.xdist_group("pin_event_49205")
+def test_disabling_active_status_hides_section_without_unpinning(page):
+    """ADO-135673.
+
+    NOT a duplicate of TC 135670: this test captures pinned_event_value()
+    before toggling Active Status off and asserts it is UNCHANGED after
+    Save (the case's own core invariant — "while an event remains pinned"),
+    then confirms the section hides on the Home Page — proving the hide is
+    driven purely by Active Status, never by touching pinnedEvent. Step 3
+    ("success toast displays") has no locator anywhere in this project's
+    admin POMs (verified by grep) so it is disclosed, not scripted;
+    persistence is instead verified via the same reopen-and-assert
+    hardening TC 135670 uses. Carries the same `xdist_group` as TC 135670
+    since both mutate the same singleton, plus the same baseline-restore
+    `finally` block.
+    """
+    admin = HomeFeaturedEventAdminPage(page)
+    home = HomeFeaturedEventPage(page)
+
+    try:
+        with allure.step("Establish a known pinned + Active=True precondition"):
+            admin.open_upcoming_event_pins_list()
+            admin.open_pin_record()
+            admin.set_active(True)
+            admin.save()
+            pinned_before = admin.pinned_event_value()
+
+        visible_before = home.reload_until(lambda p: p.is_section_visible())
+        assert visible_before, (
+            "The Upcoming Events section was not visible with Active=True "
+            f"within {home.RELOAD_POLL_TIMEOUT_MS}ms of Save."
+        )
+
+        with allure.step("Disable Active Status without changing the Pinned Event selection, then Save"):
+            admin.open_upcoming_event_pins_list()
+            admin.open_pin_record()
+            admin.set_active(False)
+            admin.save()
+
+        assert admin.is_active() is False
+        assert admin.pinned_event_value() == pinned_before, (
+            "Pinned Event selection changed as a side effect of disabling "
+            f"Active Status: expected {pinned_before!r}, got "
+            f"{admin.pinned_event_value()!r}."
+        )
+
+        with allure.step("Reload the Home Page and assert the section is hidden"):
+            hidden_after = home.reload_until(lambda p: not p.is_section_visible())
+        assert hidden_after, (
+            "Active Status was disabled but section.qc-home-upcoming-event "
+            f"is still visible after {home.RELOAD_POLL_TIMEOUT_MS}ms of "
+            "polling, even though the Pinned Event selection was left "
+            "unchanged."
+        )
+    finally:
+        with allure.step("Restore the singleton to its confirmed original baseline"):
+            admin.open_upcoming_event_pins_list()
+            admin.open_pin_record()
+            admin.reset_to_baseline()
+
+        with allure.step("Reopen and verify the restore actually persisted"):
+            admin.open_upcoming_event_pins_list()
+            admin.open_pin_record()
+            assert admin.pinned_event_value() == admin.BASELINE_PINNED_EVENT
+            assert admin.is_active() == admin.BASELINE_ACTIVE

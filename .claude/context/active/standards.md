@@ -389,6 +389,45 @@ is left ungrouped and free to parallelize normally:
 | Upcoming Event Pins singleton | 49205 | `xdist_group("pin_event_49205")` | `tc_135670` |
 | Mission pillar card | 49082 | `xdist_group("mission_49082")` | `tc_135557`, `tc_135562` |
 | Qatar Airways partner | 45776 | `xdist_group("qatar_airways_45776")` | `tc_135832` |
+| Objectives pillar card | 49108 | `xdist_group("objectives_49108")` | any Strategic Pillar Card test (`tc_135558` etc.) |
+
+**Vision (real record, ID pending confirmation)** is the third member of the same
+Strategic Pillar Card carousel as Mission (49082) and Objectives (49108) — treat it as
+equally protected even though its ID has not yet been logged here; confirm and add it
+the next time a test touches it.
+
+## Destructive Operations Against qcdev — Never Delete by Position or Assumption
+
+**Incident (2026-09-03, PBI 129381 batch):** the real "Objectives" pillar card
+(ID 49108) was permanently deleted from qcdev — content lost, no recycle bin, no
+backup — because a delete-targeting helper (`newest_entry_code()` in
+`ObjectAuthoringPage`) assumed "last row in the admin grid = most recently created
+row" to pick a disposable `QCTEST-*` entry to clean up. That assumption was wrong at
+least once and the helper deleted whatever real record happened to be last instead.
+The row list's "Entry" column showing an internal UUID rather than the title (a
+separate, still-open Page Object defect) is what made position-based targeting seem
+necessary in the first place — the actual fix is a title/ID-based lookup, not a
+positional one.
+
+**Rule, mandatory for any code or agent instruction that calls a `delete_*` /
+`remove_*` method against qcdev, or any other shared/live environment:**
+
+1. **Never delete by position** ("last row", "first row", "newest") on any list that
+   can contain real content — position is not identity. Resolve the target by its
+   known ID/external-reference-code or exact title match against a field confirmed to
+   actually hold the title (verify the column live before trusting it — see the
+   incident above).
+2. **Before any delete against qcdev runs, verify the target is disposable** — its
+   title/ID must match a `QCTEST-*` (or equivalent clearly-fake) pattern, or be in the
+   singleton table above marked as safe to mutate under its own test. If a delete
+   target cannot be positively confirmed as test-created, **stop and ask the user**
+   instead of proceeding — irreversible operations on shared data are never inferred
+   from a general "fix it and re-run" instruction; they need their own explicit
+   go-ahead.
+3. **A QA Manager/orchestrator instruction to "fix the framework and re-run" does NOT
+   imply authorization for irreversible deletes on real content.** Delegated fix/rerun
+   requests must call this out explicitly (e.g. "confirm every delete target by ID
+   before executing it") rather than assuming the delegate will infer the caution.
 
 A test can only belong to one `xdist_group` — before adding a new one, grep the test
 body for all 4 record IDs; if a test genuinely straddles two, merge those two

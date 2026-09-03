@@ -51,6 +51,41 @@ class CommunityPartnersPage(BasePage):
         locator = self.PARTNER_LOGO_BY_ALT.format(name=partner_name)
         return self.page.locator(locator).first.is_visible() if self.page.locator(locator).count() > 0 else False
 
+    LOGO_IMG = "img.qc-partner-logo"
+
+    def visible_partner_order(self) -> list:
+        """First-occurrence, de-duplicated order of `alt` names among the
+        currently-rendered `img.qc-partner-logo` nodes — the marquee repeats
+        each logo multiple times (see module docstring), so raw DOM order
+        would double-count; this collapses to one entry per distinct partner
+        in the order it first appears, which is what "carousel order"
+        actually means for a caller comparing before/after a Display Order
+        change."""
+        alts = self.page.locator(self.LOGO_IMG).all()
+        seen = []
+        for img in alts:
+            alt = (img.get_attribute("alt") or "").strip()
+            if alt and alt not in seen:
+                seen.append(alt)
+        return seen
+
+    def reload_until_order_matches(self, expected_order: list, timeout_ms: int = 8000, interval_ms: int = 1000) -> bool:
+        """Poll (reload + re-check) until `visible_partner_order()`'s first
+        `len(expected_order)` entries equal `expected_order`, or `timeout_ms`
+        elapses. Mirrors `reload_until_logo_matches()`'s poll-not-sleep
+        pattern for this same class of publish-then-verify check."""
+        import time
+
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_home()
+            current = self.visible_partner_order()[: len(expected_order)]
+            if current == expected_order:
+                return True
+            if time.monotonic() >= deadline:
+                return current == expected_order
+            self.page.wait_for_timeout(interval_ms)
+
     def reload_until_logo_matches(self, partner_name: str, expected_visible: bool, timeout_ms: int = 8000, interval_ms: int = 1000) -> bool:
         """Poll (reload + re-check), never a bare sleep — cms-profile.md's
         confirmed ~0s propagation figure plus a conservative safety-margin

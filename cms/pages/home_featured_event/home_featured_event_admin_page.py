@@ -158,6 +158,15 @@ class HomeFeaturedEventAdminPage(BasePage):
     def is_active(self) -> bool:
         return self.page.locator(self.ACTIVE_STATUS_CHECKBOX).is_checked()
 
+    def field_references(self) -> set:
+        """Every `data-field-reference` present on the open record's edit
+        form — TC 135672's own evidence that no manual event-detail fields
+        (title/date/time/location/description/image) exist alongside the
+        confirmed-live 2-field map (activeStatus, pinnedEvent)."""
+        return set(self.page.locator("[data-field-reference]").evaluate_all(
+            "els => els.map(el => el.getAttribute('data-field-reference'))"
+        ))
+
     def reset_to_baseline(self) -> "HomeFeaturedEventAdminPage":
         """Restore the singleton to its confirmed original baseline and
         SAVE — callers must still reopen the record afterward and assert
