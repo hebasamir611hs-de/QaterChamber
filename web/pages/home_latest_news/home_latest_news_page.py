@@ -148,6 +148,12 @@ class HomeLatestNewsPage(BasePage):
     CARD_META_ITEM = ".qc-ln-meta-item"
     CARD_META_TEXT = ".qc-ln-meta-text"
 
+    # Borrowed placeholder budget — see HomePromoBannersPage's own note:
+    # not independently re-measured for this content type, per
+    # cms-profile.md's "re-probe before assuming it generalizes" caveat.
+    RELOAD_POLL_TIMEOUT_MS = 5000
+    RELOAD_POLL_INTERVAL_MS = 500
+
     # ── Navigation ───────────────────────────────────────────────────────
     def open_home(self) -> "HomeLatestNewsPage":
         self.open(web_url("/home"))
@@ -338,3 +344,40 @@ class HomeLatestNewsPage(BasePage):
         stated alignment."""
         box = self.page.locator(self.VIEW_ALL_TOP).bounding_box()
         return self._horizontal_half(box["x"] if box else None)
+
+    # ── CMS content-verification (Control_Panel-driven propagation checks) ──
+    def is_section_visible(self) -> bool:
+        return self.is_visible(self.SECTION)
+
+    def article_visible_by_title(self, title: str) -> bool:
+        """True if any Latest News card renders this title. Uses
+        Playwright's own is_visible() (not mere DOM presence) so an
+        unpublished/absent article is correctly reported absent."""
+        try:
+            locator = self.page.locator(f'{self.SECTION} {self.CARD_TITLE}:text-is("{title}")')
+            return locator.first.is_visible()
+        except Exception:  # noqa: BLE001 — mirrors BasePage.is_visible's never-throws contract
+            return False
+
+    def reload_until(self, predicate, timeout_ms: int | None = None, interval_ms: int | None = None) -> bool:
+        """Poll open_home() + predicate(self) until True or timeout — never
+        a bare sleep. Mirrors HomePromoBannersPage.reload_until()'s shape."""
+        import time
+
+        timeout_ms = timeout_ms if timeout_ms is not None else self.RELOAD_POLL_TIMEOUT_MS
+        interval_ms = interval_ms if interval_ms is not None else self.RELOAD_POLL_INTERVAL_MS
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_home()
+            if predicate(self):
+                return True
+            if time.monotonic() >= deadline:
+                return False
+            self.page.wait_for_timeout(interval_ms)
+
+    def reload_until_article_matches(self, title: str, expected_visible: bool,
+                                      timeout_ms: int | None = None) -> bool:
+        return self.reload_until(
+            lambda p: p.article_visible_by_title(title) == expected_visible,
+            timeout_ms=timeout_ms,
+        )

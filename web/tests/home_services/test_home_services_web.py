@@ -12,13 +12,16 @@ skeleton, untouched.
 scripted below (TC 135329, 135330, 135331, 135332, 135335, 135336, 135337,
 135338, 135339, 135340, 135341, 135342, 135343, 135344, 135345). The other 2
 (TC 135353, 135414) each have their OWN Arrange step requiring an
-authenticated Site Content Editor CMS session (deactivate every service
-card's Active Status / unpublish the Our Services listing page) — gated
-below with the same `_UNRESOLVED`/credential collection-time-skip convention
-already established by test_home_strategic_partners_web.py's TC 136289
-chain / test_home_community_partners_web.py's TC 135811, against
-home_services_admin_page.py (TEST_USER/TEST_PASSWORD blank in .env — see
-that module's docstring).
+authenticated Site Content Editor CMS session:
+  - TC 135353 (deactivate every service card's Active Status) is fully
+    scripted against HomeServicesAdminPage's real, live-verified per-card
+    edit-form API (TEST_USER/TEST_PASSWORD are populated in .env — the
+    project-wide blank-creds blocker no longer applies here).
+  - TC 135414 (unpublish the Our Services listing page) is SKIPPED —
+    HomeServicesAdminPage only implements the Service Cards object CRUD, not
+    a separate listing-PAGE publish/unpublish control, and no live-verified
+    locator for that control exists (never guessed). See
+    _LISTING_PAGE_PUBLISH_SKIP below.
 
 Known real-environment findings surfaced while scripting these (full detail
 in web/pages/home_services/home_services_page.py's docstring, which
@@ -40,11 +43,10 @@ observed value:
   - TC 135345: the "Information Services" tab's real accessible name is
     "Information" (not "Information Services") — scripted against the real
     live label.
-  - TC 135353/135414: BLOCKED — each case's own Arrange step needs an
-    authenticated CMS session, and TEST_USER/TEST_PASSWORD are blank in
-    .env (same project-wide blocker as every sibling *_control_panel.py /
-    *_admin_page.py in this tree). Gated with the same
-    `_UNRESOLVED`/credential collection-time-skip convention; never guessed.
+  - TC 135353: runs for real against qcdev — briefly sets Active Status=False
+    on all 8 real editorial service cards, asserts the section is absent,
+    then restores every card's Active Status=True in teardown.
+  - TC 135414: SKIPPED, not guessed — see _LISTING_PAGE_PUBLISH_SKIP's reason.
 """
 
 import os
@@ -52,7 +54,6 @@ import os
 import allure
 import pytest
 
-from web.pages.components.cms_login_page import CmsLoginPage
 from cms.pages.home_services.home_services_admin_page import HomeServicesAdminPage
 from web.pages.home_services.home_services_page import HomeServicesPage
 
@@ -90,31 +91,14 @@ ESERVICES_TITLES = ["Certificate of Origin", "Document Attestation"]
 INFORMATION_TITLES = ["Business Directory", "Economic Reports"]
 
 
-# ── CMS-blocker-chain gate — same `_UNRESOLVED` collection-time skipif
-#    convention as test_home_strategic_partners_web.py: skip (never
-#    RuntimeError) while ANY of HomeServicesAdminPage's locators is still an
-#    unresolved TODO placeholder, and say WHICH ones. ──────────────────────
-_PLACEHOLDER_PREFIX = "TODO:"
-_UNRESOLVED = [
-    f"{cls.__name__}.{name}"
-    for cls, names in (
-        (HomeServicesAdminPage, (
-            "HOME_PAGE_MANAGEMENT_LINK", "OUR_SERVICES_MANAGEMENT_LINK", "SERVICE_CARD_ROW",
-            "SERVICE_ACTIVE_STATUS_TOGGLE", "SAVE_BUTTON", "LISTING_PAGE_MANAGEMENT_LINK",
-            "LISTING_PAGE_UNPUBLISH_BUTTON", "LISTING_PAGE_PUBLISH_BUTTON",
-            "LISTING_PAGE_STATUS_INDICATOR",
-        )),
-    )
-    for name in names
-    if str(getattr(cls, name)).startswith(_PLACEHOLDER_PREFIX)
-]
-_UNRESOLVED_SKIP = pytest.mark.skipif(
-    bool(_UNRESOLVED),
+# ── TC 135414's precondition control has no automation yet ─────────────────
+_LISTING_PAGE_PUBLISH_SKIP = pytest.mark.skip(
     reason=(
-        "Unresolved locator placeholders on HomeServicesAdminPage — run "
-        "tools/extract_locators.py (as an authenticated Site Content Editor) "
-        "against the live Our Services content-management screen and replace: "
-        + ", ".join(_UNRESOLVED)
+        "Listing-page publish/unpublish control not yet automated — "
+        "HomeServicesAdminPage only implements the Service Cards object CRUD "
+        "(list/edit form), not the separate Our Services listing PAGE's own "
+        "management screen. No live-verified locator for that control exists; "
+        "never guessed. See cms/pages/home_services/home_services_admin_page.py."
     ),
 )
 
@@ -721,22 +705,23 @@ def test_information_tab_shows_only_information_cards(page):
 @pytest.mark.regression
 @pytest.mark.pbi_129371
 @pytest.mark.traceability("SVC-OURSERVICES-TC-135353")
-@_UNRESOLVED_SKIP
 def test_section_not_rendered_when_no_service_card_published(page):
     # SVC-OURSERVICES-TC-135353 | PBI 129371
-    user, password = _skip_if_no_credentials()
+    _skip_if_no_credentials()
 
-    # Arrange
-    login = CmsLoginPage(page)
+    # Arrange — HomeServicesAdminPage.open_service_cards_list() self-
+    # authenticates via settings.test_user/test_password (see its own
+    # docstring); no separate CmsLoginPage call needed.
     admin = HomeServicesAdminPage(page)
     svc = HomeServicesPage(page)
 
     try:
         # Act
-        with allure.step("Log into the Liferay CMS and set every service card's Active Status to False"):
-            login.open_login().login(user, password)
-            admin.navigate_to_our_services_management()
-            admin.deactivate_all_service_cards()
+        with allure.step("Set every real service card's Active Status to False via its edit form"):
+            for title in ALL_SERVICES_TITLES:
+                admin.open_service_card_edit_form_by_title(title)
+                admin.set_active(False)
+                admin.save()
 
         with allure.step("Open the live Home Page"):
             svc.open_home()
@@ -745,7 +730,10 @@ def test_section_not_rendered_when_no_service_card_published(page):
         assert not svc.is_section_present(), "expected the Our Services section to be entirely absent, not rendered empty"
     finally:
         with allure.step("Reactivate every service card (teardown — protects other parallel tests)"):
-            admin.reactivate_all_service_cards()
+            for title in ALL_SERVICES_TITLES:
+                admin.open_service_card_edit_form_by_title(title)
+                admin.set_active(True)
+                admin.save()
 
 
 # ── TC 135414 — CTA absent when the listing page is unpublished ────────────
@@ -760,20 +748,18 @@ def test_section_not_rendered_when_no_service_card_published(page):
 @pytest.mark.edge
 @pytest.mark.pbi_129371
 @pytest.mark.traceability("SVC-OURSERVICES-TC-135414")
-@_UNRESOLVED_SKIP
+@_LISTING_PAGE_PUBLISH_SKIP
 def test_view_all_cta_not_rendered_when_listing_page_unpublished(page):
     # SVC-OURSERVICES-TC-135414 | PBI 129371
-    user, password = _skip_if_no_credentials()
+    _skip_if_no_credentials()
 
     # Arrange
-    login = CmsLoginPage(page)
     admin = HomeServicesAdminPage(page)
     svc = HomeServicesPage(page)
 
     try:
         # Act
-        with allure.step("Log into the Liferay CMS and unpublish the Our Services listing page"):
-            login.open_login().login(user, password)
+        with allure.step("Unpublish the Our Services listing page"):
             admin.navigate_to_listing_page_management()
             admin.unpublish_listing_page()
 

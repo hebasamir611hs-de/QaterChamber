@@ -62,7 +62,7 @@ import allure
 import pytest
 
 from cms.pages.gm_message.gm_message_admin_page import GmMessageAdminPage
-from web.pages.gm_message.gm_message_page import GmMessagePage
+from web.pages.gm_message.gm_message_page import GM_MESSAGE_PATH, GmMessagePage
 
 
 @allure.epic("About Us")
@@ -512,28 +512,208 @@ def test_site_content_editor_can_author_preview_and_publish_the_135453(page):
 @allure.epic("About Us")
 @allure.feature("General Manager's Message")
 @allure.title("Verify that a Site Content Editor is blocked from publishing when the Arabic Page Title is missing (ADO-135454)")
+@allure.label("pbi", "129397")
+@allure.label("testcase", "135454")
 @pytest.mark.control_panel
 @pytest.mark.about
 @pytest.mark.functional_high
 @pytest.mark.bilingual
 @pytest.mark.pbi_129397
 @pytest.mark.tc_135454
-@pytest.mark.skip(reason=_CMS_LOGIN_BLOCKED)
+@pytest.mark.xdist_group("gm_message_79878")
 def test_site_content_editor_is_blocked_from_publishing_when_the_135454(page):
-    ...
+    """ADO-135454. Same baseline-capture -> try -> assert -> finally-restore
+    structure as tc_135453/tc_135457 against the SAME shared singleton
+    record (79878).
+
+    CONFIRMED PRODUCT DEFECT (reported by the QA Manager from a live manual
+    repro, 2026-09-03): clearing the Arabic Page Title and Saving does NOT
+    block the save as the case requires -- it succeeds, and the Arabic Page
+    Title field is silently auto-filled with the English Page Title's own
+    content instead of being left blank or rejected. That is worse than the
+    case's own framing (a validation gate) and is asserted here as the
+    case's literal, correct-behavior expectation (Publish/Save is blocked,
+    record remains at its prior baseline) -- this test is expected to FAIL
+    loudly against the live defect rather than being written to match the
+    defect as if it were spec (automation-standards.md Result Integrity).
+
+    Scope note: only the Arabic Page Title is cleared (the case's own Step 1
+    names only this field); every other field is left untouched.
+    """
+    admin = GmMessageAdminPage(page)
+
+    with allure.step("Open the GM's Message record in the Control Panel"):
+        admin.open_gm_message_edit_form()
+
+    with allure.step("Capture the current (baseline) EN/AR Page Title + Status for teardown"):
+        baseline_status = admin.status_value()
+        baseline_title_en = admin.field_value(admin.PAGE_TITLE)
+        admin.switch_field_to_arabic("Page Title")
+        baseline_title_ar = admin.field_value(admin.PAGE_TITLE)
+        admin.switch_field_to_english("Page Title")
+
+    try:
+        from core.utils.reporting import attach_screenshot
+        from config.settings import settings
+
+        with allure.step("Clear the Arabic Page Title, leave every other field as-is, and click Save"):
+            admin.switch_field_to_arabic("Page Title")
+            admin.fill_text_field(admin.PAGE_TITLE, "")
+            admin.switch_field_to_english("Page Title")
+            admin.save()
+
+        with allure.step("Capture bug evidence #1: form state immediately after Save (no validation error surfaced)"):
+            attach_screenshot(page.screenshot(full_page=True), "135454", settings.project_name)
+
+        with allure.step("Capture bug evidence #2: reopen the record and show the Arabic Page Title was silently auto-filled instead of blocked/left blank"):
+            admin.open_gm_message_edit_form()
+            admin.switch_field_to_arabic("Page Title")
+            attach_screenshot(page.screenshot(full_page=True), "135454", settings.project_name)
+            reloaded_title_ar = admin.field_value(admin.PAGE_TITLE)
+            admin.switch_field_to_english("Page Title")
+
+        # Correct-behavior assertion (case's Step 1): Publish/Save must be
+        # blocked with the bilingual gate's error message, and the record
+        # must remain unchanged (not silently saved with a blank/auto-filled
+        # Arabic title). Expected to FAIL against the confirmed live defect
+        # above -- report as a product bug, not an automation bug, once
+        # this failure is observed.
+        assert admin.is_save_error_shown() and reloaded_title_ar == "", (
+            "Expected the bilingual publish gate to block Save when the "
+            "Arabic Page Title is blank, but no validation error was shown "
+            "at all -- confirmed live defect: the field is instead silently "
+            f"auto-filled with {reloaded_title_ar!r} (the English Page "
+            "Title's own content) rather than being left blank or rejected."
+        )
+    finally:
+        with allure.step("Teardown: restore the baseline EN/AR Page Title + Status so the shared singleton record is never left mutated"):
+            restored = False
+            last_title_en = last_title_ar = last_status = None
+            for _ in range(3):
+                admin.open_gm_message_edit_form()
+                if admin.status_value() != baseline_status:
+                    admin.select_status(baseline_status)
+                admin.switch_field_to_english("Page Title")
+                if admin.field_value(admin.PAGE_TITLE) != baseline_title_en:
+                    admin.fill_text_field(admin.PAGE_TITLE, baseline_title_en)
+                admin.switch_field_to_arabic("Page Title")
+                if admin.field_value(admin.PAGE_TITLE) != baseline_title_ar:
+                    admin.fill_text_field(admin.PAGE_TITLE, baseline_title_ar)
+                admin.switch_field_to_english("Page Title")
+                admin.save()
+                admin.open_gm_message_edit_form()
+                last_title_en = admin.field_value(admin.PAGE_TITLE)
+                admin.switch_field_to_arabic("Page Title")
+                last_title_ar = admin.field_value(admin.PAGE_TITLE)
+                last_status = admin.status_value()
+                if (
+                    last_title_en == baseline_title_en
+                    and last_title_ar == baseline_title_ar
+                    and last_status == baseline_status
+                ):
+                    restored = True
+                    break
+            assert restored, (
+                "Teardown restore did not persist after 3 converge attempts: "
+                f"Page Title (EN) reads {last_title_en!r} (expected "
+                f"{baseline_title_en!r}), Page Title (AR) reads "
+                f"{last_title_ar!r} (expected {baseline_title_ar!r}), Status "
+                f"reads {last_status!r} (expected {baseline_status!r})."
+            )
 
 
 @allure.epic("About Us")
 @allure.feature("General Manager's Message")
 @allure.title("Verify that unpublishing the GM's Message page removes it from the live website while the record remains editable in CMS (ADO-135456)")
+@allure.label("pbi", "129397")
+@allure.label("testcase", "135456")
 @pytest.mark.control_panel
 @pytest.mark.about
 @pytest.mark.functional_high
 @pytest.mark.pbi_129397
 @pytest.mark.tc_135456
-@pytest.mark.skip(reason=_CMS_LOGIN_BLOCKED)
+@pytest.mark.xdist_group("gm_message_79878")
 def test_unpublishing_the_gms_message_page_removes_it_from_the_135456(page):
-    ...
+    """ADO-135456. Same baseline-capture -> try -> assert -> finally-restore
+    structure as tc_135453/tc_135457/tc_135454 against the SAME shared
+    singleton record (79878).
+
+    Disclosed mechanism substitution (GmMessageAdminPage's own module
+    docstring): this form has no separate "Unpublish" button -- the Status
+    field IS the publish/unpublish control (Published/Draft). Step 1 is
+    therefore scripted as select_status("Draft") + Save, the confirmed real
+    mechanism, not a literal "Unpublish" click that does not exist here.
+
+    Disclosed, expected-to-FAIL assertion for Step 2: the case's literal
+    expectation is that the public page becomes a 404/redirect once
+    unpublished. tc_135457 (this same module, same shared record) already
+    confirmed live that the product instead renders the page shell normally
+    with the content area BLANK for a non-Published record, not a 404/
+    redirect. Per Result Integrity, this test asserts the case's own literal
+    wording rather than silently substituting the known real behavior --
+    a failure here reproduces that same already-confirmed defect, it is not
+    a new automation bug.
+    """
+    admin = GmMessageAdminPage(page)
+    gm_page = GmMessagePage(page)
+
+    with allure.step("Open the GM's Message record in the Control Panel"):
+        admin.open_gm_message_edit_form()
+
+    with allure.step("Capture the current (baseline) Status for teardown"):
+        baseline_status = admin.status_value()
+
+    try:
+        with allure.step('As Editor, open the Published record and click Unpublish (Status -> "Draft" + Save, the confirmed real mechanism)'):
+            admin.select_status("Draft")
+            admin.save()
+
+        # Assert: Step 1 -- status changes to Unpublished (Draft) with no
+        # validation error.
+        assert not admin.is_save_error_shown(), admin.save_error_text()
+        assert admin.status_value() == "Draft"
+
+        with allure.step("As a visitor, navigate to the page URL"):
+            from config.settings import web_url
+
+            target_url = web_url(GM_MESSAGE_PATH, locale="en")
+            response = page.goto(target_url)
+
+        # Assert: Step 2 -- case's literal expectation (404/redirect).
+        # EXPECTED TO FAIL against the confirmed-live defect documented
+        # above (page renders 200 with a blank content area instead).
+        status_code = response.status if response else None
+        redirected = bool(response) and response.url != target_url
+        assert status_code == 404 or redirected or status_code in (301, 302, 303, 307, 308), (
+            "AZDO (see tc_135457, same confirmed defect): unpublishing "
+            "record 79878 should make the public page 404/redirect, but it "
+            f"instead returned status {status_code!r} at the same URL with "
+            "the content area rendered blank rather than being taken down."
+        )
+
+        with allure.step("As Editor, reopen the record in CMS"):
+            admin.open_gm_message_edit_form()
+
+        # Assert: Step 3 -- content is still present and editable.
+        assert admin.field_value(admin.GM_NAME) != ""
+    finally:
+        with allure.step("Teardown: restore the baseline Status so the shared singleton record is never left mutated"):
+            restored = False
+            last_status = None
+            for _ in range(3):
+                admin.open_gm_message_edit_form()
+                if admin.status_value() != baseline_status:
+                    admin.select_status(baseline_status)
+                admin.save()
+                admin.open_gm_message_edit_form()
+                last_status = admin.status_value()
+                if last_status == baseline_status:
+                    restored = True
+                    break
+            assert restored, (
+                "Teardown restore did not persist after 3 converge attempts: "
+                f"Status reads {last_status!r} (expected {baseline_status!r})."
+            )
 
 
 @allure.epic("About Us")
@@ -732,11 +912,76 @@ def test_draft_content_saved_but_not_yet_published_is_never_135457(page):
 @pytest.mark.about
 @pytest.mark.functional_high
 @pytest.mark.dataintegrity
+@pytest.mark.uat
 @pytest.mark.pbi_129397
 @pytest.mark.tc_135458
-@pytest.mark.skip(reason=_CMS_LOGIN_BLOCKED)
+@pytest.mark.xdist_group("gm_message_79878")
 def test_updating_the_gm_name_field_once_and_republishing_updates_135458(page):
-    ...
+    """ADO-135458. Same baseline-capture -> try -> assert -> finally-restore
+    structure as tc_135453/tc_135456/tc_135457/tc_135454 against the SAME
+    shared singleton record (79878).
+
+    Verifies the single-source-of-truth acceptance point: the GM Name field
+    is the one source both the public Portrait Caption
+    (GmMessagePage.portrait_name_text()) and the Signature Block
+    (GmMessagePage.signature_name_text()) render from, per
+    test_gm_message_name_designation_consistency's already-passing
+    steady-state check in test_gm_message_web.py -- this test additionally
+    exercises the write-then-republish propagation step that check does not
+    cover.
+    """
+    admin = GmMessageAdminPage(page)
+    gm_page = GmMessagePage(page)
+
+    qctest_name_en = "QCTEST-135458 Mr. Ali Saeed Busherbak Al Mansoori"
+
+    with allure.step("Open the GM's Message record in the Control Panel"):
+        admin.open_gm_message_edit_form()
+
+    with allure.step("Capture the current (baseline) GM Name for teardown"):
+        baseline_name_en = admin.field_value(admin.GM_NAME)
+
+    try:
+        with allure.step("As Editor, open the Published record and change the GM Name field to a new value"):
+            admin.fill_text_field(admin.GM_NAME, qctest_name_en)
+
+        # Assert: Step 1 -- field accepts the new value.
+        assert admin.field_value(admin.GM_NAME) == qctest_name_en
+
+        with allure.step("Publish the change"):
+            admin.save()
+
+        # Assert: Step 2 -- save succeeds with no validation error (the
+        # confirmable half of "Success toast appears" -- see
+        # GmMessageAdminPage.SUCCESS_TOAST's own unresolved-placeholder note).
+        assert not admin.is_save_error_shown(), admin.save_error_text()
+
+        with allure.step("As a visitor, reload the public page"):
+            gm_page.open_gm_message(locale="en")
+
+        # Assert: Step 3 -- both the portrait caption and the signature
+        # block display the new GM Name identically.
+        assert gm_page.portrait_name_text() == qctest_name_en
+        assert gm_page.signature_name_text() == qctest_name_en
+        assert gm_page.portrait_name_text() == gm_page.signature_name_text()
+    finally:
+        with allure.step("Teardown: restore the baseline GM Name so the shared singleton record is never left mutated"):
+            restored = False
+            last_name = None
+            for _ in range(3):
+                admin.open_gm_message_edit_form()
+                if admin.field_value(admin.GM_NAME) != baseline_name_en:
+                    admin.fill_text_field(admin.GM_NAME, baseline_name_en)
+                admin.save()
+                admin.open_gm_message_edit_form()
+                last_name = admin.field_value(admin.GM_NAME)
+                if last_name == baseline_name_en:
+                    restored = True
+                    break
+            assert restored, (
+                "Teardown restore did not persist after 3 converge attempts: "
+                f"GM Name reads {last_name!r} (expected {baseline_name_en!r})."
+            )
 
 
 @allure.epic("About Us")

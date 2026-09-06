@@ -86,6 +86,8 @@ import pytest
 from cms.pages.home_community_partners.home_community_partners_admin_page import (
     CommunityPartnersAdminPage,
     QATAR_AIRWAYS_NAME,
+    QATAR_ENERGY_NAME,
+    QNB_NAME,
 )
 from web.pages.home_community_partners.home_community_partners_page import (
     CommunityPartnersPage,
@@ -286,4 +288,221 @@ def test_deactivating_partner_removes_logo_from_home_page(page):
         assert restored_active == baseline_active, (
             f"failed to restore Qatar Airways' Active state to baseline "
             f"({baseline_active!r}) — currently {restored_active!r}"
+        )
+
+
+# ---------------------------------------------------------------------------
+# TC 135831 / TC 135833 (2026-09-03) — same PBI 129385 batch continued.
+#
+# Both were authored against a case set that assumes an object-authoring
+# Draft/Preview/Publish lifecycle ("click Publish", "Success toast
+# displayed") per .claude/context/active/standards.md's "Object Authoring —
+# Draft / Preview / Publish / Unpublish Lifecycle" section. This session
+# checked whether that surface (`manage-community-partners`) exists for this
+# object before writing anything against it — it does not, and moreover NONE
+# of the manage-<slug> pages currently resolve on qcdev:
+#
+#   https://qcdev.ihorizons.com/web/qatar-chamber/manage-community-partners
+#   https://qcdev.ihorizons.com/web/qatar-chamber/manage-news-article
+#   https://qcdev.ihorizons.com/web/qatar-chamber/manage-promotional-banner
+#   https://qcdev.ihorizons.com/web/qatar-chamber/manage-service-card
+#   https://qcdev.ihorizons.com/web/qatar-chamber/manage-strategic-pillar-card
+#
+# all render the site's "Coming Soon" template live this session (confirmed
+# via a fresh authenticated context, re-checked after re-logging in to rule
+# out a stale-session false negative) — the whole object-authoring surface is
+# currently unreachable on this environment, not a Community-Partners-
+# specific gap. This is disclosed as a live environment finding, not silently
+# reasoned about from source.
+#
+# Consequently, both cases below are scripted against the ONLY reachable
+# Control_Panel surface for this object — the raw Object Definitions editor
+# (Content & Data > Community Partners) that every other test in this module
+# already uses — with the same substitution precedent TC 135830 already
+# established:
+#   - TC 135831's "click Publish" -> the real form's only commit action,
+#     Save (no separate Publish/Draft/Preview button exists on this editor —
+#     see home_community_partners_admin_page.py's module docstring). This
+#     makes TC 135831 functionally overlap with the already-scripted
+#     TC 135830 (both omit Partner Name (EN) and assert the same real
+#     validation strings) — flagged back here for the QA Manager to
+#     adjudicate a possible case merge, not silently deduplicated away
+#     (TC 135831 has its own Azure Test Case id and its own retest selector,
+#     so it is scripted in full rather than skipped).
+#   - TC 135833's "Success toast displayed" -> the real editor shows no
+#     toast on Save (confirmed live via every existing test in this module,
+#     e.g. TC 135829/135832 both assert `is_save_error_shown()` is False as
+#     their own "no error" surrogate, never a toast) — asserted here as "no
+#     validation error and the row is unchanged" instead of a toast that
+#     does not exist on this form.
+#
+# TC 135834 ("Save as Draft, then Preview a draft without publishing") is NOT
+# automated here at all: there is no Draft state or Preview action reachable
+# on the raw editor (Save commits directly to Status "Approved", confirmed
+# live in the admin Page Object's own module docstring), and the
+# object-authoring surface that WOULD provide it is confirmed unreachable
+# above. Blocking reason for the record: no reachable precondition state —
+# not a missing locator on an existing screen.
+# ---------------------------------------------------------------------------
+
+TC_135831_PARTNER_NAME_AR = "شركة اختبار QCTEST-135831"
+TC_135831_PARTNER_URL = "https://example.com/qctest-135831"
+
+
+@allure.epic("Home Page")
+@allure.feature("Community Partners")
+@allure.story("Form validation")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Publishing a Community Partner entry without a Partner Name is blocked")
+@pytest.mark.control_panel
+@pytest.mark.global_
+@pytest.mark.pbi_129385
+@pytest.mark.tc_135831
+def test_publishing_without_partner_name_en_is_blocked(page):
+    # QA-135831 — the case's "click Publish" has no target on this form: the
+    # raw Object Definitions editor exposes only Save/Cancel, and Save
+    # commits directly to Status "Approved" with no separate Publish step
+    # (see module docstring above and home_community_partners_admin_page.py's
+    # own confirmed-live finding) — Save is exercised as the real "publish
+    # action is submitted" step the case describes. Fill every mandatory
+    # field EXCEPT Partner Name (EN) -> Save -> assert the real validation
+    # error is shown and no entry was created -> reload the Home Page and
+    # assert nothing appears there for it.
+    admin = CommunityPartnersAdminPage(page)
+    home = CommunityPartnersPage(page)
+
+    admin.open_new_partner_form()
+
+    try:
+        admin.set_partner_name_ar(TC_135831_PARTNER_NAME_AR)
+        admin.set_partner_url(TC_135831_PARTNER_URL)
+        admin.set_display_order("999")
+        admin.upload_partner_logo(LOGO_FIXTURE)
+
+        admin.save()
+
+        # Assert: the (real) validation error is shown — the case's literal
+        # text ("Partner Name is required.") does not match this form's own
+        # confirmed-live strings (see TC 135830 above); asserted against the
+        # real banner/inline text instead.
+        assert admin.is_save_error_shown(), (
+            "expected a validation error when Partner Name (EN) is omitted "
+            "before Save, but Save appeared to succeed"
+        )
+        assert "Partner Name (EN)" in admin.save_error_text() or admin.INLINE_REQUIRED_TEXT in admin.save_error_text(), (
+            f"unexpected validation error text: {admin.save_error_text()!r}"
+        )
+
+        # Assert: no entry was published — the Home Page carousel shows
+        # nothing for this never-created partner, anywhere.
+        assert home.reload_until_logo_matches(
+            TC_135831_PARTNER_NAME_AR, expected_visible=False, timeout_ms=3000
+        ), (
+            "a logo unexpectedly appeared on the Home Page for a partner "
+            "that should never have been created"
+        )
+    finally:
+        # Defensive cleanup in case a future product fix makes Partner Name
+        # (EN) non-blocking and this form somehow DID commit an entry.
+        admin.open_community_partners_list()
+        admin.delete_row_by_name(TC_135831_PARTNER_NAME_AR)
+
+
+@allure.epic("Home Page")
+@allure.feature("Community Partners")
+@allure.story("Display order")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Changing a partner's Display Order updates its position in the frontend carousel")
+@pytest.mark.control_panel
+@pytest.mark.global_
+@pytest.mark.pbi_129385
+@pytest.mark.tc_135833
+@pytest.mark.xdist_group("qatar_airways_45776")
+def test_changing_display_order_updates_carousel_position(page):
+    # QA-135833 — the case's literal Display Order values (3 -> 1, "shift
+    # others accordingly") assume a 1/2/3 sequence; the REAL, live-confirmed
+    # values for the 3 shared records are 100 (QatarEnergy), 200 (Qatar
+    # Airways), 300 (QNB) — see intent, not the literal numbers: move the
+    # currently-LAST partner (QNB, 300) to the FRONT (100), shifting
+    # QatarEnergy/Qatar Airways back one slot each (200/300) so relative
+    # order is fully determined, not just "QNB moved somewhere earlier".
+    # Snapshots every touched record's baseline order and restores all three
+    # in `finally`, re-verified by a fresh reopen (same snapshot-restore-
+    # and-reverify precedent TC 135832 already established for these same
+    # shared, non-disposable records). No "Success toast" exists on this
+    # form (see module docstring) — success is asserted as "no validation
+    # error and the row is unchanged" instead.
+    admin = CommunityPartnersAdminPage(page)
+    home = CommunityPartnersPage(page)
+
+    admin.open_partner_edit_form_by_name(QATAR_ENERGY_NAME)
+    baseline_qatarenergy = admin.display_order_value()
+    admin.open_partner_edit_form_by_name(QATAR_AIRWAYS_NAME)
+    baseline_qatarairways = admin.display_order_value()
+    admin.open_partner_edit_form_by_name(QNB_NAME)
+    baseline_qnb = admin.display_order_value()
+
+    assert (baseline_qatarenergy, baseline_qatarairways, baseline_qnb) == ("100", "200", "300"), (
+        f"expected the real baseline Display Order sequence (100, 200, 300), got "
+        f"({baseline_qatarenergy!r}, {baseline_qatarairways!r}, {baseline_qnb!r}) — "
+        f"confirm the real baseline before running this test"
+    )
+
+    try:
+        admin.open_partner_edit_form_by_name(QNB_NAME)
+        admin.set_display_order("100")
+        admin.save()
+        assert not admin.is_save_error_shown(), (
+            f"unexpected validation error setting QNB's Display Order: {admin.save_error_text()!r}"
+        )
+
+        admin.open_partner_edit_form_by_name(QATAR_ENERGY_NAME)
+        admin.set_display_order("200")
+        admin.save()
+        assert not admin.is_save_error_shown(), (
+            f"unexpected validation error setting QatarEnergy's Display Order: {admin.save_error_text()!r}"
+        )
+
+        admin.open_partner_edit_form_by_name(QATAR_AIRWAYS_NAME)
+        admin.set_display_order("300")
+        admin.save()
+        assert not admin.is_save_error_shown(), (
+            f"unexpected validation error setting Qatar Airways' Display Order: {admin.save_error_text()!r}"
+        )
+
+        # Assert: the public Home Page carousel's logo order reflects the
+        # new Display Order sequence — QNB first, then QatarEnergy, then
+        # Qatar Airways.
+        expected_order = [QNB_NAME, QATAR_ENERGY_NAME, QATAR_AIRWAYS_NAME]
+        assert home.reload_until_order_matches(expected_order), (
+            f"Home Page carousel order did not reflect the new Display Order "
+            f"sequence; expected {expected_order!r}, got {home.visible_partner_order()!r}"
+        )
+    finally:
+        # Restore baseline for all three shared records, re-verified by a
+        # fresh reopen of each.
+        admin.open_partner_edit_form_by_name(QATAR_ENERGY_NAME)
+        admin.set_display_order(baseline_qatarenergy)
+        admin.save()
+        admin.open_partner_edit_form_by_name(QATAR_AIRWAYS_NAME)
+        admin.set_display_order(baseline_qatarairways)
+        admin.save()
+        admin.open_partner_edit_form_by_name(QNB_NAME)
+        admin.set_display_order(baseline_qnb)
+        admin.save()
+
+        admin.open_partner_edit_form_by_name(QATAR_ENERGY_NAME)
+        restored_qatarenergy = admin.display_order_value()
+        admin.open_partner_edit_form_by_name(QATAR_AIRWAYS_NAME)
+        restored_qatarairways = admin.display_order_value()
+        admin.open_partner_edit_form_by_name(QNB_NAME)
+        restored_qnb = admin.display_order_value()
+        assert (restored_qatarenergy, restored_qatarairways, restored_qnb) == (
+            baseline_qatarenergy,
+            baseline_qatarairways,
+            baseline_qnb,
+        ), (
+            f"failed to restore baseline Display Order sequence "
+            f"({baseline_qatarenergy!r}, {baseline_qatarairways!r}, {baseline_qnb!r}) — "
+            f"currently ({restored_qatarenergy!r}, {restored_qatarairways!r}, {restored_qnb!r})"
         )

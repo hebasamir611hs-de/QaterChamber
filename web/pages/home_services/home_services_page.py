@@ -177,6 +177,19 @@ class HomeServicesPage(BasePage):
     EMPTY_STATE = ".qc-os-empty"
     HTML_ROOT = "html"
 
+    # Generic tab locator (any [role="tab"] under TABLIST) — used by
+    # open_tab()/reload_until_card_visible_under_tab() for CMS content-
+    # verification checks that need to select a tab by its live label text,
+    # as opposed to click_tab()'s fixed TAB_ALL/TAB_MEMBERSHIP/etc. enum.
+    TAB = f'{TABLIST} [role="tab"]'
+
+    # Borrowed from cms-profile.md's ONLY measured propagation budget
+    # (~0s / 5s-timeout / 0.5s-interval, Board Members JAX-RS endpoint) —
+    # NOT independently re-measured for this content type. Disclosed
+    # placeholder budget, matching HomePromoBannersPage's own note.
+    RELOAD_POLL_TIMEOUT_MS = 5000
+    RELOAD_POLL_INTERVAL_MS = 500
+
     # ── Navigation ───────────────────────────────────────────────────────
     def open_home(self) -> "HomeServicesPage":
         self.open(web_url("/home"))
@@ -259,7 +272,7 @@ class HomeServicesPage(BasePage):
         return self.page.locator(self.CARD).nth(index)
 
     def card_titles(self) -> list:
-        return self.page.locator(self.CARD_TITLE).all_inner_texts()
+        return [t.strip() for t in self.page.locator(self.CARD_TITLE).all_inner_texts()]
 
     def card_title_text(self, index: int = 0) -> str:
         return self._card(index).locator(self.CARD_TITLE).inner_text()
@@ -299,3 +312,58 @@ class HomeServicesPage(BasePage):
         """TC 135332 ('no login prompt') — a generic, page-wide check that no
         password field is rendered anywhere, not scoped to this section."""
         return self.page.locator('input[type="password"]').count() == 0
+
+    # ── CMS content-verification (Control_Panel-driven propagation checks) ──
+    def open_tab(self, tab_label: str) -> "HomeServicesPage":
+        """Click a real, confirmed-live tab (e.g. "Information") and wait
+        for it to actually become the selected tab before returning.
+
+        Confirmed live (2026-09-02): the tab switch flips `aria-selected`
+        on the clicked tab synchronously with the click (client-side), and
+        separately re-renders the section's card list (8 cards under "All
+        Services" -> 2 under "Information", confirmed live) — that
+        re-render may not produce any network activity, so
+        `wait_for_load_state("networkidle")` alone can resolve before the
+        new card list is actually in the DOM and read the PREVIOUS tab's
+        cards. Waiting on `aria-selected="true"` on the target tab is the
+        real, confirmed-live signal this framework's assertions rely on.
+        """
+        tab = self.page.locator(f'{self.TAB}:text-is("{tab_label}")')
+        tab.click()
+        self.page.locator(f'{self.TAB}:text-is("{tab_label}")[aria-selected="true"]').wait_for(
+            state="attached", timeout=10000
+        )
+        self.page.wait_for_load_state("networkidle")
+        return self
+
+    def card_visible(self, title: str) -> bool:
+        try:
+            locator = self.page.locator(f'{self.CARD_TITLE}:text-is("{title}")')
+            return locator.first.is_visible()
+        except Exception:  # noqa: BLE001 — mirrors BasePage.is_visible's never-throws contract
+            return False
+
+    def reload_until(self, predicate, timeout_ms: int | None = None, interval_ms: int | None = None) -> bool:
+        """Poll open_home() + predicate(self) until True or timeout — never
+        a bare sleep."""
+        import time
+
+        timeout_ms = timeout_ms if timeout_ms is not None else self.RELOAD_POLL_TIMEOUT_MS
+        interval_ms = interval_ms if interval_ms is not None else self.RELOAD_POLL_INTERVAL_MS
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_home()
+            if predicate(self):
+                return True
+            if time.monotonic() >= deadline:
+                return False
+            self.page.wait_for_timeout(interval_ms)
+
+    def reload_until_card_visible_under_tab(self, tab_label: str, title: str,
+                                             expected_visible: bool,
+                                             timeout_ms: int | None = None) -> bool:
+        def _predicate(p: "HomeServicesPage") -> bool:
+            p.open_tab(tab_label)
+            return p.card_visible(title) == expected_visible
+
+        return self.reload_until(_predicate, timeout_ms=timeout_ms)

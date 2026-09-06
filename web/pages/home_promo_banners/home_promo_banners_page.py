@@ -140,6 +140,20 @@ class HomePromoBannersPage(BasePage):
     # structure diagram.
     DOTS_CONTAINER = ".qc-promo-dots"
     DOT = f"{DOTS_CONTAINER} >> .qc-promo-dot"
+    # Section wrapper (distinct from CAROUSEL — used for CMS content-
+    # verification checks that need to confirm the whole section, not just
+    # the carousel widget, is present/hidden).
+    SECTION = "section.qc-home-promotional-banners"
+    IMG = f"{SECTION} .qc-promo-img"
+
+    # Borrowed from cms-profile.md's ONLY measured propagation budget
+    # (~0s / 5s-timeout / 0.5s-interval, Board Members JAX-RS endpoint) —
+    # NOT independently re-measured for this content type. Per the
+    # profile's own "re-probe before assuming it generalizes" note, this is
+    # a disclosed placeholder budget, not a confirmed one for Promotional
+    # Banners specifically.
+    RELOAD_POLL_TIMEOUT_MS = 5000
+    RELOAD_POLL_INTERVAL_MS = 500
 
     # ── Navigation ───────────────────────────────────────────────────────
     def open_home(self) -> "HomePromoBannersPage":
@@ -336,3 +350,41 @@ class HomePromoBannersPage(BasePage):
         if not viewport_box or not image_box:
             return False
         return abs(image_box["width"] - viewport_box["width"]) <= tolerance
+
+    # ── CMS content-verification (Control_Panel-driven propagation checks) ──
+    def is_section_visible(self) -> bool:
+        return self.is_visible(self.SECTION)
+
+    def banner_visible(self, alt_text_en: str) -> bool:
+        """True if any carousel slide (including cloned loop slides) renders
+        an image whose alt text matches. Uses Playwright's own is_visible()
+        (not mere DOM presence) so a banner hidden behind
+        Active Status=False is correctly reported absent."""
+        try:
+            locator = self.page.locator(f'{self.IMG}[alt="{alt_text_en}"]')
+            return locator.first.is_visible()
+        except Exception:  # noqa: BLE001 — mirrors BasePage.is_visible's never-throws contract
+            return False
+
+    def reload_until(self, predicate, timeout_ms: int | None = None, interval_ms: int | None = None) -> bool:
+        """Poll open_home() + predicate(self) until True or timeout — never
+        a bare sleep."""
+        import time
+
+        timeout_ms = timeout_ms if timeout_ms is not None else self.RELOAD_POLL_TIMEOUT_MS
+        interval_ms = interval_ms if interval_ms is not None else self.RELOAD_POLL_INTERVAL_MS
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_home()
+            if predicate(self):
+                return True
+            if time.monotonic() >= deadline:
+                return False
+            self.page.wait_for_timeout(interval_ms)
+
+    def reload_until_banner_matches(self, alt_text_en: str, expected_visible: bool,
+                                     timeout_ms: int | None = None) -> bool:
+        return self.reload_until(
+            lambda p: p.banner_visible(alt_text_en) == expected_visible,
+            timeout_ms=timeout_ms,
+        )
