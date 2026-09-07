@@ -83,6 +83,63 @@ module docstring is RESOLVED; see that module's updated note):
     same disclosed-substitution pattern already used elsewhere in this
     module family (see gm_message_page.py / org_structure_admin_page.py
     docstrings for precedent).
+
+  CORRECTED 2026-09-07 (per .claude/context/active/standards.md's "Object
+  Authoring Is the Only Path for Publish/Unpublish/Draft/Preview Actions"):
+  the "No dedicated Preview action" / "Status field IS the publish control"
+  notes directly above describe the **Content & Data** surface only, and
+  that surface is NOT the correct/supported path for lifecycle actions.
+  Object Authoring (`https://qcdev.ihorizons.com/object-authoring`, this
+  object's own `manage-general-manager-message` page) is a genuinely
+  different, richer mechanism confirmed live this session: it exposes
+  distinct "Save as Draft" / "Submit for Publishing" commit actions and an
+  "Unpublish to edit as draft" button (with its own native `confirm()`
+  dialog) — real Draft/Publish lifecycle controls Content & Data never
+  exposed. Status vocabulary also differs: Object Authoring's
+  editing banner reads "(draft)"/"(approved)" where Content & Data's
+  Status combobox reads "Draft"/"Published" — same record, same two
+  underlying states, different UI and wording.
+
+  Confirmed live 2026-09-07 (Playwright MCP, qcdev, existing authenticated
+  session), reusing `ObjectAuthoringPage` (cms/pages/components/
+  object_authoring_page.py) — the generic, per-object-agnostic Page Object
+  every other object's Draft/Preview/Publish/Unpublish case already
+  composes instead of duplicating the state machine:
+    - Slug: `general-manager-message` (i.e.
+      `manage-general-manager-message`) — confirmed live navigating
+      `/web/qatar-chamber/manage-general-manager-message`.
+    - The singleton row's own Entry-column code is
+      `QCDEMO-129397-general-managers-message` (same externalReferenceCode
+      already documented above for the Content & Data path) — GM_MESSAGE_
+      OBJECT_SLUG / GM_MESSAGE_RECORD_ID below.
+    - Field labels on THIS surface are NOT locale-toggle-based like Content
+      & Data's DDM form — each bilingual field renders as TWO separately-
+      named textboxes reachable directly via
+      `page.get_by_role("textbox", name=<label>, exact=True)` with no
+      locale-toggle click: confirmed live "GM Name" / "GM Name — العربية",
+      "Salutation Heading" / "Salutation Heading — العربية",
+      "Signature Closing Text" / "Signature Closing Text — العربية",
+      "Page Title" / "Page Title — العربية". `ObjectAuthoringPage.fill_text()`
+      / the new `field_value()` read-back already handle this generically —
+      no new locators needed in THIS module for field-level access on that
+      surface; use `<label> — العربية` directly instead of
+      `switch_field_to_arabic()`/`switch_field_to_english()` (those two
+      methods remain correct ONLY for the Content & Data path).
+    - Confirmed live: opening the Approved singleton record renders
+      "Editing "QCDEMO-129397-general-managers-message" (approved). It is
+      published, so Save as Draft is unavailable until you unpublish it."
+      with an "Unpublish to edit as draft" button — clicking it (accepting
+      its native `confirm()` dialog, per ObjectAuthoringPage's own
+      convention) is the correct, real "Unpublish" action; "Save as Draft"
+      then becomes enabled.
+  `open_gm_message_edit_form()` / `select_status()` / `status_value()`
+  below remain valid for the Content & Data surface's field-level
+  authoring/validation cases (e.g. tc_135454's bilingual-gate check) — they
+  are simply NOT used for lifecycle (publish/unpublish/draft) actions
+  anymore. tc_135453 and tc_135457 (this module's own test file) were
+  corrected to drive Draft/Publish through Object Authoring instead;
+  tc_135454/tc_135456/tc_135458 still use the Content & Data path for now
+  and should be re-verified against Object Authoring in a follow-up pass.
   - SUCCESS_TOAST is an explicit, disclosed UNVERIFIED placeholder: a live
     Save was not exercised by this exploration (a destructive write
     against the shared qcdev singleton record was correctly blocked by
@@ -105,6 +162,11 @@ GM_MESSAGES_LIST_URL = control_panel_url(
     "&_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_P0K8_objectDefinitionId=79727"
 )
 GM_MESSAGE_RECORD_ID = "79878"  # the one live singleton record
+
+# ---- Object Authoring path (the correct lifecycle-action surface — see
+# module docstring's 2026-09-07 correction) ---------------------------------
+GM_MESSAGE_OBJECT_AUTHORING_SLUG = "general-manager-message"
+GM_MESSAGE_ENTRY_CODE = "QCDEMO-129397-general-managers-message"
 
 _UNVERIFIED = "TODO: confirm against a real Save this batch could not safely trigger"
 
@@ -368,6 +430,37 @@ class GmMessageAdminPage(BasePage):
         # form to render off the (confirmed-live-lagging) read-side path.
         self.wait_for(self.GM_NAME, timeout=self.GM_NAME_RELOAD_TIMEOUT_MS)
         return self
+
+    def open_object_authoring_form(self):
+        """Returns an `ObjectAuthoringPage` already opened on the singleton
+        record's own edit form — the correct surface for any Draft/Publish/
+        Unpublish/Preview action (see module docstring's 2026-09-07
+        correction). Callers use the returned object's own
+        fill_text()/field_value()/unpublish_to_edit_as_draft()/
+        save_as_draft()/submit_for_publishing()/current_status() API
+        directly — this Page Object does not duplicate that generic state
+        machine.
+
+        CONFIRMED LIVE 2026-09-07: `ObjectAuthoringPage.open_entry_by_code()`
+        navigates straight to the target URL with no login/session check of
+        its own (unlike this class's own `open_gm_message_edit_form()`,
+        which re-logs-in if the Product Menu isn't visible). A live debug
+        run against a real pytest-launched context reproduced a genuine
+        failure from this gap: the stored `.auth/state.json` session had
+        gone stale, and navigating straight to `manage-general-manager-
+        message?editEntry=...` rendered the public site's generic "Coming
+        Soon" placeholder instead of the admin form (not a login redirect,
+        so `ObjectAuthoringPage` had no signal to react to). Routing through
+        `open_gm_message_edit_form()` FIRST (which owns the real
+        login-if-needed check and the English-locale-forcing home URL) and
+        only THEN opening the Object Authoring URL on that now-guaranteed-
+        authenticated session fixed this live, reproduced this session."""
+        from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+
+        self.open_gm_message_edit_form()
+        authoring = ObjectAuthoringPage(self.page, slug=GM_MESSAGE_OBJECT_AUTHORING_SLUG)
+        authoring.open_entry_by_code(GM_MESSAGE_ENTRY_CODE)
+        return authoring
 
     # ---- Field actions ------------------------------------------------------
     def fill_text_field(self, field_locator: str, value: str) -> "GmMessageAdminPage":

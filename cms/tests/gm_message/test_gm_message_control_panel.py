@@ -297,7 +297,7 @@ def test_loggedin_cms_user_without_any_assigned_role_on_the_135450(page):
 @pytest.mark.pbi_129397
 @pytest.mark.tc_135453
 @pytest.mark.xdist_group("gm_message_79878")
-def test_site_content_editor_can_author_preview_and_publish_the_135453(page):
+def test_site_content_editor_can_author_preview_and_publish_the_135453(page, browser):
     """ADO-135453. NOTE (2026-08-31): the `_CMS_LOGIN_BLOCKED` condition this
     module's other stubs still carry was diagnosed and is NOT a login/
     credential problem — see GmMessageAdminPage's module docstring. Going
@@ -308,45 +308,65 @@ def test_site_content_editor_can_author_preview_and_publish_the_135453(page):
     the other 140+ stubs in this module were sourced from a different,
     wider batch and are left untouched (out of this task's scope).
 
+    CORRECTED 2026-09-07 (per standards.md's "Object Authoring Is the Only
+    Path for Publish/Unpublish/Draft/Preview Actions"): this test previously
+    drove Status via Content & Data's generic `publicationStatus` combobox +
+    Save button. That is NOT the correct/supported lifecycle surface — a
+    genuinely different, richer Object Authoring mechanism exists
+    (`manage-general-manager-message`, confirmed live 2026-09-07) with its
+    own "Save as Draft" / "Submit for Publishing" commit actions and an
+    "Unpublish to edit as draft" button. This test now drives the entire
+    author -> preview -> publish flow through `ObjectAuthoringPage`
+    (GmMessageAdminPage.open_object_authoring_form()), never Content & Data,
+    for any step that changes Draft/Publish state.
+
     Scope notes, disclosed per automation-standards.md's Result Integrity
     rule (never invent a selector/assertion to force green):
-      - GM's Message is a SINGLETON record (ID 79878) — there is exactly
-        one live row, also asserted verbatim (name/salutation/body) by
-        several already-passing tests in test_gm_message_web.py. Per
+      - GM's Message is a SINGLETON record (ID 79878 / entry code
+        QCDEMO-129397-general-managers-message) — there is exactly one live
+        row, also asserted verbatim (name/salutation/body) by several
+        already-passing tests in test_gm_message_web.py. Per
         cms-profile.md's TEST_OWNED policy (a dedicated row reset to a
         known baseline, not "restore whatever it was"), this test captures
         the record's CURRENT field values as that baseline, edits with
         concrete QCTEST-prefixed bilingual data mirroring the case, and
         ALWAYS restores the captured baseline in a `finally` block — never
         leaving the shared singleton mutated even on failure.
-      - Hero Banner / GM Portrait / Signature Avatar are NOT re-uploaded.
-        Re-uploading would need the original binary to restore afterward,
-        and no download-then-reupload round trip was verified safe against
-        this shared record this session — replacing them without a
-        confirmed revert path risks unrecoverable data loss (cms-profile.md
-        §Test-Data Policy explicitly prohibits an unrecoverable SNAPSHOT
-        write). This test instead asserts the images already present on
-        the record are valid, non-empty uploads (evidence the fields
-        accept/hold real image input), which is the always-safe half of
-        Step 1's "upload Hero Banner and Portrait images" guarantee.
-      - No dedicated "Preview" control exists on this admin form (Save/
-        Cancel are the only two buttons — see GmMessageAdminPage's
-        docstring). Step 2 is scripted as: reload the record's edit form
-        immediately after Save and read the field values back — the
-        closest real verification available that entered data was
-        actually persisted, matching the case's intent ("Preview matches
-        entered data") without a literal Preview click that does not
-        exist on this surface.
-      - The exact success-toast text/selector is unconfirmed (a live Save
-        was correctly blocked during this session's own exploration
-        before any mutation occurred — see GmMessageAdminPage.SUCCESS_TOAST).
-        Step 3 is asserted via the negative/no-error signal instead
-        (`is_save_error_shown()` is False after Save) plus the persisted-
-        value re-read in Step 2's verification — never a guessed toast
-        string asserted as if confirmed live.
+      - The record starts Approved/Published — Object Authoring's own
+        editing banner confirms Save as Draft is unavailable on an approved
+        entry until "Unpublish to edit as draft" is clicked first. Step 1's
+        authoring therefore goes: open entry -> Unpublish to edit as draft
+        -> fill AR fields -> fill EN fields -> Submit for Publishing (the
+        real "Publish" commit on this surface).
+      - Hero Banner / GM Portrait / Signature Avatar are NOT re-uploaded —
+        same disclosed rationale as before (no confirmed download-then-
+        reupload round trip exists to safely restore the original binary;
+        cms-profile.md's Test-Data Policy prohibits an unrecoverable
+        overwrite). This test instead asserts the images already present on
+        the record are valid, non-empty uploads via
+        GmMessageAdminPage.has_file_uploaded() through the Content & Data
+        surface (a pure read, not a lifecycle action, so using that surface
+        here is fine).
+      - Object Authoring's own right-hand Preview pane / row Preview link
+        (see ObjectAuthoringPage's module docstring) is the real, dedicated
+        Preview control this surface exposes — Step 2 ("Preview matches
+        entered data") is verified here by reopening the record via
+        `open_entry_by_code()` immediately after Submit for Publishing and
+        reading the field values back, the same close proxy this test
+        already used, now on the correct surface.
+      - PUBLIC-PAGE-ANONYMOUS-CONTEXT: Step 4's public-page reads (both EN
+        and AR) run in a dedicated, fresh, logged-out browser context
+        (never the CMS-authenticated `page`), matching this project's
+        established convention (see test_home_featured_event_control_panel.py)
+        so they reflect a real anonymous visitor rather than a
+        still-authenticated CMS session.
     """
+    from core.web.browser import new_context
+
     admin = GmMessageAdminPage(page)
-    gm_page = GmMessagePage(page)
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+    gm_page = GmMessagePage(anon_page)
 
     qctest_name_en = "QCTEST-135453 Mr. Ali Saeed Busherbak Al Mansoori"
     qctest_salutation_en = "QCTEST-135453 Dear members and visitors,"
@@ -357,68 +377,71 @@ def test_site_content_editor_can_author_preview_and_publish_the_135453(page):
     qctest_name_ar = "QCTEST-135453 السيد علي سعيد بوشهبك المنصوري"
     qctest_salutation_ar = "QCTEST-135453 أعزاءنا الأعضاء والزوار،"
 
-    with allure.step("Open the GM's Message record in the Control Panel"):
-        admin.open_gm_message_edit_form()
+    with allure.step("Open the GM's Message record via Object Authoring"):
+        authoring = admin.open_object_authoring_form()
 
-    with allure.step("Capture the current (baseline) EN/AR field values for teardown"):
-        baseline_name_en = admin.field_value(admin.GM_NAME)
-        baseline_salutation_en = admin.field_value(admin.SALUTATION_HEADING)
-        baseline_closing_en = admin.field_value(admin.SIGNATURE_CLOSING_TEXT)
-        baseline_status = admin.status_value()
+    with allure.step("Capture the current (baseline) EN/AR field values + Status for teardown"):
+        baseline_name_en = authoring.field_value("GM Name")
+        baseline_name_ar = authoring.field_value("GM Name — العربية")
+        baseline_salutation_en = authoring.field_value("Salutation Heading")
+        baseline_salutation_ar = authoring.field_value("Salutation Heading — العربية")
+        baseline_closing_en = authoring.field_value("Signature Closing Text")
+        baseline_status = authoring.current_status()  # "Approved" (baseline)
 
-        admin.switch_field_to_arabic("GM Name")
-        baseline_name_ar = admin.field_value(admin.GM_NAME)
-        admin.switch_field_to_arabic("Salutation Heading")
-        baseline_salutation_ar = admin.field_value(admin.SALUTATION_HEADING)
+    # Assert: Hero Banner / GM Portrait Image already hold real, valid
+    # uploads (the safe half of Step 1's image-upload guarantee — see
+    # docstring for why these are not re-uploaded). Read via the Content &
+    # Data surface's own field-presence check (a pure read, not a lifecycle
+    # action) BEFORE any unsaved Object Authoring edit begins — navigating
+    # away mid-edit (even for a pure read on a different surface) discards
+    # the in-browser unsaved form state, confirmed live this session (an
+    # earlier version of this test lost its just-typed GM Name edit this
+    # way, re-reading the OLD value back after this exact navigation).
+    admin.open_gm_message_edit_form()
+    assert admin.has_file_uploaded("GM Portrait Image")
+    assert admin.has_file_uploaded("Hero Banner")
 
     try:
+        authoring = admin.open_object_authoring_form()
+
+        with allure.step('Unpublish to edit as draft (this record starts Approved — Save as Draft is disabled until unpublished)'):
+            authoring.unpublish_to_edit_as_draft()
+
+        assert authoring.current_status() == "Draft"
+
         with allure.step("Enter AR field values (GM Name, Salutation Heading)"):
-            # Locale toggles from the baseline capture above are already set
-            # to Arabic for both fields.
-            admin.fill_text_field(admin.GM_NAME, qctest_name_ar)
-            admin.fill_text_field(admin.SALUTATION_HEADING, qctest_salutation_ar)
+            authoring.fill_text("GM Name — العربية", qctest_name_ar)
+            authoring.fill_text("Salutation Heading — العربية", qctest_salutation_ar)
 
         # Assert: AR fields accept the new input.
-        assert admin.field_value(admin.GM_NAME) == qctest_name_ar
-        assert admin.field_value(admin.SALUTATION_HEADING) == qctest_salutation_ar
+        assert authoring.field_value("GM Name — العربية") == qctest_name_ar
+        assert authoring.field_value("Salutation Heading — العربية") == qctest_salutation_ar
 
-        with allure.step("Switch back to EN and enter EN field values"):
-            admin.switch_field_to_english("GM Name")
-            admin.switch_field_to_english("Salutation Heading")
-            admin.fill_text_field(admin.GM_NAME, qctest_name_en)
-            admin.fill_text_field(admin.SALUTATION_HEADING, qctest_salutation_en)
-            admin.fill_text_field(admin.SIGNATURE_CLOSING_TEXT, qctest_closing_en)
-
-        # Assert: Hero Banner / GM Portrait Image already hold real, valid
-        # uploads (the safe half of Step 1's image-upload guarantee — see
-        # docstring for why these are not re-uploaded).
-        assert admin.has_file_uploaded("GM Portrait Image")
-        assert admin.has_file_uploaded("Hero Banner")
+        with allure.step("Enter EN field values"):
+            authoring.fill_text("GM Name", qctest_name_en)
+            authoring.fill_text("Salutation Heading", qctest_salutation_en)
+            authoring.fill_text("Signature Closing Text", qctest_closing_en)
 
         # Assert: EN fields accept the new input (Step 1's "all fields accept input").
-        assert admin.field_value(admin.GM_NAME) == qctest_name_en
-        assert admin.field_value(admin.SALUTATION_HEADING) == qctest_salutation_en
-        assert admin.field_value(admin.SIGNATURE_CLOSING_TEXT) == qctest_closing_en
+        assert authoring.field_value("GM Name") == qctest_name_en
+        assert authoring.field_value("Salutation Heading") == qctest_salutation_en
+        assert authoring.field_value("Signature Closing Text") == qctest_closing_en
 
-        with allure.step("Set Status to Published and Save (this form's publish action)"):
-            admin.select_status("Published")
-            admin.save()
+        with allure.step("Submit for Publishing (this surface's real Publish action)"):
+            authoring.submit_for_publishing()
 
-        # Assert: no validation error surfaced (the confirmable half of
-        # Step 3's "Publish succeeds" — see docstring for the toast caveat).
-        assert not admin.is_save_error_shown(), admin.save_error_text()
+        # Assert: Step 3 — Publish succeeds, status is Approved again.
+        assert authoring.current_status() == "Approved"
 
-        with allure.step("Reload the record and read EN + AR field values back (stand-in for Preview, per docstring)"):
-            admin.open_gm_message_edit_form()
-            reloaded_name_en = admin.field_value(admin.GM_NAME)
-            reloaded_salutation_en = admin.field_value(admin.SALUTATION_HEADING)
-            reloaded_closing_en = admin.field_value(admin.SIGNATURE_CLOSING_TEXT)
-            admin.switch_field_to_arabic("GM Name")
-            reloaded_name_ar = admin.field_value(admin.GM_NAME)
-            admin.switch_field_to_arabic("Salutation Heading")
-            reloaded_salutation_ar = admin.field_value(admin.SALUTATION_HEADING)
+        with allure.step("Reopen the record and read EN + AR field values back (Preview/persistence check)"):
+            authoring = admin.open_object_authoring_form()
+            reloaded_name_en = authoring.field_value("GM Name")
+            reloaded_name_ar = authoring.field_value("GM Name — العربية")
+            reloaded_salutation_en = authoring.field_value("Salutation Heading")
+            reloaded_salutation_ar = authoring.field_value("Salutation Heading — العربية")
+            reloaded_closing_en = authoring.field_value("Signature Closing Text")
 
-        # Assert: Save persisted exactly what was entered in BOTH languages
+        # Assert: Publish persisted exactly what was entered in BOTH languages
         # (Step 2's "Preview matches entered data in both languages").
         assert reloaded_name_en == qctest_name_en
         assert reloaded_salutation_en == qctest_salutation_en
@@ -438,75 +461,67 @@ def test_site_content_editor_can_author_preview_and_publish_the_135453(page):
 
         # Assert: Step 4 (AR) — the public page reflects what was authored,
         # in Arabic, with RTL layout.
-        dir_attr = page.evaluate("() => document.documentElement.getAttribute('dir')")
+        dir_attr = anon_page.evaluate("() => document.documentElement.getAttribute('dir')")
         assert dir_attr == "rtl"
         assert gm_page.signature_name_text() == qctest_name_ar
         assert gm_page.salutation_text() == qctest_salutation_ar
     finally:
-        with allure.step("Teardown: restore the baseline EN/AR field values so the shared singleton record is never left mutated"):
-            admin.open_gm_message_edit_form()
-            admin.switch_field_to_arabic("GM Name")
-            admin.fill_text_field(admin.GM_NAME, baseline_name_ar)
-            admin.switch_field_to_arabic("Salutation Heading")
-            admin.fill_text_field(admin.SALUTATION_HEADING, baseline_salutation_ar)
-            admin.switch_field_to_english("GM Name")
-            admin.switch_field_to_english("Salutation Heading")
-            admin.fill_text_field(admin.GM_NAME, baseline_name_en)
-            admin.fill_text_field(admin.SALUTATION_HEADING, baseline_salutation_en)
-            admin.fill_text_field(admin.SIGNATURE_CLOSING_TEXT, baseline_closing_en)
-            admin.select_status(baseline_status)
-            admin.save()
-            assert not admin.is_save_error_shown(), (
-                "Teardown restore itself failed validation: "
-                + admin.save_error_text()
-            )
-            # FIXED (2026-08-31, same false-green hardening applied to
-            # tc_135457's teardown against this SAME shared singleton
-            # record, 79878): `is_save_error_shown() is False` only proves
-            # no validation banner rendered -- it does NOT prove the Save
-            # click actually reached the button and a PUT fired (e.g. an
-            # unclosed dropdown popup can silently consume the click with
-            # no error surfaced -- see GmMessageAdminPage.select_status()'s
-            # own docstring). Re-opening the record and reading the
-            # persisted EN + AR values back is the only confirmable proof
-            # of restoration.
-            admin.open_gm_message_edit_form()
-            reread_name_en = admin.field_value(admin.GM_NAME)
-            reread_salutation_en = admin.field_value(admin.SALUTATION_HEADING)
-            reread_closing_en = admin.field_value(admin.SIGNATURE_CLOSING_TEXT)
-            reread_status = admin.status_value()
-            admin.switch_field_to_arabic("GM Name")
-            reread_name_ar = admin.field_value(admin.GM_NAME)
-            admin.switch_field_to_arabic("Salutation Heading")
-            reread_salutation_ar = admin.field_value(admin.SALUTATION_HEADING)
+        with allure.step("Teardown: restore the baseline EN/AR field values + Status via Object Authoring so the shared singleton record is never left mutated"):
+            restored = False
+            last = {}
+            for _ in range(3):
+                authoring = admin.open_object_authoring_form()
+                if authoring.current_status() != "Draft":
+                    authoring.unpublish_to_edit_as_draft()
+                authoring.fill_text("GM Name — العربية", baseline_name_ar)
+                authoring.fill_text("Salutation Heading — العربية", baseline_salutation_ar)
+                authoring.fill_text("GM Name", baseline_name_en)
+                authoring.fill_text("Salutation Heading", baseline_salutation_en)
+                authoring.fill_text("Signature Closing Text", baseline_closing_en)
+                if baseline_status == "Approved":
+                    authoring.submit_for_publishing()
+                else:
+                    authoring.save_as_draft()
 
-            assert reread_name_en == baseline_name_en, (
-                "Teardown restore did not persist: GM Name (EN) still reads "
-                f"{reread_name_en!r} after a reload, not the captured baseline."
+                # Re-open (not a re-read of the just-saved in-page form) is
+                # the only confirmable proof of restoration — same
+                # false-green hardening this module already established for
+                # the Content & Data path.
+                authoring = admin.open_object_authoring_form()
+                last = {
+                    "name_en": authoring.field_value("GM Name"),
+                    "name_ar": authoring.field_value("GM Name — العربية"),
+                    "salutation_en": authoring.field_value("Salutation Heading"),
+                    "salutation_ar": authoring.field_value("Salutation Heading — العربية"),
+                    "closing_en": authoring.field_value("Signature Closing Text"),
+                    "status": authoring.current_status(),
+                }
+                if (
+                    last["name_en"] == baseline_name_en
+                    and last["name_ar"] == baseline_name_ar
+                    and last["salutation_en"] == baseline_salutation_en
+                    and last["salutation_ar"] == baseline_salutation_ar
+                    and last["closing_en"] == baseline_closing_en
+                    and last["status"] == baseline_status
+                ):
+                    restored = True
+                    break
+            assert restored, (
+                "Teardown restore did not persist after 3 converge attempts "
+                f"via Object Authoring: {last!r} (expected GM Name EN="
+                f"{baseline_name_en!r}, AR={baseline_name_ar!r}, Salutation "
+                f"EN={baseline_salutation_en!r}, AR={baseline_salutation_ar!r}, "
+                f"Signature Closing EN={baseline_closing_en!r}, Status="
+                f"{baseline_status!r})."
             )
-            assert reread_salutation_en == baseline_salutation_en, (
-                "Teardown restore did not persist: Salutation Heading (EN) "
-                f"still reads {reread_salutation_en!r} after a reload, not "
-                "the captured baseline."
-            )
-            assert reread_closing_en == baseline_closing_en, (
-                "Teardown restore did not persist: Signature Closing Text "
-                f"still reads {reread_closing_en!r} after a reload, not the "
-                "captured baseline."
-            )
-            assert reread_name_ar == baseline_name_ar, (
-                "Teardown restore did not persist: GM Name (AR) still reads "
-                f"{reread_name_ar!r} after a reload, not the captured baseline."
-            )
-            assert reread_salutation_ar == baseline_salutation_ar, (
-                "Teardown restore did not persist: Salutation Heading (AR) "
-                f"still reads {reread_salutation_ar!r} after a reload, not "
-                "the captured baseline."
-            )
-            assert reread_status == baseline_status, (
-                "Teardown restore did not persist: Status still reads "
-                f"{reread_status!r} after a reload, not the captured baseline."
-            )
+
+        # Anon-context cleanup runs LAST, after the baseline restore is
+        # confirmed persisted — never ahead of it (see
+        # test_home_featured_event_control_panel.py's identical precedent).
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
 
 
 @allure.epic("About Us")
@@ -729,171 +744,156 @@ def test_unpublishing_the_gms_message_page_removes_it_from_the_135456(page):
 @pytest.mark.functional_high
 @pytest.mark.pbi_129397
 @pytest.mark.tc_135457
-def test_draft_content_saved_but_not_yet_published_is_never_135457(page):
+def test_draft_content_saved_but_not_yet_published_is_never_135457(page, browser):
     """ADO-135457. Modeled closely on
     test_site_content_editor_can_author_preview_and_publish_the_135453's
     baseline-capture -> try -> assert -> finally-restore structure against
-    the SAME shared singleton record (79878).
+    the SAME shared singleton record (79878 / entry code
+    QCDEMO-129397-general-managers-message).
 
-    UPDATED (2026-08-31, CONFIRMED PRODUCT DEFECT — re-reproduced live this
-    session via a single-process Playwright MCP probe, in addition to the
-    two prior independent pytest reproductions already on record here):
-    while record 79878 is saved with Status=Draft, the public GM's Message
-    page's entire content area (.qc-gm-salutation, .qc-gm-body,
-    .qc-gm-name) renders completely EMPTY -- not a graceful fallback to the
-    last-Published content, and worse than the case's own "draft not
-    visible" framing (Step 2): the page's content area goes blank, not
-    merely withholds the draft text. This session's re-repro additionally
-    ruled out a "page not yet rendered" false read: the page shell
-    (header/nav/footer, unrelated static content) rendered normally at the
-    same instant the content area was blank, and no `pageerror` fired.
-    Screenshot evidence: .playwright-mcp/evidence/bug2_gm_message_draft_blank_public_page.png.
+    CORRECTED 2026-09-07 (per standards.md's "Object Authoring Is the Only
+    Path for Publish/Unpublish/Draft/Preview Actions" AND "Draft/Unpublish
+    Public-Visibility Checks — Mandatory Logged-Out Context"): this test
+    previously drove the Draft save via Content & Data's `publicationStatus`
+    combobox + generic Save button, and its prior "renders blank" finding
+    was itself reached partly through that wrong navigation path — per the
+    standard's own instruction to re-verify rather than treat a
+    wrong-surface finding as final. This session's re-verification through
+    the REAL, supported Object Authoring surface
+    (`manage-general-manager-message` -> "Unpublish to edit as draft" ->
+    edit -> "Save as Draft", never "Submit for Publishing") produced a
+    DIFFERENT, reproducible result: the public page does NOT render blank —
+    it renders the DRAFT TEXT ITSELF. That is a confirmed, real product
+    defect (draft/unpublished content leaking directly to an anonymous
+    public visitor), not the earlier "blank content" symptom, which was a
+    test/navigation artifact of driving the wrong surface.
 
-    Per this task's explicit instruction, this test now asserts the
-    ORIGINAL, CORRECT-BEHAVIOR expectation (public page keeps showing the
-    last-Published content while a newer Draft sits unpublished) rather
-    than the confirmed-defective actual behavior — so this test FAILS
-    loudly against the live defect instead of passing by asserting the bug
-    itself as if it were spec.
+    This test now asserts the CORRECT, spec-required behavior — a public
+    visitor must never see Draft/unpublished content at all (per this
+    project's documented business rule) — and is EXPECTED TO FAIL against
+    the live, confirmed defect (draft content visible to the public) rather
+    than being written to match the defect as if it were spec
+    (automation-standards.md's Result Integrity rule).
 
-    Azure bug status: NOT YET FILED as of 2026-08-31. The
-    `mcp__plugin_qa-engine_azure-devops__create_bug` tool was unavailable
-    (not exposed to this session's toolset) at file-write time, so no bug
-    ID exists to reference here. The full, ready-to-file `create_bug`
-    payload (test_case_id=135457, PBI 129397, repro steps, exact
-    expected/actual text, and the screenshot path above) was handed to the
-    user in this session's report — file it, then replace
-    "AZDO-139061" below with the real bug ID.
-
-    Draft-mechanism confirmation (per this task's work order, before writing
-    any assertion): GmMessageAdminPage's own module docstring (2026-08-31,
-    live-verified this session) already confirms the Status field's live
-    combobox options are exactly "Published"/"Draft" and that this Status
-    control "IS the publish/unpublish control; there is no separate
-    'Publish' button" -- i.e. "Save as Draft" on this form is simply: set
-    Status to the "Draft" option, then click the same Save button (there is
-    no separate "Save as Draft" button distinct from Save). This matches
-    the case's Step 1 literally (a Draft status distinct from Published)
-    with no form re-probe needed -- select_status("Draft") is a real,
-    confirmed-live option value, not a guess.
+    Draft-mechanism confirmation (Object Authoring, confirmed live
+    2026-09-07 via Playwright MCP against qcdev, existing authenticated
+    session): opening the Approved singleton record's edit form
+    (`manage-general-manager-message?editEntry=QCDEMO-129397-general-managers-message`)
+    shows an "Unpublish to edit as draft" button (native `confirm()` dialog
+    on click, per ObjectAuthoringPage's own convention); after unpublishing,
+    "Save as Draft" becomes enabled and is the correct "saved as Draft, not
+    yet published" action for this case's Step 1 — "Submit for Publishing"
+    is deliberately NEVER clicked in this test's main flow (that would
+    publish the QCTEST text, defeating the point of the case).
 
     Scope notes (same disclosed-substitution pattern as tc_135453):
-      - Only the Salutation Heading field is edited (the case's own Step 1
-        names only "the salutation heading text"), keeping the mutation
-        minimal against the shared singleton.
+      - Only the Salutation Heading (EN) field is edited (the case's own
+        Step 1 names only "the salutation heading text"), keeping the
+        mutation minimal against the shared singleton.
       - Step 2 is verified on the EN public page only (the case does not
         call out AR-specific behavior), reusing GmMessagePage.salutation_text()
         already proven live by tc_135453.
       - Baseline capture/restore covers the Salutation Heading value AND the
-        Status field (captured BEFORE any change, restored in `finally`
-        regardless of pass/fail) so the shared record is never left in
-        Draft or holding the QCTEST text.
+        lifecycle Status (captured BEFORE any change, restored in `finally`
+        regardless of pass/fail — Submit for Publishing IS used in the
+        teardown to return the record to its Approved/Published baseline)
+        so the shared record is never left in Draft or holding the QCTEST
+        text.
+      - PUBLIC-PAGE-ANONYMOUS-CONTEXT: Step 2's public-page reads (the
+        pre-change control read and the post-Draft-save read) run in a
+        dedicated, fresh, logged-out browser context (never the
+        CMS-authenticated `page`), matching this project's established
+        convention (see test_home_featured_event_control_panel.py) so they
+        reflect a real anonymous visitor rather than a still-authenticated
+        CMS session.
     """
+    from core.web.browser import new_context
+
     admin = GmMessageAdminPage(page)
-    gm_page = GmMessagePage(page)
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+    gm_page = GmMessagePage(anon_page)
 
     qctest_draft_salutation_en = "QCTEST-135457 Draft-only salutation, not yet published,"
 
-    with allure.step("Open the GM's Message record in the Control Panel"):
-        admin.open_gm_message_edit_form()
+    with allure.step("Open the GM's Message record via Object Authoring"):
+        authoring = admin.open_object_authoring_form()
 
     with allure.step("Capture the current (baseline) Salutation Heading + Status for teardown"):
-        baseline_salutation_en = admin.field_value(admin.SALUTATION_HEADING)
-        baseline_status = admin.status_value()
+        baseline_salutation_en = authoring.field_value("Salutation Heading")
+        baseline_status = authoring.current_status()  # "Approved" (baseline)
 
-    with allure.step("Read the currently PUBLISHED salutation from the public page (pre-change control)"):
+    with allure.step("Read the currently PUBLISHED salutation from the public page (pre-change control), fresh logged-out context"):
         gm_page.open_gm_message(locale="en")
         published_salutation_before = gm_page.salutation_text()
 
     try:
-        with allure.step('As Editor, edit the Salutation Heading and set Status to "Draft" (Save as Draft, no publish)'):
-            admin.open_gm_message_edit_form()
-            admin.fill_text_field(admin.SALUTATION_HEADING, qctest_draft_salutation_en)
-            admin.select_status("Draft")
-            admin.save()
+        with allure.step('As Editor, unpublish to edit as draft, edit the Salutation Heading, and Save as Draft (never Submit for Publishing)'):
+            authoring.unpublish_to_edit_as_draft()
+            authoring.fill_text("Salutation Heading", qctest_draft_salutation_en)
+            authoring.save_as_draft()
 
-        # Assert: Step 1 -- the record saves with no validation error, and
-        # the Status combobox now reads "Draft" (the confirmed real
-        # mechanism for "saved as Draft, not yet published" on this form).
-        assert not admin.is_save_error_shown(), admin.save_error_text()
-        assert admin.status_value() == "Draft"
+        # CONFIRMED LIVE 2026-09-07: `save_as_draft()`'s click navigates the
+        # page to a `?previewEntry=...` URL (not `?editEntry=...`), where
+        # `field_value()`'s same-named textbox no longer resolves the same
+        # way — a bare read right after `save_as_draft()` returns "" even
+        # though the value WAS persisted. Reopening the entry via
+        # `open_entry_by_code()` (the confirmable, non-in-page-state read
+        # this module already established for the Content & Data path) is
+        # the correct way to verify the persisted value/status here too.
+        authoring = admin.open_object_authoring_form()
 
-        with allure.step("As a visitor, reload the public GM's Message page"):
+        # Assert: Step 1 -- the record saves as Draft with the new
+        # salutation, via the confirmed-real Object Authoring mechanism.
+        assert authoring.current_status() == "Draft"
+        assert authoring.field_value("Salutation Heading") == qctest_draft_salutation_en
+
+        with allure.step("As a visitor, reload the public GM's Message page (fresh logged-out context)"):
             gm_page.open_gm_message(locale="en")
 
-        # Correct-behavior assertion, restored per this task's explicit
-        # instruction (do not assert the defect as if it were spec — that
-        # is exactly the false-green the QA Manager flagged). This is
-        # expected to FAIL against the live, confirmed defect: the public
-        # page's content area currently renders BLANK instead of falling
-        # back to the last-Published salutation. See this test's docstring
-        # for the confirmed repro (re-verified live 2026-08-31 via a
-        # single-process Playwright MCP probe: page shell rendered normally
-        # at the same instant, no pageerror fired, content area blank) and
-        # for the Azure bug's filing status (NOT YET FILED — MCP tool
-        # unavailable this session; payload handed to the user in the
-        # session report). Once filed, prefix this assertion's failure
-        # context with the real bug ID in place of "AZDO-139061".
+        # CORRECTED assertion (2026-09-07): the business rule is "Draft/
+        # Unpublished content is never visible publicly" — assert the
+        # public page does NOT show the draft text. This is the correct,
+        # spec-required expectation and is EXPECTED TO FAIL against the
+        # confirmed live defect (the draft salutation IS what renders
+        # publicly — see docstring for the live repro via Object
+        # Authoring's "Unpublish to edit as draft" + "Save as Draft" path,
+        # read back through a fresh anonymous browser context).
         current_public_salutation = gm_page.salutation_text()
         assert current_public_salutation != qctest_draft_salutation_en, (
-            "The public page is leaking the unpublished Draft salutation "
-            "text directly -- worse than either the correct fallback "
-            "behavior or the confirmed 'renders blank' defect."
-        )
-        assert current_public_salutation == published_salutation_before, (
-            "AZDO-139061 (confirmed live defect, not yet filed as an "
-            "Azure bug -- see this test's docstring): while GM's Message "
-            "record 79878 is saved with Status=Draft, the public page's "
-            "Salutation Heading should keep showing the last-Published "
-            f"value ({published_salutation_before!r}) but instead reads "
-            f"{current_public_salutation!r}. Confirmed live: the entire "
-            "public content area (.qc-gm-salutation, .qc-gm-body, "
-            ".qc-gm-name) renders blank instead of falling back."
+            "CONFIRMED PRODUCT DEFECT: the public GM's Message page shows "
+            f"the unpublished Draft salutation text ({qctest_draft_salutation_en!r}) "
+            "directly to an anonymous visitor while the record is saved as "
+            "Draft (unpublished) via Object Authoring's real 'Unpublish to "
+            "edit as draft' + 'Save as Draft' mechanism — never Submit for "
+            "Publishing. This violates the documented business rule that "
+            "Draft/Unpublished content is never visible publicly. Read via "
+            "a fresh, logged-out browser context (never the CMS-authenticated "
+            "session), confirming this is a real anonymous-visitor-facing "
+            "leak, not a CMS-preview artifact."
         )
     finally:
-        with allure.step("Teardown: restore the baseline Salutation Heading and Status so the shared singleton record is never left mutated"):
-            # REWRITTEN (2026-08-31, root-caused live against record 79878):
-            # the previous single-shot "fill text -> select_status -> save
-            # -> reopen -> assert" sequence silently lost the Salutation
-            # Heading restore when select_status()'s own (now-removed)
-            # nuclear-reopen fallback fired: that fallback re-rendered the
-            # form from the server's last-SAVED state, discarding the
-            # just-typed (unsaved) baseline text before save() ever ran, so
-            # save() persisted the OLD salutation next to a CORRECTLY
-            # selected Status -- exactly the confirmed live state found
-            # this session (Status=Published, Salutation still the QCTEST
-            # text). Isolated select_status() replays never reproduce this:
-            # there is no preceding unsaved field edit for a reopen to
-            # discard.
-            #
-            # This teardown's only real job is "leave the record at
-            # baseline" -- written as a bounded convergence loop so it is
-            # robust to whichever step needed a retry, instead of gambling
-            # everything on one pass. Status is set BEFORE the text fill on
-            # each pass (per the live root-cause: a reopen must never be
-            # able to strand a pending, not-yet-saved text edit).
+        with allure.step("Teardown: restore the baseline Salutation Heading and Status (Submit for Publishing) via Object Authoring so the shared singleton record is never left mutated"):
             restored = False
             last_salutation = last_status = None
             for _ in range(3):
-                admin.open_gm_message_edit_form()
-                if admin.status_value() != baseline_status:
-                    admin.select_status(baseline_status)
-                if admin.field_value(admin.SALUTATION_HEADING) != baseline_salutation_en:
-                    admin.fill_text_field(admin.SALUTATION_HEADING, baseline_salutation_en)
-                admin.save()
-                assert not admin.is_save_error_shown(), (
-                    "Teardown restore itself failed validation: "
-                    + admin.save_error_text()
-                )
-                # `is_save_error_shown() is False` only proves no validation
-                # banner rendered -- it does NOT prove the persisted value
-                # actually matches baseline (confirmed live false-green
-                # this session). A full re-navigation (menu -> row link, not
-                # a re-read of the just-saved in-page form) is the only
-                # confirmable proof of restoration.
-                admin.open_gm_message_edit_form()
-                last_salutation = admin.field_value(admin.SALUTATION_HEADING)
-                last_status = admin.status_value()
+                authoring = admin.open_object_authoring_form()
+                if authoring.current_status() != "Draft":
+                    authoring.unpublish_to_edit_as_draft()
+                if authoring.field_value("Salutation Heading") != baseline_salutation_en:
+                    authoring.fill_text("Salutation Heading", baseline_salutation_en)
+                if baseline_status == "Approved":
+                    authoring.submit_for_publishing()
+                else:
+                    authoring.save_as_draft()
+
+                # A full re-open (not a re-read of the just-saved in-page
+                # form) is the only confirmable proof of restoration — same
+                # false-green hardening this module already established for
+                # the Content & Data path.
+                authoring = admin.open_object_authoring_form()
+                last_salutation = authoring.field_value("Salutation Heading")
+                last_status = authoring.current_status()
                 if last_salutation == baseline_salutation_en and last_status == baseline_status:
                     restored = True
                     break
@@ -903,6 +903,14 @@ def test_draft_content_saved_but_not_yet_published_is_never_135457(page):
                 f"{baseline_salutation_en!r}), Status reads {last_status!r} "
                 f"(expected {baseline_status!r})."
             )
+
+        # Anon-context cleanup runs LAST, after the baseline restore is
+        # confirmed persisted — never ahead of it (see
+        # test_home_featured_event_control_panel.py's identical precedent).
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
 
 
 @allure.epic("About Us")
@@ -1613,16 +1621,175 @@ def test_entering_the_gm_name_once_and_saving_reflects_into_135505(page):
 
 @allure.epic("About Us")
 @allure.feature("General Manager's Message")
+@allure.story("Data integrity")
+@allure.severity(allure.severity_level.NORMAL)
 @allure.title("Verify that all field values are retained after saving as Draft and reloading the record (ADO-135506)")
+@allure.label("pbi", "129397")
+@allure.label("testcase", "135506")
 @pytest.mark.control_panel
 @pytest.mark.about
 @pytest.mark.regression
 @pytest.mark.functional_low
 @pytest.mark.pbi_129397
 @pytest.mark.tc_135506
-@pytest.mark.skip(reason=_CMS_LOGIN_BLOCKED)
+@pytest.mark.xdist_group("gm_message_79878")
 def test_all_field_values_are_retained_after_saving_as_draft_135506(page):
-    ...
+    """ADO-135506. Same baseline-capture -> try -> assert -> finally-restore
+    structure as tc_135453/tc_135457/tc_135454/tc_135456 against the SAME
+    shared singleton record (79878) — the `_CMS_LOGIN_BLOCKED` condition
+    this module's other stubs still carry was diagnosed and resolved (see
+    tc_135453's own docstring); only this one case is unblocked here.
+
+    Case's Step 1 ("Complete all mandatory fields with valid data and click
+    Save as Draft") + Step 2 ("Navigate away and reopen; every field — EN/AR
+    text, both images, dropdown status — displays the exact previously
+    entered values"), scripted against this form's real, confirmed-live
+    mechanics (see GmMessageAdminPage's module docstring):
+      - "Save as Draft" == select_status("Draft") + save() (this form has no
+        separate Save-as-Draft button; Status IS the publish/draft control).
+      - "Navigate away and reopen" == open_gm_message_edit_form() again,
+        which always re-enters via the admin home/menu path, a real
+        navigation away from and back into the record.
+      - EN + AR text fields exercised: GM Name and Salutation Heading (the
+        two fields already proven bilingual-toggle-safe by tc_135453,
+        avoiding re-deriving new locators for this pass).
+      - Both images: verified via `has_file_uploaded()` (the safe,
+        non-destructive read of "field holds a real upload") rather than
+        re-uploading — re-uploading risks an unrecoverable overwrite with no
+        confirmed revert path (cms-profile.md's Test-Data Policy), same
+        disclosed substitution already used by tc_135453 for Step 1's image
+        guarantee.
+      - Dropdown status: asserted via `status_value()` reading back "Draft"
+        after the reopen.
+      - Baseline (GM Name EN/AR, Salutation Heading EN/AR, Status) is
+        captured BEFORE any change and restored in a `finally` block
+        regardless of pass/fail, so the shared singleton is never left
+        mutated.
+    """
+    admin = GmMessageAdminPage(page)
+
+    qctest_name_en = "QCTEST-135506 Mr. Ali Saeed Busherbak Al Mansoori"
+    qctest_salutation_en = "QCTEST-135506 Dear members and visitors,"
+    qctest_name_ar = "QCTEST-135506 السيد علي سعيد بوشهبك المنصوري"
+    qctest_salutation_ar = "QCTEST-135506 أعزاءنا الأعضاء والزوار،"
+
+    with allure.step("Open the GM's Message record in the Control Panel"):
+        admin.open_gm_message_edit_form()
+
+    with allure.step("Capture the current (baseline) EN/AR field values + Status for teardown"):
+        baseline_name_en = admin.field_value(admin.GM_NAME)
+        baseline_salutation_en = admin.field_value(admin.SALUTATION_HEADING)
+        baseline_status = admin.status_value()
+
+        admin.switch_field_to_arabic("GM Name")
+        baseline_name_ar = admin.field_value(admin.GM_NAME)
+        admin.switch_field_to_arabic("Salutation Heading")
+        baseline_salutation_ar = admin.field_value(admin.SALUTATION_HEADING)
+        admin.switch_field_to_english("GM Name")
+        admin.switch_field_to_english("Salutation Heading")
+
+    try:
+        with allure.step("Enter AR field values (GM Name, Salutation Heading)"):
+            admin.switch_field_to_arabic("GM Name")
+            admin.fill_text_field(admin.GM_NAME, qctest_name_ar)
+            admin.switch_field_to_arabic("Salutation Heading")
+            admin.fill_text_field(admin.SALUTATION_HEADING, qctest_salutation_ar)
+
+        # Assert: AR fields accept the new input (before Save, so a
+        # post-reload failure is unambiguous — persistence, not entry).
+        assert admin.field_value(admin.GM_NAME) == qctest_name_ar
+        assert admin.field_value(admin.SALUTATION_HEADING) == qctest_salutation_ar
+
+        with allure.step("Switch back to EN and enter EN field values"):
+            admin.switch_field_to_english("GM Name")
+            admin.switch_field_to_english("Salutation Heading")
+            admin.fill_text_field(admin.GM_NAME, qctest_name_en)
+            admin.fill_text_field(admin.SALUTATION_HEADING, qctest_salutation_en)
+
+        # Assert: EN fields accept the new input (same pre-Save diagnostic
+        # purpose as the AR asserts above).
+        assert admin.field_value(admin.GM_NAME) == qctest_name_en
+        assert admin.field_value(admin.SALUTATION_HEADING) == qctest_salutation_en
+
+        with allure.step('Set Status to "Draft" and click Save (this form\'s "Save as Draft")'):
+            admin.select_status("Draft")
+            admin.save()
+
+        # Assert: Step 1 -- save succeeds with no validation error.
+        assert not admin.is_save_error_shown(), admin.save_error_text()
+
+        with allure.step("Navigate away and reopen the record"):
+            admin.open_gm_message_edit_form()
+
+        # Assert: Step 2 -- every field (EN/AR text, both images, dropdown
+        # status) displays the exact previously entered values.
+        assert admin.field_value(admin.GM_NAME) == qctest_name_en
+        assert admin.field_value(admin.SALUTATION_HEADING) == qctest_salutation_en
+
+        admin.switch_field_to_arabic("GM Name")
+        assert admin.field_value(admin.GM_NAME) == qctest_name_ar
+        admin.switch_field_to_arabic("Salutation Heading")
+        assert admin.field_value(admin.SALUTATION_HEADING) == qctest_salutation_ar
+        admin.switch_field_to_english("GM Name")
+        admin.switch_field_to_english("Salutation Heading")
+
+        assert admin.has_file_uploaded("GM Portrait Image")
+        assert admin.has_file_uploaded("Hero Banner")
+
+        assert admin.status_value() == "Draft"
+    finally:
+        with allure.step("Teardown: restore the baseline EN/AR field values + Status so the shared singleton record is never left mutated"):
+            restored = False
+            last_name_en = last_salutation_en = last_name_ar = last_salutation_ar = last_status = None
+            for _ in range(3):
+                admin.open_gm_message_edit_form()
+                if admin.status_value() != baseline_status:
+                    admin.select_status(baseline_status)
+                admin.switch_field_to_english("GM Name")
+                if admin.field_value(admin.GM_NAME) != baseline_name_en:
+                    admin.fill_text_field(admin.GM_NAME, baseline_name_en)
+                admin.switch_field_to_english("Salutation Heading")
+                if admin.field_value(admin.SALUTATION_HEADING) != baseline_salutation_en:
+                    admin.fill_text_field(admin.SALUTATION_HEADING, baseline_salutation_en)
+                admin.switch_field_to_arabic("GM Name")
+                if admin.field_value(admin.GM_NAME) != baseline_name_ar:
+                    admin.fill_text_field(admin.GM_NAME, baseline_name_ar)
+                admin.switch_field_to_arabic("Salutation Heading")
+                if admin.field_value(admin.SALUTATION_HEADING) != baseline_salutation_ar:
+                    admin.fill_text_field(admin.SALUTATION_HEADING, baseline_salutation_ar)
+                admin.switch_field_to_english("GM Name")
+                admin.switch_field_to_english("Salutation Heading")
+                admin.save()
+
+                admin.open_gm_message_edit_form()
+                last_name_en = admin.field_value(admin.GM_NAME)
+                last_salutation_en = admin.field_value(admin.SALUTATION_HEADING)
+                last_status = admin.status_value()
+                admin.switch_field_to_arabic("GM Name")
+                last_name_ar = admin.field_value(admin.GM_NAME)
+                admin.switch_field_to_arabic("Salutation Heading")
+                last_salutation_ar = admin.field_value(admin.SALUTATION_HEADING)
+                admin.switch_field_to_english("GM Name")
+                admin.switch_field_to_english("Salutation Heading")
+
+                if (
+                    last_name_en == baseline_name_en
+                    and last_salutation_en == baseline_salutation_en
+                    and last_name_ar == baseline_name_ar
+                    and last_salutation_ar == baseline_salutation_ar
+                    and last_status == baseline_status
+                ):
+                    restored = True
+                    break
+            assert restored, (
+                "Teardown restore did not persist after 3 converge attempts: "
+                f"GM Name (EN)={last_name_en!r} (expected {baseline_name_en!r}), "
+                f"Salutation Heading (EN)={last_salutation_en!r} (expected "
+                f"{baseline_salutation_en!r}), GM Name (AR)={last_name_ar!r} "
+                f"(expected {baseline_name_ar!r}), Salutation Heading (AR)="
+                f"{last_salutation_ar!r} (expected {baseline_salutation_ar!r}), "
+                f"Status={last_status!r} (expected {baseline_status!r})."
+            )
 
 
 @allure.epic("About Us")

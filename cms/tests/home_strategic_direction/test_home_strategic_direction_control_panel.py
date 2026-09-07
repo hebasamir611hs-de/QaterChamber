@@ -1,9 +1,9 @@
 """
-web/tests/home_strategic_direction/test_home_strategic_direction_control_panel.py
+cms/tests/home_strategic_direction/test_home_strategic_direction_control_panel.py
 — Control_Panel-tagged cases for PBI 129381 ("Strategic Direction Section" /
 Pillar Cards, Home Page), scoped to the "Strategic Pillar Cards" Object
 Definition (objectDefinitionId=48938, groupId=37246). See
-web/pages/home_strategic_direction/home_strategic_direction_admin_page.py's
+cms/pages/home_strategic_direction/home_strategic_direction_admin_page.py's
 module docstring for the full live-verified field/menu/validation inventory
 this batch is built on — every locator and confirmed string below traces
 back to a real, live, single-process probe run this session (2026-08-31),
@@ -14,28 +14,46 @@ tool-boundary artifacts, not real site behavior).
 DISCLOSED SUBSTITUTIONS / DEVIATIONS FROM THE SOURCE CASE TEXT (read before
 touching this module):
 
+  CORRECTED 2026-09-07 (per .claude/context/active/standards.md's "Object
+  Authoring Is the Only Path for Publish/Unpublish/Draft/Preview Actions"
+  and "Draft/Unpublish Public-Visibility Checks — Mandatory Logged-Out
+  Context"): TC 135556, TC 135557, and TC 135562 (immediately below) were
+  re-verified against Object Authoring (`manage-strategic-pillar-card`,
+  `ObjectAuthoringPage`) instead of the raw Content & Data editor
+  (`HomeStrategicDirectionAdminPage`), which this file's Batch 2 section
+  further down already established is NOT the correct/supported surface for
+  lifecycle actions. `HomeStrategicDirectionAdminPage` is still used only to
+  establish the authenticated admin session (`open_pillar_cards_list()`)
+  before switching to `ObjectAuthoringPage` — its own Save/Cancel-only edit
+  form is no longer used for Draft/Preview/Publish/Unpublish on any of these
+  three tests.
+
   1. TC 135556 ("...Save as draft -> Preview the card -> Publish the
-     section...") — confirmed live, this Object Definition entry editor has
-     ONLY Save/Cancel; there is no Draft/Preview/Publish pipeline, no
-     `publicationStatus` combobox (same scope note as
-     gm_message_admin_page.py's own confirmed-absent Preview/Publish
-     controls). The 3-step lifecycle collapses to: Save (with Active Status
-     checked) -> reload the record to confirm the write -> load the live
-     Home Page and confirm the card renders in the public carousel. This is
-     the SAME class of disclosed substitution already established in this
-     project's GM Message batch, not an invented workaround.
+     section...") — the notes below (points 1/2 as originally written)
+     described the raw Content & Data editor, which is confirmed to have
+     ONLY Save/Cancel (no Draft/Preview/Publish pipeline). Object Authoring
+     DOES support the case's literal 3-step sequence for a brand-new
+     entry — `Save as Draft` -> the entry's own row-level Preview link ->
+     `Submit for Publishing` — confirmed live 2026-09-03 (this module's own
+     Batch 2 section) and again this pass. This test now drives that REAL
+     sequence instead of the earlier Save-only substitution.
 
   2. TC 135562 ("...Publish is blocked with inline validation error
      'Section Heading (EN) is required.'...") — NO field named "Section
-     Heading" exists on this form (confirmed by a full live field/label
-     inventory — see the admin Page Object's docstring). The real,
-     confirmed-live required EN field the case is almost certainly
-     describing is "Pillar Title", and the real confirmed-live validation
-     strings are "This form is invalid. Check field Pillar Title." (page
-     banner) and "This field is required." (inline). This test clears and
-     asserts on the REAL field ("Pillar Title") and the REAL strings, not
-     the case's paraphrase — flagging the discrepancy here rather than
-     silently coding to text that does not exist on the live form.
+     Heading" exists on EITHER surface (confirmed by a full live field/label
+     inventory on the raw editor, and by Object Authoring's own confirmed
+     field set — see both Page Objects' docstrings). The real, confirmed
+     required EN field on both surfaces is "Pillar Title". Mandatory-field
+     ENFORCEMENT/MESSAGING genuinely differs between the two surfaces,
+     however (re-verified this pass, see the test's own docstring for the
+     detail): the raw Content & Data editor surfaces an explicit custom page
+     banner ("This form is invalid. Check field Pillar Title.") plus inline
+     "This field is required." text; Object Authoring's Pillar Title control
+     is a native-`required` HTML textbox with no equivalent custom banner
+     confirmed — this test therefore asserts the BEHAVIOR the case cares
+     about (publish is blocked, Mission's persisted title is unchanged), not
+     the raw editor's specific banner string, which does not apply to this
+     surface.
 
   3. TC 135557 and TC 135562 both mutate a REAL, shared editorial record
      ("Mission", ID 49082) — cms-profile.md's Test-Data Policy classifies
@@ -202,54 +220,104 @@ MISSION_TITLE = "Mission"
 @pytest.mark.control_panel
 @pytest.mark.functional_high
 @pytest.mark.regression
-def test_create_publish_and_verify_new_pillar_card_on_home_page(page):
-    # QA-135556 — Log in as Site Content Editor (this project's only
-    # provisioned account, TEST_USER, is mapped to "Administrator/general
-    # authoring" per cms-profile.md's Roles table — its exact role mapping
-    # is unconfirmed, so this is a disclosed assumption, not a confirmed
-    # Site Content Editor login) -> Add Pillar Card -> fill all mandatory
-    # fields with valid data -> Save (see module docstring's disclosed
-    # substitution #1 for why this stands in for "Save as draft -> Preview
-    # -> Publish") -> refresh/reload the Home Page -> assert the new pillar
-    # card is visible in the live carousel.
+def test_create_publish_and_verify_new_pillar_card_on_home_page(page, browser):
+    # QA-135556 — CORRECTED 2026-09-07 per standards.md's "Object Authoring
+    # Is the Only Path for Publish/Unpublish/Draft/Preview Actions": the
+    # PRIOR version of this test drove Save (Active Status checked) through
+    # `HomeStrategicDirectionAdminPage` (the raw Content & Data editor,
+    # confirmed absent any Draft/Preview/Publish pipeline) and substituted
+    # "reopen and re-read" for the case's literal "Save as draft -> Preview
+    # -> Publish" because that pipeline genuinely does not exist on THAT
+    # surface. Re-checked against Object Authoring (`manage-strategic-
+    # pillar-card`, confirmed live 2026-09-03 — see this module's own Batch
+    # 2 section above): the literal 3-step sequence IS supported there for a
+    # brand-new entry — `Save as Draft` -> its own row-level Preview link ->
+    # `Submit for Publishing` — so this test now drives the REAL sequence
+    # instead of the disclosed substitution.
+    #
+    # Entry-code note (see ObjectAuthoringPage's own "Entry-code-based
+    # lookups" docstring): manage-strategic-pillar-card's Entry column
+    # renders an autogenerated externalReferenceCode, never the Pillar
+    # Title text — the fixture's own entry code is resolved via the
+    # VERIFIED (never positional) find_entry_code_by_field() lookup, per
+    # standards.md's "Destructive Operations Against qcdev" rule, same
+    # precedent this module's Batch 2 tests (tc_135558 etc.) already
+    # established.
+    #
+    # PUBLIC-PAGE-ANONYMOUS-CONTEXT: the public Home Page check runs in a
+    # dedicated, fresh, logged-out browser context (never the CMS admin
+    # `page`) so it reflects a real anonymous visitor rather than a
+    # still-authenticated CMS session — same pattern as
+    # home_featured_event_control_panel.py's TC 135670/135671/135673.
+    from core.web.browser import new_context
+
     admin = HomeStrategicDirectionAdminPage(page)
-    home = HomeStrategicDirectionPage(page)
+    authoring = ObjectAuthoringPage(page, slug="strategic-pillar-card")
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+    home = HomeStrategicDirectionPage(anon_page)
 
+    entry_code = None
     try:
-        # Arrange / Act
-        admin.open_pillar_cards_list()
-        admin.open_new_pillar_card_form()
-        admin.fill_pillar_card_form(
-            pillar_title=QCTEST_TITLE,
-            pillar_description=QCTEST_DESCRIPTION,
-            display_order="999",
-            active_status=True,
-        )
-        admin.upload_pillar_icon(PILLAR_ICON_FIXTURE)
-        admin.save()
+        # Arrange / Act — Step 1: fill every mandatory field and Save as
+        # Draft (the real first step of the literal sequence).
+        admin.open_pillar_cards_list()  # establishes the authenticated admin session
+        _create_strategic_pillar_card(authoring, QCTEST_TITLE, QCTEST_DESCRIPTION)
+        authoring.save_as_draft()
 
-        # Assert: the write was not blocked and the record now shows the
-        # entered values on reload (the "Preview" substitute).
-        assert not admin.is_save_error_shown(), (
-            f"unexpected validation error after saving a fully-filled new "
-            f"pillar card: {admin.save_error_text()!r}"
+        entry_code = authoring.find_entry_code_by_field("Pillar Title", QCTEST_TITLE)
+        assert entry_code, f"could not verify an entry whose Pillar Title reads {QCTEST_TITLE!r}"
+
+        authoring.open_entry_by_code(entry_code)
+        assert authoring.current_status() == "Draft", (
+            f"fixture card {QCTEST_TITLE!r} does not read Draft status right after Save as Draft"
         )
-        admin.reopen_pillar_card_by_title_fresh(QCTEST_TITLE)
-        assert admin.pillar_title_value() == QCTEST_TITLE
+
+        # Step 2: Preview the card via its own row-level Preview link — the
+        # real, dedicated Preview control this surface exposes (see
+        # ObjectAuthoringPage's module docstring). Confirms the PREVIEW
+        # banner reads the draft/unpublished wording, i.e. the preview
+        # reflects the not-yet-published entry.
+        preview_url = authoring.row_preview_url_by_code(entry_code)
+        assert preview_url, f"no Preview link found for entry {entry_code!r}"
+        preview_text = authoring.preview_banner_text(preview_url)
+        assert "PREVIEW" in preview_text and "draft" in preview_text.lower(), (
+            f"Preview banner did not read as an unpublished/draft preview: {preview_text!r}"
+        )
+
+        # Step 3: Submit for Publishing — the real Publish action.
+        authoring.open_entry_by_code(entry_code)
+        authoring.submit_for_publishing()
+
+        authoring.open_entry_by_code(entry_code)
+        assert authoring.current_status() == "Approved", (
+            f"fixture card {QCTEST_TITLE!r} did not reach Approved/Published status after "
+            f"Submit for Publishing"
+        )
+        assert authoring.field_value("Pillar Title") == QCTEST_TITLE
 
         # Assert: the card is visible in the live public Home Page carousel
         # after a reload (poll, not a bare sleep — see module docstring).
         assert home.reload_until_card_visible(QCTEST_TITLE), (
-            f"pillar card {QCTEST_TITLE!r} was saved in the admin but never "
+            f"pillar card {QCTEST_TITLE!r} was published in the admin but never "
             f"appeared in the public Home Page's Strategic Direction carousel"
         )
     finally:
-        # Teardown: delete the QCTEST- disposable record (UI-only, per
-        # cms-profile.md's current Test-Data Policy) so this test never
-        # leaves a permanent card in the live carousel.
-        admin.open_pillar_cards_list()
-        if admin.row_visible(QCTEST_TITLE):
-            admin.delete_pillar_card_by_title(QCTEST_TITLE)
+        # Teardown: delete the QCTEST- disposable record via Object
+        # Authoring's own verified-by-code delete (never a positional
+        # guess — see find_entry_code_by_field()'s docstring).
+        authoring.open_entries_list()
+        if entry_code:
+            authoring.delete_entry_by_code(entry_code)
+
+        # Anon-context cleanup runs LAST, after teardown — same lesson as
+        # home_featured_event_control_panel.py's finally blocks: a raw
+        # context.close() must never be able to short-circuit the real
+        # cleanup.
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
 
 
 @allure.label("pbi", "129381")
@@ -265,19 +333,48 @@ def test_create_publish_and_verify_new_pillar_card_on_home_page(page):
 @pytest.mark.functional_high
 @pytest.mark.regression
 @pytest.mark.xdist_group("mission_49082")
-def test_edit_existing_mission_pillar_card_reflects_on_home_page(page):
-    # QA-135557 — Open the existing "Mission" pillar card (ID 49082,
-    # confirmed live) -> change its description -> Save -> reload the Home
-    # Page -> assert the public carousel shows the UPDATED description.
+def test_edit_existing_mission_pillar_card_reflects_on_home_page(page, browser):
+    # QA-135557 — CORRECTED 2026-09-07 per standards.md's "Object Authoring
+    # Is the Only Path for Publish/Unpublish/Draft/Preview Actions": the
+    # edit+publish flow now goes through `manage-strategic-pillar-card`
+    # (ObjectAuthoringPage), never the raw Content & Data editor. Mission's
+    # own entry code is resolved via the VERIFIED (never positional)
+    # find_entry_code_by_field() lookup (its Entry column shows a UUID, not
+    # the Pillar Title — see ObjectAuthoringPage's own docstring), same
+    # precedent already established for the Batch 2 tests below.
+    #
+    # Mission is Approved/Published already — CONFIRMED LIVE (see
+    # ObjectAuthoringPage's module docstring): an Approved entry's own
+    # `Submit for Publishing` button is NOT disabled (only `Save as Draft`
+    # is, until Unpublish is clicked), so editing an already-published
+    # record's field and clicking `Submit for Publishing` directly IS the
+    # correct, real "edit the live record and republish" action here — no
+    # Unpublish step needed for this case.
+    #
     # SNAPSHOT_RESTORE exception (see module docstring #3): baseline is
     # captured before mutating and restored in `finally`, re-verified by a
     # fresh re-open.
-    admin = HomeStrategicDirectionAdminPage(page)
-    home = HomeStrategicDirectionPage(page)
+    #
+    # PUBLIC-PAGE-ANONYMOUS-CONTEXT: the public Home Page check runs in a
+    # dedicated, fresh, logged-out browser context (never the CMS admin
+    # `page`) so it reflects a real anonymous visitor rather than a
+    # still-authenticated CMS session — same pattern as
+    # home_featured_event_control_panel.py's TC 135670/135671/135673.
+    from core.web.browser import new_context
 
-    admin.open_pillar_cards_list()
-    admin.open_pillar_card_edit_form_by_title(MISSION_TITLE)
-    baseline_description = admin.pillar_description_text()
+    admin = HomeStrategicDirectionAdminPage(page)
+    authoring = ObjectAuthoringPage(page, slug="strategic-pillar-card")
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+    home = HomeStrategicDirectionPage(anon_page)
+
+    admin.open_pillar_cards_list()  # establishes the authenticated admin session
+    mission_code = authoring.find_entry_code_by_field("Pillar Title", MISSION_TITLE)
+    assert mission_code, f"could not verify an entry whose Pillar Title reads {MISSION_TITLE!r}"
+
+    authoring.open_entry_by_code(mission_code)
+    baseline_status = authoring.current_status()  # "Approved" (baseline)
+    baseline_description = authoring.rich_text_value()
     updated_description = (
         "QCTEST-135557 temporary Mission description — automated edit-and-restore "
         "regression check, will be reverted by test teardown."
@@ -285,16 +382,13 @@ def test_edit_existing_mission_pillar_card_reflects_on_home_page(page):
 
     try:
         # Act
-        admin.fill_pillar_card_form(pillar_description=updated_description)
-        admin.save()
-        assert not admin.is_save_error_shown(), (
-            f"unexpected validation error editing Mission's description: "
-            f"{admin.save_error_text()!r}"
-        )
+        authoring.fill_rich_text(updated_description)
+        authoring.submit_for_publishing()
 
-        # Assert: admin reload shows the new description.
-        admin.reopen_pillar_card_by_title_fresh(MISSION_TITLE)
-        assert admin.pillar_description_text() == updated_description
+        # Assert: admin reload shows the new description, still Approved.
+        authoring.open_entry_by_code(mission_code)
+        assert authoring.current_status() == "Approved"
+        assert authoring.rich_text_value() == updated_description
 
         # Assert: the public Home Page carousel reflects it after a
         # reload/poll (cache-refresh substitute — see module docstring #4).
@@ -306,16 +400,37 @@ def test_edit_existing_mission_pillar_card_reflects_on_home_page(page):
         # Restore the real, shared "Mission" record to its baseline —
         # SNAPSHOT_RESTORE exception, same precedent as this project's GM
         # Message batch.
-        admin.reopen_pillar_card_by_title_fresh(MISSION_TITLE)
-        current = admin.pillar_description_text()
-        if current != baseline_description:
-            admin.fill_pillar_card_form(pillar_description=baseline_description)
-            admin.save()
-        admin.reopen_pillar_card_by_title_fresh(MISSION_TITLE)
-        assert admin.pillar_description_text() == baseline_description, (
-            "teardown failed to restore Mission's description to its "
-            "captured baseline — real editorial content may be left mutated"
+        restored = False
+        last_description = last_status = None
+        for _ in range(3):
+            authoring.open_entry_by_code(mission_code)
+            current = authoring.rich_text_value()
+            if current != baseline_description:
+                authoring.fill_rich_text(baseline_description)
+            if baseline_status == "Approved":
+                authoring.submit_for_publishing()
+            else:
+                authoring.save_as_draft()
+            authoring.open_entry_by_code(mission_code)
+            last_description = authoring.rich_text_value()
+            last_status = authoring.current_status()
+            if last_description == baseline_description and last_status == baseline_status:
+                restored = True
+                break
+        assert restored, (
+            "teardown failed to restore Mission's description/status to its "
+            f"captured baseline via Object Authoring — real editorial content "
+            f"may be left mutated: got description={last_description!r} "
+            f"status={last_status!r}, expected description="
+            f"{baseline_description!r} status={baseline_status!r}"
         )
+
+        # Anon-context cleanup runs LAST, after the baseline restore — same
+        # lesson as home_featured_event_control_panel.py's finally blocks.
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
 
 
 @allure.label("pbi", "129381")
@@ -330,63 +445,94 @@ def test_edit_existing_mission_pillar_card_reflects_on_home_page(page):
 @pytest.mark.regression
 @pytest.mark.xdist_group("mission_49082")
 def test_publish_blocked_when_pillar_title_left_empty(page):
-    # QA-135562 — Clear the required EN title field -> click Save (this
-    # form's only persist/publish action — see module docstring's
-    # disclosed substitution #2 for why "Pillar Title" stands in for the
-    # case's "Section Heading (EN)", which does not exist on this form) ->
-    # assert Save is BLOCKED with the real confirmed inline validation
-    # error, and the record's persisted value is unchanged. SNAPSHOT_RESTORE
-    # exception on the real "Mission" record (module docstring #3);
-    # restored defensively in `finally` regardless of outcome, per the case's
-    # own instruction.
+    # QA-135562 — CORRECTED 2026-09-07 per standards.md's "Object Authoring
+    # Is the Only Path for Publish/Unpublish/Draft/Preview Actions": the
+    # PRIOR version cleared Pillar Title and clicked the raw Content & Data
+    # editor's Save button. Re-verified via Object Authoring
+    # (`manage-strategic-pillar-card`): clear the required EN title field ->
+    # click `Submit for Publishing` (this surface's real publish/persist
+    # action) -> assert publishing is BLOCKED, and the record's persisted
+    # value is unchanged. Disclosed substitution #2 still applies (no field
+    # named "Section Heading" exists on either surface — the real required
+    # EN field is "Pillar Title").
+    #
+    # Mandatory-field enforcement DIFFERS between the two surfaces
+    # (discrepancy flagged per this task's own instruction): the raw
+    # Content & Data editor surfaces an explicit page banner ("This form is
+    # invalid. Check field Pillar Title.") plus inline "This field is
+    # required." text. Object Authoring's `fill_text()` targets a
+    # `role="textbox"` HTML5 form control that is native-`required` —
+    # clicking `Submit for Publishing` with it empty is expected to trigger
+    # the BROWSER'S OWN native constraint-validation UI (a native bubble,
+    # not a page-rendered banner) and/or simply refuse to navigate away from
+    # the form, rather than reproducing the raw editor's own custom banner
+    # text verbatim. This test therefore asserts the BEHAVIOR the case
+    # actually cares about — publishing is blocked and Mission's persisted
+    # Pillar Title is unchanged — rather than asserting the raw editor's
+    # specific banner string, which does not apply to this surface.
+    #
+    # SNAPSHOT_RESTORE exception on the real "Mission" record (module
+    # docstring #3); restored defensively in `finally` regardless of
+    # outcome, per the case's own instruction.
     admin = HomeStrategicDirectionAdminPage(page)
+    authoring = ObjectAuthoringPage(page, slug="strategic-pillar-card")
 
-    admin.open_pillar_cards_list()
-    admin.open_pillar_card_edit_form_by_title(MISSION_TITLE)
-    baseline_title = admin.pillar_title_value()
+    admin.open_pillar_cards_list()  # establishes the authenticated admin session
+    mission_code = authoring.find_entry_code_by_field("Pillar Title", MISSION_TITLE)
+    assert mission_code, f"could not verify an entry whose Pillar Title reads {MISSION_TITLE!r}"
+
+    authoring.open_entry_by_code(mission_code)
+    baseline_title = authoring.field_value("Pillar Title")
+    baseline_status = authoring.current_status()  # "Approved" (baseline)
 
     try:
         # Act
-        admin.fill_pillar_card_form(pillar_title="")
-        admin.click(admin.SAVE_BUTTON)
-        page.wait_for_timeout(admin.SAVE_COMMIT_GRACE_MS)
+        authoring.fill_text("Pillar Title", "")
+        authoring.submit_for_publishing()
 
-        # Assert: Save is blocked with the real, confirmed-live validation
-        # strings (see module docstring #2 for why these differ from the
-        # case's "Section Heading (EN) is required." paraphrase).
-        assert admin.is_save_error_shown(), (
-            "clearing the required Pillar Title field and clicking Save did "
-            "not surface any validation error — the form may have silently "
-            "accepted an empty mandatory field"
+        # Assert: publishing is blocked — the record must NOT have been
+        # persisted with an empty Pillar Title. Reopen fresh (never trust
+        # the in-page state right after the blocked action) and confirm the
+        # title is still the baseline, not empty.
+        authoring.open_entry_by_code(mission_code)
+        reloaded_title = authoring.field_value("Pillar Title")
+        assert reloaded_title == baseline_title, (
+            "Mission's Pillar Title was persisted as empty (or something "
+            f"other than the baseline) after Submit for Publishing with the "
+            f"required field cleared: got {reloaded_title!r}, expected "
+            f"{baseline_title!r} — publishing was NOT actually blocked "
+            f"server-side via Object Authoring"
         )
-        error_text = admin.save_error_text()
-        assert admin.SAVE_ERROR_BANNER_PREFIX in error_text or admin.INLINE_REQUIRED_TEXT in error_text, (
-            f"validation error text did not match the confirmed-live "
-            f"strings: got {error_text!r}"
-        )
-
-        # Assert: the record's own persisted value is unchanged — the
-        # blocked Save must not have silently committed the empty title.
-        admin.reopen_pillar_card_by_title_fresh(MISSION_TITLE)
-        assert admin.pillar_title_value() == baseline_title, (
-            "Mission's Pillar Title was persisted as empty despite the form "
-            "reporting a blocked/invalid Save — publish was NOT actually "
-            "blocked server-side"
+        assert authoring.current_status() == baseline_status, (
+            "Mission's Status changed despite the blocked publish attempt"
         )
     finally:
         # Defensive restore regardless of outcome, per the case's own
         # instruction — the field is client-side cleared during Act and
         # should never have persisted, but restore explicitly rather than
         # trust that.
-        admin.reopen_pillar_card_by_title_fresh(MISSION_TITLE)
-        current = admin.pillar_title_value()
-        if current != baseline_title:
-            admin.fill_pillar_card_form(pillar_title=baseline_title)
-            admin.save()
-        admin.reopen_pillar_card_by_title_fresh(MISSION_TITLE)
-        assert admin.pillar_title_value() == baseline_title, (
-            "teardown failed to restore Mission's Pillar Title to its "
-            "captured baseline — real editorial content may be left mutated"
+        restored = False
+        last_title = last_status = None
+        for _ in range(3):
+            authoring.open_entry_by_code(mission_code)
+            current = authoring.field_value("Pillar Title")
+            if current != baseline_title:
+                authoring.fill_text("Pillar Title", baseline_title)
+            if baseline_status == "Approved":
+                authoring.submit_for_publishing()
+            else:
+                authoring.save_as_draft()
+            authoring.open_entry_by_code(mission_code)
+            last_title = authoring.field_value("Pillar Title")
+            last_status = authoring.current_status()
+            if last_title == baseline_title and last_status == baseline_status:
+                restored = True
+                break
+        assert restored, (
+            "teardown failed to restore Mission's Pillar Title/Status to its "
+            f"captured baseline via Object Authoring — real editorial content "
+            f"may be left mutated: got title={last_title!r} status={last_status!r}, "
+            f"expected title={baseline_title!r} status={baseline_status!r}"
         )
 
 
