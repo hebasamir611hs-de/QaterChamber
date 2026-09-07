@@ -55,7 +55,7 @@ THUMBNAIL_FIXTURE = "cms/tests/home_latest_news/fixtures/news_thumbnail.png"
 @pytest.mark.workflow
 @pytest.mark.pbi_129372
 @pytest.mark.tc_135279
-def test_save_article_as_draft_not_in_latest_news(page):
+def test_save_article_as_draft_not_in_latest_news(page, browser):
     """ADO-135279. Steps (from Azure DevOps, quoted verbatim):
       1. Log in to CMS as Site Content Editor -> CMS loads
       2. Navigate to News module > Create Article -> Create Article form
@@ -71,10 +71,18 @@ def test_save_article_as_draft_not_in_latest_news(page):
     expected result: stored status = Draft on the authoring surface, AND
     absence from the public Home Page Latest News section
     (cms-testing.md's dual-surface requirement).
+
+    PUBLIC-PAGE-ANONYMOUS-CONTEXT (mandatory per standards.md, added
+    2026-09-07): the public Home Page read goes through a fresh, logged-out
+    browser context, never the CMS-authenticated `page` — mirrors
+    home_business_events_admin_page's established pattern.
     """
+    from core.web.browser import new_context
+
     admin = HomeLatestNewsAdminPage(page)
     authoring = ObjectAuthoringPage(page, slug="news-article")
-    home = HomeLatestNewsPage(page)
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomeLatestNewsPage(anon_context.new_page())
     title = "QCTEST-135279 Draft Test Article"
 
     try:
@@ -115,3 +123,4 @@ def test_save_article_as_draft_not_in_latest_news(page):
             authoring.delete_entry_by_title(title)
         except Exception:
             logger.warning("teardown for %r did not complete — leftover QCTEST data may remain", title)
+        anon_context.close()
