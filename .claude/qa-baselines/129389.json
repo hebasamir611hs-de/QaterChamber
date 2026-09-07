@@ -1,0 +1,482 @@
+{
+  "analysed": "2026-08-13",
+  "mode": "Normal",
+  "budget": 53,
+  "delivered": 53,
+  "categories": {
+    "UI": 7,
+    "Functional-High": 7,
+    "Functional-Low": 32,
+    "Compatibility": 3,
+    "Auth": 2,
+    "Edge": 2
+  },
+  "inventory": {
+    "OBJ": 8,
+    "FLD": 12,
+    "CTL": 5,
+    "ST": 7,
+    "ROL": 2,
+    "MSG": 3,
+    "SUR": 4,
+    "LNG": 2
+  },
+  "case_ids": [
+    "ABOUT-ABOUTUSSECTION-TC-001",
+    "ABOUT-ABOUTUSSECTION-TC-002",
+    "ABOUT-ABOUTUSSECTION-TC-003",
+    "ABOUT-ABOUTUSSECTION-TC-004",
+    "ABOUT-ABOUTUSSECTION-TC-005",
+    "ABOUT-ABOUTUSSECTION-TC-006",
+    "ABOUT-ABOUTUSSECTION-TC-007",
+    "ABOUT-ABOUTUSSECTION-TC-008",
+    "ABOUT-ABOUTUSSECTION-TC-009",
+    "ABOUT-ABOUTUSSECTION-TC-010",
+    "ABOUT-ABOUTUSSECTION-TC-011",
+    "ABOUT-ABOUTUSSECTION-TC-012",
+    "ABOUT-ABOUTUSSECTION-TC-013",
+    "ABOUT-ABOUTUSSECTION-TC-014",
+    "ABOUT-ABOUTUSSECTION-TC-015",
+    "ABOUT-ABOUTUSSECTION-TC-016",
+    "ABOUT-ABOUTUSSECTION-TC-017",
+    "ABOUT-ABOUTUSSECTION-TC-018",
+    "ABOUT-ABOUTUSSECTION-TC-019",
+    "ABOUT-ABOUTUSSECTION-TC-020",
+    "ABOUT-ABOUTUSSECTION-TC-021",
+    "ABOUT-ABOUTUSSECTION-TC-022",
+    "ABOUT-ABOUTUSSECTION-TC-023",
+    "ABOUT-ABOUTUSSECTION-TC-024",
+    "ABOUT-ABOUTUSSECTION-TC-025",
+    "ABOUT-ABOUTUSSECTION-TC-026",
+    "ABOUT-ABOUTUSSECTION-TC-027",
+    "ABOUT-ABOUTUSSECTION-TC-028",
+    "ABOUT-ABOUTUSSECTION-TC-029",
+    "ABOUT-ABOUTUSSECTION-TC-030",
+    "ABOUT-ABOUTUSSECTION-TC-031",
+    "ABOUT-ABOUTUSSECTION-TC-032",
+    "ABOUT-ABOUTUSSECTION-TC-033",
+    "ABOUT-ABOUTUSSECTION-TC-034",
+    "ABOUT-ABOUTUSSECTION-TC-035",
+    "ABOUT-ABOUTUSSECTION-TC-036",
+    "ABOUT-ABOUTUSSECTION-TC-037",
+    "ABOUT-ABOUTUSSECTION-TC-038",
+    "ABOUT-ABOUTUSSECTION-TC-039",
+    "ABOUT-ABOUTUSSECTION-TC-040",
+    "ABOUT-ABOUTUSSECTION-TC-041",
+    "ABOUT-ABOUTUSSECTION-TC-042",
+    "ABOUT-ABOUTUSSECTION-TC-043",
+    "ABOUT-ABOUTUSSECTION-TC-044",
+    "ABOUT-ABOUTUSSECTION-TC-045",
+    "ABOUT-ABOUTUSSECTION-TC-046",
+    "ABOUT-ABOUTUSSECTION-TC-047",
+    "ABOUT-ABOUTUSSECTION-TC-048",
+    "ABOUT-ABOUTUSSECTION-TC-049",
+    "ABOUT-ABOUTUSSECTION-TC-050",
+    "ABOUT-ABOUTUSSECTION-TC-051",
+    "ABOUT-ABOUTUSSECTION-TC-052",
+    "ABOUT-ABOUTUSSECTION-TC-053"
+  ],
+  "cases": {
+    "ABOUT-ABOUTUSSECTION-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "OBJ-2",
+        "OBJ-3",
+        "OBJ-4",
+        "OBJ-5",
+        "OBJ-6",
+        "ST-1",
+        "SUR-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-002": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-3",
+        "FLD-5"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-004": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-4",
+        "FLD-1",
+        "FLD-2",
+        "FLD-3",
+        "LNG-1",
+        "LNG-2"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-005": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-5",
+        "CTL-5",
+        "FLD-6",
+        "FLD-7",
+        "ST-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-006": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-6"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-007": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-6",
+        "OBJ-7",
+        "FLD-8",
+        "FLD-9",
+        "FLD-10"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-008": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-7",
+        "FLD-11"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-009": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-7",
+        "FLD-12",
+        "ST-4"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-010": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "LNG-2"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-011": {
+      "category": "Compatibility",
+      "traceability": [
+        "OBJ-1",
+        "SUR-2"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-012": {
+      "category": "Compatibility",
+      "traceability": [
+        "OBJ-1",
+        "SUR-3"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-013": {
+      "category": "Compatibility",
+      "traceability": [
+        "OBJ-1",
+        "SUR-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-014": {
+      "category": "Auth",
+      "traceability": [
+        "OBJ-8",
+        "ROL-2",
+        "SUR-4"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-015": {
+      "category": "Auth",
+      "traceability": [
+        "OBJ-8",
+        "ROL-1",
+        "SUR-4"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-016": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-8",
+        "FLD-2",
+        "FLD-3",
+        "FLD-4",
+        "FLD-6",
+        "FLD-7",
+        "CTL-3",
+        "MSG-3",
+        "ST-6"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-017": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-8",
+        "CTL-1",
+        "ST-5",
+        "MSG-3"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-018": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-8",
+        "CTL-2",
+        "ST-5"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-019": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "OBJ-8",
+        "ST-6",
+        "MSG-3"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-020": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-8",
+        "FLD-3",
+        "ST-6",
+        "MSG-3"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-021": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-022": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-7",
+        "CTL-4",
+        "ST-7"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-023": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-024": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-025": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-026": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-027": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-028": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-029": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-030": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-031": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-032": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-033": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-034": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-035": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-036": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-037": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-038": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-039": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7",
+        "MSG-2"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-040": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-041": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-042": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-043": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-044": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-045": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-046": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-047": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11",
+        "MSG-3"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-048": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-049": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1",
+        "FLD-2",
+        "FLD-3",
+        "FLD-4",
+        "FLD-5",
+        "FLD-6",
+        "FLD-7",
+        "FLD-8",
+        "FLD-9",
+        "FLD-10",
+        "FLD-11",
+        "FLD-12",
+        "MSG-3"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-050": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12",
+        "ST-3",
+        "ST-4"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-051": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2",
+        "CTL-1"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-052": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-5",
+        "CTL-5",
+        "ST-2"
+      ]
+    },
+    "ABOUT-ABOUTUSSECTION-TC-053": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-7",
+        "CTL-4",
+        "ST-7"
+      ]
+    }
+  },
+  "basis": "Description-only (ac=\"No AC\"). Figma node 849:15904 (EN desktop light) verified and used for exact-value UI cases; 8 of 9 design frames (AR desktop, EN/AR mobile, EN/AR dark desktop/mobile) not individually verified — corresponding cases assert standard/expected rendering, not exact pixel values."
+}

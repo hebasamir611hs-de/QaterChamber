@@ -1,0 +1,29 @@
+{
+  "pbi": "133380",
+  "analysed": "2026-08-11",
+  "mode": "Normal",
+  "budget": 29,
+  "delivered": 29,
+  "categories": {
+    "UI": 7,
+    "Compatibility": 5,
+    "Functional-High": 7,
+    "Functional-Low": 5,
+    "Edge": 5
+  },
+  "inventory": {
+    "OBJ": 5,
+    "CTL": 2,
+    "ST": 7,
+    "ROL": 2,
+    "AC": 10,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 5
+  },
+  "case_ids": [
+    "GLOBAL-LANGUAGESWITCHER-TC-001",
+    "GLOBAL-LANGUAGESWITCHER-TC-029"
+  ],
+  "basis": "Description-only PBI (AC field empty); Figma primary frame (EN Desktop Light, node 849:15904, shared with Footer PBI) verified for the AR toggle label; sibling AR/mobile/dark frames not deep-verified"
+}

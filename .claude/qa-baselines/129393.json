@@ -1,0 +1,752 @@
+{
+  "analysed": "2026-08-12",
+  "mode": "Normal",
+  "budget": 94,
+  "delivered": 94,
+  "categories": {
+    "UI": 16,
+    "Compatibility": 5,
+    "Auth": 5,
+    "Functional-High": 14,
+    "Functional-Low": 50,
+    "Edge": 4
+  },
+  "inventory": {
+    "OBJ": 11,
+    "FLD": 16,
+    "CTL": 10,
+    "ST": 10,
+    "ROL": 4,
+    "MSG": 5,
+    "AC": 19,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 4
+  },
+  "basis": "Description only - no AC; Figma content-verified (1640-20884 EN, 1640-20909 AR) though frame is mislabelled QC-ABOUT-003. Rev 2 2026-08-12: dark mode confirmed in scope, ENV-4 added with TC-090/091/092/093; page-load-failure confirmed applicable, ST-10 added with TC-094; EN mobile now derived from the AR mobile frame with English strings per QA Manager. Browser matrix, cache TTL, fallback language CLOSED (forget it).",
+  "case_ids": [
+    "ABOUT-CHAIRMANMESSAGE-TC-001",
+    "ABOUT-CHAIRMANMESSAGE-TC-002",
+    "ABOUT-CHAIRMANMESSAGE-TC-003",
+    "ABOUT-CHAIRMANMESSAGE-TC-004",
+    "ABOUT-CHAIRMANMESSAGE-TC-005",
+    "ABOUT-CHAIRMANMESSAGE-TC-006",
+    "ABOUT-CHAIRMANMESSAGE-TC-007",
+    "ABOUT-CHAIRMANMESSAGE-TC-008",
+    "ABOUT-CHAIRMANMESSAGE-TC-009",
+    "ABOUT-CHAIRMANMESSAGE-TC-010",
+    "ABOUT-CHAIRMANMESSAGE-TC-011",
+    "ABOUT-CHAIRMANMESSAGE-TC-012",
+    "ABOUT-CHAIRMANMESSAGE-TC-013",
+    "ABOUT-CHAIRMANMESSAGE-TC-014",
+    "ABOUT-CHAIRMANMESSAGE-TC-015",
+    "ABOUT-CHAIRMANMESSAGE-TC-016",
+    "ABOUT-CHAIRMANMESSAGE-TC-017",
+    "ABOUT-CHAIRMANMESSAGE-TC-018",
+    "ABOUT-CHAIRMANMESSAGE-TC-019",
+    "ABOUT-CHAIRMANMESSAGE-TC-020",
+    "ABOUT-CHAIRMANMESSAGE-TC-021",
+    "ABOUT-CHAIRMANMESSAGE-TC-022",
+    "ABOUT-CHAIRMANMESSAGE-TC-023",
+    "ABOUT-CHAIRMANMESSAGE-TC-024",
+    "ABOUT-CHAIRMANMESSAGE-TC-025",
+    "ABOUT-CHAIRMANMESSAGE-TC-026",
+    "ABOUT-CHAIRMANMESSAGE-TC-027",
+    "ABOUT-CHAIRMANMESSAGE-TC-028",
+    "ABOUT-CHAIRMANMESSAGE-TC-029",
+    "ABOUT-CHAIRMANMESSAGE-TC-030",
+    "ABOUT-CHAIRMANMESSAGE-TC-031",
+    "ABOUT-CHAIRMANMESSAGE-TC-032",
+    "ABOUT-CHAIRMANMESSAGE-TC-033",
+    "ABOUT-CHAIRMANMESSAGE-TC-034",
+    "ABOUT-CHAIRMANMESSAGE-TC-035",
+    "ABOUT-CHAIRMANMESSAGE-TC-036",
+    "ABOUT-CHAIRMANMESSAGE-TC-037",
+    "ABOUT-CHAIRMANMESSAGE-TC-038",
+    "ABOUT-CHAIRMANMESSAGE-TC-039",
+    "ABOUT-CHAIRMANMESSAGE-TC-040",
+    "ABOUT-CHAIRMANMESSAGE-TC-041",
+    "ABOUT-CHAIRMANMESSAGE-TC-042",
+    "ABOUT-CHAIRMANMESSAGE-TC-043",
+    "ABOUT-CHAIRMANMESSAGE-TC-044",
+    "ABOUT-CHAIRMANMESSAGE-TC-045",
+    "ABOUT-CHAIRMANMESSAGE-TC-046",
+    "ABOUT-CHAIRMANMESSAGE-TC-047",
+    "ABOUT-CHAIRMANMESSAGE-TC-048",
+    "ABOUT-CHAIRMANMESSAGE-TC-049",
+    "ABOUT-CHAIRMANMESSAGE-TC-050",
+    "ABOUT-CHAIRMANMESSAGE-TC-051",
+    "ABOUT-CHAIRMANMESSAGE-TC-052",
+    "ABOUT-CHAIRMANMESSAGE-TC-053",
+    "ABOUT-CHAIRMANMESSAGE-TC-054",
+    "ABOUT-CHAIRMANMESSAGE-TC-055",
+    "ABOUT-CHAIRMANMESSAGE-TC-056",
+    "ABOUT-CHAIRMANMESSAGE-TC-057",
+    "ABOUT-CHAIRMANMESSAGE-TC-058",
+    "ABOUT-CHAIRMANMESSAGE-TC-059",
+    "ABOUT-CHAIRMANMESSAGE-TC-060",
+    "ABOUT-CHAIRMANMESSAGE-TC-061",
+    "ABOUT-CHAIRMANMESSAGE-TC-062",
+    "ABOUT-CHAIRMANMESSAGE-TC-063",
+    "ABOUT-CHAIRMANMESSAGE-TC-064",
+    "ABOUT-CHAIRMANMESSAGE-TC-065",
+    "ABOUT-CHAIRMANMESSAGE-TC-066",
+    "ABOUT-CHAIRMANMESSAGE-TC-067",
+    "ABOUT-CHAIRMANMESSAGE-TC-068",
+    "ABOUT-CHAIRMANMESSAGE-TC-069",
+    "ABOUT-CHAIRMANMESSAGE-TC-070",
+    "ABOUT-CHAIRMANMESSAGE-TC-071",
+    "ABOUT-CHAIRMANMESSAGE-TC-072",
+    "ABOUT-CHAIRMANMESSAGE-TC-073",
+    "ABOUT-CHAIRMANMESSAGE-TC-074",
+    "ABOUT-CHAIRMANMESSAGE-TC-075",
+    "ABOUT-CHAIRMANMESSAGE-TC-076",
+    "ABOUT-CHAIRMANMESSAGE-TC-077",
+    "ABOUT-CHAIRMANMESSAGE-TC-078",
+    "ABOUT-CHAIRMANMESSAGE-TC-079",
+    "ABOUT-CHAIRMANMESSAGE-TC-080",
+    "ABOUT-CHAIRMANMESSAGE-TC-081",
+    "ABOUT-CHAIRMANMESSAGE-TC-082",
+    "ABOUT-CHAIRMANMESSAGE-TC-083",
+    "ABOUT-CHAIRMANMESSAGE-TC-084",
+    "ABOUT-CHAIRMANMESSAGE-TC-085",
+    "ABOUT-CHAIRMANMESSAGE-TC-086",
+    "ABOUT-CHAIRMANMESSAGE-TC-087",
+    "ABOUT-CHAIRMANMESSAGE-TC-088",
+    "ABOUT-CHAIRMANMESSAGE-TC-089",
+    "ABOUT-CHAIRMANMESSAGE-TC-090",
+    "ABOUT-CHAIRMANMESSAGE-TC-091",
+    "ABOUT-CHAIRMANMESSAGE-TC-092",
+    "ABOUT-CHAIRMANMESSAGE-TC-093",
+    "ABOUT-CHAIRMANMESSAGE-TC-094"
+  ],
+  "cases": {
+    "ABOUT-CHAIRMANMESSAGE-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "AC-1",
+        "ENV-1",
+        "LNG-1",
+        "SUR-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-002": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-11",
+        "AC-1",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-3",
+        "AC-2",
+        "ENV-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-004": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-4",
+        "AC-3",
+        "ENV-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-5",
+        "AC-4",
+        "ENV-1",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-006": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-6",
+        "AC-4",
+        "ENV-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-007": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-7",
+        "AC-5",
+        "ENV-1",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-008": {
+      "category": "UI",
+      "traceability": [
+        "AC-6",
+        "OBJ-6"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-009": {
+      "category": "UI",
+      "traceability": [
+        "AC-7"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-010": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1",
+        "AC-10"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-011": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2",
+        "AC-10"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-012": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-11",
+        "LNG-2",
+        "AC-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-013": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-11",
+        "LNG-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-014": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-7",
+        "LNG-2",
+        "AC-10"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-015": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-016": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-017": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-3"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-018": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-019": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2",
+        "AC-11"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-020": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3",
+        "AC-12"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-021": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-022": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-4",
+        "MSG-4"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-023": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-8",
+        "ST-2",
+        "OBJ-1",
+        "AC-11",
+        "AC-15",
+        "MSG-5",
+        "SUR-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-024": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-025": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-9",
+        "ST-3"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-026": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-6",
+        "ST-1",
+        "AC-9",
+        "AC-16"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-027": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-7",
+        "ST-4",
+        "AC-14"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-028": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-6",
+        "OBJ-9",
+        "OBJ-10",
+        "AC-17"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-029": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-3",
+        "OBJ-8",
+        "AC-8"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-030": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-5"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-031": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-5"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-032": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-10"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-033": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-10"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-034": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-035": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-4"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-036": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-9",
+        "AC-18"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-037": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-038": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-039": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-040": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-041": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-042": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-043": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-044": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-045": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-046": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "MSG-3",
+        "AC-13"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-047": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "MSG-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-048": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-049": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-050": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-051": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-052": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-053": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-054": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6",
+        "MSG-3"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-055": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6",
+        "MSG-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-056": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-057": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-058": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-059": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-060": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-061": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-062": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-063": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-064": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-065": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-066": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-067": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-068": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-069": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-070": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-071": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-072": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-073": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-074": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-075": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-076": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-077": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-078": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-079": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-080": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-081": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13",
+        "AC-13"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-082": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-083": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-084": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-085": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-086": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1",
+        "FLD-15",
+        "FLD-16"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-087": {
+      "category": "Edge",
+      "traceability": [
+        "ST-5",
+        "AC-19"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-088": {
+      "category": "Edge",
+      "traceability": [
+        "ST-7",
+        "AC-8"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-089": {
+      "category": "Edge",
+      "traceability": [
+        "ST-8",
+        "AC-8"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-090": {
+      "category": "UI",
+      "traceability": [
+        "ENV-4",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-091": {
+      "category": "UI",
+      "traceability": [
+        "ENV-4",
+        "LNG-2"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-092": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-4",
+        "ENV-1"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-093": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-4",
+        "ENV-3"
+      ]
+    },
+    "ABOUT-CHAIRMANMESSAGE-TC-094": {
+      "category": "Edge",
+      "traceability": [
+        "ST-10"
+      ]
+    }
+  }
+}

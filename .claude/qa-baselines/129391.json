@@ -1,0 +1,560 @@
+{
+  "analysed": "2026-08-13",
+  "mode": "Normal",
+  "budget": 72,
+  "delivered": 72,
+  "categories": {
+    "UI": 11,
+    "Compatibility": 5,
+    "Auth": 1,
+    "Functional-High": 4,
+    "Functional-Low": 42,
+    "Edge": 9
+  },
+  "inventory": {
+    "OBJ": 2,
+    "FLD": 10,
+    "CTL": 5,
+    "ST": 6,
+    "ROL": 2,
+    "MSG": 5,
+    "SUR": 2,
+    "LNG": 3,
+    "ENV": 5,
+    "CMS-AX": 2
+  },
+  "case_ids": [
+    "GLOBAL-STRATEGICPARTNERS-TC-001",
+    "GLOBAL-STRATEGICPARTNERS-TC-002",
+    "GLOBAL-STRATEGICPARTNERS-TC-003",
+    "GLOBAL-STRATEGICPARTNERS-TC-004",
+    "GLOBAL-STRATEGICPARTNERS-TC-005",
+    "GLOBAL-STRATEGICPARTNERS-TC-006",
+    "GLOBAL-STRATEGICPARTNERS-TC-007",
+    "GLOBAL-STRATEGICPARTNERS-TC-008",
+    "GLOBAL-STRATEGICPARTNERS-TC-009",
+    "GLOBAL-STRATEGICPARTNERS-TC-010",
+    "GLOBAL-STRATEGICPARTNERS-TC-011",
+    "GLOBAL-STRATEGICPARTNERS-TC-012",
+    "GLOBAL-STRATEGICPARTNERS-TC-013",
+    "GLOBAL-STRATEGICPARTNERS-TC-014",
+    "GLOBAL-STRATEGICPARTNERS-TC-015",
+    "GLOBAL-STRATEGICPARTNERS-TC-016",
+    "GLOBAL-STRATEGICPARTNERS-TC-017",
+    "GLOBAL-STRATEGICPARTNERS-TC-018",
+    "GLOBAL-STRATEGICPARTNERS-TC-019",
+    "GLOBAL-STRATEGICPARTNERS-TC-020",
+    "GLOBAL-STRATEGICPARTNERS-TC-021",
+    "GLOBAL-STRATEGICPARTNERS-TC-022",
+    "GLOBAL-STRATEGICPARTNERS-TC-023",
+    "GLOBAL-STRATEGICPARTNERS-TC-024",
+    "GLOBAL-STRATEGICPARTNERS-TC-025",
+    "GLOBAL-STRATEGICPARTNERS-TC-026",
+    "GLOBAL-STRATEGICPARTNERS-TC-027",
+    "GLOBAL-STRATEGICPARTNERS-TC-028",
+    "GLOBAL-STRATEGICPARTNERS-TC-029",
+    "GLOBAL-STRATEGICPARTNERS-TC-030",
+    "GLOBAL-STRATEGICPARTNERS-TC-031",
+    "GLOBAL-STRATEGICPARTNERS-TC-032",
+    "GLOBAL-STRATEGICPARTNERS-TC-033",
+    "GLOBAL-STRATEGICPARTNERS-TC-034",
+    "GLOBAL-STRATEGICPARTNERS-TC-035",
+    "GLOBAL-STRATEGICPARTNERS-TC-036",
+    "GLOBAL-STRATEGICPARTNERS-TC-037",
+    "GLOBAL-STRATEGICPARTNERS-TC-038",
+    "GLOBAL-STRATEGICPARTNERS-TC-039",
+    "GLOBAL-STRATEGICPARTNERS-TC-040",
+    "GLOBAL-STRATEGICPARTNERS-TC-041",
+    "GLOBAL-STRATEGICPARTNERS-TC-042",
+    "GLOBAL-STRATEGICPARTNERS-TC-043",
+    "GLOBAL-STRATEGICPARTNERS-TC-044",
+    "GLOBAL-STRATEGICPARTNERS-TC-045",
+    "GLOBAL-STRATEGICPARTNERS-TC-046",
+    "GLOBAL-STRATEGICPARTNERS-TC-047",
+    "GLOBAL-STRATEGICPARTNERS-TC-048",
+    "GLOBAL-STRATEGICPARTNERS-TC-049",
+    "GLOBAL-STRATEGICPARTNERS-TC-050",
+    "GLOBAL-STRATEGICPARTNERS-TC-051",
+    "GLOBAL-STRATEGICPARTNERS-TC-052",
+    "GLOBAL-STRATEGICPARTNERS-TC-053",
+    "GLOBAL-STRATEGICPARTNERS-TC-054",
+    "GLOBAL-STRATEGICPARTNERS-TC-055",
+    "GLOBAL-STRATEGICPARTNERS-TC-056",
+    "GLOBAL-STRATEGICPARTNERS-TC-057",
+    "GLOBAL-STRATEGICPARTNERS-TC-058",
+    "GLOBAL-STRATEGICPARTNERS-TC-059",
+    "GLOBAL-STRATEGICPARTNERS-TC-060",
+    "GLOBAL-STRATEGICPARTNERS-TC-061",
+    "GLOBAL-STRATEGICPARTNERS-TC-062",
+    "GLOBAL-STRATEGICPARTNERS-TC-063",
+    "GLOBAL-STRATEGICPARTNERS-TC-064",
+    "GLOBAL-STRATEGICPARTNERS-TC-065",
+    "GLOBAL-STRATEGICPARTNERS-TC-066",
+    "GLOBAL-STRATEGICPARTNERS-TC-067",
+    "GLOBAL-STRATEGICPARTNERS-TC-068",
+    "GLOBAL-STRATEGICPARTNERS-TC-069",
+    "GLOBAL-STRATEGICPARTNERS-TC-070",
+    "GLOBAL-STRATEGICPARTNERS-TC-071",
+    "GLOBAL-STRATEGICPARTNERS-TC-072"
+  ],
+  "cases": {
+    "GLOBAL-STRATEGICPARTNERS-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-002": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-004": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-006": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "ST-5"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-007": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "LNG-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-008": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-009": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-010": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-011": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-012": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-013": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-014": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-4"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-015": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-5"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-016": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-017": {
+      "category": "Functional-High",
+      "traceability": [
+        "SUR-1",
+        "ROL-1",
+        "ST-4"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-018": {
+      "category": "Functional-High",
+      "traceability": [
+        "SUR-1",
+        "SUR-2",
+        "CTL-1",
+        "CTL-2",
+        "CTL-3",
+        "ROL-2",
+        "MSG-5"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-019": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-4"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-020": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-021": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-022": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-023": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-024": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-025": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-026": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-027": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-028": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-029": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-030": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "MSG-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-031": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-032": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-033": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-034": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "MSG-4"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-035": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-036": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-037": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-038": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-039": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-040": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-041": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-042": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-043": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-044": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-045": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-046": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-047": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-048": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8",
+        "CTL-5",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-049": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8",
+        "CTL-5",
+        "ST-2",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-050": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9",
+        "ST-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-051": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-052": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-053": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10",
+        "ST-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-054": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-055": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-056": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-057": {
+      "category": "Functional-Low",
+      "traceability": [
+        "MSG-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-058": {
+      "category": "Functional-Low",
+      "traceability": [
+        "MSG-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-059": {
+      "category": "Functional-Low",
+      "traceability": [
+        "MSG-5",
+        "CTL-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-060": {
+      "category": "Functional-Low",
+      "traceability": [
+        "MSG-5",
+        "CTL-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-061": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-062": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-4",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-063": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2b"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-064": {
+      "category": "Edge",
+      "traceability": [
+        "ST-4"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-065": {
+      "category": "Edge",
+      "traceability": [
+        "ST-5b"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-066": {
+      "category": "Edge",
+      "traceability": [
+        "ST-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-067": {
+      "category": "Edge",
+      "traceability": [
+        "ST-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-068": {
+      "category": "Edge",
+      "traceability": [
+        "ST-3"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-069": {
+      "category": "Edge",
+      "traceability": [
+        "ST-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-070": {
+      "category": "Edge",
+      "traceability": [
+        "CMS-AX-1"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-071": {
+      "category": "Edge",
+      "traceability": [
+        "CMS-AX-2"
+      ]
+    },
+    "GLOBAL-STRATEGICPARTNERS-TC-072": {
+      "category": "Edge",
+      "traceability": [
+        "ROL-2"
+      ]
+    }
+  },
+  "basis": "Derived from description only - no AC. Figma-verified design tokens for EN-light, AR-light, and EN-dark frames (nodes 849:15904, 1188:10142, 1861:52843). No cms-profile.md exists for this project - architecture inferred as coupled/Liferay-rendered, single consumer (rendered web); publish-latency budget not declared."
+}

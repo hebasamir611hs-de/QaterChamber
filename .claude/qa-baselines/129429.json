@@ -1,0 +1,624 @@
+{
+  "pbi": "129429",
+  "analysed": "2026-08-11",
+  "mode": "Normal",
+  "budget": 79,
+  "delivered": 79,
+  "categories": {
+    "UI": 17,
+    "Functional-Low": 47,
+    "Functional-High": 10,
+    "Auth": 2,
+    "Compatibility": 3
+  },
+  "inventory": {
+    "OBJ": 11,
+    "FLD": 22,
+    "CTL": 11,
+    "ST": 5,
+    "ROL": 1,
+    "MSG": 1,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 3,
+    "AC": 0
+  },
+  "case_ids": [
+    "GLOBAL-THEMESHELL-TC-001",
+    "GLOBAL-THEMESHELL-TC-002",
+    "GLOBAL-THEMESHELL-TC-003",
+    "GLOBAL-THEMESHELL-TC-004",
+    "GLOBAL-THEMESHELL-TC-005",
+    "GLOBAL-THEMESHELL-TC-006",
+    "GLOBAL-THEMESHELL-TC-007",
+    "GLOBAL-THEMESHELL-TC-008",
+    "GLOBAL-THEMESHELL-TC-009",
+    "GLOBAL-STYLEBOOK-TC-001",
+    "GLOBAL-STYLEBOOK-TC-002",
+    "GLOBAL-STYLEBOOK-TC-003",
+    "GLOBAL-STYLEBOOK-TC-004",
+    "GLOBAL-STYLEBOOK-TC-005",
+    "GLOBAL-STYLEBOOK-TC-006",
+    "GLOBAL-STYLEBOOK-TC-007",
+    "GLOBAL-STYLEBOOK-TC-008",
+    "GLOBAL-STYLEBOOK-TC-009",
+    "GLOBAL-STYLEBOOK-TC-010",
+    "GLOBAL-STYLEBOOK-TC-011",
+    "GLOBAL-FRAGMENTS-TC-001",
+    "GLOBAL-FRAGMENTS-TC-002",
+    "GLOBAL-FRAGMENTS-TC-003",
+    "GLOBAL-FRAGMENTS-TC-004",
+    "GLOBAL-FRAGMENTS-TC-005",
+    "GLOBAL-CARDOBJECT-TC-001",
+    "GLOBAL-CARDOBJECT-TC-002",
+    "GLOBAL-CARDOBJECT-TC-003",
+    "GLOBAL-CARDOBJECT-TC-004",
+    "GLOBAL-CARDOBJECT-TC-005",
+    "GLOBAL-CARDOBJECT-TC-006",
+    "GLOBAL-CARDOBJECT-TC-007",
+    "GLOBAL-CARDOBJECT-TC-008",
+    "GLOBAL-CARDOBJECT-TC-009",
+    "GLOBAL-CARDOBJECT-TC-010",
+    "GLOBAL-CARDOBJECT-TC-011",
+    "GLOBAL-CARDOBJECT-TC-012",
+    "GLOBAL-CARDOBJECT-TC-013",
+    "GLOBAL-CARDOBJECT-TC-014",
+    "GLOBAL-CARDOBJECT-TC-015",
+    "GLOBAL-CARDOBJECT-TC-016",
+    "GLOBAL-CARDOBJECT-TC-017",
+    "GLOBAL-CARDOBJECT-TC-018",
+    "GLOBAL-CARDOBJECT-TC-019",
+    "GLOBAL-CARDOBJECT-TC-020",
+    "GLOBAL-CARDOBJECT-TC-021",
+    "GLOBAL-CARDOBJECT-TC-022",
+    "GLOBAL-ALTTEXT-TC-001",
+    "GLOBAL-ALTTEXT-TC-002",
+    "GLOBAL-ALTTEXT-TC-003",
+    "GLOBAL-ALTTEXT-TC-004",
+    "GLOBAL-ALTTEXT-TC-005",
+    "GLOBAL-ALTTEXT-TC-006",
+    "GLOBAL-ASSETVOCAB-TC-001",
+    "GLOBAL-ASSETVOCAB-TC-002",
+    "GLOBAL-ASSETVOCAB-TC-003",
+    "GLOBAL-ASSETVOCAB-TC-004",
+    "GLOBAL-ASSETVOCAB-TC-005",
+    "GLOBAL-ASSETVOCAB-TC-006",
+    "GLOBAL-CAROUSEL-TC-001",
+    "GLOBAL-CAROUSEL-TC-002",
+    "GLOBAL-CAROUSEL-TC-003",
+    "GLOBAL-CAROUSEL-TC-004",
+    "GLOBAL-CAROUSEL-TC-005",
+    "GLOBAL-CAROUSEL-TC-006",
+    "GLOBAL-CAROUSEL-TC-007",
+    "GLOBAL-RTLI18N-TC-001",
+    "GLOBAL-RTLI18N-TC-002",
+    "GLOBAL-RTLI18N-TC-003",
+    "GLOBAL-RTLI18N-TC-004",
+    "GLOBAL-RTLI18N-TC-005",
+    "GLOBAL-RTLI18N-TC-006",
+    "GLOBAL-RTLI18N-TC-007",
+    "GLOBAL-RTLI18N-TC-008",
+    "GLOBAL-RTLI18N-TC-009",
+    "GLOBAL-RTLI18N-TC-010",
+    "GLOBAL-RTLI18N-TC-011",
+    "GLOBAL-RTLI18N-TC-012",
+    "GLOBAL-RTLI18N-TC-013"
+  ],
+  "cases": {
+    "GLOBAL-THEMESHELL-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "FLD-1",
+        "OBJ-1",
+        "SUR-1"
+      ]
+    },
+    "GLOBAL-THEMESHELL-TC-002": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "GLOBAL-THEMESHELL-TC-003": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2",
+        "SUR-1"
+      ]
+    },
+    "GLOBAL-THEMESHELL-TC-004": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "GLOBAL-THEMESHELL-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "FLD-3",
+        "LNG-1",
+        "LNG-2",
+        "SUR-1"
+      ]
+    },
+    "GLOBAL-THEMESHELL-TC-006": {
+      "category": "UI",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "GLOBAL-THEMESHELL-TC-007": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "SUR-1"
+      ]
+    },
+    "GLOBAL-THEMESHELL-TC-008": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "GLOBAL-THEMESHELL-TC-009": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "FLD-5",
+        "OBJ-2",
+        "SUR-1"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-002": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "FLD-6",
+        "LNG-2"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-004": {
+      "category": "UI",
+      "traceability": [
+        "FLD-6",
+        "LNG-1"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-006": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-007": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-1",
+        "ROL-1"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-008": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-009": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-010": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1"
+      ]
+    },
+    "GLOBAL-STYLEBOOK-TC-011": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "GLOBAL-FRAGMENTS-TC-001": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8",
+        "OBJ-3"
+      ]
+    },
+    "GLOBAL-FRAGMENTS-TC-002": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "GLOBAL-FRAGMENTS-TC-003": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "GLOBAL-FRAGMENTS-TC-004": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "GLOBAL-FRAGMENTS-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "CTL-2"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "FLD-10",
+        "OBJ-4",
+        "LNG-1",
+        "LNG-2"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-002": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "FLD-11",
+        "OBJ-5"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-004": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-005": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-006": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-007": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-008": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-009": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-010": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-011": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-15",
+        "ST-3"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-012": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-15",
+        "ST-3"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-013": {
+      "category": "UI",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-014": {
+      "category": "UI",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-015": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-3",
+        "ST-1",
+        "ST-2"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-016": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-3",
+        "ST-1",
+        "ST-2"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-017": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-4"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-018": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-4"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-019": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-1"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-020": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-2"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-021": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-3",
+        "FLD-15"
+      ]
+    },
+    "GLOBAL-CARDOBJECT-TC-022": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    "GLOBAL-ALTTEXT-TC-001": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    "GLOBAL-ALTTEXT-TC-002": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17",
+        "CTL-5",
+        "ST-4",
+        "MSG-1"
+      ]
+    },
+    "GLOBAL-ALTTEXT-TC-003": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    "GLOBAL-ALTTEXT-TC-004": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18",
+        "OBJ-6"
+      ]
+    },
+    "GLOBAL-ALTTEXT-TC-005": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18",
+        "MSG-1"
+      ]
+    },
+    "GLOBAL-ALTTEXT-TC-006": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    "GLOBAL-ASSETVOCAB-TC-001": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19",
+        "OBJ-7"
+      ]
+    },
+    "GLOBAL-ASSETVOCAB-TC-002": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    "GLOBAL-ASSETVOCAB-TC-003": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20",
+        "CTL-6",
+        "OBJ-8"
+      ]
+    },
+    "GLOBAL-ASSETVOCAB-TC-004": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    "GLOBAL-ASSETVOCAB-TC-005": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-6"
+      ]
+    },
+    "GLOBAL-ASSETVOCAB-TC-006": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-6"
+      ]
+    },
+    "GLOBAL-CAROUSEL-TC-001": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-7",
+        "OBJ-9",
+        "OBJ-10"
+      ]
+    },
+    "GLOBAL-CAROUSEL-TC-002": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-7"
+      ]
+    },
+    "GLOBAL-CAROUSEL-TC-003": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-8"
+      ]
+    },
+    "GLOBAL-CAROUSEL-TC-004": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-8"
+      ]
+    },
+    "GLOBAL-CAROUSEL-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "CTL-9"
+      ]
+    },
+    "GLOBAL-CAROUSEL-TC-006": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-10"
+      ]
+    },
+    "GLOBAL-CAROUSEL-TC-007": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-10"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-001": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21",
+        "OBJ-11"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-002": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-003": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-004": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-005": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-11"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-006": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-11"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-007": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1",
+        "SUR-1"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-008": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1",
+        "SUR-2"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-009": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2",
+        "SUR-1",
+        "ST-5"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-010": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2",
+        "SUR-2"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-011": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-1"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-012": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-2"
+      ]
+    },
+    "GLOBAL-RTLI18N-TC-013": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-3"
+      ]
+    }
+  },
+  "basis": "Description-only, no formal AC. Figma link attached but verified NOT relevant (unrelated homepage mockup, not a Style Book/token source) — used only as loose visual-language reference (maroon #911731, Cairo font), never pixel-exact. T01 (env health check) and T10 (documentation) excluded as N/A (Dev-led, no externally verifiable surface)."
+}

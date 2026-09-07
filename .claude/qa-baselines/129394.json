@@ -1,0 +1,1096 @@
+{
+  "analysed": "2026-08-12",
+  "mode": "Normal",
+  "budget": 142,
+  "delivered": 142,
+  "categories": {
+    "UI": 15,
+    "Compatibility": 5,
+    "Auth": 5,
+    "Functional-High": 19,
+    "Functional-Low": 91,
+    "Edge": 7
+  },
+  "inventory": {
+    "OBJ": 11,
+    "FLD": 27,
+    "CTL": 15,
+    "ST": 15,
+    "ROL": 4,
+    "MSG": 7,
+    "AC": 22,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 4
+  },
+  "basis": "Description only - no AC; design supplied as 8 raster frame exports (Figma REST 429, seat-tier quota) so UI cases assert structure/copy/theme not px-hex tokens - CLOSED by QA Manager as the accepted substitute. Rev 2 2026-08-12: Law Entry Icon cap corrected 1MB->2MB (QA Manager: not deliberate, PBI table needs fixing), TC-097 rewritten; ST-15 added with TC-142 for Display Order collision (keep consistent). Law entry publish semantics confirmed as-per-backlog. Browser matrix, TTL, fallback language, default open behaviour CLOSED (forget it). Rev 3 2026-08-12: TC-142 recategorised Edge -> Functional-Low (it asserts a field validation rule, not an edge scenario); Edge 8->7, Functional-Low 90->91, total 142 unchanged. Phase 2 complete - all 142 cases injected to Azure DevOps as work items 134846-134987, errors_count 0.",
+  "case_ids": [
+    "ABOUT-CHAMBERLAWS-TC-001",
+    "ABOUT-CHAMBERLAWS-TC-002",
+    "ABOUT-CHAMBERLAWS-TC-003",
+    "ABOUT-CHAMBERLAWS-TC-004",
+    "ABOUT-CHAMBERLAWS-TC-005",
+    "ABOUT-CHAMBERLAWS-TC-006",
+    "ABOUT-CHAMBERLAWS-TC-007",
+    "ABOUT-CHAMBERLAWS-TC-008",
+    "ABOUT-CHAMBERLAWS-TC-009",
+    "ABOUT-CHAMBERLAWS-TC-010",
+    "ABOUT-CHAMBERLAWS-TC-011",
+    "ABOUT-CHAMBERLAWS-TC-012",
+    "ABOUT-CHAMBERLAWS-TC-013",
+    "ABOUT-CHAMBERLAWS-TC-014",
+    "ABOUT-CHAMBERLAWS-TC-015",
+    "ABOUT-CHAMBERLAWS-TC-016",
+    "ABOUT-CHAMBERLAWS-TC-017",
+    "ABOUT-CHAMBERLAWS-TC-018",
+    "ABOUT-CHAMBERLAWS-TC-019",
+    "ABOUT-CHAMBERLAWS-TC-020",
+    "ABOUT-CHAMBERLAWS-TC-021",
+    "ABOUT-CHAMBERLAWS-TC-022",
+    "ABOUT-CHAMBERLAWS-TC-023",
+    "ABOUT-CHAMBERLAWS-TC-024",
+    "ABOUT-CHAMBERLAWS-TC-025",
+    "ABOUT-CHAMBERLAWS-TC-026",
+    "ABOUT-CHAMBERLAWS-TC-027",
+    "ABOUT-CHAMBERLAWS-TC-028",
+    "ABOUT-CHAMBERLAWS-TC-029",
+    "ABOUT-CHAMBERLAWS-TC-030",
+    "ABOUT-CHAMBERLAWS-TC-031",
+    "ABOUT-CHAMBERLAWS-TC-032",
+    "ABOUT-CHAMBERLAWS-TC-033",
+    "ABOUT-CHAMBERLAWS-TC-034",
+    "ABOUT-CHAMBERLAWS-TC-035",
+    "ABOUT-CHAMBERLAWS-TC-036",
+    "ABOUT-CHAMBERLAWS-TC-037",
+    "ABOUT-CHAMBERLAWS-TC-038",
+    "ABOUT-CHAMBERLAWS-TC-039",
+    "ABOUT-CHAMBERLAWS-TC-040",
+    "ABOUT-CHAMBERLAWS-TC-041",
+    "ABOUT-CHAMBERLAWS-TC-042",
+    "ABOUT-CHAMBERLAWS-TC-043",
+    "ABOUT-CHAMBERLAWS-TC-044",
+    "ABOUT-CHAMBERLAWS-TC-045",
+    "ABOUT-CHAMBERLAWS-TC-046",
+    "ABOUT-CHAMBERLAWS-TC-047",
+    "ABOUT-CHAMBERLAWS-TC-048",
+    "ABOUT-CHAMBERLAWS-TC-049",
+    "ABOUT-CHAMBERLAWS-TC-050",
+    "ABOUT-CHAMBERLAWS-TC-051",
+    "ABOUT-CHAMBERLAWS-TC-052",
+    "ABOUT-CHAMBERLAWS-TC-053",
+    "ABOUT-CHAMBERLAWS-TC-054",
+    "ABOUT-CHAMBERLAWS-TC-055",
+    "ABOUT-CHAMBERLAWS-TC-056",
+    "ABOUT-CHAMBERLAWS-TC-057",
+    "ABOUT-CHAMBERLAWS-TC-058",
+    "ABOUT-CHAMBERLAWS-TC-059",
+    "ABOUT-CHAMBERLAWS-TC-060",
+    "ABOUT-CHAMBERLAWS-TC-061",
+    "ABOUT-CHAMBERLAWS-TC-062",
+    "ABOUT-CHAMBERLAWS-TC-063",
+    "ABOUT-CHAMBERLAWS-TC-064",
+    "ABOUT-CHAMBERLAWS-TC-065",
+    "ABOUT-CHAMBERLAWS-TC-066",
+    "ABOUT-CHAMBERLAWS-TC-067",
+    "ABOUT-CHAMBERLAWS-TC-068",
+    "ABOUT-CHAMBERLAWS-TC-069",
+    "ABOUT-CHAMBERLAWS-TC-070",
+    "ABOUT-CHAMBERLAWS-TC-071",
+    "ABOUT-CHAMBERLAWS-TC-072",
+    "ABOUT-CHAMBERLAWS-TC-073",
+    "ABOUT-CHAMBERLAWS-TC-074",
+    "ABOUT-CHAMBERLAWS-TC-075",
+    "ABOUT-CHAMBERLAWS-TC-076",
+    "ABOUT-CHAMBERLAWS-TC-077",
+    "ABOUT-CHAMBERLAWS-TC-078",
+    "ABOUT-CHAMBERLAWS-TC-079",
+    "ABOUT-CHAMBERLAWS-TC-080",
+    "ABOUT-CHAMBERLAWS-TC-081",
+    "ABOUT-CHAMBERLAWS-TC-082",
+    "ABOUT-CHAMBERLAWS-TC-083",
+    "ABOUT-CHAMBERLAWS-TC-084",
+    "ABOUT-CHAMBERLAWS-TC-085",
+    "ABOUT-CHAMBERLAWS-TC-086",
+    "ABOUT-CHAMBERLAWS-TC-087",
+    "ABOUT-CHAMBERLAWS-TC-088",
+    "ABOUT-CHAMBERLAWS-TC-089",
+    "ABOUT-CHAMBERLAWS-TC-090",
+    "ABOUT-CHAMBERLAWS-TC-091",
+    "ABOUT-CHAMBERLAWS-TC-092",
+    "ABOUT-CHAMBERLAWS-TC-093",
+    "ABOUT-CHAMBERLAWS-TC-094",
+    "ABOUT-CHAMBERLAWS-TC-095",
+    "ABOUT-CHAMBERLAWS-TC-096",
+    "ABOUT-CHAMBERLAWS-TC-097",
+    "ABOUT-CHAMBERLAWS-TC-098",
+    "ABOUT-CHAMBERLAWS-TC-099",
+    "ABOUT-CHAMBERLAWS-TC-100",
+    "ABOUT-CHAMBERLAWS-TC-101",
+    "ABOUT-CHAMBERLAWS-TC-102",
+    "ABOUT-CHAMBERLAWS-TC-103",
+    "ABOUT-CHAMBERLAWS-TC-104",
+    "ABOUT-CHAMBERLAWS-TC-105",
+    "ABOUT-CHAMBERLAWS-TC-106",
+    "ABOUT-CHAMBERLAWS-TC-107",
+    "ABOUT-CHAMBERLAWS-TC-108",
+    "ABOUT-CHAMBERLAWS-TC-109",
+    "ABOUT-CHAMBERLAWS-TC-110",
+    "ABOUT-CHAMBERLAWS-TC-111",
+    "ABOUT-CHAMBERLAWS-TC-112",
+    "ABOUT-CHAMBERLAWS-TC-113",
+    "ABOUT-CHAMBERLAWS-TC-114",
+    "ABOUT-CHAMBERLAWS-TC-115",
+    "ABOUT-CHAMBERLAWS-TC-116",
+    "ABOUT-CHAMBERLAWS-TC-117",
+    "ABOUT-CHAMBERLAWS-TC-118",
+    "ABOUT-CHAMBERLAWS-TC-119",
+    "ABOUT-CHAMBERLAWS-TC-120",
+    "ABOUT-CHAMBERLAWS-TC-121",
+    "ABOUT-CHAMBERLAWS-TC-122",
+    "ABOUT-CHAMBERLAWS-TC-123",
+    "ABOUT-CHAMBERLAWS-TC-124",
+    "ABOUT-CHAMBERLAWS-TC-125",
+    "ABOUT-CHAMBERLAWS-TC-126",
+    "ABOUT-CHAMBERLAWS-TC-127",
+    "ABOUT-CHAMBERLAWS-TC-128",
+    "ABOUT-CHAMBERLAWS-TC-129",
+    "ABOUT-CHAMBERLAWS-TC-130",
+    "ABOUT-CHAMBERLAWS-TC-131",
+    "ABOUT-CHAMBERLAWS-TC-132",
+    "ABOUT-CHAMBERLAWS-TC-133",
+    "ABOUT-CHAMBERLAWS-TC-134",
+    "ABOUT-CHAMBERLAWS-TC-135",
+    "ABOUT-CHAMBERLAWS-TC-136",
+    "ABOUT-CHAMBERLAWS-TC-137",
+    "ABOUT-CHAMBERLAWS-TC-138",
+    "ABOUT-CHAMBERLAWS-TC-139",
+    "ABOUT-CHAMBERLAWS-TC-140",
+    "ABOUT-CHAMBERLAWS-TC-141",
+    "ABOUT-CHAMBERLAWS-TC-142"
+  ],
+  "cases": {
+    "ABOUT-CHAMBERLAWS-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "AC-1",
+        "ENV-1",
+        "LNG-1",
+        "SUR-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-002": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-3",
+        "AC-1",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "AC-2",
+        "ENV-1",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-004": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-7",
+        "ENV-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-4",
+        "AC-3",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-006": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-5",
+        "AC-4",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-007": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-6",
+        "AC-5",
+        "ENV-1",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-008": {
+      "category": "UI",
+      "traceability": [
+        "AC-8"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-009": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-010": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2",
+        "AC-9"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-011": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-6",
+        "LNG-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-012": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2",
+        "ENV-3",
+        "OBJ-5"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-013": {
+      "category": "UI",
+      "traceability": [
+        "ENV-3",
+        "OBJ-5",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-014": {
+      "category": "UI",
+      "traceability": [
+        "ENV-4",
+        "LNG-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-015": {
+      "category": "UI",
+      "traceability": [
+        "ENV-4",
+        "LNG-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-016": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-017": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-018": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-3"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-019": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-4",
+        "ENV-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-020": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-4",
+        "ENV-3"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-021": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-022": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-023": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3",
+        "AC-13"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-024": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-025": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-4",
+        "MSG-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-026": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-9",
+        "ST-2",
+        "OBJ-1",
+        "AC-11",
+        "AC-16",
+        "MSG-7",
+        "SUR-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-027": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-028": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-10",
+        "ST-3"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-029": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-7",
+        "ST-1",
+        "AC-10",
+        "AC-17"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-030": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-8",
+        "ST-4",
+        "AC-15"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-031": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-9",
+        "OBJ-9",
+        "OBJ-10",
+        "AC-18"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-032": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-3",
+        "OBJ-8",
+        "AC-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-033": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-4",
+        "OBJ-8",
+        "AC-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-034": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-5"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-035": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-036": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-037": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-11"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-038": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-11"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-039": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-12",
+        "OBJ-11",
+        "AC-12"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-040": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-13",
+        "AC-12"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-041": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-14",
+        "AC-12"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-042": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-15",
+        "ST-11",
+        "AC-7"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-043": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-15",
+        "ST-10"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-141": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-044": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-045": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2",
+        "MSG-4"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-046": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-047": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-048": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-049": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "MSG-1"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-050": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-051": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-052": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-053": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "MSG-3",
+        "AC-14"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-054": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "MSG-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-055": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-056": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-057": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-058": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-059": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-060": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-061": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-062": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-063": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-064": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-065": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-066": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-067": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-068": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-069": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-070": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-071": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-072": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-073": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-074": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-075": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-076": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-077": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-078": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-079": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-080": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-081": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-082": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-083": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-084": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-085": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-086": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12",
+        "MSG-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-087": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-088": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-089": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-090": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-091": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-092": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-093": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-094": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1",
+        "FLD-15",
+        "FLD-16"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-095": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-096": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-097": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18",
+        "MSG-2"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-098": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-099": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-100": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-101": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-102": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-103": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-104": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-105": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-106": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-107": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-108": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-109": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-110": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-111": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-112": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-113": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-114": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-115": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-23"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-116": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-23"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-117": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-23"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-118": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-23"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-119": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-24"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-120": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-24"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-121": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-24"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-122": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-24"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-123": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-25"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-124": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-25",
+        "MSG-5"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-125": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-25"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-126": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-25"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-127": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-26"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-128": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-26"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-129": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-26"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-130": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-26"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-131": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-27"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-132": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-27"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-133": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-134": {
+      "category": "Edge",
+      "traceability": [
+        "ST-5",
+        "AC-19"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-135": {
+      "category": "Edge",
+      "traceability": [
+        "ST-6",
+        "AC-20"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-136": {
+      "category": "Edge",
+      "traceability": [
+        "ST-7",
+        "AC-21"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-137": {
+      "category": "Edge",
+      "traceability": [
+        "ST-8",
+        "AC-22"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-138": {
+      "category": "Edge",
+      "traceability": [
+        "ST-12",
+        "AC-4"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-139": {
+      "category": "Edge",
+      "traceability": [
+        "ST-13",
+        "AC-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-140": {
+      "category": "Edge",
+      "traceability": [
+        "ST-14",
+        "AC-6"
+      ]
+    },
+    "ABOUT-CHAMBERLAWS-TC-142": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-15"
+      ]
+    }
+  }
+}
