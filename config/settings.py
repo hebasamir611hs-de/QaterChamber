@@ -48,6 +48,17 @@ class Settings:
     test_user: str = os.getenv("TEST_USER", "")
     test_password: str = os.getenv("TEST_PASSWORD", "")
 
+    # Named CMS user roles — restricted-role Control_Panel tests must log in
+    # as the specific role a test case calls for, not the default TEST_USER
+    # (which is a super-admin-equivalent account). See CMS_ROLE_CREDENTIALS
+    # below and standards.md's "Named CMS User Roles" section for usage.
+    cms_site_content_editor_email: str = os.getenv("CMS_SITE_CONTENT_EDITOR_EMAIL", "")
+    cms_site_content_editor_password: str = os.getenv("CMS_SITE_CONTENT_EDITOR_PASSWORD", "")
+    cms_site_content_author_email: str = os.getenv("CMS_SITE_CONTENT_AUTHOR_EMAIL", "")
+    cms_site_content_author_password: str = os.getenv("CMS_SITE_CONTENT_AUTHOR_PASSWORD", "")
+    cms_content_contributor_email: str = os.getenv("CMS_CONTENT_CONTRIBUTOR_EMAIL", "")
+    cms_content_contributor_password: str = os.getenv("CMS_CONTENT_CONTRIBUTOR_PASSWORD", "")
+
     # Reports root — holds allure-results/ and allure-report/ (Allure's own,
     # GUID/hash filenames) alongside screenshots/, videos/, traces/ (the
     # readable-named archive of every evidence file — see
@@ -73,6 +84,47 @@ class Settings:
 
 
 settings = Settings()
+
+# Role name (matches standards.md's Named CMS User Roles table, and the
+# Azure test case's "Login as <role>" step wording) -> (email, password).
+# Use this instead of hard-coding a role's credentials at a call site, so a
+# credential rotation only needs to change .env.
+CMS_ROLE_CREDENTIALS: dict[str, tuple[str, str]] = {
+    "Site Content Editor": (
+        settings.cms_site_content_editor_email,
+        settings.cms_site_content_editor_password,
+    ),
+    "Site Content Author": (
+        settings.cms_site_content_author_email,
+        settings.cms_site_content_author_password,
+    ),
+    "Content Contributor": (
+        settings.cms_content_contributor_email,
+        settings.cms_content_contributor_password,
+    ),
+}
+
+
+def cms_role_credentials(role: str) -> tuple[str, str]:
+    """(email, password) for a named CMS role — see CMS_ROLE_CREDENTIALS.
+
+    Raises rather than returning empty strings when the role is unknown or
+    its .env values are unset: a restricted-role test silently logging in
+    with blank credentials would fail confusingly deep inside the login
+    form instead of at setup, same rationale as web_url()/control_panel_url()
+    above.
+    """
+    if role not in CMS_ROLE_CREDENTIALS:
+        raise RuntimeError(
+            f"Unknown CMS role {role!r}. Known roles: {sorted(CMS_ROLE_CREDENTIALS)} "
+            "(see standards.md's Named CMS User Roles section)."
+        )
+    email, password = CMS_ROLE_CREDENTIALS[role]
+    if not email or not password:
+        raise RuntimeError(
+            f"Credentials for CMS role {role!r} are not set in {ENV_FILE}."
+        )
+    return email, password
 
 
 def auth_state_path() -> Path:

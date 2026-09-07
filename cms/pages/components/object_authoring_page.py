@@ -130,7 +130,19 @@ class ObjectAuthoringPage(BasePage):
     # and directly fillable via BasePage.fill_iframe_editor() with no prior
     # click — verified by a live write + read-back round trip. Generic across
     # every object that has a single rich-text field on this surface.
-    DESCRIPTION_EDITOR_IFRAME = 'iframe[title="editor"]'
+    # HEALED 2026-09-07 (live re-investigation, manage-strategic-pillar-
+    # card): a bilingual rich-text field (e.g. Pillar Description) mounts
+    # TWO CKEditor iframes matching a bare `iframe[title="editor"]` — one
+    # per locale (EN/AR). `:visible` alone did NOT disambiguate them
+    # (confirmed live: BOTH report visible per Playwright's own visibility
+    # check — unlike the detached-menu-node pattern documented elsewhere in
+    # this project, these are two live-rendered CKEditor instances, not one
+    # real + hidden leftovers). `>> nth=0` deterministically selects the
+    # FIRST-mounted instance, confirmed live to be the default-locale (EN)
+    # editor on a freshly opened create/edit form, before any locale toggle
+    # is touched — the only state this class's fill_rich_text()/
+    # rich_text_value() are used in.
+    DESCRIPTION_EDITOR_IFRAME = 'iframe[title="editor"] >> nth=0'
 
     def fill_rich_text(self, text: str) -> "ObjectAuthoringPage":
         self.fill_iframe_editor(self.DESCRIPTION_EDITOR_IFRAME, text)
@@ -205,9 +217,28 @@ class ObjectAuthoringPage(BasePage):
 
             dismiss_overlays(self.page)
             edit_link.click(force=True)
-        self.page.wait_for_load_state("networkidle")
+        self._wait_for_network_settle()
         self.wait_for(self.CANCEL_AND_ADD_NEW_LINK, timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS)
         return self
+
+    def _wait_for_network_settle(self) -> None:
+        """Bounded `networkidle` wait with a `load`-state fallback — HEALED
+        2026-09-07 (live incident, tc_135966, manage-dynamic-widget): a bare
+        `self.page.wait_for_load_state("networkidle")` here previously used
+        Playwright's own 30000ms default and hung for the FULL 30s on this
+        page, because navigating straight into `?editEntry=<code>` lands
+        on a page whose network never technically idles (the same site-wide
+        chatbot-widget polling `_wait_for_settle()` already documents for
+        the Save/Submit path) — confirmed cross-surface, not idiosyncratic
+        to one object, since `_wait_for_settle()` already carried this
+        exact finding for a different call site on this same class. Shared
+        here so BOTH open_entry_by_edit_link() and open_entry_by_code()
+        get the same bounded wait instead of each risking its own 30s
+        stall."""
+        try:
+            self.page.wait_for_load_state("networkidle", timeout=8000)
+        except Exception:
+            self.page.wait_for_load_state("load", timeout=8000)
 
     # ---- List state queries ----------------------------------------------
     def row_status_text(self, title: str) -> str:
@@ -238,6 +269,16 @@ class ObjectAuthoringPage(BasePage):
 
     def row_preview_url(self, title: str) -> str:
         row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{title}")')
+        href = row.get_by_role("link", name="Preview").get_attribute("href")
+        return control_panel_url(href) if href else ""
+
+    def row_preview_url_by_code(self, entry_code: str) -> str:
+        """Same as row_preview_url(), scoped by the row's own Entry-column
+        code instead of a title that may not be rendered there (see
+        row_status_text_by_code()'s own docstring for why — e.g.
+        manage-strategic-pillar-card, whose Entry column shows an
+        externalReferenceCode/UUID, never the object's own title field)."""
+        row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{entry_code}")')
         href = row.get_by_role("link", name="Preview").get_attribute("href")
         return control_panel_url(href) if href else ""
 
@@ -357,7 +398,7 @@ class ObjectAuthoringPage(BasePage):
         purpose) — never with newest_entry_code()'s positional guess when
         the result will be acted on."""
         self.open(self._manage_url(edit_entry=entry_code))
-        self.page.wait_for_load_state("networkidle")
+        self._wait_for_network_settle()
         self.wait_for(self.CANCEL_AND_ADD_NEW_LINK, timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS)
         return self
 
@@ -391,6 +432,32 @@ class ObjectAuthoringPage(BasePage):
     def fill_text(self, field_label: str, value: str) -> "ObjectAuthoringPage":
         self.page.get_by_role("textbox", name=field_label, exact=True).fill(value)
         return self
+
+    def field_value(self, field_label: str) -> str:
+        """Read-back counterpart to fill_text() — CONFIRMED LIVE 2026-09-07
+        against manage-general-manager-message: unlike the raw Object
+        Definitions editor (Content & Data), THIS surface renders each
+        bilingual field as TWO separate, independently-named textboxes
+        (e.g. "GM Name" and "GM Name — العربية"), each individually
+        addressable via `get_by_role("textbox", name=..., exact=True)` with
+        no locale-toggle click needed — pass the AR-suffixed label
+        (`"<Field Label> — العربية"`) directly to read/fill the Arabic
+        value."""
+        return self.page.get_by_role("textbox", name=field_label, exact=True).input_value()
+
+    def current_status(self) -> str:
+        """"Approved"/"Draft"/"Unknown" parsed out of editing_banner_text()'s
+        confirmed-live wording ("...(approved)...")/"...(draft)...") — the
+        same normalized vocabulary row_status_text()/row_status_text_by_code()
+        already return, so callers can compare against either interchangeably.
+        Only valid when called on an entry opened via open_entry_by_code()/
+        open_entry_by_edit_link() (i.e. the editing banner is present)."""
+        text = self.editing_banner_text()
+        if "(approved)" in text:
+            return "Approved"
+        if "(draft)" in text:
+            return "Draft"
+        return "Unknown"
 
     def fill_number(self, field_label: str, value: str) -> "ObjectAuthoringPage":
         self.page.get_by_role("spinbutton", name=field_label, exact=True).fill(value)
