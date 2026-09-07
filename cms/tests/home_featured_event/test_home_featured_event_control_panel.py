@@ -50,6 +50,15 @@ session's two independent repro values before any future attempt to
 automate TC 135669 — do not re-guess a third value format without a
 product-side fix or clarification first.
 
+**TC 135671 ("pinning a different event replaces the previously featured
+event without a duplicate section appearing") is PARTIALLY automated**: the
+propagation half (re-verified live 2026-09-06, still reproduces) is
+disclosed/blocked like TC 135669, but the case's separate "no duplicate
+section appearing" DOM-structural expectation does not depend on which
+event resolves and IS scripted and asserted (section count stays exactly 1
+before and after re-pinning) — same partial-script-plus-disclosure shape
+already used for TC 135672's step-1/2-only scripting.
+
 **TC 135670 ("unpin ... Upcoming Events section disappears") IS automated
 below** — the Active Status toggle was independently confirmed live to be
 the real, working mechanism: setting `activeStatus=false` and Saving makes
@@ -135,7 +144,7 @@ def test_pinning_a_valid_event_updates_the_home_page_card():
 @pytest.mark.pbi_129382
 @pytest.mark.tc_135670
 @pytest.mark.xdist_group("pin_event_49205")
-def test_unpinning_the_featured_event_hides_the_home_page_section(page):
+def test_unpinning_the_featured_event_hides_the_home_page_section(page, browser):
     """ADO-135670.
 
     Steps (mapped onto the confirmed-live 2-field form and the confirmed-
@@ -148,9 +157,18 @@ def test_unpinning_the_featured_event_hides_the_home_page_section(page):
     `section.qc-home-upcoming-event` is no longer visible (rendered with
     `display:none`, per the confirmed-live mechanism — not a DOM-removal
     check).
+
+    PUBLIC-PAGE-ANONYMOUS-CONTEXT: the public Home Page check now runs in a
+    dedicated, fresh, logged-out browser context (never the CMS admin
+    `page`) so it reflects a real anonymous visitor rather than a still-
+    authenticated CMS session.
     """
+    from core.web.browser import new_context
+
     admin = HomeFeaturedEventAdminPage(page)
-    home = HomeFeaturedEventPage(page)
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+    home = HomeFeaturedEventPage(anon_page)
 
     try:
         with allure.step(
@@ -211,38 +229,138 @@ def test_unpinning_the_featured_event_hides_the_home_page_section(page):
                 f"{admin.is_active()!r}."
             )
 
+        # Anon-context cleanup runs LAST, after the baseline restore — never
+        # ahead of it. See conftest.py's `page` teardown for the same lesson:
+        # a raw context.close() thrown mid-teardown must never be able to
+        # abort the safety-critical restore of a shared TEST_OWNED singleton.
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
+
 
 @allure.epic("Home Page")
 @allure.feature("Upcoming Event Pins")
 @allure.story("Replace the featured event")
 @allure.severity(allure.severity_level.CRITICAL)
-@allure.title("SKIPPED — depends on the same confirmed pinnedEvent propagation defect as TC 135669")
+@allure.title("Pinning a different event never renders a duplicate Upcoming Event section")
 @pytest.mark.control_panel
 @pytest.mark.event
 @pytest.mark.regression
 @pytest.mark.functional_high
 @pytest.mark.pbi_129382
 @pytest.mark.tc_135671
-@pytest.mark.skip(
-    reason="CONFIRMED PRODUCT DEFECT, not an automation gap — same root "
-    "cause as TC 135669 (see module docstring): the Pinned Event field on "
-    "the Upcoming Event Pins singleton (record 49205) has already been "
-    "live-reproduced, twice, to not change the Home Page featured card "
-    "with two independent real, valid, in-format ('?id=<N>') candidate "
-    "values. TC 135671's own step-1 precondition ('Event A is currently "
-    "pinned and visible') is also not establishable: the baseline pinned "
-    "value 404s and the card only ever renders the widget's fallback. Per "
-    "the original writeup's own instruction, no third candidate value is "
-    "re-guessed without a product-side fix or clarification. File/confirm "
-    "a bug against PBI 129382 before re-attempting this TC."
-)
-def test_pinning_replaces_the_previously_featured_event():
-    """ADO-135671. Left deliberately unautomated/skipped — see module
-    docstring and this test's own skip reason for the full disclosure."""
-    pytest.fail(
-        "Not reached — see the skip reason: TC 135671 depends on the same "
-        "confirmed pinnedEvent propagation defect documented for TC 135669."
-    )
+@pytest.mark.xdist_group("pin_event_49205")
+def test_pinning_replaces_the_previously_featured_event(page, browser):
+    """ADO-135671.
+
+    RE-VERIFIED LIVE 2026-09-06 (single serial session, qcdev): the
+    pinnedEvent propagation defect documented above for TC 135669/this
+    module's docstring (2026-08-31) still reproduces today with the exact
+    same in-format candidate (`?id=49443`) — saved and read back correctly
+    on the admin form, but the public Home Page card never changed within
+    15s of polling. Step 3's "only Event B appears; Event A no longer
+    appears" half of the expectation is therefore still BLOCKED by that
+    confirmed, unresolved product defect and is NOT asserted here (would
+    either always fail or be silently rewritten to mask the defect — same
+    reasoning as TC 135669).
+
+    What IS independently assertable today, per this module's own
+    step-1-and-2-only precedent (test_pin_configuration_has_no_manual_
+    event_detail_fields, TC 135672): step 3's OTHER, DOM-structural
+    expectation — "no duplicate section appearing" — does not depend on
+    which event the card resolves to. Confirmed live this session: exactly
+    one `section.qc-home-upcoming-event` renders both before and after
+    re-pinning, in both the failing-propagation state and the baseline
+    state. This test pins Event B (the same in-format, in-collection
+    candidate value re-used from the original repro, not a newly-guessed
+    third value), reloads, and asserts the section count stays exactly 1 —
+    i.e. re-pinning never duplicates the section, whether or not the
+    pinned card itself visibly changes.
+
+    PUBLIC-PAGE-ANONYMOUS-CONTEXT: the public Home Page checks now run in a
+    dedicated, fresh, logged-out browser context (never the CMS admin
+    `page`) so they reflect a real anonymous visitor rather than a still-
+    authenticated CMS session.
+    """
+    from core.web.browser import new_context
+
+    admin = HomeFeaturedEventAdminPage(page)
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+    home = HomeFeaturedEventPage(anon_page)
+    EVENT_B_PINNED_VALUE = "/web/qatar-chamber/events/event?id=49443"
+
+    try:
+        with allure.step("Confirm Event A (the current baseline pin) is visible on the Home Page"):
+            visible_before = home.reload_until(lambda p: p.is_section_visible())
+        assert visible_before, (
+            "The Upcoming Events section was not visible with the baseline "
+            f"pin within {home.RELOAD_POLL_TIMEOUT_MS}ms — cannot proceed "
+            "to the re-pin assertion without a confirmed precondition."
+        )
+        assert anon_page.locator(home.SECTION).count() == 1, (
+            "Expected exactly one Upcoming Event section before re-pinning, "
+            f"found {anon_page.locator(home.SECTION).count()}."
+        )
+
+        with allure.step("In Pin Configuration, select Event B instead of Event A and save"):
+            admin.open_upcoming_event_pins_list()
+            admin.open_pin_record()
+            admin.set_pinned_event(EVENT_B_PINNED_VALUE)
+            admin.set_active(True)
+            admin.save()
+
+        with allure.step("Reopen and verify Event B's value actually persisted on the admin form"):
+            admin.open_upcoming_event_pins_list()
+            admin.open_pin_record()
+            assert admin.pinned_event_value() == EVENT_B_PINNED_VALUE, (
+                "Pin Configuration did not persist Event B: expected "
+                f"{EVENT_B_PINNED_VALUE!r}, got "
+                f"{admin.pinned_event_value()!r}."
+            )
+            admin.cancel()
+
+        with allure.step(
+            "Wait for cache refresh and reload the Home Page — assert no "
+            "duplicate section is ever rendered"
+        ):
+            home.reload_until(lambda p: True, timeout_ms=home.RELOAD_POLL_TIMEOUT_MS)
+            section_count_after = anon_page.locator(home.SECTION).count()
+        assert section_count_after == 1, (
+            "Re-pinning to Event B rendered "
+            f"{section_count_after} Upcoming Event sections on the Home "
+            "Page instead of exactly 1 — a duplicate section, independent "
+            "of the separately-disclosed pinnedEvent propagation defect "
+            "(see this test's docstring)."
+        )
+    finally:
+        with allure.step("Restore the singleton to its confirmed original baseline"):
+            admin.open_upcoming_event_pins_list()
+            admin.open_pin_record()
+            admin.reset_to_baseline()
+
+        with allure.step("Reopen and verify the restore actually persisted"):
+            admin.open_upcoming_event_pins_list()
+            admin.open_pin_record()
+            assert admin.pinned_event_value() == admin.BASELINE_PINNED_EVENT, (
+                "Baseline restore did not persist for pinnedEvent: expected "
+                f"{admin.BASELINE_PINNED_EVENT!r}, got "
+                f"{admin.pinned_event_value()!r}."
+            )
+            assert admin.is_active() == admin.BASELINE_ACTIVE, (
+                "Baseline restore did not persist for activeStatus: "
+                f"expected {admin.BASELINE_ACTIVE!r}, got "
+                f"{admin.is_active()!r}."
+            )
+            admin.cancel()
+
+        # Anon-context cleanup runs LAST, after the baseline restore — see
+        # TC 135670's finally block for the same lesson from conftest.py.
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
 
 
 @allure.epic("Home Page")
@@ -308,7 +426,7 @@ def test_pin_configuration_has_no_manual_event_detail_fields(page):
 @pytest.mark.pbi_129382
 @pytest.mark.tc_135673
 @pytest.mark.xdist_group("pin_event_49205")
-def test_disabling_active_status_hides_section_without_unpinning(page):
+def test_disabling_active_status_hides_section_without_unpinning(page, browser):
     """ADO-135673.
 
     NOT a duplicate of TC 135670: this test captures pinned_event_value()
@@ -322,9 +440,18 @@ def test_disabling_active_status_hides_section_without_unpinning(page):
     hardening TC 135670 uses. Carries the same `xdist_group` as TC 135670
     since both mutate the same singleton, plus the same baseline-restore
     `finally` block.
+
+    PUBLIC-PAGE-ANONYMOUS-CONTEXT: the public Home Page check now runs in a
+    dedicated, fresh, logged-out browser context (never the CMS admin
+    `page`) so it reflects a real anonymous visitor rather than a still-
+    authenticated CMS session.
     """
+    from core.web.browser import new_context
+
     admin = HomeFeaturedEventAdminPage(page)
-    home = HomeFeaturedEventPage(page)
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+    home = HomeFeaturedEventPage(anon_page)
 
     try:
         with allure.step("Establish a known pinned + Active=True precondition"):
@@ -372,3 +499,10 @@ def test_disabling_active_status_hides_section_without_unpinning(page):
             admin.open_pin_record()
             assert admin.pinned_event_value() == admin.BASELINE_PINNED_EVENT
             assert admin.is_active() == admin.BASELINE_ACTIVE
+
+        # Anon-context cleanup runs LAST, after the baseline restore — see
+        # TC 135670's finally block for the same lesson from conftest.py.
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass

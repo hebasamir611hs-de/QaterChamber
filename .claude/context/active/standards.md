@@ -466,6 +466,93 @@ probe, after the serial-run instability above): Mission (49082) Pillar Title =
 `/web/qatar-chamber/events/novgorod-delegation`, active = True (baseline). All 4
 confirmed at baseline — no restore was needed.
 
+## Draft/Unpublish Public-Visibility Checks — Mandatory Logged-Out Context (agreed 2026-09-07)
+
+**Any test that checks what a public visitor sees while CMS content is in Draft,
+Unpublished, or mid-edit state MUST load that public page in a fresh browser context
+with NO logged-in CMS user** — never the same `page`/session object the test used to
+drive the CMS admin side. A test that reads the public page through an
+authenticated/CMS session can observe CMS-only preview/editor rendering paths that a
+real anonymous visitor never sees, producing a false read on whether the business rule
+("Draft/Unpublished content is never visible publicly") actually holds.
+
+This rule was already being applied ad hoc in some tests (e.g. the anon-context pattern
+in `cms/tests/home_featured_event/test_home_featured_event_control_panel.py`) but had
+never been written down here — it was silently lost/never captured once before (see the
+Dev-Environment Navigation Quirks section's own note about `55a5c91` dropping
+undocumented conventions). Any test asserting draft/unpublish/preview visibility must
+explicitly open a new browser context with no auth state (`new_context(browser,
+use_auth_state=False)` per this project's `core/web/browser.py` helper) to load the
+public page, not reuse the authenticated `page` fixture.
+
+**Re-verify any existing "confirmed bug" finding that was reached by reading the public
+page through the wrong path** (CMS-authenticated session, or via `Content & Data`
+instead of `Object Authoring` — see the next section) before treating it as final —
+the wrong navigation path can itself produce a false blank-page symptom that looks like
+a product defect but is actually a test/navigation artifact.
+
+## Object Authoring Is the Only Path for Content Operations — Not Content & Data (superseded/broadened 2026-09-07)
+
+**Superseded same-day:** the rule below originally covered only publish/unpublish/
+draft/preview lifecycle actions. The QA Manager has since broadened it: **`Content &
+Data` is retired entirely as an automation path for any Object-Definition-backed
+content record on this project — creating new content, editing field values, AND every
+lifecycle action (save as draft, preview, submit for publishing, unpublish) must all go
+through Object Authoring** (`https://qcdev.ihorizons.com/object-authoring`, reusable
+component at `cms/pages/components/object_authoring_page.py`). Do not open `Content &
+Data` for these records at all going forward, not even to fill in fields.
+
+This does NOT apply to CMS surfaces that were never a Content & Data-vs-Object
+Authoring choice in the first place — e.g. a plain widget-config toggle with no
+content-lifecycle states (confirmed case: Upcoming Event Pins / record 49205, a
+2-field Active-Status+pinnedEvent config, not an Object-Definition entity) stays on
+its existing native mechanism. Before assuming a feature needs the Object Authoring
+fix, check whether it's actually an Object-Definition-backed content record (has
+Draft/Approved-style states, a Content & Data menu entry under an object definition)
+or a different kind of CMS surface (Events module, a dedicated portlet, a config
+form) — apply this rule only to the former, and say explicitly which kind a feature
+turned out to be before automating it.
+
+Original rule text (still correct for the narrower lifecycle-action case, now
+subsumed by the broader rule above): any test step that performs publish, unpublish,
+set-to-draft, or preview on a content record must perform that action from Object
+Authoring, not `Content & Data` — `Content & Data` is not a validated equivalent to
+the real editor workflow a Site Content Editor actually uses.
+
+Any existing Page Object/test that currently drives ANY content operation (not just
+lifecycle actions) via `Content & Data` navigation should be corrected to go through
+Object Authoring instead — this may change previously-observed behavior (including
+bugs already filed), so re-verify rather than assume the old result still holds.
+
+## Named CMS User Roles (agreed 2026-09-06)
+
+Restricted-role Control_Panel test cases (e.g. "Login succeeds with the restricted
+role" style steps, RBAC/permission-bypass cases) must authenticate as the **specific
+named role the case calls for** — never the default `TEST_USER`/`TEST_PASSWORD`
+account, which is a super-admin-equivalent login meant only for setup/general
+CMS access, not role-scoped permission testing.
+
+Three named roles are provisioned on qcdev, credentials in `.env`
+(`config/settings.py`'s `CMS_ROLE_CREDENTIALS` / `cms_role_credentials(role)`):
+
+| Role | Email | Password |
+|---|---|---|
+| `Site Content Editor` | `test1@xyz.com` | `Test@1234` |
+| `Site Content Author` | `Test2@xyz.com` | `Test@123` |
+| `Content Contributor` | `Test3@xyz.com` | `Test@123` |
+
+**Usage:** in a `cms/` test that needs a specific role, resolve credentials via
+`config.settings.cms_role_credentials("Site Content Editor")` and pass the result to
+`CmsLoginPage.login(email, password)` — do **not** hard-code any of these emails/
+passwords directly in a test or Page Object; always go through
+`cms_role_credentials()` so a credential rotation only touches `.env`.
+
+**Which role for which case:** the test case's own title/steps/preconditions name
+the role required (e.g. "Verify Content Contributor cannot publish without
+approval"). When a case doesn't name one explicitly but is clearly RBAC/permission
+scoped, pick the role whose expected privilege level matches the scenario under
+test — do not default to `TEST_USER` for a permission-boundary case.
+
 ## Wait-Strategy Audit (agreed 2026-09-01)
 
 Audited every Page Object built in the 2026-08-31 CMS batch

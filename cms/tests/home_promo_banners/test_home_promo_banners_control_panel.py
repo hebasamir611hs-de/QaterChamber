@@ -416,7 +416,7 @@ def _create_banner_via_object_authoring(
 @pytest.mark.workflow
 @pytest.mark.pbi_129368
 @pytest.mark.tc_135122
-def test_save_new_banner_slot_as_draft(page):
+def test_save_new_banner_slot_as_draft(page, browser):
     """ADO-135122. Steps (from Azure DevOps, quoted verbatim):
       1. Click Add Banner -> Add Banner form opens
       2. Fill all mandatory fields (images, alt text, display order, active
@@ -427,10 +427,18 @@ def test_save_new_banner_slot_as_draft(page):
     UNBLOCKED 2026-09-03 via the object-authoring surface (see module
     docstring) — driven through manage-promotional-banner instead of the
     raw Object Definition admin, which genuinely lacks the control.
+
+    PUBLIC-PAGE-ANONYMOUS-CONTEXT (mandatory per standards.md, added
+    2026-09-07): the "not visible on the Home Page" half is read through a
+    fresh, logged-out browser context, never the CMS-authenticated `page` —
+    mirrors home_business_events_admin_page's established pattern.
     """
+    from core.web.browser import new_context
+
     admin = HomePromoBannersAdminPage(page)
     authoring = ObjectAuthoringPage(page, slug="promotional-banner")
-    home = HomePromoBannersPage(page)
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePromoBannersPage(anon_context.new_page())
     alt_en = "QCTEST-135122 Draft Banner"
 
     try:
@@ -475,6 +483,7 @@ def test_save_new_banner_slot_as_draft(page):
             authoring.delete_entry_by_title(alt_en)
         except Exception:
             logger.warning("teardown for %r did not complete — leftover QCTEST data may remain", alt_en)
+        anon_context.close()
 
 
 @allure.epic("Home Page")
@@ -637,7 +646,7 @@ def test_publishing_pending_review_banner_makes_it_live(page):
 @pytest.mark.workflow
 @pytest.mark.pbi_129368
 @pytest.mark.tc_135125
-def test_unpublishing_banner_removes_it_from_home_page(page):
+def test_unpublishing_banner_removes_it_from_home_page(page, browser):
     """ADO-135125. Steps (from Azure DevOps, quoted verbatim):
       1. Open the published banner slot -> Published banner opens for edit
       2. Click Unpublish -> System displays a Liferay generic success
@@ -653,10 +662,20 @@ def test_unpublishing_banner_removes_it_from_home_page(page):
     case's actual intent (the banner comes off the live Home Page and
     returns to an editable, unpublished state) is preserved and asserted
     in full.
+
+    PUBLIC-PAGE-ANONYMOUS-CONTEXT (mandatory per standards.md, added
+    2026-09-07): both the before-unpublish and after-unpublish Home Page
+    reads go through a fresh, logged-out browser context, never the
+    CMS-authenticated `page` — this also removes the earlier need to
+    navigate `authoring` back to the entries list after the public-page
+    read, since the public read never shares `page` with it anymore.
     """
+    from core.web.browser import new_context
+
     admin = HomePromoBannersAdminPage(page)
     authoring = ObjectAuthoringPage(page, slug="promotional-banner")
-    home = HomePromoBannersPage(page)
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePromoBannersPage(anon_context.new_page())
     alt_en = "QCTEST-135125 Unpublish Banner"
 
     try:
@@ -680,15 +699,12 @@ def test_unpublishing_banner_removes_it_from_home_page(page):
         )
 
         with allure.step("Open the published banner slot and click Unpublish"):
-            # Root-caused live 2026-09-03: home.reload_until_banner_matches()
-            # (just called above) leaves the browser on the PUBLIC Home
-            # Page, not manage-promotional-banner — calling
-            # open_entry_by_edit_link() directly after it was searching for
-            # the entries table row on the wrong page entirely, so the
-            # "Edit" link locator matched 0 elements and both the normal
-            # and the force-click fallback correctly hung for their full
-            # timeouts waiting for an element that could never appear
-            # there. Must return to the entries list first.
+            # authoring is left on the edit form after submit_for_publishing()
+            # above, not the entries list open_entry_by_edit_link() needs —
+            # must return to the entries list first. Only reads through the
+            # anon_page's home now, so (unlike before the anonymous-context
+            # fix) this step is no longer about recovering from a public-page
+            # navigation on the shared `page`, just this ordinary precondition.
             authoring.open_entries_list()
             authoring.open_entry_by_edit_link(alt_en)
             assert authoring.is_save_as_draft_disabled(), (
@@ -721,6 +737,7 @@ def test_unpublishing_banner_removes_it_from_home_page(page):
             authoring.delete_entry_by_title(alt_en)
         except Exception:
             logger.warning("teardown for %r did not complete — leftover QCTEST data may remain", alt_en)
+        anon_context.close()
 
 
 @allure.epic("Home Page")

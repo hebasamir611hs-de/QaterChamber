@@ -1,5 +1,5 @@
 """
-web/pages/home_strategic_direction/home_strategic_direction_admin_page.py —
+cms/pages/home_strategic_direction/home_strategic_direction_admin_page.py —
 HomeStrategicDirectionAdminPage.
 
 Control_Panel Page Object for PBI 129381 ("Strategic Direction Section" /
