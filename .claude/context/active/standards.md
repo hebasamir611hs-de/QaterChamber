@@ -390,6 +390,9 @@ is left ungrouped and free to parallelize normally:
 | Mission pillar card | 49082 | `xdist_group("mission_49082")` | `tc_135557`, `tc_135562` |
 | Qatar Airways partner | 45776 | `xdist_group("qatar_airways_45776")` | `tc_135832` |
 | Objectives pillar card | 49108 | `xdist_group("objectives_49108")` | any Strategic Pillar Card test (`tc_135558` etc.) |
+| About Us Section + Counters | Section 52157 (`QCDEMO-129389-ABOUT_US_SECTION-01`), Counters `QCDEMO-129389-ABOUT_US_COUNTER-01..04` | `xdist_group("about_us_section_52157")` | `tc_136103`, `tc_136106`, `tc_136136` |
+| Home Contact Us Section article (Liferay Journal/Web Content, NOT Object-Definition-backed — confirmed live 2026-09-07, no `manage-<slug>` Object Authoring surface exists for it; see `cms/pages/home_contact_us/home_contact_us_admin_page.py`) | articleId `53012` (groupId `37246`) | `xdist_group("home_contact_us_section_article_53012")` | `tc_136508`, `tc_136512`, `tc_136518`, `tc_136523`, `tc_136527`, `tc_136541`, `tc_136546`, `tc_136555`, `tc_136559`, `tc_136565`, `tc_136572`, `tc_136498` (all currently `@pytest.mark.skip` — live, reproducible Fields-panel rendering defect, re-confirmed 2026-09-07) |
+| Home Contact Us Inquiry Category row 01 | ERC `QCDEMO-129390-INQCAT-01` (record `52706`) | `xdist_group("home_contact_us_inquiry_category_52706")` | `tc_136534`, `tc_136538`, `tc_136569` |
 
 **Vision (real record, ID pending confirmation)** is the third member of the same
 Strategic Pillar Card carousel as Mission (49082) and Objectives (49108) — treat it as
