@@ -21,6 +21,14 @@ against qcdev, authenticated via CmsLoginPage / TEST_USER):
     Save) whose fields — confirmed by full-page screenshot after an explicit
     networkidle wait (the fields render async; a fixed short wait is not
     enough, hence WAIT_AFTER_NEW_MS below) — are exactly, in this order:
+      (NOTE 2026-09-08: the asterisks below are the **native Control-Panel
+       "New" form's** markers, NOT the Object Authoring form's — see
+       `cms/pages/home_hero_banner/home_hero_banner_admin_page.py`, which
+       records that the Object Authoring form renders no visible "*". Both
+       findings are correct for their own surface; don't reconcile them by
+       deleting one. Per `standards.md`, new content operations belong on
+       Object Authoring, so treat this asterisk mapping as documentation of
+       a legacy surface.)
       Active Status (checkbox, no asterisk -> optional)
       Department Description (AR) (textarea, optional)
       Department Description (EN) (textarea, optional)

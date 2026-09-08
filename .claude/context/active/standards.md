@@ -466,6 +466,60 @@ probe, after the serial-run instability above): Mission (49082) Pillar Title =
 `/web/qatar-chamber/events/novgorod-delegation`, active = True (baseline). All 4
 confirmed at baseline — no restore was needed.
 
+## Fragments and Page Layout Are Off-Limits to Automation — Never Create, Edit, Move or Delete (agreed 2026-09-08)
+
+**Scope note:** the *Destructive Operations* rule above governs **Object entries**
+(content records). It says nothing about **fragments** or **page layout**, and that
+gap was never explicit until now. This section closes it.
+
+**Rule, absolute and with no exception for "just to reproduce the bug":** automation
+on this project — every test, Page Object, helper, and delegated agent — operates
+**only on content records via Object Authoring**. It must **never**:
+
+- add, edit, duplicate, reorder, move, hide, or delete a **fragment** on any page;
+- add, edit, reorder, or delete a **page**, a page section, or anything in a page's
+  layout / Page Editor;
+- enter the Page Editor, Fragment Collections, or the Look-and-Feel/Master-Template
+  surfaces at all, on `qcdev` or any other shared environment.
+
+**Why this is safe to state absolutely:** the three-layer model in
+`cms/liferay-context.md` §2 puts Pages (layout) and Fragments (design blocks) *above*
+the content layer, explicitly **"off-limits to editors"** — a fragment is shared
+design used by every page that renders it, it has no draft/approved lifecycle to fall
+back on, and it is **not exposed via headless REST on this instance**, so there is no
+scripted restore path if one is damaged. `.claude/context/active/OBJECT-AUTHORING-GUIDE.md`
+makes the same boundary from the tool side: Object Authoring edits content
+*"without opening the Control Panel and without touching a page or a fragment."*
+If a test's expected result appears to require a layout change, the test case is
+wrong for this surface — escalate it to the QA Manager; do not satisfy it by editing
+the page.
+
+**If a page section is missing or renders empty, that is a finding, not a repair
+job.** Report it with evidence and stop. Do **not** attempt to "put the section
+back", re-drop a fragment, or re-edit the page — a well-meant repair on shared
+`qcdev` is itself an unauthorized layout change, and it destroys the evidence needed
+to diagnose the real cause.
+
+Diagnose in this order before concluding anything:
+
+1. **Check the content layer first** — the entries the section renders may simply be
+   Draft, have `activeStatus` off, or have been unpublished. That is by far the
+   commonest cause and it is fully reversible.
+2. **Check for other actors.** `qcdev` is shared and this project has repeatedly had
+   multiple concurrent sessions on it (see the concurrency violation recorded in the
+   section above). Another session's page edit is a real and documented possibility.
+3. **Only then** report a layout/fragment defect — naming what you checked, and
+   stating plainly whether this session's own code could have caused it.
+
+**Precedent (2026-09-07/08, PBI 129367 — Hero Banner):** the Hero Banner section
+disappeared from the Home page during a test batch and the question was raised
+whether automation had deleted the fragment. Investigation cleared it: all 10 slide
+entries were present and the count had *increased*, no `delete_*` call existed
+anywhere in the batch's code, the page rendered with 0 console errors, and 6 other
+peer sessions were active on the same shared `qcdev`. **The automation never touches
+page layout — and this section now says so in writing, so the same question does not
+have to be re-investigated from scratch next time.**
+
 ## Draft/Unpublish Public-Visibility Checks — Mandatory Logged-Out Context (agreed 2026-09-07)
 
 **Any test that checks what a public visitor sees while CMS content is in Draft,
@@ -492,6 +546,66 @@ the wrong navigation path can itself produce a false blank-page symptom that loo
 a product defect but is actually a test/navigation artifact.
 
 ## Object Authoring Is the Only Path for Content Operations — Not Content & Data (superseded/broadened 2026-09-07)
+
+> ### READ THIS FIRST — the authoritative guide is in the repo (added 2026-09-08)
+>
+> **`.claude/context/active/OBJECT-AUTHORING-GUIDE.md`** is the project team's own
+> Content Editor Guide for this surface, supplied 2026-09-08. **Every agent that
+> writes or runs a Control_Panel test, and every Page Object that drives Object
+> Authoring, must read it before making any assumption about how the tool
+> behaves.** Do not re-derive its contents by probing the live site, and do not
+> contradict it from memory or from an older repo document.
+>
+> **Precedence:** the guide is authoritative on **tool mechanics** (URLs,
+> buttons, statuses, bilingual field shapes, attachment behaviour, preview panel,
+> error/success message text). This `standards.md` remains authoritative on **QA
+> policy** — what we are permitted to do to `qcdev` — because policy is
+> deliberately stricter than the tool. Where any other document
+> (`cms/liferay-context.md`, a Page Object docstring, a test comment) disagrees
+> with the guide on mechanics, **the guide wins**: fix the other document rather
+> than working around it.
+>
+> Operational facts from the guide that automation must honour (each one has cost
+> this project real time or real data):
+>
+> - **A 404 on an authoring URL means the session is signed out** — not a missing
+>   page, not a bad slug, not a locator bug. Re-run `python tools/save_auth.py`
+>   and retry before investigating anything else. (Diagnosed the hard way on the
+>   PBI 129394 batch, 2026-09-07.)
+> - **On a brand-new record the Arabic saves a moment *after* the record.** Wait
+>   for **"Arabic content saved for this record."** before navigating away; if
+>   *"the record was saved but its Arabic content was not"* appears, re-open Edit
+>   and re-enter the Arabic. A test that creates a bilingual record and leaves the
+>   page on a fixed timeout can silently lose the Arabic content on a real record.
+> - **`Remove file` / `Undo remove` on an attachment field take effect only on
+>   save, and a required attachment field refuses to be cleared.** So a
+>   clear-the-field check can reach the empty state and then abandon without
+>   saving. Re-evaluate any test skipped for "no safe file-restore path" against
+>   this. If a *required* attachment field ever does end up empty on a live
+>   record, that contradicts the guide and is a candidate **product bug** — report
+>   it, do not silently repair it.
+> - **`displayOrder` / `homeDisplayOrder` are numbered in multiples of 100**
+>   (`100, 200, 300 …`, lowest first); never write an in-between value like `150`.
+>   This is an editorial convention the platform does **not** enforce (its own
+>   validation only requires `>= 1`), so a test case that dictates `1` / `2` will
+>   pass validation while leaving real content mis-numbered among its neighbours
+>   — flag the conflict to the QA Manager instead of just executing it.
+> - **A refused save shows a red bar listing the reasons in plain words, and
+>   nothing was saved.** Read that bar and assert on it; the expected per-object
+>   message strings are catalogued in `cms/liferay-context.md` §6.
+> - **Two independent visibility gates.** A saved record can be invisible to
+>   visitors either because it is a **draft** *or* because its **`activeStatus`**
+>   is off. Never conclude one from the other — check the gate the case actually
+>   names.
+> - **Preview is a staff surface.** The preview panel (including its `AR` toggle
+>   and `Show all drafts`) renders drafts to signed-in staff, so it does **not**
+>   satisfy the mandatory logged-out public-visibility check in the section above.
+>   Use it to verify rendering; use a fresh logged-out context to verify
+>   visibility.
+> - **`Delete` has no undo and no recycle bin** — which is the tool-level
+>   restatement of the never-delete-by-position rule in *Destructive Operations
+>   Against qcdev* above. To take content off the site without losing it, un-tick
+>   `activeStatus` or use **Unpublish to edit as draft**.
 
 **Superseded same-day:** the rule below originally covered only publish/unpublish/
 draft/preview lifecycle actions. The QA Manager has since broadened it: **`Content &

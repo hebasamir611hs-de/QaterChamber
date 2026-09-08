@@ -54,6 +54,31 @@ write against a *different* instance/version, per the skills' own
 
 ## 2. Content Model — How This Site Is Actually Built
 
+> **⚠ This document predates the Object Authoring tool and does NOT describe the
+> editing path (noted 2026-09-08).** Everything below is accurate about the
+> *data model* — object definitions, fields, `required`/`localized` flags,
+> validation rules, relationships, folders — and that is what it is for.
+>
+> But it presents the **Control Panel** and the **headless REST API** as the ways
+> to edit content, and they are no longer the automation path on this project.
+> **All content operations — create, edit field values, save as draft, preview,
+> submit for publishing, unpublish — go through Object Authoring**
+> (`/web/qatar-chamber/object-authoring`), per `standards.md` → *Object Authoring
+> Is the Only Path for Content Operations*.
+>
+> **Read `.claude/context/active/OBJECT-AUTHORING-GUIDE.md` for how that tool
+> behaves** — it is the project team's own authoritative guide and it wins over
+> this file wherever the two disagree about editing mechanics. Use this file for
+> *what the fields are*, and the guide for *how to work with them*.
+>
+> Two places where the two documents connect directly:
+> - The guide's **"Localized fields"** (one box plus a `— العربية` box) vs
+>   **"Suffix pairs"** (`…En` / `…Ar`) distinction is exactly the `localized`
+>   column in the §6 catalog below: `localized: true` → a localized field;
+>   `localized: false` on an `…En`/`…Ar` name → a suffix pair.
+> - The guide's *"a red bar lists the reasons in plain words"* refers to the
+>   validation messages already catalogued per object in §6.
+
 Three layers, and only the third is what content editors (and most
 automation) ever touches:
 
