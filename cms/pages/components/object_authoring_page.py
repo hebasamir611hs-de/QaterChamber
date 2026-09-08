@@ -142,14 +142,65 @@ class ObjectAuthoringPage(BasePage):
     # editor on a freshly opened create/edit form, before any locale toggle
     # is touched — the only state this class's fill_rich_text()/
     # rich_text_value() are used in.
-    DESCRIPTION_EDITOR_IFRAME = 'iframe[title="editor"] >> nth=0'
+    #
+    # HEALED FURTHER 2026-09-07 (live incident, PBI 129393/tc_134777,
+    # manage-chairman-message-page, Message Content field): the ABOVE
+    # nth=0 guarantee is confirmed-live ONLY for a freshly opened form
+    # BEFORE any Save/Submit. A real Save as Draft / Submit for Publishing
+    # triggers an in-place DOM reflow of this form (see `_wait_for_settle()`
+    # below) that re-mounts BOTH iframes — mount ORDER across that reflow
+    # is a race, not a guarantee, so `nth=0` can resolve to the AR editor
+    # after a Save, causing a write/read-back right after Save to silently
+    # target the wrong locale. Reproduced live: tc_134777's
+    # fill_rich_text() -> save_as_draft() -> rich_text_value() sequence
+    # read back `'\n'` instead of the just-written text.
+    #
+    # Root-caused live (headless Chromium, qcdev, manage-chairman-message-
+    # page): the EN/default-locale editor's own underlying `<textarea>` /
+    # CKEditor wrapper DOM id always contains `ObjectField_<fieldName>`
+    # (Liferay's own canonical object-field name string, e.g.
+    # `ObjectField_messageContent`), while the Arabic instance's own DOM id
+    # always contains `qc-ar-<fieldName>` (this site's own custom
+    # "qc-oel" Object-Authoring widget naming, e.g. `qc-ar-messageContent`)
+    # — BOTH ids are keyed by the field's persistent name, never by mount
+    # order, so scoping the iframe search to the EN id substring is immune
+    # to the same post-Save reflow race that breaks `nth=0`. Confirmed live
+    # unique (count=1) for the Message Content field both on a fresh open
+    # and immediately after a real Save as Draft (in-place reflow, no page
+    # navigation in between) — the exact tc_134777 sequence.
+    #
+    # `description_editor_iframe(field_name)` / the `field_name` parameter
+    # on fill_rich_text()/rich_text_value() below are the OPT-IN fix: pass
+    # the field's own Liferay object-field name (e.g. "messageContent") for
+    # a locale-safe, reflow-safe locator. Omitting it preserves the
+    # ORIGINAL `nth=0` behavior unchanged, so manage-strategic-pillar-card /
+    # manage-general-manager-message (already proven correct under nth=0 in
+    # their own confirmed-live usage) are not touched or re-verified here —
+    # per this project's Result Integrity rule, a locale-id pattern
+    # confirmed on ONE object's field is not silently assumed for others
+    # without its own live check.
+    RICH_TEXT_EDITOR_IFRAME_CSS = 'iframe[title="editor"]'
+    DESCRIPTION_EDITOR_IFRAME = f'{RICH_TEXT_EDITOR_IFRAME_CSS} >> nth=0'
 
-    def fill_rich_text(self, text: str) -> "ObjectAuthoringPage":
-        self.fill_iframe_editor(self.DESCRIPTION_EDITOR_IFRAME, text)
+    def description_editor_iframe(self, field_name: str | None = None) -> str:
+        """Locator for a bilingual rich-text field's EN/default-locale
+        CKEditor iframe. See DESCRIPTION_EDITOR_IFRAME's own docstring note
+        above for the full live investigation. `field_name` is the field's
+        own Liferay object-field name (e.g. "messageContent", matching the
+        DOM id substring `ObjectField_<fieldName>` confirmed live) — when
+        given, returns a locale-safe, reflow-safe locator scoped to that
+        field's own container; when omitted, returns the original
+        `DESCRIPTION_EDITOR_IFRAME` (`>> nth=0`) unchanged."""
+        if field_name:
+            return f'div[id*="ObjectField_{field_name}"] {self.RICH_TEXT_EDITOR_IFRAME_CSS}'
+        return self.DESCRIPTION_EDITOR_IFRAME
+
+    def fill_rich_text(self, text: str, field_name: str | None = None) -> "ObjectAuthoringPage":
+        self.fill_iframe_editor(self.description_editor_iframe(field_name), text)
         return self
 
-    def rich_text_value(self) -> str:
-        return self.iframe_editor_text(self.DESCRIPTION_EDITOR_IFRAME)
+    def rich_text_value(self, field_name: str | None = None) -> str:
+        return self.iframe_editor_text(self.description_editor_iframe(field_name))
 
     def __init__(self, page, slug: str):
         super().__init__(page)
@@ -445,6 +496,18 @@ class ObjectAuthoringPage(BasePage):
         value."""
         return self.page.get_by_role("textbox", name=field_label, exact=True).input_value()
 
+    def field_count(self, field_label: str) -> int:
+        """Count of textboxes whose accessible name EXACTLY matches
+        `field_label` — used to verify "exactly one field named X exists"
+        cases (e.g. PBI 129393's TC 134787: exactly one Chairman Name field
+        and one Chairman Designation field per language, no separate
+        signature-block field) without a test ever touching raw Playwright
+        (`get_by_role` stays inside this Page Object, never a test body).
+        An exact-name match against a DIFFERENT label (e.g. a hypothetical
+        separate signature-block field) never counts here, so a result of 1
+        already proves both "exists" and "no duplicate/alternate field"."""
+        return self.page.get_by_role("textbox", name=field_label, exact=True).count()
+
     def current_status(self) -> str:
         """"Approved"/"Draft"/"Unknown" parsed out of editing_banner_text()'s
         confirmed-live wording ("...(approved)...")/"...(draft)...") — the
@@ -462,6 +525,13 @@ class ObjectAuthoringPage(BasePage):
     def fill_number(self, field_label: str, value: str) -> "ObjectAuthoringPage":
         self.page.get_by_role("spinbutton", name=field_label, exact=True).fill(value)
         return self
+
+    def spinbutton_value(self, field_label: str) -> str:
+        """Read-back counterpart to fill_number() — mirrors field_value()'s
+        exact-name-match textbox read, scoped to the spinbutton role instead
+        (e.g. "Display Order"). Added 2026-09-08 (PBI 129367, tc_135009):
+        no prior caller needed a numeric-field read-back on this surface."""
+        return self.page.get_by_role("spinbutton", name=field_label, exact=True).input_value()
 
     def type_date(self, field_label: str, value: str) -> "ObjectAuthoringPage":
         """Clicks the date field then types directly (mirrors the
@@ -549,6 +619,146 @@ class ObjectAuthoringPage(BasePage):
         return self.page.get_by_role(
             "textbox", name=field_label, exact=True
         ).inner_text().strip()
+
+    # ---- File restore (Current file / Preview / Download) -----------------
+    # CONFIRMED LIVE 2026-09-07 against manage-chamber-laws-page (Content
+    # Image) and manage-law-entry (Law Icon), PBI 129394: unlike the
+    # Chairman Portrait / Hero Banner Image fields on manage-chairman-
+    # message-page (which expose ONLY "Select File" / "Remove file" — no
+    # Download, see ChairmanMessageAdminPage's own docstring, which is why
+    # that object's replace/upload-first-time cases stayed disclosed SKIPs),
+    # THIS object's upload widget is a DIFFERENT, richer variant: once a
+    # file is set, it renders an additional
+    # `<div class="qc-oel__current-file-meta">Current file: <name> (<size>)
+    # Preview · Download ... Remove file</div>` block — CONFIRMED LIVE a
+    # sibling of the plain Liferay `form-group` 3 ancestor-levels above the
+    # field's own hidden "<Field Label> Select File" textbox (verified via a
+    # live ancestor walk: depth 1-2 = plain wrapper divs, depth 3 =
+    # `form-group` and the FIRST ancestor level containing the meta block).
+    # This gives a real, verified BINARY restore path this project's other
+    # upload-only objects don't have: download the CURRENT file's bytes
+    # before mutating, re-upload those same bytes in `finally` — never
+    # assumed, always read fresh off the live record immediately before any
+    # write, per this project's TEST_OWNED convention.
+    def _file_upload_container(self, field_label: str):
+        hidden_textbox = self.page.get_by_role(
+            "textbox", name=f"{field_label} Select File"
+        )
+        return hidden_textbox.locator("xpath=../../..")
+
+    def current_file_name(self, field_label: str) -> str:
+        """Returns "" when the field is genuinely empty (no `Current file:`
+        block rendered) — confirmed live to be the correct empty-state signal on
+        this variant (see class docstring above), unlike
+        `uploaded_filename()`'s own `<strong role="textbox">` scope, which
+        stays empty on THIS variant even when a file IS set (that element
+        only reflects a NEWLY selected, not-yet-saved file here)."""
+        meta = self._file_upload_container(field_label).locator(
+            ".qc-oel__current-file-meta"
+        )
+        if meta.count() == 0:
+            return ""
+        text = meta.first.inner_text()
+        import re
+
+        # HEALED 2026-09-07 (live incident, PBI 129394): Liferay auto-
+        # dedupes a same-named re-upload by inserting "(<n>)" INSIDE the
+        # filename, before the extension (e.g. "lawbook (4).png") — a
+        # non-greedy match up to the FIRST "(" (the original version of
+        # this regex) truncated the result to "lawbook" on exactly that
+        # filename shape, dropping "(4).png" entirely (reproduced live
+        # re-uploading the same fixture file multiple times in one
+        # session). The trailing "(<size> KB/MB)" group is always the
+        # LAST parenthesised run on the line, so matching greedily up to
+        # the last "(" is the correct, reflow-safe boundary regardless of
+        # how many "(...)" groups the filename itself contains.
+        match = re.search(r"Current file:\s*(.+)\s*\(", text)
+        return match.group(1).strip() if match else ""
+
+    def current_file_download_url(self, field_label: str) -> str:
+        """Absolute URL of the current file's own `Download` link (see class
+        docstring above) — "" if no current file is set."""
+        meta = self._file_upload_container(field_label).locator(
+            ".qc-oel__current-file-meta"
+        )
+        if meta.count() == 0:
+            return ""
+        link = meta.get_by_role("link", name="Download")
+        if link.count() == 0:
+            return ""
+        href = link.first.get_attribute("href") or ""
+        return control_panel_url(href) if href else ""
+
+    def download_current_file(self, field_label: str, dest_path: str) -> str:
+        """Downloads the field's CURRENT file to `dest_path` via an
+        authenticated request on this same page's context (reuses its
+        session cookies — no separate login) — the TEST_OWNED baseline
+        capture step for a binary restore. Returns "" (no-op) if the field
+        is currently empty."""
+        url = self.current_file_download_url(field_label)
+        if not url:
+            return ""
+        response = self.page.context.request.get(url)
+        with open(dest_path, "wb") as handle:
+            handle.write(response.body())
+        return dest_path
+
+    def current_file_placeholder(self, field_label: str) -> str:
+        """Persisted-file signal for a THIRD upload-widget variant this
+        class's uploaded_filename()/current_file_name() do not cover —
+        CONFIRMED LIVE 2026-09-08 (PBI 129367/tc_135009, manage-hero-
+        banner-slide's Banner Image field): on a fresh reopen, this field's
+        own `<strong role="textbox">` filename readout (uploaded_filename()'s
+        target) stays empty — matching current_file_name()'s own already-
+        documented finding for that element on OTHER objects — and this
+        field ALSO has no richer `.qc-oel__current-file-meta` block
+        (current_file_name()'s target: confirmed live absent here, unlike
+        manage-chamber-laws-page/manage-law-entry). The ONLY confirmed-live
+        persisted-file signal on THIS variant is the field's own hidden
+        `<input type="text" ... placeholder="Current file: <name> — pick a
+        file to replace it">`'s placeholder attribute — confirmed live via a
+        real create -> Submit for Publishing -> fresh reopen round trip.
+        Returns "" if the field has no current file (placeholder text does
+        not start with "Current file:")."""
+        hidden_textbox = self.page.get_by_role(
+            "textbox", name=f"{field_label} Select File"
+        )
+        placeholder = hidden_textbox.get_attribute("placeholder") or ""
+        return placeholder if placeholder.startswith("Current file:") else ""
+
+    def remove_current_file(self, field_label: str) -> "ObjectAuthoringPage":
+        """Clicks this field's own "Remove file" button — confirmed live a
+        plain, no-dialog action (unlike row Delete/Unpublish's native
+        `confirm()`).
+
+        ⚠ REAL, LIVE-CONFIRMED FINDING (2026-09-07, manage-chamber-laws-page
+        Content Image, reproduced twice): `remove_current_file()` followed
+        DIRECTLY by `upload_file()` on the SAME still-open form, then
+        Submit for Publishing, does **not** persist the new file — a fresh
+        re-open after that sequence still shows the OLD file untouched
+        (confirmed live via both the admin read-back AND the public
+        delivery surface's own document id, which never changed). This is
+        a genuine two-step widget quirk, not a locator bug: `remove_current_
+        file()` needs its OWN separate save (`save_as_draft()` or
+        `submit_for_publishing()`) to actually commit the empty state
+        BEFORE a subsequent `upload_file()` on a freshly re-opened form
+        will attach correctly. CONFIRMED LIVE this two-phase sequence DOES
+        work (`remove_current_file()` -> `save_as_draft()` -> re-open ->
+        `upload_file()` -> `submit_for_publishing()`), reproduced twice
+        (fresh upload AND restoring the original file's downloaded bytes
+        back). A DIRECT replace with no `remove_current_file()` step at all
+        (`upload_file()` straight over an existing file, i.e. exactly the
+        "Select File only if you want to REPLACE it" wording the widget's
+        own on-screen help text uses) is unaffected by this — that path
+        was confirmed live to persist correctly in ONE save, no two-phase
+        needed. Callers reaching a genuinely EMPTY-field precondition (a
+        case that literally requires "no file set") MUST use the two-phase
+        sequence; callers simply replacing an existing file should call
+        `upload_file()` directly, never through this method first."""
+        self._file_upload_container(field_label).get_by_role(
+            "button", name="Remove file"
+        ).click()
+        return self
 
     # ---- Lifecycle actions --------------------------------------------------
     def save_as_draft(self) -> "ObjectAuthoringPage":

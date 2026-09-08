@@ -55,6 +55,61 @@ future session:
 import allure
 import pytest
 
+from cms.pages.chambers_law.chambers_law_admin_page import (
+    ChambersLawAdminPage,
+    CHAMBERS_LAW_PAGE_ENTRY_CODE,
+    LAW_1990_ENTRY_CODE,
+    LAW_1996_ENTRY_CODE,
+    LAW_1990_TITLE,
+    LAW_1996_TITLE,
+)
+from web.pages.chambers_law.chambers_law_page import ChambersLawPage
+from core.web.browser import new_context
+from core.utils.waits import wait_until
+
+FIXTURES_DIR = "cms/tests/chambers_law/fixtures"
+
+# All 12 tests below mutate one of TWO shared, real Object Authoring records
+# (the Chamber Laws Page singleton, and the Law Entry list's 1990/1996
+# entries) -- one shared group so xdist (--dist loadgroup) never schedules
+# two of them on different workers concurrently, mirroring this project's
+# established convention (see e.g. web/tests/about_chairman_message/
+# test_chairman_message_control_panel.py's xdist_group("chairman_message_78261")).
+CHAMBERS_LAW_XDIST_GROUP = pytest.mark.xdist_group("chambers_law_129394")
+
+
+def _reflects_public(check_fn, timeout: float = 20.0, poll: float = 2.0, message: str = "") -> None:
+    """Polls `check_fn()` (which itself reloads the public page) until it
+    returns True or `timeout` elapses -- the "wait for the standard cache
+    refresh" step several cases call for, as a real condition-based wait
+    (never `sleep()`)."""
+    wait_until(check_fn, timeout=timeout, poll=poll, message=message)
+
+
+def _normalize_rich_text(text: str) -> str:
+    """REAL, LIVE-CONFIRMED FIX (2026-09-07): `ObjectAuthoringPage.
+    fill_rich_text()` -> `BasePage.fill_iframe_editor()` types the given
+    string via real keyboard events, where EVERY literal "\\n" character
+    sends an Enter keypress (confirmed live: typing `PARA1 + "\\n" + PARA2`
+    round-trips back through `rich_text_value()` as `PARA1 + "\\n\\n" +
+    PARA2` -- CKEditor renders two adjacent `<p>` elements as
+    "\\n\\n"-separated when read via `.inner_text()`). Feeding a
+    PREVIOUSLY-READ value (already containing "\\n\\n" per paragraph break)
+    straight back into `fill_rich_text()` therefore DOUBLES each paragraph
+    break into an extra blank `<p>` every write/read/write cycle --
+    reproduced live against `manage-chamber-laws-page`'s Intro Content
+    field (each Save-as-Draft/Submit-for-Publishing round trip visibly
+    inflated the gap between its two paragraphs). Collapsing every run of
+    2+ newlines down to exactly one before re-typing keeps a baseline
+    capture -> mutate -> restore cycle byte-for-byte stable instead of
+    drifting the real record's content on every test run. Callers building
+    a "baseline + appended marker" string must normalize the BASELINE half
+    (already round-tripped through `rich_text_value()`) before concatenating
+    a literal "\\n\\n" separator for the new paragraph."""
+    import re
+
+    return re.sub(r"\n{2,}", "\n", text)
+
 
 # ---------------------------------------------------------------------------
 # 134850 -- Verify that the Chamber Legal Framework section renders its configured heading and intro content
@@ -171,14 +226,91 @@ def test_chambers_law_cp_134870_a_user_without_the_required_permission_is_denied
 @pytest.mark.about
 @pytest.mark.regression
 @pytest.mark.functional_high
+@pytest.mark.workflow
 @pytest.mark.pbi_129394
 @pytest.mark.tc_134871
 @pytest.mark.traceability("134871")
 @allure.label("pbi", "129394")
 @allure.label("testcase", "134871")
-@pytest.mark.skip(reason="Requires a real state-transition action against the shared qcdev Chamber's Law CMS record (publish / unpublish / draft-preview / create-edit-reorder-deactivate-reactivate a law entry, or an audit-log/cache assertion tied to one of those) with no confirmed teardown/restore path on this shared environment (cms-profile.md's Test-Data Policy prohibits SNAPSHOT_RESTORE outside an explicit documented exception, and this batch could not even reach the admin form to attempt one -- see module docstring). Skipped per the QA Manager's explicit instruction to skip rather than block the batch.")
-def test_chambers_law_cp_134871_publishing_the_chamber_s_law_page_makes_the_content_visible_on_the_website(page):
-    ...
+@CHAMBERS_LAW_XDIST_GROUP
+def test_chambers_law_cp_134871_publishing_the_chamber_s_law_page_makes_the_content_visible_on_the_website(page, browser):
+    # TEST_OWNED (cms-profile.md Test-Data Policy): this record is real,
+    # non-disposable editorial content, not a QCTEST- fixture. Every field
+    # touched is read BEFORE mutating and restored in `finally` regardless
+    # of outcome. Driven entirely through Object Authoring
+    # (ChambersLawAdminPage/ObjectAuthoringPage) -- Content & Data is
+    # retired for this kind of record project-wide. No confirmed generic
+    # Liferay "success toast" selector exists on this surface (same
+    # disclosed, project-wide finding already recorded against
+    # ChairmanMessageAdminPage's own batch) -- the record's own status
+    # transition to Approved plus the public page actually reflecting the
+    # new values is asserted instead of a literal toast element.
+    admin = ChambersLawAdminPage(page)
+    target_title = "Chamber's Law"
+    target_intro_heading = "Chamber Legal Framework"
+    target_refs_heading = "Official Legal References"
+    baseline = {}
+
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+
+    try:
+        with allure.step("Sign in to Liferay CMS and open the Chamber's Law page record via Object Authoring"):
+            authoring = admin.open_page_record()
+
+        with allure.step("Capture the pre-existing baseline values (TEST_OWNED reset target)"):
+            baseline["title"] = authoring.field_value(admin.PAGE_TITLE_LABEL)
+            baseline["intro_heading"] = authoring.field_value(admin.INTRO_HEADING_LABEL)
+            baseline["refs_heading"] = authoring.field_value(admin.REFERENCES_HEADING_LABEL)
+            baseline["status"] = authoring.current_status()
+
+        with allure.step("Set Page Title, Intro Section Heading, Legal References Section Heading, then publish"):
+            if authoring.current_status() == "Approved":
+                authoring.unpublish_to_edit_as_draft()
+            authoring.fill_text(admin.PAGE_TITLE_LABEL, target_title)
+            authoring.fill_text(admin.INTRO_HEADING_LABEL, target_intro_heading)
+            authoring.fill_text(admin.REFERENCES_HEADING_LABEL, target_refs_heading)
+            authoring.submit_for_publishing()
+
+        with allure.step("Wait for the standard cache refresh and open the Chamber's Law page on the public site as a genuine anonymous visitor"):
+            cl = ChambersLawPage(anon_page)
+
+            def _public_reflects_title() -> bool:
+                cl.open_chambers_law()
+                return cl.hero_title_text().strip() == target_title
+
+            _reflects_public(
+                _public_reflects_title,
+                message="Public page never reflected the newly-published Page Title",
+            )
+            public_title = cl.hero_title_text()
+            public_intro_heading = cl.intro_heading_text()
+            public_refs_heading = cl.refs_heading_text()
+            law_1990_visible = cl.is_card_visible("Law No. 11 of 1990")
+
+        # Assert
+        assert authoring.current_status() == "Approved"
+        assert public_title == target_title
+        assert public_intro_heading == target_intro_heading
+        assert public_refs_heading == target_refs_heading
+        assert law_1990_visible, "expected the 'Law No. 11 of 1990' card to render on the published page"
+    finally:
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
+        if baseline:
+            with allure.step("TEST_OWNED reset — restore Page Title/Intro Heading/References Heading/Status to baseline"):
+                authoring = admin.open_page_record()
+                if authoring.current_status() == "Approved":
+                    authoring.unpublish_to_edit_as_draft()
+                authoring.fill_text(admin.PAGE_TITLE_LABEL, baseline["title"])
+                authoring.fill_text(admin.INTRO_HEADING_LABEL, baseline["intro_heading"])
+                authoring.fill_text(admin.REFERENCES_HEADING_LABEL, baseline["refs_heading"])
+                if baseline["status"] == "Approved":
+                    authoring.submit_for_publishing()
+                else:
+                    authoring.save_as_draft()
 
 
 @allure.epic("About Us")
@@ -190,14 +322,94 @@ def test_chambers_law_cp_134871_publishing_the_chamber_s_law_page_makes_the_cont
 @pytest.mark.about
 @pytest.mark.regression
 @pytest.mark.functional_high
+@pytest.mark.workflow
 @pytest.mark.pbi_129394
 @pytest.mark.tc_134873
 @pytest.mark.traceability("134873")
 @allure.label("pbi", "129394")
 @allure.label("testcase", "134873")
-@pytest.mark.skip(reason="Requires a real state-transition action against the shared qcdev Chamber's Law CMS record (publish / unpublish / draft-preview / create-edit-reorder-deactivate-reactivate a law entry, or an audit-log/cache assertion tied to one of those) with no confirmed teardown/restore path on this shared environment (cms-profile.md's Test-Data Policy prohibits SNAPSHOT_RESTORE outside an explicit documented exception, and this batch could not even reach the admin form to attempt one -- see module docstring). Skipped per the QA Manager's explicit instruction to skip rather than block the batch.")
-def test_chambers_law_cp_134873_unpublishing_the_chamber_s_law_page_removes_it_from_the_website(page):
-    ...
+@CHAMBERS_LAW_XDIST_GROUP
+def test_chambers_law_cp_134873_unpublishing_the_chamber_s_law_page_removes_it_from_the_website(page, browser):
+    # TEST_OWNED. Driven through Object Authoring's "Unpublish to edit as
+    # draft" action, per this project's "Object Authoring Is the Only Path"
+    # rule.
+    #
+    # REAL, LIVE, DISCLOSED FINDING (2026-09-07, confirmed via a scoped
+    # CLI probe against qcdev before this test was written, then
+    # independently reproduced by this test itself): unlike the case's
+    # expected result, "Unpublish to edit as draft" does NOT retract the
+    # already-published content from the public delivery surface on this
+    # object. The CMS record's own status correctly flips to Draft, but the
+    # public `/about-us/chamber-laws` URL keeps serving HTTP 200 with the
+    # SAME previously-approved content indefinitely (re-checked after 0s,
+    # 5s, 15s, and 25s — no propagation delay explains it; this is not a
+    # cache-timing race). This is the SAME class of Draft/Approved-vocabulary
+    # mismatch already disclosed for Chairman's Message TC 134776, but a
+    # materially stronger one: there, only the STATUS LABEL differed
+    # ("Unpublished" vs "Draft"); here the PUBLIC VISIBILITY OUTCOME itself
+    # differs (case expects removal, live product keeps serving it). Per
+    # automation-standards.md's Result Integrity rule this is scripted
+    # exactly as the case is worded and is EXPECTED TO FAIL HONESTLY against
+    # the real live behaviour — not loosened to match it. This is a genuine,
+    # disclosed product/case-wording mismatch to route to a bug, not a test
+    # defect.
+    admin = ChambersLawAdminPage(page)
+    baseline_status = None
+
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+
+    try:
+        with allure.step("Sign in and open the published Chamber's Law page record via Object Authoring"):
+            authoring = admin.open_page_record()
+            baseline_status = authoring.current_status()
+
+        with allure.step("Ensure the record starts Approved/published (this case's own precondition), then click Unpublish"):
+            if authoring.current_status() != "Approved":
+                authoring.submit_for_publishing()
+            authoring.unpublish_to_edit_as_draft()
+
+        with allure.step("Wait for the standard cache refresh, then open the public Chamber's Law URL with no CMS login"):
+            cl = ChambersLawPage(anon_page)
+            anon_page.wait_for_timeout(1000)
+            resp = anon_page.goto(
+                "https://qcdev.ihorizons.com/web/qatar-chamber/about-us/chamber-laws",
+                wait_until="networkidle",
+            )
+            public_status_code = resp.status if resp else None
+            public_hero_visible = cl.is_hero_visible()
+
+        with allure.step("Re-open the record and its law entry list in the CMS"):
+            authoring = admin.open_page_record()
+            status_in_cms = authoring.current_status()
+            law_entries = admin.open_law_entries_list()
+            law_1990_row_visible = law_entries.row_visible(LAW_1990_TITLE)
+
+        # Assert — CMS-side (real, holds true)
+        assert status_in_cms == "Draft"
+        assert law_1990_row_visible, "expected the Law No. 11 of 1990 entry to remain present/editable in the CMS"
+        # Assert — public-side, per the case's literal expected result (see
+        # docstring above: EXPECTED TO FAIL HONESTLY on this live environment).
+        assert public_status_code == 404 or not public_hero_visible, (
+            "DISCLOSED PRODUCT/ENV FINDING: the public Chamber's Law page "
+            f"still served HTTP {public_status_code} with the hero section "
+            "visible after Unpublish — this object's Unpublish action does "
+            "not retract already-published content from the delivery "
+            "surface (confirmed live, re-checked up to 25s later); the "
+            "case's expected result ('no longer serves the page content') "
+            "does not hold on this environment."
+        )
+    finally:
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
+        with allure.step("TEST_OWNED reset — restore the record to its pre-existing baseline status"):
+            authoring = admin.open_page_record()
+            if baseline_status == "Approved" and authoring.current_status() != "Approved":
+                authoring.submit_for_publishing()
+            elif baseline_status == "Draft" and authoring.current_status() != "Draft":
+                authoring.unpublish_to_edit_as_draft()
 
 
 @allure.epic("About Us")
@@ -209,14 +421,81 @@ def test_chambers_law_cp_134873_unpublishing_the_chamber_s_law_page_removes_it_f
 @pytest.mark.about
 @pytest.mark.regression
 @pytest.mark.functional_high
+@pytest.mark.workflow
 @pytest.mark.pbi_129394
 @pytest.mark.tc_134874
 @pytest.mark.traceability("134874")
 @allure.label("pbi", "129394")
 @allure.label("testcase", "134874")
-@pytest.mark.skip(reason="Requires a real state-transition action against the shared qcdev Chamber's Law CMS record (publish / unpublish / draft-preview / create-edit-reorder-deactivate-reactivate a law entry, or an audit-log/cache assertion tied to one of those) with no confirmed teardown/restore path on this shared environment (cms-profile.md's Test-Data Policy prohibits SNAPSHOT_RESTORE outside an explicit documented exception, and this batch could not even reach the admin form to attempt one -- see module docstring). Skipped per the QA Manager's explicit instruction to skip rather than block the batch.")
-def test_chambers_law_cp_134874_draft_chamber_s_law_content_is_visible_only_in_the_cms_and_not_on_the_website(page):
-    ...
+@CHAMBERS_LAW_XDIST_GROUP
+def test_chambers_law_cp_134874_draft_chamber_s_law_content_is_visible_only_in_the_cms_and_not_on_the_website(page, browser):
+    # TEST_OWNED. Driven through Object Authoring's Unpublish/Save-as-Draft
+    # actions. Unlike TC 134873 (see that test's own disclosed finding),
+    # THIS case's assertion does NOT depend on the page becoming
+    # unavailable — only that the newly-added DRAFT paragraph never leaks
+    # to the public page while the previously-published intro content
+    # keeps rendering, which holds true regardless of that other finding.
+    admin = ChambersLawAdminPage(page)
+    baseline_intro_content = None
+    baseline_status = None
+    marker = "DRAFT-ONLY-129394"
+
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+
+    try:
+        with allure.step("Sign in and open the Chamber's Law page record via Object Authoring"):
+            authoring = admin.open_page_record()
+
+        with allure.step("Capture the pre-existing baseline Intro Content + Status (TEST_OWNED reset target)"):
+            # _normalize_rich_text(): collapse the "\n\n"-per-paragraph-break
+            # this read-back already carries (see that helper's own
+            # docstring for the live-confirmed keyboard-typing/CKEditor
+            # round-trip finding) BEFORE it is ever re-typed, so restoring
+            # this same baseline later doesn't inflate the real record's
+            # paragraph spacing.
+            baseline_intro_content = _normalize_rich_text(
+                authoring.rich_text_value(admin.INTRO_CONTENT_FIELD_NAME)
+            )
+            baseline_status = authoring.current_status()
+
+        with allure.step(f"Add the paragraph '{marker}' to Intro Content and Save as Draft"):
+            if authoring.current_status() == "Approved":
+                authoring.unpublish_to_edit_as_draft()
+            authoring.fill_rich_text(
+                f"{baseline_intro_content}\n{marker}", admin.INTRO_CONTENT_FIELD_NAME
+            )
+            authoring.save_as_draft()
+
+        with allure.step("Open the public Chamber's Law page and search for the draft-only marker"):
+            cl = ChambersLawPage(anon_page)
+            cl.open_chambers_law()
+            public_body_text = cl.text("body")
+
+        with allure.step("Re-open the record in the CMS"):
+            authoring = admin.open_page_record()
+            cms_intro_content = authoring.rich_text_value(admin.INTRO_CONTENT_FIELD_NAME)
+
+        # Assert
+        assert authoring.current_status() == "Draft"
+        assert marker in cms_intro_content
+        assert marker not in public_body_text
+        assert cl.is_intro_heading_visible(), "expected the previously-published intro content to still render"
+    finally:
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
+        if baseline_intro_content is not None:
+            with allure.step("TEST_OWNED reset — restore Intro Content/Status to their pre-existing baseline"):
+                authoring = admin.open_page_record()
+                if authoring.current_status() == "Approved":
+                    authoring.unpublish_to_edit_as_draft()
+                authoring.fill_rich_text(baseline_intro_content, admin.INTRO_CONTENT_FIELD_NAME)
+                if baseline_status == "Approved":
+                    authoring.submit_for_publishing()
+                else:
+                    authoring.save_as_draft()
 
 
 @allure.epic("About Us")
@@ -228,14 +507,81 @@ def test_chambers_law_cp_134874_draft_chamber_s_law_content_is_visible_only_in_t
 @pytest.mark.about
 @pytest.mark.regression
 @pytest.mark.functional_high
+@pytest.mark.workflow
 @pytest.mark.pbi_129394
 @pytest.mark.tc_134875
 @pytest.mark.traceability("134875")
 @allure.label("pbi", "129394")
 @allure.label("testcase", "134875")
-@pytest.mark.skip(reason="Requires a real state-transition action against the shared qcdev Chamber's Law CMS record (publish / unpublish / draft-preview / create-edit-reorder-deactivate-reactivate a law entry, or an audit-log/cache assertion tied to one of those) with no confirmed teardown/restore path on this shared environment (cms-profile.md's Test-Data Policy prohibits SNAPSHOT_RESTORE outside an explicit documented exception, and this batch could not even reach the admin form to attempt one -- see module docstring). Skipped per the QA Manager's explicit instruction to skip rather than block the batch.")
-def test_chambers_law_cp_134875_preview_renders_unpublished_chamber_s_law_content_without_publishing_it(page):
-    ...
+@CHAMBERS_LAW_XDIST_GROUP
+def test_chambers_law_cp_134875_preview_renders_unpublished_chamber_s_law_content_without_publishing_it(page, browser):
+    # Control_Panel only (no Web tag on this case) -- no public-side sibling
+    # test needed. TEST_OWNED. Uses the entries list's own row-level Preview
+    # link, per ObjectAuthoringPage's confirmed-live Preview mechanism.
+    admin = ChambersLawAdminPage(page)
+    baseline_intro_content = None
+    baseline_status = None
+    marker = "PREVIEW-ONLY-129394"
+
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+
+    try:
+        with allure.step("Sign in and open the Chamber's Law page record via Object Authoring"):
+            authoring = admin.open_page_record()
+
+        with allure.step("Capture the pre-existing baseline Intro Content + Status (TEST_OWNED reset target)"):
+            # See _normalize_rich_text()'s own docstring for the live-
+            # confirmed reason this collapse happens before any re-type.
+            baseline_intro_content = _normalize_rich_text(
+                authoring.rich_text_value(admin.INTRO_CONTENT_FIELD_NAME)
+            )
+            baseline_status = authoring.current_status()
+
+        with allure.step(f"Add the paragraph '{marker}' to Intro Content, Save as Draft (do not publish), then Preview"):
+            if authoring.current_status() == "Approved":
+                authoring.unpublish_to_edit_as_draft()
+            authoring.fill_rich_text(
+                f"{baseline_intro_content}\n{marker}", admin.INTRO_CONTENT_FIELD_NAME
+            )
+            authoring.save_as_draft()
+            status_before_preview = authoring.current_status()
+
+            entries = admin.open_page_entries_list()
+            preview_url = entries.row_preview_url_by_code(CHAMBERS_LAW_PAGE_ENTRY_CODE)
+            banner_text = entries.preview_banner_text(preview_url)  # navigates `page` to preview_url
+            preview_body_text = entries.text("body")
+
+        with allure.step("Confirm the record status is unchanged after Preview"):
+            authoring = admin.open_page_record()
+            status_after_preview = authoring.current_status()
+
+        with allure.step("Confirm the public page (fresh, anonymous context) does not contain the preview-only paragraph"):
+            cl = ChambersLawPage(anon_page)
+            cl.open_chambers_law()
+            public_body_text = cl.text("body")
+
+        # Assert
+        assert status_before_preview == "Draft"
+        assert "unpublished (draft)" in banner_text.lower() or "draft" in banner_text.lower()
+        assert marker in preview_body_text
+        assert status_after_preview == "Draft", "expected Preview to leave the record status unchanged"
+        assert marker not in public_body_text
+    finally:
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
+        if baseline_intro_content is not None:
+            with allure.step("TEST_OWNED reset — restore Intro Content/Status to their pre-existing baseline"):
+                authoring = admin.open_page_record()
+                if authoring.current_status() == "Approved":
+                    authoring.unpublish_to_edit_as_draft()
+                authoring.fill_rich_text(baseline_intro_content, admin.INTRO_CONTENT_FIELD_NAME)
+                if baseline_status == "Approved":
+                    authoring.submit_for_publishing()
+                else:
+                    authoring.save_as_draft()
 
 
 @allure.epic("About Us")
@@ -258,10 +604,108 @@ def test_chambers_law_cp_134876_publishing_the_chamber_s_law_page_updates_the_pa
 
 # ---------------------------------------------------------------------------
 # 134877 -- Verify that clicking a Law Title hyperlink opens the configured external legal text
-# Both Web+Control_Panel; the Web-observable half is already scripted and
-# passing in test_chambers_law_web.py under the same tc_134877 marker --
-# not duplicated here to avoid a duplicate Axis-C selector across modules.
+# Both Web+Control_Panel. The public CLICK-behaviour half is already
+# scripted and passing in test_chambers_law_web.py under the same
+# tc_134877 marker (asserted against the ACTUAL live destination, since the
+# real entry is not configured with the case's illustrative
+# '...LawID=2541' query string). THIS module adds the missing
+# Control_Panel half: actually setting a law entry's External Link URL (EN)
+# to the case's own literal value and publishing it, confirmed via the CMS
+# and the public card's href, per this batch's brief -- CMS is reachable
+# now (2026-08-25's blocker no longer applies).
 # ---------------------------------------------------------------------------
+
+@allure.epic("About Us")
+@allure.feature("Chamber's Law")
+@allure.story("CMS authoring / admin")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that a law entry's External Link URL can be configured and published")
+@pytest.mark.control_panel
+@pytest.mark.about
+@pytest.mark.regression
+@pytest.mark.functional_high
+@pytest.mark.uat
+@pytest.mark.redirect
+@pytest.mark.pbi_129394
+@pytest.mark.tc_134877
+@pytest.mark.traceability("134877")
+@allure.label("pbi", "129394")
+@allure.label("testcase", "134877")
+@CHAMBERS_LAW_XDIST_GROUP
+def test_chambers_law_cp_134877_law_title_external_link_url_can_be_configured_and_published(page, browser):
+    # TEST_OWNED. Edits the REAL, pre-existing "Law No. 11 of 1990" entry's
+    # External Link URL (not bilingual — confirmed live) to the case's own
+    # literal value, publishes, confirms it via the admin read-back AND the
+    # public card's actual href, then restores the entry's original URL.
+    admin = ChambersLawAdminPage(page)
+    target_url = "https://www.almeezan.qa/LawView.aspx?opt&LawID=2541"
+    baseline_url = None
+    baseline_status = None
+
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+
+    try:
+        with allure.step("In Liferay CMS, open the Law No. 11 of 1990 entry via Object Authoring"):
+            authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE)
+
+        with allure.step("Capture the pre-existing baseline External Link URL + Status (TEST_OWNED reset target)"):
+            baseline_url = authoring.field_value(admin.EXTERNAL_LINK_URL_LABEL)
+            baseline_status = authoring.current_status()
+
+        with allure.step(f"Set External Link URL (EN) to {target_url} and publish"):
+            if authoring.current_status() == "Approved":
+                authoring.unpublish_to_edit_as_draft()
+            authoring.fill_text(admin.EXTERNAL_LINK_URL_LABEL, target_url)
+            authoring.submit_for_publishing()
+            # REAL, LIVE-CONFIRMED FINDING (2026-09-07): reading a plain
+            # textbox field back on the SAME `authoring`/`page` object
+            # immediately after submit_for_publishing() can return "" —
+            # the exact same post-Save DOM-reflow race
+            # ObjectAuthoringPage.DESCRIPTION_EDITOR_IFRAME's own docstring
+            # documents for the CKEditor iframe, confirmed live here to
+            # also affect a plain `get_by_role("textbox", ...)` read (not
+            # only rich-text fields). A FRESH re-open of the same entry
+            # (not a re-read on the stale in-place object) reads back the
+            # correct, persisted value. Re-open before any post-save
+            # admin-side read-back.
+            authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE)
+
+        with allure.step("Open the Chamber's Law page in English and locate the Law No. 11 of 1990 Law Title link"):
+            cl = ChambersLawPage(anon_page)
+
+            def _public_reflects_url() -> bool:
+                cl.open_chambers_law()
+                return cl.card_title_href("Law No. 11 of 1990") == target_url
+
+            _reflects_public(
+                _public_reflects_url,
+                message="Public card's Law Title href never reflected the newly-published External Link URL",
+            )
+            public_href = cl.card_title_href("Law No. 11 of 1990")
+            public_target = cl.card_title_target("Law No. 11 of 1990")
+
+        # Assert
+        assert authoring.current_status() == "Approved"
+        assert authoring.field_value(admin.EXTERNAL_LINK_URL_LABEL) == target_url
+        assert public_href == target_url
+        assert public_target == "_blank"
+    finally:
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
+        if baseline_url is not None:
+            with allure.step("TEST_OWNED reset — restore External Link URL/Status to their pre-existing baseline"):
+                authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE)
+                if authoring.current_status() == "Approved":
+                    authoring.unpublish_to_edit_as_draft()
+                authoring.fill_text(admin.EXTERNAL_LINK_URL_LABEL, baseline_url)
+                if baseline_status == "Approved":
+                    authoring.submit_for_publishing()
+                else:
+                    authoring.save_as_draft()
+
 
 @allure.epic("About Us")
 @allure.feature("Chamber's Law")
@@ -277,9 +721,118 @@ def test_chambers_law_cp_134876_publishing_the_chamber_s_law_page_updates_the_pa
 @pytest.mark.traceability("134882")
 @allure.label("pbi", "129394")
 @allure.label("testcase", "134882")
-@pytest.mark.skip(reason="Requires a real state-transition action against the shared qcdev Chamber's Law CMS record (publish / unpublish / draft-preview / create-edit-reorder-deactivate-reactivate a law entry, or an audit-log/cache assertion tied to one of those) with no confirmed teardown/restore path on this shared environment (cms-profile.md's Test-Data Policy prohibits SNAPSHOT_RESTORE outside an explicit documented exception, and this batch could not even reach the admin form to attempt one -- see module docstring). Skipped per the QA Manager's explicit instruction to skip rather than block the batch.")
-def test_chambers_law_cp_134882_uploading_a_content_image_for_the_first_time_publishes_it_to_the_website(page):
-    ...
+@CHAMBERS_LAW_XDIST_GROUP
+def test_chambers_law_cp_134882_uploading_a_content_image_for_the_first_time_publishes_it_to_the_website(page, browser, tmp_path):
+    # TEST_OWNED — with a real, DISCLOSED difference from this batch's
+    # sibling PBI 129393 precedent (ChairmanMessageAdminPage's TC 134784,
+    # left an unconditional disclosed SKIP): CONFIRMED LIVE 2026-09-07,
+    # this object's Content Image upload widget DOES expose a real
+    # "Preview · Download" link once a file is set (unlike the Chairman
+    # Portrait/Hero Banner fields, which expose Select-File/Remove-file
+    # only — see ChambersLawAdminPage's own docstring). This record's
+    # Content Image is ALSO currently set (chamber-laws-content.png), so
+    # this case's own literal precondition ("no Content Image set") is not
+    # the record's current state either — but here, UNLIKE Chairman's
+    # Message, there IS a verified, byte-for-byte restore path: download
+    # the CURRENT file before removing it, re-upload those exact bytes in
+    # `finally`. This reaches the case's real precondition safely instead
+    # of leaving it an unconditional skip.
+    # REAL, LIVE-CONFIRMED SEQUENCE (2026-09-07, reproduced twice —
+    # see ObjectAuthoringPage.remove_current_file()'s own docstring for the
+    # full write-up): Remove file -> Select File -> Submit for Publishing
+    # in ONE unsaved form session does NOT persist the new file (a fresh
+    # reopen still serves the OLD file). Reaching this case's real "no
+    # Content Image set" precondition and then uploading a NEW file
+    # therefore needs the confirmed-live TWO-PHASE sequence: (1) remove +
+    # its OWN save (commits the empty state), (2) re-open fresh, upload +
+    # publish. Both the mutation and the `finally` restore below follow
+    # this same two-phase shape.
+    admin = ChambersLawAdminPage(page)
+    target_alt_text = "Law book with scales of justice"
+    baseline_alt_text = None
+    baseline_status = None
+    original_saved = False
+    original_download_path = None
+
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+
+    try:
+        with allure.step("Sign in and open a Chamber's Law page record via Object Authoring"):
+            authoring = admin.open_page_record()
+
+        with allure.step("Capture the pre-existing baseline Content Image (bytes, via Download) + Alt Text + Status (TEST_OWNED reset target)"):
+            baseline_alt_text = authoring.field_value(admin.CONTENT_IMAGE_ALT_TEXT_LABEL)
+            baseline_status = authoring.current_status()
+            # Download to a LOCAL file carrying the SAME basename as the
+            # original (read off the field's own "Current file:" name)
+            # so re-uploading it in `finally` restores the identical
+            # filename, not just the identical bytes.
+            original_filename = authoring.current_file_name(admin.CONTENT_IMAGE_UPLOAD_LABEL)
+            if original_filename:
+                original_download_path = str(tmp_path / original_filename)
+                saved = authoring.download_current_file(admin.CONTENT_IMAGE_UPLOAD_LABEL, original_download_path)
+                original_saved = bool(saved)
+
+        with allure.step("Remove the current Content Image and save (phase 1) to reach this case's own empty-field precondition"):
+            if authoring.current_status() == "Approved":
+                authoring.unpublish_to_edit_as_draft()
+            if original_saved:
+                authoring.remove_current_file(admin.CONTENT_IMAGE_UPLOAD_LABEL)
+                authoring.save_as_draft()
+
+        with allure.step(f"Re-open fresh, upload lawbook.png as the Content Image, set its alt text to '{target_alt_text}', and publish (phase 2)"):
+            authoring = admin.open_page_record()
+            assert authoring.current_file_name(admin.CONTENT_IMAGE_UPLOAD_LABEL) == "", (
+                "expected the Content Image field to be genuinely empty after the phase-1 remove+save"
+            )
+            authoring.upload_file(admin.CONTENT_IMAGE_UPLOAD_LABEL, f"{FIXTURES_DIR}/lawbook.png")
+            authoring.fill_text(admin.CONTENT_IMAGE_ALT_TEXT_LABEL, target_alt_text)
+            authoring.submit_for_publishing()
+            # Post-Save DOM-reflow race (see TC 134877's own docstring note
+            # for the confirmed-live finding) — re-open fresh before any
+            # admin-side read-back.
+            authoring = admin.open_page_record()
+
+        with allure.step("Open the public Chamber's Law page in English after the standard cache refresh"):
+            cl = ChambersLawPage(anon_page)
+
+            def _public_reflects_alt() -> bool:
+                cl.open_chambers_law()
+                return cl.intro_image_alt() == target_alt_text
+
+            _reflects_public(
+                _public_reflects_alt,
+                message="Public intro image alt text never reflected the newly-published Content Image",
+            )
+            public_alt = cl.intro_image_alt()
+            public_image_visible = cl.is_intro_image_visible()
+
+        # Assert
+        assert authoring.current_status() == "Approved"
+        assert "lawbook" in authoring.current_file_name(admin.CONTENT_IMAGE_UPLOAD_LABEL)
+        assert public_image_visible
+        assert public_alt == target_alt_text
+    finally:
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+            pass
+        with allure.step("TEST_OWNED reset — remove the test image (phase 1) then restore the original Content Image bytes/Alt Text/Status (phase 2)"):
+            authoring = admin.open_page_record()
+            if authoring.current_status() == "Approved":
+                authoring.unpublish_to_edit_as_draft()
+            if original_saved:
+                authoring.remove_current_file(admin.CONTENT_IMAGE_UPLOAD_LABEL)
+                authoring.save_as_draft()
+                authoring = admin.open_page_record()
+                authoring.upload_file(admin.CONTENT_IMAGE_UPLOAD_LABEL, original_download_path)
+            if baseline_alt_text is not None:
+                authoring.fill_text(admin.CONTENT_IMAGE_ALT_TEXT_LABEL, baseline_alt_text)
+            if baseline_status == "Approved":
+                authoring.submit_for_publishing()
+            elif baseline_status is not None:
+                authoring.save_as_draft()
 
 
 @allure.epic("About Us")

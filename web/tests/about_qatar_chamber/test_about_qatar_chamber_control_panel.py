@@ -17,17 +17,23 @@ case lives in the sibling test_about_qatar_chamber_web.py, scripted against
 whatever content is already live (see that module + about_qatar_chamber_page.py's
 docstring for what was actually confirmed).
 
-REAL, CONFIRMED BLOCKER (2026-08-26, not fabricated — same root cause already
-documented for every other Control_Panel Page Object in this project, most
-recently home_quick_contact_admin_page.py 2026-08-25): TEST_USER/TEST_PASSWORD
-are still blank in .env this session. The anonymous /c/portal/login form
-itself is reachable and its locators are real/confirmed
-(web/pages/components/cms_login_page.py), but nothing PAST login — the
-Object-entry management screen for `aboutqatarchamberpages` and every one of
-its fields/actions — could be reached by an authenticated session this run,
-and no Playwright MCP fallback was available either. Every locator
-AboutQatarChamberAdminPage exposes is therefore a literal `TODO:` placeholder
-string, never a guessed-but-plausible Liferay selector.
+UPDATE (2026-08-31): UNBLOCKED. TEST_USER/TEST_PASSWORD ARE set in .env this
+session and CLI-confirmed working (`python tools/save_auth.py` captured a
+real authenticated session to `.auth/state.json`). 17 of the 23
+AboutQatarChamberAdminPage locator placeholders are now real, live-confirmed
+selectors — see that Page Object's own docstring for the full extraction
+record (per-screen-state passes: Content & Data nav, entries list,
+entry-edit form, plus an interactive DOM-inspection pass for the
+Status/CKEditor/upload internals extract_locators.py's static harvest
+can't click through). The remaining 6 are confirmed GENUINELY ABSENT from
+the real entry-edit screen after exhaustive exploration (no distinct
+Publish/Unpublish/Preview buttons or Audit Log entry point exist there —
+see that Page Object's docstring points 6 and 9), not merely unreached, and
+stay as literal `TODO:` placeholders. Also flagged there, not silently
+patched: `PAGE_CONTENT_EN_EDITOR`/`_AR_EDITOR` resolve to a real CKEditor
+iframe that current `BasePage.type()`/`.text()` cannot reach into
+(Playwright `Locator` does not pierce iframes) — a wrapper-capability gap,
+separate from locator resolution.
 
 GATING — the SAME `_UNRESOLVED` collection-time skipif convention this
 project's own git history already established for exactly this situation
@@ -36,10 +42,17 @@ test_home_quick_contact_control_panel.py, 2026-08-25). Every test below
 carries a `@pytest.mark.skipif(bool(_UNRESOLVED), reason=...)` gate computed
 from AboutQatarChamberAdminPage's own placeholder constants — a
 collection-time SKIP with the concrete list of what's unresolved, never a
-runtime RuntimeError mid-test. A second, independent runtime gate (a plain
-`pytest.skip` on missing TEST_USER/TEST_PASSWORD) is layered in each test
-body too: fixing the locators alone would otherwise flip these straight from
-SKIP to a real login failure with no credentials to log in with.
+runtime RuntimeError mid-test. Because this gate is a single MODULE-WIDE
+list (not scoped per test to only the locators that specific test uses),
+and 6 of the 23 constants remain genuinely unresolved (2 of them —
+PREVIEW_BUTTON/PREVIEW_PANEL — are exactly what ADO-134692 below needs),
+`_UNRESOLVED` stays non-empty and **all 15 tests in this module still skip**
+even though most of their own individual locators are now resolved. That is
+a known, disclosed limitation of this shared-gate design, not a mistake in
+this pass — narrowing the skip to per-test scope is a follow-up, not
+attempted here without being asked. A second, independent runtime gate (a
+plain `pytest.skip` on missing TEST_USER/TEST_PASSWORD) is layered in each
+test body too, and now passes through live (credentials are set).
 """
 
 import os
@@ -57,13 +70,11 @@ _UNRESOLVED = [
     f"{cls.__name__}.{name}"
     for cls, names in (
         (AboutQatarChamberAdminPage, (
-            "OBJECT_ENTRIES_NAV_LINK", "ABOUT_PAGE_ENTRY_ROW", "ENTRY_EDIT_SCREEN",
-            "PAGE_TITLE_EN_INPUT", "PAGE_TITLE_AR_INPUT", "PAGE_CONTENT_EN_EDITOR",
-            "PAGE_CONTENT_AR_EDITOR", "CONTENT_IMAGE_UPLOAD", "CONTENT_IMAGE_ALT_TEXT_EN_INPUT",
-            "HERO_BANNER_IMAGE_UPLOAD", "HERO_BANNER_ALT_TEXT_INPUT", "HYPERLINK_TITLE_INPUT",
-            "HYPERLINK_URL_INPUT", "HYPERLINK_OPEN_BEHAVIOUR_SELECT", "SAVE_DRAFT_BUTTON",
-            "PUBLISH_BUTTON", "UNPUBLISH_BUTTON", "SUCCESS_TOAST", "AUDIT_LOG_NAV_LINK",
-            "AUDIT_LOG_ENTRY_ROW", "PREVIEW_BUTTON", "PREVIEW_PANEL", "RECORD_STATUS_LABEL",
+            # 17/23 resolved live 2026-08-31 (see AboutQatarChamberAdminPage's own
+            # docstring for the full extraction record) — only the 6 constants
+            # confirmed GENUINELY ABSENT from the real entry-edit screen remain here.
+            "HYPERLINK_OPEN_BEHAVIOUR_SELECT", "UNPUBLISH_BUTTON", "AUDIT_LOG_NAV_LINK",
+            "AUDIT_LOG_ENTRY_ROW", "PREVIEW_BUTTON", "PREVIEW_PANEL",
         )),
     )
     for name in names

@@ -233,6 +233,28 @@ class BasePage:
         self.page.keyboard.type(text)
         log_action(logger, "fill_iframe_editor", iframe_locator, text)
 
+    def append_iframe_editor(self, iframe_locator: str, text: str) -> None:
+        """Appends `text` as a new paragraph at the END of a classic
+        (iframe-based) CKEditor's EXISTING content, rather than replacing it
+        the way `fill_iframe_editor` does (Ctrl+A first). For cases whose
+        wording is literally "add a paragraph to X" without discarding what
+        is already there (e.g. PBI 129393's TC 134777/134778 "Add the
+        paragraph 'DRAFT-ONLY-129393' to Message Content"). Same real-
+        keyboard idiom as `fill_iframe_editor` -- never `page.evaluate()`
+        into the frame, which would bypass CKEditor's own input handling."""
+        on_login_flow = _is_login_flow_url(self.page.url)
+        if is_gate_showing(self.page):
+            clear_license_gate(self.page)
+        if not on_login_flow and is_login_form_showing(self.page):
+            reauthenticate(self.page)
+        body = self.page.frame_locator(iframe_locator).locator("body")
+        body.wait_for(state="visible")
+        body.click()
+        self.page.keyboard.press("Control+End")
+        self.page.keyboard.press("Enter")
+        self.page.keyboard.type(text)
+        log_action(logger, "append_iframe_editor", iframe_locator, text)
+
     def iframe_editor_text(self, iframe_locator: str) -> str:
         """Read the CURRENT (possibly unsaved) editable text out of a
         classic CKEditor iframe's body — the live counterpart to

@@ -44,11 +44,41 @@ has no content that lets the case's specific scenario be verified without
 first performing its blocked Liferay CMS step (TEST_USER/TEST_PASSWORD blank
 — see test_chairman_message_control_panel.py): 134759, 134776, 134777,
 134779, 134780, 134783, 134784, 134828, 134829, 134834, 134838, 134839, 134840.
+
+STATUS UPDATE (2026-09-07): TEST_USER/TEST_PASSWORD are NOW set and working
+(the "blank credentials" reason above is stale for 134776/134777/134780's
+skip texts specifically — see each test's own updated skip reason below).
+The Control_Panel-side CMS mutations for 134774/134776/134777/134778/134780/
+134787 are now scripted for real (see test_chairman_message_control_panel.py,
+migrated to Object Authoring per standards.md's 2026-09-07 correction), but
+every one of them is TEST_OWNED and restores its own baseline in `finally` —
+the mutation only exists for the duration of that ONE test's own execution.
+An independently-scheduled Web-side test here (which may run before, after,
+concurrently with, or never anywhere near that window under pytest-xdist)
+cannot reliably observe that transient state, so 134776/134777/134780's Web
+halves stay skipped by design, not by blocked credentials. 134778 (Preview)
+carries no `Web` tag on its source case at all, so it has no Web-side
+counterpart here.
+
+**⚠ REAL, LIVE, DISCLOSED CONTENT FINDING (2026-09-07):** loading this exact
+page in a genuinely fresh, unauthenticated context found the "EN" (no-prefix)
+URL currently rendering ARABIC text for the hero title, salutation, Name
+Card, and Signature block — e.g. the hero title reads "رسالة رئيس مجلس
+الإدارة", not "Chairman's Message" — contradicting several assertions below
+that assume English content is currently live (a prior-session finding this
+same content has since drifted away from; root cause undetermined, flagged
+to the QA Manager, not silently fixed here). Per Result Integrity, these
+assertions are left exactly as scripted (they are expected to fail honestly
+against the live Arabic content) rather than being loosened to match it —
+see test_chairman_message_control_panel.py's module docstring for the full,
+independently-corroborated finding (confirmed 3 separate ways: Content &
+Data, Object Authoring, and this direct anonymous-context read).
 """
 
 import allure
 import pytest
 
+from core.utils.waits import wait_until
 from web.pages.about_chairman_message.chairman_message_page import ChairmanMessagePage
 
 PBI = "129393"
@@ -839,11 +869,17 @@ def test_visitor_reaches_page_from_main_menu(page):
 @pytest.mark.traceability("ABOUT-CHAIRMANMSG-TC-134776")
 def test_unpublished_page_no_longer_served_publicly(page):
     # ABOUT-CHAIRMANMSG-TC-134776 | PBI 129393
+    # UPDATED 2026-09-07: TEST_USER/TEST_PASSWORD are no longer blank — the
+    # Control_Panel half now runs for real (Object Authoring, see
+    # test_chairman_message_control_panel.py). Still skipped HERE because
+    # that CMS test is TEST_OWNED and restores the record in its own
+    # `finally` — the "unpublished" state only exists for the duration of
+    # that one test's own execution, which this independently-scheduled Web
+    # test cannot reliably observe under pytest-xdist.
     pytest.skip(
-        "Verifying this case requires the page to actually BE unpublished first "
-        "(the Control_Panel half — blocked, blank TEST_USER/TEST_PASSWORD). There "
-        "is no pre-existing 'already unpublished' state to check the public URL "
-        "against without performing that mutation. See test_chairman_message_control_panel.py."
+        "The Control_Panel half's unpublish is TEMPORARY (restored in `finally` "
+        "within that same test) — this independent Web-side test cannot reliably "
+        "observe that transient window. See test_chairman_message_control_panel.py."
     )
 
 
@@ -863,12 +899,14 @@ def test_unpublished_page_no_longer_served_publicly(page):
 @pytest.mark.traceability("ABOUT-CHAIRMANMSG-TC-134777")
 def test_draft_content_not_visible_on_public_site(page):
     # ABOUT-CHAIRMANMSG-TC-134777 | PBI 129393
+    # UPDATED 2026-09-07: see TC 134776's own update note above — the
+    # Control_Panel half now runs for real but is TEST_OWNED/transient.
     pytest.skip(
-        "Verifying this case requires the specific draft paragraph to actually "
-        "be saved first (the Control_Panel half — blocked, blank "
-        "TEST_USER/TEST_PASSWORD). Checking the public page for a string that "
-        "was never authored would be a tautological, non-observed pass, not a "
-        "genuine verification. See test_chairman_message_control_panel.py."
+        "The Control_Panel half's draft-only paragraph is TEMPORARY (restored in "
+        "`finally` within that same test) — this independent Web-side test cannot "
+        "reliably observe that transient window, and checking for a string that "
+        "was never durably authored would be a tautological, non-observed pass, "
+        "not a genuine verification. See test_chairman_message_control_panel.py."
     )
 
 
@@ -913,10 +951,16 @@ def test_message_hyperlink_opens_destination(page):
     cm = ChairmanMessagePage(page)
     cm.open_en()
     if cm.body_link_count() == 0:
+        # UPDATED 2026-09-07: the Control_Panel half now configures this
+        # hyperlink for real (Object Authoring), but restores its own
+        # baseline in `finally` — this independent Web test can't reliably
+        # observe that transient window, so it stays skipped when (as is
+        # normally the case) no hyperlink happens to be live right now.
         pytest.skip(
-            "No inline hyperlink exists in the live message body to click — requires "
-            "the Control_Panel authoring step (blocked, blank TEST_USER/TEST_PASSWORD). "
-            "See test_chairman_message_control_panel.py."
+            "No inline hyperlink exists in the live message body to click right now — "
+            "the Control_Panel half configures one for real but restores its own "
+            "baseline in `finally` (TEST_OWNED), a transient window this independent "
+            "Web-side test cannot reliably observe. See test_chairman_message_control_panel.py."
         )
 
 
@@ -1021,11 +1065,17 @@ def test_language_switch_ar_to_en_loads_same_page(page):
 @pytest.mark.traceability("ABOUT-CHAIRMANMSG-TC-134783")
 def test_replaced_portrait_shown_on_website(page):
     # ABOUT-CHAIRMANMSG-TC-134783 | PBI 129393
+    # UPDATED 2026-09-07: the Control_Panel half is itself scripted SKIPPED
+    # (no reliable restore path for a binary Chairman Portrait upload on
+    # Object Authoring — no Download control exists, confirmed live; see
+    # test_chairman_message_control_panel.py's module docstring), so there
+    # is no before/after CMS mutation for this Web half to verify against.
     pytest.skip(
-        "Verifying an image REPLACE requires a real before/after CMS mutation "
-        "(the Control_Panel half — blocked, blank TEST_USER/TEST_PASSWORD) to "
-        "compare against; there is no meaningful single-snapshot proxy for "
-        "'no longer serves the previous image'. See test_chairman_message_control_panel.py."
+        "The Control_Panel half is scripted SKIPPED (no safe TEST_OWNED restore path "
+        "for a binary portrait upload on Object Authoring — see that module's docstring), "
+        "so there is no real before/after CMS mutation to compare against here; a "
+        "single-snapshot proxy for 'no longer serves the previous image' would not be a "
+        "genuine verification. See test_chairman_message_control_panel.py."
     )
 
 
@@ -1043,12 +1093,18 @@ def test_replaced_portrait_shown_on_website(page):
 @pytest.mark.traceability("ABOUT-CHAIRMANMSG-TC-134784")
 def test_first_time_portrait_upload_shown_on_website(page):
     # ABOUT-CHAIRMANMSG-TC-134784 | PBI 129393
+    # UPDATED 2026-09-07: the Control_Panel half is itself scripted SKIPPED
+    # (the case's own "no portrait set" precondition can't be reached
+    # without a destructive delete of the real, live portrait on the
+    # singleton record — see test_chairman_message_control_panel.py's
+    # module docstring), so there is no real "before" state for this Web
+    # half to verify against either.
     pytest.skip(
-        "Verifying a FIRST-TIME upload requires starting from a record with no "
-        "portrait set (the Control_Panel half — blocked, blank "
-        "TEST_USER/TEST_PASSWORD); the live page already has a portrait, so "
-        "there is no 'before' state to exercise this against. "
-        "See test_chairman_message_control_panel.py."
+        "The Control_Panel half is scripted SKIPPED (this case's 'no portrait set' "
+        "precondition would require a destructive delete of the real, live portrait "
+        "on the singleton record — see that module's docstring); the live public page "
+        "already has a portrait, so there is no 'before' state to exercise this "
+        "against. See test_chairman_message_control_panel.py."
     )
 
 
@@ -1133,12 +1189,30 @@ def test_visitor_can_scroll_to_signature_and_footer(page):
 @pytest.mark.traceability("ABOUT-CHAIRMANMSG-TC-134787")
 def test_name_and_designation_consistent_across_both_locations(page):
     # ABOUT-CHAIRMANMSG-TC-134787 | PBI 129393
+    # The public-verification half of the Control_Panel authoring case (see
+    # test_chairman_message_control_panel.py's
+    # test_name_and_designation_have_single_source_field). Polls for
+    # propagation (5s timeout / 0.5s interval) per this project's measured
+    # Liferay publish latency (cms-profile.md's "Publish / Propagation
+    # Latency Budget") instead of a bare sleep or a single, potentially-early
+    # read — the CMS half's `finally` block always restores the baseline
+    # value, which is this SAME expected value (see the admin Page Object's
+    # docstring), so this assertion holds regardless of run order relative
+    # to the Control_Panel test.
     # Arrange
     cm = ChairmanMessagePage(page)
 
     # Act
     with allure.step("Open the public Chairman's Message page in English"):
         cm.open_en()
+
+    with allure.step("Poll (5s timeout / 0.5s interval) for the Name Card to reflect the published values"):
+        wait_until(
+            lambda: cm.name_text() == EXPECTED_NAME_EN and cm.designation_text() == EXPECTED_DESIGNATION_EN,
+            timeout=5.0,
+            poll=0.5,
+            message="Name Card never reflected the published Chairman Name/Designation",
+        )
 
     with allure.step("Read the Name Card and the Signature block"):
         namecard_name = cm.name_text()
