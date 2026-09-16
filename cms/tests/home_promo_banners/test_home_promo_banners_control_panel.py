@@ -903,3 +903,408 @@ def test_banner_visible_only_within_start_end_date_range(page):
         admin.open_promo_banners_list()
         admin.delete_row_by_alt_text(alt_en_in_range)
         admin.delete_row_by_alt_text(alt_en_out_of_range)
+
+
+# ---------------------------------------------------------------------------
+# ADO 135117 / 135184 / 135185 -- added 2026-09-09
+#
+# OBJECT NAME (per standards.md, taken from cms/Content-Admin-Guide.docx
+# section 16 "Home - Promotional Banners", NEVER guessed or probed first):
+# **PromotionalBanner** -> Object Authoring slug `promotional-banner`
+# (`/web/qatar-chamber/manage-promotional-banner`). Guide field list:
+# bannerImageEN / bannerImageAR (desktop), bannerImageMobileEN / ...AR
+# (mobile, optional), bannerAltTextEN / ...AR, redirectUrl (bilingual),
+# openInNewTab, startDate / endDate (optional schedule), displayOrder,
+# activeStatus.
+#
+# CONFIRMED LIVE 2026-09-09 (headless Chromium against qcdev, freshly
+# re-captured .auth/state.json, scoped CLI probes -- never the Playwright
+# MCP):
+#   - `manage-promotional-banner` renders 3 entries, all APPROVED
+#     (QCDEMO-129368-PROMO-BANNER-1..3). The ENTRY column renders **Banner
+#     Alt Text (EN)**, which is also the value the public carousel puts in
+#     each slide image's `alt` -- so one string keys both the CMS row lookup
+#     and the public-page assertion.
+#   - Lifecycle controls all present on this surface: `Save as Draft`,
+#     `Submit for Publishing`, and (on an Approved entry) `Unpublish to edit
+#     as draft`. This is what unblocked these cases; the module's original
+#     WORKFLOW FINDING above describes the RETIRED Content & Data surface,
+#     where none of them existed.
+#   - Required fields (live `required`-attribute read; this form renders no
+#     visible "*"): Banner Alt Text (EN), Banner Alt Text (AR), Display
+#     Order. The image fields are not DOM-required.
+#   - Public baseline at the time of writing: 3 slides, alt texts matching
+#     the 3 CMS rows exactly.
+#
+# DISCLOSED CASE-VS-BUILD LABEL MAPPING (applies to all three cases below,
+# and is the same mapping already disclosed for TC 135123/135124/135125):
+#   case wording        -> this build's actual state/control
+#   "Publish"           -> `Submit for Publishing`
+#   "Published"         -> status `Approved`
+#   "Unpublish"         -> `Unpublish to edit as draft`
+#   "Unpublished"       -> status `Draft`
+#   "Pending Review"    -> DOES NOT EXIST. `Submit for Publishing` moves
+#                          Draft -> Approved directly, with no intermediate
+#                          moderation state. Asserted and reported as such
+#                          below rather than faked.
+#
+# TEST-DATA POLICY FOR THESE THREE -- DISCLOSED DEVIATION from the delete-on-
+# teardown convention the older tests in this module use, per the QA
+# Manager's standing instruction that newly-created entries are LEFT IN
+# PLACE: `_retire_created_banner()` never deletes. It instead returns the
+# created entry to Draft + Active Status=False, which restores the PUBLIC
+# Home Page to its 3-slide baseline while keeping the QCTEST record in the
+# CMS for inspection. That satisfies both the no-teardown instruction and
+# standards.md's rule that a test must not leave live public content
+# altered.
+# ---------------------------------------------------------------------------
+
+PROMO_XDIST_GROUP = pytest.mark.xdist_group("promotional_banner_129368")
+
+
+def _sweep_previous_run_leftovers(authoring: ObjectAuthoringPage, alt_en: str) -> None:
+    """Remove same-titled rows THIS case left behind on an earlier run.
+
+    Added 2026-09-10 after a real failure: because `_retire_created_banner()`
+    keeps the record instead of deleting it (the standing no-teardown
+    instruction), a second run of a create-case produced two rows with the
+    same Banner Alt Text (EN), and `open_entry_by_edit_link()` then failed
+    with a Playwright strict-mode violation ("resolved to 2 elements").
+
+    This runs BEFORE the case creates anything, so the invariant is "exactly
+    one QCTEST row per case survives a run, for inspection" rather than
+    "one more every run". It only ever touches this case's own
+    `QCTEST-<tc-id>` title -- `delete_all_entries_by_title()` itself refuses
+    anything outside the QCTEST- namespace -- so real editorial banners are
+    unreachable from here.
+    """
+    authoring.delete_all_entries_by_title(alt_en)
+
+
+def _retire_created_banner(authoring: ObjectAuthoringPage, alt_en: str) -> None:
+    """Restore-not-delete teardown -- see the TEST-DATA POLICY note above.
+
+    Deliberately tolerant: it re-navigates to the entries list itself and
+    no-ops when the row is absent, so it is safe to call unconditionally
+    from a `finally` even when the test failed before creating anything.
+    """
+    authoring.open_entries_list()
+    if not authoring.row_visible(alt_en):
+        return
+    authoring.open_entry_by_edit_link(alt_en)
+    if authoring.current_status() == "Approved":
+        authoring.unpublish_to_edit_as_draft()
+    authoring.set_checkbox("Active Status", False)
+    authoring.save_as_draft()
+
+
+@allure.epic("Home Page")
+@allure.feature("Promotional Banners")
+@allure.story("Content workflow - create and publish")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Site Content Editor can create and publish a new promotional banner slot")
+@pytest.mark.control_panel
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.workflow
+@pytest.mark.pbi_129368
+@pytest.mark.tc_135117
+@pytest.mark.traceability("135117")
+@PROMO_XDIST_GROUP
+def test_create_and_publish_new_promotional_banner_slot(page):
+    """ADO-135117 (Control_Panel, Regression, UAT, Workflow; Priority 2).
+    Steps, quoted verbatim from the Azure DevOps work item:
+      1. Log into Liferay CMS as Site Content Editor -> Login succeeds
+      2. Navigate to Home Page > Promotional Banners / Ad Slots Management
+         -> Management screen loads with existing banner list
+      3. Click Add Banner -> Add Banner form opens
+      4. Upload both bilingual images, enter bilingual alt text, redirect
+         URL, display order = 1, set Active Status = true -> All fields
+         accept the entered values with no inline validation errors
+      5. Save as Draft, then Publish -> System displays a Liferay generic
+         success toast; banner slot status changes to Published
+
+    CMS-only case (no Web tag) -- the public Home Page is deliberately NOT
+    asserted here; ADO-135184 below is the end-to-end sibling that does.
+
+    DISCLOSED DEVIATIONS FROM THE LITERAL WORDING:
+      - Steps 1-3: on the Object Authoring surface, `manage-promotional-
+        banner` with no `editEntry` param IS the Add form -- there is no
+        separate "Add Banner" button to click. Login is the framework's
+        stored-session auth, re-captured immediately before the run.
+      - Step 5 "Publish" is this build's `Submit for Publishing`, and
+        "Published" is status `Approved` (see the mapping note above).
+      - The toast is not asserted. `ObjectAuthoringPage` has no toast/error
+        reader, so a toast assertion would be unverifiable rather than
+        merely unwritten. The step's real outcome -- the status transition
+        -- IS asserted, on both the edit form and the entries list.
+    """
+    authoring = ObjectAuthoringPage(page, slug="promotional-banner")
+    alt_en = "QCTEST-135117 Create And Publish"
+    alt_ar = "إنشاء-ونشر-135117"
+    redirect_url = "https://www.qatarchamber.com/qctest-135117"
+
+    try:
+        with allure.step("Clear any same-titled leftover from a previous run of this case"):
+            _sweep_previous_run_leftovers(authoring, alt_en)
+
+        with allure.step("Open the Promotional Banner authoring form and enter every field the case names"):
+            _create_banner_via_object_authoring(authoring, alt_en, alt_ar, "1", True)
+            authoring.fill_text("Redirect URL", redirect_url)
+
+        with allure.step("Assert all fields accepted the entered values with no inline validation error"):
+            accepted = {
+                "Banner Alt Text (EN)": authoring.field_value("Banner Alt Text (EN)"),
+                "Banner Alt Text (AR)": authoring.field_value("Banner Alt Text (AR)"),
+                "Redirect URL": authoring.field_value("Redirect URL"),
+                "Display Order": authoring.spinbutton_value("Display Order"),
+            }
+            active_accepted = authoring.is_checked("Active Status")
+        assert accepted["Banner Alt Text (EN)"] == alt_en, accepted
+        assert accepted["Banner Alt Text (AR)"] == alt_ar, accepted
+        assert accepted["Redirect URL"] == redirect_url, accepted
+        assert accepted["Display Order"] == "1", accepted
+        assert active_accepted, "Active Status did not accept the checked state"
+
+        with allure.step("Save as Draft"):
+            authoring.save_as_draft()
+            status_draft = authoring.row_status_text(alt_en)
+        assert status_draft == "Draft", (
+            f"new banner {alt_en!r} did not save as Draft, got {status_draft!r}"
+        )
+
+        with allure.step("Publish it (this build: Submit for Publishing)"):
+            authoring.open_entry_by_edit_link(alt_en)
+            authoring.submit_for_publishing()
+            status_published = authoring.row_status_text(alt_en)
+        assert status_published == "Approved", (
+            f"banner {alt_en!r} did not reach Approved (this build's "
+            f"Published), got {status_published!r}"
+        )
+    finally:
+        try:
+            _retire_created_banner(authoring, alt_en)
+        except Exception:  # noqa: BLE001 -- teardown must never mask the real failure
+            logger.warning(
+                "restore for %r did not complete -- a QCTEST banner may still be "
+                "Approved and Active on the public Home Page", alt_en
+            )
+
+
+@allure.epic("Home Page")
+@allure.feature("Promotional Banners")
+@allure.story("End-to-end - CMS to public Home Page")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Admin can create, publish, and see a promotional banner appear on the Home Page end-to-end")
+@pytest.mark.control_panel
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.pbi_129368
+@pytest.mark.tc_135184
+@pytest.mark.traceability("135184")
+@PROMO_XDIST_GROUP
+def test_create_publish_and_see_banner_on_home_page_end_to_end(page, browser):
+    """ADO-135184 (Control_Panel + Web, Regression, UAT; Priority 1).
+    Steps, quoted verbatim from the Azure DevOps work item:
+      1. Log in to CMS as Site Content Editor -> Login succeeds
+      2. Add Banner: upload EN+AR images, enter bilingual alt text,
+         redirect URL, Display Order=1, Active=true -> All fields populated
+         as entered
+      3. Save as Draft -> Draft saved; Liferay success toast shown
+      4. Submit for review -> State moves to Pending Review; toast shown
+      5. Publish the banner -> State moves to Published; toast shown
+      6. Trigger cache refresh / wait for cache TTL -> Cache refreshed
+      7. Load the public Home Page -> Banner is visible on the Home Page
+         with the configured EN image, alt text, and is clickable to the
+         redirect URL
+
+    DISCLOSED DEVIATION -- STEPS 4 AND 5 COLLAPSE INTO ONE TRANSITION.
+    Confirmed live: this build has no Pending Review state. `Submit for
+    Publishing` moves Draft -> Approved directly, so there is no
+    intermediate state for step 4 to land on and no separate step-5
+    Publish action to invoke afterwards. The test asserts the transition
+    that DOES exist (Draft -> Approved) and this docstring records the
+    gap; it does not manufacture a Pending Review assertion. Same finding
+    already reported for TC 135123/135124 -- worth the QA Manager deciding
+    once whether the workflow was descoped or the cases were authored
+    against an assumed design.
+
+    Step 6 is a real condition-based poll (`reload_until_banner_matches`),
+    never a sleep. Step 7's public read runs in a FRESH LOGGED-OUT context
+    (mandatory per standards.md) so CMS session state cannot mask the
+    result.
+    """
+    from core.web.browser import new_context
+
+    authoring = ObjectAuthoringPage(page, slug="promotional-banner")
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePromoBannersPage(anon_context.new_page())
+    alt_en = "QCTEST-135184 End To End"
+    alt_ar = "شامل-135184"
+    redirect_url = "https://www.qatarchamber.com/qctest-135184"
+
+    try:
+        with allure.step("Clear any same-titled leftover from a previous run of this case"):
+            _sweep_previous_run_leftovers(authoring, alt_en)
+
+        with allure.step("Add Banner: both images, bilingual alt text, redirect URL, Display Order=1, Active=true"):
+            _create_banner_via_object_authoring(authoring, alt_en, alt_ar, "1", True)
+            authoring.fill_text("Redirect URL", redirect_url)
+            assert authoring.field_value("Banner Alt Text (EN)") == alt_en
+            assert authoring.field_value("Banner Alt Text (AR)") == alt_ar
+            assert authoring.field_value("Redirect URL") == redirect_url
+            assert authoring.spinbutton_value("Display Order") == "1"
+            assert authoring.is_checked("Active Status")
+
+        with allure.step("Save as Draft"):
+            authoring.save_as_draft()
+            status_draft = authoring.row_status_text(alt_en)
+        assert status_draft == "Draft", (
+            f"banner {alt_en!r} did not save as Draft, got {status_draft!r}"
+        )
+
+        with allure.step("Submit for publishing (steps 4+5 -- no Pending Review state exists on this build)"):
+            authoring.open_entry_by_edit_link(alt_en)
+            authoring.submit_for_publishing()
+            status_published = authoring.row_status_text(alt_en)
+        assert status_published == "Approved", (
+            f"banner {alt_en!r} did not reach Approved (this build's "
+            f"Published), got {status_published!r}"
+        )
+
+        with allure.step("Wait for the public Home Page to reflect the new banner (anonymous context)"):
+            appeared = home.reload_until_banner_matches(alt_en, expected_visible=True)
+        assert appeared, (
+            f"published banner {alt_en!r} did not appear on the public Home "
+            f"Page within {home.RELOAD_POLL_TIMEOUT_MS}ms"
+        )
+
+        with allure.step("Assert the rendered banner carries the configured EN image, alt text and redirect link"):
+            rendered_src = home.banner_image_src(alt_en)
+            rendered_href = home.banner_link_href(alt_en)
+        assert rendered_src, (
+            f"banner {alt_en!r} rendered with no image src -- the configured "
+            "EN image is not wired to the public slide"
+        )
+        assert rendered_href == redirect_url, (
+            f"banner {alt_en!r} is not clickable to the configured redirect "
+            f"URL: expected {redirect_url!r}, got {rendered_href!r}"
+        )
+    finally:
+        try:
+            _retire_created_banner(authoring, alt_en)
+        except Exception:  # noqa: BLE001
+            logger.warning(
+                "restore for %r did not complete -- a QCTEST banner may still be "
+                "Approved and Active on the public Home Page", alt_en
+            )
+        anon_context.close()
+
+
+@allure.epic("Home Page")
+@allure.feature("Promotional Banners")
+@allure.story("End-to-end - unpublish removes from public Home Page")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Unpublishing a banner removes it from the Home Page after cache refresh")
+@pytest.mark.control_panel
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.pbi_129368
+@pytest.mark.tc_135185
+@pytest.mark.traceability("135185")
+@PROMO_XDIST_GROUP
+def test_unpublishing_banner_removes_it_from_home_page_after_cache_refresh(page, browser):
+    """ADO-135185 (Control_Panel + Web, Regression; Priority 1).
+    Steps, quoted verbatim from the Azure DevOps work item:
+      1. Log in to CMS, locate the published banner -> Banner list shows
+         Published state
+      2. Click Unpublish -> State changes to Unpublished; Liferay success
+         toast shown
+      3. Wait for cache refresh -> Cache refreshed
+      4. Load the public Home Page -> Banner no longer appears in the
+         promotional banners section
+
+    PRECONDITION ("Banner from TC-019 is live"): the case inherits a live
+    banner from its predecessor. Rather than depend on ADO-135184 having
+    run first -- which would make this test order-dependent and unable to
+    run alone -- it establishes the same precondition itself and ASSERTS it
+    publicly before touching anything. The case's own subject matter (the
+    unpublish transition) is unchanged by that.
+
+    Deliberately NOT retargeted at one of the three real
+    QCDEMO-129368-PROMO-BANNER-* entries: unpublishing real editorial
+    content would take a live banner off the public Home Page for the
+    duration of the run, which standards.md forbids when a disposable
+    fixture achieves the identical assertion.
+
+    Both public reads use a FRESH LOGGED-OUT context (mandatory per
+    standards.md), and step 3's "wait for cache refresh" is a real
+    condition-based poll, never a sleep.
+    """
+    from core.web.browser import new_context
+
+    authoring = ObjectAuthoringPage(page, slug="promotional-banner")
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePromoBannersPage(anon_context.new_page())
+    alt_en = "QCTEST-135185 Unpublish Removes From Home"
+    alt_ar = "إلغاء-النشر-135185"
+
+    try:
+        with allure.step("Clear any same-titled leftover from a previous run of this case"):
+            _sweep_previous_run_leftovers(authoring, alt_en)
+
+        with allure.step("Establish the precondition: a published, live banner"):
+            _create_banner_via_object_authoring(authoring, alt_en, alt_ar, "1", True)
+            authoring.save_as_draft()
+            authoring.open_entry_by_edit_link(alt_en)
+            authoring.submit_for_publishing()
+            status_before = authoring.row_status_text(alt_en)
+        assert status_before == "Approved", (
+            f"precondition failed: fixture banner {alt_en!r} is not in the "
+            f"Published/Approved state, got {status_before!r}"
+        )
+
+        with allure.step("Confirm the banner IS on the public Home Page before unpublishing"):
+            live_before = home.reload_until_banner_matches(alt_en, expected_visible=True)
+        assert live_before, (
+            f"precondition failed: banner {alt_en!r} is not live on the "
+            "public Home Page, so its removal cannot be observed"
+        )
+
+        with allure.step("Locate the published banner in the CMS and click Unpublish"):
+            authoring.open_entries_list()
+            authoring.open_entry_by_edit_link(alt_en)
+            assert authoring.is_save_as_draft_disabled(), (
+                "Save as Draft was not disabled on the opened entry -- it is "
+                "not in the published state this step requires"
+            )
+            authoring.unpublish_to_edit_as_draft()
+            status_after = authoring.row_status_text(alt_en)
+        assert status_after == "Draft", (
+            f"banner {alt_en!r} did not leave the published state after "
+            f"Unpublish, got {status_after!r} (this build labels the "
+            "unpublished state 'Draft', not 'Unpublished')"
+        )
+
+        with allure.step("Wait for cache refresh, then assert the banner is gone from the Home Page"):
+            gone = home.reload_until_banner_matches(alt_en, expected_visible=False)
+        assert gone, (
+            f"unpublished banner {alt_en!r} still appears in the promotional "
+            f"banners section within {home.RELOAD_POLL_TIMEOUT_MS}ms"
+        )
+    finally:
+        try:
+            _retire_created_banner(authoring, alt_en)
+        except Exception:  # noqa: BLE001
+            logger.warning(
+                "restore for %r did not complete -- a QCTEST banner may still be "
+                "Approved and Active on the public Home Page", alt_en
+            )
+        anon_context.close()

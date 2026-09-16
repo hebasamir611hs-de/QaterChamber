@@ -1,0 +1,72 @@
+
+### 134960 — Verify that a valid English Law Description is accepted and saved
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the Law Description (EN) text area available
+  2. Enter a 300-character description in Law Description (EN) and click Save
+     -> Value is accepted with no validation error and the success toast is shown
+  3. Reload the law entry record
+     -> Law Description (EN) is returned with the full 300-character text preserved
+
+### 134961 — Verify that an empty English Law Description is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record with Law Description (EN) populated
+     -> Law entry record opens with Law Description (EN) populated
+  2. Clear Law Description (EN) completely and click Save
+     -> Save is blocked with a required-field validation error against Law Description (EN) and no success toast appears
+  3. Reload the law entry record
+     -> Law Description (EN) retains its previous content
+
+### 134962 — Verify that the English Law Description accepts exactly 500 characters and rejects 501
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the Law Description (EN) text area available
+  2. Enter exactly 500 characters in Law Description (EN) and click Save
+     -> The 500-character value is accepted and saved with the success toast shown
+  3. Add one more character to make 501 and click Save
+     -> The 501st character is not accepted — the field caps at 500 characters or a max-length validation error is shown and the previously saved 500-character value is unchanged
+
+### 134963 — Verify that a whitespace-only English Law Description is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the Law Description (EN) text area available
+  2. Enter five space characters in Law Description (EN) and click Save
+     -> Save is blocked with a required-field validation error and no success toast appears
+  3. Reload the law entry record
+     -> Law Description (EN) retains its previous content and is not stored as spaces
+
+### 134964 — Verify that a valid Arabic Law Description is accepted and saved with RTL text preserved
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the Law Description (AR) text area available
+  2. Enter a 300-character Arabic description in Law Description (AR) and click Save
+     -> Value is accepted with no validation error and the success toast is shown
+  3. Reload the law entry record
+     -> Law Description (AR) is returned with the Arabic text intact and rendered right-to-left in the text area
+
+### 134965 — Verify that an empty Arabic Law Description is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record with Law Description (AR) populated
+     -> Law entry record opens with Law Description (AR) populated
+  2. Clear Law Description (AR) completely and click Save
+     -> Save is blocked with a required-field validation error against Law Description (AR) and no success toast appears
+  3. Reload the law entry record
+     -> Law Description (AR) retains its previous content
+
+### 134966 — Verify that the Arabic Law Description accepts exactly 500 characters and rejects 501
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the Law Description (AR) text area available
+  2. Enter exactly 500 Arabic characters in Law Description (AR) and click Save
+     -> The 500-character Arabic value is accepted and saved with the success toast shown
+  3. Add one more Arabic character to make 501 and click Save
+     -> The 501st character is not accepted — the field caps at 500 characters or a max-length validation error is shown and the previously saved value is unchanged
+
+### 134967 — Verify that a whitespace-only Arabic Law Description is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the Law Description (AR) text area available
+  2. Enter five space characters in Law Description (AR) and click Save
+     -> Save is blocked with a required-field validation error and no success toast appears
+  3. Reload the law entry record
+     -> Law Description (AR) retains its previous content and is not stored as spaces

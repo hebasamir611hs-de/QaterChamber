@@ -1,0 +1,36 @@
+
+### 134968 — Verify that a valid External Link URL is accepted and saved
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low, Redirect
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the External Link URL field available
+  2. Enter 'https://www.almeezan.qa/LawView.aspx?opt&LawID=2541' as the External Link URL and click Save
+     -> Value is accepted with no validation error and the success toast is shown
+  3. Reload the law entry record
+     -> External Link URL reads 'https://www.almeezan.qa/LawView.aspx?opt&LawID=2541' with its query string preserved
+
+### 134969 — Verify that an invalid External Link URL is rejected with the valid-URL message
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low, Redirect
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the External Link URL field available
+  2. Enter 'almeezan..qa/LawView' as the External Link URL and click Save
+     -> Save is blocked with 'Please enter a valid URL.' shown against External Link URL, no success toast appears, and the invalid string is not stored
+  3. Switch the CMS interface language to Arabic and repeat
+     -> The same validation is shown in Arabic as 'يرجى إدخال رابط صالح.'
+
+### 134970 — Verify that the External Link URL accepts exactly 500 characters and rejects 501
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low, Redirect
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the External Link URL field available
+  2. Enter a valid URL exactly 500 characters long as the External Link URL and click Save
+     -> The 500-character URL is accepted and saved with the success toast shown
+  3. Extend the same URL to 501 characters and click Save
+     -> The 501st character is not accepted — the field caps at 500 characters or a max-length validation error is shown and the value is not saved
+
+### 134971 — Verify that an empty External Link URL is allowed because the field is optional
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low, Redirect, Web
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the External Link URL field empty
+  2. Leave the External Link URL field empty, complete all mandatory law entry fields, and click Save
+     -> Save succeeds with no validation error against External Link URL and the success toast is shown
+  3. Publish the page and open the Chamber's Law page in English
+     -> The law entry's card renders with its icon, number, title and description, and no broken or empty-destination CTA is displayed

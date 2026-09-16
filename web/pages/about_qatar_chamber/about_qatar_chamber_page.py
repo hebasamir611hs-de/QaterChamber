@@ -298,6 +298,35 @@ class AboutQatarChamberPage(BasePage):
         self.wait_for(self.HERO_TITLE)
         return self
 
+    def open_en_tolerant(self) -> "AboutQatarChamberPage":
+        """Opens the EN page WITHOUT waiting for the hero title to render.
+
+        Added 2026-09-09 (PBI 129392). `open_en()` waits for
+        `.qc-ap-hero-title` to be visible, which is right for every test that
+        expects a normally-published page — but it makes the
+        unpublished/draft states impossible to observe: confirmed live, when
+        the AboutQatarChamberPage record is unpublished the URL still returns
+        **HTTP 200** and renders a SHELL whose hero `<h1
+        class="qc-ap-hero-title">` is EMPTY and hidden, so `open_en()` times
+        out with "locator resolved to hidden" instead of letting the test
+        assert the withdrawn state. Use this for any case that inspects
+        draft/unpublished public behaviour; use `open_en()` everywhere else."""
+        self.open(web_url(ABOUT_PATH))
+        return self
+
+    def hero_title_is_rendered(self) -> bool:
+        """True when the hero title is BOTH present and non-empty — the
+        honest "is this page actually serving its content?" signal, since an
+        unpublished record still renders the element, just empty (see
+        `open_en_tolerant`)."""
+        loc = self.page.locator(self.HERO_TITLE)
+        if loc.count() == 0:
+            return False
+        try:
+            return bool((loc.first.inner_text() or "").strip())
+        except Exception:  # noqa: BLE001 — mirrors BasePage.is_visible's contract
+            return False
+
     def open_not_found_path(self) -> int:
         """Navigates to a deliberately non-existent sibling path (134742) and
         returns the real HTTP status code the server answered with."""

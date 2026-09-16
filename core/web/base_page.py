@@ -24,6 +24,17 @@ logger = get_logger("base_page")
 # session_guard.py's reentrancy note for the sibling fix in type()).
 _LOGIN_FLOW_MARKERS = ("/c/portal/login", "com_liferay_login_web_portlet_LoginPortlet")
 
+# Navigation budget for open(). Playwright's default is 30s, which is enough
+# for every authoring screen EXCEPT the entries list: `manage-law-entry` has
+# grown past 240 objects and, late in a long run (qcdev degrades as the
+# session ages), its DOM-ready can exceed 30s outright — it broke tc_134978
+# live on 2026-09-16 AFTER the test had already navigated that same URL
+# successfully several times, which is the signature of a slow page, not a
+# broken locator. Raising the budget can only ever allow more time; every
+# Page Object still waits on its own real conditions afterwards, so a page
+# that is genuinely never coming back still fails, just later.
+NAV_TIMEOUT_MS = 90000
+
 
 def _is_login_flow_url(url: str) -> bool:
     return any(marker in (url or "") for marker in _LOGIN_FLOW_MARKERS)
@@ -35,7 +46,21 @@ class BasePage:
 
     def open(self, url: str) -> None:
         remember_target(self.page, url)
-        self.page.goto(url)
+        # `wait_until="domcontentloaded"`, NOT Playwright's default "load"
+        # (added 2026-09-09, PBI 129394). Measured live on qcdev: after a
+        # navigation on the object-authoring surface `domcontentloaded`
+        # fires immediately while **`load` never fires at all** — it was
+        # still timing out on a 15s budget (some page resource never
+        # completes; same class of cause as the chatbot polling that
+        # already makes `networkidle` unusable here, see
+        # ObjectAuthoringPage._wait_for_settle). A bare goto() therefore
+        # inherits the 30s default timeout on "load" and throws
+        # `Page.goto: Timeout 30000ms exceeded` on a page that is in fact
+        # fully usable — observed breaking tc_134884 after it had already
+        # navigated successfully many times. DOM-ready is the correct
+        # precondition here: every Page Object waits on its own real
+        # conditions afterwards.
+        self.page.goto(url, wait_until="domcontentloaded", timeout=NAV_TIMEOUT_MS)
         # Site-wide interstitial guard (see core/web/license_gate.py). No-op
         # when the interstitial is absent, which is the normal path.
         clear_license_gate(self.page, url)

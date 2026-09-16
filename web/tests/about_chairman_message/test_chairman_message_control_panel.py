@@ -321,6 +321,12 @@ def test_admin_can_unpublish_chairman_message_page(page):
         with allure.step("Ensure the record starts Approved/published (this case's own precondition), then click Unpublish"):
             if authoring.current_status() != "Approved":
                 authoring.submit_for_publishing()
+                # CONFIRMED LIVE 2026-09-10: a save navigates this surface to
+                # `manage-<slug>?previewEntry=<code>` (the PREVIEW view), which
+                # has no "Unpublish to edit as draft" button at all -- the
+                # unpublish below then timed out waiting for a control that was
+                # never going to render. Re-open the edit form first.
+                authoring = admin.open_object_authoring_form()
             authoring.unpublish_to_edit_as_draft()
 
         # Assert
@@ -349,7 +355,7 @@ def test_admin_can_unpublish_chairman_message_page(page):
 @pytest.mark.pbi_129393
 @pytest.mark.xdist_group("chairman_message_78261")
 @pytest.mark.traceability("ABOUT-CHAIRMANMSG-TC-134777")
-def test_draft_content_is_saved_but_not_published(page):
+def test_draft_content_is_saved_but_not_published(page, browser):
     # ABOUT-CHAIRMANMSG-TC-134777 | PBI 129393
     # TEST_OWNED. Driven through Object Authoring's Unpublish/Save as Draft
     # actions.
@@ -362,10 +368,29 @@ def test_draft_content_is_saved_but_not_published(page):
     # editor instead of EN. Every rich-text call below now passes
     # `admin.MESSAGE_CONTENT_FIELD_NAME` for a locale-safe, reflow-safe
     # locator instead of relying on that default.
+    #
+    # COMPLETED 2026-09-09: the public-invisibility half now runs HERE, inside
+    # this test, while the draft actually exists. It was previously missing
+    # from BOTH halves of this case — this test asserted only status + content
+    # read-back, and the independent Web-side test
+    # (`test_chairman_message_web.py::test_draft_content_not_visible_on_public_site`)
+    # skips because it cannot observe a window this test opens and closes in
+    # its own `finally`. That skip reasoning is sound for a SEPARATE test, but
+    # it left the case's actual headline claim — "draft content stays out of
+    # the public site" — unverified by anything. standards.md's "Draft/Unpublish
+    # Public-Visibility Checks — Mandatory Logged-Out Context" rule requires a
+    # genuinely unauthenticated context for this check (a signed-in page, and
+    # the Object Authoring preview panel, both render drafts to staff by
+    # design and would produce a false pass), so it uses the same fresh
+    # `new_context(browser, use_auth_state=False)` idiom TC 134778 below
+    # already uses — but opened LAZILY, see below.
+    from core.web.browser import new_context
+
     user, password = _skip_if_no_credentials()
     admin = ChairmanMessageAdminPage(page)
     baseline_message = None
     baseline_status = None
+    anon_context = None
 
     try:
         with allure.step("Sign in and open the Chairman's Message record via Object Authoring"):
@@ -381,12 +406,74 @@ def test_draft_content_is_saved_but_not_published(page):
                 authoring.unpublish_to_edit_as_draft()
             authoring.fill_rich_text(f"{baseline_message}\n\nDRAFT-ONLY-129393", admin.MESSAGE_CONTENT_FIELD_NAME)
             authoring.save_as_draft()
+            # Re-open before reading back: a save lands this surface on
+            # `manage-<slug>?previewEntry=<code>`, whose rich-text editor is
+            # EMPTY regardless of what was stored -- confirmed live
+            # 2026-09-10, this read returned only a bare newline while the
+            # record on disk
+            # held the paragraph, failing the assertion below on a value the
+            # product had actually saved correctly.
+            authoring = admin.open_object_authoring_form()
+            status_after_draft = authoring.current_status()
+            draft_content = authoring.rich_text_value(admin.MESSAGE_CONTENT_FIELD_NAME)
+
+        with allure.step("Confirm the public page (fresh, anonymous context) does not show the draft-only paragraph"):
+            # Read the public page WHILE the draft is live — this is the case's
+            # headline claim, and it is only observable inside this window.
+            #
+            # The anonymous context is opened HERE, not at test start, and torn
+            # down as soon as the read is done. Holding a second browser context
+            # open across this test's whole ~90s CMS interaction reproducibly
+            # tripped qcdev's dev-mode connection-limit gate (observed
+            # 2026-09-09: `Page.goto: Timeout 30000ms exceeded`, and before that
+            # a rich-text iframe that resolved but never became visible) — the
+            # gate standards.md's parallelism section already documents. Two
+            # concurrent contexts against this shared dev instance is the
+            # trigger, so the second one exists only for the seconds it is
+            # actually needed.
+            anon_context = new_context(browser, use_auth_state=False)
+            cm = ChairmanMessagePage(anon_context.new_page())
+            # NOT open_en(): that waits for the hero title to be VISIBLE, which
+            # a draft-backed page never satisfies — see
+            # ChairmanMessagePage.open_en_expecting_no_content()'s docstring for
+            # the confirmed-live behaviour (page 200s, chrome renders, every
+            # content slot empty).
+            cm.open_en_expecting_no_content()
+            public_body_text = cm.text("body")  # BasePage.text() — no raw Playwright in the test
+            public_hero_title = cm.hero_title_text()
+            anon_context.close()
+            anon_context = None
 
         # Assert
         assert login.login_succeeded()
-        assert authoring.current_status() == "Draft"
-        assert "DRAFT-ONLY-129393" in authoring.rich_text_value(admin.MESSAGE_CONTENT_FIELD_NAME)
+        assert status_after_draft == "Draft"
+        assert "DRAFT-ONLY-129393" in draft_content
+
+        # Positive control FIRST — without it the two absence assertions below
+        # would also "pass" if the anonymous page had simply failed to load, or
+        # served an error/Coming-Soon shell. Prove we are really looking at the
+        # Chairman's Message page before concluding anything is absent from it.
+        assert "Chairman's Message" in public_body_text, (
+            "the anonymous context did not load the public Chairman's Message page, "
+            "so the absence checks below would be meaningless — got: "
+            f"{public_body_text[:200]!r}"
+        )
+        assert "DRAFT-ONLY-129393" not in public_body_text, (
+            "draft-only content leaked to the public Chairman's Message page while "
+            "the record was in Draft status"
+        )
+        # Confirmed-live behaviour: a draft-backed page renders its chrome but
+        # leaves every content slot empty, so the hero title carries no text.
+        assert public_hero_title.strip() == "", (
+            "expected the public hero title to be empty while the record is a draft, "
+            f"got {public_hero_title!r}"
+        )
     finally:
+        if anon_context is not None:  # only set if the read above did not reach its own close()
+            try:
+                anon_context.close()
+            except Exception:  # noqa: BLE001 — cleanup must never mask the real result
+                pass
         if baseline_message is not None:
             with allure.step("TEST_OWNED reset — restore Message Content/Status to their pre-existing baseline"):
                 authoring = admin.open_object_authoring_form()
@@ -465,8 +552,16 @@ def test_preview_renders_draft_content_without_publishing(page, browser):
             status_after_preview = authoring.current_status()
 
         with allure.step("Confirm the public page (fresh, anonymous context) does not contain the preview-only paragraph"):
+            # NOT open_en(): the record is deliberately in Draft for this
+            # case, so the public hero <h1> renders EMPTY and therefore
+            # hidden, and open_en()'s trailing wait_for(HERO_TITLE,
+            # state="visible") can never be satisfied -- confirmed live
+            # 2026-09-10, it timed out at 10s with the locator resolved to a
+            # hidden, text-less <h1 class="qc-cm-hero-title">. This is the
+            # same trap open_en_expecting_no_content() already exists for in
+            # TC 134777; this case needs it for the identical reason.
             cm = ChairmanMessagePage(anon_page)
-            cm.open_en()
+            cm.open_en_expecting_no_content()
             public_body_text = cm.text("body")  # BasePage.text() — no raw Playwright in the test
 
         # Assert
@@ -534,6 +629,18 @@ def test_admin_can_configure_message_hyperlink(page):
             authoring.fill_text(admin.HYPERLINK_TITLE_LABEL, "Qatar National Vision 2030")
             authoring.fill_text(admin.HYPERLINK_URL_LABEL, "https://www.qatarchamber.com")
             authoring.submit_for_publishing()
+
+        with allure.step("Re-open the record before reading the persisted values back"):
+            # CONFIRMED LIVE 2026-09-10: after save_as_draft() /
+            # submit_for_publishing(), this surface navigates to
+            # `manage-<slug>?previewEntry=<code>` -- the PREVIEW view, NOT
+            # the edit form (`?editEntry=`). Every field_value() read there
+            # returns "" regardless of what was actually persisted, which is
+            # exactly what made the assertions below fail with `'' == '<the
+            # value just written>'` while the record on disk was correct.
+            # Re-opening the entry puts us back on the edit form so the
+            # read-back asserts what was really stored.
+            authoring = admin.open_object_authoring_form()
 
         # Assert
         assert login.login_succeeded()
@@ -682,6 +789,18 @@ def test_name_and_designation_have_single_source_field(page):
             authoring.fill_text(admin.CHAIRMAN_NAME_LABEL, new_name)
             authoring.fill_text(admin.CHAIRMAN_DESIGNATION_LABEL, new_designation)
             authoring.submit_for_publishing()
+
+        with allure.step("Re-open the record before reading the persisted values back"):
+            # CONFIRMED LIVE 2026-09-10: after save_as_draft() /
+            # submit_for_publishing(), this surface navigates to
+            # `manage-<slug>?previewEntry=<code>` -- the PREVIEW view, NOT
+            # the edit form (`?editEntry=`). Every field_value() read there
+            # returns "" regardless of what was actually persisted, which is
+            # exactly what made the assertions below fail with `'' == '<the
+            # value just written>'` while the record on disk was correct.
+            # Re-opening the entry puts us back on the edit form so the
+            # read-back asserts what was really stored.
+            authoring = admin.open_object_authoring_form()
 
         # Assert
         assert name_count_en == 1, f"expected exactly 1 Chairman Name (EN) field, found {name_count_en}"

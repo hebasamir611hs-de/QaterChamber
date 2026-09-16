@@ -638,6 +638,57 @@ lifecycle actions) via `Content & Data` navigation should be corrected to go thr
 Object Authoring instead — this may change previously-observed behavior (including
 bugs already filed), so re-verify rather than assume the old result still holds.
 
+## Object Names Come From `cms/Content-Admin-Guide.docx` — Never Guessed, Never Probed First (agreed 2026-09-09)
+
+**`cms/Content-Admin-Guide.docx`** is the team's own Content Admin Guide and is the
+**single source of truth for which Object(s) back which page or section**. Before
+writing or fixing any Control_Panel test, Page Object, or locator constant, read it
+and take the object name from there. Do **not** derive an object name by probing
+`/object-authoring`, by pattern-matching an existing sibling feature's slug, or from
+a PBI's field tables.
+
+**Why this rule exists (real cost, 2026-09-09):** `ChambersLawAdminPage` was written
+against an invented page-level object, `chamber-laws-page`
+(`manage-chamber-laws-page`), documented in its own docstring as "CONFIRMED LIVE
+2026-09-07 … never guessed". That object does not exist and never did.
+`manage-chamber-laws-page` returns **HTTP 404**, and none of the 21 page-level
+(`*-page`) objects on the live `/object-authoring` index is Chamber's Law. Every
+Control_Panel test for PBI 129394 failed at its first step, twice, before anyone
+opened the guide — which states the answer plainly in §26.
+
+**The guide's answers for this feature (§26 + §22):** the Chamber's Law page is backed
+by exactly two objects — **`LawEntry`** (one entry per law/reference row: `lawNumber`,
+`lawTitle`, `lawDescription`, `externalLinkUrl`, `lawIcon`, `displayOrder`,
+`activeStatus`) and **`AboutHeroBanner`** (`pageKey = chamber-laws`, `bannerImage`,
+`bannerImageAltText`) for the top banner photo. There is **no** page-level Chamber's
+Law object, so `pageTitle` / `introContent` / `contentImage` / references-heading
+fields **do not exist on this page** and cannot be authored by an editor.
+
+**Object name → Object Authoring slug** is a mechanical transform: the guide's
+CamelCase object name lower-kebabs into the manage URL — `LawEntry` →
+`/web/qatar-chamber/manage-law-entry`, `AboutHeroBanner` → `manage-about-hero-banner`,
+`AboutQatarChamberPage` → `manage-about-qatar-chamber-page`. Derive the slug this way
+from the guide's name; do not invent one.
+
+**Precedence.** On *which object and which fields back a page*, this guide **wins over
+everything** — over a PBI's own "Field Level Details (CMS)" table, over a Page Object
+docstring's "confirmed live" claim, and over `cms/liferay-context.md`. It sits
+alongside `OBJECT-AUTHORING-GUIDE.md`, which remains authoritative on *tool mechanics*
+(URLs, buttons, statuses, messages); this one is authoritative on *content model*.
+This `standards.md` still owns QA policy. Where a Page Object contradicts the guide,
+fix the Page Object.
+
+**When a PBI's AC names fields the guide does not list for that page** — as PBI 129394
+does, requiring page-level authoring of Page Title / Intro Content / section headings
+that no Chamber's Law object provides — that is a **requirements-vs-implementation
+conflict to escalate to the QA Manager and the BA**, not something to satisfy by
+inventing an object, retargeting the case to an unrelated field, or editing a page or
+fragment (which the *Fragments and Page Layout Are Off-Limits* section forbids
+outright). A frequent root cause is a case templated from a sibling page that genuinely
+does have a page object (e.g. **§23 `AboutQatarChamberPage`** carries exactly the
+`pageTitle` / `pageContent` / `contentImage` / `contentImageAltText` set that PBI
+129394's blocked cases ask for) — check for that before assuming a product defect.
+
 ## Named CMS User Roles (agreed 2026-09-06)
 
 Restricted-role Control_Panel test cases (e.g. "Login succeeds with the restricted

@@ -180,3 +180,459 @@ def test_create_new_hero_banner_slide_with_all_mandatory_fields(page):
     # Banner Title (EN) = "QCTEST-135009 Hero Banner Slide", entry code
     # printed below for traceability.
     print(f"QCTEST-135009 created Hero Banner Slide entry code: {entry_code}")
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# PBI 129367 batch added 2026-09-09 -- tc_135013 / tc_135016 / tc_135017 /
+# tc_135022 / tc_135023, all on the **HeroBannerSlide** object
+# (`manage-hero-banner-slide`), the object named in
+# cms/Content-Admin-Guide.docx section 5 ("Slides -- HeroBannerSlide, one
+# entry per slide"), per standards.md's object-name rule.
+#
+# TARGET RECORD: `QCDEMO-129367-HERO_BANNER_SLIDE-02` -- one of the three
+# real slides live on the Home page hero. Every test below captures that
+# slide's own baseline (title / activeStatus / publish status) BEFORE
+# mutating and restores it in `finally`. Nothing is ever deleted.
+#
+# WHY FOUR NEAR-IDENTICAL VISIBILITY CASES: 135016/135017 toggle
+# `activeStatus`; 135022/135023 toggle the PUBLISH state. Those are the
+# **two independent visibility gates** the Object Authoring guide
+# describes -- a record can be invisible to visitors either because it is
+# a draft OR because activeStatus is off, and standards.md forbids
+# concluding one from the other. So these are genuinely distinct cases,
+# not duplicates, and each drives only its own gate while leaving the
+# other untouched.
+#
+# PUBLIC-SIDE CHECK: read through a FRESH ANONYMOUS context
+# (standards.md's mandatory logged-out rule) using HomeHeroBannerPage,
+# whose title reader deliberately uses textContent -- only the active
+# panel is visible, so a visibility-based read would report an inactive
+# slide as missing (see that class's docstring).
+# ═══════════════════════════════════════════════════════════════════════
+
+from cms.pages.home_hero_banner.home_hero_banner_admin_page import (  # noqa: E402
+    HomeHeroBannerAdminPage as _AdminPage,
+)
+from web.pages.home_hero_banner.home_hero_banner_page import HomeHeroBannerPage  # noqa: E402
+from core.web.browser import new_context  # noqa: E402
+from core.utils.waits import wait_until  # noqa: E402
+
+TARGET_SLIDE_CODE = "QCDEMO-129367-HERO_BANNER_SLIDE-02"
+HERO_XDIST_GROUP = pytest.mark.xdist_group("hero_banner_slide_129367")
+
+
+def _reflects_home(check_fn, timeout: float = 25.0, poll: float = 2.0, message: str = "") -> None:
+    """Polls `check_fn()` (which reloads the Home page itself) until true --
+    the cases' "trigger/await cache refresh" step as a real condition-based
+    wait, never a sleep."""
+    wait_until(check_fn, timeout=timeout, poll=poll, message=message)
+
+
+def _hero_case(tc_id: str, title: str, story: str, severity):
+    def wrap(fn):
+        fn = allure.title(title)(fn)
+        fn = allure.story(story)(fn)
+        fn = allure.severity(severity)(fn)
+        fn = allure.epic("Home Page")(fn)
+        fn = allure.feature("Hero Banner")(fn)
+        fn = allure.label("pbi", "129367")(fn)
+        fn = allure.label("testcase", tc_id)(fn)
+        fn = pytest.mark.control_panel(fn)
+        fn = pytest.mark.global_(fn)
+        fn = pytest.mark.functional_high(fn)
+        fn = pytest.mark.regression(fn)
+        fn = pytest.mark.pbi_129367(fn)
+        fn = getattr(pytest.mark, f"tc_{tc_id}")(fn)
+        fn = pytest.mark.traceability(tc_id)(fn)
+        fn = HERO_XDIST_GROUP(fn)
+        return fn
+
+    return wrap
+
+
+def _set_active(authoring, admin, value: bool):
+    """Toggle activeStatus and republish. A published record must be
+    unpublished before any field edit -- `Save as Draft` is disabled while
+    Approved (guide section 4)."""
+    if authoring.current_status() == "Approved":
+        authoring.unpublish_to_edit_as_draft()
+    authoring.set_checkbox(admin.ACTIVE_STATUS_LABEL, value)
+    authoring.submit_for_publishing()
+
+
+# ─────────────────────────────────────────────────────────────────────────
+@_hero_case(
+    "135013",
+    "Verify that a Site Content Editor can edit an existing published slide's title",
+    "CMS authoring — edit",
+    allure.severity_level.NORMAL,
+)
+def test_hero_cp_135013_editing_a_published_slides_title(page):
+    # DISCLOSED (same project-wide finding this module's docstring already
+    # records for tc_135009): no confirmed generic Liferay "success toast"
+    # selector exists on this surface, so the case's toast expectation is
+    # verified by the record reaching Approved with the new value read back
+    # on a genuine reopen -- a strictly stronger check than a toast.
+    admin = _AdminPage(page)
+    new_title = "Sustainable Growth"
+    baseline_title = None
+    baseline_status = None
+
+    try:
+        with allure.step("Open the existing published slide for edit"):
+            authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+            baseline_title = authoring.field_value(admin.BANNER_TITLE_EN_LABEL)
+            baseline_status = authoring.current_status()
+            assert baseline_status == "Approved", (
+                f"precondition failed: this case needs a PUBLISHED slide; got {baseline_status}"
+            )
+
+        with allure.step(f"Change Title EN to {new_title!r}"):
+            authoring.unpublish_to_edit_as_draft()
+            authoring.fill_text(admin.BANNER_TITLE_EN_LABEL, new_title)
+
+        with allure.step("Click Save"):
+            authoring.submit_for_publishing()
+
+        with allure.step("Re-open the slide and read the title back"):
+            authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+            saved_title = authoring.field_value(admin.BANNER_TITLE_EN_LABEL)
+            saved_status = authoring.current_status()
+
+        assert saved_title == new_title, (
+            f"expected the slide title to persist as {new_title!r}; got {saved_title!r}"
+        )
+        assert saved_status == "Approved"
+    finally:
+        if baseline_title is not None:
+            with allure.step("TEST_OWNED reset -- restore the slide's original title/status"):
+                authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+                if authoring.current_status() == "Approved":
+                    authoring.unpublish_to_edit_as_draft()
+                authoring.fill_text(admin.BANNER_TITLE_EN_LABEL, baseline_title)
+                if baseline_status == "Approved":
+                    authoring.submit_for_publishing()
+                else:
+                    authoring.save_as_draft()
+
+
+# ─────────────────────────────────────────────────────────────────────────
+@_hero_case(
+    "135016",
+    "Verify that enabling a slide's Active Status makes it eligible to appear on the frontend",
+    "Visibility gate — activeStatus",
+    allure.severity_level.NORMAL,
+)
+def test_hero_cp_135016_enabling_active_status_shows_the_slide(page, browser):
+    # Drives ONLY the activeStatus gate -- the slide stays published
+    # throughout, so this cannot be confused with the publish gate that
+    # tc_135022 covers.
+    admin = _AdminPage(page)
+    baseline_active = None
+    baseline_status = None
+    slide_title = None
+
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+
+    try:
+        with allure.step("Open the slide and capture its baseline"):
+            authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+            baseline_status = authoring.current_status()
+            baseline_active = authoring.is_checked(admin.ACTIVE_STATUS_LABEL)
+            slide_title = authoring.field_value(admin.BANNER_TITLE_EN_LABEL).strip()
+
+        with allure.step("Establish this case's precondition: Active Status false, slide absent from the slider"):
+            hero = HomeHeroBannerPage(anon_page)
+            if baseline_active:
+                _set_active(authoring, admin, False)
+
+            def _absent() -> bool:
+                hero.open_home()
+                return not hero.has_slide_containing(slide_title)
+
+            _reflects_home(
+                _absent,
+                message="could not reach the precondition -- the slide is still in the slider",
+            )
+            count_before = hero.slide_count()
+
+        with allure.step("Toggle Active Status to true, Save"):
+            authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+            _set_active(authoring, admin, True)
+            active_in_cms = admin.open_slide_by_code(TARGET_SLIDE_CODE).is_checked(
+                admin.ACTIVE_STATUS_LABEL
+            )
+
+        with allure.step("Load Home Page"):
+            def _present() -> bool:
+                hero.open_home()
+                return hero.has_slide_containing(slide_title)
+
+            _reflects_home(
+                _present,
+                message="the re-activated slide never appeared in the Home page slider",
+            )
+            count_after = hero.slide_count()
+
+        assert active_in_cms is True, "expected Active Status to be saved as true"
+        assert hero.has_slide_containing(slide_title), (
+            "expected the activated slide to appear in the Home page slider"
+        )
+        assert count_after == count_before + 1, (
+            f"expected the slider to gain exactly one slide; {count_before} -> {count_after}"
+        )
+    finally:
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001 -- cleanup must never mask the real result
+            pass
+        if baseline_active is not None:
+            with allure.step("TEST_OWNED reset -- restore Active Status/publish state"):
+                authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+                if authoring.is_checked(admin.ACTIVE_STATUS_LABEL) != baseline_active:
+                    _set_active(authoring, admin, baseline_active)
+                authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+                if baseline_status == "Approved" and authoring.current_status() != "Approved":
+                    authoring.submit_for_publishing()
+
+
+# ─────────────────────────────────────────────────────────────────────────
+@_hero_case(
+    "135017",
+    "Verify that disabling a slide's Active Status removes it from the frontend",
+    "Visibility gate — activeStatus",
+    allure.severity_level.NORMAL,
+)
+def test_hero_cp_135017_disabling_active_status_hides_the_slide(page, browser):
+    admin = _AdminPage(page)
+    baseline_active = None
+    baseline_status = None
+    slide_title = None
+
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+
+    try:
+        with allure.step("Open the slide and capture its baseline"):
+            authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+            baseline_status = authoring.current_status()
+            baseline_active = authoring.is_checked(admin.ACTIVE_STATUS_LABEL)
+            slide_title = authoring.field_value(admin.BANNER_TITLE_EN_LABEL).strip()
+
+        with allure.step("Confirm the slide is currently in the slider"):
+            hero = HomeHeroBannerPage(anon_page)
+            if not baseline_active:
+                _set_active(authoring, admin, True)
+
+            def _present() -> bool:
+                hero.open_home()
+                return hero.has_slide_containing(slide_title)
+
+            _reflects_home(
+                _present,
+                message="precondition failed -- the slide is not in the slider to begin with",
+            )
+            count_before = hero.slide_count()
+
+        with allure.step("Toggle Active Status to false, Save"):
+            authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+            _set_active(authoring, admin, False)
+            active_in_cms = admin.open_slide_by_code(TARGET_SLIDE_CODE).is_checked(
+                admin.ACTIVE_STATUS_LABEL
+            )
+
+        with allure.step("Load Home Page"):
+            def _absent() -> bool:
+                hero.open_home()
+                return not hero.has_slide_containing(slide_title)
+
+            _reflects_home(
+                _absent,
+                message="the de-activated slide was still rendered in the Home page slider",
+            )
+            count_after = hero.slide_count()
+
+        assert active_in_cms is False, "expected Active Status to be saved as false"
+        assert not hero.has_slide_containing(slide_title), (
+            "expected the de-activated slide to disappear from the Home page slider"
+        )
+        assert count_after == count_before - 1, (
+            f"expected the slider to lose exactly one slide; {count_before} -> {count_after}"
+        )
+        assert count_after >= 1, "expected the remaining slides to keep rendering"
+    finally:
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001
+            pass
+        if baseline_active is not None:
+            with allure.step("TEST_OWNED reset -- restore Active Status/publish state"):
+                authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+                if authoring.is_checked(admin.ACTIVE_STATUS_LABEL) != baseline_active:
+                    _set_active(authoring, admin, baseline_active)
+                authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+                if baseline_status == "Approved" and authoring.current_status() != "Approved":
+                    authoring.submit_for_publishing()
+
+
+# ─────────────────────────────────────────────────────────────────────────
+@_hero_case(
+    "135022",
+    "Verify that publishing a slide makes it visible on the Home Page after cache refresh",
+    "Visibility gate — publish state",
+    allure.severity_level.CRITICAL,
+)
+def test_hero_cp_135022_publishing_a_slide_makes_it_visible(page, browser):
+    # Drives ONLY the publish gate -- activeStatus stays true throughout,
+    # so this is genuinely distinct from tc_135016.
+    admin = _AdminPage(page)
+    baseline_status = None
+    baseline_active = None
+    slide_title = None
+
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+
+    try:
+        with allure.step("Open the slide and capture its baseline"):
+            authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+            baseline_status = authoring.current_status()
+            baseline_active = authoring.is_checked(admin.ACTIVE_STATUS_LABEL)
+            slide_title = authoring.field_value(admin.BANNER_TITLE_EN_LABEL).strip()
+
+        with allure.step("Establish this case's precondition: the slide is unpublished and absent"):
+            hero = HomeHeroBannerPage(anon_page)
+            if authoring.current_status() == "Approved":
+                authoring.unpublish_to_edit_as_draft()
+
+            def _absent() -> bool:
+                hero.open_home()
+                return not hero.has_slide_containing(slide_title)
+
+            _reflects_home(
+                _absent,
+                message="could not reach the precondition -- the unpublished slide is still rendered",
+            )
+            count_before = hero.slide_count()
+
+        with allure.step("Click Publish"):
+            authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+            authoring.submit_for_publishing()
+            status_after_publish = admin.open_slide_by_code(TARGET_SLIDE_CODE).current_status()
+
+        with allure.step("Await the cache refresh, then load the Home Page"):
+            def _present() -> bool:
+                hero.open_home()
+                return hero.has_slide_containing(slide_title)
+
+            _reflects_home(
+                _present,
+                message="the published slide never appeared on the Home Page",
+            )
+            count_after = hero.slide_count()
+
+        assert status_after_publish == "Approved", "expected the slide to be published"
+        assert hero.has_slide_containing(slide_title), (
+            "expected the published slide to appear in the Home Page slider"
+        )
+        assert count_after == count_before + 1, (
+            f"expected the slider to gain exactly one slide; {count_before} -> {count_after}"
+        )
+    finally:
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001
+            pass
+        if baseline_status:
+            with allure.step("TEST_OWNED reset -- restore publish state/Active Status"):
+                authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+                if baseline_active is not None and authoring.is_checked(admin.ACTIVE_STATUS_LABEL) != baseline_active:
+                    _set_active(authoring, admin, baseline_active)
+                    authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+                if baseline_status == "Approved" and authoring.current_status() != "Approved":
+                    authoring.submit_for_publishing()
+                elif baseline_status == "Draft" and authoring.current_status() == "Approved":
+                    authoring.unpublish_to_edit_as_draft()
+
+
+# ─────────────────────────────────────────────────────────────────────────
+@_hero_case(
+    "135023",
+    "Verify that unpublishing a slide removes it from the Home Page",
+    "Visibility gate — publish state",
+    allure.severity_level.NORMAL,
+)
+def test_hero_cp_135023_unpublishing_a_slide_removes_it(page, browser):
+    # DISCLOSED VOCABULARY NOTE: the case expects "status = Unpublished".
+    # This surface's own vocabulary is "Draft" -- unpublishing returns a
+    # record to an ordinary draft (guide section 4). Asserted against the
+    # real vocabulary; the case's intent (slide withdrawn from the Home
+    # Page) is asserted exactly as worded.
+    admin = _AdminPage(page)
+    baseline_status = None
+    baseline_active = None
+    slide_title = None
+
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+
+    try:
+        with allure.step("Open the slide and capture its baseline"):
+            authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+            baseline_status = authoring.current_status()
+            baseline_active = authoring.is_checked(admin.ACTIVE_STATUS_LABEL)
+            slide_title = authoring.field_value(admin.BANNER_TITLE_EN_LABEL).strip()
+
+        with allure.step("Confirm the published slide is currently on the Home Page"):
+            hero = HomeHeroBannerPage(anon_page)
+            if authoring.current_status() != "Approved":
+                authoring.submit_for_publishing()
+
+            def _present() -> bool:
+                hero.open_home()
+                return hero.has_slide_containing(slide_title)
+
+            _reflects_home(
+                _present,
+                message="precondition failed -- the slide is not on the Home Page to begin with",
+            )
+            count_before = hero.slide_count()
+
+        with allure.step("Click Unpublish"):
+            authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+            authoring.unpublish_to_edit_as_draft()
+            status_after = admin.open_slide_by_code(TARGET_SLIDE_CODE).current_status()
+
+        with allure.step("Load Home Page"):
+            def _absent() -> bool:
+                hero.open_home()
+                return not hero.has_slide_containing(slide_title)
+
+            _reflects_home(
+                _absent,
+                message="the unpublished slide was still rendered on the Home Page",
+            )
+            count_after = hero.slide_count()
+
+        assert status_after == "Draft"
+        assert not hero.has_slide_containing(slide_title), (
+            "expected the unpublished slide to disappear from the Home Page"
+        )
+        assert count_after == count_before - 1, (
+            f"expected the slider to lose exactly one slide; {count_before} -> {count_after}"
+        )
+        assert count_after >= 1, "expected the remaining slides to keep rendering"
+    finally:
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001
+            pass
+        if baseline_status:
+            with allure.step("TEST_OWNED reset -- restore publish state/Active Status"):
+                authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+                if baseline_active is not None and authoring.is_checked(admin.ACTIVE_STATUS_LABEL) != baseline_active:
+                    _set_active(authoring, admin, baseline_active)
+                    authoring = admin.open_slide_by_code(TARGET_SLIDE_CODE)
+                if baseline_status == "Approved" and authoring.current_status() != "Approved":
+                    authoring.submit_for_publishing()

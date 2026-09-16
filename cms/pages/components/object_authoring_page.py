@@ -92,7 +92,10 @@ probes on manage-promotional-banner:
         record, exactly as visitors see it."
 """
 
+import re
+
 from core.utils.logger import get_logger
+from core.utils.waits import wait_until
 from core.web.base_page import BasePage
 from config.settings import control_panel_url
 
@@ -103,6 +106,62 @@ logger = get_logger("object_authoring_page")
 # networkidle before it reliably appears (see module docstring). Kept as
 # a real wait_for with this as the upper-bound timeout, not a blind sleep.
 APPROVED_BANNER_SETTLE_TIMEOUT_MS = 8000
+
+# Workflow-status labels as rendered by the entries list's STATUS column.
+#
+# CONFIRMED LIVE 2026-09-10: that column started returning ARABIC labels
+# ("مسودة" / "موافق عليه") even on the English page — same request, English
+# URL (`/en/manage-<slug>`), English <title>, English column HEADERS
+# ("ENTRY", "STATUS", ...), and English form buttons ("Save as Draft",
+# "Submit for Publishing"). Only the status VALUES localize, and they
+# follow the signed-in user's own account language rather than the page
+# locale, so an account whose language preference is Arabic sees an
+# otherwise-English screen with Arabic status values.
+#
+# Reported separately as an environment/UI finding. Normalizing here keeps
+# every caller's `== "Draft"` / `== "Approved"` comparison working against
+# either account language — the same object-agnostic intent the existing
+# `.capitalize()` normalization already had (it was added because some
+# objects' CSS uppercases this column). Unknown values pass through
+# capitalized and therefore still fail loudly rather than silently mapping
+# to a wrong state.
+_STATUS_LABEL_TRANSLATIONS = {
+    "مسودة": "Draft",
+    "موافق عليه": "Approved",
+}
+
+# Status BADGE prefixes, matched case-insensitively against the start of the
+# cell's text. CONFIRMED LIVE 2026-09-15 (manage-chamber-laws-page): that
+# object's STATUS cell renders a second "ON THE WEBSITE" caption glued to the
+# badge, and `.inner_text()` returns the pair as ONE run ("APPROVEDON THE
+# WEBSITE"), so the previous whole-cell `.capitalize()` produced
+# "Approvedon the website" and every `== "Approved"` comparison against
+# `row_status_text*()` silently failed on this object. Matching the badge as
+# a PREFIX keeps this object-agnostic (cells that carry only the badge are
+# unchanged) instead of each caller needing to know its own object's cell
+# layout. Anything that matches no badge still passes through capitalized, so
+# an unknown value fails loudly rather than mapping to a wrong state.
+_STATUS_BADGE_PREFIXES = (
+    ("APPROVED", "Approved"),
+    ("DRAFT", "Draft"),
+    ("موافق عليه", "Approved"),
+    ("مسودة", "Draft"),
+)
+
+
+def _normalize_status_label(raw: str) -> str:
+    """Status-cell text -> this codebase's English status vocabulary."""
+    text = (raw or "").strip()
+    if not text:
+        return ""
+    first_line = text.splitlines()[0].strip()
+    if first_line in _STATUS_LABEL_TRANSLATIONS:
+        return _STATUS_LABEL_TRANSLATIONS[first_line]
+    upper = first_line.upper()
+    for badge, normalized in _STATUS_BADGE_PREFIXES:
+        if upper.startswith(badge.upper()):
+            return normalized
+    return first_line.capitalize()
 
 
 class ObjectAuthoringPage(BasePage):
@@ -202,18 +261,92 @@ class ObjectAuthoringPage(BasePage):
     def rich_text_value(self, field_name: str | None = None) -> str:
         return self.iframe_editor_text(self.description_editor_iframe(field_name))
 
+    # ---- Field-label matching ------------------------------------------
+    # REAL, LIVE-CONFIRMED FIX (2026-09-15, PBI 129394 tc_134884): a
+    # REQUIRED field's on-screen asterisk is part of its rendered <label>,
+    # and therefore part of its ACCESSIBLE NAME -- so
+    # `get_by_role("textbox", name="Law Number - Arabic", exact=True)`
+    # matched ZERO elements while the live element's accessible name was
+    # "Law Number - Arabic *". Measured live on both of this feature's
+    # objects (manage-law-entry and manage-chamber-laws-page): the ENGLISH
+    # halves of the bilingual pairs are NOT required (no asterisk) while
+    # the ARABIC halves ARE (trailing " *"), so neither a blanket
+    # "always add ' *'" nor a blanket "never add it" can be right -- and
+    # a third shape exists too (the page object's "Intro Content" renders a
+    # separate "Required" badge instead of an asterisk, and its Arabic
+    # counterpart carries NO asterisk at all).
+    #
+    # Matching must therefore be tolerant of an OPTIONAL trailing asterisk
+    # while staying ANCHORED, so an English label can never accidentally
+    # match its own Arabic counterpart (or any longer label that merely
+    # starts with the same words). A `^<label>\s*\*?\s*$` regex passed to
+    # `get_by_role(name=...)` does exactly that; `exact=` is ignored by
+    # Playwright when `name` is a regex, which is why it is dropped at every
+    # call site below rather than left set to a value with no effect.
+    #
+    # Verified live 2026-09-15 on both objects (uniqueness count == 1 for
+    # every field, EN and AR, on manage-chamber-laws-page's Page Title /
+    # Intro Heading / Content Image Alt Text / References Heading and
+    # manage-law-entry's Law Number / Law Title / Law Description /
+    # External Link URL / Display Order / Active Status).
+    @staticmethod
+    def label_pattern(field_label: str) -> "re.Pattern":
+        """Anchored accessible-name matcher tolerant of a required field's
+        trailing ` *` (see the note above). Use this instead of
+        `exact=True` for every role-based form-field lookup on this
+        surface."""
+        return re.compile(r"^\s*" + re.escape(field_label) + r"\s*\*?\s*$")
+
     def __init__(self, page, slug: str):
         super().__init__(page)
         self.slug = slug
+        # Entry code of whatever record was last opened for edit through
+        # this object -- set by open_entry_by_code()/open_entry_by_edit_link()
+        # so reopen()/wait_for_status() can re-read the record from a FRESH
+        # navigation instead of trusting a stale, post-save-reflowed DOM.
+        self._entry_code: str | None = None
+        # Interface locale this object last navigated in ("en"/"ar"/None for
+        # "whatever the session happens to be") -- see _manage_url().
+        self._locale: str | None = None
 
     # ---- Navigation -----------------------------------------------------
-    def _manage_url(self, edit_entry: str | None = None) -> str:
-        path = f"/web/qatar-chamber/manage-{self.slug}"
+    # LOCALE PINNING -- REAL, LIVE-MEASURED NEED (2026-09-15, PBI 129394).
+    # The unprefixed `/web/qatar-chamber/manage-<slug>` URL renders in
+    # WHATEVER LOCALE THE SESSION CURRENTLY HOLDS, and on qcdev the shared
+    # authoring account (test@liferay.com) has `ar_SA` as its own Liferay
+    # language. Measured live, same storage state, same URL, one run apart:
+    #
+    #   fresh context -> /web/.../manage-law-entry   -> <html lang="ar-SA">
+    #   after visiting /en/web/... once in the same context
+    #                 -> /web/.../manage-law-entry   -> <html lang="en-US">
+    #
+    # That is not cosmetic. The form's field labels ARE the Object's own
+    # per-locale labels, so the accessible name every `label_pattern()`
+    # lookup resolves against CHANGES with the page locale:
+    #
+    #   en-US: "Law Number"  "Law Title"  "External Link URL"  "Display Order"
+    #   ar-SA: "Law Number (AR)" "Law Title (AR)"
+    #          "رابط النص القانوني الخارجي"  "ترتيب العرض"
+    #
+    # In an ar-SA render `get_by_role("textbox", name=^Law Number$)` resolves
+    # ZERO controls (counted live). The page's own `isArabic()` reads
+    # `document.documentElement.lang` too, so the same flip decides which
+    # language every client-side validation message arrives in.
+    #
+    # `locale="en"` / `locale="ar"` therefore PINS the render, making both
+    # the locators and the message language deterministic instead of
+    # inherited. `locale=None` keeps the historic, session-inherited
+    # behaviour byte-for-byte, so no existing caller changes.
+    def _manage_url(
+        self, edit_entry: str | None = None, locale: str | None = None
+    ) -> str:
+        prefix = f"/{locale}" if locale else ""
+        path = f"{prefix}/web/qatar-chamber/manage-{self.slug}"
         if edit_entry:
             path += f"?editEntry={edit_entry}"
         return control_panel_url(path)
 
-    def open_new_entry_form(self) -> "ObjectAuthoringPage":
+    def open_new_entry_form(self, locale: str | None = None) -> "ObjectAuthoringPage":
         """`manage-<slug>` with no editEntry param IS the create-new form —
         no separate "Add"/"New" button to click first. Widened to 35000ms
         (from 20000ms) 2026-09-03: manage-promotional-banner's cold first
@@ -223,11 +356,13 @@ class ObjectAuthoringPage(BasePage):
         an already-warm, long-lived session — a real page-load latency
         difference on first hit, not a wrong locator (SAVE_AS_DRAFT_BUTTON
         itself was never wrong)."""
-        self.open(self._manage_url())
+        self.open(self._manage_url(locale=locale))
+        self._entry_code = None
+        self._locale = locale
         self.wait_for(self.SAVE_AS_DRAFT_BUTTON, timeout=35000)
         return self
 
-    def open_entries_list(self) -> "ObjectAuthoringPage":
+    def open_entries_list(self, locale: str | None = None) -> "ObjectAuthoringPage":
         """Navigates to `manage-<slug>` and waits on the entries table
         itself (`a[data-qc-oel-delete]`, first match) rather than the
         create-new form's own Save-as-Draft button — teardown only needs
@@ -235,7 +370,8 @@ class ObjectAuthoringPage(BasePage):
         the wrong signal cost a real 20s timeout live 2026-09-03 when this
         method didn't exist yet and teardown called open_new_entry_form()
         instead."""
-        self.open(self._manage_url())
+        self.open(self._manage_url(locale=locale))
+        self._locale = locale
         self.wait_for("a[data-qc-oel-delete]", first=True, timeout=20000)
         return self
 
@@ -270,6 +406,22 @@ class ObjectAuthoringPage(BasePage):
             edit_link.click(force=True)
         self._wait_for_network_settle()
         self.wait_for(self.CANCEL_AND_ADD_NEW_LINK, timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS)
+        # Record the code the Edit link actually landed on, so reopen()/
+        # wait_for_status() work after this entry point too.
+        try:
+            code = self.page.url.split("editEntry=")[1].split("&")[0]
+            self._entry_code = code or None
+        except Exception:  # noqa: BLE001 — code tracking is best-effort here
+            self._entry_code = None
+        # ...and the LOCALE it landed in, read off the URL's own prefix. The
+        # Edit link is relative, so clicking it from a `/en`-pinned list stays
+        # on `/en`; recording that keeps reopen() from silently dropping the
+        # pin and flipping every field label mid-test (see _manage_url()).
+        try:
+            first_segment = self.page.url.split("//", 1)[1].split("/")[1]
+            self._locale = first_segment if first_segment in ("en", "ar") else None
+        except Exception:  # noqa: BLE001 — locale tracking is best-effort here
+            self._locale = None
         return self
 
     def _wait_for_network_settle(self) -> None:
@@ -286,10 +438,20 @@ class ObjectAuthoringPage(BasePage):
         here so BOTH open_entry_by_edit_link() and open_entry_by_code()
         get the same bounded wait instead of each risking its own 30s
         stall."""
-        try:
-            self.page.wait_for_load_state("networkidle", timeout=8000)
-        except Exception:
-            self.page.wait_for_load_state("load", timeout=8000)
+        # WIDENED 2026-09-09 (PBI 129392): the `load` fallback RAISED when
+        # `networkidle` also timed out — and `load` never fires at all on
+        # this surface (measured: still timing out on a 15s budget), so a
+        # page that is perfectly usable could blow up every caller of
+        # open_entry_by_code()/open_entry_by_edit_link(). That took out 5 of
+        # the 6 About Us tests at once. Same three-tier degrade as
+        # `_wait_for_settle()`: this is a settle, not an assertion, so it
+        # never raises — callers assert real conditions afterwards.
+        for state, budget in (("networkidle", 8000), ("load", 8000), ("domcontentloaded", 8000)):
+            try:
+                self.page.wait_for_load_state(state, timeout=budget)
+                return
+            except Exception:  # noqa: BLE001 — fall through to the next-weaker signal
+                continue
 
     # ---- List state queries ----------------------------------------------
     def row_status_text(self, title: str) -> str:
@@ -305,7 +467,7 @@ class ObjectAuthoringPage(BasePage):
         row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{title}")')
         if row.count() == 0:
             return ""
-        return row.locator("td").nth(1).inner_text().strip().capitalize()
+        return _normalize_status_label(row.locator("td").nth(1).inner_text())
 
     def row_visible(self, title: str) -> bool:
         return self.is_visible(f'{self.ENTRIES_TABLE_ROW}:has-text("{title}")')
@@ -415,7 +577,9 @@ class ObjectAuthoringPage(BasePage):
         for code in codes:
             self.open_entry_by_code(code)
             try:
-                value = self.page.get_by_role("textbox", name=field_label, exact=True).input_value()
+                value = self.page.get_by_role(
+                    "textbox", name=self.label_pattern(field_label)
+                ).input_value()
             except Exception:  # noqa: BLE001 — field may not exist/apply to this row's form state
                 continue
             if value == expected_value:
@@ -431,12 +595,14 @@ class ObjectAuthoringPage(BasePage):
         row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{entry_code}")')
         if row.count() == 0:
             return ""
-        return row.locator("td").nth(1).inner_text().strip().capitalize()
+        return _normalize_status_label(row.locator("td").nth(1).inner_text())
 
     def row_visible_by_code(self, entry_code: str) -> bool:
         return self.is_visible(f'{self.ENTRIES_TABLE_ROW}:has-text("{entry_code}")')
 
-    def open_entry_by_code(self, entry_code: str) -> "ObjectAuthoringPage":
+    def open_entry_by_code(
+        self, entry_code: str, locale: str | None = None
+    ) -> "ObjectAuthoringPage":
         """Opens an existing entry for edit by navigating directly to its
         own `?editEntry=<code>` URL — confirmed live this IS the entry's own
         Entry-column code, so this never depends on a row's Edit link/title
@@ -448,9 +614,74 @@ class ObjectAuthoringPage(BasePage):
         read straight off a fresh entries list for a different, read-only
         purpose) — never with newest_entry_code()'s positional guess when
         the result will be acted on."""
-        self.open(self._manage_url(edit_entry=entry_code))
+        self.open(self._manage_url(edit_entry=entry_code, locale=locale))
+        self._entry_code = entry_code
+        self._locale = locale
         self._wait_for_network_settle()
         self.wait_for(self.CANCEL_AND_ADD_NEW_LINK, timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS)
+        return self
+
+    @property
+    def entry_code(self) -> str:
+        """The entry code of whatever record was last opened for edit through
+        this object, or "" when none was (e.g. the create-new form).
+
+        Read-only, and public because a test needs the IDENTITY of a record
+        it has just created without reconstructing it from a URL by hand --
+        PBI 129394's tc_134978 asks whether a Law Entry's ID is
+        auto-generated and unique, and this (with the entries list's own
+        `row_entry_id()`) is where that identity is actually observable: the
+        Law Entry edit FORM renders no ID control at all."""
+        return self._entry_code or ""
+
+    # ---- Fresh re-read of the record under edit ---------------------------
+    # REAL, LIVE-MEASURED NEED (2026-09-15, PBI 129394): a lifecycle action's
+    # own settle proves nothing about the record's committed state. Measured
+    # live on manage-chamber-laws-page / manage-law-entry, 3 iterations each:
+    #   - "Unpublish to edit as draft" -> status reads Draft in 1.20-1.38s
+    #   - "Submit for Publishing"      -> status reads Approved in 27-30s
+    # `submit_for_publishing()`'s ~2.5s settle is an order of magnitude short
+    # of that, so anything that publishes and then immediately reads the
+    # status (or polls the public page on a 20s budget) races a transition
+    # that has not happened yet -- and a TEST_OWNED `finally` restore that
+    # "publishes and assumes" leaves a real shared record stuck in Draft,
+    # which is exactly how one failed test cascaded into three others' broken
+    # preconditions. reopen()/wait_for_status() make the commit CHECKED
+    # rather than assumed, from a FRESH navigation (never a stale,
+    # post-save-reflowed DOM -- see TC 134877's own read-back-race note).
+    def reopen(self) -> "ObjectAuthoringPage":
+        """Re-navigates to the record last opened through this object, so
+        every read afterwards comes off a freshly rendered form."""
+        if not self._entry_code:
+            raise AssertionError(
+                "reopen() needs a record opened via open_entry_by_code() "
+                "first -- there is no entry code to navigate back to."
+            )
+        # Re-navigates in the SAME pinned locale the record was opened in --
+        # a reopen that silently dropped the pin would flip the field labels
+        # (and the validation-message language) mid-test.
+        return self.open_entry_by_code(self._entry_code, locale=self._locale)
+
+    def wait_for_status(
+        self, expected: str, timeout: float = 90.0, poll: float = 3.0
+    ) -> "ObjectAuthoringPage":
+        """Polls until the record's OWN status reaches `expected`, re-opening
+        it fresh on every poll. Raises WaitTimeoutError if it never does --
+        a lifecycle action that silently did not commit must fail loudly,
+        never be assumed to have worked."""
+
+        def _reached() -> bool:
+            return self.reopen().current_status() == expected
+
+        wait_until(
+            _reached,
+            timeout=timeout,
+            poll=poll,
+            message=(
+                f"record {self._entry_code!r} on manage-{self.slug} never "
+                f"reached status {expected!r}"
+            ),
+        )
         return self
 
     def delete_entry_by_code(self, entry_code: str) -> bool:
@@ -481,7 +712,11 @@ class ObjectAuthoringPage(BasePage):
 
     # ---- Form actions ------------------------------------------------------
     def fill_text(self, field_label: str, value: str) -> "ObjectAuthoringPage":
-        self.page.get_by_role("textbox", name=field_label, exact=True).fill(value)
+        """Fills the field whose accessible name is `field_label`, tolerating
+        a required field's trailing ` *` -- see label_pattern()'s note."""
+        self.page.get_by_role(
+            "textbox", name=self.label_pattern(field_label)
+        ).fill(value)
         return self
 
     def field_value(self, field_label: str) -> str:
@@ -494,7 +729,9 @@ class ObjectAuthoringPage(BasePage):
         no locale-toggle click needed — pass the AR-suffixed label
         (`"<Field Label> — العربية"`) directly to read/fill the Arabic
         value."""
-        return self.page.get_by_role("textbox", name=field_label, exact=True).input_value()
+        return self.page.get_by_role(
+            "textbox", name=self.label_pattern(field_label)
+        ).input_value()
 
     def field_count(self, field_label: str) -> int:
         """Count of textboxes whose accessible name EXACTLY matches
@@ -506,7 +743,9 @@ class ObjectAuthoringPage(BasePage):
         An exact-name match against a DIFFERENT label (e.g. a hypothetical
         separate signature-block field) never counts here, so a result of 1
         already proves both "exists" and "no duplicate/alternate field"."""
-        return self.page.get_by_role("textbox", name=field_label, exact=True).count()
+        return self.page.get_by_role(
+            "textbox", name=self.label_pattern(field_label)
+        ).count()
 
     def current_status(self) -> str:
         """"Approved"/"Draft"/"Unknown" parsed out of editing_banner_text()'s
@@ -523,7 +762,9 @@ class ObjectAuthoringPage(BasePage):
         return "Unknown"
 
     def fill_number(self, field_label: str, value: str) -> "ObjectAuthoringPage":
-        self.page.get_by_role("spinbutton", name=field_label, exact=True).fill(value)
+        self.page.get_by_role(
+            "spinbutton", name=self.label_pattern(field_label)
+        ).fill(value)
         return self
 
     def spinbutton_value(self, field_label: str) -> str:
@@ -531,23 +772,39 @@ class ObjectAuthoringPage(BasePage):
         exact-name-match textbox read, scoped to the spinbutton role instead
         (e.g. "Display Order"). Added 2026-09-08 (PBI 129367, tc_135009):
         no prior caller needed a numeric-field read-back on this surface."""
-        return self.page.get_by_role("spinbutton", name=field_label, exact=True).input_value()
+        return self.page.get_by_role(
+            "spinbutton", name=self.label_pattern(field_label)
+        ).input_value()
 
     def type_date(self, field_label: str, value: str) -> "ObjectAuthoringPage":
         """Clicks the date field then types directly (mirrors the
         confirmed-live-safe pattern already used by every raw-admin date
         field on this project, e.g. HomeLatestNewsAdminPage.set_publication_date())."""
-        self.page.get_by_role("textbox", name=field_label, exact=True).click()
+        self.page.get_by_role(
+            "textbox", name=self.label_pattern(field_label)
+        ).click()
         self.page.keyboard.type(value, delay=20)
         return self
 
     def set_checkbox(self, field_label: str, checked: bool) -> "ObjectAuthoringPage":  # noqa: D401
-        checkbox = self.page.get_by_role("checkbox", name=field_label, exact=True)
+        checkbox = self.page.get_by_role(
+            "checkbox", name=self.label_pattern(field_label)
+        )
         if checked:
             checkbox.check()
         else:
             checkbox.uncheck()
         return self
+
+    def is_checked(self, field_label: str) -> bool:
+        """Read-back counterpart to `set_checkbox()` — the class had a
+        setter but no reader until 2026-09-09 (PBI 129394 tc_134887/
+        tc_134888 needed to capture an `Active Status` baseline before
+        flipping it, which is exactly the TEST_OWNED pattern standards.md
+        requires for a shared real record)."""
+        return self.page.get_by_role(
+            "checkbox", name=self.label_pattern(field_label)
+        ).is_checked()
 
     def select_combobox_option(self, field_label: str, option_label: str) -> "ObjectAuthoringPage":
         """Confirmed live 2026-09-03 on manage-service-card's "Assigned
@@ -600,6 +857,86 @@ class ObjectAuthoringPage(BasePage):
             self.page.wait_for_timeout(1000)
         return self
 
+    def select_existing_file(
+        self, field_label: str, file_name: str, folder: str | None = None
+    ) -> "ObjectAuthoringPage":
+        """Picks an ALREADY-EXISTING Documents & Media file for an attachment
+        field, instead of uploading from disk like `upload_file()` does.
+
+        CONFIRMED LIVE 2026-09-09 (scoped CLI Playwright probe against qcdev,
+        manage-law-entry's `Law Icon` field): the same "Select File" button
+        opens the same picker iframe, which is a full Documents & Media
+        browser — root shows `about-us-hero.png` plus the folders `Flickr`,
+        `qatar-chamber-website`, `QC Footer Social Icons` and
+        `request-to-media-dept`. Clicking a folder's link navigates into it;
+        clicking a FILE's own name **immediately closes the picker and fills
+        the field** — there is NO "Add" button step on this path (unlike
+        `upload_file()`, whose Add button belongs to the upload flow). Like
+        every attachment change on this surface the selection only takes
+        effect on Save (guide: "Remove file / Undo remove take effect only on
+        save").
+
+        `folder` navigates one level down first; omit it for a root-level
+        file. Verified selectable icons live in `QC Footer Social Icons`
+        (`qc-social-facebook.svg` … `qc-social-youtube.svg`)."""
+        hidden_textbox = self.page.get_by_role(
+            "textbox", name=f"{field_label} Select File"
+        )
+        hidden_textbox.locator("xpath=..").get_by_role(
+            "button", name="Select File"
+        ).click()
+        frame = self.page.frame_locator(self.UPLOAD_MODAL_IFRAME)
+        if folder:
+            frame.get_by_role("link", name=folder).first.click()
+            # The folder navigation is a real page load inside the iframe —
+            # wait for the target file itself to render rather than sleeping.
+            frame.get_by_text(file_name, exact=True).first.wait_for(
+                state="visible", timeout=15000
+            )
+        frame.get_by_text(file_name, exact=True).first.click()
+        # HARDENED 2026-09-09 — the file-name click's effect is INTERMITTENT
+        # (both behaviours confirmed live within minutes of each other): it
+        # usually closes the picker outright, but it can instead merely
+        # SELECT the card and leave the modal open. When that happened,
+        # tc_134884's next action (`Submit for Publishing`) failed with
+        # `Locator.click: Timeout 30000ms` because the still-open modal
+        # overlaid the button — a silent, misleading failure mode, so this
+        # method now refuses to return while the picker is still up.
+        if not self._picker_closed(4000):
+            for label in ("Add", "Select", "Choose", "Done"):
+                try:
+                    btn = frame.get_by_role("button", name=label)
+                    if btn.count():
+                        btn.first.click(timeout=8000)
+                        break
+                except Exception:  # noqa: BLE001 — try the next candidate label
+                    continue
+        if not self._picker_closed(6000):
+            # Last resort: some item-selector builds treat a single click as
+            # select-only and require a double-click to commit.
+            try:
+                frame.get_by_text(file_name, exact=True).first.dblclick()
+            except Exception:  # noqa: BLE001 — the assertion below is the real gate
+                pass
+        if not self._picker_closed(8000):
+            raise AssertionError(
+                f"the Documents & Media picker stayed open after selecting "
+                f"{file_name!r} — refusing to continue, because a still-open "
+                "modal silently overlays the form's Save/Publish buttons and "
+                "turns the next click into an unexplained 30s timeout"
+            )
+        return self
+
+    def _picker_closed(self, timeout: int) -> bool:
+        """True once the file-picker iframe is detached; False on timeout."""
+        try:
+            self.page.locator(self.UPLOAD_MODAL_IFRAME).wait_for(
+                state="detached", timeout=timeout
+            )
+            return True
+        except Exception:  # noqa: BLE001 — caller decides what to do next
+            return False
+
     def uploaded_filename(self, field_label: str) -> str:
         """Reads the ACTUAL uploaded filename off the field's own
         filename-readout element — confirmed-live a `<strong role="textbox"
@@ -617,7 +954,7 @@ class ObjectAuthoringPage(BasePage):
         Playwright raises "Node is not an <input>..." on that call), hence
         `.inner_text()` on the narrowly-scoped element."""
         return self.page.get_by_role(
-            "textbox", name=field_label, exact=True
+            "textbox", name=self.label_pattern(field_label)
         ).inner_text().strip()
 
     # ---- File restore (Current file / Preview / Download) -----------------
@@ -783,10 +1120,24 @@ class ObjectAuthoringPage(BasePage):
         try/except-fallback shape already used by upload_file()'s own
         iframe-detach wait rather than blocking indefinitely on a signal
         this page may never emit."""
-        try:
-            self.page.wait_for_load_state("networkidle", timeout=8000)
-        except Exception:
-            self.page.wait_for_load_state("load", timeout=8000)
+        # WIDENED 2026-09-09 (live, PBI 129394): the `load` fallback is
+        # itself unreliable on this surface — measured live today, after a
+        # lifecycle action's form POST `domcontentloaded` fires immediately
+        # but `load` NEVER fires (still timing out on a 15s budget; some
+        # page resource never reaches completion, same class of cause as the
+        # chatbot polling that already breaks `networkidle`). Both original
+        # branches therefore raised while the action itself had already
+        # committed in ~1.1s, turning a successful save/unpublish into a
+        # broken test. This is a *settle*, not an assertion: it now degrades
+        # through domcontentloaded and never raises, and callers assert the
+        # real outcome (status transition / delivery surface) themselves —
+        # which is what actually proves the write landed.
+        for state, budget in (("networkidle", 8000), ("load", 8000), ("domcontentloaded", 8000)):
+            try:
+                self.page.wait_for_load_state(state, timeout=budget)
+                break
+            except Exception:  # noqa: BLE001 — fall through to the next-weaker signal
+                continue
         # Widened from 1500ms to 2500ms 2026-09-03: on the `networkidle`
         # timeout/fallback path specifically, this is the ONLY settle the
         # write (Save as Draft / Submit for Publishing) gets before a
@@ -812,12 +1163,41 @@ class ObjectAuthoringPage(BasePage):
     def unpublish_to_edit_as_draft(self) -> "ObjectAuthoringPage":
         """Waits for the Unpublish button to actually render (see module
         docstring's settle note) before clicking, and accepts the native
-        `confirm()` dialog it fires."""
+        `confirm()` dialog it fires.
+
+        FIXED 2026-09-09 (live, PBI 129394 tc_134871/tc_134873): this method
+        was the ONLY lifecycle action still calling raw
+        `wait_for_load_state("networkidle")` with NO timeout — i.e.
+        Playwright's 30s default — while `save_as_draft()` and
+        `submit_for_publishing()` had already been migrated to
+        `_wait_for_settle()`. `networkidle` never fires on this page (the
+        site-wide chatbot widget's polling keeps the network non-idle; see
+        `_wait_for_settle`'s own docstring, confirmed live 2026-09-03), so
+        every caller of this method burned 30s and then raised
+        TimeoutError — AFTER the click had already been dispatched, making a
+        successful unpublish look like a broken test and skipping the
+        caller's own post-conditions. Reproduced twice live on this batch.
+        Now shares the same bounded settle+fallback as its sibling actions.
+        """
         self.wait_for(self.UNPUBLISH_BUTTON, timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS)
         self.page.once("dialog", lambda d: d.accept())
         self.page.locator(self.UNPUBLISH_BUTTON).click()
-        self.page.wait_for_load_state("networkidle")
-        self.page.wait_for_timeout(1500)
+        # Condition-based wait on the real OUTCOME, not a load-state signal —
+        # measured live 2026-09-09: the confirm dialog is accepted and the
+        # banner reports "(draft)" ~1.1s after the click, while `load` never
+        # fires at all on this page. Polling the status is therefore both
+        # faster and the only signal that actually proves the unpublish
+        # committed.
+        wait_until(
+            lambda: self.current_status() == "Draft",
+            timeout=20.0,
+            poll=0.5,
+            message=(
+                "record status never became Draft after clicking "
+                "'Unpublish to edit as draft'"
+            ),
+        )
+        self._wait_for_settle()
         return self
 
     def delete_entry_by_title(self, title: str) -> bool:
@@ -848,9 +1228,63 @@ class ObjectAuthoringPage(BasePage):
             logger.warning("delete_entry_by_title(%r) failed — leftover QCTEST data may remain", title)
             return False
 
+    def delete_all_entries_by_title(self, title: str, max_rows: int = 10) -> int:
+        """Delete EVERY entry whose row matches `title` exactly, one at a
+        time, re-reading the list between deletes. Returns how many were
+        removed.
+
+        Why this exists (2026-09-10): `delete_entry_by_title()` cannot
+        clear duplicates — its `row_entry_id()` builds a plural row
+        locator, so with two same-titled rows it raises a strict-mode
+        violation, gets swallowed by that method's never-raise contract,
+        and silently deletes nothing. Leaving newly-created entries in
+        place (the standing test-data instruction) means a re-run of a
+        create-case produces exactly that duplicate, which then breaks
+        `open_entry_by_edit_link()` for every subsequent run.
+
+        SAFETY — this is the one method here that deletes more than one
+        row, so it is deliberately narrow: it refuses any title outside
+        the project's disposable `QCTEST-` namespace, and it matches on
+        the caller's exact title string, never on position ("newest"/
+        "last row"). Real editorial rows can therefore never be reached by
+        it, which is what standards.md requires of any multi-row delete on
+        a shared environment.
+        """
+        if not title.startswith("QCTEST-"):
+            raise ValueError(
+                f"refusing to bulk-delete {title!r}: this method is limited to "
+                "the disposable QCTEST- namespace"
+            )
+        removed = 0
+        for _ in range(max_rows):
+            self.open_entries_list()
+            rows = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{title}")')
+            if rows.count() == 0:
+                return removed
+            delete_link = rows.first.locator("a[data-qc-oel-delete]").first
+            entry_id = delete_link.get_attribute("data-qc-oel-delete")
+            if not entry_id:
+                return removed
+            self.page.once("dialog", lambda d: d.accept())
+            self.page.locator(f'a[data-qc-oel-delete="{entry_id}"]').click(force=True)
+            self._wait_for_network_settle()
+            removed += 1
+        logger.warning(
+            "delete_all_entries_by_title(%r) hit the %d-row cap — more leftovers may remain",
+            title, max_rows,
+        )
+        return removed
+
     def preview_banner_text(self, preview_url: str) -> str:
         """Navigates directly to the record's own preview URL (row-level
         `Preview` link target) and returns the status-banner text this
         page's PREVIEW mode injects (see module docstring)."""
         self.open(preview_url)
         return self.page.locator('[role="status"]').first.inner_text()
+
+    def rendered_body_text(self) -> str:
+        """Full rendered text of whatever this object is currently showing --
+        used after `preview_banner_text()` to prove the PREVIEW surface
+        really renders an unpublished record's text. Lives here so a test
+        never has to hold a raw `"body"` selector of its own."""
+        return self.page.locator("body").inner_text()

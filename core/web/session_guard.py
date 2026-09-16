@@ -104,7 +104,14 @@ def reauthenticate(page, target_url: str = None, max_attempts: int = 3) -> bool:
             continue
 
         if target_url:
-            page.goto(target_url)
+            # Explicit "domcontentloaded" on the goto itself, not just the
+            # wait_for_load_state below it: a bare goto() waits for "load",
+            # which never fires on the object-authoring surface (measured
+            # 2026-09-09 — see BasePage.open()'s own note), so the
+            # post-re-auth re-navigation could burn the full 30s default and
+            # throw, turning a SUCCESSFUL session recovery into a test
+            # failure.
+            page.goto(target_url, wait_until="domcontentloaded")
             page.wait_for_load_state("domcontentloaded")
         break
 

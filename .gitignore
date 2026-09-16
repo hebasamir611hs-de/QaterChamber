@@ -43,3 +43,12 @@ temp/
 # to any repo review. Delete _to_delete/ manually after confirming nothing
 # in it is needed.
 _to_delete/
+
+# Generated, byte-exact image fixtures (PBI 129394 batch 1) -- rebuilt on
+# demand by cms/tests/chambers_law/test_chambers_law_field_validation.py,
+# never committed (they are multi-megabyte binaries).
+cms/tests/chambers_law/fixtures/generated/
+
+# Ad-hoc, per-run Allure output directories (allure-results/ is already
+# ignored above; runs that target a named batch write siblings of it).
+allure-results-*/

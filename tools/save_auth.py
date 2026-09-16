@@ -53,7 +53,17 @@ def login(page):
     flow ever changes.
     """
     base = (env("WEB_BASE_URL", "") or "").rstrip("/")
-    page.goto(base + env("LOGIN_PATH", "/c/portal/login"), wait_until="domcontentloaded")
+    # LOCALE-PINNED login path. Confirmed live 2026-09-10: the unprefixed
+    # `/c/portal/login` began returning an ARABIC session (qcdev's site
+    # default locale), which broke this script two ways at once — the
+    # LOGIN_SUCCESS_SELECTOR below waits on the ENGLISH `aria-label="Control
+    # Menu"`, which never appears in an Arabic session (so every run exited
+    # "Login failed" even though the credentials were accepted), and every
+    # Object Authoring form then renders Arabic field labels, which no Page
+    # Object's `get_by_role(..., name="<English label>")` can match.
+    # Prefixing `/en/` pins the session to English and fixes both. Still
+    # overridable via LOGIN_PATH.
+    page.goto(base + env("LOGIN_PATH", "/en/c/portal/login"), wait_until="domcontentloaded")
     dismiss_overlays(page, grace_ms=MOUNT_GRACE_MS)
     page.fill(
         env("LOGIN_USER_SELECTOR", "#_com_liferay_login_web_portlet_LoginPortlet_login"),

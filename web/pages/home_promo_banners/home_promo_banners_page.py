@@ -366,6 +366,40 @@ class HomePromoBannersPage(BasePage):
         except Exception:  # noqa: BLE001 — mirrors BasePage.is_visible's never-throws contract
             return False
 
+    def banner_link_href(self, alt_text_en: str) -> str:
+        """`href` of the anchor wrapping the slide whose image alt text
+        matches — the "is clickable to the redirect URL" half of ADO-135184.
+
+        CONFIRMED LIVE 2026-09-09 (anonymous Chromium against qcdev /home,
+        scoped CLI probe): every real slide renders as
+        `div.qc-promo-slide > a.qc-promo-link > picture > img.qc-promo-img`,
+        so the anchor is the image's closest `a` ancestor. Returns "" when
+        no matching slide is on the page, so callers assert on a value
+        rather than handling an exception.
+        """
+        locator = self.page.locator(f'{self.IMG}[alt="{alt_text_en}"]')
+        if locator.count() == 0:
+            return ""
+        href = locator.first.evaluate(
+            "el => { const a = el.closest('a'); return a ? a.getAttribute('href') : ''; }"
+        )
+        return href or ""
+
+    def banner_image_src(self, alt_text_en: str) -> str:
+        """`src` of the slide image whose alt text matches — the "with the
+        configured EN image" half of ADO-135184. Empty string when absent.
+
+        Note the rendered `src` is a Documents & Media URL carrying
+        `objectEntryExternalReferenceCode=<entry code>`, NOT the uploaded
+        file's own name, so callers verify an image is wired up (and, if
+        needed, which entry it came from) rather than string-matching a
+        fixture filename.
+        """
+        locator = self.page.locator(f'{self.IMG}[alt="{alt_text_en}"]')
+        if locator.count() == 0:
+            return ""
+        return locator.first.get_attribute("src") or ""
+
     def reload_until(self, predicate, timeout_ms: int | None = None, interval_ms: int | None = None) -> bool:
         """Poll open_home() + predicate(self) until True or timeout — never
         a bare sleep."""

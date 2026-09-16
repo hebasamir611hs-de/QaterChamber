@@ -1,0 +1,78 @@
+
+### 134972 — Verify that a valid positive Display Order is accepted and saved
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Display Order editable
+  2. Enter 2 in Display Order and click Save
+     -> Value is accepted with no validation error and the success toast is shown
+  3. Reload the law entry record
+     -> Display Order reads 2
+
+### 134973 — Verify that a zero or negative Display Order is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS with Display Order currently 2
+     -> Law entry record opens with Display Order 2
+  2. Enter 0 in Display Order and click Save
+     -> Save is blocked with a validation error stating Display Order must be a positive integer, and no success toast appears
+  3. Enter -1 in Display Order and click Save
+     -> Save is blocked again with the same validation error for -1
+  4. Reload the law entry record
+     -> Display Order still reads 2 — neither 0 nor -1 was stored
+
+### 134974 — Verify that a non-integer Display Order is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS with Display Order currently 2
+     -> Law entry record opens with Display Order 2
+  2. Enter 2.5 in Display Order and click Save
+     -> Save is blocked with an integer-format validation error and no success toast appears — the value is not silently rounded to 2 or 3
+  3. Enter 'two' in Display Order and click Save
+     -> Save is blocked again with an integer-format validation error for the text 'two'
+  4. Reload the law entry record
+     -> Display Order still reads 2
+
+### 134975 — Verify that an empty Display Order is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS with Display Order populated
+     -> Law entry record opens with Display Order populated
+  2. Clear Display Order completely and click Save
+     -> Save is blocked with a required-field validation error against Display Order and no success toast appears
+  3. Reload the law entry record
+     -> Display Order retains its previous value
+
+### 134976 — Verify that Active Status stores the value True
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS with Active Status False
+     -> Law entry record opens with Active Status False
+  2. Set Active Status to True and click Save
+     -> True is accepted and saved with the success toast shown
+  3. Reload the law entry record
+     -> Active Status reads True
+
+### 134977 — Verify that Active Status stores the value False
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS with Active Status True
+     -> Law entry record opens with Active Status True
+  2. Set Active Status to False and click Save
+     -> False is accepted and saved with the success toast shown
+  3. Reload the law entry record
+     -> Active Status reads False
+
+### 134978 — Verify that Law Entry ID is auto-generated, unique, and not editable
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Create a new law entry under the Chamber's Law page with all mandatory fields completed and note its Law Entry ID
+     -> The first law entry is saved and its Law Entry ID is populated automatically
+  2. Create a second law entry and note its Law Entry ID
+     -> The second law entry receives a different Law Entry ID — the two identifiers do not collide
+  3. Attempt to edit the Law Entry ID on either record
+     -> The Law Entry ID is not editable on either record — it is read-only or absent from the edit form
+
+### 134987 — Verify that saving a law entry with a Display Order already used by another entry is rejected
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open the Law Entry list under the Chamber's Law page in Liferay CMS with an existing active entry 'Law No. 11 of 1990' holding Display Order 1
+     -> The Law Entry list opens showing the existing entry at Display Order 1
+  2. Open a second law entry, enter Display Order 1, and click Save
+     -> Save is blocked with a validation error stating the Display Order is already in use, and no success toast appears
+  3. Reload the Law Entry list and read both entries' Display Order values
+     -> The first entry still holds Display Order 1 and the second entry retains its previous value - the list contains no two entries sharing Display Order 1
+  4. Change the second entry's Display Order to 2 and click Save
+     -> The unique value 2 is accepted and saved with the success toast shown
