@@ -317,6 +317,21 @@ class HomeContactUsAdminPage(BasePage):
         self.page.wait_for_timeout(2000)
         return self
 
+    # ---- Preview — TODO(locator): no confirmed-live Preview control for
+    # this article was located this session (the Fields-panel blocker
+    # documented above meant the field-entry step that would normally
+    # precede a meaningful Preview click was never reached). Left as an
+    # explicit TODO rather than an invented selector — see TC-136498 in
+    # cms/tests/home_contact_us/test_home_contact_us_control_panel.py,
+    # which is @pytest.mark.skip for the same Fields-panel reason and never
+    # actually invokes this method.
+    ARTICLE_PREVIEW_BUTTON = "TODO(locator): Preview control — not located live, see docstring"
+
+    def preview_article(self) -> "HomeContactUsAdminPage":
+        self.click(self.ARTICLE_PREVIEW_BUTTON)
+        self.page.wait_for_timeout(1500)
+        return self
+
     # ---- Real cross-session logout / re-login (same shape as every other
     # admin page in this suite) ----------------------------------------------
     LOGOUT_PATH = "/c/portal/logout"

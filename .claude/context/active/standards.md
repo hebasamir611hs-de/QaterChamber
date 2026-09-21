@@ -431,10 +431,9 @@ is left ungrouped and free to parallelize normally:
 | Mission pillar card | 49082 | `xdist_group("mission_49082")` | `tc_135557`, `tc_135562` |
 | Qatar Airways partner | 45776 | `xdist_group("qatar_airways_45776")` | `tc_135832` |
 | Objectives pillar card | 49108 | `xdist_group("objectives_49108")` | any Strategic Pillar Card test (`tc_135558` etc.) |
-| Hero Banner Slide -01/-02 pair (QCDEMO-129367-HERO_BANNER_SLIDE-01/-02) | 45560 (originally logged for -02 only; reused for the pair 2026-09-08 since 135014/135015 mutate -01 together with -02 — see the "one xdist_group per test" merge rule below) | `xdist_group("hero_banner_slide_45560")` | `tc_135024`, `tc_135014`, `tc_135015` |
-| Achievement Counter "counter 3" (QCDEMO-129367-ACHIEVEMENT_COUNTER-03) | 45659 | `xdist_group("achievement_counter_45659")` | `tc_135026`, `tc_135027`, `tc_135028`, `tc_135029` |
-| Member Services Sector + its 2 active children (QCDEMO-129399-DEPT-04/-07/-08) | 80734 (parent; 80746/80750 are its children, toggled/checked by the sibling test) | `xdist_group("member_services_sector_80734")` | `tc_133292`, `tc_133293` |
-| Board Directory Page MAIN entry (page-level singleton driving the real live `/web/qatar-chamber/about-us/board-of-directors` page, `manage-board-directory-page`) | `QCDEMO-129398-BOARD_DIRECTORY_PAGE-MAIN` | `xdist_group("board_directory_page_main")` | `tc_133517`-`tc_133523`, `tc_133530`-`tc_133533`, `tc_133537`-`tc_133543`, `tc_133544`+`tc_133545` (one combined test) — every BATCH 5 test in `test_board_of_directors_control_panel.py`, 19 tests total |
+| About Us Section + Counters | Section 52157 (`QCDEMO-129389-ABOUT_US_SECTION-01`), Counters `QCDEMO-129389-ABOUT_US_COUNTER-01..04` | `xdist_group("about_us_section_52157")` | `tc_136103`, `tc_136106`, `tc_136136` |
+| Home Contact Us Section article (Liferay Journal/Web Content, NOT Object-Definition-backed — confirmed live 2026-09-07, no `manage-<slug>` Object Authoring surface exists for it; see `cms/pages/home_contact_us/home_contact_us_admin_page.py`) | articleId `53012` (groupId `37246`) | `xdist_group("home_contact_us_section_article_53012")` | `tc_136508`, `tc_136512`, `tc_136518`, `tc_136523`, `tc_136527`, `tc_136541`, `tc_136546`, `tc_136555`, `tc_136559`, `tc_136565`, `tc_136572`, `tc_136498` (all currently `@pytest.mark.skip` — live, reproducible Fields-panel rendering defect, re-confirmed 2026-09-07) |
+| Home Contact Us Inquiry Category row 01 | ERC `QCDEMO-129390-INQCAT-01` (record `52706`) | `xdist_group("home_contact_us_inquiry_category_52706")` | `tc_136534`, `tc_136538`, `tc_136569` |
 
 **Vision (real record, ID pending confirmation)** is the third member of the same
 Strategic Pillar Card carousel as Mission (49082) and Objectives (49108) — treat it as
