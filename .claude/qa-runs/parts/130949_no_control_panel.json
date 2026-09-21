@@ -1,0 +1,852 @@
+[
+  {
+    "id": 141180,
+    "title": "Verify that the hero renders the eyebrow, page title and description with the verified English design tokens",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Page QCTEST-130949-ProposalForResearch is Published, EN locale, Light theme, 1920px. Tokens from Figma frame 2824:38277. [SVC-PROPOSALRESEARCH-TC-001]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open a logged-out Chrome window sized 1920x1080 with the site theme set to Light and navigate to /en/our-services/information/proposal-for-research",
+        "expected": "The page loads LTR with no console error and no horizontal scrollbar; the hero block uses padding 40px 300px 0px over the gradient fill linear-gradient(118deg,#46071E 0%,#601430 48%,#911731 100%)"
+      },
+      {
+        "action": "Inspect the hero eyebrow, title and description text and their computed styles",
+        "expected": "The eyebrow reads 'Economic Research Service' in Cairo 400 12px/18px #FFFFFF at 50% opacity, left-aligned; the title reads 'Proposal for Research' in Cairo 700 48px/60px #FFFFFF; the description reads 'Propose an economic or business-related research topic for consideration by Qatar Chamber's Research & Studies Department and access supporting templates and guidance.' in Cairo 400 16px/24px #FFFFFF at 70% opacity"
+      }
+    ]
+  },
+  {
+    "id": 141181,
+    "title": "Verify that the four quick-facts tiles render the verified label and value pairs in display order",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "4 Active quick-facts tiles with display order 1-4; EN locale, 1920px, Light theme. [SVC-PROPOSALRESEARCH-TC-002]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load the published page at /en/our-services/information/proposal-for-research at 1920px in a logged-out browser",
+        "expected": "The quick-facts strip renders at the bottom of the hero in a container filled rgba(29,29,27,0.1) with a rgba(255,255,255,0.2) stroke and radius 24px 24px 0 0"
+      },
+      {
+        "action": "Read the four quick-facts tiles left to right and inspect their computed styles and the container styling",
+        "expected": "The tiles read in order 'Proposal Type'/'Research or Study', 'Research Focus'/'Economy & Business', 'Primary Audience'/'Qatar Private Sector', 'Responsible Department'/'Research & Studies'; every label is Cairo 400 12px/18px #FFFFFF at 50% opacity and every value is Cairo 700 14px/22px #FFFFFF, all left-aligned"
+      }
+    ]
+  },
+  {
+    "id": 141182,
+    "title": "Verify that the breadcrumb renders the Home and Services trail defined by the PBI",
+    "state": "Design",
+    "priority": 3,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UI",
+      "Web"
+    ],
+    "description": "Published page, EN locale, 1920px. The shared Breadcrumb component instance in the design carries the garbled default override 'Hcvxcxvcome' plus a stale 'Item-3' node (A-7) — the PBI defines the trail as Home then Services. [SVC-PROPOSALRESEARCH-TC-003]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load /en/our-services/information/proposal-for-research at 1920px in a logged-out browser",
+        "expected": "The breadcrumb renders above the hero eyebrow"
+      },
+      {
+        "action": "Read every breadcrumb node above the hero title and inspect its computed style",
+        "expected": "The trail reads exactly 'Home' then 'Services' in Cairo 400 14px/22px #FFFFFF, left-aligned; no node reading 'Hcvxcxvcome', 'Item-3' or 'About Qatar Chamber' is rendered, and the 'Home' node links to the site root"
+      }
+    ]
+  },
+  {
+    "id": 141183,
+    "title": "Verify that the sticky section index renders only the three PBI-defined entries and highlights the active one on scroll",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Sections 01 Overview, 02 Service information, 03 Downloadable resources are Active with display order 1-3. The PBI defines these three only; index entries 04-07 exist in Figma but are out of scope (A-3). [SVC-PROPOSALRESEARCH-TC-004]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load the published page in English at 1920px in a logged-out browser",
+        "expected": "The sticky index renders in a 312px rail to the left of the 944px content column, on a #F6F6F6 card with a 1px #EDEDED stroke and 8px radius"
+      },
+      {
+        "action": "Read the sticky index entries and inspect their computed styles and the rail container",
+        "expected": "Exactly three entries render: '01 Overview', '02 Service information', '03 Downloadable resources'; each numeral is Cairo 700 14px/22px #A8A8A7 and each label is Cairo 600 14px/22px #6C6C6B; no entry reading 'Frequently asked questions' and no duplicate 'Overview' entry is present"
+      },
+      {
+        "action": "Scroll until the Service information section reaches the top of the viewport and re-read the index",
+        "expected": "The rail stays pinned while the page scrolls and the '02 Service information' entry is visually marked as the active entry"
+      }
+    ]
+  },
+  {
+    "id": 141184,
+    "title": "Verify that the Overview section renders the verified badge, heading and body copy tokens",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Overview section Active; EN, 1920px, Light theme; body row padding 64px 300px with gap 24px. [SVC-PROPOSALRESEARCH-TC-005]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load the published page in English at 1920px in a logged-out browser",
+        "expected": "Section 01 is in view inside the 944px content column with padding-left 40px"
+      },
+      {
+        "action": "Scroll to section 01 and inspect the badge, heading and body copy",
+        "expected": "The badge reads 'About the service' in Cairo 400 12px/18px #911731; the heading reads 'Overview' in Cairo 600 24px/32px #1D1D1B; the body opens with 'Qatar Chamber's Proposal for Research service enables businesses, researchers, and interested stakeholders to propose economic and business-related topics for c' in Cairo 400 16px/24px #4A4A49"
+      }
+    ]
+  },
+  {
+    "id": 141185,
+    "title": "Verify that the three Overview info cards render the verified titles and descriptions in display order",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "3 Active info cards with display order 1-3; EN, 1920px, Light theme. [SVC-PROPOSALRESEARCH-TC-006]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load the published page in English at 1920px in a logged-out browser",
+        "expected": "Three cards render side by side, each 256px wide, beneath the Overview body"
+      },
+      {
+        "action": "Scroll to the Overview info cards and read the three card titles and descriptions with their computed styles",
+        "expected": "The titles read left to right 'Clear research focus', 'Business guidance', 'Contact our experts' in Cairo 600 16px/24px #343432; the three descriptions read 'Define the proposed topic and the issue or opportunity the research should examine.', 'Identify the economic sector or business area connected to the proposed study.' and 'Include available data, references, or other information that helps explain the topic and its expected value.' in Cairo 400 14px/22px #7C7B7B"
+      }
+    ]
+  },
+  {
+    "id": 141186,
+    "title": "Verify that the Service information section renders its verified badge and heading tokens",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Service information section Active; EN, 1920px, Light theme. [SVC-PROPOSALRESEARCH-TC-007]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load the published page in English at 1920px in a logged-out browser",
+        "expected": "Section 02 is in view directly below the Overview info cards"
+      },
+      {
+        "action": "Scroll to section 02 and inspect the badge and heading",
+        "expected": "The badge reads 'Rich informational content' in Cairo 400 12px/18px #911731 and the heading reads 'Service information' in Cairo 600 24px/32px #1D1D1B, both left-aligned"
+      }
+    ]
+  },
+  {
+    "id": 141187,
+    "title": "Verify that the Preparing your proposal information group renders its label, intro and six bullets in order",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Information group 1 Active with 6 Active bullets, display order 1-6; EN, 1920px, Light theme. [SVC-PROPOSALRESEARCH-TC-008]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load the published page in English at 1920px in a logged-out browser and scroll to section 02",
+        "expected": "The group renders first inside the Service information section"
+      },
+      {
+        "action": "Read the group label, intro and every bullet top to bottom with their computed styles",
+        "expected": "The label reads 'Preparing your proposal' in Cairo 700 14px/22px #A66F43; the intro reads 'A clear and well-supported proposal helps communicate the importance and intended purpose of the suggested research topic. The proposal should include:' in Cairo 400 14px/22px #343432; the six bullets read in order 'The proposed research title or topic.', 'A brief description of the issue or opportunity.', 'The purpose and main objectives of the research.', 'The relevant economic sector or business area.', 'The expected value or potential benefit of the study.', 'Available data, references, or supporting information.' in Cairo 400 14px/22px #343432"
+      }
+    ]
+  },
+  {
+    "id": 141188,
+    "title": "Verify that the Supporting information group renders its label, intro and exactly the four bullets defined by the PBI",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Information group 2 Active with 4 Active bullets, display order 1-4; EN, 1920px. The design duplicates two bullets from group 1 into this group (A-5); this case asserts they are absent. [SVC-PROPOSALRESEARCH-TC-009]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load the published page in English at 1920px in a logged-out browser and scroll to the second group in section 02",
+        "expected": "The group renders below 'Preparing your proposal'"
+      },
+      {
+        "action": "Read the group label, intro and every bullet with their computed styles",
+        "expected": "The label reads 'Supporting information' in Cairo 700 14px/22px #A66F43; the intro reads 'Relevant supporting materials may be included to provide additional context for the proposed research topic.' in Cairo 400 14px/22px #343432; exactly four bullets render in order 'Existing reports or studies.', 'Statistical data and reference documents.', 'Presentations or preliminary findings.', 'Only materials directly related to the proposed research topic should be included.'; the bullets 'The expected value or potential benefit of the study.' and 'Available data, references, or supporting information.' do NOT appear in this group"
+      }
+    ]
+  },
+  {
+    "id": 141189,
+    "title": "Verify that the Downloadable resources section renders its verified badge, heading and intro tokens",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Downloadable resources section Active; EN, 1920px, Light theme. [SVC-PROPOSALRESEARCH-TC-010]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load the published page in English at 1920px in a logged-out browser",
+        "expected": "Section 03 is in view below the Service information section"
+      },
+      {
+        "action": "Scroll to section 03 and inspect the badge, heading and intro",
+        "expected": "The badge reads 'Templates and guidance' in Cairo 400 12px/18px #911731; the heading reads 'Downloadable resources' in Cairo 600 24px/32px #1D1D1B; the intro reads 'Download the available templates and guidance documents to help prepare a clear and complete research proposal.' in Cairo 400 16px/24px #4A4A49"
+      }
+    ]
+  },
+  {
+    "id": 141190,
+    "title": "Verify that the Research Proposal Template resource card renders its title, file metadata and Download button",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Resource item 1 Active with a 200 KB PDF attached; EN, 1920px. The '50 Downloads' counter present in the design has no PBI field and is not asserted (A-4). [SVC-PROPOSALRESEARCH-TC-011]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load the published page in English at 1920px in a logged-out browser and scroll to section 03",
+        "expected": "The first resource card renders directly under the section intro"
+      },
+      {
+        "action": "Inspect the first resource card's title, file-type chip, file-size chip and button",
+        "expected": "The title reads 'Research Proposal Template' in Cairo 600 16px/24px #343432; the file type reads 'PDF' and the file size reads '200 KB', both Cairo 400 14px/22px #A8A8A7; the button label reads 'Download' in Cairo 600 14px/22px #4A4A49 centre-aligned"
+      }
+    ]
+  },
+  {
+    "id": 141191,
+    "title": "Verify that the Research Proposal Guidelines resource card renders its title, file metadata and Download button",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Resource item 2 Active with a 200 KB PDF attached, display order 2; EN, 1920px. [SVC-PROPOSALRESEARCH-TC-012]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load the published page in English at 1920px in a logged-out browser and scroll to section 03",
+        "expected": "The second resource card renders directly below the 'Research Proposal Template' card, matching its display order of 2"
+      },
+      {
+        "action": "Inspect the second resource card's title, file-type chip, file-size chip and button and its position relative to the first card",
+        "expected": "The title reads 'Research Proposal Guidelines' in Cairo 600 16px/24px #343432; the file type reads 'PDF' and the file size reads '200 KB', both Cairo 400 14px/22px #A8A8A7; the button label reads 'Download' in Cairo 600 14px/22px #4A4A49"
+      }
+    ]
+  },
+  {
+    "id": 141192,
+    "title": "Verify that the page renders no hero CTA button and no Ready to continue banner",
+    "state": "Design",
+    "priority": 3,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UI",
+      "Web"
+    ],
+    "description": "Published page, EN, 1920px. The design carries two stale 'Request Legal Consultation' buttons in the hero (A-2) and no next-step banner is defined for this page (A-18); neither is in the PBI. [SVC-PROPOSALRESEARCH-TC-013]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load /en/our-services/information/proposal-for-research at 1920px in a logged-out browser",
+        "expected": "The page loads with the hero fully rendered"
+      },
+      {
+        "action": "Inspect the hero region between the description and the quick-facts strip",
+        "expected": "No button element renders in the hero; specifically no button labelled 'Request Legal Consultation' or 'طلب استشارة قانونية' is present, and the quick-facts strip follows the hero description directly"
+      },
+      {
+        "action": "Scroll to the end of section 03 and inspect the region between the last resource card and the site footer",
+        "expected": "No 'Ready to continue?' eyebrow, no 'Choose the service you need' heading and no next-step banner block renders; the site footer follows the last resource card directly"
+      }
+    ]
+  },
+  {
+    "id": 141194,
+    "title": "Verify that the page renders the verified dark-theme palette when Dark mode is active",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Accessibility",
+      "Ai_MCP_Injected",
+      "Automation",
+      "SVC",
+      "UI",
+      "Web"
+    ],
+    "description": "EN locale, 1920px, Dark theme enabled through the shared Header component's Darkmode property. Tokens from Figma frame 2824:40009. [SVC-PROPOSALRESEARCH-TC-015]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load /en/our-services/information/proposal-for-research at 1920px in a logged-out browser and switch the site theme to Dark",
+        "expected": "Dark theme is applied site-wide and the page surfaces switch to #1D1D1B / #343432 / #4A4A49"
+      },
+      {
+        "action": "Inspect the section badges, section headings, body copy, sticky index labels, info cards and information group labels",
+        "expected": "The badges 'About the service', 'Rich informational content' and 'Templates and guidance' render #C44561 (not the light-theme #911731); the headings 'Overview', 'Service information' and 'Downloadable resources' render #FFFFFF; the Overview body renders #EDEDED; the sticky index labels render #DEDEDD with numerals still #A8A8A7; info-card titles render #F6F6F6 with descriptions #D0D0D0; the group labels 'Preparing your proposal' and 'Supporting information' stay #A66F43 with their bullets #F6F6F6"
+      }
+    ]
+  },
+  {
+    "id": 141195,
+    "title": "Verify that the English page renders left-to-right end to end",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Bilingual",
+      "SVC",
+      "UI",
+      "Web"
+    ],
+    "description": "Published page, EN locale, 1920px, Light theme. [SVC-PROPOSALRESEARCH-TC-016]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load /en/our-services/information/proposal-for-research in a logged-out browser at 1920px",
+        "expected": "The document reports dir=\"ltr\""
+      },
+      {
+        "action": "Inspect the document direction and the alignment of the breadcrumb, hero, quick facts, sticky index, all three sections and the resource cards",
+        "expected": "The breadcrumb, hero eyebrow/title/description, quick-fact labels and values, section badges/headings/bodies, group labels and bullets and resource titles are all left-aligned; the sticky index rail sits to the LEFT of the content column; no text is clipped and there is no horizontal scrollbar"
+      }
+    ]
+  },
+  {
+    "id": 141196,
+    "title": "Verify that the Arabic page renders right-to-left with the verified Arabic copy",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Bilingual",
+      "SVC",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Published page, AR locale, 1920px, Light theme. Tokens and copy from Figma frame 2824:38304. [SVC-PROPOSALRESEARCH-TC-017]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load /ar/our-services/information/proposal-for-research in a logged-out browser at 1920px",
+        "expected": "The document reports dir=\"rtl\" and the layout is mirrored: the sticky index rail sits to the RIGHT of the content column"
+      },
+      {
+        "action": "Inspect the document direction and the position of the sticky index rail",
+        "expected": "All text nodes compute text-align RIGHT and none is clipped"
+      },
+      {
+        "action": "Read the hero, quick facts, sticky index, group labels and resource cards",
+        "expected": "The hero eyebrow reads 'خدمة البحوث الاقتصادية', the title reads 'اقتراح بحث أو دراسة', the description reads 'اقترح موضوعًا بحثيًا اقتصاديًا أو تجاريًا للنظر فيه من قِبل إدارة البحوث والدراسات في غرفة قطر، واستفد من النماذج والإرشادات المتاحة.'; the quick facts read 'نوع المقترح'/'بحث أو دراسة', 'مجال البحث'/'الاقتصاد والأعمال', 'الفئة المستهدفة'/'القطاع الخاص في قطر', 'الإدارة المسؤولة'/'إدارة البحوث والدراسات'; the index reads '01 نظرة عامة', '02 معلومات الخدمة', '03 الملفات القابلة للتنزيل'; the group labels read 'إعداد المقترح البحثي' and 'المعلومات الداعمة'; the resource cards read 'نموذج المقترح البحثي' and 'إرشادات إعداد المقترح البحثي' with the button label 'تحميل'"
+      }
+    ]
+  },
+  {
+    "id": 141197,
+    "title": "Verify that the Arabic hero title uses the Arabic type scale rather than the English one",
+    "state": "Design",
+    "priority": 3,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Bilingual",
+      "SVC",
+      "UI",
+      "Web"
+    ],
+    "description": "Language-specific variant: the verified EN desktop frame sets the hero title at Cairo 700 48px/60px while the AR desktop frame sets it at Cairo 700 40px/64px. [SVC-PROPOSALRESEARCH-TC-018]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Load /en/our-services/information/proposal-for-research at 1920px and read the computed font family, weight, size and line height of the hero title",
+        "expected": "The English hero title 'Proposal for Research' computes to Cairo 700 48px with a 60px line height, left-aligned"
+      },
+      {
+        "action": "Switch to /ar/our-services/information/proposal-for-research at 1920px and read the same computed values",
+        "expected": "The Arabic hero title 'اقتراح بحث أو دراسة' computes to Cairo 700 40px with a 64px line height, right-aligned, and the hero block does not overflow its 40px 300px 0px padding box"
+      }
+    ]
+  },
+  {
+    "id": 141198,
+    "title": "Verify that the page renders correctly on desktop 1920px in English Light theme",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "SVC",
+      "UAT",
+      "Web"
+    ],
+    "description": "Published page, EN, Light theme, viewport 1920x1080, matching Figma frame 2824:38277 (1920x2692). Logged-out context. [SVC-PROPOSALRESEARCH-TC-019]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open a logged-out Chrome window sized 1920x1080 with the site theme set to Light and navigate to /en/our-services/information/proposal-for-research",
+        "expected": "The viewport reports 1920px wide and the page renders LTR with no horizontal scrollbar"
+      },
+      {
+        "action": "Measure the header, hero, body row and footer geometry and scroll the full page height",
+        "expected": "The header is 80px tall with padding 16px 24px, fill #FFFFFF, box-shadow 0 0 14px rgba(0,0,0,0.25) and a 180x48 logo; the hero uses padding 40px 300px 0px with a 64px inner gap; the body row uses padding 64px 300px with gap 24px, a 312px sticky index rail and a 944px content column with 40px padding-left; the footer uses padding 80px 300px 32px over linear-gradient(90deg,#422C1B 16%,#911731 84%); all three sections and both resource cards are reachable by scrolling with no overlapping or clipped text"
+      }
+    ]
+  },
+  {
+    "id": 141199,
+    "title": "Verify that the page renders correctly on desktop 1920px in Arabic Light theme",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Bilingual",
+      "Compatibility",
+      "SVC",
+      "UAT",
+      "Web"
+    ],
+    "description": "Published page, AR, Light theme, viewport 1920x1080, matching Figma frame 2824:38304 (1920x2624). Logged-out context. [SVC-PROPOSALRESEARCH-TC-020]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open a logged-out Chrome window sized 1920x1080 with the site theme set to Light and navigate to /ar/our-services/information/proposal-for-research",
+        "expected": "The viewport reports 1920px wide, the document reports dir=\"rtl\" and there is no horizontal scrollbar"
+      },
+      {
+        "action": "Measure the mirrored layout geometry and scroll the full page height",
+        "expected": "The navigation order is mirrored (اتصل بنا first from the right edge inward), the sticky index rail of 312px sits on the RIGHT with the 944px content column on the left, the hero eyebrow/title/description and all section content are right-aligned, and both resource cards render with the 'تحميل' button on the mirrored side; no Arabic text is clipped or overlapped anywhere down the page"
+      }
+    ]
+  },
+  {
+    "id": 141200,
+    "title": "Verify that the page renders correctly on desktop 1920px in English Dark theme",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Accessibility",
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "SVC",
+      "Web"
+    ],
+    "description": "Published page, EN, Dark theme enabled through the shared Header component's Darkmode property, viewport 1920x1080, matching Figma frame 2824:40009. [SVC-PROPOSALRESEARCH-TC-021]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open a logged-out Chrome window sized 1920x1080, navigate to /en/our-services/information/proposal-for-research and enable Dark mode from the header",
+        "expected": "Dark mode activates without a page error and the page keeps the same 1920px layout geometry (312px rail, 944px content column, 64px 300px body padding)"
+      },
+      {
+        "action": "Scroll the full page height and inspect every section surface, text block and the resource cards for contrast and clipping",
+        "expected": "Every surface switches to the dark palette (#1D1D1B page surface, #343432 and #4A4A49 raised surfaces), every text block stays legible against its surface with no light-theme colour left behind, both resource cards and all ten information-group bullets remain fully visible, and no element is clipped or invisible"
+      }
+    ]
+  },
+  {
+    "id": 141201,
+    "title": "Verify that the page reflows correctly on mobile 390px in English",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "SVC",
+      "UAT",
+      "Web"
+    ],
+    "description": "Published page, EN, Light theme, viewport 390x844, matching Figma frame 2824:38330 (390x3907). [SVC-PROPOSALRESEARCH-TC-022]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open a logged-out browser at viewport 390x844 and navigate to /en/our-services/information/proposal-for-research",
+        "expected": "The viewport reports 390px wide and the page renders with no horizontal scrollbar"
+      },
+      {
+        "action": "Inspect the hero, quick facts, Overview info cards and resource cards and scroll the full page height",
+        "expected": "The hero title 'Proposal for Research' renders Cairo 700 30px/38px (down from the desktop 48px/60px); the four quick facts stack vertically one per row at 252px wide; the section headings render Cairo 600 18px/28px; the three Overview info cards stack vertically at 262px wide; both resource cards stack with the 'Download' button below the file metadata; the sticky index rail is not shown as a side rail and no content is clipped"
+      }
+    ]
+  },
+  {
+    "id": 141202,
+    "title": "Verify that the page reflows correctly on mobile 390px in Arabic",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Bilingual",
+      "Compatibility",
+      "SVC",
+      "Web"
+    ],
+    "description": "Published page, AR, Light theme, viewport 390x844, matching Figma frame 2824:38354. [SVC-PROPOSALRESEARCH-TC-023]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open a logged-out browser at viewport 390x844 and navigate to /ar/our-services/information/proposal-for-research",
+        "expected": "The viewport reports 390px wide, the document reports dir=\"rtl\" and there is no horizontal scrollbar"
+      },
+      {
+        "action": "Inspect the hero, quick facts, info cards and resource cards and scroll the full page height",
+        "expected": "The hero title 'اقتراح بحث أو دراسة' renders Cairo 700 30px/38px right-aligned; the four quick facts stack vertically right-aligned at 252px; the section headings 'نظرة عامة', 'معلومات الخدمة', 'الملفات القابلة للتنزيل' render Cairo 600 18px/28px right-aligned; the three info cards stack vertically at 262px; both resource cards stack with the 'تحميل' button visible; no Arabic text is clipped or reversed"
+      }
+    ]
+  },
+  {
+    "id": 141203,
+    "title": "Verify that the page reflows correctly on a 768px tablet viewport in English",
+    "state": "Design",
+    "priority": 3,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "SVC",
+      "Web"
+    ],
+    "description": "Published page, EN, Light theme, viewport 768x1024. No Figma frame exists for tablet (A-9), so this case asserts reflow and legibility rather than exact tokens. [SVC-PROPOSALRESEARCH-TC-024]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open a logged-out browser at viewport 768x1024 and navigate to /en/our-services/information/proposal-for-research",
+        "expected": "The viewport reports 768px wide and the page renders with no horizontal scrollbar"
+      },
+      {
+        "action": "Scroll the full page height and inspect the hero, quick facts, section index, info cards, information groups and resource cards",
+        "expected": "Every region reflows to the available width without overlapping: the hero copy wraps inside the viewport, the four quick facts wrap into rows rather than overflowing, the three Overview info cards wrap into a readable grid, all ten information-group bullets wrap without truncation, and both resource cards keep their title, 'PDF', '200 KB' and 'Download' button visible and tappable"
+      }
+    ]
+  },
+  {
+    "id": 141210,
+    "title": "Verify that an anonymous visitor can download the Research Proposal Template document from the published page",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "SVC",
+      "UAT",
+      "Web"
+    ],
+    "description": "Published page; resource item 'Research Proposal Template' Active with a 200 KB PDF named QCTEST-130949-template.pdf attached. [SVC-PROPOSALRESEARCH-TC-031]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context and scroll to section 03",
+        "expected": "The 'Research Proposal Template' card renders with the metadata 'PDF' and '200 KB' and an enabled 'Download' button"
+      },
+      {
+        "action": "Click the 'Download' button on the 'Research Proposal Template' card",
+        "expected": "The download starts without any login prompt or intermediate form and returns HTTP 200"
+      },
+      {
+        "action": "Inspect the downloaded file",
+        "expected": "The downloaded file is QCTEST-130949-template.pdf, opens as a valid PDF and is approximately 200 KB — matching the file size shown on the card"
+      }
+    ]
+  },
+  {
+    "id": 141309,
+    "title": "Verify that clicking a sticky section index entry scrolls the page to that section",
+    "state": "Design",
+    "priority": 3,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "SVC",
+      "Web"
+    ],
+    "description": "Published page, EN, 1920px, logged-out context, all three sections Active. [SVC-PROPOSALRESEARCH-TC-132]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open /en/our-services/information/proposal-for-research at 1920px in a fresh logged-out browser context",
+        "expected": "The page loads at the top with the Overview section in view"
+      },
+      {
+        "action": "Click the sticky index entry '03 Downloadable resources'",
+        "expected": "The page scrolls so that the Downloadable resources section heading is at the top of the content area and both resource cards are visible"
+      },
+      {
+        "action": "Read the page position and the index highlight state",
+        "expected": "The '03 Downloadable resources' index entry is visually marked as the active entry and the rail stays pinned"
+      }
+    ]
+  },
+  {
+    "id": 141311,
+    "title": "Verify that switching the language from English to Arabic loads the Arabic Proposal for Research page",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Bilingual",
+      "Functional-Low",
+      "SVC",
+      "Web"
+    ],
+    "description": "Published page open at /en/our-services/information/proposal-for-research in a logged-out context. [SVC-PROPOSALRESEARCH-TC-134]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context",
+        "expected": "The English page renders with the hero title 'Proposal for Research'"
+      },
+      {
+        "action": "Click the header language switcher control labelled 'AR'",
+        "expected": "The switcher activates without a page error"
+      },
+      {
+        "action": "Read the URL, document direction and the hero title",
+        "expected": "The URL is /ar/our-services/information/proposal-for-research, the document reports dir=\"rtl\", and the hero title reads 'اقتراح بحث أو دراسة' — the visitor stays on the same page rather than being sent to the site home page"
+      }
+    ]
+  },
+  {
+    "id": 141312,
+    "title": "Verify that switching the language from Arabic back to English loads the English Proposal for Research page",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Bilingual",
+      "Functional-Low",
+      "SVC",
+      "Web"
+    ],
+    "description": "Published page open at /ar/our-services/information/proposal-for-research in a logged-out context. Reverse of the EN to AR switch. [SVC-PROPOSALRESEARCH-TC-135]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open /ar/our-services/information/proposal-for-research in a fresh logged-out browser context",
+        "expected": "The Arabic page renders with the hero title 'اقتراح بحث أو دراسة'"
+      },
+      {
+        "action": "Click the header language switcher control labelled 'EN'",
+        "expected": "The switcher activates without a page error"
+      },
+      {
+        "action": "Read the URL, document direction and the hero title",
+        "expected": "The URL is /en/our-services/information/proposal-for-research, the document reports dir=\"ltr\", and the hero title reads 'Proposal for Research' on the same page"
+      }
+    ]
+  },
+  {
+    "id": 141313,
+    "title": "Verify that switching the theme from Light to Dark re-renders the page in the dark palette",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Accessibility",
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "SVC",
+      "Web"
+    ],
+    "description": "Published page open at /en/our-services/information/proposal-for-research at 1920px in a logged-out context, Light theme active. [SVC-PROPOSALRESEARCH-TC-136]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the published English page at 1920px in a fresh logged-out browser context with the Light theme active",
+        "expected": "The page renders in the light palette with the Overview badge #911731, heading #1D1D1B and a #FFFFFF page surface"
+      },
+      {
+        "action": "Activate the Dark mode control in the shared header",
+        "expected": "The Dark mode control activates without a page reload error and the setting is applied to the whole page"
+      },
+      {
+        "action": "Read the Overview badge colour, the Overview heading colour and the page surface colour",
+        "expected": "The Overview badge renders #C44561, the Overview heading renders #FFFFFF and the page surface renders #1D1D1B"
+      }
+    ]
+  },
+  {
+    "id": 141314,
+    "title": "Verify that switching the theme from Dark back to Light restores the light palette",
+    "state": "Design",
+    "priority": 3,
+    "tags": [
+      "Accessibility",
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "SVC",
+      "Web"
+    ],
+    "description": "Published page open at 1920px in a logged-out context with Dark mode active. Reverse of the Light to Dark switch. [SVC-PROPOSALRESEARCH-TC-137]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the published English page at 1920px in a fresh logged-out browser context and activate Dark mode",
+        "expected": "The page renders in the dark palette with the Overview badge #C44561 and a #1D1D1B page surface"
+      },
+      {
+        "action": "Deactivate the Dark mode control in the shared header",
+        "expected": "The Dark mode control deactivates without a page error"
+      },
+      {
+        "action": "Read the Overview badge colour, the Overview heading colour and the page surface colour",
+        "expected": "The Overview badge renders #911731, the Overview heading renders #1D1D1B and the page surface renders #FFFFFF"
+      }
+    ]
+  },
+  {
+    "id": 141364,
+    "title": "Verify that a visitor reaches the Proposal for Research page from the Main Menu Services entry",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "SVC",
+      "UAT",
+      "Web"
+    ],
+    "description": "The Proposal for Research page is Published. Frontend Workflow step 1: Main Menu &gt; Services &gt; Proposal for Research, exercised as an anonymous visitor with no URL typed. [SVC-PROPOSALRESEARCH-TC-187]",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open https://qcdev.ihorizons.com/en in a fresh logged-out Chrome window sized 1920x1080",
+        "expected": "The English home page loads with the main navigation visible and a 'Services' entry present"
+      },
+      {
+        "action": "Open the Main Menu and hover or click the 'Services' entry",
+        "expected": "The Services menu expands and lists an item labelled 'Proposal for Research'"
+      },
+      {
+        "action": "Click the 'Proposal for Research' item in the Services menu",
+        "expected": "The browser navigates to /en/our-services/information/proposal-for-research; the page renders the breadcrumb 'Home > Services', the hero title 'Proposal for Research', the quick-facts strip and the sticky index entries 01-03, with no 404 and no console error"
+      }
+    ]
+  }
+]

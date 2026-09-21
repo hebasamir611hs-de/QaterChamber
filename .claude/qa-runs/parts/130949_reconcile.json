@@ -1,0 +1,595 @@
+{
+ "verdict": "GAPS-FOUND",
+ "checked": "Read the full HTML-stripped PBI description (130949.desc.txt, 824 lines: US-001 visitor display/download, US-002 CMS management, both AC prose blocks, edge/negative/post-conditions, all seven field-level tables, Permissions table, Business Rules, Figma link list) clause by clause against all 88 inventory rows, the 21 reductions and all 168 cases in .claude/qa-runs/130949.json.",
+ "a0_retired": true,
+ "a0_note": "A-0 CAN BE RETIRED: the description file now exists at C:/Users/MahmoudSamy/.claude/projects/d--Ai-QatarChamber/baa964ef-4d8c-44e3-a433-6dad1908077c/tool-results/130949.desc.txt and was read end to end. It confirms the scope the set was built against: two user stories (public display + CMS management), the same objects (hero, quick-facts, section index 01-03, Overview body + info cards, Service information groups + bullet items, downloadable resources), the same lifecycle (Draft/Published/Unpublished + preview), the same three roles, the same bilingual EN/AR + LTR/RTL and desktop/tablet/mobile requirements, and the same char-limit table (eyebrow 60, page title 100, fact label 60, fact value 120, section title 100, card title 100, group label 120, group item 300, resource title 200, download label 40), the same hero banner rule (JPG/PNG/SVG < 2 MB) and the same resource rule (PDF, 5 MB). has_ac remains FALSE (the Azure AC field is literally 'No AC'); the Given/When/Then prose lives in the description body and stays routed to OBJ/FLD/CTL/ST/ROL/MSG/SUR/LNG/ENV rows — zero AC-n rows were added. A-0 nevertheless predicted exactly the residue found: the raw description carries SIX field-level rows the brief did not summarise (Quick-Facts Icon, Overview Card Icon, Section Badge EN/AR, Section Numbering, Created Date, Last Modified Date), one required/optional flag the brief got wrong (Group Intro is Required = No), one field the brief folded into Display Order (Section Numbering), one narrower role wording (Site Content Author = 'View and update assigned page/section content where permitted' — no create, no submit-for-review), one untested rich-text capability ('headings, paragraphs, bullets and inline hyperlinks') and one untested navigation step (Main Menu > Services > Proposal for Research). CONFIRMED UNCHANGED by the PBI text, with no contradiction: the auto-captured File Type and File Size system fields (FLD-27/FLD-28 correct), the 'document shall be replaceable without unpublishing the page' rule (CTL-15/ST-12/TC-034 correct), the PDF-only 5 MB resource constraint (FLD-26 correct), and the 300-char group-item bullet limit (FLD-22 correct). Retire A-0 and replace it with the merged rows and the two open decisions in 'contradictions' below.",
+ "gaps": [
+  {
+   "pbi_statement": "Icon | Icon/Image | Yes | Allowed icon set | Tile icon (Quick-Facts Tile table)",
+   "why_missing": "The quick-facts tile inventory carries Label (FLD-6), Value (FLD-7), Display Order (FLD-8) and Active Status (FLD-9) but no Icon field, even though the PBI marks it mandatory with an allowed-icon-set validation. No case selects, renders or rejects a tile icon.",
+   "new_inventory": ["FLD-32"],
+   "new_case_ids": ["SVC-PROPOSALRESEARCH-TC-169", "SVC-PROPOSALRESEARCH-TC-170", "SVC-PROPOSALRESEARCH-TC-171"]
+  },
+  {
+   "pbi_statement": "Card Icon | Icon/Image | Yes | Allowed icon set | Card icon (Overview — Body + Info Card table); and 'each active info card shall show its icon, title and description in order'",
+   "why_missing": "The Overview info card inventory carries Title (FLD-14), Description (FLD-15), Display Order (FLD-16) and Active Status (FLD-17) but no Card Icon field. TC-006 asserts card titles and descriptions only; the AC explicitly requires the icon to render.",
+   "new_inventory": ["FLD-33"],
+   "new_case_ids": ["SVC-PROPOSALRESEARCH-TC-172", "SVC-PROPOSALRESEARCH-TC-173", "SVC-PROPOSALRESEARCH-TC-174"]
+  },
+  {
+   "pbi_statement": "Section Badge EN/AR | Text | Yes | Max 100 chars | Section badge / eyebrow (e.g., \u201cAbout the service\u201d) | 100",
+   "why_missing": "Section Badge appears as a mandatory 100-char field in THREE field tables (Overview, Service Information, Downloadable Resources) and is asserted only as a rendered string in the UI cases TC-005/TC-007/TC-010. No inventory row and therefore no field-level validation coverage (empty, whitespace, max, max+1) exists for it.",
+   "new_inventory": ["FLD-34"],
+   "new_case_ids": ["SVC-PROPOSALRESEARCH-TC-175", "SVC-PROPOSALRESEARCH-TC-176", "SVC-PROPOSALRESEARCH-TC-177", "SVC-PROPOSALRESEARCH-TC-178", "SVC-PROPOSALRESEARCH-TC-179"]
+  },
+  {
+   "pbi_statement": "Section Numbering | Text | Yes | Numbering \u201c01, 02, 03\u201d | Section Numbering (Section Index / Section table)",
+   "why_missing": "The PBI defines Section Numbering as its own mandatory AUTHORED text field, separate from Display Order. The inventory has no row for it and instead folds the rendered 01/02/03 numerals into FLD-11 (Display Order) — see the contradiction entry. No case authors, validates or renders the numbering value independently.",
+   "new_inventory": ["FLD-35"],
+   "new_case_ids": ["SVC-PROPOSALRESEARCH-TC-180", "SVC-PROPOSALRESEARCH-TC-181", "SVC-PROPOSALRESEARCH-TC-182"]
+  },
+  {
+   "pbi_statement": "Created / Last Modified Date | System | Yes | Auto | Audit fields (Page / Hero table)",
+   "why_missing": "The PBI lists Created Date and Last Modified Date as mandatory auto-captured system fields on the page record. The inventory covers the audit LOG (ST-13, TC-164) and the two auto-captured RESOURCE system fields (FLD-27/FLD-28, TC-104/TC-105) but has no row for the page-level Created / Last Modified audit fields, so the same auto-capture rule that produced TC-104/TC-105 was never applied here.",
+   "new_inventory": ["FLD-36", "FLD-37"],
+   "new_case_ids": ["SVC-PROPOSALRESEARCH-TC-183", "SVC-PROPOSALRESEARCH-TC-184"]
+  },
+  {
+   "pbi_statement": "Then rich text shall support headings, paragraphs, bullets and inline hyperlinks",
+   "why_missing": "Hero Description and Overview Body are typed Rich Text with the validation 'Headings, bullets, links', and the AC states the capability explicitly. Existing cases TC-086..TC-091 only assert that a plain valid value saves and that empty/whitespace is blocked; nothing exercises the rich-text formatting capability or asserts that an inline hyperlink renders as a working anchor on the public page.",
+   "new_inventory": ["CTL-17"],
+   "new_case_ids": ["SVC-PROPOSALRESEARCH-TC-185", "SVC-PROPOSALRESEARCH-TC-186"]
+  },
+  {
+   "pbi_statement": "Visitor navigates to Main Menu \u2192 Services \u2192 Proposal for Research.",
+   "why_missing": "Step 1 of the stated Frontend Workflow. Every existing visitor case enters the page by typing the URL directly (A-17 flags the URL itself as derived). No case verifies that the page is reachable from the site's main menu under Services — the actual entry point a visitor uses.",
+   "new_inventory": ["CTL-18"],
+   "new_case_ids": ["SVC-PROPOSALRESEARCH-TC-187"]
+  },
+  {
+   "pbi_statement": "Hero Banner | Image Upload | Yes | JPG/PNG/SVG < 2 MB | Hero illustration",
+   "why_missing": "The hero banner is mandatory, but the budget rule applied to file fields (valid + disallowed type + oversize) produced TC-098/TC-099/TC-100 and no REQUIRED-ness case. Nothing verifies that the record cannot be saved/published with no hero banner attached.",
+   "new_inventory": [],
+   "new_case_ids": ["SVC-PROPOSALRESEARCH-TC-188"]
+  },
+  {
+   "pbi_statement": "Resource File | File Upload (single) | Yes | PDF\u2014 5MB | Downloadable document",
+   "why_missing": "Same gap on the resource item: TC-101/TC-102/TC-103 cover valid, disallowed type and oversize, but no case verifies that a resource item with NO file attached is rejected — which matters because an active file-less resource item would publish a Download button pointing at nothing.",
+   "new_inventory": [],
+   "new_case_ids": ["SVC-PROPOSALRESEARCH-TC-189"]
+  },
+  {
+   "pbi_statement": "Group Intro EN/AR | Rich Text | No | Plain/rich | Intro above the group\u2019s bullets",
+   "why_missing": "The PBI marks Group Intro as the ONLY optional field in the whole feature. The artifact treats it as mandatory (see the contradiction entry), so the positive optional behaviour — saving and publishing a group with no intro, and the group rendering its label and bullets without an empty intro block — is untested.",
+   "new_inventory": [],
+   "new_case_ids": ["SVC-PROPOSALRESEARCH-TC-190"]
+  }
+ ],
+ "contradictions": [
+  {
+   "inventory_id": "FLD-19",
+   "artifact_says": "\"Information Group Intro EN/AR — Rich Text, mandatory, no stated max\" — and cases TC-096 ('an empty Information Group Intro blocks the save') and TC-097 ('a whitespace-only Information Group Intro blocks the save') assert that the save is blocked and the field is flagged as required.",
+   "pbi_says": "Group Intro EN/AR | Rich Text | No | Plain/rich | Intro above the group\u2019s bullets | \u2014",
+   "fix": "Change FLD-19 to 'Information Group Intro EN/AR — Rich Text, OPTIONAL (Required = No per the PBI field table), no stated max'. TC-096 and TC-097 assert the opposite of the PBI and must be DELETED (or inverted); the new TC-190 replaces them by asserting that an empty Group Intro saves, publishes and renders the group label plus bullets with no empty intro block. Net effect on the budget: line 2 drops from 4 mandatory rich-text fields to 3 (12 -> 9 cases) plus 1 optional-field case, i.e. delivered moves 168 -> 168 - 2 (TC-096, TC-097) + 22 new = 188 if the Manager removes both."
+  },
+  {
+   "inventory_id": "FLD-11",
+   "artifact_says": "\"Section Display Order — Number, mandatory, positive integer (drives the rendered 01/02/03 numerals)\" — and TC-145 'Verify that reordering sections changes both the page order and the index numerals' asserts that a reorder rewrites the rendered numerals.",
+   "pbi_says": "Section Numbering | Text | Yes | Numbering \u201c01, 02, 03\u201d | Section Numbering  ...  Display Order | Number | Yes | Positive integer | Order",
+   "fix": "Numbering and Display Order are TWO separate mandatory fields in the PBI: the numeral is authored text, the order is a number. Strip the parenthetical '(drives the rendered 01/02/03 numerals)' from FLD-11 and add FLD-35 for the authored Section Numbering. TC-145 must be narrowed to assert the rendered SEQUENCE of sections and index entries only, not that the numerals themselves are rewritten; the new TC-182 asserts the PBI behaviour (authored numbering is preserved across a reorder). If the client actually wants auto-numbering, this is a product decision — flag it rather than silently keeping TC-145 as written."
+  },
+  {
+   "inventory_id": "ROL-3",
+   "artifact_says": "\"Site Content Author — creates and edits assigned content, submits for review, no direct publish\".",
+   "pbi_says": "Site Content Author (Site Role) | View and update assigned page/section content where permitted.",
+   "fix": "The PBI grants the Author VIEW and UPDATE only — it grants no create capability and mentions no submit-for-review workflow anywhere in the document. Narrow ROL-3 to 'Site Content Author — views and updates assigned page/section content where permitted; no create, no publish, no unpublish'. TC-028 (edit and save as draft) and TC-029 (cannot publish) both remain valid under the narrower wording; no new case was invented for a create/submit-for-review denial because the PBI states no such boundary and inventing one would be invented scope. Confirm with the product owner whether Authors are meant to create records at all."
+  },
+  {
+   "inventory_id": "FLD-10",
+   "artifact_says": "\"Section Title EN/AR — Text, mandatory, max 100 (drives both the sticky index entry label and the section heading)\" — TC-056 and TC-059 assert one field feeding both places.",
+   "pbi_says": "Section Title EN/AR | Text | Yes | Max 100 chars | Section heading (e.g., \u201cOverview\u201d) | 100   ...   Section Badge EN/AR | Text | Yes | Max 100 chars | Section badge / eyebrow",
+   "fix": "Not a limit/flag error — FLD-10's type, required flag and 100-char limit all match the PBI. The only correction is completeness: the section-level tables carry a SECOND mandatory 100-char text field (Section Badge) that FLD-10 does not cover. Keep FLD-10 as is and add FLD-34; no existing case needs changing."
+  }
+ ],
+ "new_inventory_rows": [
+  {"id": "FLD-32", "description": "Quick-fact Tile Icon — Icon/Image, mandatory, must come from the allowed icon set; renders on the quick-facts tile"},
+  {"id": "FLD-33", "description": "Overview Info Card Icon — Icon/Image, mandatory, must come from the allowed icon set; the AC requires each active info card to show its icon, title and description"},
+  {"id": "FLD-34", "description": "Section Badge EN/AR — Text, mandatory, max 100 (section eyebrow above the section heading; authored on the Overview, Service Information and Downloadable Resources sections, e.g. 'About the service', 'Rich informational content', 'Templates and guidance')"},
+  {"id": "FLD-35", "description": "Section Numbering — Text, mandatory, authored numbering value in the form '01, 02, 03'; distinct from Section Display Order (FLD-11) and rendered as the numeral in the sticky index"},
+  {"id": "FLD-36", "description": "Page Created Date — System field, mandatory, auto-captured at record creation, read-only (PBI 'Created / Last Modified Date | System | Yes | Auto | Audit fields')"},
+  {"id": "FLD-37", "description": "Page Last Modified Date — System field, mandatory, auto-captured on every save, read-only (PBI 'Created / Last Modified Date | System | Yes | Auto | Audit fields')"},
+  {"id": "CTL-17", "description": "Rich-text editor formatting capability on Hero Description (FLD-3) and Overview Body (FLD-13) — headings, paragraphs, bullet lists and inline hyperlinks must be authorable and must render on the public page"},
+  {"id": "CTL-18", "description": "Public site Main Menu > Services > Proposal for Research navigation entry — the visitor's stated entry point to the page (Frontend Workflow step 1)"}
+ ],
+ "new_cases": [
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-169",
+   "title": "Verify that a valid quick-fact tile Icon is saved and rendered on the published page",
+   "category": "Functional-Low",
+   "traceability": ["FLD-32", "OBJ-3"],
+   "description": "Object Authoring record QCTEST-130949-ProposalForResearch, quick-fact tile 1 'Research Focus'. Icon picked from the allowed icon set.",
+   "steps_list": [
+    "Log into https://qcdev.ihorizons.com/object-authoring as the Site Content Editor and open the QCTEST-130949-ProposalForResearch record, then open quick-fact tile 1 'Research Focus'",
+    "Open the Icon picker, select the allowed-set icon 'search' and save the record",
+    "Publish the record and open /en/our-services/information/proposal-for-research in a fresh logged-out browser context"
+   ],
+   "expected_list": [
+    "Quick-fact tile 1 opens with the Icon field visible and marked as required",
+    "The icon 'search' is accepted with no validation error and the record saves with the Liferay generic success toast",
+    "The 'Research Focus' quick-fact tile renders the 'search' icon above its label, and the icon element is present in the DOM with a non-empty source"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Both",
+   "priority": 2,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel", "Web"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-170",
+   "title": "Verify that a quick-fact tile with no Icon selected blocks the save",
+   "category": "Functional-Low",
+   "traceability": ["FLD-32"],
+   "description": "Quick-fact tile 1 of QCTEST-130949-ProposalForResearch with its Icon cleared; the PBI marks the tile Icon as Required = Yes.",
+   "steps_list": [
+    "Open quick-fact tile 1 'Research Focus' in the QCTEST-130949-ProposalForResearch record and clear the selected Icon so the field is empty",
+    "Attempt to save the record"
+   ],
+   "expected_list": [
+    "The Icon field shows no selected icon",
+    "The save is blocked and the Icon field is flagged as required; no success toast is shown"
+   ],
+   "test_type": "Functional",
+   "scenario": "negative",
+   "impact_area": "Backend",
+   "priority": 3,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-171",
+   "title": "Verify that a quick-fact tile Icon outside the allowed icon set is rejected",
+   "category": "Functional-Low",
+   "traceability": ["FLD-32", "MSG-3"],
+   "description": "Quick-fact tile 1 of QCTEST-130949-ProposalForResearch. Upload sample QCTEST-130949-icon.bmp, a 40x40 BMP that is not a member of the allowed icon set.",
+   "steps_list": [
+    "Open quick-fact tile 1 'Research Focus' and attempt to supply the icon by uploading the file QCTEST-130949-icon.bmp instead of choosing from the allowed icon set",
+    "Attempt to save the record"
+   ],
+   "expected_list": [
+    "The upload is rejected with a validation error stating the icon is not an allowed type, or the picker offers no way to supply a file outside the allowed icon set",
+    "The tile retains its previously saved allowed-set icon and QCTEST-130949-icon.bmp is never stored against the tile"
+   ],
+   "test_type": "Functional",
+   "scenario": "negative",
+   "impact_area": "Backend",
+   "priority": 3,
+   "execution_type": "Manual",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-172",
+   "title": "Verify that a valid Overview info card Icon is saved and rendered on the published page",
+   "category": "Functional-Low",
+   "traceability": ["FLD-33", "OBJ-5"],
+   "description": "Overview info card 1 'Clear research focus' of QCTEST-130949-ProposalForResearch. Icon picked from the allowed icon set.",
+   "steps_list": [
+    "Open the QCTEST-130949-ProposalForResearch record in Object Authoring as the Site Content Editor and open Overview info card 1 'Clear research focus'",
+    "Open the Card Icon picker, select the allowed-set icon 'target' and save the record",
+    "Publish the record and open /en/our-services/information/proposal-for-research in a fresh logged-out browser context, then scroll to the Overview info cards"
+   ],
+   "expected_list": [
+    "Info card 1 opens with the Card Icon field visible and marked as required",
+    "The icon 'target' is accepted with no validation error and the record saves with the Liferay generic success toast",
+    "The 'Clear research focus' card renders the 'target' icon above its title, followed by the title and the description, in that order"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Both",
+   "priority": 2,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel", "Web"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-173",
+   "title": "Verify that an Overview info card with no Card Icon selected blocks the save",
+   "category": "Functional-Low",
+   "traceability": ["FLD-33"],
+   "description": "Overview info card 1 'Clear research focus' with its Card Icon cleared; the PBI marks the Card Icon as Required = Yes.",
+   "steps_list": [
+    "Open Overview info card 1 'Clear research focus' in the QCTEST-130949-ProposalForResearch record and clear the selected Card Icon",
+    "Attempt to save the record"
+   ],
+   "expected_list": [
+    "The Card Icon field shows no selected icon",
+    "The save is blocked and the Card Icon field is flagged as required; no success toast is shown"
+   ],
+   "test_type": "Functional",
+   "scenario": "negative",
+   "impact_area": "Backend",
+   "priority": 3,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-174",
+   "title": "Verify that an Overview info card Icon outside the allowed icon set is rejected",
+   "category": "Functional-Low",
+   "traceability": ["FLD-33", "MSG-3"],
+   "description": "Overview info card 1 of QCTEST-130949-ProposalForResearch. Upload sample QCTEST-130949-icon.bmp, a 40x40 BMP outside the allowed icon set.",
+   "steps_list": [
+    "Open Overview info card 1 'Clear research focus' and attempt to supply the Card Icon by uploading QCTEST-130949-icon.bmp instead of choosing from the allowed icon set",
+    "Attempt to save the record"
+   ],
+   "expected_list": [
+    "The upload is rejected with a validation error stating the icon is not an allowed type, or the picker offers no way to supply a file outside the allowed icon set",
+    "The card retains its previously saved allowed-set icon and QCTEST-130949-icon.bmp is never stored against the card"
+   ],
+   "test_type": "Functional",
+   "scenario": "negative",
+   "impact_area": "Backend",
+   "priority": 3,
+   "execution_type": "Manual",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-175",
+   "title": "Verify that a valid Section Badge is saved in both languages and rendered above the section heading",
+   "category": "Functional-Low",
+   "traceability": ["FLD-34", "OBJ-5"],
+   "description": "Overview section of QCTEST-130949-ProposalForResearch. Data: EN 'About the service', AR '\u0639\u0646 \u0627\u0644\u062e\u062f\u0645\u0629'.",
+   "steps_list": [
+    "Enter 'About the service' in the Overview Section Badge EN field and '\u0639\u0646 \u0627\u0644\u062e\u062f\u0645\u0629' in the Section Badge AR field",
+    "Publish the record",
+    "Open the English and Arabic published pages in a fresh logged-out browser context and read the badge above the Overview heading"
+   ],
+   "expected_list": [
+    "Both values are accepted with no validation error",
+    "The record is saved with status Published and the Liferay generic success toast is displayed",
+    "The English page renders 'About the service' in Cairo 400 12px/18px #911731 directly above the 'Overview' heading, and the Arabic page renders '\u0639\u0646 \u0627\u0644\u062e\u062f\u0645\u0629' right-aligned above '\u0646\u0638\u0631\u0629 \u0639\u0627\u0645\u0629'"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Both",
+   "priority": 2,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel", "Web", "Bilingual"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-176",
+   "title": "Verify that an empty Section Badge blocks the save",
+   "category": "Functional-Low",
+   "traceability": ["FLD-34"],
+   "description": "Overview Section Badge EN cleared to an empty value; the PBI marks Section Badge as Required = Yes.",
+   "steps_list": [
+    "Clear the Overview Section Badge EN field so it contains no characters",
+    "Attempt to save the record"
+   ],
+   "expected_list": [
+    "The field is empty",
+    "The save is blocked and the Section Badge EN field is flagged as required"
+   ],
+   "test_type": "Functional",
+   "scenario": "negative",
+   "impact_area": "Backend",
+   "priority": 3,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-177",
+   "title": "Verify that a whitespace-only Section Badge blocks the save",
+   "category": "Functional-Low",
+   "traceability": ["FLD-34"],
+   "description": "Overview Section Badge EN set to three space characters '   '.",
+   "steps_list": [
+    "Type three space characters into the Overview Section Badge EN field",
+    "Attempt to save the record"
+   ],
+   "expected_list": [
+    "The field contains only whitespace",
+    "The save is blocked and the Section Badge EN field is flagged as required"
+   ],
+   "test_type": "Functional",
+   "scenario": "negative",
+   "impact_area": "Backend",
+   "priority": 3,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-178",
+   "title": "Verify that a Section Badge of exactly 100 characters is accepted and rendered in full",
+   "category": "Functional-Low",
+   "traceability": ["FLD-34"],
+   "description": "Overview Section Badge EN set to a string of exactly 100 'B' characters (the PBI limit is Max 100 chars).",
+   "steps_list": [
+    "Enter a string of exactly 100 'B' characters in the Overview Section Badge EN field and save the record",
+    "Publish the record and read the badge above the Overview heading on the English page in a fresh logged-out browser context"
+   ],
+   "expected_list": [
+    "The field accepts all 100 characters and the record saves with the Liferay generic success toast",
+    "The badge renders all 100 'B' characters above the Overview heading with none truncated"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Both",
+   "priority": 3,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel", "Web"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-179",
+   "title": "Verify that a Section Badge longer than 100 characters is not accepted",
+   "category": "Functional-Low",
+   "traceability": ["FLD-34"],
+   "description": "Overview Section Badge EN given a string of 101 'B' characters. Per A-10 the case passes whether input stops at the limit or the save is blocked.",
+   "steps_list": [
+    "Paste a string of 101 'B' characters into the Overview Section Badge EN field",
+    "Attempt to save the record and re-read the stored value"
+   ],
+   "expected_list": [
+    "Either the field stops accepting input at 100 characters or the 101-character value is held pending validation",
+    "The field does not accept a value longer than 100 characters: the save is blocked with the Section Badge EN field flagged as over the limit, or the stored value is exactly 100 characters"
+   ],
+   "test_type": "Functional",
+   "scenario": "negative",
+   "impact_area": "Backend",
+   "priority": 3,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-180",
+   "title": "Verify that a valid Section Numbering value is saved and rendered as the sticky index numeral",
+   "category": "Functional-Low",
+   "traceability": ["FLD-35", "OBJ-4"],
+   "description": "Section 2 'Service information' of QCTEST-130949-ProposalForResearch. Section Numbering authored as '02' per the PBI validation 'Numbering 01, 02, 03'.",
+   "steps_list": [
+    "Open section 2 'Service information' in the QCTEST-130949-ProposalForResearch record and enter '02' in the Section Numbering field",
+    "Publish the record",
+    "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context and read the sticky index entry for Service information"
+   ],
+   "expected_list": [
+    "The value '02' is accepted with no validation error",
+    "The record is saved with status Published and the Liferay generic success toast is displayed",
+    "The sticky index entry reads '02 Service information', with the numeral matching the authored Section Numbering value exactly"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Both",
+   "priority": 2,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel", "Web"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-181",
+   "title": "Verify that an empty Section Numbering blocks the save",
+   "category": "Functional-Low",
+   "traceability": ["FLD-35"],
+   "description": "Section 2 'Service information' with its Section Numbering cleared; the PBI marks Section Numbering as Required = Yes.",
+   "steps_list": [
+    "Clear the Section Numbering field of section 2 'Service information' so it contains no characters",
+    "Attempt to save the record"
+   ],
+   "expected_list": [
+    "The field is empty",
+    "The save is blocked and the Section Numbering field is flagged as required"
+   ],
+   "test_type": "Functional",
+   "scenario": "negative",
+   "impact_area": "Backend",
+   "priority": 3,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-182",
+   "title": "Verify that the authored Section Numbering is preserved when sections are reordered",
+   "category": "Functional-Low",
+   "traceability": ["FLD-35", "FLD-11", "OBJ-4"],
+   "description": "Sections authored as Numbering '01' Overview / order 1, '02' Service information / order 2, '03' Downloadable resources / order 3. Numbering is a separate authored text field from Display Order, so a reorder changes the sequence but must not rewrite the authored numerals.",
+   "steps_list": [
+    "Open the QCTEST-130949-ProposalForResearch record and change the Display Order of 'Downloadable resources' to 2 and of 'Service information' to 3, leaving both Section Numbering values as authored ('03' and '02')",
+    "Publish the record",
+    "Open the English published page in a fresh logged-out browser context and read the sticky index entries top to bottom together with their numerals"
+   ],
+   "expected_list": [
+    "Both Display Order values are accepted with no validation error",
+    "The record is saved with status Published and the Liferay generic success toast is displayed",
+    "The sections and index entries now render in the sequence Overview, Downloadable resources, Service information, and each entry still carries its AUTHORED numeral: '01 Overview', '03 Downloadable resources', '02 Service information' — the numerals are not renumbered by the reorder"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Both",
+   "priority": 3,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel", "Web"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-183",
+   "title": "Verify that the page Created Date is auto-captured at creation and is not editable",
+   "category": "Functional-Low",
+   "traceability": ["FLD-36", "ST-13"],
+   "description": "A new page record QCTEST-130949-CreatedDate is created in Object Authoring. The PBI defines Created Date as a mandatory auto system audit field.",
+   "steps_list": [
+    "Log into Object Authoring as the Site Content Editor, create the record QCTEST-130949-CreatedDate and note the wall-clock time at the moment of the first save",
+    "Reopen the saved record and inspect the Created Date field",
+    "Attempt to type a different date into the Created Date field, then edit the Page Title to 'QCTEST-130949-CreatedDate v2', save, and re-read the Created Date"
+   ],
+   "expected_list": [
+    "The record is created and saved with the Liferay generic success toast; no Created Date was entered by the author",
+    "The Created Date is populated automatically and matches the wall-clock time of the first save to the minute",
+    "The Created Date field is read-only and rejects the typed value, and after the title edit is saved the Created Date still shows the original creation timestamp unchanged"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Backend",
+   "priority": 3,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-184",
+   "title": "Verify that the page Last Modified Date is auto-updated on every save and is not editable",
+   "category": "Functional-Low",
+   "traceability": ["FLD-37", "ST-13"],
+   "description": "Existing record QCTEST-130949-ProposalForResearch. The PBI defines Last Modified Date as a mandatory auto system audit field.",
+   "steps_list": [
+    "Open the QCTEST-130949-ProposalForResearch record in Object Authoring as the Site Content Editor and record the current Last Modified Date value",
+    "Attempt to type a different date into the Last Modified Date field",
+    "Change the Hero Eyebrow EN to 'QCTEST Economic Research Service', save the record and re-read the Last Modified Date"
+   ],
+   "expected_list": [
+    "The current Last Modified Date is displayed on the record",
+    "The Last Modified Date field is read-only and rejects the typed value",
+    "The save succeeds with the Liferay generic success toast and the Last Modified Date has advanced to the time of this save, matching the wall-clock time to the minute and no longer equal to the previously recorded value"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Backend",
+   "priority": 3,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-185",
+   "title": "Verify that the Hero Description rich text supports headings, bullets and inline hyperlinks on the published page",
+   "category": "Functional-Low",
+   "traceability": ["CTL-17", "FLD-3", "OBJ-2"],
+   "description": "Hero Description EN of QCTEST-130949-ProposalForResearch authored with a heading 'QCTEST Research scope', a two-item bullet list ('Economic topics', 'Business topics') and the inline hyperlink 'Research & Studies' pointing at https://qcdev.ihorizons.com/en/about.",
+   "steps_list": [
+    "In the Hero Description EN rich-text field, author a heading 'QCTEST Research scope', a bullet list with the items 'Economic topics' and 'Business topics', and a paragraph containing the inline hyperlink 'Research & Studies' targeting https://qcdev.ihorizons.com/en/about",
+    "Publish the record",
+    "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context and inspect the hero description markup",
+    "Click the 'Research & Studies' link in the hero description"
+   ],
+   "expected_list": [
+    "The editor accepts the heading, the bullet list and the hyperlink with no validation error",
+    "The record is saved with status Published and the Liferay generic success toast is displayed",
+    "The hero description renders 'QCTEST Research scope' as a heading element, 'Economic topics' and 'Business topics' as two list items of a bullet list, and 'Research & Studies' as an anchor element whose href is https://qcdev.ihorizons.com/en/about",
+    "The browser navigates to https://qcdev.ihorizons.com/en/about"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Both",
+   "priority": 2,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel", "Web"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-186",
+   "title": "Verify that the Overview Body rich text supports headings, paragraphs, bullets and inline hyperlinks on the published page",
+   "category": "Functional-Low",
+   "traceability": ["CTL-17", "FLD-13", "OBJ-5"],
+   "description": "Overview Section Body EN of QCTEST-130949-ProposalForResearch authored with a heading 'QCTEST How proposals are reviewed', two paragraphs, a three-item bullet list and the inline hyperlink 'contact the department' targeting https://qcdev.ihorizons.com/en/contact-us.",
+   "steps_list": [
+    "In the Section 1 Body EN rich-text field, author a heading 'QCTEST How proposals are reviewed', two paragraphs, a bullet list with the items 'Submission', 'Review' and 'Feedback', and a paragraph containing the inline hyperlink 'contact the department' targeting https://qcdev.ihorizons.com/en/contact-us",
+    "Publish the record",
+    "Open the English published page in a fresh logged-out browser context and inspect the Overview body markup",
+    "Click the 'contact the department' link inside the Overview body"
+   ],
+   "expected_list": [
+    "The editor accepts the heading, both paragraphs, the bullet list and the hyperlink with no validation error",
+    "The record is saved with status Published and the Liferay generic success toast is displayed",
+    "The Overview body renders 'QCTEST How proposals are reviewed' as a heading element, the two paragraphs as separate paragraph elements, 'Submission', 'Review' and 'Feedback' as three list items of a bullet list, and 'contact the department' as an anchor element whose href is https://qcdev.ihorizons.com/en/contact-us",
+    "The browser navigates to https://qcdev.ihorizons.com/en/contact-us"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Both",
+   "priority": 2,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel", "Web"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-187",
+   "title": "Verify that a visitor reaches the Proposal for Research page from the Main Menu Services entry",
+   "category": "Functional-High",
+   "traceability": ["CTL-18", "OBJ-1", "ROL-1", "SUR-1"],
+   "description": "The Proposal for Research page is Published. Frontend Workflow step 1: Main Menu > Services > Proposal for Research, exercised as an anonymous visitor with no URL typed.",
+   "steps_list": [
+    "Open https://qcdev.ihorizons.com/en in a fresh logged-out Chrome window sized 1920x1080",
+    "Open the Main Menu and hover or click the 'Services' entry",
+    "Click the 'Proposal for Research' item in the Services menu"
+   ],
+   "expected_list": [
+    "The English home page loads with the main navigation visible and a 'Services' entry present",
+    "The Services menu expands and lists an item labelled 'Proposal for Research'",
+    "The browser navigates to /en/our-services/information/proposal-for-research; the page renders the breadcrumb 'Home > Services', the hero title 'Proposal for Research', the quick-facts strip and the sticky index entries 01-03, with no 404 and no console error"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Both",
+   "priority": 1,
+   "execution_type": "Automated",
+   "tags": ["Functional-High", "SVC", "Web", "UAT", "Regression"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-188",
+   "title": "Verify that saving the page with no Hero Banner attached is blocked",
+   "category": "Functional-Low",
+   "traceability": ["FLD-4", "OBJ-2"],
+   "description": "Record QCTEST-130949-ProposalForResearch with the Hero Banner image removed; the PBI marks Hero Banner as Required = Yes.",
+   "steps_list": [
+    "Open the QCTEST-130949-ProposalForResearch record in Object Authoring as the Site Content Editor and remove the attached hero banner image so the Hero Banner field is empty",
+    "Attempt to save and publish the record"
+   ],
+   "expected_list": [
+    "The Hero Banner field shows no attached image",
+    "The save/publish is blocked and the Hero Banner field is flagged as required; no success toast is shown and the previously published page continues to serve its existing hero banner"
+   ],
+   "test_type": "Functional",
+   "scenario": "negative",
+   "impact_area": "Backend",
+   "priority": 2,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-189",
+   "title": "Verify that saving a downloadable resource item with no file attached is blocked",
+   "category": "Functional-Low",
+   "traceability": ["FLD-26", "OBJ-9"],
+   "description": "New resource item QCTEST-130949-NoFile added to the Downloadable resources section with a title but no Resource File; the PBI marks Resource File as Required = Yes.",
+   "steps_list": [
+    "Add a new downloadable resource item to the QCTEST-130949-ProposalForResearch record, set Resource Title EN to 'QCTEST-130949-NoFile', set Display Order 3 and Active Status Active, and leave the Resource File field empty",
+    "Attempt to save the record"
+   ],
+   "expected_list": [
+    "The item is created in the editor with no file attached",
+    "The save is blocked and the Resource File field is flagged as required; no resource card titled 'QCTEST-130949-NoFile' is created and none appears on the published page"
+   ],
+   "test_type": "Functional",
+   "scenario": "negative",
+   "impact_area": "Backend",
+   "priority": 2,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel"]
+  },
+  {
+   "id": "SVC-PROPOSALRESEARCH-TC-190",
+   "title": "Verify that an information group with no Group Intro is saved and rendered with its label and bullets only",
+   "category": "Functional-Low",
+   "traceability": ["FLD-19", "OBJ-6", "OBJ-7"],
+   "description": "Information group 2 'Supporting information' of QCTEST-130949-ProposalForResearch with its Group Intro cleared in both languages. The PBI field table marks Group Intro as Required = No — this is the only optional field in the feature.",
+   "steps_list": [
+    "Open information group 2 'Supporting information' in the QCTEST-130949-ProposalForResearch record and clear both the Group Intro EN and the Group Intro AR rich-text fields",
+    "Save and publish the record",
+    "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context and read the second information group in section 02"
+   ],
+   "expected_list": [
+    "Both Group Intro fields are empty and neither is flagged as required",
+    "The record saves and publishes successfully with the Liferay generic success toast",
+    "The group renders its label 'Supporting information' followed directly by its four bullets, with no intro paragraph and no empty intro block or extra vertical gap between the label and the first bullet"
+   ],
+   "test_type": "Functional",
+   "scenario": "positive",
+   "impact_area": "Both",
+   "priority": 2,
+   "execution_type": "Automated",
+   "tags": ["Functional-Low", "SVC", "Control_Panel", "Web"]
+  }
+ ],
+ "no_gap_note": ""
+}
