@@ -45,6 +45,20 @@ from core.web.base_page import BasePage
 
 ORG_STRUCTURE_PATH = "/web/qatar-chamber/about-us/organizational-structure"
 
+# Borrowed from cms-profile.md's ONLY measured propagation budget (~0s /
+# 5s-timeout / 0.5s-interval, Board Members JAX-RS endpoint) and reused
+# project-wide as the safety-margin default pending a per-endpoint
+# re-measure (same disclosed-not-independently-confirmed precedent as
+# HomePromoBannersPage.RELOAD_POLL_TIMEOUT_MS / HomeHeroBannerPage's own
+# PROPAGATION_POLL_TIMEOUT_MS) — used by reload_until_node_matches() below,
+# ADDED 2026-09-14 (Group A/tc_133294 triage: a single cold post-deactivation
+# read raced cache propagation with no retry; sibling tests in this same
+# suite, e.g. Hero Banner's reload_until_title_in_carousel(), already carry
+# this exact poll pattern for the identical class of publish-then-verify
+# check).
+PROPAGATION_POLL_TIMEOUT_MS = 5000
+PROPAGATION_POLL_INTERVAL_MS = 500
+
 
 class OrgStructurePage(BasePage):
     # ---- Page chrome -------------------------------------------------
@@ -126,6 +140,56 @@ class OrgStructurePage(BasePage):
         except Exception:  # noqa: BLE001 — mirrors BasePage.is_visible's contract
             return False
 
+    def reload_until_node_matches(
+        self,
+        department_name: str,
+        expected_visible: bool,
+        timeout_ms: int = PROPAGATION_POLL_TIMEOUT_MS,
+        interval_ms: int = PROPAGATION_POLL_INTERVAL_MS,
+    ) -> bool:
+        """Poll (reload + is_node_visible check), never a single cold read
+        — ADDED 2026-09-14 (Group A/tc_133294 triage). Mirrors
+        HomeHeroBannerPage.reload_until_title_in_carousel()'s own already-
+        established pattern in this same test suite for the identical
+        class of check (admin deactivates/reactivates -> the frontend read
+        needs a real retry window for cache propagation, not an immediate
+        single reload)."""
+        import time
+
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_org_structure()
+            if self.is_node_visible(department_name) == expected_visible:
+                return True
+            if time.monotonic() >= deadline:
+                return self.is_node_visible(department_name) == expected_visible
+            self.page.wait_for_timeout(interval_ms)
+
+    def reload_until_default_avatar_matches(
+        self,
+        department_name: str,
+        expected_default: bool,
+        timeout_ms: int = PROPAGATION_POLL_TIMEOUT_MS,
+        interval_ms: int = PROPAGATION_POLL_INTERVAL_MS,
+    ) -> bool:
+        """Poll (reload + node_has_default_avatar check), never a single cold
+        read — ADDED 2026-09-15 (tc_133345/tc_133346 healing re-investigation).
+        Mirrors reload_until_node_matches()'s own already-established pattern
+        exactly (same class of publish-then-verify propagation gap: a single
+        open_org_structure() immediately after admin.save() can race delivery-
+        surface propagation for a brand-new department entry, the same way it
+        already does for a plain node-visibility read)."""
+        import time
+
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_org_structure()
+            if self.node_has_default_avatar(department_name) == expected_default:
+                return True
+            if time.monotonic() >= deadline:
+                return self.node_has_default_avatar(department_name) == expected_default
+            self.page.wait_for_timeout(interval_ms)
+
     def node_person_name(self, department_name: str) -> str:
         return self._node(department_name).locator(self.NODE_PERSON_NAME).inner_text()
 
@@ -160,6 +224,25 @@ class OrgStructurePage(BasePage):
     def node_person_title_locator(self, department_name: str) -> str:
         return f'.qc-org-node:has(.qc-org-node-dept:text-is("{department_name}")) .qc-org-node-title'
 
+    def child_department_order(self, parent_name: str) -> list:
+        """Ordered (DOM-rendered) list of `parent_name`'s DIRECT children
+        department names — CONFIRMED LIVE 2026-09-07 (tc_133295): a
+        parent's children render as a `<ul>` nested directly inside that
+        parent's own `<li>` (same structural fact `is_child_nested_under_
+        parent()` already relies on for membership), and that `<ul>`'s own
+        `<li>` order is confirmed live to follow each child's own admin-set
+        Display Order value ascending (lower value first) — used here to
+        assert a Display Order change actually reorders the rendered
+        sibling sequence, not just the raw field value. `:scope > ul > li`
+        scopes to DIRECT children only (never grandchildren) relative to
+        the parent's own `<li>`."""
+        parent_li = self.page.locator(
+            f'li:has(> .qc-org-node .qc-org-node-dept:text-is("{parent_name}"))'
+        ).first
+        return parent_li.locator(
+            ':scope > ul > li > .qc-org-node .qc-org-node-dept'
+        ).all_inner_texts()
+
     def is_child_nested_under_parent(self, parent_name: str, child_name: str) -> bool:
         """Structural parent/child check (case 133260/133365): the org chart
         renders each node's children as a <ul> nested INSIDE that node's own
@@ -173,6 +256,37 @@ class OrgStructurePage(BasePage):
         return parent_li.locator(
             f'.qc-org-node-dept:text-is("{child_name}")'
         ).count() > 0
+
+    def reload_until_child_nested(
+        self,
+        parent_name: str,
+        child_name: str,
+        expected_nested: bool = True,
+        timeout_ms: int = PROPAGATION_POLL_TIMEOUT_MS,
+        interval_ms: int = PROPAGATION_POLL_INTERVAL_MS,
+    ) -> bool:
+        """Poll (reload + is_child_nested_under_parent check), never a
+        single cold read — HEALED 2026-09-15 (tc_133326 healing session):
+        CONFIRMED LIVE a single `open_org_structure()` + immediate
+        `is_child_nested_under_parent()` read can race delivery-surface
+        propagation for a brand-new department entry the same way
+        `reload_until_node_matches()` above already documents for a plain
+        visibility check (same class of gap, same fix shape) — a fresh
+        admin-side read confirmed the entry was genuinely Approved with the
+        correct Parent Department value, yet the immediately-following
+        single frontend read still reported no nesting. Mirrors
+        `reload_until_node_matches()`'s own already-established pattern
+        exactly."""
+        import time
+
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_org_structure()
+            if self.is_child_nested_under_parent(parent_name, child_name) == expected_nested:
+                return True
+            if time.monotonic() >= deadline:
+                return self.is_child_nested_under_parent(parent_name, child_name) == expected_nested
+            self.page.wait_for_timeout(interval_ms)
 
     # ---- Expand / collapse ----------------------------------------------
     def _toggle_branch_button(self, department_name: str):

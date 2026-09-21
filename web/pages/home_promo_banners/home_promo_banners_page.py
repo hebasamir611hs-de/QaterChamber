@@ -86,3 +86,14 @@ class HomePromoBannersPage(BasePage):
             lambda p: p.banner_visible(alt_text_en) == expected_visible,
             timeout_ms=timeout_ms,
         )
+
+    def banner_redirect_url(self, alt_text_en: str) -> str:
+        """ADDED (batch1, 2026-09-13, tc_135184) — href of the confirmed-live
+        `.qc-promo-link` wrapping the slide whose image alt text matches (see
+        module docstring: "`.qc-promo-slide` > `.qc-promo-link` >
+        `.qc-promo-img`"). Inferred from that already-documented DOM
+        structure (the "link" class name plus the slide being described as
+        clickable) rather than independently re-probed live this session —
+        disclosed, not silently assumed as independently confirmed."""
+        img = self.page.locator(f'{self.IMG}[alt="{alt_text_en}"]').first
+        return img.locator("xpath=..").get_attribute("href") or ""

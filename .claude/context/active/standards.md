@@ -226,6 +226,47 @@ diff this file afterward rather than assuming it's untouched.
   reset-then-navigate sequence themselves, in the same browser context, not
   assume a prior manual reset carries over.
 
+## CMS Admin UI Locale — English-Only Locators, No Arabic Fallback (agreed 2026-09-15)
+
+**Every locator in this codebase is English-text-based, and stays that way.** Do not
+add Arabic locator variants or bilingual fallback matching anywhere in `cms/pages/` or
+`web/pages/` — not even as a "just in case" safety net. If a test needs to assert
+Arabic-rendered content (e.g. an AR field's value), read/assert the field's data value,
+not the surrounding UI chrome text.
+
+**Known gotcha: the shared `TEST_USER` account's Liferay UI language preference is
+persisted server-side (account profile, not just a session cookie) and can end up set
+to Arabic** — e.g. from a prior manual QA session that clicked the site's own "AR"
+language switcher while signed in as this shared account. When that happens, every
+English-text locator (`role=link[name="Edit"]`, "Preview", "Unpublish", "Delete", the
+whole Object Authoring action bar) stops matching, producing misleading failures that
+look like "no live row found for category X" or timeouts waiting for buttons that are
+actually rendered under different (Arabic) accessible names — not a locator bug, not
+missing data.
+
+`CmsLoginPage.login()` forces English locale on login
+(`/c/portal/update_language?languageId=en_US`) as a first line of defense, but this has
+been observed to **not hold for an entire test run** — the account can flip back to
+Arabic mid-run through a path not yet fully root-caused (under investigation as of
+2026-09-15; suspects include a re-auth path that bypasses the fixed `login()`, or a
+portlet-level language negotiation quirk independent of the account preference). If a
+run shows early tests passing with real validation-logic assertions and later tests in
+the *same* run failing with "no live row found" / element-not-found on previously-fine
+locators, suspect this locale drift before assuming a data or selector problem —
+live-check the admin page's title/action-link text (Edit vs. تحرير) to confirm before
+reporting a false product bug.
+
+## Active Status Is a Precondition for Public-Site Visibility (agreed 2026-09-15)
+
+**Content will not appear/propagate to the public site unless its Active Status is
+checked/enabled**, regardless of Published/Approved state. Any test that edits a field
+and then asserts the change is visible on the public-facing page (not just saved in the
+CMS) must verify — and set, if not already true — Active Status = True as part of its
+setup, before asserting public propagation. A propagation assertion that fails ("edited
+value did not appear on the public listing within N seconds") is not automatically a
+caching/timing bug or a product defect — check Active Status on the target record
+first; it is a common, easy-to-miss root cause.
+
 ## Automation Structure — Project Deviation from the Plugin Default
 
 The section that used to live here was **lost in an accidental overwrite** (commit
@@ -378,7 +419,7 @@ which would either force far more tests onto one worker than necessary (coarser
 than the real constraint) or fail to protect a shared record touched by tests in
 two different modules. `loadgroup` lets you name the actual constraint.
 
-**The 4 shared/singleton qcdev records and their group tags** — every test that
+**The shared/singleton qcdev records and their group tags** — every test that
 mutates one of these carries the matching `@pytest.mark.xdist_group(...)` so xdist
 never schedules two of them on different workers at the same time. Everything else
 is left ungrouped and free to parallelize normally:
@@ -390,6 +431,10 @@ is left ungrouped and free to parallelize normally:
 | Mission pillar card | 49082 | `xdist_group("mission_49082")` | `tc_135557`, `tc_135562` |
 | Qatar Airways partner | 45776 | `xdist_group("qatar_airways_45776")` | `tc_135832` |
 | Objectives pillar card | 49108 | `xdist_group("objectives_49108")` | any Strategic Pillar Card test (`tc_135558` etc.) |
+| Hero Banner Slide -01/-02 pair (QCDEMO-129367-HERO_BANNER_SLIDE-01/-02) | 45560 (originally logged for -02 only; reused for the pair 2026-09-08 since 135014/135015 mutate -01 together with -02 — see the "one xdist_group per test" merge rule below) | `xdist_group("hero_banner_slide_45560")` | `tc_135024`, `tc_135014`, `tc_135015` |
+| Achievement Counter "counter 3" (QCDEMO-129367-ACHIEVEMENT_COUNTER-03) | 45659 | `xdist_group("achievement_counter_45659")` | `tc_135026`, `tc_135027`, `tc_135028`, `tc_135029` |
+| Member Services Sector + its 2 active children (QCDEMO-129399-DEPT-04/-07/-08) | 80734 (parent; 80746/80750 are its children, toggled/checked by the sibling test) | `xdist_group("member_services_sector_80734")` | `tc_133292`, `tc_133293` |
+| Board Directory Page MAIN entry (page-level singleton driving the real live `/web/qatar-chamber/about-us/board-of-directors` page, `manage-board-directory-page`) | `QCDEMO-129398-BOARD_DIRECTORY_PAGE-MAIN` | `xdist_group("board_directory_page_main")` | `tc_133517`-`tc_133523`, `tc_133530`-`tc_133533`, `tc_133537`-`tc_133543`, `tc_133544`+`tc_133545` (one combined test) — every BATCH 5 test in `test_board_of_directors_control_panel.py`, 19 tests total |
 
 **Vision (real record, ID pending confirmation)** is the third member of the same
 Strategic Pillar Card carousel as Mission (49082) and Objectives (49108) — treat it as

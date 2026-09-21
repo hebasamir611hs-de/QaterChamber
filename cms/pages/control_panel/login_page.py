@@ -82,6 +82,8 @@ Page Object.
     entry point.
 """
 
+from urllib.parse import quote
+
 from core.web.base_page import BasePage
 from config.settings import control_panel_url
 
@@ -99,6 +101,47 @@ class CmsLoginPage(BasePage):
     # either alone. See STATUS UPDATE above.
     LOGIN_SUCCESS_INDICATOR = 'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'
 
+    # HEALED 2026-09-15 (triage of 26 Functional-Low Control_Panel failures,
+    # tc_133580 and siblings in test_board_of_directors_control_panel.py —
+    # "no live row found for category 'Board Member'" / TimeoutError on
+    # role=link[name="Edit"]). Root cause, confirmed live via Playwright MCP
+    # against qcdev with the real TEST_USER account: the account's Liferay
+    # profile had its OWN persisted UI-language preference set to Arabic
+    # (independent of the GUEST_LANGUAGE_ID=en_US cookie already baked into
+    # .auth/state.json — that cookie only governs the ANONYMOUS/guest
+    # render, not an authenticated user's own account preference, which
+    # wins once logged in). Every English-text locator in this project
+    # (`role=link[name="Edit"]`, "Preview", "Unpublish", "Delete", etc.)
+    # then matched zero elements because the admin surface was actually
+    # rendering "تحرير"/"معاينة"/"إلغاء النشر"/"حذف".
+    #
+    # Confirmed live this session that Liferay's own language switcher
+    # (visible on the login page as an "AR" link) hits exactly this
+    # `/c/portal/update_language?languageId=<id>&redirect=<url>` endpoint —
+    # the same call "My Account > Language" makes. Hitting it with
+    # languageId=en_US while authenticated does not just pin the current
+    # browser session to English (a URL /en/ prefix on one request does
+    # that, but only for that JSESSIONID and only until it expires); it
+    # PERSISTS the account's own language preference in Liferay's user
+    # profile. Proven live by clearing all cookies, logging back in via the
+    # plain (no /en/ prefix) LOGIN_PATH as a completely fresh session, and
+    # confirming manage-board-member still rendered English with an "Edit"
+    # (not "تحرير") link — i.e. the fix survives a brand-new session, not
+    # just the one that called it.
+    #
+    # Calling this unconditionally on every login() — rather than detecting
+    # the rendered language first — is deliberate: it is one cheap extra
+    # navigation, has no race condition to get wrong, and makes every
+    # automated login deterministic regardless of what a prior manual or
+    # automated session last left the shared TEST_USER account's language
+    # preference at (this project's test accounts are shared, not
+    # per-worker, so a manual QA session clicking "AR" to eyeball the
+    # Arabic site can otherwise silently flip every subsequent automated
+    # run to Arabic until someone notices).
+    UPDATE_LANGUAGE_PATH = "/c/portal/update_language"
+    ENGLISH_LANGUAGE_ID = "en_US"
+    POST_LOGIN_REDIRECT_PATH = "/home"
+
     def open_login(self) -> "CmsLoginPage":
         self.open(control_panel_url(self.LOGIN_PATH))
         return self
@@ -115,7 +158,28 @@ class CmsLoginPage(BasePage):
         # than through the generic wrapper (mirrors the same fix already
         # applied in core/web/session_guard.py's reauthenticate()).
         self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="visible", timeout=10000)
+        self._force_english_locale()
         return self
+
+    def _force_english_locale(self) -> None:
+        """Forces (and persists) the just-authenticated account's UI
+        language to English — see the HEALED 2026-09-15 note above. Runs
+        AFTER LOGIN_SUCCESS_INDICATOR is already confirmed visible, so this
+        is always hitting update_language as an authenticated request (an
+        anonymous hit would only move the GUEST_LANGUAGE_ID cookie, not the
+        account's own persisted preference — confirmed by that same live
+        investigation). Re-confirms LOGIN_SUCCESS_INDICATOR after the
+        redirect lands so a broken/blocked update_language call surfaces
+        immediately here, at login time, rather than as a confusing
+        Arabic-locator failure deep inside an unrelated test later.
+        """
+        redirect_url = quote(self.POST_LOGIN_REDIRECT_PATH, safe="")
+        self.open(
+            control_panel_url(
+                f"{self.UPDATE_LANGUAGE_PATH}?languageId={self.ENGLISH_LANGUAGE_ID}&redirect={redirect_url}"
+            )
+        )
+        self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="visible", timeout=10000)
 
     def login_succeeded(self) -> bool:
         try:

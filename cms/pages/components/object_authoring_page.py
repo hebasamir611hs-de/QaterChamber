@@ -77,6 +77,26 @@ probes on manage-promotional-banner:
     exact text: 'Unpublish "<title>"? It comes off the live site
     immediately and becomes a draft you can keep editing. Publish it again
     when you are ready.') — same `page.once("dialog", ...)` pattern.
+  - CORRECTED 2026-09-08 (Hero Banner Slide's "Banner Image" field —
+    manage-hero-banner-slide, PBI 129367): the SAME `iframe[src*=
+    "selectFileEntry"]` item-selector modal `upload_file()` opens actually
+    supports TWO different sub-flows, confirmed live via Playwright MCP —
+    (1) `upload_file()`'s own drag-drop-a-NEW-file flow (the "Drag & Drop
+    Your Files or Browse to Upload" zone -> "1 of 1" progress -> "Add"
+    button), and (2) selecting an EXISTING file already in the library: a
+    SINGLE CLICK directly on an existing file's own card (after navigating
+    into a folder, e.g. this project's Flickr-import folder — see
+    cms-profile.md's "Flickr Pro API" note) selects it and closes the
+    modal IMMEDIATELY — no "Add" button, no upload-progress wait. A prior
+    session used flow (1) for a field whose real, intended usage on THIS
+    project is flow (2) and, combined with several required text fields
+    being left unfilled (native HTML5 "Please fill out this field"
+    validation silently blocking the Submit button with zero network
+    calls — mistaken at the time for a silent product no-op), concluded a
+    false product-defect finding. See HeroBannerSlideAdminPage's own
+    module docstring for the full corrected evidence trail and
+    `select_existing_file_from_library()` below for the real mechanism,
+    now used by that field instead of `upload_file()`.
   - The right-hand Preview pane AND the row's own `Preview` link both
     resolve to `/web/qatar-chamber/home?qcPreview=<objecttype>%3A<id>` — a
     real navigation to the live Home page with that specific record pinned
@@ -93,6 +113,7 @@ probes on manage-promotional-banner:
 """
 
 from core.utils.logger import get_logger
+from core.utils.waits import WaitTimeoutError, wait_until
 from core.web.base_page import BasePage
 from config.settings import control_panel_url
 
@@ -183,9 +204,24 @@ class ObjectAuthoringPage(BasePage):
         the list to find/delete a row, not a mounted form, and waiting on
         the wrong signal cost a real 20s timeout live 2026-09-03 when this
         method didn't exist yet and teardown called open_new_entry_form()
-        instead."""
+        instead.
+
+        Widened to 35000ms (from 20000ms) 2026-09-08, mirroring
+        `open_new_entry_form()`'s own identical precedent above: live-
+        observed on manage-hero-banner-slide (Hero Banner Slide PBI
+        129367's own tc_135010/tc_135018 correction batch) that this exact
+        20s budget intermittently timed out on a `finally`-block teardown
+        re-check call specifically, under real qcdev load from a
+        concurrently-running, unrelated process also mutating this same
+        Object's entries table at the time — the entry BEING torn down had
+        already been created/deleted correctly by the test's own earlier,
+        successful calls to this same method; only this later, redundant
+        best-effort re-check call raced the busier table. Not a locator
+        bug (`a[data-qc-oel-delete]` itself was never wrong) — a real,
+        environment-load-dependent render-latency budget, same class of
+        finding as `open_new_entry_form()`'s own note."""
         self.open(self._manage_url())
-        self.wait_for("a[data-qc-oel-delete]", first=True, timeout=20000)
+        self.wait_for("a[data-qc-oel-delete]", first=True, timeout=35000)
         return self
 
     def open_entry_by_edit_link(self, title: str) -> "ObjectAuthoringPage":
@@ -258,6 +294,19 @@ class ObjectAuthoringPage(BasePage):
 
     def row_visible(self, title: str) -> bool:
         return self.is_visible(f'{self.ENTRIES_TABLE_ROW}:has-text("{title}")')
+
+    def has_entries(self) -> bool:
+        """True if the entries table has at least one row — CONFIRMED LIVE
+        2026-09-07 (org_structure, tc_133288): the bare ENTRIES_TABLE_ROW
+        locator (`table tbody tr`) matches every row on any populated
+        object, so `BasePage.is_visible(ENTRIES_TABLE_ROW)` throws a
+        Playwright strict-mode violation internally; BasePage.is_visible()'s
+        own except-and-return-False contract swallows that exception and
+        silently reports an ACTUALLY-POPULATED table as invisible. `.count()
+        > 0` sidesteps strict mode entirely (it does not require a single
+        match) and is the correct, generic way for any caller to assert
+        "the list loaded with data" rather than target one specific row."""
+        return self.page.locator(self.ENTRIES_TABLE_ROW).count() > 0
 
     def row_entry_id(self, title: str) -> str:
         """Entry id embedded in the row's own `data-qc-oel-delete`
@@ -530,6 +579,120 @@ class ObjectAuthoringPage(BasePage):
             self.page.wait_for_timeout(1000)
         return self
 
+    def select_existing_file_from_library(
+        self, field_label: str, folder_name: str, file_name: str
+    ) -> "ObjectAuthoringPage":
+        """Selects an EXISTING file already present in Liferay's Documents &
+        Media library, via the SAME item-selector picker `upload_file()`
+        opens (`iframe[src*="selectFileEntry"]`) — CONFIRMED LIVE 2026-09-08
+        (Hero Banner Slide's "Banner Image" field, PBI 129367) this is the
+        REAL, working mechanism for a field whose library is already
+        populated (e.g. via this project's Flickr import — see
+        cms-profile.md's "Flickr Pro API" note), as opposed to
+        `upload_file()`'s drag-drop-a-NEW-file flow, which a prior session
+        mistakenly used for this exact field and reported a false
+        product-defect finding (see module docstring's CORRECTED note and
+        HeroBannerSlideAdminPage's own module docstring for the full
+        evidence trail).
+
+        Opens the field's own picker (identical locator chain to
+        `upload_file()`), clicks into `folder_name` (top-level folder link
+        text, e.g. "Flickr"), then clicks directly on the existing file's
+        own name/label (`.card-title`, matched by visible filename text
+        within that folder's file listing) to select it.
+
+        HEALED 2026-09-08 (live-diagnosed, tc_135010, two separate live
+        incidents against the SAME picker widget):
+          1. Clicking the whole `.card-row` container (an earlier version
+             of this method) landed on EMPTY whitespace at the row's own
+             horizontal center in this framework's real 1920x1080 viewport
+             (a "List"-style row lays its filename far left and a Preview
+             button far right, with a wide gap between) — the modal never
+             closed, nothing was selected. Fixed by clicking the row's own
+             `.card-title` element (the filename's real, narrow,
+             content-bearing element) instead of the row container.
+          2. This picker widget ALSO renders a second, visually different
+             "Cards" (thumbnail-grid) layout — confirmed live via a
+             screenshot that a video-recording Playwright context (this
+             framework's own real per-test default) rendered this file
+             picker as a thumbnail grid, not the row/list layout fix #1
+             was diagnosed against. In THAT layout, a SINGLE click only
+             highlights/selects the card (confirmed live: the hidden
+             "Select File" textbox stayed empty and the modal stayed open
+             indefinitely after one click) — a SECOND click (or an
+             explicit `dblclick()`) is required to confirm and close the
+             modal (confirmed live: `dblclick()` on the same `.card-title`
+             populated the hidden textbox with the file's real ID and
+             closed the modal). Which of the two layouts renders is NOT
+             reliably controllable from here (it is this Liferay widget's
+             own responsive/session-dependent choice, not something this
+             suite's own viewport setting alone determines — both diagnoses
+             above used the SAME 1920x1080 default). This method therefore
+             clicks once, checks whether the modal is still present, and
+             — only if so — clicks the SAME target a second time, which is
+             safe for BOTH layouts: layout #1 (row/list) already closed the
+             modal on the first click, so the check short-circuits and no
+             second click is ever attempted (avoiding an unintended click
+             on whatever now sits under the closed modal); layout #2
+             (cards) needs, and gets, the second click.
+
+        The filename readout (`uploaded_filename()`) populates shortly
+        after the modal closes, asynchronously — this method waits for
+        that readout element's own text to become non-empty as the real,
+        condition-based signal, with a short bounded fallback wait if the
+        wording/timing ever drifts — mirrors `upload_file()`'s own "wait
+        for a real signal instead of a blind sleep" convention above."""
+        hidden_textbox = self.page.get_by_role(
+            "textbox", name=f"{field_label} Select File"
+        )
+        select_file_button = hidden_textbox.locator("xpath=..").get_by_role(
+            "button", name="Select File"
+        )
+        select_file_button.click()
+        frame = self.page.frame_locator(self.UPLOAD_MODAL_IFRAME)
+        frame.get_by_role("link", name=folder_name, exact=True).click()
+        file_card = frame.locator(".card-row", has_text=file_name).first
+        file_card.wait_for(state="visible", timeout=10000)
+        file_title = file_card.locator(".card-title").first
+        file_title.click()
+        modal = self.page.locator(self.UPLOAD_MODAL_IFRAME)
+        try:
+            modal.wait_for(state="detached", timeout=3000)
+        except Exception:
+            # Still present after the first click — this is the "Cards"
+            # (thumbnail-grid) layout, which only highlights on one click
+            # (see docstring's incident #2). One more click on the same,
+            # now-highlighted target confirms/selects it.
+            try:
+                file_title.click()
+            except Exception:  # noqa: BLE001 — modal may have closed between the check and this click
+                pass
+            try:
+                modal.wait_for(state="detached", timeout=8000)
+            except Exception:
+                self.page.wait_for_timeout(1000)
+        # Re-queries the readout element FRESH on every poll (never a
+        # cached element handle) — HEALED 2026-09-08 (live-observed,
+        # tc_135010, second attempt): an earlier version of this wait
+        # grabbed a single `element_handle()` up front and polled THAT
+        # specific node; if this surface's readout element gets replaced
+        # (re-rendered) by the framework's own reactive update after
+        # selection rather than mutated in place, that handle goes stale
+        # and never reflects the real, current text — timing out silently
+        # regardless of how long the wait budget is. `wait_until()` (see
+        # core/utils/waits.py) re-runs the predicate itself each poll, so
+        # every check re-queries live DOM state.
+        try:
+            wait_until(
+                lambda: bool(self.uploaded_filename(field_label)),
+                timeout=8.0,
+                poll=0.3,
+                message=f"{field_label!r} filename readout stayed empty after selecting {file_name!r}",
+            )
+        except WaitTimeoutError:
+            pass
+        return self
+
     def uploaded_filename(self, field_label: str) -> str:
         """Reads the ACTUAL uploaded filename off the field's own
         filename-readout element — confirmed-live a `<strong role="textbox"
@@ -562,24 +725,47 @@ class ObjectAuthoringPage(BasePage):
         return self
 
     def _wait_for_settle(self) -> None:
-        """Bounded `networkidle` wait with a fallback — confirmed live
+        """POSITIVE-signal wait — HEALED 2026-09-14 (Group B triage of
+        tc_135184/135185/133294's teardown, evidence: `reports/allure-
+        results/`). The PRIOR strategy here (`networkidle` with a `load`
+        fallback) was already disclosed by this method's own earlier
+        docstring as a KNOWN-BROKEN signal on this page — confirmed live
         2026-09-03 that `networkidle` can fail to fire at all within a
-        generous 30s budget on this page even though `load` fires
-        immediately (some continuous background network activity, e.g.
+        generous 30s budget (continuous background network activity, e.g.
         the site-wide chatbot widget's own polling, keeps the network
-        technically non-idle) — a real environment characteristic, not a
-        broken save/submit action (the entries list's own status DOES
-        update correctly once this method returns). Mirrors the same
-        try/except-fallback shape already used by upload_file()'s own
-        iframe-detach wait rather than blocking indefinitely on a signal
-        this page may never emit."""
+        technically non-idle) — not new information, and every failing
+        run's own screenshots showed the underlying Save/Submit action had
+        already committed correctly by the time the wait timed out (a
+        broken WAIT signal, never a broken SAVE). Replaced with a bounded
+        wait for ANY of the generic, confirmed-live DOM markers that signal
+        this surface has settled into a real, recognized post-save state —
+        whichever one the current object/view actually lands on:
+          - the entries table's own row marker (`a[data-qc-oel-delete]`) —
+            present when the save returns to/re-renders the entries list;
+          - the editing banner's "Cancel and add a new entry instead" link
+            (`CANCEL_AND_ADD_NEW_LINK`) — present when the save stays on an
+            edit form (Draft OR Approved banner, see class docstring);
+          - the create form's own Save as Draft button
+            (`SAVE_AS_DRAFT_BUTTON`) — present when the save leaves a fresh
+            create form mounted.
+        Playwright's own comma-joined selector list resolves the instant
+        ANY one of the three appears, which is always true once this page
+        has genuinely settled — unlike `networkidle`, which it may never
+        reach at all. Falls back to a short, explicitly-capped `load` wait
+        (never unbounded) for the rare state that matches none of the
+        three (e.g. a genuine validation-error state)."""
+        settle_selector = (
+            f'a[data-qc-oel-delete], {self.CANCEL_AND_ADD_NEW_LINK}, {self.SAVE_AS_DRAFT_BUTTON}'
+        )
         try:
-            self.page.wait_for_load_state("networkidle", timeout=8000)
-        except Exception:
-            self.page.wait_for_load_state("load", timeout=8000)
-        # Widened from 1500ms to 2500ms 2026-09-03: on the `networkidle`
-        # timeout/fallback path specifically, this is the ONLY settle the
-        # write (Save as Draft / Submit for Publishing) gets before a
+            self.page.wait_for_selector(settle_selector, state="attached", timeout=15000)
+        except Exception:  # noqa: BLE001 — real, explicitly-capped fallback, never unbounded
+            try:
+                self.page.wait_for_load_state("load", timeout=8000)
+            except Exception:  # noqa: BLE001
+                pass
+        # Widened from 1500ms to 2500ms 2026-09-03: this is the ONLY settle
+        # the write (Save as Draft / Submit for Publishing) gets before a
         # caller may immediately poll the delivery surface (e.g.
         # reload_until_banner_matches) — matches this project's own
         # documented write-vs-read-cache propagation grace convention
@@ -587,7 +773,8 @@ class ObjectAuthoringPage(BasePage):
         # unmeasured value that raced that propagation gap live this
         # session (Approved status was already correct in the entries
         # list at the time, but the separate delivery-surface read lagged
-        # behind it).
+        # behind it). Kept unchanged by this HEALED pass — only the wait
+        # SIGNAL above changed, not this grace period.
         self.page.wait_for_timeout(2500)
 
     def is_save_as_draft_disabled(self) -> bool:
@@ -630,8 +817,25 @@ class ObjectAuthoringPage(BasePage):
             if not entry_id:
                 return False
             self.page.once("dialog", lambda d: d.accept())
-            self.page.locator(f'a[data-qc-oel-delete="{entry_id}"]').click(force=True)
-            self.page.wait_for_load_state("networkidle")
+            delete_link = self.page.locator(f'a[data-qc-oel-delete="{entry_id}"]')
+            delete_link.click(force=True)
+            # HEALED 2026-09-14 (Group B triage of tc_135184/135185/133294's
+            # teardown): replaces the previous, UNBOUNDED
+            # `wait_for_load_state("networkidle")` call (no timeout arg at
+            # all — Playwright's own 30000ms default) with a POSITIVE,
+            # scoped signal: this exact row's own delete-link element
+            # detaching from the DOM is the real, verifiable confirmation
+            # the delete committed, not a generic (and, on this page,
+            # confirmed-broken — see `_wait_for_settle()`'s own docstring)
+            # network-quiescence guess. Explicitly capped at 10000ms so a
+            # hung teardown wait can never silently consume the whole run.
+            try:
+                delete_link.wait_for(state="detached", timeout=10000)
+            except Exception:  # noqa: BLE001 — real, explicitly-capped fallback, never unbounded
+                try:
+                    self.page.wait_for_load_state("load", timeout=5000)
+                except Exception:  # noqa: BLE001
+                    pass
             self.page.wait_for_timeout(1000)
             return True
         except Exception:  # noqa: BLE001 — best-effort teardown, never raises
