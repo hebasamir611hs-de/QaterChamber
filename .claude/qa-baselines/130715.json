@@ -1,0 +1,920 @@
+{
+  "total_cases": 136,
+  "category_counts": {
+    "UI": 12,
+    "Compatibility": 8,
+    "Auth": 7,
+    "Functional-High": 44,
+    "Functional-Low": 55,
+    "Edge": 10
+  },
+  "mode": "Normal",
+  "has_ac": false,
+  "cases": [
+    {
+      "id": "001",
+      "traceability": [
+        "FLD-1",
+        "FLD-2",
+        "FLD-3",
+        "OBJ-1"
+      ]
+    },
+    {
+      "id": "002",
+      "traceability": [
+        "FLD-1",
+        "FLD-3",
+        "OBJ-2"
+      ]
+    },
+    {
+      "id": "003",
+      "traceability": [
+        "CTL-1",
+        "CTL-2",
+        "CTL-4",
+        "ST-9",
+        "ST-11"
+      ]
+    },
+    {
+      "id": "004",
+      "traceability": [
+        "CTL-3",
+        "FLD-8"
+      ]
+    },
+    {
+      "id": "005",
+      "traceability": [
+        "FLD-11",
+        "FLD-12",
+        "FLD-17",
+        "FLD-18",
+        "FLD-20",
+        "FLD-21"
+      ]
+    },
+    {
+      "id": "006",
+      "traceability": [
+        "CTL-5"
+      ]
+    },
+    {
+      "id": "007",
+      "traceability": [
+        "FLD-17",
+        "FLD-18",
+        "CTL-7"
+      ]
+    },
+    {
+      "id": "008",
+      "traceability": [
+        "FLD-11",
+        "FLD-12",
+        "FLD-20",
+        "FLD-21"
+      ]
+    },
+    {
+      "id": "009",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    {
+      "id": "010",
+      "traceability": [
+        "CTL-8",
+        "CTL-9",
+        "CTL-10",
+        "CTL-11",
+        "OBJ-8",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    {
+      "id": "011",
+      "traceability": [
+        "LNG-2",
+        "OBJ-1"
+      ]
+    },
+    {
+      "id": "012",
+      "traceability": [
+        "LNG-2",
+        "OBJ-2"
+      ]
+    },
+    {
+      "id": "013",
+      "traceability": [
+        "ENV-3",
+        "OBJ-1"
+      ]
+    },
+    {
+      "id": "014",
+      "traceability": [
+        "ENV-2",
+        "OBJ-1"
+      ]
+    },
+    {
+      "id": "015",
+      "traceability": [
+        "ENV-1",
+        "OBJ-1"
+      ]
+    },
+    {
+      "id": "016",
+      "traceability": [
+        "ENV-3",
+        "OBJ-2"
+      ]
+    },
+    {
+      "id": "017",
+      "traceability": [
+        "ENV-2",
+        "OBJ-2"
+      ]
+    },
+    {
+      "id": "018",
+      "traceability": [
+        "ENV-1",
+        "OBJ-2"
+      ]
+    },
+    {
+      "id": "019",
+      "traceability": [
+        "ENV-4",
+        "ENV-5",
+        "OBJ-1"
+      ]
+    },
+    {
+      "id": "020",
+      "traceability": [
+        "ENV-4",
+        "ENV-5",
+        "OBJ-2"
+      ]
+    },
+    {
+      "id": "021",
+      "traceability": [
+        "ROL-1",
+        "CTL-20",
+        "SUR-2"
+      ]
+    },
+    {
+      "id": "022",
+      "traceability": [
+        "ROL-2",
+        "CTL-14"
+      ]
+    },
+    {
+      "id": "023",
+      "traceability": [
+        "ROL-2",
+        "CTL-20",
+        "MSG-4"
+      ]
+    },
+    {
+      "id": "024",
+      "traceability": [
+        "ROL-3",
+        "CTL-12"
+      ]
+    },
+    {
+      "id": "025",
+      "traceability": [
+        "ROL-3",
+        "CTL-14",
+        "MSG-4"
+      ]
+    },
+    {
+      "id": "026",
+      "traceability": [
+        "ROL-4",
+        "OBJ-1",
+        "OBJ-2"
+      ]
+    },
+    {
+      "id": "027",
+      "traceability": [
+        "ROL-4",
+        "ST-3"
+      ]
+    },
+    {
+      "id": "028",
+      "traceability": [
+        "ST-9",
+        "ST-11",
+        "OBJ-1"
+      ]
+    },
+    {
+      "id": "029",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    {
+      "id": "030",
+      "traceability": [
+        "CTL-1",
+        "LNG-2"
+      ]
+    },
+    {
+      "id": "031",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    {
+      "id": "032",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    {
+      "id": "033",
+      "traceability": [
+        "CTL-1"
+      ]
+    },
+    {
+      "id": "034",
+      "traceability": [
+        "CTL-2"
+      ]
+    },
+    {
+      "id": "035",
+      "traceability": [
+        "CTL-2"
+      ]
+    },
+    {
+      "id": "036",
+      "traceability": [
+        "CTL-3"
+      ]
+    },
+    {
+      "id": "037",
+      "traceability": [
+        "CTL-2",
+        "CTL-3"
+      ]
+    },
+    {
+      "id": "038",
+      "traceability": [
+        "CTL-3",
+        "CTL-2"
+      ]
+    },
+    {
+      "id": "039",
+      "traceability": [
+        "CTL-4",
+        "ST-10"
+      ]
+    },
+    {
+      "id": "040",
+      "traceability": [
+        "CTL-4",
+        "ST-9"
+      ]
+    },
+    {
+      "id": "041",
+      "traceability": [
+        "CTL-1",
+        "CTL-2",
+        "CTL-4"
+      ]
+    },
+    {
+      "id": "042",
+      "traceability": [
+        "CTL-5",
+        "ST-13"
+      ]
+    },
+    {
+      "id": "043",
+      "traceability": [
+        "CTL-5",
+        "ST-14"
+      ]
+    },
+    {
+      "id": "044",
+      "traceability": [
+        "CTL-6"
+      ]
+    },
+    {
+      "id": "045",
+      "traceability": [
+        "CTL-6",
+        "FLD-21"
+      ]
+    },
+    {
+      "id": "046",
+      "traceability": [
+        "CTL-7"
+      ]
+    },
+    {
+      "id": "047",
+      "traceability": [
+        "CTL-7"
+      ]
+    },
+    {
+      "id": "048",
+      "traceability": [
+        "CTL-7"
+      ]
+    },
+    {
+      "id": "049",
+      "traceability": [
+        "CTL-7"
+      ]
+    },
+    {
+      "id": "050",
+      "traceability": [
+        "CTL-7"
+      ]
+    },
+    {
+      "id": "051",
+      "traceability": [
+        "CTL-8"
+      ]
+    },
+    {
+      "id": "052",
+      "traceability": [
+        "CTL-9"
+      ]
+    },
+    {
+      "id": "053",
+      "traceability": [
+        "CTL-10"
+      ]
+    },
+    {
+      "id": "054",
+      "traceability": [
+        "CTL-11"
+      ]
+    },
+    {
+      "id": "055",
+      "traceability": [
+        "CTL-12",
+        "ST-1",
+        "OBJ-4"
+      ]
+    },
+    {
+      "id": "056",
+      "traceability": [
+        "CTL-12",
+        "CTL-14"
+      ]
+    },
+    {
+      "id": "057",
+      "traceability": [
+        "CTL-13",
+        "ST-1"
+      ]
+    },
+    {
+      "id": "058",
+      "traceability": [
+        "CTL-14",
+        "FLD-17",
+        "MSG-6"
+      ]
+    },
+    {
+      "id": "059",
+      "traceability": [
+        "CTL-14",
+        "FLD-13",
+        "MSG-7"
+      ]
+    },
+    {
+      "id": "060",
+      "traceability": [
+        "CTL-15",
+        "ST-3"
+      ]
+    },
+    {
+      "id": "061",
+      "traceability": [
+        "CTL-16"
+      ]
+    },
+    {
+      "id": "062",
+      "traceability": [
+        "CTL-17",
+        "CTL-18",
+        "FLD-8",
+        "OBJ-3"
+      ]
+    },
+    {
+      "id": "063",
+      "traceability": [
+        "CTL-18",
+        "ST-4"
+      ]
+    },
+    {
+      "id": "064",
+      "traceability": [
+        "CTL-19"
+      ]
+    },
+    {
+      "id": "065",
+      "traceability": [
+        "CTL-19"
+      ]
+    },
+    {
+      "id": "066",
+      "traceability": [
+        "CTL-21",
+        "OBJ-5",
+        "OBJ-4",
+        "OBJ-6",
+        "ST-6"
+      ]
+    },
+    {
+      "id": "067",
+      "traceability": [
+        "ST-15"
+      ]
+    },
+    {
+      "id": "068",
+      "traceability": [
+        "ST-16",
+        "OBJ-7"
+      ]
+    },
+    {
+      "id": "069",
+      "traceability": [
+        "CTL-21"
+      ]
+    },
+    {
+      "id": "070",
+      "traceability": [
+        "CTL-23",
+        "OBJ-7"
+      ]
+    },
+    {
+      "id": "071",
+      "traceability": [
+        "MSG-9",
+        "OBJ-9"
+      ]
+    },
+    {
+      "id": "072",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    {
+      "id": "073",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    {
+      "id": "074",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    {
+      "id": "075",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    {
+      "id": "076",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    {
+      "id": "077",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    {
+      "id": "078",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    {
+      "id": "079",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    {
+      "id": "080",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    {
+      "id": "081",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    {
+      "id": "082",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    {
+      "id": "083",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    {
+      "id": "084",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    {
+      "id": "085",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    {
+      "id": "086",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    {
+      "id": "087",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    {
+      "id": "088",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    {
+      "id": "089",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    {
+      "id": "090",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    {
+      "id": "091",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    {
+      "id": "092",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    {
+      "id": "093",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    {
+      "id": "094",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    {
+      "id": "095",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    {
+      "id": "096",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    {
+      "id": "097",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    {
+      "id": "098",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    {
+      "id": "099",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    {
+      "id": "100",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    {
+      "id": "101",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    {
+      "id": "102",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    {
+      "id": "103",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    {
+      "id": "104",
+      "traceability": [
+        "FLD-15",
+        "ST-7"
+      ]
+    },
+    {
+      "id": "105",
+      "traceability": [
+        "FLD-15"
+      ]
+    },
+    {
+      "id": "106",
+      "traceability": [
+        "FLD-15"
+      ]
+    },
+    {
+      "id": "107",
+      "traceability": [
+        "FLD-16",
+        "ST-8"
+      ]
+    },
+    {
+      "id": "108",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    {
+      "id": "109",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    {
+      "id": "110",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    {
+      "id": "111",
+      "traceability": [
+        "FLD-17",
+        "MSG-8"
+      ]
+    },
+    {
+      "id": "112",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    {
+      "id": "113",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    {
+      "id": "114",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    {
+      "id": "115",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    {
+      "id": "116",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    {
+      "id": "117",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    {
+      "id": "118",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    {
+      "id": "119",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    {
+      "id": "120",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    {
+      "id": "121",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    {
+      "id": "122",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    {
+      "id": "123",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    {
+      "id": "124",
+      "traceability": [
+        "FLD-23"
+      ]
+    },
+    {
+      "id": "125",
+      "traceability": [
+        "FLD-24"
+      ]
+    },
+    {
+      "id": "126",
+      "traceability": [
+        "FLD-11",
+        "FLD-7",
+        "FLD-19",
+        "MSG-5"
+      ]
+    },
+    {
+      "id": "127",
+      "traceability": [
+        "MSG-1",
+        "CTL-1",
+        "CTL-2"
+      ]
+    },
+    {
+      "id": "128",
+      "traceability": [
+        "MSG-2"
+      ]
+    },
+    {
+      "id": "129",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    {
+      "id": "130",
+      "traceability": [
+        "MSG-3"
+      ]
+    },
+    {
+      "id": "131",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    {
+      "id": "132",
+      "traceability": [
+        "LNG-2"
+      ]
+    },
+    {
+      "id": "133",
+      "traceability": [
+        "LNG-2"
+      ]
+    },
+    {
+      "id": "134",
+      "traceability": [
+        "ST-15"
+      ]
+    },
+    {
+      "id": "135",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    {
+      "id": "136",
+      "traceability": [
+        "ST-14"
+      ]
+    }
+  ]
+}

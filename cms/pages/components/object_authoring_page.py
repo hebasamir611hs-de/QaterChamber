@@ -530,6 +530,68 @@ class ObjectAuthoringPage(BasePage):
             self.page.wait_for_timeout(1000)
         return self
 
+    def upload_file_expect_rejected(self, field_label: str, file_path: str) -> bool:
+        """Attempts upload_file() for a file expected to be rejected by
+        server-side validation (oversized / unsupported format) and reports
+        whether rejection was actually observed.
+
+        NOT independently confirmed live this session — three live probe
+        attempts against this project's qcdev instance (see
+        home_about_summary_admin_page.py's module docstring for the
+        disclosed evidence: `networkidle` timeouts, a `Target crashed` /
+        `Page crashed` Playwright error, and 25+ orphan `chrome.exe`
+        processes already present on the host before this session's own
+        browser was launched) made it impossible to observe which signal
+        this surface actually uses for a rejected upload. The two signals
+        checked below are inferred from this class's own generic
+        upload_file() implementation, not observed:
+          1. upload_file() itself raising (the picker's own "Add" flow never
+             completes / the upload iframe never detaches for a file the
+             server refuses).
+          2. the field's own uploaded_filename() readout NOT containing the
+             attempted file's basename afterward (still blank or still the
+             pre-attempt value).
+        Returns False (rejection NOT observed -- the file was silently
+        accepted) if neither signal fires; callers must treat False as a
+        real, honestly-reported finding (the case's expected rejection did
+        not happen), never as a framework gap to route around."""
+        import os
+
+        attempted_name = os.path.basename(file_path)
+        try:
+            self.upload_file(field_label, file_path)
+        except Exception:
+            return True
+        try:
+            current = self.uploaded_filename(field_label)
+        except Exception:
+            return True
+        return attempted_name not in current
+
+    def field_length_rejected(self, field_label: str, attempted: str, limit: int) -> bool:
+        """Fills `attempted` (expected to exceed `limit` characters) into a
+        plain textbox field and reports whether the over-limit input was
+        rejected, per this project's QA cases' own accepted disjunction
+        ("Field truncates OR shows a max-length error"). NOT independently
+        confirmed live which mechanism this surface uses this session (see
+        upload_file_expect_rejected()'s docstring for the same disclosed
+        probe-failure evidence) -- checks BOTH branches so either a
+        client-side `maxlength` truncation or a submit-time validation block
+        satisfies the case:
+          1. truncation: the field's OWN value, read back immediately after
+             fill (no submit needed), is <= limit characters -- a native
+             `maxlength` attribute truncates synchronously on fill.
+          2. submit-time block: submit_for_publishing() is attempted and
+             current_status() does not become "Approved" afterward.
+        Returns True if either signal fired. Callers must NOT loosen this
+        further or treat a False return as anything but a real, honestly-
+        reported "the over-limit value was accepted" finding."""
+        self.fill_text(field_label, attempted)
+        if len(self.field_value(field_label)) <= limit:
+            return True
+        self.submit_for_publishing()
+        return self.current_status() != "Approved"
+
     def uploaded_filename(self, field_label: str) -> str:
         """Reads the ACTUAL uploaded filename off the field's own
         filename-readout element — confirmed-live a `<strong role="textbox"

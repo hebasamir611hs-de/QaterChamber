@@ -50,6 +50,27 @@ class BasePage:
         dismiss_overlays(self.page, grace_ms=MOUNT_GRACE_MS)
         log_action(logger, "open", url)
 
+    def open_anonymous(self, url: str) -> None:
+        """Navigate a genuinely anonymous/logged-out context (e.g. a
+        `new_context(browser, use_auth_state=False)` public-visibility
+        check) without ever calling `reauthenticate()`. `open()` above
+        unconditionally reauthenticates on any non-login-flow URL if it
+        detects a login form — correct for the normal authenticated flow,
+        but on an intentionally anonymous context that would silently log
+        the shared TEST_USER/TEST_PASSWORD back in the moment a login form
+        rendered, defeating the whole point of an anonymous read and
+        producing a false result on a public-visibility/draft/unpublish
+        check (see standards.md's "Draft/Unpublish Public-Visibility
+        Checks — Mandatory Logged-Out Context"). Only clears the
+        credential-free interstitial (license gate) and the site-wide
+        announcement overlay — neither of which authenticates anything.
+        Callers still do their own post-navigation waits (e.g. for their
+        own page's heading) since what to wait for is page-specific."""
+        self.page.goto(url)
+        clear_license_gate(self.page, url)
+        dismiss_overlays(self.page, grace_ms=MOUNT_GRACE_MS)
+        log_action(logger, "open_anonymous", url)
+
     def click(self, locator: str) -> None:
         # The session can drop between two calls on this page (open_x() then
         # click(), no wait_for() in between) — check before spending the

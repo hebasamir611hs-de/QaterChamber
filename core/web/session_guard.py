@@ -13,10 +13,31 @@ Per cms/pages/control_panel/login_page.py's own history, submitting the
 login form can itself re-trip the connection limit once — so this retries
 the reset+login pair, not just a single login attempt.
 
+SECOND failure mode (confirmed live, 2026-09-17): an expired/invalid
+session (e.g. a stale `.auth/state.json` reused across a long gap, no
+sustained traffic required at all) hitting a Control Panel URL — e.g.
+Object Authoring's `manage-<slug>?editEntry=...` — does NOT render a login
+form and does NOT trip the license gate. It silently falls through to the
+public site's own generic "Coming Soon" placeholder (or, on some paths,
+the plain public Home page) instead, because that URL happens to also
+resolve on the public-facing side of the same Liferay instance. Neither
+`is_login_form_showing()` nor `license_gate.is_gate_showing()` recognizes
+this render, so `reauthenticate()` previously no-op'd and every caller
+waiting on admin-only content (e.g. `object_authoring_page.py`'s
+`CANCEL_AND_ADD_NEW_LINK` wait) timed out with no recovery attempted at
+all — this had been misdiagnosed across multiple sessions as a qcdev
+connection-limit/concurrency problem before being isolated with a direct,
+single-request, no-concurrency repro. `is_dead_session()` / the dead-session
+branch inside `reauthenticate()` below close this gap by first navigating to
+the real login URL (forcing the form to render) before the existing
+fill/submit/verify loop runs — scoped to known Control-Panel-only paths so
+it can never misfire on a legitimately anonymous public-web page load.
+
 This is a session symptom, not a fix for the underlying qcdev-side limit
 (that needs whoever administers the qcdev instance — see license_gate.py's
 docstring). This module only makes the automated suite recover from it
-automatically instead of failing every test that outlives one ~30s window.
+automatically instead of failing every test that outlives one ~30s window,
+or that reuses a session which had simply gone stale between runs.
 
 Wired into the wrapper layer (core/web/base_page.py) alongside
 license_gate.py, not into any test or Page Object — every navigation in the
@@ -44,6 +65,27 @@ SUBMIT_BUTTON = (
 # against a render-order race between the two nav elements.
 LOGIN_SUCCESS_INDICATOR = 'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'
 
+# Path markers for URLs that ONLY exist inside the Control Panel / Object
+# Authoring surface (never on the public-facing site) — used to scope
+# is_dead_session() so it never misfires on a legitimately anonymous
+# public-web page load, which never shows Control Menu/Product Menu
+# regardless of session state, by design. Deliberately excludes the bare
+# "/home" path: confirmed live 2026-09-17 that path alone resolves
+# ambiguously to the PUBLIC home page when the session is dead, so it is
+# not a reliable Control-Panel-only signal the way "/en/home" (the
+# locale-forced admin redirect target used across this suite's Page
+# Objects) is.
+_CONTROL_PANEL_URL_MARKERS = (
+    "/web/qatar-chamber/manage-",
+    "/object-authoring",
+    "/en/home",
+    "/group/control_panel",
+)
+
+
+def _is_control_panel_url(url: str) -> bool:
+    return any(marker in (url or "") for marker in _CONTROL_PANEL_URL_MARKERS)
+
 
 def is_login_form_showing(page) -> bool:
     """Cheap, non-blocking detection — mirrors license_gate.is_gate_showing's
@@ -54,11 +96,32 @@ def is_login_form_showing(page) -> bool:
         return False
 
 
+def is_dead_session(page) -> bool:
+    """Detects the second failure mode documented in this module's own
+    docstring: an expired session on a Control-Panel-only URL that shows
+    neither the login form nor the authenticated Control Menu/Product
+    Menu — i.e. the public-site fallback render ("Coming Soon" or the
+    plain public Home page) that neither this guard's own
+    is_login_form_showing() nor license_gate.is_gate_showing() previously
+    recognized. Returns False whenever the login form IS showing (that
+    case is already handled by the existing is_login_form_showing() path)
+    or the URL isn't a known Control-Panel-only path."""
+    try:
+        if not _is_control_panel_url(page.url):
+            return False
+        if is_login_form_showing(page):
+            return False
+        return page.locator(LOGIN_SUCCESS_INDICATOR).count() == 0
+    except Exception:  # noqa: BLE001 — detection must never mask a real failure
+        return False
+
+
 def reauthenticate(page, target_url: str = None, max_attempts: int = 3) -> bool:
     """Log back in with the project's admin test account if the session has
-    dropped, then return to `target_url`. No-op (returns False) if the login
-    form is not showing — mirrors clear_license_gate's contract so callers
-    can chain both guards unconditionally.
+    dropped, then return to `target_url`. No-op (returns False) if neither
+    the login form nor a dead Control-Panel session (see is_dead_session's
+    docstring) is detected — mirrors clear_license_gate's contract so
+    callers can chain both guards unconditionally.
 
     ONLY uses the shared admin account (settings.test_user/test_password).
     Never call this from a test whose subject IS the login/permission flow
@@ -66,17 +129,39 @@ def reauthenticate(page, target_url: str = None, max_attempts: int = 3) -> bool:
     CmsLoginPage directly instead — this guard would defeat that test's
     purpose).
     """
+    dead_session = False
     if not is_login_form_showing(page):
-        return False
+        dead_session = is_dead_session(page)
+        if not dead_session:
+            return False
 
     if not settings.test_user or not settings.test_password:
         logger.warning(
-            "session dropped (login form showing) but TEST_USER/TEST_PASSWORD "
-            "are not set — cannot auto-reauthenticate"
+            "session dropped but TEST_USER/TEST_PASSWORD are not set — "
+            "cannot auto-reauthenticate"
         )
         return False
 
     from core.web.license_gate import clear_license_gate, is_gate_showing  # local import: avoid a cycle at module load
+
+    if dead_session:
+        # No login form on the page yet — navigate to the real login URL to
+        # force it to render before the fill/submit loop below runs (see
+        # is_dead_session's docstring: the page currently showing is the
+        # public-site fallback, not a form we can fill in place). Several
+        # callers (e.g. base_page.py's wait_for() exception-recovery branch)
+        # call reauthenticate(page) with no target_url at all — without
+        # capturing where we actually were, a successful login would land on
+        # Liferay's generic post-login default page instead of back on the
+        # admin URL the caller was originally trying to reach, and the
+        # caller's retried wait would fail again immediately.
+        from config.settings import control_panel_url  # local import: avoid a cycle at module load
+
+        if not target_url:
+            target_url = page.url
+        logger.info("dead session detected on %s — navigating to login form", page.url)
+        page.goto(control_panel_url("/c/portal/login"))
+        page.wait_for_load_state("domcontentloaded")
 
     reauthenticated = False
     for attempt in range(1, max_attempts + 1):

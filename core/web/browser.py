@@ -15,6 +15,21 @@ def launch_browser(playwright):
     return playwright.chromium.launch(headless=settings.headless)
 
 
+def launch_webkit_browser(playwright):
+    """Real Safari-engine (WebKit) launch — added for PBI 129373 batch 4
+    (ADO-131150, "renders correctly in Safari on desktop"). Confirmed live
+    this session that `playwright.webkit` launches successfully in this
+    environment (`playwright install` already provisioned it), unlike the
+    rest of this project which only ever launches `chromium` via
+    `launch_browser()` above — this is an explicit, disclosed ADDITION for
+    the one case whose own subject is cross-engine rendering, not a
+    default-browser change. No branded "Safari.app" exists on non-macOS
+    CI/dev machines; WebKit is the real, correct open-source rendering
+    engine Safari itself is built on, and is the closest genuine
+    (non-faked) equivalent achievable via Playwright here."""
+    return playwright.webkit.launch(headless=settings.headless)
+
+
 def new_context(
     browser,
     viewport: tuple = None,

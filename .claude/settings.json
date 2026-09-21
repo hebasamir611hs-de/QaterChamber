@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(findstr /n \"def select_option\\\\|def click\\\\|def is_visible\\\\|def wait_for\\\\|def text\\\\|def type\")",
+      "mcp__plugin_qa-engine_playwright__browser_fill_form",
+      "mcp__plugin_qa-engine_playwright__browser_find",
+      "mcp__plugin_qa-engine_playwright__browser_run_code_unsafe"
+    ]
+  }
+}
