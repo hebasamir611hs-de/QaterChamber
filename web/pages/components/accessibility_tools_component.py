@@ -631,6 +631,30 @@ class AccessibilityToolsComponent(BasePage):
     def dark_mode_toggle_state(self) -> str:
         return self.page.locator(self.DARK_MODE_SWITCH).get_attribute("aria-checked")
 
+    def is_dark_mode_switch_checked(self) -> bool:
+        """Boolean convenience wrapper around dark_mode_toggle_state() for
+        callers that just need a yes/no (e.g. enable_dark_mode()'s own
+        idempotency check below)."""
+        return self.dark_mode_toggle_state() == "true"
+
+    def enable_dark_mode(self) -> "AccessibilityToolsComponent":
+        """One-call convenience for pages that only need dark mode ON before
+        their own assertions (e.g. a service page's dark-theme rendering
+        check) and don't otherwise care about the panel's other controls:
+        opens the panel, flips Dark Mode only if not already on, waits for
+        the product's own `<html data-theme="dark">` signal (confirmed live
+        — `prefers-color-scheme: dark` alone does NOT flip it, this widget
+        is the only way in), then closes the panel again. Idempotent."""
+        self.click_accessibility_button()
+        self.wait_for(self.PANEL)
+        if not self.is_dark_mode_switch_checked():
+            self.switch_to_dark_mode()
+        self.page.wait_for_function(
+            "() => document.documentElement.getAttribute('data-theme') === 'dark'"
+        )
+        self.close_panel()
+        return self
+
     def header_background_color(self) -> str:
         """Reads via HeaderComponent.container_style() (composed, not
         re-declared) -- the same background-color source ADO #134665/#134666

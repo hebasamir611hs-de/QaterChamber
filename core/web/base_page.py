@@ -191,6 +191,44 @@ class BasePage:
         if is_overlay_showing(self.page):
             dismiss_overlays(self.page)
 
+    def wait_for_class_on_nth(self, locator: str, index: int, class_name: str,
+                              timeout: int = 10000) -> None:
+        """Waits until the nth (0-based) match of `locator` carries
+        `class_name`.
+
+        Needed for class states that a page applies ASYNCHRONOUSLY after an
+        interaction (smooth-scroll + scroll-spy highlighting, for example):
+        click() returns as soon as the click dispatches, several frames
+        before the class lands, so reading the state immediately returns the
+        PREVIOUS one. Waiting on the class of the specific element under
+        test — not on "some element has it" — is what makes that read
+        deterministic.
+        """
+        self.page.wait_for_function(
+            """([selector, index, className]) => {
+                const nodes = document.querySelectorAll(selector);
+                const el = nodes[index];
+                return !!el && el.classList.contains(className);
+            }""",
+            arg=[locator, index, class_name],
+            timeout=timeout,
+        )
+        log_action(logger, "wait_for_class_on_nth", locator, f"[{index}].{class_name}")
+
+    def wait_for_url(self, url_pattern, timeout: int = 15000) -> None:
+        """Waits for the page URL to match `url_pattern` (glob/regex/callable,
+        per Playwright's page.wait_for_url).
+
+        Use after any click that triggers navigation: click() resolves on
+        dispatch, so a page.url read right after it can still return the
+        ORIGIN url and make a navigation assertion pass or fail on timing.
+        """
+        self.page.wait_for_url(url_pattern, timeout=timeout)
+        log_action(logger, "wait_for_url", str(url_pattern), self.page.url)
+
+    def get_attribute(self, locator: str, name: str) -> str | None:
+        return self.page.locator(locator).get_attribute(name)
+
     def select_option(self, locator: str, label: str = None, value: str = None) -> None:
         self.page.locator(locator).select_option(label=label, value=value)
         log_action(logger, "select_option", locator, label or value)

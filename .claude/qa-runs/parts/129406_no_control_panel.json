@@ -1,0 +1,659 @@
+[
+  {
+    "id": 142128,
+    "title": "Verify that a visitor reaches the Economic Consultancy page from the main menu and sees every published section",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "All four sections are published and active.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Qatar Chamber website in English",
+        "expected": "Home page loads with the main menu visible"
+      },
+      {
+        "action": "Click 'Our Services' in the main menu",
+        "expected": "'Our Services' dropdown expands"
+      },
+      {
+        "action": "Click 'Economic Consultancy' in the dropdown",
+        "expected": "The Economic Consultancy page loads"
+      },
+      {
+        "action": "Observe the page from hero to footer",
+        "expected": "Breadcrumb 'Home &gt; Services' renders over the maroon hero, which shows the eyebrow 'Economic Information Service', the title 'Economic Consultancy &amp; Advisory' and its description beside the banner image; the quick facts read Market Intelligence / Official Chamber Reports, Turnaround Time / 5 Working Days, Service Fee / Free for Members and Sectoral Coverage / All National Sectors; the index lists 01 to 04 and all four sections render in order"
+      }
+    ]
+  },
+  {
+    "id": 142129,
+    "title": "Verify that clicking a section-index entry scrolls to that section and marks it active",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "The section index is sticky across four sections.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads with the sticky index visible"
+      },
+      {
+        "action": "Click '03 Scope &amp; Exclusions' in the sticky section index",
+        "expected": "The viewport scrolls to Section 03 and its heading is in view"
+      },
+      {
+        "action": "Observe the viewport and the index",
+        "expected": "The '03 Scope &amp; Exclusions' entry is marked active and the index stays sticky in the viewport"
+      },
+      {
+        "action": "Scroll back up and observe the index",
+        "expected": "The active marker follows the section currently in view rather than staying on Section 03"
+      }
+    ]
+  },
+  {
+    "id": 142130,
+    "title": "Verify that selecting a second section-index entry moves the active marker off the first",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "Web"
+    ],
+    "description": "Repeat pass on the index control.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads with all four index entries"
+      },
+      {
+        "action": "Click '03 Scope &amp; Exclusions' in the index",
+        "expected": "Viewport moves to Section 03 and that entry is active"
+      },
+      {
+        "action": "Click '01 Overview' in the index",
+        "expected": "Viewport moves to Section 01 Overview"
+      },
+      {
+        "action": "Inspect all four index entries",
+        "expected": "Exactly one entry is marked active ('01 Overview') and Section 03 has returned to its default style"
+      }
+    ]
+  },
+  {
+    "id": 142131,
+    "title": "Verify that clicking an FAQ question expands its answer without a page reload",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "Section 04 holds published FAQ items.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to Section 04 Frequently asked questions",
+        "expected": "All active FAQ questions render as collapsed accordion headers with their answers hidden"
+      },
+      {
+        "action": "Record the browser navigation state, then click the first question",
+        "expected": "The first question expands"
+      },
+      {
+        "action": "Observe the answer and the navigation state",
+        "expected": "Its answer becomes visible with no page reload and no change to the browser URL"
+      }
+    ]
+  },
+  {
+    "id": 142132,
+    "title": "Verify that clicking an expanded FAQ question again collapses its answer",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "Web"
+    ],
+    "description": "Reverse pass on the accordion control, starting from the first question expanded.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English and expand the first FAQ question",
+        "expected": "The first question is expanded and its answer is visible"
+      },
+      {
+        "action": "Click the same question again",
+        "expected": "The first question collapses and its answer is hidden again"
+      },
+      {
+        "action": "Click a different question",
+        "expected": "The second question expands"
+      },
+      {
+        "action": "Inspect both questions",
+        "expected": "Exactly the questions the visitor expanded are open; no answer opened or closed on its own"
+      }
+    ]
+  },
+  {
+    "id": 142133,
+    "title": "Verify that the breadcrumb links navigate to their targets",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "Web"
+    ],
+    "description": "Verifies the two breadcrumb segments. Figma frame 2802:94813 carries the placeholder value 'Hcvxcxvcome' on the Breadcrumb component — see Open Risk R-6.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads with the hero rendered"
+      },
+      {
+        "action": "Inspect the breadcrumb in the hero",
+        "expected": "Breadcrumb shows a home icon, 'Home', a chevron-right separator, then 'Services' — and no placeholder text such as 'Hcvxcxvcome'"
+      },
+      {
+        "action": "Click the 'Home' breadcrumb link",
+        "expected": "Browser navigates to the Qatar Chamber home page"
+      },
+      {
+        "action": "Navigate back and click the 'Services' breadcrumb link",
+        "expected": "Browser navigates to the Services landing page"
+      }
+    ]
+  },
+  {
+    "id": 142134,
+    "title": "Verify that the language toggle switches the whole page between English and Arabic",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Arabic",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "RTL",
+      "UAT",
+      "Web"
+    ],
+    "description": "The PBI requires all content to display in the selected language with correct LTR / RTL layout.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads left-to-right with English content"
+      },
+      {
+        "action": "Click the AR language toggle in the header",
+        "expected": "The page reloads in Arabic"
+      },
+      {
+        "action": "Inspect the hero, quick facts, section index and all four sections",
+        "expected": "Every label, section badge, section title, info card, highlight item, area card, scope item and FAQ question renders in Arabic, right-to-left, with no English text left in a translated field"
+      },
+      {
+        "action": "Click the EN toggle to switch back",
+        "expected": "The page returns to English left-to-right with the same content and the same scroll target"
+      }
+    ]
+  },
+  {
+    "id": 142148,
+    "title": "Verify that an active repeatable item renders with its full content in the configured position",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "Web"
+    ],
+    "description": "Asserts ST-6 at element level for the second quick-facts tile.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Log in to Liferay CMS as a Site Content Editor and open the Economic Consultancy page record and confirm the second quick-facts tile is Active with Display Order 2",
+        "expected": "The tile is Active with Display Order 2"
+      },
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to the quick-facts strip",
+        "expected": "The strip renders its active tiles in order"
+      },
+      {
+        "action": "Inspect the second tile",
+        "expected": "The second tile shows its icon, the label 'Turnaround Time' and the value '5 Working Days', matching the values stored in the CMS"
+      }
+    ]
+  },
+  {
+    "id": 142152,
+    "title": "Verify that the Economic Consultancy page renders correctly in light mode",
+    "state": "Design",
+    "priority": 3,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "Web"
+    ],
+    "description": "Asserts ST-15 against the light-mode Figma frame 2802:94813.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Set the browser or site appearance to light mode",
+        "expected": "Light mode is active"
+      },
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads with no visual defects"
+      },
+      {
+        "action": "Inspect the page background, header and section index",
+        "expected": "Page and header backgrounds are #FFFFFF; the sticky index uses the #F6F6F6 surface with #6C6C6B labels"
+      },
+      {
+        "action": "Inspect an info card, the highlighted list and both scope lists",
+        "expected": "Info cards and area cards render on white with #EDEDED borders, the highlighted list sits on its #F6F0EC surface, and the green #ECFDF5 Included and red #FFF1F2 Excluded blocks stay legible"
+      }
+    ]
+  },
+  {
+    "id": 142153,
+    "title": "Verify that the Economic Consultancy page renders correctly in dark mode",
+    "state": "Design",
+    "priority": 3,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "Web"
+    ],
+    "description": "Asserts ST-16 against the dark-mode Figma frame 2802:99270. Dark mode appears in 4 of the 8 linked frames but is not mentioned in the PBI text and has no CMS field — see Open Risk R-1.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Set the browser or site appearance to dark mode",
+        "expected": "Dark mode is active"
+      },
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads with no visual defects and no unstyled light-mode remnants"
+      },
+      {
+        "action": "Inspect the page background, header and section index",
+        "expected": "The page and header adopt the dark palette and every index label, section heading and body text remains legible against it"
+      },
+      {
+        "action": "Inspect an info card, the highlighted list, both scope lists and the FAQ accordion",
+        "expected": "Cards, the highlighted list, the accordion and the two scope blocks adopt their dark surfaces, and the green and red scope colours still meet a readable contrast"
+      }
+    ]
+  },
+  {
+    "id": 142159,
+    "title": "Verify that the English Economic Consultancy page renders left-to-right with the designed copy",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Asserts LNG-1 against the English desktop Figma frame 2802:94813.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads left-to-right"
+      },
+      {
+        "action": "Inspect the hero and quick-facts strip",
+        "expected": "The hero shows 'Economic Information Service' above 'Economic Consultancy &amp; Advisory' with its description constrained to its designed width beside the banner image; the quick facts read Market Intelligence, Turnaround Time, Service Fee and Sectoral Coverage"
+      },
+      {
+        "action": "Inspect the section index and Section 01",
+        "expected": "The index reads 01 to 04; Section 01 shows the badge 'About the service' above 'Service Overview &amp; Strategic Purpose', its body, three info cards, the secondary paragraph and the highlighted list"
+      },
+      {
+        "action": "Inspect Sections 02, 03 and 04",
+        "expected": "Section 02 shows 'Areas of Economic Consultancy' with four area cards; Section 03 shows 'Service Scope &amp; Exclusions' above 'Service Scope &amp; Coverage Limits' with both lists; Section 04 shows 'Common questions' above 'Frequently asked questions'"
+      }
+    ]
+  },
+  {
+    "id": 142160,
+    "title": "Verify that the Arabic Economic Consultancy page renders right-to-left with Arabic copy throughout",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Arabic",
+      "Automation",
+      "Regression",
+      "RTL",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Asserts LNG-2 against the Arabic desktop Figma frame 2802:94852.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in Arabic",
+        "expected": "Page loads right-to-left"
+      },
+      {
+        "action": "Inspect the hero, quick facts and section index",
+        "expected": "The hero renders its eyebrow, title and description in Arabic, right-aligned, with the banner image mirrored to the opposite side"
+      },
+      {
+        "action": "Inspect all four sections",
+        "expected": "Every section badge, heading, info card, highlight item, area card, scope item and FAQ question renders in Arabic with no English text left in a translated field"
+      },
+      {
+        "action": "Inspect the layout direction of the index, the highlighted list and the scope lists",
+        "expected": "The section index sits on the mirrored side, the highlighted list's bullets sit to the right of their text, and the Included and Excluded blocks keep their green and red treatment while mirroring their layout"
+      }
+    ]
+  },
+  {
+    "id": 142161,
+    "title": "Verify that the Economic Consultancy page renders correctly at desktop viewport width",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "Regression",
+      "Web"
+    ],
+    "description": "Asserts ENV-1 against the desktop Figma frames, designed at 1920px.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Set the browser viewport to 1920x1080",
+        "expected": "The viewport is set"
+      },
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads with no horizontal scrollbar"
+      },
+      {
+        "action": "Inspect the hero, quick-facts strip and sticky section index",
+        "expected": "The hero renders its text block beside the 424x322 banner image, the quick facts render as four tiles in a row, and the 312px section index sits alongside the content as a sticky column"
+      },
+      {
+        "action": "Inspect the info cards, the area cards and both scope lists",
+        "expected": "The three info cards render in one row, the four area cards render in their designed grid, and the Included and Excluded blocks each span the content width"
+      }
+    ]
+  },
+  {
+    "id": 142162,
+    "title": "Verify that the Economic Consultancy page renders correctly at tablet viewport width",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "Regression",
+      "Web"
+    ],
+    "description": "Asserts ENV-2 at the intermediate breakpoint. The PBI states the layout shall be responsive.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Set the browser viewport to 768x1024",
+        "expected": "The viewport is set"
+      },
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads with no horizontal scrollbar and no clipped content"
+      },
+      {
+        "action": "Inspect the hero, quick facts and section index",
+        "expected": "The hero image and text reflow without overlapping, the quick-facts tiles wrap rather than shrinking below legibility, and the section index collapses or repositions rather than disappearing"
+      },
+      {
+        "action": "Inspect the info cards, area cards, scope lists and the accordion",
+        "expected": "The info cards and area cards reflow to fewer columns, both scope lists stay distinguishable, and the accordion remains operable"
+      }
+    ]
+  },
+  {
+    "id": 142163,
+    "title": "Verify that the Economic Consultancy page renders correctly at mobile viewport width",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "Asserts ENV-3 against the mobile Figma frame 2802:94890.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Set the browser viewport to 390x844",
+        "expected": "The viewport is set"
+      },
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads with no horizontal scrollbar and no text overflowing its container"
+      },
+      {
+        "action": "Inspect the hero, quick facts and section index",
+        "expected": "The hero stacks its eyebrow, title, description and banner image vertically; the quick facts stack into a single column; the section index collapses to its mobile treatment rather than disappearing"
+      },
+      {
+        "action": "Inspect all four sections and expand an FAQ answer",
+        "expected": "The info cards, area cards and both scope lists render one per row with their text unclipped, and the accordion expands and collapses on tap"
+      }
+    ]
+  },
+  {
+    "id": 142164,
+    "title": "Verify that the hero renders its eyebrow, title, description and banner image in the designed layout",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Regression",
+      "UI",
+      "Web"
+    ],
+    "description": "Asserts OBJ-2 against Figma frame 2802:94813. This page has no hero CTA — the field table defines none.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Inspect the hero region",
+        "expected": "The hero renders the maroon gradient with the breadcrumb above the eyebrow, the eyebrow above the title and the description below it"
+      },
+      {
+        "action": "Measure the hero text against its container",
+        "expected": "None of the three text elements overflows or is clipped, and the description is constrained to its designed 648px width rather than spanning edge to edge"
+      },
+      {
+        "action": "Inspect the banner image and look for any call-to-action",
+        "expected": "The banner image renders beside the text at its designed size with its drop shadow, and no call-to-action button is rendered, because this page defines none"
+      }
+    ]
+  },
+  {
+    "id": 142168,
+    "title": "Verify that the Included and Excluded scope lists are visually distinguished from each other",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Asserts OBJ-10 and the PBI's requirement that the two lists are visually distinguished.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to Section 03 Service Scope &amp; Exclusions",
+        "expected": "Section 03 renders two separate grouped blocks rather than one merged list"
+      },
+      {
+        "action": "Inspect the Included Scope list",
+        "expected": "The Included Scope block is headed 'Included Scope:' in green on its light green surface with its items marked as included"
+      },
+      {
+        "action": "Inspect the Excluded Scope list",
+        "expected": "The Excluded Scope block is headed 'Excluded Scope:' in red on its light red surface, so the two cannot be mistaken for one another at a glance"
+      }
+    ]
+  },
+  {
+    "id": 142169,
+    "title": "Verify that the FAQ content on the published page is about economic consultancy and not another service",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Manual",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Several service pages in this sprint carry another service's copy in their designs — see Open Risk R-7. This case guards against the same slip reaching Economic Consultancy.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to Section 04 Frequently asked questions",
+        "expected": "Section 04 renders its published questions"
+      },
+      {
+        "action": "Expand every FAQ item",
+        "expected": "Every answer expands"
+      },
+      {
+        "action": "Read each question and answer in full",
+        "expected": "Every question and answer concerns the economic consultancy service — economic information, business insights, who the service is for and where reports are found — and none refers to another Qatar Chamber service"
+      }
+    ]
+  },
+  {
+    "id": 142170,
+    "title": "Verify that a failure to load the Economic Consultancy page shows the standard site error page",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Manual",
+      "Regression",
+      "UI",
+      "Web"
+    ],
+    "description": "Covers the unhappy delivery path so a broken page does not surface a raw server error to the visitor.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Request the Economic Consultancy URL with the content service unavailable",
+        "expected": "The request completes"
+      },
+      {
+        "action": "Observe the response",
+        "expected": "The visitor sees the site's standard error page with the site header and footer, not a raw stack trace, a Liferay diagnostic screen or a blank page"
+      },
+      {
+        "action": "Request an Economic Consultancy sub-path that does not exist",
+        "expected": "The request completes"
+      },
+      {
+        "action": "Observe that response",
+        "expected": "The visitor sees the site's standard not-found page in the current language"
+      }
+    ]
+  }
+]
