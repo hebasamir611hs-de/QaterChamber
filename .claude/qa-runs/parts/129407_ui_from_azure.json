@@ -1,0 +1,340 @@
+[
+  {
+    "id": 139505,
+    "title": "Verify that the English Economic Research page renders left-to-right with the designed copy",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads left-to-right"
+      },
+      {
+        "action": "Inspect the hero and quick-facts strip",
+        "expected": "The hero shows 'Research & Studies' above 'Economic Research' with its description constrained to its designed width and the banner image beside it; the quick facts read Content, Coverage, Audience and Source"
+      },
+      {
+        "action": "Inspect the section index and Section 01",
+        "expected": "The index reads 01 Overview and 02 Research library; Section 01 renders the badge 'About the service' above the heading 'Overview' and its rich-text body"
+      },
+      {
+        "action": "Inspect Section 02 and its report cards",
+        "expected": "Section 02 renders the badge 'Research library' above 'Published research and studies' and the intro 'Browse published reports and open any card to read its summary, metadata, and key topics before downloading the full PDF.', followed by the report cards"
+      }
+    ]
+  },
+  {
+    "id": 139506,
+    "title": "Verify that the Arabic Economic Research page renders right-to-left with Arabic copy throughout",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Arabic",
+      "Automation",
+      "Regression",
+      "RTL",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in Arabic",
+        "expected": "Page loads right-to-left"
+      },
+      {
+        "action": "Inspect the hero and quick-facts strip",
+        "expected": "The hero renders its eyebrow, title and description in Arabic, right-aligned, with the banner image mirrored to the opposite side"
+      },
+      {
+        "action": "Inspect the section index and both sections",
+        "expected": "Every section badge, heading and body renders in Arabic with no English text left in a translated field"
+      },
+      {
+        "action": "Inspect the layout direction of the index, the cards and the download buttons",
+        "expected": "The section index sits on the mirrored side, each report card places its thumbnail on the mirrored side of its text, and the Download PDF button's icon sits on the mirrored side of its label"
+      }
+    ]
+  },
+  {
+    "id": 139507,
+    "title": "Verify that the report preview view renders right-to-left in Arabic",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Manual",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Arabic",
+      "Manual",
+      "Regression",
+      "RTL",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in Arabic",
+        "expected": "The page loads right-to-left in Arabic"
+      },
+      {
+        "action": "Click a report card to open the preview view",
+        "expected": "The preview view opens for that report"
+      },
+      {
+        "action": "Inspect the title, summary, metadata and publish date",
+        "expected": "The report's title, summary and metadata render in Arabic, right-aligned, and the publish date is localised for Arabic"
+      },
+      {
+        "action": "Inspect the download action",
+        "expected": "The download action's label renders in Arabic and serves the same PDF as the English view"
+      }
+    ]
+  },
+  {
+    "id": 139511,
+    "title": "Verify that the hero renders its eyebrow, title, description and banner image in the designed layout",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 2,
+    "execution_type": "Automated",
+    "impact_area": "UI",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Regression",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Inspect the hero region",
+        "expected": "The hero renders the maroon gradient with the breadcrumb above the eyebrow, the eyebrow above the title and the description below it"
+      },
+      {
+        "action": "Measure the hero text against its container",
+        "expected": "None of the three text elements overflows or is clipped, and the description is constrained to its designed 648px width rather than spanning edge to edge"
+      },
+      {
+        "action": "Inspect the banner image",
+        "expected": "The banner image renders beside the text at its designed size with its drop shadow, correctly scaled and not distorted"
+      }
+    ]
+  },
+  {
+    "id": 139512,
+    "title": "Verify that the quick-facts strip renders each active tile with its icon, label and value",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "UI",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Control_Panel",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Inspect the quick-facts strip attached to the foot of the hero",
+        "expected": "The strip renders one tile per active quick fact, evenly divided by vertical rules"
+      },
+      {
+        "action": "Inspect each tile in turn",
+        "expected": "Each tile shows its icon beside its label and value, with no tile missing an icon and no label wrapping into its neighbour"
+      },
+      {
+        "action": "Compare the tiles against the values stored in the CMS",
+        "expected": "The rendered labels and values match the CMS exactly — Content / Market Intelligence, Coverage / All Sectors, Audience / Businesses & Investors and Source / Official Publications"
+      }
+    ]
+  },
+  {
+    "id": 139513,
+    "title": "Verify that every report card renders all five of its designed elements",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Control_Panel",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to Section 02 Research library",
+        "expected": "The library renders one card per published report"
+      },
+      {
+        "action": "Inspect every rendered card in turn",
+        "expected": "Every card shows a thumbnail, a title, a short description, a publish date and a Download PDF button — none renders a blank thumbnail slot, an empty description area or a missing date"
+      },
+      {
+        "action": "Compare each card's values against its CMS record",
+        "expected": "Each card's title, description and publish date match its CMS record exactly"
+      }
+    ]
+  },
+  {
+    "id": 139514,
+    "title": "Verify that the report preview view shows the report's summary, metadata and key topics",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Control_Panel",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads with the library rendered"
+      },
+      {
+        "action": "Click a report card to open the preview view",
+        "expected": "The preview view opens for the clicked report"
+      },
+      {
+        "action": "Inspect every element of the preview",
+        "expected": "The preview shows the report title, its summary, its publish date and its download action, none of them clipped or empty"
+      },
+      {
+        "action": "Compare them against that report's CMS record",
+        "expected": "Every displayed value matches that report's CMS record; no other report's content appears in the view"
+      }
+    ]
+  },
+  {
+    "id": 139515,
+    "title": "Verify that a report thumbnail with an unexpected aspect ratio still renders inside its card frame",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 2,
+    "execution_type": "Manual",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Control_Panel",
+      "Manual",
+      "Regression",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Log in to Liferay CMS as a Site Content Editor and open a research report record",
+        "expected": "The report record opens with its current thumbnail"
+      },
+      {
+        "action": "Replace the thumbnail with a 2000x400 wide image and publish",
+        "expected": "The wide image is accepted and the card renders it cropped or fitted within its frame, without stretching the card"
+      },
+      {
+        "action": "Replace it with a 400x2000 tall image and publish",
+        "expected": "The tall image is accepted and the card renders it cropped or fitted within the same frame"
+      },
+      {
+        "action": "Open the public Economic Research page in English and inspect that card after each change",
+        "expected": "In both cases the card keeps its designed height and border radius, and the title, description, date and button stay in their designed positions"
+      }
+    ]
+  },
+  {
+    "id": 139516,
+    "title": "Verify that a failure to load the Economic Research page shows the standard site error page",
+    "type": "UI",
+    "scenario": "negative",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 2,
+    "execution_type": "Manual",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Manual",
+      "Regression",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Request the Economic Research URL with the content service unavailable",
+        "expected": "The request completes"
+      },
+      {
+        "action": "Observe the response",
+        "expected": "The visitor sees the site's standard error page with the site header and footer, not a raw stack trace, a Liferay diagnostic screen or a blank page"
+      },
+      {
+        "action": "Request an Economic Research report URL that does not exist",
+        "expected": "The request completes"
+      },
+      {
+        "action": "Observe that response",
+        "expected": "The visitor sees the site's standard not-found page in the current language"
+      }
+    ]
+  }
+]

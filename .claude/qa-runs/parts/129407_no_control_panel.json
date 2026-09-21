@@ -1,0 +1,661 @@
+[
+  {
+    "id": 139474,
+    "title": "Verify that a visitor reaches the Economic Research page from the main menu and sees the library",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "The listing page is published with at least one published report.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Qatar Chamber website in English",
+        "expected": "Home page loads with the main menu visible"
+      },
+      {
+        "action": "Click 'Our Services' in the main menu",
+        "expected": "'Our Services' dropdown expands"
+      },
+      {
+        "action": "Click 'Economic Research' in the dropdown",
+        "expected": "The Economic Research page loads"
+      },
+      {
+        "action": "Observe the page from hero to footer",
+        "expected": "Breadcrumb 'Home > Services' renders over the maroon hero gradient; the hero shows eyebrow 'Research & Studies', title 'Economic Research', its description and the hero banner image; the quick facts read Content / Market Intelligence, Coverage / All Sectors, Audience / Businesses & Investors and Source / Official Publications; the index lists 01 Overview and 02 Research library; Section 01 renders its badge 'About the service' and Section 02 its badge 'Research library' above the heading 'Published research and studies' and the report cards"
+      }
+    ]
+  },
+  {
+    "id": 139475,
+    "title": "Verify that clicking a section-index entry scrolls to that section and marks it active",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "The PBI states the section index is sticky.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads with the sticky index visible"
+      },
+      {
+        "action": "Click '02 Research library' in the sticky section index",
+        "expected": "The viewport scrolls to Section 02 and its heading is in view"
+      },
+      {
+        "action": "Observe the viewport and the index",
+        "expected": "The '02 Research library' entry is marked active and the index stays sticky in the viewport"
+      },
+      {
+        "action": "Scroll back up and observe the index",
+        "expected": "The active marker follows the section currently in view rather than staying on Section 02"
+      }
+    ]
+  },
+  {
+    "id": 139476,
+    "title": "Verify that selecting the other section-index entry moves the active marker off the first",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "Web"
+    ],
+    "description": "Repeat pass on the index control with only two sections.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads with both index entries"
+      },
+      {
+        "action": "Click '02 Research library' in the index",
+        "expected": "Viewport moves to Section 02 and that entry is active"
+      },
+      {
+        "action": "Click '01 Overview' in the index",
+        "expected": "Viewport moves to Section 01 Overview"
+      },
+      {
+        "action": "Inspect both index entries",
+        "expected": "Exactly one entry is marked active ('01 Overview') and Section 02 has returned to its default style"
+      }
+    ]
+  },
+  {
+    "id": 139477,
+    "title": "Verify that clicking a report card opens that report in the preview view",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "The PBI states the card opens the same report in preview mode and the detail view shows its summary, metadata and key topics.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to Section 02 Research library",
+        "expected": "The library renders one card per published report"
+      },
+      {
+        "action": "Note the title and publish date on the first card",
+        "expected": "The card shows its thumbnail, title, short description, publish date and a Download PDF button"
+      },
+      {
+        "action": "Click that card",
+        "expected": "The report opens in the preview view showing that same report — its title and publish date match the card the visitor clicked, not another report's"
+      }
+    ]
+  },
+  {
+    "id": 139479,
+    "title": "Verify that Download PDF is also reachable from the report preview view",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "Web"
+    ],
+    "description": "The preview view is the second surface the visitor can download from; a card-only download would leave it untested.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Click a report card to open the preview view",
+        "expected": "The preview view opens for that report"
+      },
+      {
+        "action": "Locate the download action in the preview",
+        "expected": "A download action is present in the preview view for the same report"
+      },
+      {
+        "action": "Click it and open the downloaded file",
+        "expected": "The downloaded file is the document attached to that report in the CMS"
+      }
+    ]
+  },
+  {
+    "id": 139480,
+    "title": "Verify that the language toggle switches the whole page and the report cards between English and Arabic",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Arabic",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "RTL",
+      "UAT",
+      "Web"
+    ],
+    "description": "The PBI requires all content — titles, descriptions, dates, buttons — to display in the selected language with correct LTR / RTL layout.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads left-to-right with English content"
+      },
+      {
+        "action": "Click the AR language toggle in the header",
+        "expected": "The page reloads in Arabic"
+      },
+      {
+        "action": "Inspect the hero, quick facts, section index and both sections",
+        "expected": "Every label, section badge, section title and body renders in Arabic, right-to-left, with no English text left in a translated field"
+      },
+      {
+        "action": "Inspect a report card and click the EN toggle to switch back",
+        "expected": "The card's title and short description render in Arabic, the publish date is localised and the Download PDF button label is Arabic; switching back returns the page to English left-to-right"
+      }
+    ]
+  },
+  {
+    "id": 139481,
+    "title": "Verify that the breadcrumb links on the Economic Research page navigate to their targets",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "Web"
+    ],
+    "description": "Verifies the two breadcrumb segments. Figma frame 2972:114643 carries the placeholder value 'Hcvxcxvcome' on the Breadcrumb component — see Open Risk R-6.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads with the hero rendered"
+      },
+      {
+        "action": "Inspect the breadcrumb in the hero",
+        "expected": "Breadcrumb shows a home icon, 'Home', a chevron-right separator, then 'Services' — and no placeholder text such as 'Hcvxcxvcome'"
+      },
+      {
+        "action": "Click the 'Home' breadcrumb link",
+        "expected": "Browser navigates to the Qatar Chamber home page"
+      },
+      {
+        "action": "Navigate back and click the 'Services' breadcrumb link",
+        "expected": "Browser navigates to the Services landing page"
+      }
+    ]
+  },
+  {
+    "id": 139493,
+    "title": "Verify that an active quick-fact tile renders with its full content in the configured position",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-High",
+      "Regression",
+      "Web"
+    ],
+    "description": "Asserts ST-6 at element level for the third quick-facts tile.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Log in to Liferay CMS as a Site Content Editor and open the Economic Research page record and confirm the third quick-facts tile is Active with Display Order 3",
+        "expected": "The tile is Active with Display Order 3"
+      },
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to the quick-facts strip",
+        "expected": "The strip renders its active tiles in order"
+      },
+      {
+        "action": "Inspect the third tile",
+        "expected": "The third tile shows its icon, the label 'Audience' and the value 'Businesses & Investors', matching the values stored in the CMS"
+      }
+    ]
+  },
+  {
+    "id": 139497,
+    "title": "Verify that the Economic Research page renders correctly in light mode",
+    "state": "Design",
+    "priority": 3,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "Web"
+    ],
+    "description": "Asserts ST-9 against the light-mode Figma frame 2972:114643.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Set the browser or site appearance to light mode",
+        "expected": "Light mode is active"
+      },
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads with no visual defects"
+      },
+      {
+        "action": "Inspect the page background, header and section index",
+        "expected": "Page and header backgrounds are #FFFFFF; header navigation labels are #1D1D1B; the sticky index uses the #F6F6F6 surface with #6C6C6B labels"
+      },
+      {
+        "action": "Inspect a report card and its Download PDF button",
+        "expected": "Report cards render on white with #EDEDED borders and 12px radius, the thumbnail is not distorted, and the Download PDF button stays legible against the card"
+      }
+    ]
+  },
+  {
+    "id": 139498,
+    "title": "Verify that the Economic Research page renders correctly in dark mode",
+    "state": "Design",
+    "priority": 3,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "Web"
+    ],
+    "description": "Asserts ST-10 against the dark-mode Figma frame 2972:116054. Dark mode appears in 4 of the 8 linked frames but is not mentioned in the PBI text and has no CMS field — see Open Risk R-1.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Set the browser or site appearance to dark mode",
+        "expected": "Dark mode is active"
+      },
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads with no visual defects and no unstyled light-mode remnants"
+      },
+      {
+        "action": "Inspect the page background, header and section index",
+        "expected": "The page and header adopt the dark palette and every index label, section heading and body text remains legible against it"
+      },
+      {
+        "action": "Inspect a report card, its thumbnail and its Download PDF button",
+        "expected": "Report cards adopt their dark surface, the thumbnail image is not washed out or inverted, and the Download PDF button keeps a readable contrast"
+      }
+    ]
+  },
+  {
+    "id": 139505,
+    "title": "Verify that the English Economic Research page renders left-to-right with the designed copy",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Asserts LNG-1 against the English desktop Figma frame 2972:114643.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads left-to-right"
+      },
+      {
+        "action": "Inspect the hero and quick-facts strip",
+        "expected": "The hero shows 'Research & Studies' above 'Economic Research' with its description constrained to its designed width and the banner image beside it; the quick facts read Content, Coverage, Audience and Source"
+      },
+      {
+        "action": "Inspect the section index and Section 01",
+        "expected": "The index reads 01 Overview and 02 Research library; Section 01 renders the badge 'About the service' above the heading 'Overview' and its rich-text body"
+      },
+      {
+        "action": "Inspect Section 02 and its report cards",
+        "expected": "Section 02 renders the badge 'Research library' above 'Published research and studies' and the intro 'Browse published reports and open any card to read its summary, metadata, and key topics before downloading the full PDF.', followed by the report cards"
+      }
+    ]
+  },
+  {
+    "id": 139506,
+    "title": "Verify that the Arabic Economic Research page renders right-to-left with Arabic copy throughout",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Arabic",
+      "Automation",
+      "Regression",
+      "RTL",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Asserts LNG-2 against the Arabic desktop Figma frame 2972:114661.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in Arabic",
+        "expected": "Page loads right-to-left"
+      },
+      {
+        "action": "Inspect the hero and quick-facts strip",
+        "expected": "The hero renders its eyebrow, title and description in Arabic, right-aligned, with the banner image mirrored to the opposite side"
+      },
+      {
+        "action": "Inspect the section index and both sections",
+        "expected": "Every section badge, heading and body renders in Arabic with no English text left in a translated field"
+      },
+      {
+        "action": "Inspect the layout direction of the index, the cards and the download buttons",
+        "expected": "The section index sits on the mirrored side, each report card places its thumbnail on the mirrored side of its text, and the Download PDF button's icon sits on the mirrored side of its label"
+      }
+    ]
+  },
+  {
+    "id": 139507,
+    "title": "Verify that the report preview view renders right-to-left in Arabic",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Arabic",
+      "Manual",
+      "Regression",
+      "RTL",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "description": "Asserts LNG-2 on the detail surface, which the page-level case does not reach.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in Arabic",
+        "expected": "The page loads right-to-left in Arabic"
+      },
+      {
+        "action": "Click a report card to open the preview view",
+        "expected": "The preview view opens for that report"
+      },
+      {
+        "action": "Inspect the title, summary, metadata and publish date",
+        "expected": "The report's title, summary and metadata render in Arabic, right-aligned, and the publish date is localised for Arabic"
+      },
+      {
+        "action": "Inspect the download action",
+        "expected": "The download action's label renders in Arabic and serves the same PDF as the English view"
+      }
+    ]
+  },
+  {
+    "id": 139508,
+    "title": "Verify that the Economic Research page renders correctly at desktop viewport width",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "Regression",
+      "Web"
+    ],
+    "description": "Asserts ENV-1 against the desktop Figma frames, designed at 1920px.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Set the browser viewport to 1920x1080",
+        "expected": "The viewport is set"
+      },
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads with no horizontal scrollbar"
+      },
+      {
+        "action": "Inspect the hero, quick-facts strip and sticky section index",
+        "expected": "The hero renders its text block beside the 424x322 banner image, the quick facts render as four tiles in a row, and the 312px section index sits alongside the content as a sticky column"
+      },
+      {
+        "action": "Inspect the report cards in the Research library",
+        "expected": "Each report card renders as a horizontal row with its thumbnail on the leading side and its Download PDF button on the trailing side"
+      }
+    ]
+  },
+  {
+    "id": 139509,
+    "title": "Verify that the Economic Research page renders correctly at tablet viewport width",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "Regression",
+      "Web"
+    ],
+    "description": "Asserts ENV-2 at the intermediate breakpoint. The PBI states the listing and cards shall be responsive.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Set the browser viewport to 768x1024",
+        "expected": "The viewport is set"
+      },
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads with no horizontal scrollbar and no clipped content"
+      },
+      {
+        "action": "Inspect the hero, quick-facts strip and section index",
+        "expected": "The hero image and text reflow without overlapping, the quick-facts tiles wrap rather than shrinking below legibility, and the section index collapses or repositions rather than disappearing"
+      },
+      {
+        "action": "Inspect the report cards",
+        "expected": "Each card keeps its thumbnail, title, description, publish date and Download PDF button readable, stacking them if the row no longer fits"
+      }
+    ]
+  },
+  {
+    "id": 139510,
+    "title": "Verify that the Economic Research page renders correctly at mobile viewport width",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Compatibility",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "Asserts ENV-3 against the mobile Figma frame 2972:114679.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Set the browser viewport to 390x844",
+        "expected": "The viewport is set"
+      },
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads with no horizontal scrollbar and no text overflowing its container"
+      },
+      {
+        "action": "Inspect the hero, quick facts and section index",
+        "expected": "The hero stacks its eyebrow, title, description and banner image vertically; the quick facts stack into a single column; the section index collapses to its mobile treatment rather than disappearing"
+      },
+      {
+        "action": "Inspect the report cards and tap Download PDF",
+        "expected": "Each card stacks its thumbnail above its text, the short description is not clipped mid-word, and the Download PDF button is tappable and downloads the file"
+      }
+    ]
+  },
+  {
+    "id": 139511,
+    "title": "Verify that the hero renders its eyebrow, title, description and banner image in the designed layout",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Regression",
+      "UI",
+      "Web"
+    ],
+    "description": "Asserts OBJ-2 against Figma frame 2972:114643.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Inspect the hero region",
+        "expected": "The hero renders the maroon gradient with the breadcrumb above the eyebrow, the eyebrow above the title and the description below it"
+      },
+      {
+        "action": "Measure the hero text against its container",
+        "expected": "None of the three text elements overflows or is clipped, and the description is constrained to its designed 648px width rather than spanning edge to edge"
+      },
+      {
+        "action": "Inspect the banner image",
+        "expected": "The banner image renders beside the text at its designed size with its drop shadow, correctly scaled and not distorted"
+      }
+    ]
+  },
+  {
+    "id": 139516,
+    "title": "Verify that a failure to load the Economic Research page shows the standard site error page",
+    "state": "Design",
+    "priority": 2,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Manual",
+      "Regression",
+      "UI",
+      "Web"
+    ],
+    "description": "Covers the unhappy delivery path so a broken page does not surface a raw server error to the visitor.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Request the Economic Research URL with the content service unavailable",
+        "expected": "The request completes"
+      },
+      {
+        "action": "Observe the response",
+        "expected": "The visitor sees the site's standard error page with the site header and footer, not a raw stack trace, a Liferay diagnostic screen or a blank page"
+      },
+      {
+        "action": "Request an Economic Research report URL that does not exist",
+        "expected": "The request completes"
+      },
+      {
+        "action": "Observe that response",
+        "expected": "The visitor sees the site's standard not-found page in the current language"
+      }
+    ]
+  },
+  {
+    "id": 139517,
+    "title": "Verify that the library's card order is stable and repeatable across reloads",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Functional-High",
+      "Manual",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "The PBI defines no Display Order on the Research Report record and never states the listing order — see Open Risk R-18. This case records the order the build applies and asserts it is deterministic.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the public Economic Research page in English",
+        "expected": "Page loads with the library rendered"
+      },
+      {
+        "action": "Record the order of every report card in the Research library",
+        "expected": "The card order is captured"
+      },
+      {
+        "action": "Reload the page three times, recording the order each time",
+        "expected": "The order is identical on all three reloads — no card moves position and none is dropped or duplicated"
+      },
+      {
+        "action": "Compare the recorded orders against the reports' Publish Dates in the CMS",
+        "expected": "The order follows one stated rule, most plausibly Publish Date descending, and that rule is recorded so the build's behaviour can be confirmed against the BA's intent"
+      }
+    ]
+  }
+]
