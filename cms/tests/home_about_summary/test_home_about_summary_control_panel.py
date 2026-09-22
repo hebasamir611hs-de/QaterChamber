@@ -35,6 +35,8 @@ below captures a full baseline before writing and restores it in `finally`
 records.
 """
 
+from typing import Callable
+
 import allure
 import pytest
 
@@ -142,6 +144,103 @@ def _fill_counter_fields(counter: HomeAboutCounterAdminPage, prefix: str, **over
     for field, value in values.items():
         counter.fill_text(field, value)
     return values
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# Added 2026-09-21 — pure internal refactor (no coverage/tag/traceability
+# change) collapsing the near-identical field-length-boundary bodies of
+# tc_136111/136113/136115 (accepts up to limit) and tc_136112/136114/136116
+# (rejects over limit) into these two shared mechanics. Kept as PRIVATE
+# module-level helpers (not moved onto ObjectAuthoringPage or
+# HomeAboutSummaryAdminPage) for two concrete reasons:
+#   1. Both helpers `assert` — automation-standards.md's Page-Object rule
+#      is "no asserts" in Page Objects, and this project's own
+#      ObjectAuthoringPage already honors that (field_length_rejected() /
+#      upload_file_expect_rejected() there return bool; the `assert` stays
+#      at the test/call-site level). A helper NAMED assert_*() belongs
+#      next to the tests, not inside a Page Object.
+#   2. The accept-side mechanic needs an `open -> fill -> save -> possibly
+#      REOPEN -> read` shape, and "reopen the entry currently open" is not
+#      expressible generically on ObjectAuthoringPage: open_entry_by_code()
+#      requires the caller to pass a code, and the class stores no
+#      "current entry" state — only the subclass (open_section_entry())
+#      knows what to reopen. That reopen knowledge is About-Us-specific,
+#      not generic Object Authoring behavior.
+# ─────────────────────────────────────────────────────────────────────────
+def _assert_fields_accept_up_to_limit(
+    admin: HomeAboutSummaryAdminPage,
+    fields: list[tuple[Callable[[], None], Callable[[], str], str]],
+    *,
+    fill_step: str,
+    reopen_before_read: bool = False,
+    reload_step: str = "Reload the draft",
+) -> None:
+    """Shared boundary-acceptance mechanic behind tc_136111/136113/136115
+    (Section Tag/Heading/Description each accepting a value built to
+    exactly their own character limit). `fields` is a list of
+    (fill, read, value) triples: `fill()` is a zero-arg callable that
+    writes one field's own boundary-length `value` (e.g.
+    `lambda: admin.fill_text(FIELD_X, value)`), `read()` is a zero-arg
+    callable that reads that same field back afterward. Each test keeps
+    building and length-asserting its own `value`(s) at the call site
+    (that is test data, not the shared mechanic).
+
+    Opens the Section entry and ensures Draft (identical preamble in all
+    three cases' pre-refactor bodies), fills every field and Save Drafts
+    once inside a single `fill_step` allure.step (preserving each case's
+    own original step wording), optionally reopens the entry before
+    reading back — `reopen_before_read=True`, used only by tc_136115: its
+    pre-refactor body reloaded the draft before reading the rich-text
+    Description back, while the plain-textbox Tag/Heading fields' own
+    pre-refactor bodies never did, so this stays opt-in rather than
+    applied to every caller — then asserts every field's read() reproduces
+    its own built value exactly. Both sides of each comparison are
+    `.strip()`-ed: a no-op for the plain-textbox fields (these built
+    values carry no incidental leading/trailing whitespace) and the same
+    normalization tc_136115's own pre-refactor body already applied to
+    tolerate CKEditor's paragraph framing — so no field's actual pass/fail
+    outcome changes versus its pre-refactor body.
+    """
+    admin.open_section_entry()
+    admin.ensure_draft()
+    with allure.step(fill_step):
+        for fill, _read, _value in fields:
+            fill()
+        admin.save_as_draft()
+    if reopen_before_read:
+        with allure.step(reload_step):
+            admin.open_section_entry()
+    for _fill, read, value in fields:
+        assert read().strip() == value.strip()
+
+
+def _assert_fields_reject_over_limit(
+    admin: HomeAboutSummaryAdminPage,
+    checks: list[tuple[str, Callable[[], bool]]],
+) -> None:
+    """Shared boundary-rejection mechanic behind tc_136112/136114/136116
+    (Section Tag/Heading/Description each rejecting a value one character
+    over their own limit). `checks` is a list of (step_text, predicate)
+    pairs: `predicate()` is a zero-arg callable wrapping that field's own
+    already-shared field_length_rejected()/description_length_rejected()
+    call against an over-the-limit value the caller built (each test keeps
+    building and length-asserting its own over-limit value at the call
+    site, same reasoning as _assert_fields_accept_up_to_limit's docstring).
+
+    Opens the Section entry once, then for every check after the first
+    re-opens the entry first (tc_136112's own pre-refactor body already
+    re-opened the entry between its EN and AR checks — a field's own
+    rejection attempt is not assumed to leave the form in a state safe to
+    check a second field against), asserting each predicate inside its own
+    named allure.step so every case's original per-field step wording is
+    preserved.
+    """
+    admin.open_section_entry()
+    for i, (step_text, predicate) in enumerate(checks):
+        if i > 0:
+            admin.open_section_entry()
+        with allure.step(step_text):
+            assert predicate()
 
 
 @allure.epic("Home Page")
@@ -787,16 +886,14 @@ def test_section_tag_accepts_up_to_50_chars_136111(section_edit):
     tag_ar = ("قسم اختبار " * 5)[:50]
     assert len(tag_en) == 50 and len(tag_ar) == 50
 
-    admin.open_section_entry()
-    admin.ensure_draft()
-
-    with allure.step("Enter Section Tag EN/AR within the 50-character limit and Save Draft"):
-        admin.fill_text(FIELD_SECTION_TAG_EN, tag_en)
-        admin.fill_text(FIELD_SECTION_TAG_AR, tag_ar)
-        admin.save_as_draft()
-
-    assert admin.field_value(FIELD_SECTION_TAG_EN) == tag_en
-    assert admin.field_value(FIELD_SECTION_TAG_AR) == tag_ar
+    _assert_fields_accept_up_to_limit(
+        admin,
+        [
+            (lambda: admin.fill_text(FIELD_SECTION_TAG_EN, tag_en), lambda: admin.field_value(FIELD_SECTION_TAG_EN), tag_en),
+            (lambda: admin.fill_text(FIELD_SECTION_TAG_AR, tag_ar), lambda: admin.field_value(FIELD_SECTION_TAG_AR), tag_ar),
+        ],
+        fill_step="Enter Section Tag EN/AR within the 50-character limit and Save Draft",
+    )
 
 
 @allure.epic("Home Page")
@@ -818,14 +915,20 @@ def test_section_tag_rejects_over_50_chars_136112(section_edit):
     over_en = ("QCTEST over-limit tag " * 5)[:51]
     over_ar = ("قسم اختبار طويل جدا " * 5)[:51]
     assert len(over_en) == 51 and len(over_ar) == 51
-    admin.open_section_entry()
 
-    with allure.step("Enter a 51-character string into Section Tag EN — truncated or rejected"):
-        assert admin.field_length_rejected(FIELD_SECTION_TAG_EN, over_en, 50)
-
-    with allure.step("Enter a 51-character Arabic string into Section Tag AR — truncated or rejected"):
-        admin.open_section_entry()
-        assert admin.field_length_rejected(FIELD_SECTION_TAG_AR, over_ar, 50)
+    _assert_fields_reject_over_limit(
+        admin,
+        [
+            (
+                "Enter a 51-character string into Section Tag EN — truncated or rejected",
+                lambda: admin.field_length_rejected(FIELD_SECTION_TAG_EN, over_en, 50),
+            ),
+            (
+                "Enter a 51-character Arabic string into Section Tag AR — truncated or rejected",
+                lambda: admin.field_length_rejected(FIELD_SECTION_TAG_AR, over_ar, 50),
+            ),
+        ],
+    )
 
 
 @allure.epic("Home Page")
@@ -847,14 +950,17 @@ def test_section_heading_accepts_up_to_200_chars_136113(section_edit):
     heading_200 = ("QCTEST Qatar Chamber heading text " * 10)[:200]
     assert len(heading_200) == 200
 
-    admin.open_section_entry()
-    admin.ensure_draft()
-
-    with allure.step("Enter exactly 200 characters into Section Heading EN and Save Draft"):
-        admin.fill_text(FIELD_SECTION_HEADING_EN, heading_200)
-        admin.save_as_draft()
-
-    assert admin.field_value(FIELD_SECTION_HEADING_EN) == heading_200
+    _assert_fields_accept_up_to_limit(
+        admin,
+        [
+            (
+                lambda: admin.fill_text(FIELD_SECTION_HEADING_EN, heading_200),
+                lambda: admin.field_value(FIELD_SECTION_HEADING_EN),
+                heading_200,
+            ),
+        ],
+        fill_step="Enter exactly 200 characters into Section Heading EN and Save Draft",
+    )
 
 
 @allure.epic("Home Page")
@@ -875,10 +981,16 @@ def test_section_heading_rejects_over_200_chars_136114(section_edit):
     admin, _baseline = section_edit
     over_201 = ("QCTEST Qatar Chamber over-limit heading text " * 6)[:201]
     assert len(over_201) == 201
-    admin.open_section_entry()
 
-    with allure.step("Enter a 201-character string into Section Heading EN — truncated or rejected"):
-        assert admin.field_length_rejected(FIELD_SECTION_HEADING_EN, over_201, 200)
+    _assert_fields_reject_over_limit(
+        admin,
+        [
+            (
+                "Enter a 201-character string into Section Heading EN — truncated or rejected",
+                lambda: admin.field_length_rejected(FIELD_SECTION_HEADING_EN, over_201, 200),
+            ),
+        ],
+    )
 
 
 @allure.epic("Home Page")
@@ -904,17 +1016,13 @@ def test_section_description_accepts_up_to_1000_chars_136115(section_edit):
     desc_1000 = ("QCTEST rich text description content for the About Us section. " * 20)[:1000]
     assert len(desc_1000) == 1000
 
-    admin.open_section_entry()
-    admin.ensure_draft()
-
-    with allure.step("Enter 1000 characters into Section Description EN and Save Draft"):
-        admin.fill_description_en(desc_1000)
-        admin.save_as_draft()
-
-    with allure.step("Reload the draft"):
-        admin.open_section_entry()
-
-    assert admin.description_en_value().strip() == desc_1000
+    _assert_fields_accept_up_to_limit(
+        admin,
+        [(lambda: admin.fill_description_en(desc_1000), admin.description_en_value, desc_1000)],
+        fill_step="Enter 1000 characters into Section Description EN and Save Draft",
+        reopen_before_read=True,
+        reload_step="Reload the draft",
+    )
 
 
 @allure.epic("Home Page")
@@ -935,10 +1043,16 @@ def test_section_description_rejects_over_1000_chars_136116(section_edit):
     admin, _baseline = section_edit
     over_1001 = ("QCTEST over-limit description content for the About Us section. " * 20)[:1001]
     assert len(over_1001) == 1001
-    admin.open_section_entry()
 
-    with allure.step("Enter a 1001-character string into Section Description EN — blocked/truncated at 1000"):
-        assert admin.description_length_rejected("en", over_1001, 1000)
+    _assert_fields_reject_over_limit(
+        admin,
+        [
+            (
+                "Enter a 1001-character string into Section Description EN — blocked/truncated at 1000",
+                lambda: admin.description_length_rejected("en", over_1001, 1000),
+            ),
+        ],
+    )
 
 
 @allure.epic("Home Page")
