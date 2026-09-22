@@ -1,0 +1,833 @@
+{
+  "analysed": "2026-09-21",
+  "mode": "Normal",
+  "budget": 99,
+  "delivered": 99,
+  "categories": {
+    "UI": 9,
+    "Compatibility": 4,
+    "Auth": 3,
+    "Functional-High": 4,
+    "Functional-Low": 69,
+    "Edge": 10
+  },
+  "inventory": {
+    "OBJ": 7,
+    "FLD": 23,
+    "CTL": 7,
+    "ST": 14,
+    "ROL": 3,
+    "MSG": 5,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 4
+  },
+  "case_ids": [
+    "EXPO-MADEINQATAR-TC-001",
+    "EXPO-MADEINQATAR-TC-002",
+    "EXPO-MADEINQATAR-TC-003",
+    "EXPO-MADEINQATAR-TC-004",
+    "EXPO-MADEINQATAR-TC-005",
+    "EXPO-MADEINQATAR-TC-006",
+    "EXPO-MADEINQATAR-TC-007",
+    "EXPO-MADEINQATAR-TC-008",
+    "EXPO-MADEINQATAR-TC-009",
+    "EXPO-MADEINQATAR-TC-010",
+    "EXPO-MADEINQATAR-TC-011",
+    "EXPO-MADEINQATAR-TC-012",
+    "EXPO-MADEINQATAR-TC-013",
+    "EXPO-MADEINQATAR-TC-014",
+    "EXPO-MADEINQATAR-TC-015",
+    "EXPO-MADEINQATAR-TC-016",
+    "EXPO-MADEINQATAR-TC-017",
+    "EXPO-MADEINQATAR-TC-018",
+    "EXPO-MADEINQATAR-TC-019",
+    "EXPO-MADEINQATAR-TC-020",
+    "EXPO-MADEINQATAR-TC-021",
+    "EXPO-MADEINQATAR-TC-022",
+    "EXPO-MADEINQATAR-TC-023",
+    "EXPO-MADEINQATAR-TC-024",
+    "EXPO-MADEINQATAR-TC-025",
+    "EXPO-MADEINQATAR-TC-026",
+    "EXPO-MADEINQATAR-TC-027",
+    "EXPO-MADEINQATAR-TC-028",
+    "EXPO-MADEINQATAR-TC-029",
+    "EXPO-MADEINQATAR-TC-030",
+    "EXPO-MADEINQATAR-TC-031",
+    "EXPO-MADEINQATAR-TC-032",
+    "EXPO-MADEINQATAR-TC-033",
+    "EXPO-MADEINQATAR-TC-034",
+    "EXPO-MADEINQATAR-TC-035",
+    "EXPO-MADEINQATAR-TC-036",
+    "EXPO-MADEINQATAR-TC-037",
+    "EXPO-MADEINQATAR-TC-038",
+    "EXPO-MADEINQATAR-TC-039",
+    "EXPO-MADEINQATAR-TC-040",
+    "EXPO-MADEINQATAR-TC-041",
+    "EXPO-MADEINQATAR-TC-042",
+    "EXPO-MADEINQATAR-TC-043",
+    "EXPO-MADEINQATAR-TC-044",
+    "EXPO-MADEINQATAR-TC-045",
+    "EXPO-MADEINQATAR-TC-046",
+    "EXPO-MADEINQATAR-TC-047",
+    "EXPO-MADEINQATAR-TC-048",
+    "EXPO-MADEINQATAR-TC-049",
+    "EXPO-MADEINQATAR-TC-050",
+    "EXPO-MADEINQATAR-TC-051",
+    "EXPO-MADEINQATAR-TC-052",
+    "EXPO-MADEINQATAR-TC-053",
+    "EXPO-MADEINQATAR-TC-054",
+    "EXPO-MADEINQATAR-TC-055",
+    "EXPO-MADEINQATAR-TC-056",
+    "EXPO-MADEINQATAR-TC-057",
+    "EXPO-MADEINQATAR-TC-058",
+    "EXPO-MADEINQATAR-TC-059",
+    "EXPO-MADEINQATAR-TC-060",
+    "EXPO-MADEINQATAR-TC-061",
+    "EXPO-MADEINQATAR-TC-062",
+    "EXPO-MADEINQATAR-TC-063",
+    "EXPO-MADEINQATAR-TC-064",
+    "EXPO-MADEINQATAR-TC-065",
+    "EXPO-MADEINQATAR-TC-066",
+    "EXPO-MADEINQATAR-TC-067",
+    "EXPO-MADEINQATAR-TC-068",
+    "EXPO-MADEINQATAR-TC-069",
+    "EXPO-MADEINQATAR-TC-070",
+    "EXPO-MADEINQATAR-TC-071",
+    "EXPO-MADEINQATAR-TC-072",
+    "EXPO-MADEINQATAR-TC-073",
+    "EXPO-MADEINQATAR-TC-074",
+    "EXPO-MADEINQATAR-TC-075",
+    "EXPO-MADEINQATAR-TC-076",
+    "EXPO-MADEINQATAR-TC-077",
+    "EXPO-MADEINQATAR-TC-078",
+    "EXPO-MADEINQATAR-TC-079",
+    "EXPO-MADEINQATAR-TC-080",
+    "EXPO-MADEINQATAR-TC-081",
+    "EXPO-MADEINQATAR-TC-082",
+    "EXPO-MADEINQATAR-TC-083",
+    "EXPO-MADEINQATAR-TC-084",
+    "EXPO-MADEINQATAR-TC-085",
+    "EXPO-MADEINQATAR-TC-086",
+    "EXPO-MADEINQATAR-TC-087",
+    "EXPO-MADEINQATAR-TC-088",
+    "EXPO-MADEINQATAR-TC-089",
+    "EXPO-MADEINQATAR-TC-090",
+    "EXPO-MADEINQATAR-TC-091",
+    "EXPO-MADEINQATAR-TC-092",
+    "EXPO-MADEINQATAR-TC-093",
+    "EXPO-MADEINQATAR-TC-094",
+    "EXPO-MADEINQATAR-TC-095",
+    "EXPO-MADEINQATAR-TC-096",
+    "EXPO-MADEINQATAR-TC-097",
+    "EXPO-MADEINQATAR-TC-098",
+    "EXPO-MADEINQATAR-TC-099"
+  ],
+  "cases": {
+    "EXPO-MADEINQATAR-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-002": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "SUR-1",
+        "LNG-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-4",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-004": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-4",
+        "SUR-1",
+        "LNG-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-5",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-006": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-5",
+        "SUR-1",
+        "LNG-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-007": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-008": {
+      "category": "UI",
+      "traceability": [
+        "CTL-5",
+        "OBJ-3",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-009": {
+      "category": "UI",
+      "traceability": [
+        "CTL-6",
+        "OBJ-5",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-010": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-1",
+        "OBJ-1",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-011": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-2",
+        "OBJ-1",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-012": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-3",
+        "OBJ-1",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-013": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-4",
+        "OBJ-1",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-014": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2",
+        "SUR-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-015": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2",
+        "CTL-3",
+        "MSG-4",
+        "SUR-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-016": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3",
+        "MSG-4",
+        "SUR-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-017": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "ST-2",
+        "CTL-7",
+        "CTL-5",
+        "ROL-3",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-018": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "ROL-1",
+        "CTL-1",
+        "CTL-2",
+        "CTL-3",
+        "MSG-5",
+        "SUR-2",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-019": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "ST-1",
+        "ST-3",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-020": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-021": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-022": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-023": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-024": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-025": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-026": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-027": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-028": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-029": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-030": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-031": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-032": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "MSG-3"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-033": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "MSG-1",
+        "CTL-3"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-034": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-035": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-036": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-037": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-038": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6",
+        "MSG-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-039": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6",
+        "MSG-1",
+        "CTL-3"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-040": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-041": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-042": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-043": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-044": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-045": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-046": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-047": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-048": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-049": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-050": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-051": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-052": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-053": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-054": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-055": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-056": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16",
+        "MSG-3"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-057": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16",
+        "MSG-1",
+        "CTL-3"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-058": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-059": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-060": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-061": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-062": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-063": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-064": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-065": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-066": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-067": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-068": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20",
+        "MSG-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-069": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-070": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-071": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21",
+        "MSG-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-072": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21",
+        "MSG-1",
+        "CTL-3"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-073": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-1",
+        "ST-1",
+        "FLD-8",
+        "ROL-1",
+        "MSG-5"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-074": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-075": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-3",
+        "ST-2",
+        "FLD-8",
+        "ROL-1",
+        "MSG-5"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-076": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-4",
+        "ST-3",
+        "FLD-8",
+        "ROL-1",
+        "MSG-5"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-077": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-4"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-078": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-5",
+        "ST-6",
+        "FLD-7"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-079": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-5",
+        "ST-7",
+        "FLD-7"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-080": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-6",
+        "ST-8",
+        "FLD-22"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-081": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-6",
+        "ST-9",
+        "FLD-22"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-082": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-7"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-083": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-4",
+        "FLD-9"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-084": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-5",
+        "FLD-9"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-085": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-10",
+        "FLD-23"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-086": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-11",
+        "FLD-23"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-087": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-12"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-088": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-13"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-089": {
+      "category": "Functional-Low",
+      "traceability": [
+        "ST-14",
+        "FLD-15"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-090": {
+      "category": "Edge",
+      "traceability": [
+        "LNG-2",
+        "OBJ-4"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-091": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-7",
+        "CTL-5"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-092": {
+      "category": "Edge",
+      "traceability": [
+        "ST-1",
+        "OBJ-1",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-093": {
+      "category": "Edge",
+      "traceability": [
+        "ST-3",
+        "OBJ-1",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-094": {
+      "category": "Edge",
+      "traceability": [
+        "ROL-1",
+        "OBJ-1",
+        "OBJ-6",
+        "SUR-2"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-095": {
+      "category": "Edge",
+      "traceability": [
+        "FLD-4",
+        "OBJ-2",
+        "SUR-1"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-096": {
+      "category": "Edge",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-097": {
+      "category": "Edge",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-098": {
+      "category": "Edge",
+      "traceability": [
+        "FLD-6",
+        "FLD-21"
+      ]
+    },
+    "EXPO-MADEINQATAR-TC-099": {
+      "category": "Edge",
+      "traceability": [
+        "FLD-6",
+        "CTL-3",
+        "OBJ-1"
+      ]
+    }
+  },
+  "basis": "Derived from description only — no AC (Azure AC field returned 'No AC'). Figma links present but Figma MCP unreachable (timeout x2, REST fallback blocked by sandbox credential policy) — UI cases (TC-001..013) describe standard/expected rendering from the text spec, not verified pixel/token values."
+}

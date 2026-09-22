@@ -388,13 +388,24 @@ def test_delete_banner_slot(page):
 
 
 def _create_banner_via_object_authoring(
-    authoring: ObjectAuthoringPage, alt_en: str, alt_ar: str, display_order: str, active: bool
+    authoring: ObjectAuthoringPage, alt_en: str, alt_ar: str, display_order: str, active: bool,
+    redirect_url: str | None = None,
 ) -> None:
     authoring.open_new_entry_form()
     authoring.fill_text("Banner Alt Text (EN)", alt_en)
     authoring.fill_text("Banner Alt Text (AR)", alt_ar)
     authoring.fill_number("Display Order", display_order)
     authoring.set_checkbox("Active Status", active)
+    if redirect_url is not None:
+        # ADDED (batch1, 2026-09-13, tc_135117/135184) — "Redirect URL" field
+        # label is ASSUMED identical between the raw admin form (confirmed
+        # live, HomePromoBannersAdminPage.REDIRECT_URL_INPUT) and this
+        # Object Authoring surface, per this project's confirmed-live
+        # convention that the SAME field labels are reused across both
+        # surfaces for the same Object Definition (see e.g. every other
+        # field on this same helper) — not independently re-extracted this
+        # session; flag if it turns out to differ.
+        authoring.fill_text("Redirect URL", redirect_url)
     authoring.upload_file("Banner Image (EN)", IMAGE_FIXTURE)
     assert authoring.uploaded_filename("Banner Image (EN)") != "", (
         "Banner Image (EN) upload did not populate the field before Save"
@@ -903,3 +914,259 @@ def test_banner_visible_only_within_start_end_date_range(page):
         admin.open_promo_banners_list()
         admin.delete_row_by_alt_text(alt_en_in_range)
         admin.delete_row_by_alt_text(alt_en_out_of_range)
+
+
+# ============================================================================
+# BATCH1 (2026-09-13, plan 133534/suite 139193) — 3 additional Regression
+# cases for this same object, driven through manage-promotional-banner
+# (ObjectAuthoringPage) exactly like 135122-135125/135186 above. See
+# _create_banner_via_object_authoring()'s own updated docstring note for the
+# "Redirect URL" field-label assumption these 3 tests rely on.
+# ============================================================================
+
+REDIRECT_URL_FIXTURE = "https://qcdev.ihorizons.com/web/qatar-chamber/home"
+
+
+@allure.epic("Home Page")
+@allure.feature("Promotional Banners")
+@allure.story("Content workflow — create and publish")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("A Site Content Editor can create and publish a new promotional banner slot")
+@pytest.mark.control_panel
+@pytest.mark.global_
+@pytest.mark.regression
+@pytest.mark.functional_high
+@pytest.mark.workflow
+@pytest.mark.pbi_129368
+@pytest.mark.tc_135117
+def test_create_and_publish_new_banner_slot(page):
+    """ADO 135117 (Regression, UAT, Workflow). Steps: Log into Liferay CMS
+    as Site Content Editor -> Navigate to Home Page > Promotional Banners /
+    Ad Slots Management -> Click Add Banner -> Upload both bilingual images,
+    enter bilingual alt text, redirect URL, display order = 1, set Active
+    Status = true -> all fields accept the entered values with no inline
+    validation errors -> Save as Draft, then Publish -> Liferay generic
+    success toast; banner slot status changes to Published.
+
+    Uses the cached admin (TEST_USER) session via the `page` fixture, not a
+    real named-role login — this case's own Step 1 names a role but every
+    OTHER test in this module already establishes the cached-session
+    equivalent as this project's working convention for ordinary content
+    authoring (as opposed to an RBAC-boundary case, which would need the
+    real named-role credential). Driven through manage-promotional-banner
+    (Object Authoring), mirroring 135122-135125's own established mechanism.
+    """
+    admin = HomePromoBannersAdminPage(page)
+    authoring = ObjectAuthoringPage(page, slug="promotional-banner")
+    alt_en = "QCTEST-135117 Create Publish"
+
+    try:
+        with allure.step("Navigate to Home Page > Promotional Banners Management, Click Add Banner"):
+            admin.open_promo_banners_list()
+            authoring.open_new_entry_form()
+
+        with allure.step(
+            "Upload both bilingual images, enter bilingual alt text, redirect "
+            "URL, display order = 1, set Active Status = true"
+        ):
+            _create_banner_via_object_authoring(
+                authoring, alt_en, "إنشاء-ونشر-135117", "1", active=True,
+                redirect_url=REDIRECT_URL_FIXTURE,
+            )
+
+        with allure.step("Save as Draft, then Publish"):
+            authoring.save_as_draft()
+            assert authoring.row_status_text(alt_en) == "Draft", (
+                f"banner {alt_en!r} did not save as Draft, got "
+                f"{authoring.row_status_text(alt_en)!r}"
+            )
+            authoring.open_entry_by_edit_link(alt_en)
+            authoring.submit_for_publishing()
+
+        with allure.step("Assert status changed to Published (Approved, this build's equivalent)"):
+            status_after = authoring.row_status_text(alt_en)
+        assert status_after == "Approved", (
+            f"banner {alt_en!r} did not reach Published/Approved status, got {status_after!r}"
+        )
+    finally:
+        try:
+            authoring.open_entries_list()
+            authoring.delete_entry_by_title(alt_en)
+        except Exception:
+            logger.warning("teardown for %r did not complete — leftover QCTEST data may remain", alt_en)
+
+
+@allure.epic("Home Page")
+@allure.feature("Promotional Banners")
+@allure.story("End-to-end create/publish/see on Home Page")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("An admin can create, publish, and see a promotional banner appear on the Home Page end-to-end")
+@pytest.mark.control_panel
+@pytest.mark.global_
+@pytest.mark.regression
+@pytest.mark.functional_high
+@pytest.mark.pbi_129368
+@pytest.mark.tc_135184
+def test_create_publish_and_see_banner_on_home_page_e2e(page, browser):
+    """ADO 135184 (P1, Regression, UAT, Web). Full happy-path CMS-to-
+    frontend flow. Steps: Log in to CMS as Site Content Editor -> Add
+    Banner: upload EN+AR images, bilingual alt text, redirect URL, Display
+    Order=1, Active=true -> Save as Draft -> Submit for review -> Publish
+    -> trigger cache refresh / wait for cache TTL -> Load the public Home
+    Page -> Banner is visible with the configured EN image, alt text, and
+    is clickable to the redirect URL.
+
+    MARKER NOTE (disclosed, not silently dropped): the source case carries
+    BOTH `Control_Panel` and `Web` tags, but automation-standards.md is
+    explicit that a module never mixes platform markers (`-m web` must never
+    collect a test needing an authenticated CMS admin session). This test is
+    scripted `control_panel`-only, matching this SAME module's own already-
+    established, already-scanned-clean precedent (tc_135119/135120's own
+    "Delivery-surface assertion added ... coverage the case itself does not
+    specify" note) of reading the public HomePromoBannersPage from within a
+    control_panel-marked test for verification, without adding a `web`
+    marker — reused here rather than introduced fresh, and consistent with
+    this batch's explicit file routing (this case's 3-case batch was routed
+    to this control_panel module specifically, not split across two files).
+    The public-page read still uses a fresh, logged-out browser context per
+    standards.md's Draft/Unpublish-Visibility rule, mirroring 135122/135125.
+    """
+    from core.web.browser import new_context
+
+    admin = HomePromoBannersAdminPage(page)
+    authoring = ObjectAuthoringPage(page, slug="promotional-banner")
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePromoBannersPage(anon_context.new_page())
+    alt_en = "QCTEST-135184 E2E Create Publish See"
+
+    try:
+        with allure.step("Log in to CMS as Site Content Editor (cached admin session) and Add Banner"):
+            admin.open_promo_banners_list()
+            _create_banner_via_object_authoring(
+                authoring, alt_en, "135184-إي-تو-إي", "1", active=True,
+                redirect_url=REDIRECT_URL_FIXTURE,
+            )
+
+        with allure.step("Save as Draft"):
+            authoring.save_as_draft()
+            assert authoring.row_status_text(alt_en) == "Draft", (
+                f"banner {alt_en!r} did not save as Draft, got "
+                f"{authoring.row_status_text(alt_en)!r}"
+            )
+
+        with allure.step("Submit for review (Submit for Publishing on this surface) then Publish"):
+            authoring.open_entry_by_edit_link(alt_en)
+            authoring.submit_for_publishing()
+
+        with allure.step("Assert the banner reached Published/Approved status"):
+            status_after = authoring.row_status_text(alt_en)
+        assert status_after == "Approved", (
+            f"banner {alt_en!r} did not reach Published/Approved status, got {status_after!r}"
+        )
+
+        with allure.step("Trigger cache refresh / wait for cache TTL, load the public Home Page"):
+            visible = home.reload_until_banner_matches(alt_en, expected_visible=True)
+        assert visible, (
+            f"Published banner {alt_en!r} not visible on the Home Page within "
+            f"{home.RELOAD_POLL_TIMEOUT_MS}ms"
+        )
+
+        with allure.step("Assert the banner is clickable to the configured redirect URL"):
+            redirect_href = home.banner_redirect_url(alt_en)
+        assert redirect_href == REDIRECT_URL_FIXTURE, (
+            f"expected the banner's click-through href to be {REDIRECT_URL_FIXTURE!r}, "
+            f"got {redirect_href!r}"
+        )
+    finally:
+        try:
+            authoring.open_entries_list()
+            authoring.delete_entry_by_title(alt_en)
+        except Exception:
+            logger.warning("teardown for %r did not complete — leftover QCTEST data may remain", alt_en)
+        anon_context.close()
+
+
+@allure.epic("Home Page")
+@allure.feature("Promotional Banners")
+@allure.story("Content workflow — unpublish")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Unpublishing a banner removes it from the Home Page after cache refresh")
+@pytest.mark.control_panel
+@pytest.mark.global_
+@pytest.mark.regression
+@pytest.mark.functional_high
+@pytest.mark.pbi_129368
+@pytest.mark.tc_135185
+def test_unpublishing_banner_removes_it_after_cache_refresh(page, browser):
+    """ADO 135185 (P1, Regression, Web — scripted control_panel-only, see
+    MARKER NOTE on tc_135184 above for why: same module-wide precedent,
+    same explicit batch routing). Precondition (case's own wording:
+    "Banner from TC-019 is live" — an internal QA-suite cross-reference, not
+    an Azure ID): self-contained — creates and publishes its OWN fresh
+    disposable banner first, rather than depending on another test's banner/
+    state, mirroring this module's own established self-contained
+    precedent (e.g. 135125's live-precondition-then-unpublish shape). Steps:
+    Log in to CMS, locate the published banner -> Click Unpublish -> status
+    = Unpublished -> Wait for cache refresh -> Load the public Home Page ->
+    banner no longer appears.
+
+    DISCLOSED NEAR-OVERLAP: this case's own intent substantially overlaps
+    tc_135125 (already automated in this module) — both exercise "unpublish
+    a live banner, confirm it disappears from the Home Page". Scripted as
+    its OWN, separate test (not merged into 135125) since it is a distinct
+    Azure Test Case ID requiring its own `tc_135185` marker for independent
+    targeted-retest selection, per automation-standards.md's Axis C rule —
+    disclosed here rather than silently duplicated without comment.
+    """
+    from core.web.browser import new_context
+
+    admin = HomePromoBannersAdminPage(page)
+    authoring = ObjectAuthoringPage(page, slug="promotional-banner")
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePromoBannersPage(anon_context.new_page())
+    alt_en = "QCTEST-135185 Unpublish After Cache Refresh"
+
+    try:
+        with allure.step("Log in to CMS, create and publish a fresh disposable banner (the case's own live precondition)"):
+            admin.open_promo_banners_list()
+            _create_banner_via_object_authoring(authoring, alt_en, "الغاء-نشر-135185", "1", active=True)
+            authoring.save_as_draft()
+            authoring.open_entry_by_edit_link(alt_en)
+            authoring.submit_for_publishing()
+            assert authoring.row_status_text(alt_en) == "Approved", (
+                f"fixture banner {alt_en!r} did not reach Published/Approved "
+                f"before this test's own unpublish action, got "
+                f"{authoring.row_status_text(alt_en)!r}"
+            )
+
+        with allure.step("Confirm the banner IS visible on the Home Page before unpublishing"):
+            visible_before = home.reload_until_banner_matches(alt_en, expected_visible=True)
+        assert visible_before, (
+            f"Published fixture banner {alt_en!r} not visible on the Home Page "
+            "before unpublish — cannot proceed without a confirmed precondition"
+        )
+
+        with allure.step("Locate the published banner and click Unpublish"):
+            authoring.open_entries_list()
+            authoring.open_entry_by_edit_link(alt_en)
+            authoring.unpublish_to_edit_as_draft()
+
+        with allure.step("Assert status changed off Published/Approved"):
+            status_after = authoring.row_status_text(alt_en)
+        assert status_after == "Draft", (
+            f"banner {alt_en!r} status did not change after Unpublish, got {status_after!r}"
+        )
+
+        with allure.step("Wait for cache refresh, load the public Home Page: the banner no longer appears"):
+            hidden_after = home.reload_until_banner_matches(alt_en, expected_visible=False)
+        assert hidden_after, (
+            f"Unpublished banner {alt_en!r} still visible on the Home Page "
+            f"within {home.RELOAD_POLL_TIMEOUT_MS}ms"
+        )
+    finally:
+        try:
+            authoring.open_entries_list()
+            authoring.delete_entry_by_title(alt_en)
+        except Exception:
+            logger.warning("teardown for %r did not complete — leftover QCTEST data may remain", alt_en)
+        anon_context.close()

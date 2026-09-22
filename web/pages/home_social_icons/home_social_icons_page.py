@@ -448,3 +448,151 @@ class HomeSocialIconsPage(BasePage):
         new_page = new_page_info.value
         new_page.wait_for_load_state("domcontentloaded", timeout=10000)
         return new_page
+
+    # ══════════════════════════════════════════════════════════════════════
+    # Folded in from the `main` branch, 2026-09-22 merge.
+    #
+    # `main` carried an independently-written HomeSocialIconsPage (both sides
+    # created this file from an empty stub, so git saw two whole classes).
+    # Its locator constants and helpers are kept here so that work is not
+    # lost; they are additive and collide with nothing above.
+    #
+    # Its own `open_home()` is deliberately NOT carried over: it called
+    # BasePage.open(), which reauthenticates when it sees a login form, while
+    # this widget's assertions must run in a genuinely anonymous context (see
+    # this class's own open_home() docstring and standards.md, "Draft/Unpublish
+    # Public-Visibility Checks - Mandatory Logged-Out Context"). The methods
+    # below call self.open_home() and so pick up the anonymous one above.
+    #
+    # These helpers currently have no callers: the CMS-side test module that
+    # used them duplicated tc_131159-131167, already covered in
+    # cms/tests/components/test_footer_control_panel.py, and was not merged.
+    # ══════════════════════════════════════════════════════════════════════
+
+    HOME_PATH = "/en/home"
+
+    SECTION = "div.qc-home-social"
+    ICON_LIST = f"{SECTION} ul.qc-social-list"
+    ICON_LINK = f"{ICON_LIST} li a.qc-social-link"
+
+    # No project-specific propagation measurement exists yet for this
+    # object (see module docstring) — this budget is a conservative
+    # multiple over every OTHER Object-Authoring-backed section's own
+    # measured figure on this project (all under ~3s), never a blind
+    # guess, and is still a real, condition-based POLL, never a sleep.
+    RELOAD_POLL_TIMEOUT_MS = 15000
+    RELOAD_POLL_INTERVAL_MS = 1000
+
+
+    def icon_hrefs(self) -> list[str]:
+        """All icon hrefs in the Home section, in rendered (DOM) order —
+        this project's only observable notion of icon "position"."""
+        links = self.page.locator(self.ICON_LINK)
+        return [links.nth(i).get_attribute("href") or "" for i in range(links.count())]
+
+    def has_icon_with_href(self, href: str) -> bool:
+        return href in self.icon_hrefs()
+
+    def position_of_href(self, href: str) -> int:
+        """1-indexed DOM position of the icon whose href matches exactly,
+        or 0 if not present — mirrors the QA case's own "position N"
+        wording (there is no other numbered-slot concept on this live
+        page; see module docstring)."""
+        hrefs = self.icon_hrefs()
+        try:
+            return hrefs.index(href) + 1
+        except ValueError:
+            return 0
+
+    def platform_label_for_href(self, href: str) -> str:
+        link = self.page.locator(f'{self.ICON_LINK}[href="{href}"]').first
+        return link.get_attribute("aria-label") or ""
+
+    def icon_uses_uploaded_image(self, href: str) -> bool:
+        """True only if the icon for `href` renders as a real `<img>`
+        (i.e. actually reflects an uploaded file) rather than this
+        section's confirmed-live default inline SVG glyph — see module
+        docstring's LOAD-BEARING FINDING. Never assumed either way."""
+        link = self.page.locator(f'{self.ICON_LINK}[href="{href}"]').first
+        return link.locator("img").count() > 0
+
+    def icon_count(self) -> int:
+        return self.page.locator(self.ICON_LINK).count()
+
+    # ---- Expected-position ground truth (see module docstring's
+    # ROOT-CAUSE INVESTIGATION, Round 2) — reads the SAME public,
+    # unauthenticated JAX-RS endpoint the Home page's own front-end script
+    # itself queries (confirmed live via network capture + a bare
+    # cookie-less `curl`, both 200), used ONLY to compute what position an
+    # entry's OWN Home Display Order value should rank at among whatever is
+    # really live right now — never as the pass/fail signal itself (that
+    # remains position_of_href(), read off the actual rendered DOM, per
+    # cms-testing.md's public-surface rule). This replaces a hardcoded
+    # literal-index expectation (e.g. "must be exactly position 6") that
+    # only holds if the case's own steps had touched "Home Display Order"
+    # — the field CONFIRMED LIVE (Round 2) to actually drive this section's
+    # order — which neither TC 131159 nor TC 131160's literal steps do.
+    JAXRS_SCOPE_ID = "37246"  # confirmed live 2026-09-07 — same scopeId every capture on this environment used
+    JAXRS_ENTRIES_PATH = f"/o/c/socialmediaicons/scopes/{JAXRS_SCOPE_ID}"
+    JAXRS_HOME_ORDER_FIELD = "homeDisplayOrder"
+
+    def _live_home_display_orders_by_redirect_url(self) -> dict[str, int]:
+        """`{redirectUrl: homeDisplayOrder}` for every entry CURRENTLY
+        matching the exact filter the Home section's own front-end applies
+        (`active eq true and showOnHome eq true`) — confirmed live
+        2026-09-07 via network capture of the real /en/home page load. No
+        `sort=` param: matches the real endpoint's own confirmed-live
+        behavior (raw creation-order payload; the Home page's script does
+        its own client-side sort by `homeDisplayOrder` ascending — see
+        module docstring's Round 2 disambiguating evidence — which this
+        method reproduces in expected_position_by_home_display_order()
+        below)."""
+        response = self.page.request.get(
+            web_url(self.JAXRS_ENTRIES_PATH)
+            + "?filter=active%20eq%20true%20and%20showOnHome%20eq%20true&pageSize=200"
+        )
+        items = response.json().get("items", [])
+        return {item.get("redirectUrl", ""): item.get(self.JAXRS_HOME_ORDER_FIELD, 0) for item in items}
+
+    def expected_position_by_home_display_order(self, own_redirect_url: str, own_home_display_order: int) -> int:
+        """1-indexed rank `own_redirect_url` SHOULD occupy on the Home page
+        right now, given `own_home_display_order` and every OTHER currently
+        active+shown entry's own real, live Home Display Order value —
+        i.e. "how many entries currently rank ahead of this Home Display
+        Order value, plus one". Ties broken by redirect URL string order
+        (arbitrary but deterministic) since the real UI's own tie-break was
+        never confirmed live and is not this method's concern — callers
+        should avoid asserting against a value known to tie with another
+        live entry's Home Display Order.
+
+        This is ground truth computed from the SAME data source (confirmed
+        live) the Home section itself renders from — not a hardcoded
+        absolute index assumed from the ADO case's own wording, and keyed
+        on the field CONFIRMED LIVE (module docstring's Round 2) to
+        actually drive this section's order — "Home Display Order", not
+        "Display Order" (the Footer's own field, and this session's own
+        Round 1 mistake)."""
+        orders = self._live_home_display_orders_by_redirect_url()
+        orders[own_redirect_url] = own_home_display_order
+        ranked = sorted(orders.items(), key=lambda kv: (kv[1], kv[0]))
+        hrefs_in_order = [href for href, _ in ranked]
+        return hrefs_in_order.index(own_redirect_url) + 1
+
+    def reload_until(self, predicate, timeout_ms: int | None = None, interval_ms: int | None = None) -> bool:
+        """Poll `open_home()` + `predicate(self)` until True or the
+        timeout elapses — the propagation-check shape mandated by
+        cms-profile.md (poll, never a bare `sleep()`). See module
+        docstring's budget note."""
+        import time
+
+        timeout_ms = timeout_ms if timeout_ms is not None else self.RELOAD_POLL_TIMEOUT_MS
+        interval_ms = interval_ms if interval_ms is not None else self.RELOAD_POLL_INTERVAL_MS
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_home()
+            if predicate(self):
+                return True
+            if time.monotonic() >= deadline:
+                return False
+            self.page.wait_for_timeout(interval_ms)
+

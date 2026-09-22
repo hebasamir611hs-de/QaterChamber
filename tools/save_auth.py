@@ -22,7 +22,7 @@ from pathlib import Path
 # the project root is not importable. Add it, then import config.settings —
 # importing it is what loads .env, which the env() reads below depend on.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from config.settings import ENV_FILE, auth_state_path  # noqa: E402
+from config.settings import ENV_FILE, auth_state_path, control_panel_url  # noqa: E402
 
 try:
     from playwright.sync_api import sync_playwright
@@ -36,20 +36,86 @@ def env(key, default=None):
 
 def login(page):
     """
-    Standard username/password login driven by env selectors. ADAPT this function for
-    the project's real flow (multi-step, OTP, SSO) — it is the one project-specific piece.
-    Selectors default to common ids; override via LOGIN_*_SELECTOR env vars.
+    Qatar Chamber / Liferay DXP login — CORRECTED 2026-09-20 (live incident this
+    session, PBI 129566 Draft-vs-Publish correction batch): the PRIOR version of
+    this function (role-based "Email Address"/"Password"/"Sign In" lookup against
+    WEB_BASE_URL) does NOT raise, prints "Saved auth storageState" successfully,
+    but produces a session that cannot actually reach any Control_Panel/Object
+    Authoring surface — `manage-<slug>` and `object-authoring` both render a
+    generic "Coming Soon" fallback page with that state.json (confirmed live:
+    `manage-newsletter` returned title "Coming Soon..." with the prior flow's
+    captured state, and title "Manage: Newsletter..." after re-capturing via
+    THIS corrected flow — same account, same run). Root cause: WEB_BASE_URL's
+    login page also renders a public-member "Sign In" control (matched by the
+    old role-based lookup) that is a DIFFERENT auth path from the real Liferay
+    LoginPortlet the admin/Control_Panel surfaces require — exactly the gap
+    `cms/pages/control_panel/login_page.py`'s own docstring already disclosed
+    ("tools/save_auth.py's login() is still the generic scaffold... was never
+    adapted for this project's real flow, and points at the PUBLIC site, not
+    CONTROL_PANEL_URL"). This was a silent false-green in the auth tool itself:
+    a broken session reported as a successful capture.
+
+    Fixed by driving the SAME real LoginPortlet flow
+    `cms/pages/control_panel/login_page.py`'s CmsLoginPage and
+    `core/web/session_guard.py`'s reauthenticate() already use — stable ID
+    selectors scoped to the LoginPortlet form (not accessible-role names, which
+    this login page's account-type ambiguity makes unsafe here), against
+    CONTROL_PANEL_URL, then forcing the account's persisted UI language back to
+    English via the same `update_language` endpoint (see session_guard.py's own
+    HEALED note on why this step is not optional — a stale Arabic preference on
+    the shared TEST_USER account silently breaks every English-text locator
+    project-wide). LOGIN_*_SELECTOR env overrides are still honored for a future
+    login-form change, but now default to these confirmed-live, real selectors
+    instead of the broken role-based ones.
     """
-    base = (env("WEB_BASE_URL", "") or "").rstrip("/")
-    page.goto(base + env("LOGIN_PATH", "/login"), wait_until="domcontentloaded")
-    page.fill(env("LOGIN_USER_SELECTOR", "#username"), env("TEST_USER", ""))
-    page.fill(env("LOGIN_PASS_SELECTOR", "#password"), env("TEST_PASSWORD", ""))
-    page.click(env("LOGIN_SUBMIT_SELECTOR", "button[type=submit]"))
-    success = env("LOGIN_SUCCESS_SELECTOR")   # a selector visible ONLY after a real login
-    if success:
-        page.wait_for_selector(success, timeout=int(env("LOGIN_TIMEOUT", "15000")))
-    else:
-        page.wait_for_load_state("networkidle")
+    base = control_panel_url("")
+    page.goto(base + env("LOGIN_PATH", "/c/portal/login"), wait_until="domcontentloaded")
+
+    user_selector = env(
+        "LOGIN_USER_SELECTOR", "#_com_liferay_login_web_portlet_LoginPortlet_login"
+    )
+    pass_selector = env(
+        "LOGIN_PASS_SELECTOR", "#_com_liferay_login_web_portlet_LoginPortlet_password"
+    )
+    submit_selector = env(
+        "LOGIN_SUBMIT_SELECTOR",
+        '#_com_liferay_login_web_portlet_LoginPortlet_loginForm button[type="submit"]',
+    )
+    success_selector = env(
+        "LOGIN_SUCCESS_SELECTOR",
+        'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]',
+    )
+
+    page.fill(user_selector, env("TEST_USER", ""))
+    page.fill(pass_selector, env("TEST_PASSWORD", ""))
+    page.click(submit_selector)
+
+    # .first: this selector legitimately matches BOTH the Control Menu nav AND
+    # the Product Menu toggle once logged in (see CmsLoginPage.login()) —
+    # Playwright strict mode rejects a bare 2-element wait_for_selector.
+    page.locator(success_selector).first.wait_for(
+        state="visible", timeout=int(env("LOGIN_TIMEOUT", "15000"))
+    )
+
+    # Force (and persist) English — mirrors CmsLoginPage._force_english_locale()
+    # exactly; a stale account-level Arabic preference otherwise silently
+    # breaks every English-text locator on the admin surfaces later.
+    from urllib.parse import quote
+
+    redirect_url = quote("/home", safe="")
+    # domcontentloaded, not the default "load" — this portal's network rarely
+    # idles/finishes-loading cleanly (site-wide chatbot widget polling, same
+    # finding already documented project-wide, e.g. base_page.py/
+    # object_authoring_page.py's own settle notes); "load" timed out here live
+    # this session even though the navigation itself completes well within it.
+    page.goto(
+        control_panel_url(f"/c/portal/update_language?languageId=en_US&redirect={redirect_url}"),
+        wait_until="domcontentloaded",
+        timeout=int(env("LOGIN_TIMEOUT", "15000")),
+    )
+    page.locator(success_selector).first.wait_for(
+        state="visible", timeout=int(env("LOGIN_TIMEOUT", "15000"))
+    )
 
 
 def main():

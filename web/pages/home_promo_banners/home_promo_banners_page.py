@@ -140,6 +140,18 @@ class HomePromoBannersPage(BasePage):
     # structure diagram.
     DOTS_CONTAINER = ".qc-promo-dots"
     DOT = f"{DOTS_CONTAINER} >> .qc-promo-dot"
+    # ── Restored 2026-09-22 (merge of main) ──────────────────────────────
+    # These four constants and the four methods below were present in the
+    # shared ancestor and kept on `main`, but were dropped from this Page
+    # Object on the automation/phase3 branch while 17 call sites in
+    # cms/tests/home_promo_banners/ and cms/tests/home_featured_event/ still
+    # invoke them.  Restored verbatim from the `main` side rather than
+    # re-derived, so the live-confirmed locators are unchanged.
+    SECTION = "section.qc-home-promotional-banners"
+    SLIDE = f"{SECTION} .qc-promo-slide"
+    IMG = f"{SECTION} .qc-promo-img"
+    RELOAD_POLL_TIMEOUT_MS = 5000
+    RELOAD_POLL_INTERVAL_MS = 500
 
     # ── Navigation ───────────────────────────────────────────────────────
     def open_home(self) -> "HomePromoBannersPage":
@@ -160,6 +172,43 @@ class HomePromoBannersPage(BasePage):
     def scroll_to_section(self) -> "HomePromoBannersPage":
         self.page.locator(self.CAROUSEL).scroll_into_view_if_needed()
         return self
+    # ── Visibility + reload polling (restored from main, see note above) ──
+    def is_section_visible(self) -> bool:
+        return self.is_visible(self.SECTION)
+
+    def banner_visible(self, alt_text_en: str) -> bool:
+        """True if any carousel slide (including cloned loop slides) renders
+        an image whose alt text matches. Uses Playwright's own is_visible()
+        (not mere DOM presence) so a banner hidden behind
+        Active Status=False is correctly reported absent."""
+        try:
+            locator = self.page.locator(f'{self.IMG}[alt="{alt_text_en}"]')
+            return locator.first.is_visible()
+        except Exception:  # noqa: BLE001 - mirrors BasePage.is_visible's never-throws contract
+            return False
+
+    def reload_until(self, predicate, timeout_ms: int | None = None, interval_ms: int | None = None) -> bool:
+        """Poll open_home() + predicate(self) until True or timeout - never
+        a bare sleep. Mirrors HomeFeaturedEventPage.reload_until()'s shape."""
+        import time
+
+        timeout_ms = timeout_ms if timeout_ms is not None else self.RELOAD_POLL_TIMEOUT_MS
+        interval_ms = interval_ms if interval_ms is not None else self.RELOAD_POLL_INTERVAL_MS
+        deadline = time.monotonic() + (timeout_ms / 1000)
+        while True:
+            self.open_home()
+            if predicate(self):
+                return True
+            if time.monotonic() >= deadline:
+                return False
+            self.page.wait_for_timeout(interval_ms)
+
+    def reload_until_banner_matches(self, alt_text_en: str, expected_visible: bool,
+                                     timeout_ms: int | None = None) -> bool:
+        return self.reload_until(
+            lambda p: p.banner_visible(alt_text_en) == expected_visible,
+            timeout_ms=timeout_ms,
+        )
 
     # ── Page-level direction ─────────────────────────────────────────────
     def page_direction(self) -> str:
@@ -336,3 +385,14 @@ class HomePromoBannersPage(BasePage):
         if not viewport_box or not image_box:
             return False
         return abs(image_box["width"] - viewport_box["width"]) <= tolerance
+
+    def banner_redirect_url(self, alt_text_en: str) -> str:
+        """ADDED (batch1, 2026-09-13, tc_135184) — href of the confirmed-live
+        `.qc-promo-link` wrapping the slide whose image alt text matches (see
+        module docstring: "`.qc-promo-slide` > `.qc-promo-link` >
+        `.qc-promo-img`"). Inferred from that already-documented DOM
+        structure (the "link" class name plus the slide being described as
+        clickable) rather than independently re-probed live this session —
+        disclosed, not silently assumed as independently confirmed."""
+        img = self.page.locator(f'{self.IMG}[alt="{alt_text_en}"]').first
+        return img.locator("xpath=..").get_attribute("href") or ""

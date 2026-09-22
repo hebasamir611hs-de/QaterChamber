@@ -150,6 +150,23 @@ class BoardOfDirectorsPage(BasePage):
             f'.qc-bod-section:has(.qc-bod-heading:text-is("{heading_text}")) .qc-bod-eyebrow'
         ).first.inner_text()
 
+    # ---- Board Members section — TEXT-INDEPENDENT lookup --------------------
+    # Added for PBI 129398's page-level admin batch (BATCH 5,
+    # manage-board-directory-page's Section Eyebrow/Heading cases): unlike
+    # section_eyebrow_text(heading_text)/section_counter_text(heading_text)
+    # above (which locate the section BY its own current heading text — no
+    # good once that heading text is exactly what a test is mutating),
+    # `.qc-bod-section-grid` is the one stable, content-independent class
+    # that always identifies the Board Members section regardless of its
+    # current Eyebrow/Heading field values (see this Page Object's own module
+    # docstring's DOM probe — SECTION_GRID is the only 3-col grid section on
+    # this page).
+    def grid_section_eyebrow_text(self) -> str:
+        return self.page.locator(f'{self.SECTION_GRID} {self.EYEBROW}').first.inner_text()
+
+    def grid_section_heading_text(self) -> str:
+        return self.page.locator(f'{self.SECTION_GRID} {self.HEADING}').first.inner_text()
+
     def computed_style(self, locator, props: list) -> dict:
         """Generic Figma-token probe (mirrors org_structure_page.py's
         node_computed_style) restricted to the requested computed-style
@@ -249,6 +266,17 @@ class BoardOfDirectorsPage(BasePage):
         # against whitespace/typography differences between the case's
         # transcribed name and the live DOM's exact text node.
         return f'.qc-bod-grid-card:has-text("{name}")'
+
+    # ---- Vice Chairmen (2-col), name-based lookup ---------------------------
+    def duo_card_locator_by_name(self, name: str) -> str:
+        """Name-based counterpart to vice_chairman_card_locator(position) —
+        added for PBI 129398's Member Category rendering batch (tc_133547),
+        which creates a disposable QCTEST- Vice Chairman whose Position
+        Label is a generic "QCTEST Position" value, not the real "First/
+        Second Vice-Chairman" literal text vice_chairman_card_locator()
+        filters on. Mirrors the same :has-text() substring-by-name pattern
+        already established for grid_card_locator_by_name()."""
+        return f'.qc-bod-duo-card:has-text("{name}")'
 
     def click_grid_card_profile_link(self, member_name: str) -> None:
         self.click(f'{self.grid_card_locator_by_name(member_name)} .qc-bod-name a')
