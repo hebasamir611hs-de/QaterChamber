@@ -227,7 +227,14 @@ class AtaCarnetPage(BasePage):
         return self
 
     def enable_dark_mode(self) -> "AtaCarnetPage":
+        """Flip the real Dark mode switch, then wait for the theme's CSS
+        colour transitions to finish — computed colours read mid-transition
+        are interpolated values (confirmed live: index labels measured
+        rgb(199,199,199) mid-fade vs rgb(237,237,237) settled)."""
         AccessibilityToolsComponent(self.page).enable_dark_mode()
+        self.page.wait_for_function(
+            "() => document.getAnimations().every((a) => a.playState !== 'running')", timeout=10000
+        )
         return self
 
     def wait_for_fonts(self) -> "AtaCarnetPage":
