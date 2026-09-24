@@ -102,11 +102,20 @@ the test module, per the Page-Object rules in automation-standards.md.
 
 from config.settings import web_url
 from core.web.base_page import BasePage
+from web.pages.components.accessibility_tools_component import AccessibilityToolsComponent
 
 ATA_CARNET_PATH = "/our-services/ata-carnet"
 
 
 class AtaCarnetPage(BasePage):
+    # ---- Global chrome (header / theme) --------------------------------------
+    # Confirmed live 2026-09-24: the header toggle is an <a> that routes
+    # through /c/portal/update_language and lands on the other locale's URL.
+    PAGE_BODY = "body"
+    HEADER = "header.qc-global-site-header"
+    HEADER_NAV_LINK = "header.qc-global-site-header a.qc-nav-link"
+    LANG_TOGGLE = "header.qc-global-site-header a.qc-lang-switcher"
+
     # ---- Hero ---------------------------------------------------------------
     HERO = ".qc-ata-hero"
     HERO_SHELL = ".qc-ata-hero .qc-ata-shell"
@@ -142,6 +151,10 @@ class AtaCarnetPage(BasePage):
     SECTION_BADGE = ".qc-ata-section-badge"
     SECTION_TITLE = ".qc-ata-section-title"
     SECTION_BODY = ".qc-ata-rt"
+    # Body copy inside the six content sections only — SECTION_BODY's first
+    # match is the hero's own rich-text wrapper (confirmed live), which is
+    # white-on-gradient and must not stand in for "body copy".
+    SECTION_RT = ".qc-ata-section .qc-ata-rt"
 
     # ---- Covered Items: category cards ---------------------------------------
     CARDS = ".qc-ata-cards"
@@ -201,7 +214,142 @@ class AtaCarnetPage(BasePage):
         self.wait_for(self.COUNTRY, first=True)
         return self
 
+    def toggle_language(self) -> "AtaCarnetPage":
+        """Click the header language toggle and wait until the browser has
+        actually navigated (URL changed) and the other locale's content —
+        hero title and client-rendered country grid — has rendered. Reading
+        state right after click() would still see the previous locale."""
+        before = self.page.url
+        self.click(self.LANG_TOGGLE)
+        self.wait_for_url(lambda url: url != before, timeout=20000)
+        self.wait_for(self.HERO_TITLE)
+        self.wait_for(self.COUNTRY, first=True)
+        return self
+
+    def enable_dark_mode(self) -> "AtaCarnetPage":
+        AccessibilityToolsComponent(self.page).enable_dark_mode()
+        return self
+
+    def wait_for_fonts(self) -> "AtaCarnetPage":
+        """Wait until every web font (Cairo) has finished loading, so box
+        sizes read now match the final render — a late font swap otherwise
+        changes text-driven widths between two measurements."""
+        self.page.wait_for_function("() => document.fonts.status === 'loaded'", timeout=15000)
+        return self
+
+    def scroll_to(self, locator: str, index: int = 0) -> None:
+        self.page.locator(locator).nth(index).scroll_into_view_if_needed()
+
     # ---- Generic state queries (no assertions — tests compare) ---------------
+    def language_toggle_label(self) -> str:
+        return self.text_of(self.LANG_TOGGLE)
+
+    def theme(self):
+        return self.page.evaluate("() => document.documentElement.getAttribute('data-theme')")
+
+    def is_displayed(self, locator: str, index: int = 0) -> bool:
+        """nth-match visibility (BasePage.is_visible targets a single match)."""
+        return self.page.locator(locator).nth(index).is_visible()
+
+    def section_in_view(self) -> str | None:
+        """id of the first content section whose box intersects the viewport."""
+        return self.page.evaluate(
+            """(sel) => { const s = [...document.querySelectorAll(sel)].find((e) => {
+                    const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; });
+                return s ? s.id : null; }""",
+            self.SECTION,
+        )
+
+    def boxes(self, locator: str) -> list:
+        """box() for every match, plus whether each is actually rendered."""
+        return self.page.locator(locator).evaluate_all(
+            """
+            (els) => els.map((el) => {
+                const r = el.getBoundingClientRect();
+                return {x: Math.round(r.x * 100) / 100, y: Math.round(r.y * 100) / 100,
+                        width: Math.round(r.width * 100) / 100,
+                        height: Math.round(r.height * 100) / 100,
+                        visible: r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden"};
+            })
+            """
+        )
+
+    def computed_styles_all(self, locator: str, props: list) -> list:
+        return self.page.locator(locator).evaluate_all(
+            "(els, props) => els.map((el) => { const s = getComputedStyle(el); const o = {};"
+            " for (const p of props) o[p] = s[p]; return o; })",
+            props,
+        )
+
+    def horizontal_overflow_px(self) -> int:
+        return self.page.evaluate(
+            "() => document.documentElement.scrollWidth - document.documentElement.clientWidth"
+        )
+
+    def overflowing_elements(self) -> list:
+        """Up to 5 rendered elements whose right edge passes the viewport."""
+        return self.page.evaluate(
+            """() => [...document.querySelectorAll("body *")]
+                .filter((e) => { const r = e.getBoundingClientRect();
+                    return r.width > 0 && r.right > innerWidth + 1 && getComputedStyle(e).visibility !== "hidden"; })
+                .slice(0, 5).map((e) => e.tagName.toLowerCase() + "." + String(e.className).trim()
+                    + " (right=" + Math.round(e.getBoundingClientRect().right) + "px)")"""
+        )
+
+    def clipped_text_elements(self) -> list:
+        """Rendered leaf nodes inside the hero/content whose text overflows their box."""
+        return self.page.evaluate(
+            """() => [...document.querySelectorAll(".qc-ata-hero *, .qc-ata-content *")]
+                .filter((e) => e.offsetParent !== null && e.children.length === 0
+                    && e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).overflowX !== "visible")
+                .map((e) => String(e.className) || e.tagName)"""
+        )
+
+    def text_contrast(self, locator: str, index: int = 0) -> dict:
+        """WCAG contrast ratio of the nth match's text against the first
+        solid background found walking up its ancestors (text alpha blended
+        over it). ratio=None when a gradient/image background is reached
+        first — that pairing is not measurable from computed styles."""
+        return self.page.locator(locator).nth(index).evaluate(
+            """
+            (el) => {
+                const parse = (c) => { const m = c.match(/[0-9.]+/g) || [0, 0, 0, 0];
+                    return [+m[0], +m[1], +m[2], m.length > 3 ? +m[3] : 1]; };
+                const lum = (rgb) => { const f = (v) => { v /= 255;
+                    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+                    return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]); };
+                const s = getComputedStyle(el);
+                let node = el, bg = null, blocker = null;
+                while (node && node.nodeType === 1) {
+                    const cs = getComputedStyle(node);
+                    if (cs.backgroundImage && cs.backgroundImage !== "none") { blocker = cs.backgroundImage; break; }
+                    const c = parse(cs.backgroundColor);
+                    if (c[3] > 0) { bg = c; break; }
+                    node = node.parentElement;
+                }
+                if (!bg && !blocker) bg = [255, 255, 255, 1];
+                const fg = parse(s.color);
+                const out = {color: s.color, fontSize: parseFloat(s.fontSize), fontWeight: +s.fontWeight,
+                             text: (el.textContent || "").trim().slice(0, 40)};
+                if (!bg) return Object.assign(out, {ratio: null, background: blocker});
+                const a = fg[3];
+                const mix = [0, 1, 2].map((i) => fg[i] * a + bg[i] * (1 - a));
+                const l1 = lum(mix), l2 = lum(bg);
+                const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+                return Object.assign(out, {ratio: Math.round(ratio * 100) / 100,
+                                           background: "rgb(" + bg.slice(0, 3).join(", ") + ")"});
+            }
+            """
+        )
+
+    def relative_luminance(self, css_colour: str) -> float:
+        return self.page.evaluate(
+            """(c) => { const m = (c.match(/[0-9.]+/g) || [0, 0, 0]).map(Number);
+                const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+                return 0.2126 * f(m[0]) + 0.7152 * f(m[1]) + 0.0722 * f(m[2]); }""",
+            css_colour,
+        )
+
     def computed_style(self, locator: str, props: list, index: int = 0) -> dict:
         """getComputedStyle for `props` on the `index`-th match of `locator`."""
         return self.page.locator(locator).nth(index).evaluate(
@@ -426,6 +574,21 @@ class AtaCarnetPage(BasePage):
         scope+CTA join belongs here with the locators, not at a call site.
         """
         return self.count(f"{scope} {self.CTA}")
+
+    def cta_boxes(self, scope: str) -> list:
+        """boxes() of the CTAs inside `scope` (HERO_CTAS / NEXTSTEP_CTAS)."""
+        return self.boxes(f"{scope} {self.CTA}")
+
+    def child_box(self, parent: str, child: str, index: int = 0) -> dict:
+        """box() of the first `child` inside the index-th `parent` (card
+        icon/title/desc, hour badge) — keeps the selector join here."""
+        return self.page.locator(parent).nth(index).locator(child).first.evaluate(
+            """
+            (el) => { const r = el.getBoundingClientRect();
+                return {x: Math.round(r.x * 100) / 100, y: Math.round(r.y * 100) / 100,
+                        width: Math.round(r.width * 100) / 100, height: Math.round(r.height * 100) / 100}; }
+            """
+        )
 
     def cta_style(self, scope: str, props: list, index: int = 0) -> dict:
         return self.computed_style(f"{scope} {self.CTA}", props, index=index)

@@ -11,6 +11,18 @@ Scripted here (both Automation-tagged Web cases in the batch):
 
 Nothing from the batch is skipped: 2 attempted, 2 scripted.
 
+Batch 2 (2026-09-24, suite 137987) extends this module with:
+  - 137746 / 137747 — EN->AR and AR->EN header language switch.
+  - 137774 / 137775 — light and dark mode (dark via the Accessibility tools
+             widget).
+  - 137776 / 137777 / 137778 — desktop, tablet and mobile viewports.
+Every test in this module runs in a fresh UNAUTHENTICATED context
+(`{"auth": False}`): with the default cached CMS storageState, per-worker
+state files carrying `GUEST_LANGUAGE_ID=ar_SA` rendered the English URL in
+Arabic under xdist (the 137770 run showed 65 deviations under xdist vs 59
+serially). 137770 and 137772 received only that fixture parameter and the
+`svc` selector marker in batch 2 — their assertions are unchanged.
+
 AXIS-2 MARKER NOTE (`eserv`) — deliberate, do not strip it as "not on the
 case". Neither case's Azure `Tags` line carries a Service/Module tag, while
 PBI 130947's Certificate of Origin cases in the same E-Services family all
@@ -186,7 +198,9 @@ FEES_BORDER = hex_to_rgb("#E9DBD0")
 @pytest.mark.uat
 @pytest.mark.pbi_129402
 @pytest.mark.tc_137770
+@pytest.mark.svc
 @pytest.mark.traceability("137770")
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_ata_carnet_en_ltr_layout_and_design_tokens(page):
     """Azure Test Case 137770 (PBI 129402) — Figma frame 3036:132072
     (EN desktop light). Four steps: LTR/typography baseline, hero, quick-facts
@@ -426,7 +440,9 @@ def test_ata_carnet_en_ltr_layout_and_design_tokens(page):
 @pytest.mark.rtl
 @pytest.mark.pbi_129402
 @pytest.mark.tc_137772
+@pytest.mark.svc
 @pytest.mark.traceability("137772")
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_ata_carnet_ar_rtl_mirrored_layout(page):
     """Azure Test Case 137772 (PBI 129402) — Figma frame 3036:132156
     (AR desktop light). Four steps: RTL/typography baseline, Arabic values
@@ -538,4 +554,549 @@ def test_ata_carnet_ar_rtl_mirrored_layout(page):
                 )
 
     # -- Assert ---------------------------------------------------------------
+    assert not check.deviations, check.report()
+
+
+# ===========================================================================
+# Batch 2 (2026-09-24): language switch, light/dark theme, viewports.
+# Same `_TokenCheck` soft-assert pattern: every expected-vs-actual comparison
+# is recorded, and the test fails once with the complete list.
+# ===========================================================================
+
+ANON = {"auth": False}
+anonymous = pytest.mark.parametrize("page", [ANON], indirect=True)
+
+EN_INDEX_LABELS = ["Overview", "Covered Items", "Eligible Items", "Member countries", "Fees", "Operating hours"]
+HEADER_NAV_LIGHT = hex_to_rgb("#1D1D1B")
+BODY_COPY_LIGHT = hex_to_rgb("#4A4A49")
+PAGE_BG_LIGHT = hex_to_rgb("#FFFFFF")
+
+# WCAG 2.x AA floors — the case's "legible ... at the design's contrast" states
+# no number, so the measurable, published minimum is used (disclosed in the
+# 137775 docstring): 4.5:1 for normal text, 3:1 for large text (>= 24px, or
+# >= 18.66px at weight >= 700).
+AA_NORMAL, AA_LARGE = 4.5, 3.0
+
+
+def _overlap(a: dict, b: dict) -> bool:
+    return (a["x"] < b["x"] + b["width"] - 1 and b["x"] < a["x"] + a["width"] - 1
+            and a["y"] < b["y"] + b["height"] - 1 and b["y"] < a["y"] + a["height"] - 1)
+
+
+def _inside(inner: dict, outer: dict) -> bool:
+    return (inner["x"] >= outer["x"] - 1 and inner["x"] + inner["width"] <= outer["x"] + outer["width"] + 1)
+
+
+def _check_no_overflow(check: _TokenCheck, ata: AtaCarnetPage) -> None:
+    overflow = ata.horizontal_overflow_px()
+    check.truthy("no horizontal scrollbar", overflow <= 0, "0px overflow",
+                 f"{overflow}px, overflowing: {ata.overflowing_elements()}")
+    clipped = ata.clipped_text_elements()
+    check.truthy("no clipped content", not clipped, "no clipped text", clipped)
+
+
+def _check_top_regions_no_overlap(check: _TokenCheck, ata: AtaCarnetPage) -> None:
+    regions = {"hero copy": AtaCarnetPage.HERO_COPY, "hero image": AtaCarnetPage.HERO_ART,
+               "quick-facts strip": AtaCarnetPage.FACTS_STRIP, "content column": AtaCarnetPage.CONTENT}
+    if ata.is_displayed(AtaCarnetPage.INDEX):
+        regions["section index"] = AtaCarnetPage.INDEX
+    boxes = {name: ata.box(loc) for name, loc in regions.items()}
+    names = list(boxes)
+    for i in range(len(names)):
+        for j in range(i + 1, len(names)):
+            a, b = boxes[names[i]], boxes[names[j]]
+            check.truthy(f"{names[i]} / {names[j]} do not overlap", not _overlap(a, b), "no overlap", f"{a} vs {b}")
+
+
+def _check_index_on_narrow(check: _TokenCheck, ata: AtaCarnetPage) -> None:
+    """Narrow viewports: the index must collapse (compact control) or
+    reposition without overlapping the content. Removed entirely, with no
+    collapsed control left for section navigation, is neither — recorded
+    as a deviation."""
+    if ata.is_displayed(AtaCarnetPage.INDEX):
+        idx, content = ata.box(AtaCarnetPage.INDEX), ata.box(AtaCarnetPage.CONTENT)
+        check.truthy("section index repositioned without overlapping content", not _overlap(idx, content),
+                     "no overlap", f"index={idx} content={content}")
+    else:
+        visible_items = sum(1 for b in ata.boxes(AtaCarnetPage.INDEX_ITEM) if b["visible"])
+        col = ata.computed_style(AtaCarnetPage.INDEX_COL, ["display"])["display"]
+        check.truthy("section index collapses or repositions", visible_items > 0,
+                     "a collapsed or repositioned section index still offering section navigation",
+                     f"index column display={col!r}; 0 of {ata.count(AtaCarnetPage.INDEX_ITEM)} index entries "
+                     f"rendered and no collapsed control present (index removed entirely)")
+
+
+def _check_six_sections(check: _TokenCheck, ata: AtaCarnetPage) -> None:
+    sections = ata.boxes(AtaCarnetPage.SECTION)
+    check.equals("content section count", len(sections), 6)
+    for i, b in enumerate(sections):
+        check.truthy(f"section {i + 1} rendered", b["visible"], "visible", b)
+
+
+def _check_ctas_tappable(check: _TokenCheck, ata: AtaCarnetPage, viewport_width: int) -> None:
+    for scope_name, scope in (("hero", AtaCarnetPage.HERO_CTAS), ("next-step banner", AtaCarnetPage.NEXTSTEP_CTAS)):
+        ata.scroll_to(scope)
+        boxes = ata.cta_boxes(scope)
+        check.equals(f"{scope_name} CTA count", len(boxes), 2)
+        for i, b in enumerate(boxes):
+            check.truthy(f"{scope_name} CTA {i + 1} fully visible",
+                         b["visible"] and b["x"] >= 0 and b["x"] + b["width"] <= viewport_width + 1,
+                         f"inside the {viewport_width}px viewport", b)
+            check.truthy(f"{scope_name} CTA {i + 1} tap target", b["height"] >= 44, ">= 44px tall", f"{b['height']}px")
+
+
+# ---------------------------------------------------------------------------
+# 137746 — EN -> AR language switch
+# ---------------------------------------------------------------------------
+@allure.epic("Our Services")
+@allure.feature("ATA Carnet")
+@allure.story("Language toggle")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Switching the site language from English to Arabic renders the ATA Carnet page in Arabic")
+@allure.label("pbi", "129402")
+@allure.label("testcase", "137746")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.bilingual
+@pytest.mark.arabic
+@pytest.mark.rtl
+@pytest.mark.pbi_129402
+@pytest.mark.tc_137746
+@anonymous
+def test_ata_carnet_language_switch_en_to_ar(page):
+    """Azure TC 137746 | PBI 129402 — EN page -> header 'AR' toggle -> Arabic RTL,
+    toggle offers 'EN', every content slot Arabic and right-aligned, index
+    mirrored to the right of the content column."""
+    ata = AtaCarnetPage(page)
+    check = _TokenCheck()
+
+    with allure.step("Open the English page with its six-entry index"):
+        ata.open_ata_carnet(locale="en")
+        check.step("step 1 — English page")
+        check.equals("index entries", ata.index_labels(), EN_INDEX_LABELS)
+
+    with allure.step("Click the 'AR' toggle in the header"):
+        check.equals("toggle label before switch", ata.language_toggle_label(), "AR")
+        ata.toggle_language()
+
+    with allure.step("Arabic RTL page; toggle offers 'EN'"):
+        check.step("step 3 — direction & toggle")
+        check.equals("document dir", ata.document_direction(), "rtl")
+        check.equals("toggle label after switch", ata.language_toggle_label(), "EN")
+
+    with allure.step("Index, sections, fees, country notes, Open/Closed and CTAs are Arabic and right-aligned"):
+        check.step("step 4 — Arabic content")
+        slots = (
+            ("index label", ata.index_labels()),
+            ("section title", ata.section_titles()),
+            ("section content", ata.texts_of(AtaCarnetPage.SECTION_RT)),
+            ("fee item", ata.fee_item_texts()),
+            ("country note", ata.country_notes()),
+            ("Open/Closed status", ata.hour_badge_texts()),
+            ("CTA label", ata.cta_texts(AtaCarnetPage.HERO_CTAS) + ata.cta_texts(AtaCarnetPage.NEXTSTEP_CTAS)),
+        )
+        for name, values in slots:
+            check.truthy(f"{name}s rendered", len(values) > 0, "at least one value", values)
+            for value in values:
+                check.truthy(f"{name} is Arabic", _has_arabic(value), "Arabic text", value)
+        for name, loc in (("index label", AtaCarnetPage.INDEX_LABEL), ("section title", AtaCarnetPage.SECTION_TITLE),
+                          ("section content", AtaCarnetPage.SECTION_RT), ("fee item", AtaCarnetPage.FEE_ITEM)):
+            check.equals(f"{name} alignment", ata.resolved_text_align(loc), "right")
+        idx, content = ata.box(AtaCarnetPage.INDEX), ata.box(AtaCarnetPage.CONTENT)
+        check.truthy("index mirrored to the right of the content column",
+                     idx["x"] >= content["x"] + content["width"] - 1,
+                     "index left edge >= content right edge",
+                     f"index.x={idx['x']}, content right={content['x'] + content['width']}")
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 137747 — AR -> EN language switch
+# ---------------------------------------------------------------------------
+@allure.epic("Our Services")
+@allure.feature("ATA Carnet")
+@allure.story("Language toggle")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Switching the site language from Arabic back to English restores English content and LTR")
+@allure.label("pbi", "129402")
+@allure.label("testcase", "137747")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.pbi_129402
+@pytest.mark.tc_137747
+@anonymous
+def test_ata_carnet_language_switch_ar_to_en(page):
+    """Azure TC 137747 | PBI 129402 — AR page -> 'EN' toggle -> English LTR, index
+    on the left with the six English labels. Step 2 ("note the section in
+    view") is recorded as an Allure attachment; the expected result makes no
+    claim about it, so it is not asserted."""
+    ata = AtaCarnetPage(page)
+    check = _TokenCheck()
+
+    with allure.step("Open the Arabic page"):
+        ata.open_ata_carnet(locale="ar")
+        check.step("step 1 — Arabic page")
+        check.equals("document dir", ata.document_direction(), "rtl")
+
+    with allure.step("Note the section currently in view"):
+        allure.attach(str(ata.section_in_view()), "section in view before switch", allure.attachment_type.TEXT)
+
+    with allure.step("Click the 'EN' toggle in the header"):
+        ata.toggle_language()
+
+    with allure.step("English LTR, index back on the left, English index labels"):
+        check.step("step 4 — English page")
+        check.equals("document dir", ata.document_direction(), "ltr")
+        idx, content = ata.box(AtaCarnetPage.INDEX), ata.box(AtaCarnetPage.CONTENT)
+        check.truthy("index on the left of the content column", idx["x"] + idx["width"] <= content["x"] + 1,
+                     "index right edge <= content left edge",
+                     f"index right={idx['x'] + idx['width']}, content.x={content['x']}")
+        check.equals("index labels", ata.index_labels(), EN_INDEX_LABELS)
+        allure.attach(str(ata.section_in_view()), "section in view after switch", allure.attachment_type.TEXT)
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 137774 — light mode
+# ---------------------------------------------------------------------------
+@allure.epic("Our Services")
+@allure.feature("ATA Carnet")
+@allure.story("Theme")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("ATA Carnet page renders correctly in light mode")
+@allure.label("pbi", "129402")
+@allure.label("testcase", "137774")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.compatibility
+@pytest.mark.pbi_129402
+@pytest.mark.tc_137774
+@anonymous
+def test_ata_carnet_light_mode(page):
+    """Azure TC 137774 | PBI 129402 — ST-20 light mode (site default theme),
+    Figma frame 3036:132072. "Body copy" is read from the six content
+    sections' rich text (SECTION_RT), not the hero's white description."""
+    ata = AtaCarnetPage(page)
+    check = _TokenCheck()
+    ata.open_ata_carnet(locale="en")
+
+    check.step("step 1 — light mode")
+    check.truthy("light theme active", ata.theme() in (None, "light"), "light", ata.theme())
+
+    with allure.step("Page background, header and section index"):
+        check.step("step 3 — page, header, index")
+        check.equals("page background", ata.computed_style(AtaCarnetPage.PAGE_BODY, ["backgroundColor"])["backgroundColor"],
+                     PAGE_BG_LIGHT)
+        check.equals("header background", ata.computed_style(AtaCarnetPage.HEADER, ["backgroundColor"])["backgroundColor"],
+                     PAGE_BG_LIGHT)
+        for colour in sorted({s["color"] for s in ata.computed_styles_all(AtaCarnetPage.HEADER_NAV_LINK, ["color"])}):
+            check.equals("header navigation label colour", colour, HEADER_NAV_LIGHT)
+        index = ata.computed_style(AtaCarnetPage.INDEX, ["backgroundColor", "borderTopWidth", "borderTopStyle",
+                                                         "borderTopColor"])
+        check.equals("section index fill", index["backgroundColor"], INDEX_BG)
+        check.equals("section index border", f"{index['borderTopWidth']} {index['borderTopStyle']}", "1px solid")
+        check.equals("section index border colour", index["borderTopColor"], INDEX_BORDER)
+        for colour in sorted({s["color"] for s in ata.computed_styles_all(AtaCarnetPage.INDEX_LABEL, ["color"])}):
+            check.equals("section index label colour", colour, INDEX_LABEL_COLOR)
+
+    with allure.step("Covered Items card and fees table"):
+        check.step("step 4 — card, body copy, fees table")
+        card = ata.computed_style(AtaCarnetPage.CARD, ["backgroundColor", "borderTopWidth", "borderTopColor",
+                                                       "borderRadius"])
+        check.equals("category card fill", card["backgroundColor"], CARD_BG)
+        check.px("category card border width", card["borderTopWidth"], 1)
+        check.equals("category card border colour", card["borderTopColor"], CARD_BORDER)
+        check.px("category card radius", card["borderRadius"], 8)
+        for colour in sorted({s["color"] for s in ata.computed_styles_all(AtaCarnetPage.SECTION_RT, ["color"])}):
+            check.equals("body copy colour", colour, BODY_COPY_LIGHT)
+        fees = ata.computed_style(AtaCarnetPage.FEES, ["borderTopColor", "borderRadius"])
+        check.equals("fees table border colour", fees["borderTopColor"], FEES_BORDER)
+        check.px("fees table radius", fees["borderRadius"], 12)
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 137775 — dark mode
+# ---------------------------------------------------------------------------
+@allure.epic("Our Services")
+@allure.feature("ATA Carnet")
+@allure.story("Theme")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("ATA Carnet page renders correctly in dark mode")
+@allure.label("pbi", "129402")
+@allure.label("testcase", "137775")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.compatibility
+@pytest.mark.pbi_129402
+@pytest.mark.tc_137775
+@anonymous
+def test_ata_carnet_dark_mode(page):
+    """Azure TC 137775 | PBI 129402 — ST-21 dark mode via the Accessibility tools
+    widget (prefers-color-scheme alone does not flip this site).
+
+    The case states no hex tokens for dark mode, so it is asserted as:
+      - page/header adopt a dark palette (background relative luminance < 0.2);
+      - index labels, section headings and section body text meet WCAG AA
+        contrast against their actual background (4.5:1, large text 3:1) —
+        "the design's contrast" has no number, so the published minimum is the
+        measurable floor;
+      - cards and the fees table change surface/border from their light values
+        and cards sit on a dark fill;
+      - the hero gradient and every CTA's shape (radius, padding, size) are
+        unchanged from light mode.
+    NOTE: the next-step banner is painted with the hero gradient in BOTH themes
+    (it is already a dark surface); there is no separate dark banner surface to
+    compare, which is recorded as an Allure note rather than asserted."""
+    ata = AtaCarnetPage(page)
+    check = _TokenCheck()
+    ata.open_ata_carnet(locale="en")
+    ata.wait_for_fonts()  # light-mode CTA sizes must be read after the Cairo swap
+
+    cta_props = ["borderRadius", "paddingTop", "paddingRight", "paddingBottom", "paddingLeft"]
+    light = {
+        "hero": ata.background_layers(AtaCarnetPage.HERO)["element"],
+        "card": ata.computed_style(AtaCarnetPage.CARD, ["backgroundColor", "borderTopColor"]),
+        "fees": ata.computed_style(AtaCarnetPage.FEES, ["borderTopColor"]),
+        "cta_style": ata.computed_styles_all(AtaCarnetPage.CTA, cta_props),
+        "cta_box": [(b["width"], b["height"]) for b in ata.boxes(AtaCarnetPage.CTA)],
+        "banner": ata.background_layers(AtaCarnetPage.NEXTSTEP)["element"],
+    }
+
+    with allure.step("Turn dark mode on"):
+        ata.enable_dark_mode()
+        check.step("step 1 — dark mode")
+        check.equals("dark theme active", ata.theme(), "dark")
+
+    with allure.step("Page, header and section index adopt the dark palette and stay legible"):
+        check.step("step 3 — dark palette & legibility")
+        for name, loc in (("page", AtaCarnetPage.PAGE_BODY), ("header", AtaCarnetPage.HEADER)):
+            bg = ata.computed_style(loc, ["backgroundColor"])["backgroundColor"]
+            check.truthy(f"{name} background is dark", ata.relative_luminance(bg) < 0.2,
+                         "relative luminance < 0.2", bg)
+        for name, loc in (("index label", AtaCarnetPage.INDEX_LABEL), ("section heading", AtaCarnetPage.SECTION_TITLE),
+                          ("section body text", AtaCarnetPage.SECTION_RT)):
+            for i in range(ata.count(loc)):
+                c = ata.text_contrast(loc, i)
+                if c["ratio"] is None:
+                    allure.attach(str(c), f"{name} {i + 1}: contrast not measurable (gradient bg)",
+                                  allure.attachment_type.TEXT)
+                    continue
+                large = c["fontSize"] >= 24 or (c["fontSize"] >= 18.66 and c["fontWeight"] >= 700)
+                need = AA_LARGE if large else AA_NORMAL
+                check.truthy(f"{name} {i + 1} contrast", c["ratio"] >= need, f">= {need}:1",
+                             f"{c['ratio']}:1 ({c['color']} on {c['background']}, '{c['text']}')")
+
+    with allure.step("Cards and fees table go dark; hero gradient and CTA shapes unchanged"):
+        check.step("step 4 — surfaces & unchanged elements")
+        card = ata.computed_style(AtaCarnetPage.CARD, ["backgroundColor", "borderTopColor"])
+        check.truthy("category card fill is dark", ata.relative_luminance(card["backgroundColor"]) < 0.2,
+                     "relative luminance < 0.2", card["backgroundColor"])
+        check.truthy("category card border changed from light", card["borderTopColor"] != light["card"]["borderTopColor"],
+                     f"not {light['card']['borderTopColor']}", card["borderTopColor"])
+        fees = ata.computed_style(AtaCarnetPage.FEES, ["borderTopColor"])
+        check.truthy("fees table border changed from light", fees["borderTopColor"] != light["fees"]["borderTopColor"],
+                     f"not {light['fees']['borderTopColor']}", fees["borderTopColor"])
+        check.equals("hero gradient unchanged", ata.background_layers(AtaCarnetPage.HERO)["element"], light["hero"])
+        check.equals("CTA shapes unchanged (radius/padding)", ata.computed_styles_all(AtaCarnetPage.CTA, cta_props),
+                     light["cta_style"])
+        dark_boxes = [(b["width"], b["height"]) for b in ata.boxes(AtaCarnetPage.CTA)]
+        check.truthy("CTA sizes unchanged", len(dark_boxes) == len(light["cta_box"]) and all(
+            abs(dw - lw) <= 1 and abs(dh - lh) <= 1 for (dw, dh), (lw, lh) in zip(dark_boxes, light["cta_box"])),
+            f"{light['cta_box']} (+/-1px)", dark_boxes)
+        banner = ata.background_layers(AtaCarnetPage.NEXTSTEP)["element"]
+        allure.attach(f"light: {light['banner']}\ndark:  {banner}", "next-step banner surface (note)",
+                      allure.attachment_type.TEXT)
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 137776 — desktop viewport
+# ---------------------------------------------------------------------------
+@allure.epic("Our Services")
+@allure.feature("ATA Carnet")
+@allure.story("Responsive layout")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("ATA Carnet page renders correctly at desktop viewport width (1920x1080)")
+@allure.label("pbi", "129402")
+@allure.label("testcase", "137776")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.compatibility
+@pytest.mark.regression
+@pytest.mark.pbi_129402
+@pytest.mark.tc_137776
+@pytest.mark.parametrize("page", [{"viewport": (1920, 1080), "auth": False}], indirect=True)
+def test_ata_carnet_desktop_viewport(page):
+    """Azure TC 137776 | PBI 129402 — ENV-1 at 1920x1080."""
+    ata = AtaCarnetPage(page)
+    check = _TokenCheck()
+    ata.open_ata_carnet(locale="en")
+
+    with allure.step("No horizontal scrollbar, no clipping, no overlap"):
+        check.step("steps 2-3 — integrity")
+        _check_no_overflow(check, ata)
+        _check_top_regions_no_overlap(check, ata)
+
+    with allure.step("Scroll through the six sections to the banner; check the desktop grid"):
+        check.step("step 4 — desktop layout")
+        _check_six_sections(check, ata)
+        ata.scroll_to(AtaCarnetPage.NEXTSTEP)
+        idx, content = ata.box(AtaCarnetPage.INDEX), ata.box(AtaCarnetPage.CONTENT)
+        check.px("section index width", idx["width"], 312)
+        check.truthy("index on the left with the content column beside it",
+                     idx["x"] + idx["width"] <= content["x"] + 1, "index right edge <= content left edge",
+                     f"index right={idx['x'] + idx['width']}, content.x={content['x']}")
+        facts = ata.boxes(AtaCarnetPage.FACT)
+        check.equals("quick-facts tile count", len(facts), 4)
+        check.truthy("quick-facts tiles in one row", len({round(b["y"]) for b in facts}) == 1,
+                     "same row", [b["y"] for b in facts])
+        cards = ata.boxes(AtaCarnetPage.CARD)
+        check.equals("Covered Items card count", len(cards), 3)
+        check.truthy("Covered Items cards in one row", len({round(b["y"]) for b in cards}) == 1,
+                     "same row", [b["y"] for b in cards])
+        ata.scroll_to(AtaCarnetPage.HOURS)
+        hours = ata.boxes(AtaCarnetPage.HOUR)
+        cols, rows = sorted({round(b["x"]) for b in hours}), sorted({round(b["y"]) for b in hours})
+        check.equals("operating hours grid (columns x rows)", (len(cols), len(rows)), (2, 2))
+        if len(hours) == 4 and len(cols) == 2 and len(rows) == 2:
+            first = min(hours, key=lambda b: (b["y"], b["x"]))
+            right = next(b for b in hours if round(b["x"]) == cols[1] and round(b["y"]) == rows[0])
+            below = next(b for b in hours if round(b["x"]) == cols[0] and round(b["y"]) == rows[1])
+            check.px("operating hours column gap", right["x"] - (first["x"] + first["width"]), 16)
+            check.px("operating hours row gap", below["y"] - (first["y"] + first["height"]), 16)
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 137777 — tablet viewport
+# ---------------------------------------------------------------------------
+@allure.epic("Our Services")
+@allure.feature("ATA Carnet")
+@allure.story("Responsive layout")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("ATA Carnet page renders correctly at tablet viewport width (768x1024)")
+@allure.label("pbi", "129402")
+@allure.label("testcase", "137777")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.compatibility
+@pytest.mark.regression
+@pytest.mark.pbi_129402
+@pytest.mark.tc_137777
+@pytest.mark.parametrize("page", [{"viewport": (768, 1024), "auth": False}], indirect=True)
+def test_ata_carnet_tablet_viewport(page):
+    """Azure TC 137777 | PBI 129402 — ENV-2 responsive integrity at 768x1024
+    (no tablet Figma frame, Assumption A-4). "Collapses or repositions" is
+    read as: section navigation is still offered (compact/collapsed control
+    or relocated index) without overlapping content — removing the index
+    entirely is recorded as a deviation (see _check_index_on_narrow)."""
+    ata = AtaCarnetPage(page)
+    check = _TokenCheck()
+    ata.open_ata_carnet(locale="en")
+
+    with allure.step("No horizontal scrollbar, no clipping, no overlap"):
+        check.step("steps 2-3 — integrity")
+        _check_no_overflow(check, ata)
+        _check_top_regions_no_overlap(check, ata)
+
+    with allure.step("All six sections render; index collapses/repositions; cards, rows, badges legible"):
+        check.step("step 4 — sections, index, legibility")
+        _check_six_sections(check, ata)
+        _check_index_on_narrow(check, ata)
+        for i in range(ata.count(AtaCarnetPage.CARD)):
+            card = ata.box(AtaCarnetPage.CARD, i)
+            parts = {n: ata.child_box(AtaCarnetPage.CARD, s, i) for n, s in
+                     (("icon", AtaCarnetPage.CARD_ICON), ("title", AtaCarnetPage.CARD_TITLE), ("desc", AtaCarnetPage.CARD_DESC))}
+            for n, b in parts.items():
+                check.truthy(f"card {i + 1} {n} inside card", _inside(b, card), "inside the card", f"{b} card={card}")
+            check.truthy(f"card {i + 1} title/desc no overlap", not _overlap(parts["title"], parts["desc"]),
+                         "no overlap", f"{parts['title']} vs {parts['desc']}")
+        for r in range(ata.count(AtaCarnetPage.FEE_BODY_ROW)):
+            cells = ata.fee_row_cells(r)
+            for a in range(len(cells)):
+                for b in range(a + 1, len(cells)):
+                    ca = {"x": cells[a]["x"], "y": 0, "width": cells[a]["width"], "height": 1}
+                    cb = {"x": cells[b]["x"], "y": 0, "width": cells[b]["width"], "height": 1}
+                    check.truthy(f"fee row {r + 1} cells {a + 1}/{b + 1} no overlap", not _overlap(ca, cb),
+                                 "no overlap", f"{cells[a]} vs {cells[b]}")
+        for i in range(ata.count(AtaCarnetPage.HOUR)):
+            check.truthy(f"hours card {i + 1} badge inside card",
+                         _inside(ata.child_box(AtaCarnetPage.HOUR, AtaCarnetPage.HOUR_BADGE, i), ata.box(AtaCarnetPage.HOUR, i)),
+                         "inside the card", "badge outside its card")
+        check.truthy("hero image inside its container", _inside(ata.box(AtaCarnetPage.HERO_IMG), ata.box(AtaCarnetPage.HERO_ART)),
+                     "inside", f"{ata.box(AtaCarnetPage.HERO_IMG)} vs {ata.box(AtaCarnetPage.HERO_ART)}")
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 137778 — mobile viewport
+# ---------------------------------------------------------------------------
+@allure.epic("Our Services")
+@allure.feature("ATA Carnet")
+@allure.story("Responsive layout")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("ATA Carnet page renders correctly at mobile viewport width (375x812)")
+@allure.label("pbi", "129402")
+@allure.label("testcase", "137778")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.compatibility
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.pbi_129402
+@pytest.mark.tc_137778
+@pytest.mark.parametrize("page", [{"viewport": (375, 812), "auth": False}], indirect=True)
+def test_ata_carnet_mobile_viewport(page):
+    """Azure TC 137778 | PBI 129402 — ENV-3 at 375x812. Same "collapses or
+    repositions" reading as 137777."""
+    ata = AtaCarnetPage(page)
+    check = _TokenCheck()
+    ata.open_ata_carnet(locale="en")
+
+    with allure.step("No horizontal scrollbar, no clipping, no overlap"):
+        check.step("steps 2-3 — integrity")
+        _check_no_overflow(check, ata)
+        _check_top_regions_no_overlap(check, ata)
+
+    with allure.step("Single column; index collapses/repositions; blocks stack; CTAs tappable"):
+        check.step("step 4 — single column & stacking")
+        _check_six_sections(check, ata)
+        content = ata.box(AtaCarnetPage.CONTENT)
+        for i, s in enumerate(ata.boxes(AtaCarnetPage.SECTION)):
+            check.truthy(f"section {i + 1} in the single column", abs(s["x"] - content["x"]) <= 1
+                         and abs(s["width"] - content["width"]) <= 1, "full content-column width",
+                         f"{s} vs column {content}")
+        _check_index_on_narrow(check, ata)
+        for name, loc in (("quick-facts tile", AtaCarnetPage.FACT), ("category card", AtaCarnetPage.CARD),
+                          ("country card", AtaCarnetPage.COUNTRY), ("fee row", AtaCarnetPage.FEE_ROW),
+                          ("schedule card", AtaCarnetPage.HOUR)):
+            boxes = [b for b in ata.boxes(loc) if b["visible"]]
+            check.truthy(f"{name}s rendered", len(boxes) > 0, "at least one", 0)
+            for i, b in enumerate(boxes):
+                check.truthy(f"{name} {i + 1} within viewport", b["x"] >= -1 and b["x"] + b["width"] <= 376,
+                             "no horizontal overflow", b)
+            stacked = all(boxes[i]["y"] + boxes[i]["height"] <= boxes[i + 1]["y"] + 1 for i in range(len(boxes) - 1))
+            if name != "country card":  # the country grid may legitimately wrap 2-up on a phone
+                check.truthy(f"{name}s stacked", stacked, "one per row", [b["y"] for b in boxes])
+        _check_ctas_tappable(check, ata, 375)
+
     assert not check.deviations, check.report()
