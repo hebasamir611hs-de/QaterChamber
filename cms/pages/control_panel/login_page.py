@@ -186,3 +186,10 @@ class CmsLoginPage(BasePage):
             return self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.is_visible()
         except Exception:  # noqa: BLE001 — mirrors BasePage.is_visible's never-throws contract
             return False
+
+    def login_form_visible(self) -> bool:
+        """True if the real Liferay LoginPortlet username field is
+        currently rendered — used by callers that need to confirm an
+        unauthenticated/denied navigation actually landed back on login,
+        without reaching into this Page Object's own locator constants."""
+        return self.is_visible(self.USERNAME_INPUT)

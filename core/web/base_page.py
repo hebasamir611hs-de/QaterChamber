@@ -281,6 +281,21 @@ class BasePage:
         in the iframe on the open form."""
         return self.page.frame_locator(iframe_locator).locator("body").inner_text()
 
+    def computed_style(self, locator: str, properties: list, first: bool = False) -> dict:
+        """Reads a subset of getComputedStyle() properties off `locator` (or its
+        first match when `first=True`) — the shared read used by every Figma
+        design-token assertion across Page Objects (see
+        core/web/design_tokens.py for the hex/weight/px comparison helpers
+        that consume this dict). Returns a dict keyed by the exact
+        getComputedStyle property name requested (camelCase, e.g.
+        'backgroundColor', 'fontFamily')."""
+        target = self.page.locator(locator).first if first else self.page.locator(locator)
+        return target.evaluate(
+            "(el, props) => { const s = getComputedStyle(el); const out = {}; "
+            "props.forEach(p => out[p] = s[p]); return out; }",
+            properties,
+        )
+
     def screenshot(self, test_case_id: str = "NO-TC") -> bytes:
         png = self.page.screenshot()
         attach_screenshot(png, test_case_id, settings.project_name)
