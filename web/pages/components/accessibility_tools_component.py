@@ -30,9 +30,10 @@ dark-color-scheme Playwright context still renders `data-theme="light"`), so
 the widget is the only way in — hence `enable_dark_mode()` drives the real
 control rather than forcing a media feature.
 
-Only the three locators the dark-mode flow actually uses are declared below;
-the high-contrast switch is documented above but is not written in as a
-constant until a case exercises it (no speculative locators).
+The high-contrast switch is now exercised (PBI 131052 FAQ, TC 141659/141660)
+and declared as CONTRAST_SWITCH. Confirmed live 2026-09-24 on
+/web/qatar-chamber/faq: toggling it adds the `qc-a11y-contrast` class to
+<html> (data-theme stays as-is) and the page repaints white-on-black.
 """
 
 from core.web.base_page import BasePage
@@ -42,6 +43,8 @@ class AccessibilityToolsComponent(BasePage):
     OPEN_BUTTON = 'button[aria-label="Accessibility tools"]'
     DARK_SWITCH = "button.qc-a11y-switch[data-qc-a11y-dark]"
     DONE_BUTTON = "button.qc-a11y-done"
+    CONTRAST_SWITCH = "button.qc-a11y-switch[data-qc-a11y-contrast]"
+    HIGH_CONTRAST_CLASS = "qc-a11y-contrast"
 
     def open_panel(self) -> "AccessibilityToolsComponent":
         """Opens the widget and waits for its switches to be present."""
@@ -73,4 +76,28 @@ class AccessibilityToolsComponent(BasePage):
     def is_dark_mode_switch_checked(self) -> bool:
         return (
             self.page.locator(self.DARK_SWITCH).get_attribute("aria-checked") == "true"
+        )
+
+    def enable_high_contrast(self) -> "AccessibilityToolsComponent":
+        """Opens the panel, flips the real 'High contrast' switch, waits for
+        the product's own `<html class="qc-a11y-contrast">` signal, then
+        closes the panel. Idempotent — a switch already checked is left
+        alone."""
+        self.open_panel()
+        if not self.is_high_contrast_switch_checked():
+            self.click(self.CONTRAST_SWITCH)
+        self.page.wait_for_function(
+            "(cls) => document.documentElement.classList.contains(cls)", arg=self.HIGH_CONTRAST_CLASS
+        )
+        self.close_panel()
+        return self
+
+    def is_high_contrast_switch_checked(self) -> bool:
+        return (
+            self.page.locator(self.CONTRAST_SWITCH).get_attribute("aria-checked") == "true"
+        )
+
+    def is_high_contrast_active(self) -> bool:
+        return self.page.evaluate(
+            "(cls) => document.documentElement.classList.contains(cls)", self.HIGH_CONTRAST_CLASS
         )
