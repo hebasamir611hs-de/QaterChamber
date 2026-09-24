@@ -1,0 +1,5 @@
+{
+  "enabledPlugins": {
+    "qa-engine@ihorizons-qa": true
+  }
+}

@@ -70,6 +70,20 @@ Navigation path confirmed live:
   docstring (12 of 15 sourced cases dropped — see there for the full
   per-case reasoning). Re-verify this docstring if the fragment's
   DATA SOURCE config is later extended.
+
+RE-CONFIRMED LIVE 2026-09-16 (BATCH 4, PBI 129398's 31-case page-level
+batch, suite 134468 — see test_board_of_directors_control_panel.py's own
+BATCH 4 docstring for the full per-case breakdown): every fact above still
+holds, with exactly ONE addition — the DATA SOURCE group now also carries
+an "About Us breadcrumb URL" field (added to the panel sometime after
+2026-08-25, unrelated to this batch's case set). Still confirmed absent:
+Page Title (EN/AR), any per-section Eyebrow/Heading field, any file-upload
+Hero Banner control, and any page-level "Status" (Draft/Published)
+dropdown/toggle anywhere in this panel OR in the page's separate
+Configure Page > General tab (Name/Hidden from Menu Display/Friendly
+URL/Query String/Target — no Status field there either). This session's
+investigation was READ-ONLY against this panel (text dumps only) — no
+field was mutated, no draft was created, nothing was published/discarded.
 """
 
 from core.web.base_page import BasePage
