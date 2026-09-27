@@ -1,0 +1,1062 @@
+{
+  "analysed": "2026-08-30",
+  "mode": "Normal",
+  "budget": 110,
+  "delivered": 110,
+  "basis": "Description only - the Azure Acceptance Criteria FIELD returned 'No AC' (has_ac=False, zero AC-n inventory rows); the Given/When/Then text lives inside the Description. Plus VERIFIED Figma design: file J3e1thav8NIu6a3XhC6Wcl page 2343:88588 - frames 2343:88589 (listing EN desktop light), 2343:88607 (New Membership detail EN desktop light), component set 2327:80394 (Service Details, all 4 variants Desktop/Mobile x EN/AR), 2343:96670 (listing EN desktop dark). No PBI images (has_images=false). No sources skipped.",
+  "categories": {
+    "Functional-High": 27,
+    "Functional-Low": 62,
+    "UI": 6,
+    "Auth": 6,
+    "Compatibility": 5,
+    "Edge": 4
+  },
+  "inventory": {
+    "OBJ": 6,
+    "FLD": 22,
+    "CTL": 16,
+    "ST": 17,
+    "ROL": 3,
+    "MSG": 9,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 3
+  },
+  "case_ids": [
+    "QC-129400-001",
+    "QC-129400-002",
+    "QC-129400-003",
+    "QC-129400-004",
+    "QC-129400-005",
+    "QC-129400-006",
+    "QC-129400-007",
+    "QC-129400-008",
+    "QC-129400-009",
+    "QC-129400-010",
+    "QC-129400-011",
+    "QC-129400-012",
+    "QC-129400-013",
+    "QC-129400-014",
+    "QC-129400-015",
+    "QC-129400-016",
+    "QC-129400-017",
+    "QC-129400-018",
+    "QC-129400-019",
+    "QC-129400-020",
+    "QC-129400-021",
+    "QC-129400-022",
+    "QC-129400-023",
+    "QC-129400-024",
+    "QC-129400-025",
+    "QC-129400-026",
+    "QC-129400-027",
+    "QC-129400-028",
+    "QC-129400-029",
+    "QC-129400-030",
+    "QC-129400-031",
+    "QC-129400-032",
+    "QC-129400-033",
+    "QC-129400-034",
+    "QC-129400-035",
+    "QC-129400-036",
+    "QC-129400-037",
+    "QC-129400-038",
+    "QC-129400-039",
+    "QC-129400-040",
+    "QC-129400-041",
+    "QC-129400-042",
+    "QC-129400-043",
+    "QC-129400-044",
+    "QC-129400-045",
+    "QC-129400-046",
+    "QC-129400-047",
+    "QC-129400-048",
+    "QC-129400-049",
+    "QC-129400-050",
+    "QC-129400-051",
+    "QC-129400-052",
+    "QC-129400-053",
+    "QC-129400-054",
+    "QC-129400-055",
+    "QC-129400-056",
+    "QC-129400-057",
+    "QC-129400-058",
+    "QC-129400-059",
+    "QC-129400-060",
+    "QC-129400-061",
+    "QC-129400-062",
+    "QC-129400-063",
+    "QC-129400-064",
+    "QC-129400-065",
+    "QC-129400-066",
+    "QC-129400-067",
+    "QC-129400-068",
+    "QC-129400-069",
+    "QC-129400-070",
+    "QC-129400-071",
+    "QC-129400-072",
+    "QC-129400-073",
+    "QC-129400-074",
+    "QC-129400-075",
+    "QC-129400-076",
+    "QC-129400-077",
+    "QC-129400-078",
+    "QC-129400-079",
+    "QC-129400-080",
+    "QC-129400-081",
+    "QC-129400-082",
+    "QC-129400-083",
+    "QC-129400-084",
+    "QC-129400-085",
+    "QC-129400-086",
+    "QC-129400-087",
+    "QC-129400-088",
+    "QC-129400-089",
+    "QC-129400-090",
+    "QC-129400-091",
+    "QC-129400-092",
+    "QC-129400-093",
+    "QC-129400-094",
+    "QC-129400-095",
+    "QC-129400-096",
+    "QC-129400-097",
+    "QC-129400-098",
+    "QC-129400-099",
+    "QC-129400-100",
+    "QC-129400-101",
+    "QC-129400-102",
+    "QC-129400-103",
+    "QC-129400-104",
+    "QC-129400-105",
+    "QC-129400-106",
+    "QC-129400-107",
+    "QC-129400-108",
+    "QC-129400-109",
+    "QC-129400-110"
+  ],
+  "cases": {
+    "QC-129400-001": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-1",
+        "OBJ-1",
+        "OBJ-2",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "QC-129400-002": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-2",
+        "ST-6",
+        "OBJ-2",
+        "OBJ-3",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-003": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-3",
+        "ST-6",
+        "OBJ-2",
+        "OBJ-3",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-004": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-3",
+        "ST-7",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-005": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-4",
+        "OBJ-4",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-006": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-5",
+        "LNG-2",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-007": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-5",
+        "LNG-1",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-008": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-6",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-009": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-7",
+        "OBJ-2",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-010": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-8",
+        "OBJ-3",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-011": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-9",
+        "ST-5",
+        "FLD-19",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-012": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-9",
+        "ST-4",
+        "FLD-19",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-013": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-10",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-014": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-10",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-015": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-11",
+        "ST-1",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-016": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-12",
+        "ST-2",
+        "FLD-6",
+        "OBJ-1",
+        "OBJ-6",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-017": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-12",
+        "OBJ-1",
+        "OBJ-6",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-018": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-13",
+        "ST-3",
+        "OBJ-1",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-019": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-14",
+        "ST-1",
+        "FLD-6",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-020": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-15",
+        "OBJ-5",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-021": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-16",
+        "OBJ-5",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-022": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-1",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-023": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-2",
+        "ST-4",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-024": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-4",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-025": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-8",
+        "OBJ-4",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-026": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-10",
+        "FLD-17",
+        "OBJ-4",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-027": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-11",
+        "FLD-17",
+        "OBJ-4",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-028": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1",
+        "SUR-1",
+        "OBJ-1",
+        "OBJ-3"
+      ]
+    },
+    "QC-129400-029": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1",
+        "SUR-2",
+        "FLD-1",
+        "FLD-22"
+      ]
+    },
+    "QC-129400-030": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2",
+        "SUR-1",
+        "OBJ-3"
+      ]
+    },
+    "QC-129400-031": {
+      "category": "UI",
+      "traceability": [
+        "LNG-2",
+        "SUR-2",
+        "FLD-7",
+        "FLD-9"
+      ]
+    },
+    "QC-129400-032": {
+      "category": "UI",
+      "traceability": [
+        "ST-6",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-033": {
+      "category": "UI",
+      "traceability": [
+        "ST-15",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-034": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-1",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-035": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-2",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-036": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-3",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-037": {
+      "category": "Compatibility",
+      "traceability": [
+        "ST-16",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-038": {
+      "category": "Compatibility",
+      "traceability": [
+        "ST-17",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-039": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1",
+        "SUR-1"
+      ]
+    },
+    "QC-129400-040": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1",
+        "ST-1",
+        "ST-3",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-041": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2",
+        "CTL-7",
+        "CTL-8",
+        "CTL-11",
+        "CTL-12",
+        "CTL-13",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-042": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2",
+        "MSG-8",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-043": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3",
+        "CTL-8",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-044": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3",
+        "MSG-8",
+        "CTL-12",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-045": {
+      "category": "Edge",
+      "traceability": [
+        "ST-9",
+        "OBJ-4",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-046": {
+      "category": "Edge",
+      "traceability": [
+        "ST-12",
+        "FLD-11",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-047": {
+      "category": "Edge",
+      "traceability": [
+        "ST-13",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-048": {
+      "category": "Edge",
+      "traceability": [
+        "ST-14",
+        "FLD-13",
+        "LNG-2",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-049": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-050": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1",
+        "MSG-4",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-051": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-052": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1",
+        "MSG-4",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-053": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2",
+        "OBJ-5",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-054": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-055": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2",
+        "MSG-2",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-056": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-057": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-058": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-059": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-060": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-061": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-062": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-063": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-064": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5",
+        "OBJ-5",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-065": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-066": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5",
+        "MSG-2",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-067": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-068": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7",
+        "MSG-1",
+        "MSG-5",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-069": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-070": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7",
+        "MSG-5",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-071": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8",
+        "OBJ-5",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-072": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-073": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8",
+        "MSG-2",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-074": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-075": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-076": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-077": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-078": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10",
+        "OBJ-3",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-079": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-080": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-081": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-082": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11",
+        "OBJ-3",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-083": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-084": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11",
+        "OBJ-3",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-085": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12",
+        "OBJ-3",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-086": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-087": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12",
+        "ST-12",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-088": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13",
+        "OBJ-3",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-089": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-090": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13",
+        "ST-12",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-091": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14",
+        "OBJ-5",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-092": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-093": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14",
+        "MSG-2",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-094": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-15",
+        "OBJ-4",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-095": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-15",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-096": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-15",
+        "FLD-16",
+        "MSG-3",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-097": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16",
+        "OBJ-4",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-098": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16",
+        "MSG-6",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-099": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-100": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16",
+        "FLD-15",
+        "MSG-3",
+        "ST-9",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-101": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-102": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18",
+        "MSG-7",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-103": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-104": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20",
+        "OBJ-1",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-105": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21",
+        "OBJ-2",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-106": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22",
+        "OBJ-6",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-107": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6",
+        "ST-1",
+        "ST-2",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-108": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17",
+        "OBJ-4",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-109": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17",
+        "FLD-15",
+        "FLD-16",
+        "OBJ-4",
+        "SUR-2"
+      ]
+    },
+    "QC-129400-110": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19",
+        "ST-4",
+        "ST-5",
+        "SUR-2"
+      ]
+    }
+  }
+}

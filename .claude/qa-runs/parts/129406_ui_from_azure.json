@@ -1,0 +1,338 @@
+[
+  {
+    "id": 142159,
+    "title": "Verify that the English Economic Consultancy page renders left-to-right with the designed copy",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads left-to-right"
+      },
+      {
+        "action": "Inspect the hero and quick-facts strip",
+        "expected": "The hero shows 'Economic Information Service' above 'Economic Consultancy &amp; Advisory' with its description constrained to its designed width beside the banner image; the quick facts read Market Intelligence, Turnaround Time, Service Fee and Sectoral Coverage"
+      },
+      {
+        "action": "Inspect the section index and Section 01",
+        "expected": "The index reads 01 to 04; Section 01 shows the badge 'About the service' above 'Service Overview &amp; Strategic Purpose', its body, three info cards, the secondary paragraph and the highlighted list"
+      },
+      {
+        "action": "Inspect Sections 02, 03 and 04",
+        "expected": "Section 02 shows 'Areas of Economic Consultancy' with four area cards; Section 03 shows 'Service Scope &amp; Exclusions' above 'Service Scope &amp; Coverage Limits' with both lists; Section 04 shows 'Common questions' above 'Frequently asked questions'"
+      }
+    ]
+  },
+  {
+    "id": 142160,
+    "title": "Verify that the Arabic Economic Consultancy page renders right-to-left with Arabic copy throughout",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Arabic",
+      "Automation",
+      "Regression",
+      "RTL",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in Arabic",
+        "expected": "Page loads right-to-left"
+      },
+      {
+        "action": "Inspect the hero, quick facts and section index",
+        "expected": "The hero renders its eyebrow, title and description in Arabic, right-aligned, with the banner image mirrored to the opposite side"
+      },
+      {
+        "action": "Inspect all four sections",
+        "expected": "Every section badge, heading, info card, highlight item, area card, scope item and FAQ question renders in Arabic with no English text left in a translated field"
+      },
+      {
+        "action": "Inspect the layout direction of the index, the highlighted list and the scope lists",
+        "expected": "The section index sits on the mirrored side, the highlighted list's bullets sit to the right of their text, and the Included and Excluded blocks keep their green and red treatment while mirroring their layout"
+      }
+    ]
+  },
+  {
+    "id": 142164,
+    "title": "Verify that the hero renders its eyebrow, title, description and banner image in the designed layout",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 2,
+    "execution_type": "Automated",
+    "impact_area": "UI",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Regression",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Inspect the hero region",
+        "expected": "The hero renders the maroon gradient with the breadcrumb above the eyebrow, the eyebrow above the title and the description below it"
+      },
+      {
+        "action": "Measure the hero text against its container",
+        "expected": "None of the three text elements overflows or is clipped, and the description is constrained to its designed 648px width rather than spanning edge to edge"
+      },
+      {
+        "action": "Inspect the banner image and look for any call-to-action",
+        "expected": "The banner image renders beside the text at its designed size with its drop shadow, and no call-to-action button is rendered, because this page defines none"
+      }
+    ]
+  },
+  {
+    "id": 142165,
+    "title": "Verify that the quick-facts strip renders each active tile with its icon, label and value",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "UI",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Control_Panel",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Inspect the quick-facts strip attached to the foot of the hero",
+        "expected": "The strip renders one tile per active quick fact, evenly divided by vertical rules"
+      },
+      {
+        "action": "Inspect each tile in turn",
+        "expected": "Each tile shows its icon beside its label and value, with no tile missing an icon and no label wrapping into its neighbour"
+      },
+      {
+        "action": "Compare the tiles against the values stored in the CMS",
+        "expected": "The rendered labels and values match the CMS exactly — Market Intelligence / Official Chamber Reports, Turnaround Time / 5 Working Days, Service Fee / Free for Members and Sectoral Coverage / All National Sectors"
+      }
+    ]
+  },
+  {
+    "id": 142166,
+    "title": "Verify that Section 01 renders its body, info cards, secondary paragraph and highlighted list in order",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Control_Panel",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to Section 01 Overview",
+        "expected": "Section 01 renders its badge 'About the service' above the heading 'Service Overview &amp; Strategic Purpose'"
+      },
+      {
+        "action": "Inspect the order of the body, cards, paragraph and highlighted list",
+        "expected": "The rich-text body renders first, then the info cards, then the secondary paragraph about the Economic Affairs Department, then the highlighted list on its tinted surface — in that order"
+      },
+      {
+        "action": "Compare the cards and highlight items against the CMS records",
+        "expected": "Each active card shows its icon, title and description, and each active highlight item renders with its marker, all in ascending Display Order"
+      }
+    ]
+  },
+  {
+    "id": 142167,
+    "title": "Verify that the area cards render their icon, title and description in the configured order",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Control_Panel",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to Section 02 Areas of Economic Consultancy",
+        "expected": "Section 02 renders its badge and the heading 'Areas of Economic Consultancy' above its intro"
+      },
+      {
+        "action": "Inspect the section intro and every area card",
+        "expected": "Each active area card shows its icon, its title and its description, with no card rendering a blank icon slot or an empty description area"
+      },
+      {
+        "action": "Compare their order against the Display Order values in the CMS",
+        "expected": "The cards appear in ascending Display Order, matching the CMS"
+      }
+    ]
+  },
+  {
+    "id": 142168,
+    "title": "Verify that the Included and Excluded scope lists are visually distinguished from each other",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Automated",
+    "impact_area": "UI",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to Section 03 Service Scope &amp; Exclusions",
+        "expected": "Section 03 renders two separate grouped blocks rather than one merged list"
+      },
+      {
+        "action": "Inspect the Included Scope list",
+        "expected": "The Included Scope block is headed 'Included Scope:' in green on its light green surface with its items marked as included"
+      },
+      {
+        "action": "Inspect the Excluded Scope list",
+        "expected": "The Excluded Scope block is headed 'Excluded Scope:' in red on its light red surface, so the two cannot be mistaken for one another at a glance"
+      }
+    ]
+  },
+  {
+    "id": 142169,
+    "title": "Verify that the FAQ content on the published page is about economic consultancy and not another service",
+    "type": "UI",
+    "scenario": "positive",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 1,
+    "execution_type": "Manual",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Manual",
+      "Regression",
+      "UAT",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Open the public Economic Consultancy page in English",
+        "expected": "Page loads"
+      },
+      {
+        "action": "Scroll to Section 04 Frequently asked questions",
+        "expected": "Section 04 renders its published questions"
+      },
+      {
+        "action": "Expand every FAQ item",
+        "expected": "Every answer expands"
+      },
+      {
+        "action": "Read each question and answer in full",
+        "expected": "Every question and answer concerns the economic consultancy service — economic information, business insights, who the service is for and where reports are found — and none refers to another Qatar Chamber service"
+      }
+    ]
+  },
+  {
+    "id": 142170,
+    "title": "Verify that a failure to load the Economic Consultancy page shows the standard site error page",
+    "type": "UI",
+    "scenario": "negative",
+    "category": "UI",
+    "classification_source": "tags",
+    "priority": 2,
+    "execution_type": "Manual",
+    "impact_area": "Both",
+    "tags": [
+      "Ai_MCP_Injected",
+      "Manual",
+      "Regression",
+      "UI",
+      "Web"
+    ],
+    "steps": [
+      {
+        "action": "Request the Economic Consultancy URL with the content service unavailable",
+        "expected": "The request completes"
+      },
+      {
+        "action": "Observe the response",
+        "expected": "The visitor sees the site's standard error page with the site header and footer, not a raw stack trace, a Liferay diagnostic screen or a blank page"
+      },
+      {
+        "action": "Request an Economic Consultancy sub-path that does not exist",
+        "expected": "The request completes"
+      },
+      {
+        "action": "Observe that response",
+        "expected": "The visitor sees the site's standard not-found page in the current language"
+      }
+    ]
+  }
+]

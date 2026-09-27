@@ -1,0 +1,450 @@
+[
+  {
+    "id": 138660,
+    "title": "Verify that clicking Next with an empty Company Name shows the inline required message and blocks the step",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "Company Name is mandatory. The PBI states that clicking Next with a missing mandatory field shows '{Field Name} is required' under that field.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA",
+        "expected": "Step 01 loads with the Next button enabled by default"
+      },
+      {
+        "action": "Complete every mandatory field in Step 01 except Company Name",
+        "expected": "All fields except Company Name hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and the message 'Company Name is required' appears directly under the Company Name field"
+      },
+      {
+        "action": "Inspect the form and the step indicator",
+        "expected": "The wizard is still on Step 01 and every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138665,
+    "title": "Verify that clicking Next with an empty Commercial Registration No. shows the inline required message",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "Web"
+    ],
+    "description": "Commercial Registration No. is mandatory.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA",
+        "expected": "Step 01 loads"
+      },
+      {
+        "action": "Complete every mandatory field except Commercial Registration No.",
+        "expected": "All fields except Commercial Registration No. hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and 'Commercial Registration No. is required' appears under the field"
+      },
+      {
+        "action": "Inspect the form",
+        "expected": "Every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138669,
+    "title": "Verify that clicking Next with an empty Chamber Membership Number shows the inline required message",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "Web"
+    ],
+    "description": "Chamber Membership Number is mandatory.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA",
+        "expected": "Step 01 loads"
+      },
+      {
+        "action": "Complete every mandatory field except Chamber Membership Number",
+        "expected": "All fields except Chamber Membership Number hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and 'Chamber Membership Number is required' appears under the field"
+      },
+      {
+        "action": "Inspect the form",
+        "expected": "Every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138672,
+    "title": "Verify that clicking Next with an empty Contact Person Name shows the inline required message and blocks the step",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "Contact Person Name is mandatory. The PBI states that clicking Next with a missing mandatory field shows '{Field Name} is required' under that field.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA",
+        "expected": "Step 01 loads with the Next button enabled by default"
+      },
+      {
+        "action": "Complete every mandatory field in Step 01 except Contact Person Name",
+        "expected": "All fields except Contact Person Name hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and the message 'Contact Person Name is required' appears directly under the Contact Person Name field"
+      },
+      {
+        "action": "Inspect the form and the step indicator",
+        "expected": "The wizard is still on Step 01 and every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138676,
+    "title": "Verify that clicking Next with an empty Job Title shows the inline required message and blocks the step",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "Job Title is mandatory. The PBI states that clicking Next with a missing mandatory field shows '{Field Name} is required' under that field.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA",
+        "expected": "Step 01 loads with the Next button enabled by default"
+      },
+      {
+        "action": "Complete every mandatory field in Step 01 except Job Title",
+        "expected": "All fields except Job Title hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and the message 'Job Title is required' appears directly under the Job Title field"
+      },
+      {
+        "action": "Inspect the form and the step indicator",
+        "expected": "The wizard is still on Step 01 and every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138680,
+    "title": "Verify that clicking Next with an empty Email Address shows the inline required message",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "Web"
+    ],
+    "description": "Email Address is mandatory.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA",
+        "expected": "Step 01 loads"
+      },
+      {
+        "action": "Complete every mandatory field except Email Address",
+        "expected": "All fields except Email Address hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and 'Email Address is required' appears under the field"
+      },
+      {
+        "action": "Inspect the form",
+        "expected": "Every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138684,
+    "title": "Verify that clicking Next with an empty Mobile Number shows the inline required message",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "Web"
+    ],
+    "description": "Mobile Number is mandatory.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA",
+        "expected": "Step 01 loads"
+      },
+      {
+        "action": "Complete every mandatory field except Mobile Number",
+        "expected": "All fields except Mobile Number hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and 'Mobile Number is required' appears under the field"
+      },
+      {
+        "action": "Inspect the form",
+        "expected": "Every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138691,
+    "title": "Verify that clicking Next with an empty Company Address shows the inline required message and blocks the step",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "Company Address is mandatory. The PBI states that clicking Next with a missing mandatory field shows '{Field Name} is required' under that field.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA",
+        "expected": "Step 01 loads with the Next button enabled by default"
+      },
+      {
+        "action": "Complete every mandatory field in Step 01 except Company Address",
+        "expected": "All fields except Company Address hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and the message 'Company Address is required' appears directly under the Company Address field"
+      },
+      {
+        "action": "Inspect the form and the step indicator",
+        "expected": "The wizard is still on Step 01 and every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138694,
+    "title": "Verify that clicking Next with no Country selected shows the inline required message",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "Web"
+    ],
+    "description": "Country is mandatory.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA",
+        "expected": "Step 01 loads"
+      },
+      {
+        "action": "Complete every mandatory field but leave Country unselected",
+        "expected": "All fields except Country hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and 'Country is required' appears under the dropdown"
+      },
+      {
+        "action": "Inspect the form",
+        "expected": "Every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138699,
+    "title": "Verify that clicking Next with an empty Respondent Company Name shows the inline required message and blocks the step",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "Respondent Company Name is mandatory. The PBI states that clicking Next with a missing mandatory field shows '{Field Name} is required' under that field.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA and advance to Step 02",
+        "expected": "Step 02 loads with the Next button enabled by default"
+      },
+      {
+        "action": "Complete every mandatory field in Step 02 except Respondent Company Name",
+        "expected": "All fields except Respondent Company Name hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and the message 'Respondent Company Name is required' appears directly under the Respondent Company Name field"
+      },
+      {
+        "action": "Inspect the form and the step indicator",
+        "expected": "The wizard is still on Step 02 and every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138703,
+    "title": "Verify that clicking Next with an empty Respondent Contact Person shows the inline required message and blocks the step",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "UAT",
+      "Web"
+    ],
+    "description": "Respondent Contact Person is mandatory. The PBI states that clicking Next with a missing mandatory field shows '{Field Name} is required' under that field.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA and advance to Step 02",
+        "expected": "Step 02 loads with the Next button enabled by default"
+      },
+      {
+        "action": "Complete every mandatory field in Step 02 except Respondent Contact Person",
+        "expected": "All fields except Respondent Contact Person hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and the message 'Respondent Contact Person is required' appears directly under the Respondent Contact Person field"
+      },
+      {
+        "action": "Inspect the form and the step indicator",
+        "expected": "The wizard is still on Step 02 and every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138707,
+    "title": "Verify that clicking Next with an empty Respondent Email Address shows the inline required message",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "Web"
+    ],
+    "description": "Respondent Email Address is mandatory.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA and advance to Step 02",
+        "expected": "Step 02 loads"
+      },
+      {
+        "action": "Complete every mandatory field except Respondent Email Address",
+        "expected": "All fields except Respondent Email Address hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and 'Respondent Email Address is required' appears under the field"
+      },
+      {
+        "action": "Inspect the form",
+        "expected": "Every other field retains the value that was entered"
+      }
+    ]
+  },
+  {
+    "id": 138711,
+    "title": "Verify that clicking Next with an empty Respondent Mobile Number shows the inline required message",
+    "state": "Design",
+    "priority": 1,
+    "tags": [
+      "Ai_MCP_Injected",
+      "Automation",
+      "Functional-Low",
+      "Regression",
+      "Web"
+    ],
+    "description": "Respondent Mobile Number is mandatory.",
+    "area_path": "Qatar Chamber Website Revamp",
+    "iteration_path": "Qatar Chamber Website Revamp\\Sprint 2",
+    "steps": [
+      {
+        "action": "Open the Mediation Request wizard as a public visitor via the Submit New Request CTA and advance to Step 02",
+        "expected": "Step 02 loads"
+      },
+      {
+        "action": "Complete every mandatory field except Respondent Mobile Number",
+        "expected": "All fields except Respondent Mobile Number hold values"
+      },
+      {
+        "action": "Click Next",
+        "expected": "The wizard does not advance and 'Respondent Mobile Number is required' appears under the field"
+      },
+      {
+        "action": "Inspect the form",
+        "expected": "Every other field retains the value that was entered"
+      }
+    ]
+  }
+]

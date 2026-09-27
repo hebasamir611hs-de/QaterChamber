@@ -76,6 +76,8 @@ class BoardMemberProfilePage(BasePage):
     EXPERIENCE_HEADING = ".qc-bmp-experience .qc-bmp-block-title"
     EXPERIENCE_CARD = ".qc-bmp-exp-card"
     EXPERIENCE_ITEM = ".qc-bmp-exp-item"
+    EXPERIENCE_ITEM_ROLE = ".qc-bmp-exp-role"
+    EXPERIENCE_ITEM_ORG = ".qc-bmp-exp-org"
 
     # ---- Navigation -----------------------------------------------------------
     def open_by_url(self, url: str) -> "BoardMemberProfilePage":
@@ -112,6 +114,20 @@ class BoardMemberProfilePage(BasePage):
 
     def is_photo_visible(self) -> bool:
         return self.is_visible(self.PHOTO)
+
+    def photo_src(self) -> str:
+        """The persisted Member Photo's own delivery-surface reference —
+        added 2026-09-17 (PBI 129398 BATCH 6) as the ground-truth read for
+        photo persistence/discard cases (tc_133574, tc_133616), since the
+        admin surface's own `uploaded_filename()` readout is CONFIRMED LIVE
+        to read back EMPTY on every reopen of an EXISTING entry (only
+        reflects a filename immediately after a fresh, same-session
+        selection — never a previously-saved one), making it useless for a
+        persistence assertion. `.qc-bmp-photo` is confirmed a real `<img>`
+        (not a CSS background-image div) via this Page Object's own module
+        docstring DOM probe; `src` is the real, comparable identity of
+        which uploaded file is currently rendering."""
+        return self.page.locator(self.PHOTO).get_attribute("src") or ""
 
     def is_badge_visible(self) -> bool:
         return self.is_visible(self.BADGE)
@@ -155,6 +171,19 @@ class BoardMemberProfilePage(BasePage):
 
     def experience_item_count(self) -> int:
         return self.page.locator(self.EXPERIENCE_ITEM).count()
+
+    def experience_item_roles_in_order(self) -> list:
+        """Ordered list of each Professional Experience item's role/title
+        text, top to bottom in DOM order — added for PBI 129398 BATCH 6
+        (final-40 batch)'s Professional Experience CRUD cases
+        (133591-133600), which manipulate the admin's single free-text JSON
+        field (Role Badge/`role` key) and assert the resulting render order
+        here. Real render order confirmed live to follow the JSON array's
+        own element order."""
+        return self.page.locator(self.EXPERIENCE_ITEM_ROLE).all_inner_texts()
+
+    def experience_item_orgs_in_order(self) -> list:
+        return self.page.locator(self.EXPERIENCE_ITEM_ORG).all_inner_texts()
 
     def full_page_text(self) -> str:
         """For the negative "section is hidden entirely" cases (133442/

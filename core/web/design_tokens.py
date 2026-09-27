@@ -9,6 +9,8 @@ converts the same way once, instead of ~20 inline hex->rgb literals that can
 drift or be transcribed wrong one at a time.
 """
 
+import re
+
 FONT_WEIGHT_NAMES = {
     "regular": "400",
     "medium": "500",
@@ -22,6 +24,21 @@ def hex_to_rgb(hex_color: str) -> str:
     h = hex_color.lstrip("#")
     r, g, b = (int(h[i:i + 2], 16) for i in (0, 2, 4))
     return f"rgb({r}, {g}, {b})"
+
+
+def effective_color(computed: dict) -> tuple:
+    """{'color': ..., 'opacity': ...} -> ('rgb(r, g, b)', alpha).
+
+    A spec's "#FFFFFF at 50% opacity" can legitimately be implemented as an
+    rgba() alpha channel OR as a CSS `opacity` on the element; both render
+    identically, so both are folded into one effective alpha before the
+    comparison. `computed` is a getComputedStyle dict carrying at least
+    'color'; 'opacity' is optional and treated as 1 when absent."""
+    parts = re.findall(r"[\d.]+", computed["color"])
+    r, g, b = (int(float(v)) for v in parts[:3])
+    alpha = float(parts[3]) if len(parts) > 3 else 1.0
+    alpha *= float(computed.get("opacity") or 1)
+    return f"rgb({r}, {g}, {b})", round(alpha, 3)
 
 
 def weight_matches(computed_weight: str, expected_name: str) -> bool:

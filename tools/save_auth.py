@@ -22,16 +22,7 @@ from pathlib import Path
 # the project root is not importable. Add it, then import config.settings —
 # importing it is what loads .env, which the env() reads below depend on.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from config.settings import ENV_FILE, auth_state_path  # noqa: E402
-
-# Same site-wide announcement-overlay guard BasePage.open() applies (see
-# core/web/overlays.py). This script drives raw Playwright (it runs BEFORE
-# any authenticated Page Object exists to wrap it), so it has to dismiss the
-# overlay itself — found live 2026-08-31 automating PBI 129392: the
-# anonymous /c/portal/login page sits on the same host as CONTROL_PANEL_URL,
-# so #qc-announcement-popup-root mounts there too and intercepts the Sign In
-# click without this.
-from core.web.overlays import dismiss_overlays, MOUNT_GRACE_MS  # noqa: E402
+from config.settings import ENV_FILE, auth_state_path, control_panel_url  # noqa: E402
 
 try:
     from playwright.sync_api import sync_playwright
@@ -45,53 +36,86 @@ def env(key, default=None):
 
 def login(page):
     """
-    Liferay CMS login — the project-specific piece, adapted from the generic
-    template default. Selectors match web/pages/components/cms_login_page.py
-    (CmsLoginPage), CLI-confirmed live against qcdev.ihorizons.com/c/portal/login
-    (commit 2cbbb4c, re-confirmed 2026-08-24/2026-08-31). Override any of them
-    via the matching LOGIN_*_SELECTOR / LOGIN_PATH env var if the CMS login
-    flow ever changes.
+    Qatar Chamber / Liferay DXP login — CORRECTED 2026-09-20 (live incident this
+    session, PBI 129566 Draft-vs-Publish correction batch): the PRIOR version of
+    this function (role-based "Email Address"/"Password"/"Sign In" lookup against
+    WEB_BASE_URL) does NOT raise, prints "Saved auth storageState" successfully,
+    but produces a session that cannot actually reach any Control_Panel/Object
+    Authoring surface — `manage-<slug>` and `object-authoring` both render a
+    generic "Coming Soon" fallback page with that state.json (confirmed live:
+    `manage-newsletter` returned title "Coming Soon..." with the prior flow's
+    captured state, and title "Manage: Newsletter..." after re-capturing via
+    THIS corrected flow — same account, same run). Root cause: WEB_BASE_URL's
+    login page also renders a public-member "Sign In" control (matched by the
+    old role-based lookup) that is a DIFFERENT auth path from the real Liferay
+    LoginPortlet the admin/Control_Panel surfaces require — exactly the gap
+    `cms/pages/control_panel/login_page.py`'s own docstring already disclosed
+    ("tools/save_auth.py's login() is still the generic scaffold... was never
+    adapted for this project's real flow, and points at the PUBLIC site, not
+    CONTROL_PANEL_URL"). This was a silent false-green in the auth tool itself:
+    a broken session reported as a successful capture.
+
+    Fixed by driving the SAME real LoginPortlet flow
+    `cms/pages/control_panel/login_page.py`'s CmsLoginPage and
+    `core/web/session_guard.py`'s reauthenticate() already use — stable ID
+    selectors scoped to the LoginPortlet form (not accessible-role names, which
+    this login page's account-type ambiguity makes unsafe here), against
+    CONTROL_PANEL_URL, then forcing the account's persisted UI language back to
+    English via the same `update_language` endpoint (see session_guard.py's own
+    HEALED note on why this step is not optional — a stale Arabic preference on
+    the shared TEST_USER account silently breaks every English-text locator
+    project-wide). LOGIN_*_SELECTOR env overrides are still honored for a future
+    login-form change, but now default to these confirmed-live, real selectors
+    instead of the broken role-based ones.
     """
-    base = (env("WEB_BASE_URL", "") or "").rstrip("/")
-    # LOCALE-PINNED login path. Confirmed live 2026-09-10: the unprefixed
-    # `/c/portal/login` began returning an ARABIC session (qcdev's site
-    # default locale), which broke this script two ways at once — the
-    # LOGIN_SUCCESS_SELECTOR below waits on the ENGLISH `aria-label="Control
-    # Menu"`, which never appears in an Arabic session (so every run exited
-    # "Login failed" even though the credentials were accepted), and every
-    # Object Authoring form then renders Arabic field labels, which no Page
-    # Object's `get_by_role(..., name="<English label>")` can match.
-    # Prefixing `/en/` pins the session to English and fixes both. Still
-    # overridable via LOGIN_PATH.
-    page.goto(base + env("LOGIN_PATH", "/en/c/portal/login"), wait_until="domcontentloaded")
-    dismiss_overlays(page, grace_ms=MOUNT_GRACE_MS)
-    page.fill(
-        env("LOGIN_USER_SELECTOR", "#_com_liferay_login_web_portlet_LoginPortlet_login"),
-        env("TEST_USER", ""),
+    base = control_panel_url("")
+    page.goto(base + env("LOGIN_PATH", "/c/portal/login"), wait_until="domcontentloaded")
+
+    user_selector = env(
+        "LOGIN_USER_SELECTOR", "#_com_liferay_login_web_portlet_LoginPortlet_login"
     )
-    page.fill(
-        env("LOGIN_PASS_SELECTOR", "#_com_liferay_login_web_portlet_LoginPortlet_password"),
-        env("TEST_PASSWORD", ""),
+    pass_selector = env(
+        "LOGIN_PASS_SELECTOR", "#_com_liferay_login_web_portlet_LoginPortlet_password"
     )
     submit_selector = env(
         "LOGIN_SUBMIT_SELECTOR",
         '#_com_liferay_login_web_portlet_LoginPortlet_loginForm button[type="submit"]',
     )
-    dismiss_overlays(page)  # re-check: the overlay can (re)mount after fill() triggers JS
-    try:
-        page.click(submit_selector)
-    except Exception:
-        # Same retry-once-after-dismiss pattern as BasePage.click(): the
-        # overlay can remount again in the gap between the check above and
-        # the click actually landing (client-rendered, not on a fixed timer).
-        if not dismiss_overlays(page):
-            raise
-        page.click(submit_selector)
-    success = env("LOGIN_SUCCESS_SELECTOR", 'nav[aria-label="Control Menu"]')
-    if success:
-        page.wait_for_selector(success, timeout=int(env("LOGIN_TIMEOUT", "20000")))
-    else:
-        page.wait_for_load_state("networkidle")
+    success_selector = env(
+        "LOGIN_SUCCESS_SELECTOR",
+        'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]',
+    )
+
+    page.fill(user_selector, env("TEST_USER", ""))
+    page.fill(pass_selector, env("TEST_PASSWORD", ""))
+    page.click(submit_selector)
+
+    # .first: this selector legitimately matches BOTH the Control Menu nav AND
+    # the Product Menu toggle once logged in (see CmsLoginPage.login()) —
+    # Playwright strict mode rejects a bare 2-element wait_for_selector.
+    page.locator(success_selector).first.wait_for(
+        state="visible", timeout=int(env("LOGIN_TIMEOUT", "15000"))
+    )
+
+    # Force (and persist) English — mirrors CmsLoginPage._force_english_locale()
+    # exactly; a stale account-level Arabic preference otherwise silently
+    # breaks every English-text locator on the admin surfaces later.
+    from urllib.parse import quote
+
+    redirect_url = quote("/home", safe="")
+    # domcontentloaded, not the default "load" — this portal's network rarely
+    # idles/finishes-loading cleanly (site-wide chatbot widget polling, same
+    # finding already documented project-wide, e.g. base_page.py/
+    # object_authoring_page.py's own settle notes); "load" timed out here live
+    # this session even though the navigation itself completes well within it.
+    page.goto(
+        control_panel_url(f"/c/portal/update_language?languageId=en_US&redirect={redirect_url}"),
+        wait_until="domcontentloaded",
+        timeout=int(env("LOGIN_TIMEOUT", "15000")),
+    )
+    page.locator(success_selector).first.wait_for(
+        state="visible", timeout=int(env("LOGIN_TIMEOUT", "15000"))
+    )
 
 
 def main():

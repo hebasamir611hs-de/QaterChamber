@@ -86,9 +86,9 @@ import pytest
 
 from web.pages.components.cms_login_page import CmsLoginPage
 from cms.pages.home_strategic_partners.home_strategic_partners_admin_page import (
-    HomeStrategicPartnersAdminPage,
+    StrategicPartnersAdminPage,
 )
-from web.pages.home_strategic_partners.home_strategic_partners_page import HomeStrategicPartnersPage
+from web.pages.home_strategic_partners.home_strategic_partners_page import StrategicPartnersPage
 
 PBI = "129391"
 EPIC = "GLOBAL"
@@ -108,13 +108,13 @@ EXPECTED_DARK_GRADIENT = "linear-gradient(135deg, rgb(29, 29, 27) 0%, rgb(52, 52
 
 # ── CMS-blocker-chain gate — same `_UNRESOLVED` collection-time skipif
 #    convention as test_home_community_partners_web.py: skip (never
-#    RuntimeError) while ANY of HomeStrategicPartnersAdminPage's locators is
+#    RuntimeError) while ANY of StrategicPartnersAdminPage's locators is
 #    still an unresolved TODO placeholder, and say WHICH ones. ──────────────
 _PLACEHOLDER_PREFIX = "TODO:"
 _UNRESOLVED = [
     f"{cls.__name__}.{name}"
     for cls, names in (
-        (HomeStrategicPartnersAdminPage, (
+        (StrategicPartnersAdminPage, (
             "HOME_PAGE_MANAGEMENT_LINK", "STRATEGIC_PARTNERS_MANAGEMENT_LINK",
             "PARTNER_ENTRY_ROW", "PARTNER_ACTIVE_STATUS_TOGGLE", "PARTNER_START_DATE_FIELD",
             "PARTNER_END_DATE_FIELD", "PARTNER_LOGO_UPLOAD_FIELD", "NEW_PARTNER_BUTTON",
@@ -123,14 +123,17 @@ _UNRESOLVED = [
         )),
     )
     for name in names
-    if str(getattr(cls, name)).startswith(_PLACEHOLDER_PREFIX)
+    if not hasattr(cls, name)
+    or str(getattr(cls, name)).startswith(_PLACEHOLDER_PREFIX)
 ]
 _UNRESOLVED_SKIP = pytest.mark.skipif(
     bool(_UNRESOLVED),
     reason=(
-        "Unresolved locator placeholders on HomeStrategicPartnersAdminPage — run "
-        "tools/extract_locators.py (as an authenticated Site Content Editor) "
-        "against the live Strategic Partners content-management screen and replace: "
+        "Unresolved/absent locators on StrategicPartnersAdminPage. The admin "
+        "page object is now the Object Authoring implementation (upstream), "
+        "whose API differs from the scaffold these CMS-chain cases were "
+        "written against — they need porting to it before they can run. "
+        "Missing or still-TODO: "
         + ", ".join(_UNRESOLVED)
     ),
 )
@@ -163,7 +166,7 @@ def _skip_if_no_credentials() -> tuple:
 def test_heading_renders_with_figma_verified_typography(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136215 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the English Home Page and scroll to the Strategic Partners section"):
@@ -200,7 +203,7 @@ def test_heading_renders_with_figma_verified_typography(page):
 def test_subtitle_renders_with_figma_verified_typography(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136216 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the English Home Page and scroll to the Strategic Partners section"):
@@ -237,7 +240,7 @@ def test_subtitle_renders_with_figma_verified_typography(page):
 def test_section_renders_light_mode_gradient_background(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136217 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the Home Page and scroll to the Strategic Partners section"):
@@ -270,7 +273,7 @@ def test_section_renders_light_mode_gradient_background(page):
 def test_logo_tile_renders_at_fixed_size_with_dim_opacity(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136218 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the Home Page and scroll to the Strategic Partners section"):
@@ -304,7 +307,7 @@ def test_logo_tile_renders_at_fixed_size_with_dim_opacity(page):
 def test_logo_row_scrolls_continuously_without_pause(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136220 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the Home Page and scroll to the Strategic Partners section"):
@@ -341,7 +344,7 @@ def test_logo_row_scrolls_continuously_without_pause(page):
 def test_section_renders_arabic_heading_subtitle_and_mirrors_rtl(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136221 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Load the EN Home Page and measure the logo row's real scroll delta"):
@@ -396,7 +399,7 @@ def test_section_renders_arabic_heading_subtitle_and_mirrors_rtl(page):
 def test_partner_logo_exposes_alt_text_en(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136222 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Load the English Home Page and inspect the first partner logo image"):
@@ -425,7 +428,7 @@ def test_partner_logo_exposes_alt_text_en(page):
 def test_partner_logo_exposes_alt_text_ar(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136223 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Load the Arabic Home Page and inspect the first partner logo image"):
@@ -454,7 +457,7 @@ def test_partner_logo_exposes_alt_text_ar(page):
 def test_section_renders_dark_mode_gradient_and_inverted_heading_color(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136224 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Load the Home Page and read the light-mode section box (for a layout-unchanged comparison)"):
@@ -499,7 +502,7 @@ def test_section_renders_correctly_at_desktop_viewport(page):
     # 1920x1080 IS the framework's default viewport (core/web/browser.py) —
     # no override needed; asserted below via page.viewport_size.
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the Home Page and scroll to the Strategic Partners section"):
@@ -536,7 +539,7 @@ def test_section_renders_correctly_at_desktop_viewport(page):
 def test_section_adapts_correctly_at_tablet_viewport(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136226 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the Home Page at 768x1024 and scroll to the Strategic Partners section"):
@@ -572,7 +575,7 @@ def test_section_adapts_correctly_at_tablet_viewport(page):
 def test_section_adapts_correctly_at_mobile_viewport(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136227 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the Home Page at 375x812 and scroll to the Strategic Partners section"):
@@ -607,7 +610,7 @@ def test_section_adapts_correctly_at_mobile_viewport(page):
 def test_section_renders_correctly_in_light_theme(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136228 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the Home Page (light theme is the default, no toggle applied) and scroll to the section"):
@@ -643,7 +646,7 @@ def test_section_renders_correctly_in_light_theme(page):
 def test_section_renders_correctly_in_dark_theme(page):
     # GLOBAL-STRATEGICPARTNERS-TC-136229 | PBI 129391
     # Arrange
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the Home Page and enable dark theme via the Accessibility panel"):
@@ -682,7 +685,7 @@ def test_public_visitor_sees_floating_strategic_partners_logos(page):
     # Arrange — the default `page` fixture is an unauthenticated context (no
     # CMS session involved anywhere in this flow), i.e. already a public
     # visitor.
-    sp = HomeStrategicPartnersPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Navigate to the Home Page as an unauthenticated visitor"):
@@ -720,8 +723,8 @@ def test_no_section_renders_when_all_partners_deactivated(page):
 
     # Arrange
     login = CmsLoginPage(page)
-    admin = HomeStrategicPartnersAdminPage(page)
-    sp = HomeStrategicPartnersPage(page)
+    admin = StrategicPartnersAdminPage(page)
+    sp = StrategicPartnersPage(page)
 
     try:
         # Act
@@ -763,8 +766,8 @@ def test_section_not_rendered_when_zero_partners_active(page):
 
     # Arrange
     login = CmsLoginPage(page)
-    admin = HomeStrategicPartnersAdminPage(page)
-    sp = HomeStrategicPartnersPage(page)
+    admin = StrategicPartnersAdminPage(page)
+    sp = StrategicPartnersPage(page)
 
     try:
         # Act
@@ -802,8 +805,8 @@ def test_section_renders_correctly_with_exactly_one_active_partner(page):
 
     # Arrange
     login = CmsLoginPage(page)
-    admin = HomeStrategicPartnersAdminPage(page)
-    sp = HomeStrategicPartnersPage(page)
+    admin = StrategicPartnersAdminPage(page)
+    sp = StrategicPartnersPage(page)
 
     try:
         # Act
@@ -845,8 +848,8 @@ def test_partner_with_expired_end_date_removed_at_boundary(page):
 
     # Arrange
     login = CmsLoginPage(page)
-    admin = HomeStrategicPartnersAdminPage(page)
-    sp = HomeStrategicPartnersPage(page)
+    admin = StrategicPartnersAdminPage(page)
+    sp = StrategicPartnersPage(page)
 
     with allure.step("Load the Home Page and record the identifier of the partner to be expired"):
         sp.open_home()
@@ -887,8 +890,8 @@ def test_partner_with_future_start_date_appears_at_boundary(page):
 
     # Arrange
     login = CmsLoginPage(page)
-    admin = HomeStrategicPartnersAdminPage(page)
-    sp = HomeStrategicPartnersPage(page)
+    admin = StrategicPartnersAdminPage(page)
+    sp = StrategicPartnersPage(page)
 
     # Act
     with allure.step("Log into the Liferay CMS and set a partner's Start Date to tomorrow"):
@@ -930,8 +933,8 @@ def test_draft_partner_stays_hidden_even_if_active_and_in_window(page):
 
     # Arrange
     login = CmsLoginPage(page)
-    admin = HomeStrategicPartnersAdminPage(page)
-    sp = HomeStrategicPartnersPage(page)
+    admin = StrategicPartnersAdminPage(page)
+    sp = StrategicPartnersPage(page)
 
     with allure.step("Load the Home Page and record the current distinct partner count"):
         sp.open_home()
@@ -973,8 +976,8 @@ def test_carousel_does_not_serve_stale_logo_past_cache_window(page, tmp_path):
 
     # Arrange
     login = CmsLoginPage(page)
-    admin = HomeStrategicPartnersAdminPage(page)
-    sp = HomeStrategicPartnersPage(page)
+    admin = StrategicPartnersAdminPage(page)
+    sp = StrategicPartnersPage(page)
 
     with allure.step("Load the Home Page and record the pre-edit first partner logo src"):
         sp.open_home()
@@ -1022,8 +1025,8 @@ def test_unpublishing_partner_removes_logo_cleanly(page):
 
     # Arrange
     login = CmsLoginPage(page)
-    admin = HomeStrategicPartnersAdminPage(page)
-    sp = HomeStrategicPartnersPage(page)
+    admin = StrategicPartnersAdminPage(page)
+    sp = StrategicPartnersPage(page)
 
     with allure.step("Load the Home Page and record the identifier of the partner to be unpublished"):
         sp.open_home()

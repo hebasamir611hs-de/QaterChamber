@@ -56,6 +56,8 @@ import pytest
 from cms.pages.home_contact_us.home_contact_us_admin_page import (
     HomeContactUsAdminPage,
 )
+from core.web.browser import new_context
+from web.pages.home_contact_us.home_contact_us_page import HomeContactUsPage
 
 INQUIRY_CATEGORY_XDIST_GROUP = "home_contact_us_inquiry_category_52706"
 CONTACT_US_SECTION_XDIST_GROUP = "home_contact_us_section_article_53012"
@@ -595,3 +597,153 @@ def test_send_message_button_label_ar_valid_value_saves_and_publishes_136572(pag
         admin.fill_text_field(admin.SEND_MESSAGE_BUTTON_LABEL_AR, baseline)
         admin.save_article_as_draft()
         admin.publish_article()
+
+
+# ---------------------------------------------------------------------------
+# TC 136498 — full end-to-end configuration flow (PBI 129390). RE-VERIFIED
+# LIVE 2026-09-07 (this session, disposable Python/Playwright probe, existing
+# .auth/state.json, 1920x1080) rather than inherited from the 2026-09-06
+# finding above, per standards.md's "re-verify any finding reached via
+# Content & Data instead of Object Authoring" instruction:
+#
+#   1. Confirmed NO Object Authoring (`/web/qatar-chamber/manage-<slug>`)
+#      surface exists for this section — tried `contact-us-section`,
+#      `quick-contact-us`, `quick-contact`, `contact-us`,
+#      `home-quick-contact-us`, `contact-us-quick-section`, every one
+#      rendered the site's "Coming Soon" 404-equivalent page. Independently
+#      cross-checked against the full live Content & Data object-definition
+#      menu (`Open Applications Menu` -> menu-item dump, ~170 objects listed)
+#      — no "Contact Us Section"/"Quick Contact" object definition exists
+#      anywhere in it (only "Inquiry Categories", already covered by
+#      136534/136538/136569 above). This section is confirmed NOT
+#      Object-Definition-backed; the standards.md "Object Authoring Is the
+#      Only Path" rule does not apply to it (see that section's own carve-out
+#      for surfaces that were never a Content & Data-vs-Object-Authoring
+#      choice) — it is a Liferay Journal (Web Content) article, matching the
+#      2026-09-06 finding.
+#   2. Re-opened the real article edit screen (articleId 53012) live this
+#      session and re-clicked "Fields" myself: the SAME blocker reproduces
+#      today — `.ddm-form-builder-app` mount renders with empty innerHTML,
+#      and the console fires the identical `TypeError: B.map is not a
+#      function` / `TypeError: O.map is not a function` traces inside
+#      `asset-taglib`'s bundle on every load. This is a confirmed-live,
+#      reproducible, still-open PRODUCT DEFECT (not a stale/superseded
+#      finding) — Site Content Editors cannot enter ANY of this article's
+#      Section Tag / Heading / Email Support / Telephone / Location /
+#      Recipient Emails / Send Message Button Label fields in either
+#      locale, via any in-product path, as of this session.
+#
+# TC 136498 ("Verify that the CMS end-to-end configuration flow saves and
+# publishes correctly") Step 2 ("Enter all fields (EN+AR) with test data")
+# is exactly the step this blocker prevents — it is SKIPPED for the same
+# reason and using the same shared xdist_group (articleId 53012) as the 11
+# field-level cases above, not scripted as a hollow pass. Save as Draft (Step
+# 3) and Publish (Step 5) buttons themselves DO render and are independently
+# clickable (see HomeContactUsAdminPage's ARTICLE_SAVE_AS_DRAFT_BUTTON /
+# ARTICLE_PUBLISH_BUTTON, both CONFIRMED LIVE) — only the field-entry step is
+# blocked — but a "Save as Draft" with no fields actually enterable cannot
+# fulfil the case's own Step 2, so the whole flow is disclosed as blocked
+# rather than split into a partial/misleading pass.
+# ---------------------------------------------------------------------------
+
+@allure.epic("Home Page")
+@allure.feature("Contact Us Section")
+@allure.story("Full admin configuration flow, end to end")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("CMS end-to-end configuration flow saves and publishes correctly (ADO-136498)")
+@pytest.mark.control_panel
+@pytest.mark.regression
+@pytest.mark.functional_high
+@pytest.mark.bilingual
+@pytest.mark.pbi_129390
+@pytest.mark.tc_136498
+@pytest.mark.xdist_group(CONTACT_US_SECTION_XDIST_GROUP)
+@pytest.mark.skip(reason=FIELDS_PANEL_BLOCKED_REASON)
+def test_contact_us_section_full_admin_configuration_flow_136498(page, browser):
+    """ADO-136498. Intended body once the Fields-panel blocker clears:
+
+    Step 1: admin.open_contact_us_section_article() -> screen opens (article
+        edit form renders, Save as Draft / Publish visible).
+    Step 2: fill every EN field (SECTION_TAG_EN, SECTION_HEADING_EN,
+        EMAIL_SUPPORT_ADDRESS, TELEPHONE_NUMBER, LOCATION_ADDRESS_EN,
+        FORM_RECIPIENT_EMAILS, SEND_MESSAGE_BUTTON_LABEL_EN) with QCTEST-
+        prefixed values, switch the toolbar locale to ar-SA via
+        ARTICLE_LOCALE_TOGGLE and fill every AR counterpart
+        (SECTION_TAG_AR, SECTION_HEADING_AR, LOCATION_ADDRESS_AR,
+        SEND_MESSAGE_BUTTON_LABEL_AR) -> assert every field_value() read-back
+        equals what was entered (bilingual pairs populated).
+    Step 3: admin.save_article_as_draft() -> assert not
+        is_save_error_shown() and a success toast is visible.
+    Step 4: admin.preview_article() (or equivalent Preview control once
+        confirmed) -> assert the preview surface renders the same values
+        just entered.
+    Step 5: admin.publish_article() -> assert not is_save_error_shown();
+        then, per standards.md's mandatory logged-out-context rule, open a
+        FRESH `new_context(browser, use_auth_state=False)` page against the
+        public Home page and poll/reload until the "QC Home Contact Us"
+        fragment reflects the new Heading/Telephone text, asserting the
+        anon read (never the CMS-authenticated `page`) matches.
+    Teardown (`finally`): restore every field to its captured baseline via
+        fill_text_field() + save_article_as_draft() + publish_article(), and
+        reopen-reread to confirm the restore persisted.
+
+    None of the above can be exercised today — Step 2's "Enter all fields"
+    is blocked by the live, reproducible Fields-panel rendering defect
+    documented in the module docstring and re-confirmed at the top of this
+    section 2026-09-07 (same asset-taglib `X.map is not a function` errors,
+    empty `.ddm-form-builder-app` mount). Reported as a PRODUCT-DEFECT
+    suspicion against TC 136498 — not an automation gap to route around with
+    an invented selector.
+    """
+    admin = HomeContactUsAdminPage(page)
+    admin.open_contact_us_section_article()
+    baseline = {
+        "section_tag_en": admin.field_value(admin.SECTION_TAG_EN),
+        "section_heading_en": admin.field_value(admin.SECTION_HEADING_EN),
+        "email_support_address": admin.field_value(admin.EMAIL_SUPPORT_ADDRESS),
+        "telephone_number": admin.field_value(admin.TELEPHONE_NUMBER),
+        "location_address_en": admin.field_value(admin.LOCATION_ADDRESS_EN),
+        "form_recipient_emails": admin.field_value(admin.FORM_RECIPIENT_EMAILS),
+        "send_message_button_label_en": admin.field_value(admin.SEND_MESSAGE_BUTTON_LABEL_EN),
+    }
+    anon_context = new_context(browser, use_auth_state=False)
+    anon_page = anon_context.new_page()
+    try:
+        with allure.step("Step 1: Open Contact Us Section Management — screen opens"):
+            admin.open_contact_us_section_article()
+
+        with allure.step("Step 2: Enter all fields (EN+AR) with test data"):
+            admin.fill_text_field(admin.SECTION_TAG_EN, "QCTEST-136498 Get in touch")
+            admin.fill_text_field(admin.SECTION_HEADING_EN, "QCTEST-136498 Connect with Qatar Chamber")
+            admin.fill_text_field(admin.EMAIL_SUPPORT_ADDRESS, "qctest-136498@example.com")
+            admin.fill_text_field(admin.TELEPHONE_NUMBER, "+974 4000 0000")
+            admin.fill_text_field(admin.LOCATION_ADDRESS_EN, "QCTEST-136498 Doha, Qatar")
+            admin.fill_text_field(admin.FORM_RECIPIENT_EMAILS, "qctest-136498@example.com")
+            admin.fill_text_field(admin.SEND_MESSAGE_BUTTON_LABEL_EN, "QCTEST-136498 Send")
+            assert admin.field_value(admin.SECTION_HEADING_EN) == "QCTEST-136498 Connect with Qatar Chamber"
+
+        with allure.step("Step 3: Click Save as Draft — draft saved, success toast shown"):
+            admin.save_article_as_draft()
+            assert not admin.is_save_error_shown(), admin.save_error_text()
+
+        with allure.step("Step 4: Click Preview — preview renders matching entered values"):
+            admin.preview_article()
+
+        with allure.step("Step 5: Click Publish — section published; Home Page reflects new content"):
+            admin.publish_article()
+            assert not admin.is_save_error_shown(), admin.save_error_text()
+            home = HomeContactUsPage(anon_page)
+            reflected = home.reload_until_heading_matches("QCTEST-136498 Connect with Qatar Chamber")
+            assert reflected, "Updated Contact Us heading did not reflect on the public Home Page within the poll budget"
+    finally:
+        admin.open_contact_us_section_article()
+        admin.fill_text_field(admin.SECTION_TAG_EN, baseline["section_tag_en"])
+        admin.fill_text_field(admin.SECTION_HEADING_EN, baseline["section_heading_en"])
+        admin.fill_text_field(admin.EMAIL_SUPPORT_ADDRESS, baseline["email_support_address"])
+        admin.fill_text_field(admin.TELEPHONE_NUMBER, baseline["telephone_number"])
+        admin.fill_text_field(admin.LOCATION_ADDRESS_EN, baseline["location_address_en"])
+        admin.fill_text_field(admin.FORM_RECIPIENT_EMAILS, baseline["form_recipient_emails"])
+        admin.fill_text_field(admin.SEND_MESSAGE_BUTTON_LABEL_EN, baseline["send_message_button_label_en"])
+        admin.save_article_as_draft()
+        admin.publish_article()
+        anon_context.close()
