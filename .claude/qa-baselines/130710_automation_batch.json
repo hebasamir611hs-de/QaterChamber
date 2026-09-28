@@ -1,0 +1,3165 @@
+{
+  "pbi_id": 130710,
+  "pbi_title": "QC - Insights & Media - 002 - Al-Moltqa Magazine",
+  "cases": [
+    {
+      "id": 144092,
+      "title": "Verify that the Al-Moltaqa Magazine page hero section and breadcrumb render correctly in English",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate Main Menu &gt; Insights &amp; Media &gt; Al-Moltaqa Magazine on the EN locale (WEB_BASE_URL, no /ar prefix)",
+          "expected": "Page loads at the Al-Moltaqa Magazine URL in English"
+        },
+        {
+          "action": "Observe the hero section",
+          "expected": "Hero section displays the title &quot;Al-Moltaqa Magazine&quot; in Cairo Bold (display-xs), left-aligned LTR"
+        },
+        {
+          "action": "Observe the breadcrumb trail",
+          "expected": "Breadcrumb reads &quot;Home &gt; Insights &amp; Media&quot; left-to-right, both segments are clickable links"
+        }
+      ]
+    },
+    {
+      "id": 144093,
+      "title": "Verify that the Latest Issue card renders all required elements in English",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "Regression",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Al-Moltaqa Magazine page (EN) with Issue #68 &quot;Economic Magazine&quot; as the most recently Published issue",
+          "expected": "Latest Issue card is displayed for Issue #68"
+        },
+        {
+          "action": "Observe the Latest Issue card badges",
+          "expected": "Card shows a &quot;Latest Issue&quot; badge and an &quot;Issue #68&quot; badge"
+        },
+        {
+          "action": "Observe the Latest Issue card title and description",
+          "expected": "Card shows title &quot;Economic Magazine&quot; (Cairo Bold, display-xxs) and the full issue description paragraph"
+        },
+        {
+          "action": "Observe the Latest Issue card meta row and action buttons",
+          "expected": "Meta row shows &quot;May 2026&quot; / &quot;48 pages&quot; / &quot;12 Articles&quot;; &quot;Read Online&quot; and &quot;Download PDF&quot; buttons are visible and enabled"
+        }
+      ]
+    },
+    {
+      "id": 144094,
+      "title": "Verify that the Magazine Archive section heading and search box render in English",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Al-Moltaqa Magazine page (EN)",
+          "expected": "Page loads with at least two Published issues so an Archive section exists"
+        },
+        {
+          "action": "Scroll to the Magazine Archive section",
+          "expected": "&quot;Magazine Archive&quot; heading is visible (Cairo Semibold, display-xxs)"
+        },
+        {
+          "action": "Observe the section heading and search input",
+          "expected": "A search input with placeholder text &quot;Search...&quot; is visible and focusable"
+        }
+      ]
+    },
+    {
+      "id": 144095,
+      "title": "Verify that an Archive grid card renders all required elements in English",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Al-Moltaqa Magazine page (EN) with Issue #67 &quot;Trade &amp; Industry Review&quot; Published and present in the Archive grid",
+          "expected": "Archive grid displays a card for Issue #67"
+        },
+        {
+          "action": "Observe the Archive card badge and cover image",
+          "expected": "Card shows the &quot;Issue #67&quot; badge and a cover image"
+        },
+        {
+          "action": "Observe the Archive card title, description and meta row",
+          "expected": "Card shows title &quot;Trade &amp; Industry Review&quot;, its description, and meta (&quot;February 2026&quot; / page count / article count)"
+        },
+        {
+          "action": "Observe the Archive card action buttons",
+          "expected": "&quot;Read Online&quot; and &quot;Download PDF&quot; buttons are visible and enabled on the card"
+        }
+      ]
+    },
+    {
+      "id": 144096,
+      "title": "Verify that the Al-Moltaqa Magazine page layout is correct at desktop viewport width",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Set the browser viewport to a desktop width (1920x1080)",
+          "expected": "Viewport is set to 1920x1080"
+        },
+        {
+          "action": "Navigate to the Al-Moltaqa Magazine page (EN)",
+          "expected": "Page renders without horizontal scroll or overlapping elements"
+        },
+        {
+          "action": "Observe the Latest Issue card and Archive grid layout",
+          "expected": "Latest Issue card is full-width single layout; Archive grid displays in a multi-column layout (3+ columns) with no clipped text or overlapping cards"
+        }
+      ]
+    },
+    {
+      "id": 144097,
+      "title": "Verify that the Al-Moltaqa Magazine page layout is correct at tablet viewport width",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Set the browser viewport to a tablet width (768x1024)",
+          "expected": "Viewport is set to 768x1024"
+        },
+        {
+          "action": "Navigate to the Al-Moltaqa Magazine page (EN)",
+          "expected": "Page renders without horizontal scroll or overlapping elements"
+        },
+        {
+          "action": "Observe the Latest Issue card and Archive grid layout",
+          "expected": "Latest Issue card reflows to fit tablet width; Archive grid displays in a 2-column layout with readable text and touch-target-sized buttons"
+        }
+      ]
+    },
+    {
+      "id": 144098,
+      "title": "Verify that the Al-Moltaqa Magazine page layout is correct at mobile viewport width",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Set the browser viewport to a mobile width (375x812)",
+          "expected": "Viewport is set to 375x812"
+        },
+        {
+          "action": "Navigate to the Al-Moltaqa Magazine page (EN)",
+          "expected": "Page renders without horizontal scroll or overlapping elements"
+        },
+        {
+          "action": "Observe the Latest Issue card and Archive grid layout",
+          "expected": "Latest Issue card and Archive cards stack in a single column; &quot;Read Online&quot;/&quot;Download PDF&quot; buttons remain fully visible and tappable without truncation"
+        }
+      ]
+    },
+    {
+      "id": 144101,
+      "title": "Verify that a Site Content Author can view and update an assigned magazine issue and save it as Draft",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Log in to Object Authoring at qcdev.ihorizons.com/object-authoring as Site Content Author (Test2@xyz.com / Test@123)",
+          "expected": "Login succeeds; Author lands on the Object Authoring home"
+        },
+        {
+          "action": "Open the Al-Moltaqa Magazine management area and select an existing assigned issue, e.g. &quot;QCTEST-MAG-101&quot;",
+          "expected": "Issue &quot;QCTEST-MAG-101&quot; opens in edit mode with all fields populated"
+        },
+        {
+          "action": "Update the Issue Description EN field to &quot;Updated by Author QCTEST-MAG-101&quot;",
+          "expected": "Field value is updated in the form"
+        },
+        {
+          "action": "Click Save as Draft",
+          "expected": "Issue saves with status Draft; Liferay generic success toast is displayed; Publish action is not available to this role"
+        }
+      ]
+    },
+    {
+      "id": 144102,
+      "title": "Verify that a Site Content Author cannot publish a magazine issue",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Log in to Object Authoring as Site Content Author (Test2@xyz.com / Test@123)",
+          "expected": "Login succeeds as Site Content Author"
+        },
+        {
+          "action": "Open magazine issue &quot;QCTEST-MAG-101&quot; in Draft status",
+          "expected": "Issue opens in edit mode"
+        },
+        {
+          "action": "Attempt to locate and trigger the Publish action for the issue",
+          "expected": "Publish control is either not rendered or the action is rejected with a permission error; issue status remains Draft; the issue does not appear on the public Al-Moltaqa Magazine page"
+        }
+      ]
+    },
+    {
+      "id": 144103,
+      "title": "Verify that a Public Visitor cannot view a Draft magazine issue via a direct URL",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, create issue &quot;QCTEST-MAG-102&quot; and leave it in Draft status (do not publish)",
+          "expected": "Issue &quot;QCTEST-MAG-102&quot; is created and saved with status Draft"
+        },
+        {
+          "action": "Note the issue's detail/PDF URL from the Draft record",
+          "expected": "URL is captured from the Draft record"
+        },
+        {
+          "action": "In a fresh logged-out browser context (no CMS auth state), navigate directly to that URL",
+          "expected": "The fresh logged-out context receives a 404/blocked response or is redirected to the Magazine page without the Draft issue ever appearing in the Latest Issue card or Archive grid"
+        }
+      ]
+    },
+    {
+      "id": 144104,
+      "title": "Verify that a Site Content Editor can create a new magazine issue in Object Authoring",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Workflow"
+      ],
+      "steps": [
+        {
+          "action": "Log in to Object Authoring as Site Content Editor (test1@xyz.com / Test@1234)",
+          "expected": "Login succeeds; Editor lands on Object Authoring home"
+        },
+        {
+          "action": "Open Al-Moltaqa Magazine management in Liferay CMS (Object Authoring) and click Create New",
+          "expected": "Create New form opens with all Magazine Issue fields empty and mandatory markers visible"
+        },
+        {
+          "action": "Enter Issue Number &quot;QCTEST-MAG-201&quot;, Title EN &quot;Autumn Trade Digest&quot;, Title AR &quot;ملخص التجارة الخريفي&quot;, Description EN/AR, Issue Date 01/09/2026, Page Count 32, Article Count 8, Cover Image cover_201.jpg, PDF file 201.pdf",
+          "expected": "All entered values populate the corresponding fields without truncation"
+        },
+        {
+          "action": "Click Save as Draft",
+          "expected": "Issue &quot;QCTEST-MAG-201&quot; is created with status Draft; Liferay generic success toast is displayed"
+        }
+      ]
+    },
+    {
+      "id": 144105,
+      "title": "Verify that a Site Content Editor can edit an existing magazine issue",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Workflow"
+      ],
+      "steps": [
+        {
+          "action": "Log in to Object Authoring as Site Content Editor (test1@xyz.com / Test@1234)",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Open Al-Moltaqa Magazine management and select issue &quot;QCTEST-MAG-201&quot;",
+          "expected": "Issue &quot;QCTEST-MAG-201&quot; opens in edit mode with current values shown"
+        },
+        {
+          "action": "Change Page Count from 32 to 36",
+          "expected": "Page Count field shows 36"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Issue saves with Page Count = 36; Liferay generic success toast is displayed; record persists on reopening the issue"
+        }
+      ]
+    },
+    {
+      "id": 144106,
+      "title": "Verify that a magazine issue saved as Draft does not appear on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Workflow"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open issue &quot;QCTEST-MAG-201&quot; (currently Draft)",
+          "expected": "Issue opens in edit mode"
+        },
+        {
+          "action": "Click Save as Draft without publishing",
+          "expected": "Issue status remains Draft; Liferay generic success toast is displayed"
+        },
+        {
+          "action": "In a fresh logged-out browser context, load the Al-Moltaqa Magazine public page",
+          "expected": "Issue &quot;QCTEST-MAG-201&quot; is absent from both the Latest Issue card and the Archive grid on the public page"
+        }
+      ]
+    },
+    {
+      "id": 144107,
+      "title": "Verify that Preview shows draft content without affecting the live public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Workflow"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open Published issue &quot;QCTEST-MAG-201&quot; and change Title EN to &quot;Autumn Trade Digest (Preview Edit)&quot; without saving/publishing",
+          "expected": "Unsaved title change is present in the edit form"
+        },
+        {
+          "action": "Click Preview",
+          "expected": "Preview opens showing the title as &quot;Autumn Trade Digest (Preview Edit)&quot;"
+        },
+        {
+          "action": "In a separate fresh logged-out browser context, load the live public Al-Moltaqa Magazine page",
+          "expected": "The live public page still shows the previously published title (unchanged), confirming Preview reads draft state and does not affect delivery"
+        }
+      ]
+    },
+    {
+      "id": 144108,
+      "title": "Verify that publishing a magazine issue makes it visible as the Latest Issue on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web",
+        "Workflow"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open Draft issue &quot;QCTEST-MAG-201&quot; dated 05/09/2026 (later than the current Latest Issue)",
+          "expected": "Issue form opens for &quot;QCTEST-MAG-201&quot;"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Issue status changes to Published; Liferay generic success toast is displayed"
+        },
+        {
+          "action": "In a fresh logged-out browser context, poll the public Al-Moltaqa Magazine page (5s timeout, 0.5s interval per the propagation budget) for the Latest Issue card",
+          "expected": "Within the polling budget, the Latest Issue card shows &quot;QCTEST-MAG-201&quot; with its badge, title, description, meta and both action buttons"
+        }
+      ]
+    },
+    {
+      "id": 144109,
+      "title": "Verify that unpublishing a magazine issue removes it from the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "Web",
+        "Workflow"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open Published issue &quot;QCTEST-MAG-201&quot;",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Click Unpublish",
+          "expected": "Issue status changes to Unpublished; Liferay generic success toast is displayed"
+        },
+        {
+          "action": "In a fresh logged-out browser context, poll the public Al-Moltaqa Magazine page (5s timeout, 0.5s interval) for the issue's continued presence",
+          "expected": "Within the polling budget, &quot;QCTEST-MAG-201&quot; no longer appears in the Latest Issue card or the Archive grid"
+        }
+      ]
+    },
+    {
+      "id": 144110,
+      "title": "Verify that a Site Content Editor can delete a magazine issue",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Workflow"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open Al-Moltaqa Magazine management and locate disposable issue &quot;QCTEST-MAG-201&quot; by its exact ID (never by row position)",
+          "expected": "Target issue is located and its identity confirmed via ID/title match, not list position"
+        },
+        {
+          "action": "Confirm the entry title/ID matches the QCTEST- disposable pattern before deleting",
+          "expected": "Confirmation shows the disposable QCTEST- pattern"
+        },
+        {
+          "action": "Click Delete and confirm",
+          "expected": "Issue is removed; Liferay generic success toast is displayed"
+        },
+        {
+          "action": "Re-open the Object Authoring listing and search for &quot;QCTEST-MAG-201&quot;",
+          "expected": "Listing search returns zero matches for &quot;QCTEST-MAG-201&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144111,
+      "title": "Verify that discarding changes while creating a new magazine issue does not save the record",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, click Create New in Al-Moltaqa Magazine management",
+          "expected": "Create New form opens empty"
+        },
+        {
+          "action": "Enter Issue Number &quot;QCTEST-MAG-202&quot; and a Title EN value",
+          "expected": "Values are entered in the form"
+        },
+        {
+          "action": "Click Discard/Cancel",
+          "expected": "Form closes without a save confirmation toast"
+        },
+        {
+          "action": "Search the Object Authoring listing for &quot;QCTEST-MAG-202&quot;",
+          "expected": "No record &quot;QCTEST-MAG-202&quot; exists in the listing"
+        }
+      ]
+    },
+    {
+      "id": 144113,
+      "title": "Verify that the Latest Issue card shows the most recently published issue by Issue Date",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish issue A dated 01/03/2026 and issue B dated 01/06/2026",
+          "expected": "Both issues are Published"
+        },
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page",
+          "expected": "Page loads with the Archive and Latest Issue card populated"
+        },
+        {
+          "action": "Observe which issue appears in the Latest Issue card",
+          "expected": "Issue B (Issue Date 01/06/2026, the most recent) is shown in the Latest Issue card; issue A appears in the Archive grid instead"
+        }
+      ]
+    },
+    {
+      "id": 144114,
+      "title": "Verify that the Magazine Archive grid sorts remaining issues by Issue Date descending",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish three issues dated 01/01/2026, 01/03/2026 and 01/05/2026 (the last is Latest Issue)",
+          "expected": "All three issues are Published"
+        },
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page",
+          "expected": "Page loads with the Archive grid populated with the two non-Latest issues"
+        },
+        {
+          "action": "Read the order of the Archive grid cards",
+          "expected": "Archive grid lists 01/03/2026 before 01/01/2026 (newest first, descending by Issue Date)"
+        }
+      ]
+    },
+    {
+      "id": 144115,
+      "title": "Verify that a published magazine issue persists after a page reload",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish issue &quot;QCTEST-MAG-204&quot;",
+          "expected": "Issue is Published with the Liferay generic success toast"
+        },
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page and confirm the issue is visible",
+          "expected": "Issue &quot;QCTEST-MAG-204&quot; is visible in the Latest Issue card or Archive grid"
+        },
+        {
+          "action": "Reload the browser page",
+          "expected": "After reload, the same issue and values are still displayed identically"
+        },
+        {
+          "action": "Re-open Object Authoring and confirm the record's saved values",
+          "expected": "Object Authoring record shows the same field values as originally saved"
+        }
+      ]
+    },
+    {
+      "id": 144116,
+      "title": "Verify that publishing a newer issue re-designates it as Latest Issue and moves the previous Latest Issue into the Archive",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Confirm issue A (dated 01/04/2026) is currently the Latest Issue on the public page",
+          "expected": "Issue A is confirmed as the current Latest Issue"
+        },
+        {
+          "action": "As Site Content Editor, publish issue C dated 01/07/2026",
+          "expected": "Issue C is Published with the Liferay generic success toast"
+        },
+        {
+          "action": "Poll the public Al-Moltaqa Magazine page (5s timeout, 0.5s interval) and observe the Latest Issue card and Archive grid",
+          "expected": "Latest Issue card now shows issue C; issue A now appears as the first (newest) card in the Archive grid"
+        }
+      ]
+    },
+    {
+      "id": 144117,
+      "title": "Verify that a draft magazine issue does not appear anywhere on the public Al-Moltaqa Magazine page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, save issue &quot;QCTEST-MAG-205&quot; as Draft (do not publish)",
+          "expected": "Issue is saved with status Draft"
+        },
+        {
+          "action": "In a fresh logged-out browser context, load the public Al-Moltaqa Magazine page",
+          "expected": "Public page loads normally with only Published issues"
+        },
+        {
+          "action": "Search the page's Latest Issue card and Archive grid for &quot;QCTEST-MAG-205&quot;",
+          "expected": "&quot;QCTEST-MAG-205&quot; is not present in the Latest Issue card or the Archive grid"
+        }
+      ]
+    },
+    {
+      "id": 144118,
+      "title": "Verify that the Al-Moltaqa Magazine page itself is not publicly reachable when unpublished",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, set the Al-Moltaqa Magazine page's Active Status to Unpublished",
+          "expected": "Page status changes to Unpublished; Liferay generic success toast is displayed"
+        },
+        {
+          "action": "In a fresh logged-out browser context, navigate directly to the Al-Moltaqa Magazine page URL",
+          "expected": "The fresh logged-out context receives a 404/410 or is redirected away — the page's content is not rendered"
+        },
+        {
+          "action": "Restore the page's Active Status to Published (teardown)",
+          "expected": "Page status is restored to Published"
+        }
+      ]
+    },
+    {
+      "id": 144119,
+      "title": "Verify that a valid Page Title EN is saved and displayed on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open the Al-Moltaqa Magazine page settings",
+          "expected": "Page settings form opens with the current title shown"
+        },
+        {
+          "action": "Enter Page Title EN = &quot;Al-Moltaqa Magazine&quot;",
+          "expected": "Value &quot;Al-Moltaqa Magazine&quot; is entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save succeeds with the Liferay generic success toast"
+        },
+        {
+          "action": "Load the public Al-Moltaqa Magazine page (EN)",
+          "expected": "Public hero title displays &quot;Al-Moltaqa Magazine&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144120,
+      "title": "Verify that Page Title EN rejects an empty value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open the Al-Moltaqa Magazine page settings",
+          "expected": "Page settings form opens with the current title populated"
+        },
+        {
+          "action": "Clear the Page Title EN field",
+          "expected": "Field is empty"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked; a required-field validation error is displayed; the previous title value remains stored"
+        }
+      ]
+    },
+    {
+      "id": 144121,
+      "title": "Verify that Page Title EN rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open the Al-Moltaqa Magazine page settings",
+          "expected": "Page settings form opens"
+        },
+        {
+          "action": "Enter &quot;   &quot; (three spaces) into Page Title EN",
+          "expected": "Field shows the whitespace-only value"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked with a required-field validation error; the previous title value remains stored"
+        }
+      ]
+    },
+    {
+      "id": 144122,
+      "title": "Verify that a valid Issue Number is saved and displayed as the badge on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open issue &quot;QCTEST-MAG-206&quot;",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter Issue Number = &quot;Issue #69&quot;",
+          "expected": "Value &quot;Issue #69&quot; is entered"
+        },
+        {
+          "action": "Publish the issue",
+          "expected": "Issue publishes with the Liferay generic success toast"
+        },
+        {
+          "action": "Load the public Al-Moltaqa Magazine page",
+          "expected": "The badge &quot;Issue #69&quot; is displayed on the issue's card"
+        }
+      ]
+    },
+    {
+      "id": 144123,
+      "title": "Verify that Issue Number rejects an empty value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Leave Issue Number empty and fill all other mandatory fields",
+          "expected": "Only Issue Number is left blank"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a required-field validation error; issue remains unpublished"
+        }
+      ]
+    },
+    {
+      "id": 144124,
+      "title": "Verify that Issue Number rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter &quot;   &quot; into Issue Number and fill all other mandatory fields",
+          "expected": "Issue Number shows whitespace only"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a required-field validation error"
+        }
+      ]
+    },
+    {
+      "id": 144125,
+      "title": "Verify that a valid Issue Title EN is saved and displayed on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open issue &quot;QCTEST-MAG-207&quot;",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter Issue Title EN = &quot;Economic Magazine&quot;",
+          "expected": "Value &quot;Economic Magazine&quot; is entered"
+        },
+        {
+          "action": "Publish the issue",
+          "expected": "Issue publishes with the Liferay generic success toast"
+        },
+        {
+          "action": "Load the public page and locate the issue's card",
+          "expected": "Card title displays exactly &quot;Economic Magazine&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144126,
+      "title": "Verify that Issue Title EN rejects an empty value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Leave Issue Title EN empty and fill all other mandatory fields",
+          "expected": "Only Issue Title EN is left blank"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a required bilingual-content validation error"
+        }
+      ]
+    },
+    {
+      "id": 144127,
+      "title": "Verify that Issue Title EN rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter &quot;   &quot; into Issue Title EN and fill all other mandatory fields",
+          "expected": "Issue Title EN shows whitespace only"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a validation error"
+        }
+      ]
+    },
+    {
+      "id": 144128,
+      "title": "Verify that Issue Title EN accepts exactly 200 characters and rejects 201 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a draft issue form and enter a 200-character string into Issue Title EN",
+          "expected": "Field accepts the 200-character input without truncation"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save succeeds with the Liferay generic success toast; the full 200-character value is stored"
+        },
+        {
+          "action": "Edit the same field to a 201-character string",
+          "expected": "Field shows the 201-character input"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked with a max-length validation error; the value is not persisted beyond 200 characters"
+        }
+      ]
+    },
+    {
+      "id": 144129,
+      "title": "Verify that a valid Issue Description EN is saved and displayed on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open issue &quot;QCTEST-MAG-207&quot;",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter Issue Description EN = &quot;Al-Moltaqa Magazine Issue 68 covers Qatar's Q1 2026 economic outlook, trade statistics, and member spotlights.&quot;",
+          "expected": "Description value is entered"
+        },
+        {
+          "action": "Publish the issue",
+          "expected": "Issue publishes with the Liferay generic success toast"
+        },
+        {
+          "action": "Load the public page and view the issue's card",
+          "expected": "Card displays the description text exactly as entered"
+        }
+      ]
+    },
+    {
+      "id": 144130,
+      "title": "Verify that Issue Description EN rejects an empty value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Leave Issue Description EN empty and fill all other mandatory fields",
+          "expected": "Only Issue Description EN is left blank"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a required bilingual-content validation error"
+        }
+      ]
+    },
+    {
+      "id": 144131,
+      "title": "Verify that Issue Description EN rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter &quot;   &quot; into Issue Description EN and fill all other mandatory fields",
+          "expected": "Description shows whitespace only"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a validation error"
+        }
+      ]
+    },
+    {
+      "id": 144132,
+      "title": "Verify that Issue Description EN accepts exactly 1000 characters and rejects 1001 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, enter a 1000-character string into Issue Description EN",
+          "expected": "Field accepts the 1000-character input without truncation"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save succeeds; the full 1000-character value is stored"
+        },
+        {
+          "action": "Edit the field to a 1001-character string",
+          "expected": "Field shows the 1001-character input"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked with a max-length validation error"
+        }
+      ]
+    },
+    {
+      "id": 144133,
+      "title": "Verify that a valid JPG Cover Image is saved and displayed on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open issue &quot;QCTEST-MAG-208&quot;",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Upload cover_208.jpg as the Cover Image",
+          "expected": "Upload completes; thumbnail preview shows cover_208.jpg"
+        },
+        {
+          "action": "Publish the issue",
+          "expected": "Issue publishes with the Liferay generic success toast"
+        },
+        {
+          "action": "Load the public page and inspect the issue's card image",
+          "expected": "Card renders cover_208.jpg as the cover image with a resolvable src"
+        }
+      ]
+    },
+    {
+      "id": 144134,
+      "title": "Verify that a magazine issue cannot be published without a Cover Image",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Leave Cover Image empty and fill all other mandatory fields",
+          "expected": "Only Cover Image is left blank"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a required-field validation error"
+        }
+      ]
+    },
+    {
+      "id": 144135,
+      "title": "Verify that Cover Image rejects a non-image file format",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Attempt to upload notes.txt as the Cover Image",
+          "expected": "Upload is attempted with an unsupported file type"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Upload is rejected with a format validation error (JPG/PNG/JPEG only); no file is attached"
+        }
+      ]
+    },
+    {
+      "id": 144136,
+      "title": "Verify that a valid Issue Date is saved and reflected in the issue's meta on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open issue &quot;QCTEST-MAG-209&quot;",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter Issue Date = 01/05/2026",
+          "expected": "Date is entered and accepted by the date picker"
+        },
+        {
+          "action": "Publish the issue",
+          "expected": "Issue publishes with the Liferay generic success toast"
+        },
+        {
+          "action": "Load the public page and read the issue's meta row",
+          "expected": "Meta row displays &quot;May 2026&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144137,
+      "title": "Verify that a magazine issue cannot be published without an Issue Date",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Leave Issue Date empty and fill all other mandatory fields",
+          "expected": "Only Issue Date is left blank"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a required-field validation error"
+        }
+      ]
+    },
+    {
+      "id": 144138,
+      "title": "Verify that Issue Date rejects an invalid date format",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Type &quot;32/13/2026&quot; directly into the Issue Date field",
+          "expected": "Invalid date string is entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked with an invalid-date validation error"
+        }
+      ]
+    },
+    {
+      "id": 144139,
+      "title": "Verify that a valid Page Count is saved and displayed on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open issue &quot;QCTEST-MAG-210&quot;",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter Page Count = 48",
+          "expected": "Value 48 is entered"
+        },
+        {
+          "action": "Publish the issue",
+          "expected": "Issue publishes with the Liferay generic success toast"
+        },
+        {
+          "action": "Load the public page and read the meta row",
+          "expected": "Meta row shows &quot;48 pages&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144140,
+      "title": "Verify that Page Count rejects an empty value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Leave Page Count empty and fill all other mandatory fields",
+          "expected": "Only Page Count is left blank"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a required-field validation error"
+        }
+      ]
+    },
+    {
+      "id": 144141,
+      "title": "Verify that Page Count rejects a value of zero",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter Page Count = 0",
+          "expected": "Value 0 is entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked with a positive-integer validation error; value not persisted"
+        }
+      ]
+    },
+    {
+      "id": 144142,
+      "title": "Verify that Page Count rejects a negative value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter Page Count = -5",
+          "expected": "Value -5 is entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked with a positive-integer validation error; value not persisted"
+        }
+      ]
+    },
+    {
+      "id": 144143,
+      "title": "Verify that Page Count rejects a non-numeric value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter &quot;abc&quot; into Page Count",
+          "expected": "Value &quot;abc&quot; is entered (or rejected at keystroke level if the field is numeric-only)"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked with a number-format validation error; value not persisted"
+        }
+      ]
+    },
+    {
+      "id": 144144,
+      "title": "Verify that a valid Article Count is saved and displayed on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open issue &quot;QCTEST-MAG-210&quot;",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter Article Count = 12",
+          "expected": "Value 12 is entered"
+        },
+        {
+          "action": "Publish the issue",
+          "expected": "Issue publishes with the Liferay generic success toast"
+        },
+        {
+          "action": "Load the public page and read the meta row",
+          "expected": "Meta row shows &quot;12 Articles&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144145,
+      "title": "Verify that Article Count rejects an empty value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Leave Article Count empty and fill all other mandatory fields",
+          "expected": "Only Article Count is left blank"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a required-field validation error"
+        }
+      ]
+    },
+    {
+      "id": 144146,
+      "title": "Verify that Article Count rejects a value of zero",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter Article Count = 0",
+          "expected": "Value 0 is entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked with a positive-integer validation error"
+        }
+      ]
+    },
+    {
+      "id": 144147,
+      "title": "Verify that Article Count rejects a negative value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter Article Count = -3",
+          "expected": "Value -3 is entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked with a positive-integer validation error"
+        }
+      ]
+    },
+    {
+      "id": 144148,
+      "title": "Verify that Article Count rejects a non-numeric value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Enter &quot;xyz&quot; into Article Count",
+          "expected": "Value &quot;xyz&quot; is entered (or rejected at keystroke level if numeric-only)"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Save is blocked with a number-format validation error"
+        }
+      ]
+    },
+    {
+      "id": 144149,
+      "title": "Verify that a valid PDF attachment is saved and usable via Read Online and Download PDF on the public page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open issue &quot;QCTEST-MAG-211&quot;",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Upload issue211.pdf as the PDF Attachment",
+          "expected": "Upload completes; file name issue211.pdf shown as attached"
+        },
+        {
+          "action": "Publish the issue",
+          "expected": "Issue publishes with the Liferay generic success toast"
+        },
+        {
+          "action": "On the public page, click Read Online then Download PDF for the issue",
+          "expected": "Read Online opens issue211.pdf in a new browser tab; Download PDF saves issue211.pdf to the downloads folder"
+        }
+      ]
+    },
+    {
+      "id": 144150,
+      "title": "Verify that a magazine issue cannot be published without a PDF attachment",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new/draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Leave the PDF Attachment empty and fill all other mandatory fields",
+          "expected": "Only the PDF Attachment is left blank"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a validation error stating the PDF attachment is required; issue status remains Draft"
+        }
+      ]
+    },
+    {
+      "id": 144151,
+      "title": "Verify that publishing is blocked when the PDF Attachment is an invalid (non-PDF) file",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a draft issue form with all other mandatory fields completed",
+          "expected": "Issue form opens with valid data in every other field"
+        },
+        {
+          "action": "Attempt to upload issue211.docx as the PDF Attachment",
+          "expected": "Upload is rejected or the field flags the file as an invalid format"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Publish is blocked with a format validation error (PDF only); issue status remains Draft"
+        }
+      ]
+    },
+    {
+      "id": 144152,
+      "title": "Verify that Open in New Tab defaults to True and Read Online opens the PDF in a new browser tab",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open a new draft issue form",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Observe the Open in New Tab control without changing it",
+          "expected": "Open in New Tab shows True by default"
+        },
+        {
+          "action": "Publish the issue and click Read Online on the public page",
+          "expected": "Read Online opens the PDF in a new browser tab, leaving the magazine page open in the original tab"
+        }
+      ]
+    },
+    {
+      "id": 144153,
+      "title": "Verify that setting Open in New Tab to False persists and is honored by Read Online",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open issue &quot;QCTEST-MAG-212&quot;",
+          "expected": "Issue form opens"
+        },
+        {
+          "action": "Set Open in New Tab = False and Save",
+          "expected": "Value saves as False; Liferay generic success toast is displayed"
+        },
+        {
+          "action": "Publish the issue and click Read Online on the public page",
+          "expected": "Read Online opens the PDF in the same browser tab, not a new tab"
+        }
+      ]
+    },
+    {
+      "id": 144181,
+      "title": "Verify that Read Online's tab behavior changes correctly when Open in New Tab is toggled between issues",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish issue D with Open in New Tab = True and issue E with Open in New Tab = False",
+          "expected": "Both issues are Published and visible on the public page"
+        },
+        {
+          "action": "On the public page, click Read Online on issue D",
+          "expected": "Issue D's PDF opens in a new browser tab"
+        },
+        {
+          "action": "Click Read Online on issue E",
+          "expected": "Issue E's PDF opens in the current tab, confirming the field-dependency between Open in New Tab and Read Online per issue"
+        }
+      ]
+    },
+    {
+      "id": 144182,
+      "title": "Verify that Read Online on the Latest Issue card opens the PDF in a new browser tab",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page with Issue #68 as the Latest Issue",
+          "expected": "Page loads with the Latest Issue card visible"
+        },
+        {
+          "action": "Click &quot;Read Online&quot; on the Latest Issue card",
+          "expected": "A new browser tab opens"
+        },
+        {
+          "action": "Observe the newly opened browser tab",
+          "expected": "The new tab loads Issue #68's PDF file; the original Al-Moltaqa Magazine tab remains open and unchanged"
+        }
+      ]
+    },
+    {
+      "id": 144183,
+      "title": "Verify that Read Online on an Archive grid card opens the PDF in a new browser tab",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page with Issue #67 visible in the Archive grid",
+          "expected": "Page loads with the Archive grid populated"
+        },
+        {
+          "action": "Click &quot;Read Online&quot; on Issue #67's Archive card",
+          "expected": "A new browser tab opens"
+        },
+        {
+          "action": "Observe the newly opened browser tab",
+          "expected": "The new tab loads Issue #67's PDF file"
+        }
+      ]
+    },
+    {
+      "id": 144184,
+      "title": "Verify that Download PDF on the Latest Issue card downloads the PDF file",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page with Issue #68 as the Latest Issue",
+          "expected": "Page loads with the Latest Issue card visible"
+        },
+        {
+          "action": "Click &quot;Download PDF&quot; on the Latest Issue card",
+          "expected": "Download initiates"
+        },
+        {
+          "action": "Check the browser's download list",
+          "expected": "The PDF file for Issue #68 is present in the browser's download list with a valid PDF content type"
+        }
+      ]
+    },
+    {
+      "id": 144185,
+      "title": "Verify that Download PDF on an Archive grid card downloads the PDF file",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page with Issue #67 visible in the Archive grid",
+          "expected": "Page loads with the Archive grid populated"
+        },
+        {
+          "action": "Click &quot;Download PDF&quot; on Issue #67's Archive card",
+          "expected": "Download initiates"
+        },
+        {
+          "action": "Check the browser's download list",
+          "expected": "The PDF file for Issue #67 is present in the browser's download list with a valid PDF content type"
+        }
+      ]
+    },
+    {
+      "id": 144186,
+      "title": "Verify that Load More reveals additional archived issues",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish enough issues so the Archive grid exceeds the initial page size",
+          "expected": "More than one page's worth of issues are Published"
+        },
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page and note the number of visible Archive cards",
+          "expected": "Only the initial page-size count of Archive cards is shown"
+        },
+        {
+          "action": "Click &quot;Load More&quot;",
+          "expected": "Additional Archive cards are appended below the initially shown set, without duplicating any existing card"
+        }
+      ]
+    },
+    {
+      "id": 144187,
+      "title": "Verify that Load More is hidden or disabled once no further archived issues remain",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Archive section and click &quot;Load More&quot; repeatedly until every published issue is visible",
+          "expected": "All published Archive issues are progressively revealed"
+        },
+        {
+          "action": "Observe the Load More control's state",
+          "expected": "&quot;Load More&quot; is either hidden or rendered disabled, and clicking it (if still visible) has no further effect"
+        }
+      ]
+    },
+    {
+      "id": 144188,
+      "title": "Verify that searching the Magazine Archive by Issue Title returns the matching issue",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page",
+          "expected": "Page loads with the full Archive grid"
+        },
+        {
+          "action": "Type &quot;Trade &amp; Industry Review&quot; into the Archive search box",
+          "expected": "Search text is entered"
+        },
+        {
+          "action": "Observe the filtered results",
+          "expected": "Only the card for &quot;Trade &amp; Industry Review&quot; (Issue #67) is shown"
+        }
+      ]
+    },
+    {
+      "id": 144189,
+      "title": "Verify that searching the Magazine Archive by Issue Description returns the matching issue",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page",
+          "expected": "Page loads with the full Archive grid"
+        },
+        {
+          "action": "Type a unique phrase from Issue #67's description into the Archive search box",
+          "expected": "Search text is entered"
+        },
+        {
+          "action": "Observe the filtered results",
+          "expected": "Only the card whose description contains the matching phrase (Issue #67) is shown"
+        }
+      ]
+    },
+    {
+      "id": 144190,
+      "title": "Verify that searching the Magazine Archive by Issue Number returns the matching issue",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page",
+          "expected": "Page loads with the full Archive grid"
+        },
+        {
+          "action": "Type &quot;67&quot; into the Archive search box",
+          "expected": "Search text is entered"
+        },
+        {
+          "action": "Observe the filtered results",
+          "expected": "Only the card badged &quot;Issue #67&quot; is shown"
+        }
+      ]
+    },
+    {
+      "id": 144191,
+      "title": "Verify that clearing the search box restores the full Magazine Archive grid",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Type &quot;67&quot; into the Archive search box and confirm the grid filters to one card",
+          "expected": "Grid filters to the single matching card"
+        },
+        {
+          "action": "Clear the search box",
+          "expected": "Search box is emptied"
+        },
+        {
+          "action": "Observe the Archive grid",
+          "expected": "Archive grid returns to showing all published issues in their original descending Issue Date order"
+        }
+      ]
+    },
+    {
+      "id": 144192,
+      "title": "Verify that the breadcrumb \"Home\" link navigates to the homepage",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page",
+          "expected": "Breadcrumb &quot;Home &gt; Insights &amp; Media&quot; is visible"
+        },
+        {
+          "action": "Click the &quot;Home&quot; breadcrumb link",
+          "expected": "Browser navigates to the Qatar Chamber homepage"
+        }
+      ]
+    },
+    {
+      "id": 144193,
+      "title": "Verify that the breadcrumb \"Insights & Media\" link navigates to the Insights & Media landing page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page",
+          "expected": "Breadcrumb &quot;Home &gt; Insights &amp; Media&quot; is visible"
+        },
+        {
+          "action": "Click the &quot;Insights &amp; Media&quot; breadcrumb link",
+          "expected": "Browser navigates to the Insights &amp; Media landing page"
+        }
+      ]
+    },
+    {
+      "id": 144194,
+      "title": "Verify that a \"No results found\" message is displayed when a search matches no issues",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page",
+          "expected": "Page loads with the full Archive grid"
+        },
+        {
+          "action": "Type &quot;ZZZNOMATCH123&quot; into the Archive search box",
+          "expected": "Search text is entered"
+        },
+        {
+          "action": "Observe the Archive grid area",
+          "expected": "Archive grid is empty and displays the message &quot;No results found&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144195,
+      "title": "Verify that a missing Arabic translation falls back to the active language",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, publish issue &quot;QCTEST-MAG-213&quot; with Title EN/Description EN filled and the AR title/description fields left blank (where the CMS permits an incomplete-but-published state)",
+          "expected": "Issue is Published with only EN content available"
+        },
+        {
+          "action": "In a fresh logged-out browser context, load the public Al-Moltaqa Magazine page on the /ar locale",
+          "expected": "Arabic-locale page loads"
+        },
+        {
+          "action": "Observe the card for issue &quot;QCTEST-MAG-213&quot;",
+          "expected": "The issue's card falls back to displaying the English title/description (the active-language fallback) rather than showing a blank field"
+        }
+      ]
+    },
+    {
+      "id": 144197,
+      "title": "Verify that entering a script-like string in the Archive search box is handled safely",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page",
+          "expected": "Page loads with the full Archive grid"
+        },
+        {
+          "action": "Type &quot;&quot; into the Archive search box",
+          "expected": "Input is accepted as plain search text"
+        },
+        {
+          "action": "Observe the page for any script execution or broken rendering",
+          "expected": "No script executes; the search either returns &quot;No results found&quot; or renders the literal string safely escaped, with no layout break"
+        }
+      ]
+    },
+    {
+      "id": 144198,
+      "title": "Verify that rapid duplicate clicks on Load More do not duplicate archive cards",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Archive section with more issues than the initial page size",
+          "expected": "Initial page-size set of cards is shown"
+        },
+        {
+          "action": "Click &quot;Load More&quot; three times in rapid succession before the first click's response settles",
+          "expected": "Rapid clicks are registered"
+        },
+        {
+          "action": "Inspect the Archive grid for duplicate cards",
+          "expected": "Each additional issue appears exactly once in the grid; no card ID is duplicated"
+        }
+      ]
+    },
+    {
+      "id": 144199,
+      "title": "Verify that replacing the Cover Image on a published magazine issue updates the public page without breaking display",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open Published issue &quot;QCTEST-MAG-208&quot;",
+          "expected": "Issue form opens for the Published issue"
+        },
+        {
+          "action": "Replace Cover Image with cover_208_v2.jpg and Save",
+          "expected": "New image saves with the Liferay generic success toast"
+        },
+        {
+          "action": "Poll the public Al-Moltaqa Magazine page (5s timeout, 0.5s interval) and inspect the issue's card image",
+          "expected": "Within the polling budget, the card displays cover_208_v2.jpg with a resolvable src and no broken-image icon"
+        }
+      ]
+    },
+    {
+      "id": 144200,
+      "title": "Verify that replacing the PDF attachment on a published magazine issue propagates the new file to Read Online and Download PDF",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, open Published issue &quot;QCTEST-MAG-211&quot;",
+          "expected": "Issue form opens for the Published issue"
+        },
+        {
+          "action": "Replace the PDF Attachment with issue211_v2.pdf and Save",
+          "expected": "New file saves with the Liferay generic success toast"
+        },
+        {
+          "action": "Poll the public Al-Moltaqa Magazine page (5s timeout, 0.5s interval), then click Read Online and Download PDF for the issue",
+          "expected": "Within the polling budget, Read Online opens issue211_v2.pdf (not the old file) and Download PDF saves issue211_v2.pdf"
+        }
+      ]
+    },
+    {
+      "id": 144201,
+      "title": "Verify that a whitespace-only search query is handled gracefully",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the public Al-Moltaqa Magazine page",
+          "expected": "Page loads with the full Archive grid"
+        },
+        {
+          "action": "Type &quot;   &quot; (spaces only) into the Archive search box",
+          "expected": "Whitespace-only input is entered"
+        },
+        {
+          "action": "Observe the Archive grid",
+          "expected": "Archive grid is treated as an empty query and shows all published issues unfiltered (not a &quot;No results found&quot; state)"
+        }
+      ]
+    },
+    {
+      "id": 144202,
+      "title": "التحقق من أنه يتم عرض قسم البانر الرئيسي ومسار التنقل بشكل صحيح في صفحة مجلة الملتقى باللغة العربية",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "الانتقال إلى صفحة مجلة الملتقى عبر الرابط بالبادئة /ar",
+          "expected": "يتم تحميل الصفحة باللغة العربية مع اتجاه RTL"
+        },
+        {
+          "action": "ملاحظة قسم البانر الرئيسي",
+          "expected": "يظهر العنوان الرئيسي بخط Cairo Bold (display-xs) محاذاة لليمين واتجاه RTL"
+        },
+        {
+          "action": "ملاحظة مسار التنقل (Breadcrumb)",
+          "expected": "يظهر مسار التنقل &quot;الرئيسية &gt; الأخبار والإعلام&quot; من اليمين إلى اليسار، وكلا الجزأين قابل للنقر"
+        }
+      ]
+    },
+    {
+      "id": 144203,
+      "title": "التحقق من أنه تظهر بطاقة العدد الأحدث بجميع عناصرها المطلوبة باللغة العربية",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "الانتقال إلى صفحة مجلة الملتقى (/ar) مع نشر العدد رقم 68 كأحدث عدد",
+          "expected": "تظهر بطاقة العدد الأحدث للعدد رقم 68 باتجاه RTL"
+        },
+        {
+          "action": "ملاحظة شارات بطاقة العدد الأحدث",
+          "expected": "تظهر شارة &quot;العدد الأحدث&quot; وشارة &quot;العدد رقم 68&quot;"
+        },
+        {
+          "action": "ملاحظة عنوان ووصف بطاقة العدد الأحدث",
+          "expected": "يظهر العنوان بالعربية والوصف الكامل بالعربية بمحاذاة RTL"
+        },
+        {
+          "action": "ملاحظة صف البيانات الوصفية وأزرار الإجراءات",
+          "expected": "يظهر صف البيانات (مايو 2026 / 48 صفحة / 12 مقالة) وزرا &quot;القراءة أونلاين&quot; و&quot;تحميل PDF&quot; مفعّلين"
+        }
+      ]
+    },
+    {
+      "id": 144204,
+      "title": "التحقق من أنه يظهر عنوان قسم أرشيف المجلة ومربع البحث باللغة العربية",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "الانتقال إلى صفحة مجلة الملتقى (/ar)",
+          "expected": "تُحمَّل الصفحة مع وجود عددين منشورين على الأقل"
+        },
+        {
+          "action": "التمرير إلى قسم أرشيف المجلة",
+          "expected": "يظهر عنوان &quot;أرشيف المجلة&quot; باتجاه RTL"
+        },
+        {
+          "action": "ملاحظة عنوان القسم وحقل البحث",
+          "expected": "يظهر حقل بحث بنص توضيحي مكافئ لـ &quot;...بحث&quot; ويمكن التركيز عليه"
+        }
+      ]
+    },
+    {
+      "id": 144205,
+      "title": "التحقق من أنه تظهر بطاقة الأرشيف بجميع عناصرها المطلوبة باللغة العربية",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "الانتقال إلى صفحة مجلة الملتقى (/ar) مع نشر العدد رقم 67 وظهوره ضمن شبكة الأرشيف",
+          "expected": "تظهر بطاقة للعدد رقم 67 في شبكة الأرشيف"
+        },
+        {
+          "action": "ملاحظة شارة البطاقة وصورة الغلاف",
+          "expected": "تظهر شارة &quot;العدد رقم 67&quot; وصورة الغلاف"
+        },
+        {
+          "action": "ملاحظة عنوان ووصف البطاقة وصف البيانات الوصفية",
+          "expected": "يظهر العنوان بالعربية والوصف وصف البيانات (فبراير 2026 / عدد الصفحات / عدد المقالات)"
+        },
+        {
+          "action": "ملاحظة أزرار الإجراءات على البطاقة",
+          "expected": "يظهر زرا &quot;القراءة أونلاين&quot; و&quot;تحميل PDF&quot; مفعّلين على البطاقة"
+        }
+      ]
+    },
+    {
+      "id": 144206,
+      "title": "التحقق من أنه يتم حفظ عنوان الصفحة بالعربية بشكل صحيح وعرضه في الصفحة العامة",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، افتح إعدادات صفحة مجلة الملتقى",
+          "expected": "تفتح نموذج الإعدادات مع العنوان الحالي"
+        },
+        {
+          "action": "أدخل عنوان الصفحة بالعربية = &quot;مجلة الملتقى&quot;",
+          "expected": "تم إدخال القيمة &quot;مجلة الملتقى&quot;"
+        },
+        {
+          "action": "اضغط حفظ",
+          "expected": "يتم الحفظ بنجاح مع ظهور رسالة النجاح القياسية من Liferay"
+        },
+        {
+          "action": "افتح صفحة مجلة الملتقى العامة (/ar)",
+          "expected": "يظهر عنوان البانر الرئيسي &quot;مجلة الملتقى&quot; باتجاه RTL"
+        }
+      ]
+    },
+    {
+      "id": 144207,
+      "title": "التحقق من أنه يتم رفض حقل عنوان الصفحة بالعربية عند تركه فارغًا",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، افتح إعدادات صفحة مجلة الملتقى",
+          "expected": "تفتح نموذج الإعدادات مع العنوان الحالي معبأ"
+        },
+        {
+          "action": "امسح حقل عنوان الصفحة بالعربية",
+          "expected": "الحقل أصبح فارغًا"
+        },
+        {
+          "action": "اضغط حفظ",
+          "expected": "يتم رفض الحفظ مع ظهور رسالة تحقق من الحقل الإلزامي؛ تبقى القيمة السابقة محفوظة"
+        }
+      ]
+    },
+    {
+      "id": 144208,
+      "title": "التحقق من أنه يتم رفض حقل عنوان الصفحة بالعربية عند إدخال مسافات فقط",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، افتح إعدادات صفحة مجلة الملتقى",
+          "expected": "تفتح نموذج الإعدادات"
+        },
+        {
+          "action": "أدخل &quot;   &quot; (ثلاث مسافات) في حقل عنوان الصفحة بالعربية",
+          "expected": "يظهر الحقل بالمسافات فقط"
+        },
+        {
+          "action": "اضغط حفظ",
+          "expected": "يتم رفض الحفظ مع ظهور رسالة تحقق من الحقل الإلزامي؛ تبقى القيمة السابقة محفوظة"
+        }
+      ]
+    },
+    {
+      "id": 144209,
+      "title": "التحقق من أنه يتم حفظ عنوان العدد بالعربية بشكل صحيح وعرضه في الصفحة العامة",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، افتح العدد &quot;QCTEST-MAG-207&quot;",
+          "expected": "تفتح نموذج العدد"
+        },
+        {
+          "action": "أدخل عنوان العدد بالعربية = &quot;المجلة الاقتصادية&quot;",
+          "expected": "تم إدخال القيمة &quot;المجلة الاقتصادية&quot;"
+        },
+        {
+          "action": "انشر العدد",
+          "expected": "يتم النشر بنجاح مع ظهور رسالة النجاح القياسية"
+        },
+        {
+          "action": "افتح الصفحة العامة وابحث عن بطاقة العدد",
+          "expected": "يظهر عنوان البطاقة &quot;المجلة الاقتصادية&quot; بدقة"
+        }
+      ]
+    },
+    {
+      "id": 144210,
+      "title": "التحقق من أنه يتم رفض حقل عنوان العدد بالعربية عند تركه فارغًا",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، افتح نموذج عدد جديد",
+          "expected": "تفتح نموذج العدد"
+        },
+        {
+          "action": "اترك عنوان العدد بالعربية فارغًا واملأ باقي الحقول الإلزامية",
+          "expected": "عنوان العدد بالعربية فقط فارغ"
+        },
+        {
+          "action": "اضغط نشر",
+          "expected": "يتم رفض النشر مع ظهور رسالة تحقق من المحتوى ثنائي اللغة الإلزامي"
+        }
+      ]
+    },
+    {
+      "id": 144211,
+      "title": "التحقق من أنه يتم رفض حقل عنوان العدد بالعربية عند إدخال مسافات فقط",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، افتح نموذج عدد جديد",
+          "expected": "تفتح نموذج العدد"
+        },
+        {
+          "action": "أدخل &quot;   &quot; في حقل عنوان العدد بالعربية واملأ باقي الحقول الإلزامية",
+          "expected": "يظهر الحقل بمسافات فقط"
+        },
+        {
+          "action": "اضغط نشر",
+          "expected": "يتم رفض النشر مع ظهور رسالة تحقق"
+        }
+      ]
+    },
+    {
+      "id": 144212,
+      "title": "التحقق من أنه يقبل عنوان العدد بالعربية 200 حرف بالضبط ويرفض 201 حرف",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، أدخل نصًا من 200 حرف في عنوان العدد بالعربية",
+          "expected": "يقبل الحقل الإدخال المكون من 200 حرف دون اقتصاص"
+        },
+        {
+          "action": "اضغط حفظ",
+          "expected": "يتم الحفظ بنجاح وتُحفظ القيمة كاملة"
+        },
+        {
+          "action": "عدّل الحقل ليصبح 201 حرفًا",
+          "expected": "يظهر الحقل بالإدخال المكون من 201 حرف"
+        },
+        {
+          "action": "اضغط حفظ",
+          "expected": "يتم رفض الحفظ مع رسالة تجاوز الحد الأقصى للطول"
+        }
+      ]
+    },
+    {
+      "id": 144213,
+      "title": "التحقق من أنه يتم حفظ وصف العدد بالعربية بشكل صحيح وعرضه في الصفحة العامة",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، افتح العدد &quot;QCTEST-MAG-207&quot;",
+          "expected": "تفتح نموذج العدد"
+        },
+        {
+          "action": "أدخل وصف العدد بالعربية",
+          "expected": "تم إدخال قيمة الوصف"
+        },
+        {
+          "action": "انشر العدد",
+          "expected": "يتم النشر بنجاح مع ظهور رسالة النجاح"
+        },
+        {
+          "action": "افتح الصفحة العامة وشاهد بطاقة العدد",
+          "expected": "تظهر البطاقة نص الوصف كما تم إدخاله بالضبط"
+        }
+      ]
+    },
+    {
+      "id": 144214,
+      "title": "التحقق من أنه يتم رفض حقل وصف العدد بالعربية عند تركه فارغًا",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، افتح نموذج عدد جديد",
+          "expected": "تفتح نموذج العدد"
+        },
+        {
+          "action": "اترك وصف العدد بالعربية فارغًا واملأ باقي الحقول الإلزامية",
+          "expected": "وصف العدد بالعربية فقط فارغ"
+        },
+        {
+          "action": "اضغط نشر",
+          "expected": "يتم رفض النشر مع ظهور رسالة تحقق من المحتوى الإلزامي"
+        }
+      ]
+    },
+    {
+      "id": 144215,
+      "title": "التحقق من أنه يتم رفض حقل وصف العدد بالعربية عند إدخال مسافات فقط",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، افتح نموذج عدد جديد",
+          "expected": "تفتح نموذج العدد"
+        },
+        {
+          "action": "أدخل &quot;   &quot; في حقل وصف العدد بالعربية واملأ باقي الحقول الإلزامية",
+          "expected": "يظهر الحقل بمسافات فقط"
+        },
+        {
+          "action": "اضغط نشر",
+          "expected": "يتم رفض النشر مع ظهور رسالة تحقق"
+        }
+      ]
+    },
+    {
+      "id": 144216,
+      "title": "التحقق من أنه يقبل وصف العدد بالعربية 1000 حرف بالضبط ويرفض 1001 حرف",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "بصفتك محرر محتوى الموقع، أدخل نصًا من 1000 حرف في وصف العدد بالعربية",
+          "expected": "يقبل الحقل الإدخال المكون من 1000 حرف دون اقتصاص"
+        },
+        {
+          "action": "اضغط حفظ",
+          "expected": "يتم الحفظ بنجاح وتُحفظ القيمة كاملة"
+        },
+        {
+          "action": "عدّل الحقل ليصبح 1001 حرفًا",
+          "expected": "يظهر الحقل بالإدخال المكون من 1001 حرف"
+        },
+        {
+          "action": "اضغط حفظ",
+          "expected": "يتم رفض الحفظ مع رسالة تجاوز الحد الأقصى للطول"
+        }
+      ]
+    }
+  ]
+}
