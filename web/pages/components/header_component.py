@@ -54,6 +54,60 @@ Manager, not silently corrected here):
     navigation defect, not a locator problem — press_tab_until_focused()
     (core/web/base_page.py) will honestly return False within its bounded
     attempt count.
+    **CORRECTION, 2026-09-23 (PBI 131054 keyboard-navigation batch): this no
+    longer holds and was not reproducible.** Re-measured repeatedly in a
+    genuinely ANONYMOUS context (`{"auth": False}`, `open_anonymous()`), Tab
+    from a fresh /home load reaches `a.qc-logo` on the 4th press every time —
+    stops 1-3 are `a#qc-skip-link` and Liferay's own two screen-reader-only
+    controls, then the logo, then the 11 top-level nav links, all rendering
+    `outline: solid 2px rgb(145,23,49)`. The original note may have been
+    measured through an authenticated session (whose admin control menu
+    changes the tab order) or before a site fix. Left in place above for
+    history; do not act on it.
+  - Also stale: the top-level nav's 8th item now reads **"Business Gateway"**,
+    not "Invest in Qatar" (live 2026-09-23).
+
+--- CORRECTION, 2026-09-23 (PBI 131055 Global Advanced Search batch) ---
+
+The two notes above about the search control are **both stale and were
+replaced**, not merely annotated, because they described selectors that could
+never resolve:
+
+  * "Clicking .qc-search-btn does NOT open an in-page overlay: it performs a
+    client-side (senna.js) route change to /web/qatar-chamber/search" — **no
+    longer true.** Measured live in an anonymous context
+    (`{"auth": False}` + `open_anonymous("/home")`), clicking `a.qc-search-btn`
+    keeps the URL on `/home` and reveals a real in-page overlay; the keyword
+    input takes focus automatically (`document.activeElement.id == "hwdv-q"`)
+    and `Escape` closes it again.
+  * "SEARCH_OVERLAY* below are intent-based selectors ... never observed live"
+    — **superseded.** The overlay ships purpose-built `data-qc-search-*`
+    hooks, which are tier-1 test-id locators under automation-standards.md's
+    priority order and strictly better than the `[role="dialog"]` guesses they
+    replace. Live markup (read-only, `/home`, 1920x1080):
+
+        div.qc-search-overlay[data-qc-search-overlay][hidden]
+          div.qc-search-overlay__backdrop[data-qc-search-dismiss]
+          form.qc-search-overlay__panel[data-qc-search-form][role="search"]
+            label.qc-search-overlay__label[data-qc-search-label] for="hwdv-q"
+            input#hwdv-q.qc-search-overlay__input[data-qc-search-input]
+                 name="q" type="search" autocomplete="off"
+                 placeholder="Search the Qatar Chamber website"
+            button.qc-search-overlay__submit[data-qc-search-submit] type=submit
+            button.qc-search-overlay__close[data-qc-search-dismiss]
+                 type=button aria-label="Close search"
+
+    Submitting the form performs a real GET to `/search?q=<keyword>` (the
+    Liferay stock Search page). The overlay + button are present and visible
+    on every page checked — `/home`, `/web/qatar-chamber/about-us`,
+    `/web/qatar-chamber/events`.
+
+**Disclosed consequence:** `test_header_search_icon_opens_search_overlay`
+(ADO-134240, PBI 129363) previously failed because `SEARCH_OVERLAY` could
+never match. With the real locators in place it should now pass. That is the
+correct outcome — the case's expected result is unchanged and no assertion
+was touched — but it is a red-to-green flip caused by this batch, not by a
+product change, and is reported as such.
 
 --- Second extraction pass (ADO #134234, #134237, #134239, #134244, #134249 —
 5 more cases for the same PBI, unblocked after the user fixed a tagging
@@ -171,17 +225,20 @@ class HeaderComponent(BasePage):
     NAV_LINK_ABOUT_US = f'{NAV_TOP_LEVEL_ITEMS}:has-text("About us")'
     NAV_LINK_CONTACT_US = f'{NAV_TOP_LEVEL_ITEMS}:has-text("Contact us")'
 
-    # Intent-based only — never matched on the live site (see docstring).
-    # Written as real, resolvable Playwright selectors (not TODO placeholders)
-    # for the modal the case describes, so the test fails honestly rather
-    # than erroring on an unresolved constant.
-    SEARCH_OVERLAY = '[role="dialog"]:has(input)'
-    SEARCH_OVERLAY_INPUT = '[role="dialog"] input[type="search"], [role="dialog"] input[type="text"]'
-    SEARCH_OVERLAY_SUBMIT = (
-        '[role="dialog"] button[type="submit"], '
-        '[role="dialog"] [aria-label*="search" i], '
-        '[role="dialog"] button:has-text("Search")'
-    )
+    # ── Global search overlay (PBI 131055) ─────────────────────────────
+    # Tier-1 `data-*` hooks the fragment ships specifically for automation —
+    # see the 2026-09-23 correction in the module docstring for the live
+    # markup these were read from. NOT scoped under HEADER: the overlay is a
+    # sibling of the header element in the DOM, not a descendant of it.
+    SEARCH_OVERLAY = "[data-qc-search-overlay]"
+    SEARCH_OVERLAY_FORM = "[data-qc-search-form]"
+    SEARCH_OVERLAY_LABEL = "[data-qc-search-label]"
+    SEARCH_OVERLAY_INPUT = "[data-qc-search-input]"
+    SEARCH_OVERLAY_SUBMIT = "[data-qc-search-submit]"
+    # Both the backdrop and the close button carry data-qc-search-dismiss;
+    # the close BUTTON is the one a user clicks, so it is addressed by tag.
+    SEARCH_OVERLAY_CLOSE = "button[data-qc-search-dismiss]"
+    SEARCH_OVERLAY_BACKDROP = "div[data-qc-search-dismiss]"
 
     def open_home(self) -> "HeaderComponent":
         self.open(HOME_URL)
@@ -278,6 +335,51 @@ class HeaderComponent(BasePage):
 
     def is_search_overlay_submit_visible(self) -> bool:
         return self.is_visible(self.SEARCH_OVERLAY_SUBMIT)
+
+    # ── Overlay interaction (PBI 131055) ────────────────────────────────
+    def open_search_overlay(self) -> "HeaderComponent":
+        """Clicks the header's magnifier and waits for the overlay's keyword
+        input to actually be interactable. `open_search()` above only
+        dispatches the click; every search flow needs the settled state, and
+        the overlay is client-rendered (the `hidden` attribute is removed by
+        script), so a bare click + immediate `fill()` races the reveal."""
+        self.click(self.SEARCH_BUTTON)
+        self.wait_for(self.SEARCH_OVERLAY_INPUT)
+        return self
+
+    def type_search_keyword(self, keyword: str) -> "HeaderComponent":
+        """Types `keyword` into the overlay's keyword field.
+
+        Uses `fill()` semantics through the BasePage wrapper, which CLEARS
+        first — required by the cases that re-enter a keyword after a
+        previous submission."""
+        self.type(self.SEARCH_OVERLAY_INPUT, keyword)
+        return self
+
+    def search_keyword_value(self) -> str:
+        """Current value of the overlay's keyword field — lets a test assert
+        what was actually entered (e.g. that whitespace survived the type)."""
+        return self.page.locator(self.SEARCH_OVERLAY_INPUT).input_value()
+
+    def submit_search_by_button(self) -> "HeaderComponent":
+        """Clicks the overlay's Search submit button. Does NOT wait for a
+        navigation: whether one happens at all is exactly what the
+        empty/whitespace cases assert on."""
+        self.click(self.SEARCH_OVERLAY_SUBMIT)
+        return self
+
+    def submit_search_by_enter(self) -> "HeaderComponent":
+        """Presses Enter inside the overlay's keyword field. Same no-wait
+        rationale as submit_search_by_button()."""
+        self.page.locator(self.SEARCH_OVERLAY_INPUT).press("Enter")
+        return self
+
+    def close_search_overlay(self) -> "HeaderComponent":
+        self.click(self.SEARCH_OVERLAY_CLOSE)
+        return self
+
+    def is_search_keyword_input_focused(self) -> bool:
+        return self.is_focused(self.SEARCH_OVERLAY_INPUT)
 
     def focus_logo_via_tab(self, max_presses: int = 30) -> bool:
         return self.press_tab_until_focused(self.LOGO, max_presses=max_presses)

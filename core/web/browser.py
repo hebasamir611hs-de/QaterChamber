@@ -62,6 +62,55 @@ def launch_webkit_browser(playwright):
     return playwright.webkit.launch(headless=settings.headless)
 
 
+def launch_firefox_browser(playwright):
+    """Real Gecko-engine (Firefox) launch — added 2026-09-23 for PBI 131054
+    (ADO-141813, "keyboard navigation works consistently on Desktop
+    Firefox"). Same disclosed-addition shape as launch_webkit_browser()
+    above: an explicit second engine for the one case whose own subject is
+    cross-browser behaviour, never a default-browser change. Confirmed live
+    this session that `playwright.firefox` launches here (Firefox 119.0),
+    so that case does NOT need an engine-missing skip."""
+    return playwright.firefox.launch(headless=settings.headless)
+
+
+def launch_edge_browser(playwright):
+    """Real Microsoft Edge launch — added 2026-09-23 for PBI 131054
+    (ADO-141832, "keyboard navigation works consistently on Desktop Edge").
+    Edge is Chromium-based, so Playwright drives it through the chromium
+    engine with `channel="msedge"`, which binds to the locally INSTALLED
+    Edge build rather than Playwright's bundled Chromium — that channel
+    argument is the whole point: plain `chromium.launch()` would be
+    Chromium, not Edge, and reporting it as Edge would be a faked result.
+    Confirmed live this session (msedge 153.0.4234.48 launches), so that
+    case does NOT need an Edge-missing skip."""
+    return playwright.chromium.launch(headless=settings.headless, channel="msedge")
+
+
+# Engine key (as passed through the `page` fixture's param dict) -> factory.
+# Keeps engine selection declarative in one place instead of a branch inside
+# conftest, and keeps raw Playwright confined to this module.
+ENGINE_LAUNCHERS = {
+    "chromium": launch_browser,
+    "firefox": launch_firefox_browser,
+    "msedge": launch_edge_browser,
+    "webkit": launch_webkit_browser,
+}
+
+
+def launch_browser_for_engine(playwright, engine: str):
+    """Launch the named engine. Raises on an unknown key rather than
+    silently falling back to chromium — a cross-browser case that quietly
+    ran on the wrong engine would be a faked result (automation-standards.md
+    -> "Result integrity")."""
+    try:
+        launcher = ENGINE_LAUNCHERS[engine]
+    except KeyError:
+        raise RuntimeError(
+            f"Unknown browser engine {engine!r}. Known engines: {sorted(ENGINE_LAUNCHERS)}."
+        ) from None
+    return launcher(playwright)
+
+
 def _xdist_worker_id() -> str | None:
     """pytest-xdist sets PYTEST_XDIST_WORKER (e.g. "gw0", "gw1") inside each
     worker process's own environment. Unset (None) outside xdist — plain
@@ -157,3 +206,41 @@ def new_context(
     context = browser.new_context(**kwargs)
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     return context
+
+
+def new_api_context(
+    playwright,
+    user_agent: str = None,
+    extra_http_headers: dict = None,
+    timeout: int = None,
+):
+    """Playwright **APIRequestContext** factory — a browserless HTTP client.
+
+    Added 2026-09-23 for the PBI 131053 sitemap.xml batch: those cases are
+    protocol assertions (HTTP status, content-type, XML well-formedness,
+    namespace) with no DOM in them, so launching a full browser context per
+    test would be pure waste. This is the raw-Playwright entry point for
+    that, kept here in `core/web/` alongside `new_context()` rather than in
+    a test or Page Object (automation-standards.md: raw Playwright lives in
+    `core/` only).
+
+    Deliberately loads **no** storageState: an APIRequestContext created here
+    is genuinely anonymous/logged-out, which is what the "public visitor /
+    crawler" cases require (standards.md's "Draft/Unpublish Public-Visibility
+    Checks — Mandatory Logged-Out Context" rule, applied to a protocol-level
+    request). Callers that need an authenticated API context must pass
+    `storage_state` explicitly via a future parameter rather than having one
+    silently auto-loaded.
+
+    Kwargs mirror `playwright.request.new_context()` exactly (verified
+    against playwright.dev/python's APIRequest docs 2026-09-23); dispose with
+    `context.dispose()`.
+    """
+    kwargs = {}
+    if user_agent:
+        kwargs["user_agent"] = user_agent
+    if extra_http_headers:
+        kwargs["extra_http_headers"] = extra_http_headers
+    if timeout is not None:
+        kwargs["timeout"] = timeout
+    return playwright.request.new_context(**kwargs)

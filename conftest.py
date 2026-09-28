@@ -73,8 +73,39 @@ def browser(playwright_instance):
     b.close()
 
 
+@pytest.fixture(scope="session")
+def alt_engine_browser(playwright_instance):
+    """Session-cached NON-default browser engines (firefox, msedge, webkit),
+    launched lazily on first request and closed at session end.
+
+    Added 2026-09-23 for PBI 131054's cross-browser keyboard-navigation
+    cases (ADO-141813 Firefox, ADO-141832 Edge). Deliberately feeds the
+    EXISTING `page` fixture through its param dict's "engine" key instead of
+    introducing `firefox_page` / `edge_page` fixtures: conftest's
+    `pytest_runtest_makereport` hook looks the browser page up by the
+    literal funcarg name "page", so a differently-named fixture would
+    silently lose its failure screenshot, video and trace.
+    """
+    from core.web.browser import launch_browser_for_engine
+
+    cache = {}
+
+    def _get(engine: str):
+        if engine not in cache:
+            cache[engine] = launch_browser_for_engine(playwright_instance, engine)
+        return cache[engine]
+
+    yield _get
+
+    for b in cache.values():
+        try:
+            b.close()
+        except Exception:  # noqa: BLE001 — teardown must never mask the real failure
+            pass
+
+
 @pytest.fixture
-def page(request, browser, tmp_path):
+def page(request, browser, alt_engine_browser, tmp_path):
     from core.web.browser import new_context
     from core.utils.reporting import attach_trace, attach_video, extract_test_case_id
 
@@ -90,19 +121,26 @@ def page(request, browser, tmp_path):
     #     for tests whose subject is login/permissions (RBAC denial, TC-134658):
     #     with the default, a cached admin session would pre-authenticate the
     #     context and invalidate (or false-PASS) the permission assertion.
+    #     "engine": "firefox" | "msedge" | "webkit"
+    #     -> run this ONE test on a real second browser engine (PBI 131054's
+    #     cross-browser keyboard-navigation cases). Omitted/"chromium" keeps
+    #     the session-scoped default browser, so nothing else changes.
     if isinstance(param, dict):
         viewport = param.get("viewport")
         locale = param.get("locale")
         timezone_id = param.get("timezone_id")
         use_auth_state = param.get("auth", True)
+        engine = param.get("engine", "chromium")
     else:
         viewport = param
         locale = None
         timezone_id = None
         use_auth_state = True
+        engine = "chromium"
+    active_browser = browser if engine == "chromium" else alt_engine_browser(engine)
     video_dir = str(tmp_path / "videos")
     context = new_context(
-        browser,
+        active_browser,
         viewport=viewport,
         record_video_dir=video_dir,
         locale=locale,
@@ -156,3 +194,46 @@ def page(request, browser, tmp_path):
                          reports_dir=settings.reports_dir)
         except Exception:  # noqa: BLE001
             pass
+
+
+# ── Browserless HTTP fixtures (Playwright APIRequestContext) ─────────────
+#    Added 2026-09-23 for the PBI 131053 sitemap.xml batch. Protocol-level
+#    cases (HTTP status / content-type / XML well-formedness) need no DOM, so
+#    they use these instead of the `page` fixture — no browser is launched.
+#
+#    FUNCTION-scoped on purpose, never session-scoped: an APIRequestContext
+#    keeps cookies across the requests it makes, so a shared one would carry
+#    a JSESSIONID picked up by an earlier test into a later "anonymous
+#    visitor / crawler" test and quietly invalidate its logged-out premise.
+@pytest.fixture
+def api_context_factory(playwright_instance):
+    """Creates anonymous APIRequestContexts (no storageState) on demand and
+    disposes every one of them at teardown. Use it when a test needs a
+    non-default User-Agent or headers; otherwise use `api_request_context`."""
+    from core.web.browser import new_api_context
+
+    created = []
+
+    def _make(user_agent: str = None, extra_http_headers: dict = None, timeout: int = None):
+        ctx = new_api_context(
+            playwright_instance,
+            user_agent=user_agent,
+            extra_http_headers=extra_http_headers,
+            timeout=timeout,
+        )
+        created.append(ctx)
+        return ctx
+
+    yield _make
+
+    for ctx in created:
+        try:
+            ctx.dispose()
+        except Exception:  # noqa: BLE001 — teardown must never mask the real failure
+            pass
+
+
+@pytest.fixture
+def api_request_context(api_context_factory):
+    """A fresh, anonymous APIRequestContext with Playwright's default UA."""
+    return api_context_factory()
