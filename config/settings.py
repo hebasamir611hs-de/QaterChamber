@@ -48,16 +48,38 @@ class Settings:
     test_user: str = os.getenv("TEST_USER", "")
     test_password: str = os.getenv("TEST_PASSWORD", "")
 
-    # Named CMS user roles — restricted-role Control_Panel tests must log in
-    # as the specific role a test case calls for, not the default TEST_USER
-    # (which is a super-admin-equivalent account). See CMS_ROLE_CREDENTIALS
-    # below and standards.md's "Named CMS User Roles" section for usage.
+    # Named CMS user roles — a Control_Panel test must log in as the specific
+    # role its case calls for. See CMS_ROLE_CREDENTIALS below and
+    # standards.md's "Named CMS User Roles" section for usage.
+    #
+    # This is NOT only an RBAC concern. Confirmed live 2026-09-28: the same
+    # "Submit for Review" button lands a record on "Pending Review" as an
+    # Author and on "Published" as an Editor, because the editorial workflow
+    # routes privileged submitters past the review step. The account a test
+    # authenticates as therefore decides its lifecycle outcome — see
+    # standards.md's "Content Editorial Workflow" section.
+    #
+    # All eight accounts were provisioned by the team 2026-09-27; Editor and
+    # Author were confirmed signing in live 2026-09-28. Values live in .env.
     cms_site_content_editor_email: str = os.getenv("CMS_SITE_CONTENT_EDITOR_EMAIL", "")
     cms_site_content_editor_password: str = os.getenv("CMS_SITE_CONTENT_EDITOR_PASSWORD", "")
     cms_site_content_author_email: str = os.getenv("CMS_SITE_CONTENT_AUTHOR_EMAIL", "")
     cms_site_content_author_password: str = os.getenv("CMS_SITE_CONTENT_AUTHOR_PASSWORD", "")
     cms_content_contributor_email: str = os.getenv("CMS_CONTENT_CONTRIBUTOR_EMAIL", "")
     cms_content_contributor_password: str = os.getenv("CMS_CONTENT_CONTRIBUTOR_PASSWORD", "")
+    cms_form_manager_email: str = os.getenv("CMS_FORM_MANAGER_EMAIL", "")
+    cms_form_manager_password: str = os.getenv("CMS_FORM_MANAGER_PASSWORD", "")
+    cms_event_organizer_email: str = os.getenv("CMS_EVENT_ORGANIZER_EMAIL", "")
+    cms_event_organizer_password: str = os.getenv("CMS_EVENT_ORGANIZER_PASSWORD", "")
+    cms_seo_manager_email: str = os.getenv("CMS_SEO_MANAGER_EMAIL", "")
+    cms_seo_manager_password: str = os.getenv("CMS_SEO_MANAGER_PASSWORD", "")
+    cms_seo_editor_email: str = os.getenv("CMS_SEO_EDITOR_EMAIL", "")
+    cms_seo_editor_password: str = os.getenv("CMS_SEO_EDITOR_PASSWORD", "")
+    # The negative case: signs in successfully, holds no site role, and must
+    # be refused everywhere the others are allowed. Without it, "this role
+    # cannot see the authoring page" also passes for a broken login.
+    cms_site_member_email: str = os.getenv("CMS_SITE_MEMBER_EMAIL", "")
+    cms_site_member_password: str = os.getenv("CMS_SITE_MEMBER_PASSWORD", "")
 
     # Reports root — holds allure-results/ and allure-report/ (Allure's own,
     # GUID/hash filenames) alongside screenshots/, videos/, traces/ (the
@@ -101,6 +123,26 @@ CMS_ROLE_CREDENTIALS: dict[str, tuple[str, str]] = {
     "Content Contributor": (
         settings.cms_content_contributor_email,
         settings.cms_content_contributor_password,
+    ),
+    "Form Manager": (
+        settings.cms_form_manager_email,
+        settings.cms_form_manager_password,
+    ),
+    "Event Organizer": (
+        settings.cms_event_organizer_email,
+        settings.cms_event_organizer_password,
+    ),
+    "SEO Manager": (
+        settings.cms_seo_manager_email,
+        settings.cms_seo_manager_password,
+    ),
+    "SEO Editor": (
+        settings.cms_seo_editor_email,
+        settings.cms_seo_editor_password,
+    ),
+    "Site Member": (
+        settings.cms_site_member_email,
+        settings.cms_site_member_password,
     ),
 }
 
