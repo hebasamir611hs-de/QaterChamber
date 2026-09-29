@@ -1,0 +1,1037 @@
+{
+  "pbi": "130712",
+  "analysed": "2026-09-21",
+  "mode": "Normal",
+  "budget": 117,
+  "delivered": 117,
+  "categories": {
+    "UI": 15,
+    "Compatibility": 5,
+    "Auth": 5,
+    "Functional-High": 19,
+    "Functional-Low": 65,
+    "Edge": 8
+  },
+  "inventory": {
+    "OBJ": 5,
+    "FLD": 17,
+    "CTL": 10,
+    "ST": 10,
+    "ROL": 3,
+    "MSG": 6,
+    "AC": 12,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 5
+  },
+  "case_ids": [
+    "MEDIA-ANNUALREPORTS-TC-001",
+    "MEDIA-ANNUALREPORTS-TC-002",
+    "MEDIA-ANNUALREPORTS-TC-003",
+    "MEDIA-ANNUALREPORTS-TC-004",
+    "MEDIA-ANNUALREPORTS-TC-005",
+    "MEDIA-ANNUALREPORTS-TC-006",
+    "MEDIA-ANNUALREPORTS-TC-007",
+    "MEDIA-ANNUALREPORTS-TC-008",
+    "MEDIA-ANNUALREPORTS-TC-009",
+    "MEDIA-ANNUALREPORTS-TC-010",
+    "MEDIA-ANNUALREPORTS-TC-011",
+    "MEDIA-ANNUALREPORTS-TC-012",
+    "MEDIA-ANNUALREPORTS-TC-013",
+    "MEDIA-ANNUALREPORTS-TC-014",
+    "MEDIA-ANNUALREPORTS-TC-015",
+    "MEDIA-ANNUALREPORTS-TC-016",
+    "MEDIA-ANNUALREPORTS-TC-017",
+    "MEDIA-ANNUALREPORTS-TC-018",
+    "MEDIA-ANNUALREPORTS-TC-019",
+    "MEDIA-ANNUALREPORTS-TC-020",
+    "MEDIA-ANNUALREPORTS-TC-021",
+    "MEDIA-ANNUALREPORTS-TC-022",
+    "MEDIA-ANNUALREPORTS-TC-023",
+    "MEDIA-ANNUALREPORTS-TC-024",
+    "MEDIA-ANNUALREPORTS-TC-025",
+    "MEDIA-ANNUALREPORTS-TC-026",
+    "MEDIA-ANNUALREPORTS-TC-027",
+    "MEDIA-ANNUALREPORTS-TC-028",
+    "MEDIA-ANNUALREPORTS-TC-029",
+    "MEDIA-ANNUALREPORTS-TC-030",
+    "MEDIA-ANNUALREPORTS-TC-031",
+    "MEDIA-ANNUALREPORTS-TC-032",
+    "MEDIA-ANNUALREPORTS-TC-033",
+    "MEDIA-ANNUALREPORTS-TC-034",
+    "MEDIA-ANNUALREPORTS-TC-035",
+    "MEDIA-ANNUALREPORTS-TC-036",
+    "MEDIA-ANNUALREPORTS-TC-037",
+    "MEDIA-ANNUALREPORTS-TC-038",
+    "MEDIA-ANNUALREPORTS-TC-039",
+    "MEDIA-ANNUALREPORTS-TC-040",
+    "MEDIA-ANNUALREPORTS-TC-041",
+    "MEDIA-ANNUALREPORTS-TC-042",
+    "MEDIA-ANNUALREPORTS-TC-043",
+    "MEDIA-ANNUALREPORTS-TC-044",
+    "MEDIA-ANNUALREPORTS-TC-045",
+    "MEDIA-ANNUALREPORTS-TC-046",
+    "MEDIA-ANNUALREPORTS-TC-047",
+    "MEDIA-ANNUALREPORTS-TC-048",
+    "MEDIA-ANNUALREPORTS-TC-049",
+    "MEDIA-ANNUALREPORTS-TC-050",
+    "MEDIA-ANNUALREPORTS-TC-051",
+    "MEDIA-ANNUALREPORTS-TC-052",
+    "MEDIA-ANNUALREPORTS-TC-053",
+    "MEDIA-ANNUALREPORTS-TC-054",
+    "MEDIA-ANNUALREPORTS-TC-055",
+    "MEDIA-ANNUALREPORTS-TC-056",
+    "MEDIA-ANNUALREPORTS-TC-057",
+    "MEDIA-ANNUALREPORTS-TC-058",
+    "MEDIA-ANNUALREPORTS-TC-059",
+    "MEDIA-ANNUALREPORTS-TC-060",
+    "MEDIA-ANNUALREPORTS-TC-061",
+    "MEDIA-ANNUALREPORTS-TC-062",
+    "MEDIA-ANNUALREPORTS-TC-063",
+    "MEDIA-ANNUALREPORTS-TC-064",
+    "MEDIA-ANNUALREPORTS-TC-065",
+    "MEDIA-ANNUALREPORTS-TC-066",
+    "MEDIA-ANNUALREPORTS-TC-067",
+    "MEDIA-ANNUALREPORTS-TC-068",
+    "MEDIA-ANNUALREPORTS-TC-069",
+    "MEDIA-ANNUALREPORTS-TC-070",
+    "MEDIA-ANNUALREPORTS-TC-071",
+    "MEDIA-ANNUALREPORTS-TC-072",
+    "MEDIA-ANNUALREPORTS-TC-073",
+    "MEDIA-ANNUALREPORTS-TC-074",
+    "MEDIA-ANNUALREPORTS-TC-075",
+    "MEDIA-ANNUALREPORTS-TC-076",
+    "MEDIA-ANNUALREPORTS-TC-077",
+    "MEDIA-ANNUALREPORTS-TC-078",
+    "MEDIA-ANNUALREPORTS-TC-079",
+    "MEDIA-ANNUALREPORTS-TC-080",
+    "MEDIA-ANNUALREPORTS-TC-081",
+    "MEDIA-ANNUALREPORTS-TC-082",
+    "MEDIA-ANNUALREPORTS-TC-083",
+    "MEDIA-ANNUALREPORTS-TC-084",
+    "MEDIA-ANNUALREPORTS-TC-085",
+    "MEDIA-ANNUALREPORTS-TC-086",
+    "MEDIA-ANNUALREPORTS-TC-087",
+    "MEDIA-ANNUALREPORTS-TC-088",
+    "MEDIA-ANNUALREPORTS-TC-089",
+    "MEDIA-ANNUALREPORTS-TC-090",
+    "MEDIA-ANNUALREPORTS-TC-091",
+    "MEDIA-ANNUALREPORTS-TC-092",
+    "MEDIA-ANNUALREPORTS-TC-093",
+    "MEDIA-ANNUALREPORTS-TC-094",
+    "MEDIA-ANNUALREPORTS-TC-095",
+    "MEDIA-ANNUALREPORTS-TC-096",
+    "MEDIA-ANNUALREPORTS-TC-097",
+    "MEDIA-ANNUALREPORTS-TC-098",
+    "MEDIA-ANNUALREPORTS-TC-099",
+    "MEDIA-ANNUALREPORTS-TC-100",
+    "MEDIA-ANNUALREPORTS-TC-101",
+    "MEDIA-ANNUALREPORTS-TC-102",
+    "MEDIA-ANNUALREPORTS-TC-103",
+    "MEDIA-ANNUALREPORTS-TC-104",
+    "MEDIA-ANNUALREPORTS-TC-105",
+    "MEDIA-ANNUALREPORTS-TC-106",
+    "MEDIA-ANNUALREPORTS-TC-107",
+    "MEDIA-ANNUALREPORTS-TC-108",
+    "MEDIA-ANNUALREPORTS-TC-109",
+    "MEDIA-ANNUALREPORTS-TC-110",
+    "MEDIA-ANNUALREPORTS-TC-111",
+    "MEDIA-ANNUALREPORTS-TC-112",
+    "MEDIA-ANNUALREPORTS-TC-113",
+    "MEDIA-ANNUALREPORTS-TC-114",
+    "MEDIA-ANNUALREPORTS-TC-115",
+    "MEDIA-ANNUALREPORTS-TC-116",
+    "MEDIA-ANNUALREPORTS-TC-117"
+  ],
+  "cases": {
+    "MEDIA-ANNUALREPORTS-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "AC-1",
+        "LNG-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-002": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "AC-1",
+        "LNG-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-004": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "AC-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "AC-1",
+        "LNG-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-006": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "AC-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-007": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "AC-2",
+        "LNG-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-008": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-009": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "CTL-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-010": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "CTL-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-011": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "FLD-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-012": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "FLD-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-013": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "ST-7",
+        "MSG-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-014": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "ST-8",
+        "MSG-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-015": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "AC-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-016": {
+      "category": "Compatibility",
+      "traceability": [
+        "OBJ-1",
+        "ENV-1",
+        "AC-8"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-017": {
+      "category": "Compatibility",
+      "traceability": [
+        "OBJ-1",
+        "ENV-2",
+        "AC-8"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-018": {
+      "category": "Compatibility",
+      "traceability": [
+        "OBJ-1",
+        "ENV-3",
+        "AC-8"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-019": {
+      "category": "Compatibility",
+      "traceability": [
+        "OBJ-1",
+        "ENV-4",
+        "AC-8"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-020": {
+      "category": "Compatibility",
+      "traceability": [
+        "OBJ-1",
+        "ENV-5",
+        "AC-8"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-021": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-022": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-023": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2",
+        "AC-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-024": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-025": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-026": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "OBJ-2",
+        "AC-3",
+        "AC-5",
+        "AC-6"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-027": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "CTL-2",
+        "ST-9",
+        "AC-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-028": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "ST-7",
+        "MSG-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-029": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "ST-8",
+        "MSG-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-030": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "AC-2",
+        "AC-11",
+        "FLD-13"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-031": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "AC-7",
+        "ST-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-032": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "AC-7",
+        "ST-6"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-033": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "AC-9",
+        "CTL-5",
+        "CTL-6",
+        "CTL-7",
+        "ST-1",
+        "ST-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-034": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "CTL-10",
+        "AC-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-035": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "CTL-8",
+        "ST-3",
+        "AC-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-036": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-3",
+        "CTL-9",
+        "AC-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-037": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "FLD-1",
+        "FLD-2",
+        "FLD-3",
+        "MSG-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-038": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "FLD-7",
+        "FLD-8",
+        "FLD-9",
+        "MSG-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-039": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "FLD-10",
+        "FLD-11",
+        "MSG-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-040": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "ST-10"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-041": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "AC-12",
+        "MSG-6",
+        "OBJ-5"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-042": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "AC-5",
+        "CTL-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-043": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "AC-6",
+        "CTL-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-044": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "CTL-3",
+        "CTL-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-045": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-046": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-047": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-048": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-049": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-050": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-051": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-052": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-053": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-054": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-055": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-056": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-057": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-058": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-059": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-060": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-4"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-061": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-5"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-062": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-5"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-063": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-6",
+        "AC-12",
+        "OBJ-5"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-064": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-7"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-065": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-7"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-066": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-7"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-067": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-7"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-068": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-8"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-069": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-8"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-070": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-8"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-071": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-8"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-072": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-073": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-074": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-075": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "FLD-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-076": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-10"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-077": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-10"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-078": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-10"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-079": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-10"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-080": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-11"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-081": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-11"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-082": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-11"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-083": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-11"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-084": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-4",
+        "FLD-12"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-085": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-4",
+        "FLD-12"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-086": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-4",
+        "FLD-12"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-087": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-13"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-088": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-13"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-089": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-14"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-090": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-14"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-091": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-14"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-092": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-15"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-093": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-15"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-094": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-15"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-095": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-15"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-096": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-15"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-097": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-3",
+        "FLD-16",
+        "AC-10"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-098": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-3",
+        "FLD-16",
+        "AC-10",
+        "MSG-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-099": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-3",
+        "FLD-16",
+        "AC-10",
+        "MSG-5"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-100": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-3",
+        "FLD-16",
+        "AC-10",
+        "MSG-5"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-101": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-3",
+        "FLD-16",
+        "AC-10"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-102": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-17"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-103": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "FLD-17"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-104": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "CTL-1",
+        "AC-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-105": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "CTL-1",
+        "AC-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-106": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-2",
+        "CTL-1",
+        "AC-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-107": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "CTL-1"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-108": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "ST-7",
+        "MSG-1",
+        "LNG-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-109": {
+      "category": "Functional-Low",
+      "traceability": [
+        "OBJ-1",
+        "ST-8",
+        "MSG-2",
+        "LNG-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-110": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-2",
+        "CTL-2"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-111": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-3",
+        "CTL-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-112": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-4",
+        "FLD-12"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-113": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-2",
+        "FLD-13"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-114": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-2",
+        "CTL-7"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-115": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-2",
+        "CTL-2",
+        "ST-9"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-116": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-3",
+        "FLD-16",
+        "MSG-3"
+      ]
+    },
+    "MEDIA-ANNUALREPORTS-TC-117": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-2",
+        "CTL-4"
+      ]
+    }
+  },
+  "basis": "Description field (get_story_for_analysis AC field empty) contains two full Acceptance Criteria sections written as GWT clauses (frontend US-001 + backend US-002) — treated as has_ac=True, AC-1..AC-12 mapped verbatim. Figma verified relevant (frame #5419:307392, file J3e1thav8NIu6a3XhC6Wcl, EN/Light/Desktop) via literal content match (card titles, section headings, exact copy) — tokens extracted for that frame only; AR/Dark-mode/Mobile variant frames exist but were not separately token-extracted (standard-render cases instead)."
+}

@@ -52,3 +52,7 @@ cms/tests/chambers_law/fixtures/generated/
 # Ad-hoc, per-run Allure output directories (allure-results/ is already
 # ignored above; runs that target a named batch write siblings of it).
 allure-results-*/
+# Local QA Engine plugin checkout — a separate repo, accidentally committed
+# as a bare gitlink (mode 160000) with no .gitmodules, which left every clone
+# with an uninitialisable submodule. Untracked here on purpose.
+AI-Plugin/

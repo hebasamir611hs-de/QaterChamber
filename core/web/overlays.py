@@ -73,11 +73,19 @@ class Overlay:
         self.surfaces = surfaces
 
 
+# Named so feature Page Objects whose SUBJECT is the announcement modal
+# itself (e.g. web/pages/keyboard_navigation/, PBI 131054's modal focus-trap
+# cases) can reference the same two selectors instead of re-declaring them —
+# the structure & redundancy scan flags duplicated locator constants for the
+# same element across objects.
+ANNOUNCEMENT_ROOT = "#qc-announcement-popup-root"
+ANNOUNCEMENT_CLOSE = f"{ANNOUNCEMENT_ROOT} button.qc-ann-close"
+
 OVERLAYS = [
     Overlay(
         name="announcement",
-        root="#qc-announcement-popup-root",
-        close="#qc-announcement-popup-root button.qc-ann-close",
+        root=ANNOUNCEMENT_ROOT,
+        close=ANNOUNCEMENT_CLOSE,
         surfaces=("web",),  # public-site announcement — never renders in the Control Panel
     ),
 ]

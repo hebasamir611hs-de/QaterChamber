@@ -1,0 +1,2780 @@
+{
+  "pbi_id": 130953,
+  "pbi_title": "QC - Events - 006 - Made in China Expo",
+  "cases": [
+    {
+      "id": 144226,
+      "title": "Verify that the Made in China Expo page renders the hero, About section and side CTA card in English",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "EXPO",
+        "Regression",
+        "UAT",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to `/events/made-in-china-expo` (EN)",
+          "expected": "Hero displays eyebrow &quot;Qatari industry. Local ambition.&quot;, title &quot;Made in China Expo&quot;, description, CTA button &quot;Visit the Official Expo Website&quot;, breadcrumb &quot;Home › Events&quot;"
+        },
+        {
+          "action": "Scroll to About section",
+          "expected": "eyebrow &quot;About the exhibition&quot;, title &quot;Connecting markets and business opportunities&quot;, body paragraphs visible"
+        },
+        {
+          "action": "Scroll to side card",
+          "expected": "Made in China logo, eyebrow &quot;Official exhibition website&quot;, heading &quot;Explore Made in China&quot;, subtext, CTA button visible"
+        }
+      ]
+    },
+    {
+      "id": 144227,
+      "title": "Verify that the Made in China Expo page renders the hero, About section and side CTA card in Arabic with RTL layout",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "EXPO",
+        "Regression",
+        "UAT",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to `/ar/events/made-in-china-expo`",
+          "expected": "Hero displays AR eyebrow/title/description/CTA, page direction is RTL, breadcrumb reads right-to-left (&quot;الرئيسية › الفعاليات&quot;)"
+        },
+        {
+          "action": "Scroll to About section",
+          "expected": "AR eyebrow/title/body render RTL"
+        },
+        {
+          "action": "Scroll to side card",
+          "expected": "AR eyebrow/heading/subtext/CTA render RTL"
+        }
+      ]
+    },
+    {
+      "id": 144228,
+      "title": "Verify that the breadcrumb \"Home\" link navigates to the homepage",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Click &quot;Home&quot; in the breadcrumb",
+          "expected": "Browser navigates to the site homepage URL"
+        }
+      ]
+    },
+    {
+      "id": 144229,
+      "title": "Verify that the breadcrumb \"Events\" link navigates to the Events listing page",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Click &quot;Events&quot; in the breadcrumb",
+          "expected": "Browser navigates to the Events listing page (`/events`)"
+        }
+      ]
+    },
+    {
+      "id": 144232,
+      "title": "Verify that the Made in China Expo page layout is responsive on a desktop viewport",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "EXPO",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Open the page at 1920×1080",
+          "expected": "Hero, About, side card render in the desktop 2-column layout with no overflow/clipping"
+        }
+      ]
+    },
+    {
+      "id": 144233,
+      "title": "Verify that the Made in China Expo page layout is responsive on a tablet viewport",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "EXPO",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Resize/open at 768×1024",
+          "expected": "Sections reflow (side card moves below/beside About per breakpoint spec), no horizontal scroll, text wraps correctly"
+        }
+      ]
+    },
+    {
+      "id": 144234,
+      "title": "Verify that the Made in China Expo page layout is responsive on a mobile viewport",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "EXPO",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Resize/open at 375×667",
+          "expected": "Hero stacks vertically, CTA buttons remain fully tappable (min 44px touch target), side card stacks below About, no overflow"
+        }
+      ]
+    },
+    {
+      "id": 144235,
+      "title": "Verify that the Made in China Expo page renders correctly in Light mode",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "EXPO",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Load page with Light mode active",
+          "expected": "Backgrounds/text/CTA colors match the Light-mode Figma frame (white/light backgrounds, brand-red accents)"
+        }
+      ]
+    },
+    {
+      "id": 144236,
+      "title": "Verify that the Made in China Expo page renders correctly in Dark mode",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "EXPO",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Toggle to Dark mode",
+          "expected": "Page background/text/CTA colors switch to the Dark-mode token set with no unreadable low-contrast text or broken imagery"
+        }
+      ]
+    },
+    {
+      "id": 144237,
+      "title": "Verify that the Made in China Expo admin form in Control Panel renders correctly in Arabic with RTL layout",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Compatibility",
+        "Control_Panel",
+        "EXPO"
+      ],
+      "steps": [
+        {
+          "action": "Open the Made in China Expo page in Object Authoring with the Control Panel UI locale set to Arabic",
+          "expected": "Field labels, tabs and buttons render in Arabic, form direction is RTL, EN/AR field entry tabs remain distinguishable"
+        }
+      ]
+    },
+    {
+      "id": 144238,
+      "title": "Verify that a Site Content Editor can perform the full content lifecycle on the Made in China Expo page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor; Open Made in China Expo in Object Authoring, edit a field, Save as Draft, Preview, Publish, then Unpublish",
+          "expected": "Each action succeeds without an Access Denied error; page reflects each resulting state"
+        }
+      ]
+    },
+    {
+      "id": 144239,
+      "title": "Verify that a Site Content Author can view and update assigned Made in China Expo page content",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "EXPO"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Author; Open the assigned page, edit the Section Body field, Save as Draft",
+          "expected": "Field is editable, save succeeds, no Access Denied error"
+        }
+      ]
+    },
+    {
+      "id": 144240,
+      "title": "Verify that a Site Content Author is denied direct publish on the Made in China Expo page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Author; Open the page in Draft, attempt to click Publish",
+          "expected": "Action is blocked; error message &quot;Access Denied. You do not have permission to perform this action.&quot; (EN) is displayed; page remains in Draft"
+        }
+      ]
+    },
+    {
+      "id": 144241,
+      "title": "Verify that a Public Visitor can view the published Made in China Expo page and use the CTA",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "EXPO",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Open the published page URL as an anonymous visitor; Click the Hero CTA",
+          "expected": "Page content is fully viewable without login; CTA click redirects to the configured external URL"
+        }
+      ]
+    },
+    {
+      "id": 144242,
+      "title": "Verify that a Public Visitor is denied access to the Control Panel admin URL for the Made in China Expo page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to open the Object Authoring admin URL for the Made in China Expo page directly, unauthenticated",
+          "expected": "Redirected to CMS login / &quot;Access Denied. You do not have permission to perform this action.&quot; (EN) is shown; no admin content is exposed"
+        }
+      ]
+    },
+    {
+      "id": 144243,
+      "title": "Verify that a Site Content Editor can configure all Made in China Expo fields (EN/AR), preview, and publish successfully",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-High",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor; Fill Hero eyebrow/title/description/CTA label/URL/behavior (EN+AR), upload Hero Banner Image; Fill About eyebrow/title/body (EN+AR); Fill Side card logo/eyebrow/heading/subtext/CTA label/URL/behavior (EN+AR); Save as Draft; Preview; Publish",
+          "expected": "Each step succeeds; Preview shows the entered content before publish; after Publish the live public Web page (`/events/made-in-china-expo`, both `/` and `/ar/`) displays every entered field exactly as configured"
+        }
+      ]
+    },
+    {
+      "id": 144244,
+      "title": "Verify that editing an already-published Hero Title propagates the new value to the public Web delivery surface",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-High",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, edit Hero Title to &quot;Made in China Expo — 2027 Edition&quot; on the already-published page; Save and Publish (re-publish); Load the public Web page in a fresh browser tab",
+          "expected": "New title &quot;Made in China Expo — 2027 Edition&quot; is shown, not the stale cached &quot;Made in China Expo&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144245,
+      "title": "Verify that a Draft Made in China Expo page is not visible on the public website",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, set the page to Draft and save; Open a brand-new browser context with no auth state; Navigate to the Events menu and to the direct page URL",
+          "expected": "Page does not appear in the Events navigation menu; the direct URL returns a not-found/standard error page, not the draft content"
+        }
+      ]
+    },
+    {
+      "id": 144246,
+      "title": "Verify that an Unpublished Made in China Expo page is not visible on the public website",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, Unpublish a previously published page; Open a fresh, logged-out browser context; Navigate to Events menu and the direct page URL",
+          "expected": "Page is absent from the Events menu; direct URL returns a not-found/standard error page"
+        }
+      ]
+    },
+    {
+      "id": 144247,
+      "title": "Verify that saving a change to the Made in China Expo page displays the Liferay generic success toast and records an audit log entry (English)",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-High"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, edit the Hero Eyebrow field and click Save; Check the toast; Open the Audit Log for this page",
+          "expected": "Liferay's generic success toast is displayed in English; a new audit log entry is recorded with editor's username, timestamp, and the changed field"
+        }
+      ]
+    },
+    {
+      "id": 144248,
+      "title": "Verify that saving a change to the Made in China Expo page displays the Liferay generic success toast and records an audit log entry (Arabic)",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "EXPO",
+        "Functional-High"
+      ],
+      "steps": [
+        {
+          "action": "Set CMS UI locale to Arabic; As Editor, edit the Section Title (AR) field and click Save; Check the toast; Open the Audit Log",
+          "expected": "Liferay's generic success toast is displayed in Arabic; a new audit log entry is recorded"
+        }
+      ]
+    },
+    {
+      "id": 144249,
+      "title": "Verify that the Hero CTA redirects to the external site in the same browser tab when Open Behavior = Same Tab",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Redirect",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, set Hero CTA Open Behavior = Same Tab and publish; As visitor, click the Hero CTA",
+          "expected": "The current tab navigates to `https://www.madeinchinaexpo.com`; no new tab is opened"
+        }
+      ]
+    },
+    {
+      "id": 144250,
+      "title": "Verify that the Hero CTA redirects to the external site in a new browser tab when Open Behavior = New Tab",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Redirect",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, set Hero CTA Open Behavior = New Tab and publish; As visitor, click the Hero CTA",
+          "expected": "A new browser tab opens navigating to `https://www.madeinchinaexpo.com`; the original page tab remains on the Expo page"
+        }
+      ]
+    },
+    {
+      "id": 144251,
+      "title": "Verify that the Hero CTA is hidden when the CTA label is configured but the redirect URL is missing",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, set Hero CTA label, leave Redirect URL empty, save/publish; Load the public page",
+          "expected": "Hero CTA button does not render on the delivery surface"
+        }
+      ]
+    },
+    {
+      "id": 144252,
+      "title": "Verify that the Hero CTA is hidden when the redirect URL is configured but the CTA label is missing",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, set Hero CTA Redirect URL, leave label empty, save/publish; Load the public page",
+          "expected": "Hero CTA button does not render on the delivery surface"
+        }
+      ]
+    },
+    {
+      "id": 144253,
+      "title": "Verify that the Side CTA Card button is hidden when the CTA label is configured but the redirect URL is missing",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, set Side Card CTA label, leave Redirect URL empty, save/publish; Load the public page",
+          "expected": "Side card renders without its CTA button"
+        }
+      ]
+    },
+    {
+      "id": 144254,
+      "title": "Verify that the Side CTA Card button is hidden when the redirect URL is configured but the CTA label is missing",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, set Side Card Redirect URL, leave label empty, save/publish; Load the public page",
+          "expected": "Side card renders without its CTA button"
+        }
+      ]
+    },
+    {
+      "id": 144255,
+      "title": "Verify that a Site Content Editor can save the Made in China Expo page as Draft",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-High"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, fill required fields, click &quot;Save as Draft&quot;",
+          "expected": "Page Status = Draft in the admin listing; page not visible on the public site (per TC-020)"
+        }
+      ]
+    },
+    {
+      "id": 144256,
+      "title": "Verify that a Site Content Editor can preview the Draft Made in China Expo page before publishing",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-High"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, open the Draft page and click Preview",
+          "expected": "Preview renders the entered hero/About/side-card content exactly as configured, without publishing it live"
+        }
+      ]
+    },
+    {
+      "id": 144257,
+      "title": "Verify that a Site Content Editor can publish the Made in China Expo page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-High",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, click Publish",
+          "expected": "Page Status = Published; page appears live on the public Web site and in the Events navigation menu"
+        }
+      ]
+    },
+    {
+      "id": 144258,
+      "title": "Verify that a Site Content Editor can unpublish a previously published Made in China Expo page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-High",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, open the published page and click Unpublish",
+          "expected": "Page Status = Unpublished; page disappears from the public Web site and Events menu (per TC-021)"
+        }
+      ]
+    },
+    {
+      "id": 144259,
+      "title": "Verify that a Public Visitor clicking the Hero CTA is redirected to the external Made in China Expo website",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Redirect",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As anonymous visitor, open the published page; Click &quot;Visit the Official Expo Website&quot; in the Hero",
+          "expected": "Visitor is redirected to `https://www.madeinchinaexpo.com` per the configured open behavior"
+        }
+      ]
+    },
+    {
+      "id": 144260,
+      "title": "Verify that a Public Visitor clicking the Side Card CTA is redirected to the external Made in China Expo website",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Redirect",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As anonymous visitor, scroll to the side card; Click &quot;Visit the Official Expo Website&quot;",
+          "expected": "Visitor is redirected to `https://www.madeinchinaexpo.com` per the configured open behavior"
+        }
+      ]
+    },
+    {
+      "id": 144261,
+      "title": "Verify that a Public Visitor can reach the Made in China Expo page via Main Menu → Events",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "EXPO",
+        "Functional-High",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As anonymous visitor, open the main site navigation; Click Events, then &quot;Made in China Expo&quot;",
+          "expected": "Page loads showing hero, About section, and side card"
+        }
+      ]
+    },
+    {
+      "id": 144262,
+      "title": "Verify that the Hero Eyebrow Label accepts a valid value within 60 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter the value in EN and AR; Save/Publish",
+          "expected": "Value is saved; renders verbatim in the Hero eyebrow on the public Web page"
+        }
+      ]
+    },
+    {
+      "id": 144263,
+      "title": "Verify that the Hero Eyebrow Label is rejected when left empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Clear the EN value; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save is blocked; previous value retained"
+        }
+      ]
+    },
+    {
+      "id": 144264,
+      "title": "Verify that the Hero Eyebrow Label rejects a value exceeding 60 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 61-character string; Attempt Save",
+          "expected": "Validation error shown; save is blocked; field remains at 61-char invalid state or reverts, per CMS behavior; value is not published"
+        }
+      ]
+    },
+    {
+      "id": 144265,
+      "title": "Verify that the Hero Eyebrow Label rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "Treated as empty; &quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144266,
+      "title": "Verify that the Hero Page Title accepts a valid value within 120 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter EN/AR values; Save/Publish",
+          "expected": "Value saved; renders verbatim as the Hero title on the public Web page"
+        }
+      ]
+    },
+    {
+      "id": 144267,
+      "title": "Verify that the Hero Page Title is rejected when left empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Clear the field; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144268,
+      "title": "Verify that the Hero Page Title rejects a value exceeding 120 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter 121 characters; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144269,
+      "title": "Verify that the Hero Page Title rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144270,
+      "title": "Verify that the Hero Description accepts a valid value within 200 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter EN/AR description; Save/Publish",
+          "expected": "Value saved; renders as the Hero lead paragraph"
+        }
+      ]
+    },
+    {
+      "id": 144271,
+      "title": "Verify that the Hero Description is rejected when left empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Clear the field; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144272,
+      "title": "Verify that the Hero Description rejects a value exceeding 200 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter 201 characters; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144273,
+      "title": "Verify that the Hero Description rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144274,
+      "title": "Verify that a valid Hero Banner Image (JPG, 500KB) uploads and renders with alt text",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Upload `hero-banner.jpg` with alt text; Save/Publish",
+          "expected": "Image saved; renders in the Hero banner slot on the public page; `alt` attribute matches the entered EN/AR alt text per active locale"
+        }
+      ]
+    },
+    {
+      "id": 144275,
+      "title": "Verify that the Hero Banner Image rejects an unsupported file format",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to upload `hero-banner.pdf`; Attempt Save",
+          "expected": "Upload is rejected with a format-validation error; no image is saved"
+        }
+      ]
+    },
+    {
+      "id": 144276,
+      "title": "Verify that the Hero Banner Image rejects a file exceeding 2 MB",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to upload a 2.1MB JPG; Attempt Save",
+          "expected": "&quot;Image size must not exceed 2 MB.&quot; shown; upload rejected"
+        }
+      ]
+    },
+    {
+      "id": 144277,
+      "title": "Verify that the Hero CTA Button Label accepts a valid value within 60 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter EN/AR label; Save/Publish",
+          "expected": "Label saved; renders on the Hero CTA button"
+        }
+      ]
+    },
+    {
+      "id": 144278,
+      "title": "Verify that the Hero CTA Button Label is rejected when left empty while the Redirect URL is configured",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Set a valid Redirect URL, clear the label; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144279,
+      "title": "Verify that the Hero CTA Button Label rejects a value exceeding 60 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter 61 characters; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144280,
+      "title": "Verify that the Hero CTA Button Label rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144281,
+      "title": "Verify that the Hero CTA Redirect URL accepts a valid URL",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter the URL; Save/Publish",
+          "expected": "URL saved; CTA click redirects there (per TC-034)"
+        }
+      ]
+    },
+    {
+      "id": 144282,
+      "title": "Verify that the Hero CTA Redirect URL rejects an invalid/malformed URL and blocks publishing",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter &quot;notaurl123&quot;; Attempt to Publish",
+          "expected": "&quot;Please enter a valid URL.&quot; shown; publishing is blocked"
+        }
+      ]
+    },
+    {
+      "id": 144283,
+      "title": "Verify that the Hero CTA Redirect URL rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144284,
+      "title": "Verify that the Hero CTA Open Behavior dropdown accepts a valid selection (\"Same Tab\")",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Select &quot;Same Tab&quot;; Save/Publish",
+          "expected": "Value saved; redirect behavior matches (per TC-024)"
+        }
+      ]
+    },
+    {
+      "id": 144285,
+      "title": "Verify that Publish is blocked when the Hero CTA label and URL are configured but Open Behavior is left unselected",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Set label + URL, leave Open Behavior unselected; Attempt Publish",
+          "expected": "Validation error requiring Open Behavior selection is shown; publish blocked"
+        }
+      ]
+    },
+    {
+      "id": 144286,
+      "title": "Verify that Page Status can be set to Published via the dropdown",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Select Page Status = Published; Save",
+          "expected": "Status persists as Published; page goes live (cross-ref TC-032)"
+        }
+      ]
+    },
+    {
+      "id": 144287,
+      "title": "Verify that Page Status cannot be left unselected",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Clear/deselect Page Status; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144288,
+      "title": "Verify that turning Page Active Status ON makes the page appear in the Events menu",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Toggle Active Status ON, save/publish; Load the public Events menu",
+          "expected": "Made in China Expo entry is present"
+        }
+      ]
+    },
+    {
+      "id": 144289,
+      "title": "Verify that turning Page Active Status OFF removes the page from the Events menu",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Toggle Active Status OFF, save; Load the public Events menu",
+          "expected": "Made in China Expo entry is absent, even though Page Status = Published"
+        }
+      ]
+    },
+    {
+      "id": 144290,
+      "title": "Verify that Page Display Order accepts a valid positive integer",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter Display Order = 3; Save/Publish",
+          "expected": "Value saved; Made in China Expo appears in position 3 of the Events menu ordering"
+        }
+      ]
+    },
+    {
+      "id": 144291,
+      "title": "Verify that Page Display Order rejects a non-numeric value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter &quot;abc&quot;; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144292,
+      "title": "Verify that the Section Eyebrow accepts a valid value within 100 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter EN/AR; Save/Publish",
+          "expected": "Value saved; renders as the About section eyebrow"
+        }
+      ]
+    },
+    {
+      "id": 144293,
+      "title": "Verify that the Section Eyebrow is rejected when left empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Clear field; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144294,
+      "title": "Verify that the Section Eyebrow rejects a value exceeding 100 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter 101 characters; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144295,
+      "title": "Verify that the Section Eyebrow rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144296,
+      "title": "Verify that the Section Title accepts a valid value within 120 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter EN/AR; Save/Publish",
+          "expected": "Value saved; renders as the About section title"
+        }
+      ]
+    },
+    {
+      "id": 144297,
+      "title": "Verify that the Section Title is rejected when left empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Clear field; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144298,
+      "title": "Verify that the Section Title rejects a value exceeding 120 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter 121 characters; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144299,
+      "title": "Verify that the Section Title rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144300,
+      "title": "Verify that the Section Body accepts a valid value within 10000 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter EN/AR body text; Save/Publish",
+          "expected": "Value saved; renders as the About section body paragraphs"
+        }
+      ]
+    },
+    {
+      "id": 144301,
+      "title": "Verify that the Section Body is rejected when left empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Clear field; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144302,
+      "title": "Verify that the Section Body rejects a value exceeding 10000 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter 10001 characters; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144303,
+      "title": "Verify that the Section Body rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144304,
+      "title": "Verify that a Supporting Image's Display Order accepts a valid positive integer",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Add a Supporting Image, set Display Order = 1; Save/Publish",
+          "expected": "Value saved; image ordering on delivery matches"
+        }
+      ]
+    },
+    {
+      "id": 144305,
+      "title": "Verify that a Supporting Image's Display Order rejects a negative value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter Display Order = -1; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144306,
+      "title": "Verify that turning a Supporting Image's Active Status ON shows it on the delivery surface",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Toggle Active Status ON for a Supporting Image, save/publish; Load the public page",
+          "expected": "Supporting image is visible in the About section"
+        }
+      ]
+    },
+    {
+      "id": 144307,
+      "title": "Verify that turning a Supporting Image's Active Status OFF hides it from the delivery surface",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Toggle Active Status OFF, save; Load the public page",
+          "expected": "Supporting image is not visible, even though it still exists in the CMS"
+        }
+      ]
+    },
+    {
+      "id": 144308,
+      "title": "Verify that a valid CTA Card Logo (PNG, 300KB) uploads and renders with alt text",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Upload `mic-logo.png` (300KB) with alt text; Save/Publish",
+          "expected": "Logo saved; renders in the side card; `alt` attribute matches entered text"
+        }
+      ]
+    },
+    {
+      "id": 144309,
+      "title": "Verify that the CTA Card Logo rejects an unsupported file format",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to upload `mic-logo.gif`; Attempt Save",
+          "expected": "Upload rejected with a format-validation error"
+        }
+      ]
+    },
+    {
+      "id": 144310,
+      "title": "Verify that the CTA Card Logo rejects a file exceeding 2 MB",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to upload a 2.1MB PNG; Attempt Save",
+          "expected": "&quot;Image size must not exceed 2 MB.&quot; shown; upload rejected"
+        }
+      ]
+    },
+    {
+      "id": 144311,
+      "title": "Verify that the CTA Card Eyebrow accepts a valid value within 100 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter EN/AR; Save/Publish",
+          "expected": "Value saved; renders as side card eyebrow"
+        }
+      ]
+    },
+    {
+      "id": 144312,
+      "title": "Verify that the CTA Card Eyebrow is rejected when left empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Clear field; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144313,
+      "title": "Verify that the CTA Card Eyebrow rejects a value exceeding 100 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter 101 characters; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144314,
+      "title": "Verify that the CTA Card Eyebrow rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144315,
+      "title": "Verify that the CTA Card Heading accepts a valid value within 120 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter EN/AR; Save/Publish",
+          "expected": "Value saved; renders as side card heading"
+        }
+      ]
+    },
+    {
+      "id": 144316,
+      "title": "Verify that the CTA Card Heading is rejected when left empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Clear field; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144317,
+      "title": "Verify that the CTA Card Heading rejects a value exceeding 120 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter 121 characters; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144318,
+      "title": "Verify that the CTA Card Heading rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144319,
+      "title": "Verify that the CTA Card Subtext accepts a valid value within 200 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter EN/AR; Save/Publish",
+          "expected": "Value saved; renders as side card subtext"
+        }
+      ]
+    },
+    {
+      "id": 144320,
+      "title": "Verify that the CTA Card Subtext is rejected when left empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Clear field; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144321,
+      "title": "Verify that the CTA Card Subtext rejects a value exceeding 200 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter 201 characters; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144322,
+      "title": "Verify that the CTA Card Subtext rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144323,
+      "title": "Verify that the CTA Card Button Label accepts a valid value within 60 characters",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter EN/AR; Save/Publish",
+          "expected": "Value saved; renders on the side card CTA button"
+        }
+      ]
+    },
+    {
+      "id": 144324,
+      "title": "Verify that the CTA Card Button Label is rejected when left empty while the Redirect URL is configured",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Set a valid Redirect URL, clear label; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144325,
+      "title": "Verify that the CTA Card Button Label rejects a value exceeding 60 characters",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter 61 characters; Attempt Save",
+          "expected": "Validation error shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144326,
+      "title": "Verify that the CTA Card Button Label rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144327,
+      "title": "Verify that the CTA Card Redirect URL accepts a valid URL",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter the URL; Save/Publish",
+          "expected": "URL saved; CTA click redirects there (per TC-035)"
+        }
+      ]
+    },
+    {
+      "id": 144328,
+      "title": "Verify that the CTA Card Redirect URL rejects an invalid/malformed URL and blocks publishing",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter &quot;notaurl456&quot;; Attempt Publish",
+          "expected": "&quot;Please enter a valid URL.&quot; shown; publish blocked"
+        }
+      ]
+    },
+    {
+      "id": 144329,
+      "title": "Verify that the CTA Card Redirect URL rejects a whitespace-only value",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces; Attempt Save",
+          "expected": "&quot;This field is required.&quot; shown; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 144330,
+      "title": "Verify that the CTA Card Open Behavior dropdown accepts a valid selection (\"New Tab\")",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Select &quot;New Tab&quot;; Save/Publish",
+          "expected": "Value saved; redirect opens in a new tab (cross-ref TC-025 pattern applied to side card)"
+        }
+      ]
+    },
+    {
+      "id": 144331,
+      "title": "Verify that Publish is blocked when the CTA Card Open Behavior is left unselected",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Leave Open Behavior unselected with label+URL set; Attempt Publish",
+          "expected": "Validation error shown; publish blocked"
+        }
+      ]
+    },
+    {
+      "id": 144332,
+      "title": "Verify that turning the CTA Card Active Status ON shows the card on the delivery surface",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Toggle Active Status ON, save/publish; Load the public page",
+          "expected": "Side card is visible"
+        }
+      ]
+    },
+    {
+      "id": 144333,
+      "title": "Verify that turning the CTA Card Active Status OFF hides the card from the delivery surface",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Toggle Active Status OFF, save; Load the public page",
+          "expected": "Side card is not visible, About section remains visible"
+        }
+      ]
+    },
+    {
+      "id": 144334,
+      "title": "Verify that the required-field validation message displays in Arabic when the CMS locale is Arabic",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Set CMS UI locale to Arabic; Clear the Section Title (AR) field and attempt Save",
+          "expected": "&quot;هذا الحقل مطلوب.&quot; is displayed"
+        }
+      ]
+    },
+    {
+      "id": 144335,
+      "title": "Verify that the invalid-URL validation message displays in Arabic when the CMS locale is Arabic",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Set CMS UI locale to Arabic; Enter &quot;notaurl789&quot; in Hero CTA Redirect URL, attempt Publish",
+          "expected": "&quot;يرجى إدخال رابط صالح.&quot; is displayed"
+        }
+      ]
+    },
+    {
+      "id": 144336,
+      "title": "Verify that the image-size validation message displays in Arabic when the CMS locale is Arabic",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Set CMS UI locale to Arabic; Attempt to upload a 2.1MB Hero Banner Image, attempt Save",
+          "expected": "&quot;يجب ألا يتجاوز حجم الصورة 2 ميغابايت.&quot; is displayed"
+        }
+      ]
+    },
+    {
+      "id": 144337,
+      "title": "Verify that the access-denied message displays in Arabic when the CMS locale is Arabic",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "EXPO",
+        "Functional-Low"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Author with CMS UI locale set to Arabic; Attempt to click Publish",
+          "expected": "&quot;تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.&quot; is displayed"
+        }
+      ]
+    },
+    {
+      "id": 144338,
+      "title": "Verify that the Made in China Expo page falls back to the default language when the selected-language translation is missing",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Edge",
+        "EXPO",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, leave Section Body (AR) empty while EN is filled, publish; As visitor, load the page with UI language = Arabic",
+          "expected": "The About section body falls back to displaying the English content rather than a blank section"
+        }
+      ]
+    },
+    {
+      "id": 144340,
+      "title": "Verify that a standard error page is displayed when the Made in China Expo page itself fails to load",
+      "type": "Edge",
+      "scenario": "negative",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "EXPO",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As visitor, trigger a page-load failure condition on the Made in China Expo URL (e.g. simulated 500)",
+          "expected": "A standard error page is displayed to the visitor, not a blank/broken layout"
+        }
+      ]
+    },
+    {
+      "id": 144341,
+      "title": "Verify that replacing the Hero Banner Image on an already-published page propagates correctly with no broken image reference",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "EXPO",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Editor, upload a new Hero Banner Image (`hero-banner-v2.jpg`) replacing the existing one on the published page, save/publish; Load the public Web page",
+          "expected": "New image renders correctly; no broken image icon; old image reference is fully replaced, not left as a dangling link"
+        }
+      ]
+    }
+  ]
+}

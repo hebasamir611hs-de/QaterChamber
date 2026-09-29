@@ -63,6 +63,31 @@ the next time that table is updated — every mutating test in this module
 captures a full baseline before writing and restores it (`finally`),
 including a reopen-and-reread verification, so the shared records are
 never left mutated even on failure.
+
+PROBE FAILURE, DISCLOSED (2026-09-15): before authoring the 50-case batch
+covering ADO 136088-136140, three live one-shot probe attempts were made
+against this surface (`manage-about-us-section` / `manage-about-us-counter`)
+to confirm `maxlength` attributes and the exact required-field-violation
+wording, reusing the existing `.auth/state.json` session. All three failed:
+run 1 hung indefinitely on a `networkidle` wait with zero CPU growth for
+several minutes; run 2 raised `Timeout 30000ms exceeded` resolving the
+Section form's own textboxes, then `Target crashed` / `Page crashed`
+Playwright errors; run 3 (fresh per-section browser contexts,
+`--disable-dev-shm-usage`, a smaller viewport) hung again before the first
+field read completed. `tasklist` showed 25+ pre-existing orphan `chrome.exe`
+processes on the host across all three attempts — a host-resource condition,
+not a script defect (this project's own memory note already warns never to
+run parallel live-browser agents). No character-limit or required-field
+validation-message mechanism was independently confirmed live this session.
+Every CP test below that depends on that mechanism uses
+`ObjectAuthoringPage.field_length_rejected()` /
+`upload_file_expect_rejected()`, which accept either observable branch the
+QA cases themselves allow ("Field truncates OR shows a max-length error";
+publish is blocked = `current_status() != "Approved"`) rather than assuming
+one specific mechanism. The public (unauthenticated) Home Page surface was
+NOT affected by this — that probe succeeded cleanly and its findings are
+folded into `web/pages/home_about_summary/home_about_summary_page.py`'s own
+module docstring as real, confirmed-live results.
 """
 
 from cms.pages.components.object_authoring_page import ObjectAuthoringPage
@@ -131,6 +156,20 @@ class HomeAboutSummaryAdminPage(ObjectAuthoringPage):
     def description_ar_value(self) -> str:
         return self.iframe_editor_text(self.SECTION_DESC_EDITOR_AR)
 
+    def description_length_rejected(self, locale: str, attempted: str, limit: int) -> bool:
+        """Rich-text counterpart to ObjectAuthoringPage.field_length_rejected()
+        for the bilingual CKEditor Section Description fields — same
+        disclosed dual-branch check (see module docstring's PROBE FAILURE
+        note): truncation read back immediately after fill, OR a
+        submit-time publish block. `locale` is "en" or "ar"."""
+        fill = self.fill_description_en if locale == "en" else self.fill_description_ar
+        read = self.description_en_value if locale == "en" else self.description_ar_value
+        fill(attempted)
+        if len(read().strip()) <= limit:
+            return True
+        self.submit_for_publishing()
+        return self.current_status() != "Approved"
+
     def upload_building_image_primary(self, file_path: str) -> "HomeAboutSummaryAdminPage":
         self.upload_file(FIELD_BUILDING_IMAGE_PRIMARY, file_path)
         return self
@@ -157,7 +196,26 @@ class HomeAboutSummaryAdminPage(ObjectAuthoringPage):
             "read_more_label_en": self.field_value(FIELD_READ_MORE_LABEL_EN),
             "read_more_label_ar": self.field_value(FIELD_READ_MORE_LABEL_AR),
             "read_more_url": self.field_value(FIELD_READ_MORE_URL),
+            # Added 2026-09-15 for the ADO 136088-136140 batch: several new
+            # cases (136110, 136115, 136116) mutate the bilingual rich-text
+            # Description — the PRIOR version of this method omitted it, a
+            # real gap (restore_section() below could not have restored it
+            # either). Both now round-trip it like every other field.
+            "description_en": self.description_en_value(),
+            "description_ar": self.description_ar_value(),
         }
+
+    def ensure_draft(self) -> "HomeAboutSummaryAdminPage":
+        """Unpublishes the currently-open entry (if Approved) so Save as
+        Draft becomes available — several QA cases in the 136088-136140
+        batch explicitly exercise "Save Draft" against this project's
+        Approved-by-default singleton, where Save as Draft is disabled
+        until unpublished (see this module's REWRITTEN docstring above).
+        No-op if already Draft. Must be called on an already-open entry."""
+        if self.current_status() == "Approved":
+            self.unpublish_to_edit_as_draft()
+            self.open_section_entry()
+        return self
 
     # ---- Real cross-session logout/login (TC-136136's own mechanism —
     # confirmed live in the prior Content & Data-era version of this class:
@@ -186,6 +244,10 @@ class HomeAboutSummaryAdminPage(ObjectAuthoringPage):
         self.fill_text(FIELD_READ_MORE_LABEL_EN, baseline["read_more_label_en"])
         self.fill_text(FIELD_READ_MORE_LABEL_AR, baseline["read_more_label_ar"])
         self.fill_text(FIELD_READ_MORE_URL, baseline["read_more_url"])
+        if "description_en" in baseline:
+            self.fill_description_en(baseline["description_en"])
+        if "description_ar" in baseline:
+            self.fill_description_ar(baseline["description_ar"])
         self.submit_for_publishing()
         return self
 
@@ -202,6 +264,41 @@ class HomeAboutCounterAdminPage(ObjectAuthoringPage):
     def open_counter(self, entry_code: str) -> "HomeAboutCounterAdminPage":
         self.open_entry_by_code(entry_code)
         return self
+
+    def open_counter_list(self) -> "HomeAboutCounterAdminPage":
+        self.open_entries_list()
+        return self
+
+    def ensure_draft(self) -> "HomeAboutCounterAdminPage":
+        """Counter-row counterpart to HomeAboutSummaryAdminPage.ensure_draft()
+        — same unpublish-if-Approved no-op-if-Draft shape, for "Save Draft"
+        cases exercised against a counter row."""
+        if self.current_status() == "Approved":
+            self.unpublish_to_edit_as_draft()
+        return self
+
+    def counter_row_count(self) -> int:
+        return self.page.locator(self.ENTRIES_TABLE_ROW).count()
+
+    def add_counter_control_state(self) -> dict:
+        """Read-only inspection of the entries-list Add/New control — NEVER
+        clicked (per this project's never-click-Add policy for this
+        singleton-backed set: a real Add would create a permanent,
+        publicly-visible 5th row on the live Home page, see this class's own
+        module docstring). NOT independently confirmed live this session
+        (see module docstring's PROBE FAILURE note) — the selector list
+        below is the same one the abandoned live probe attempted to read.
+        Returns {"found": bool, "visible": bool, "disabled": bool} — a
+        caller asserting "Add is disabled/hidden" should treat found=False
+        as visible=False (no control to click) and NOT as a framework gap."""
+        for sel in ('a:has-text("Add")', 'button:has-text("Add")', 'a:has-text("New")', 'button:has-text("New")'):
+            loc = self.page.locator(sel)
+            if loc.count() > 0:
+                el = loc.first
+                visible = el.is_visible()
+                disabled = el.is_disabled() if visible else False
+                return {"found": True, "visible": visible, "disabled": disabled}
+        return {"found": False, "visible": False, "disabled": False}
 
     def set_title_en(self, value: str) -> "HomeAboutCounterAdminPage":
         self.fill_text(FIELD_COUNTER_TITLE_EN, value)

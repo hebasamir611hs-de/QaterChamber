@@ -165,6 +165,22 @@ from config.settings import web_url
 HOME_URL = web_url("/home")
 CONTACT_US_URL = web_url("/web/qatar-chamber/contact-us")
 
+
+# ── Shared with main's Social Media Icons work (PBI 129366 / 129373) ──────
+# Kept at module level because `web/pages/home_social_icons/home_social_icons_page.py`
+# and `web/pages/keyboard_navigation/keyboard_navigation_page.py` import them
+# from here (single definition).
+FOOTER_HEADING_TEXT = "Follow Us on Social Media"
+FOOTER_SOCIAL_CONTAINER = "footer ul.qc-footer-social"
+
+# Confirmed live — WhatsApp renders LAST among the 9 real production icons,
+# making it a tie-safe comparison target for a "does a newly Display-Order'd
+# icon render EARLIER" check (unlike comparing against Facebook, whose own
+# real Display Order value is unknown and could tie with a test-created entry
+# also set to Display Order=1). Shared with `HomeSocialIconsPage` (imported
+# from here) rather than redefined, since both containers currently render
+# the identical 9 production hrefs.
+PRODUCTION_WHATSAPP_HREF = "https://wa.me/97444559111"
 
 class FooterComponent(BasePage):
     # ── Structural locators — scoped under the single real <footer> ─────
@@ -386,3 +402,59 @@ class FooterComponent(BasePage):
 
     def scroll_position(self) -> int:
         return self.page.evaluate("window.scrollY")
+
+    # ── Social Media Icons query surface (merged from main, 2026-09-29) ──
+    # Read-only helpers used by cms/tests/components/test_footer_control_panel.py
+    # (Social Media Icon Object entries) to verify the public footer. They
+    # were main's whole FooterComponent; this branch's fuller component above
+    # keeps its own `open_home()` (authenticated `open()`), so main's
+    # anonymous opener lives on as `open_home_anonymous()`.
+    def open_home_anonymous(self, locale: str = "en") -> "FooterComponent":
+        """Deliberately uses `BasePage.open_anonymous()`, never `open()` —
+        see that method's own docstring: `open()` unconditionally
+        reauthenticates on any non-login-flow URL if it detects a login
+        form, which would silently re-authenticate an intentionally
+        anonymous context (see standards.md's "Draft/Unpublish
+        Public-Visibility Checks — Mandatory Logged-Out Context")."""
+        url = web_url("/", locale=locale)
+        self.open_anonymous(url)
+        self.page.get_by_text(FOOTER_HEADING_TEXT).first.wait_for(state="visible", timeout=10000)
+        # The heading being visible does not guarantee the icon LINKS
+        # underneath it have mounted yet — wait on the container's own
+        # first real link (a condition, not a sleep) before any caller
+        # reads `social_icon_hrefs()`.
+        self._social_icon_links().first.wait_for(state="visible", timeout=10000)
+        return self
+
+    def _social_icon_links(self):
+        return self.page.locator(FOOTER_SOCIAL_CONTAINER).get_by_role("link")
+
+    def social_icon_hrefs(self) -> list:
+        """Ordered list of every social icon link's `href`, left to right —
+        the ordering IS the frontend's own rendered position, driven by each
+        entry's Display Order."""
+        links = self._social_icon_links()
+        return [links.nth(i).get_attribute("href") or "" for i in range(links.count())]
+
+    def has_production_icons(self) -> bool:
+        """Positive control — confirms the section container was actually
+        found and holds real content, so a subsequent "our marker is absent"
+        assertion cannot silently pass against an empty/wrong container."""
+        return any(PRODUCTION_WHATSAPP_HREF in href for href in self.social_icon_hrefs())
+
+    def has_icon_with_href_marker(self, marker: str) -> bool:
+        return any(marker in href for href in self.social_icon_hrefs())
+
+    def index_of_href_marker(self, marker: str) -> int:
+        hrefs = self.social_icon_hrefs()
+        for i, href in enumerate(hrefs):
+            if marker in href:
+                return i
+        return -1
+
+    def index_of_production_whatsapp(self) -> int:
+        hrefs = self.social_icon_hrefs()
+        for i, href in enumerate(hrefs):
+            if PRODUCTION_WHATSAPP_HREF in href:
+                return i
+        return -1
