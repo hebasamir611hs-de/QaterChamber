@@ -9,7 +9,7 @@ feeds the public Home Page "Business Events" section
 (home_business_events_page.py is the public-frontend counterpart).
 
 CORRECTED 2026-09-07 (mandatory re-verification per standards.md's "Object
-Authoring Is the Only Path for Publish/Unpublish/Draft/Preview Actions" and
+Authoring Is the Only Path for Content Operations" and
 "Draft/Unpublish Public-Visibility Checks" sections, added same day):
 
   - The PRIOR version of this file drove Save/Publish/Unpublish via

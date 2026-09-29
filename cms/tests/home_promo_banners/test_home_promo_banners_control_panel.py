@@ -77,8 +77,10 @@ UNBLOCKED 2026-09-03 (finding above kept for history — the raw Object
 Definition admin genuinely has no workflow, that fact hasn't changed): a
 newly confirmed Control_Panel surface, `object-authoring` ->
 `manage-promotional-banner` (documented in
-.claude/context/active/standards.md's "Object Authoring — Draft / Preview
-/ Publish / Unpublish Lifecycle" section), manages this SAME object's
+.claude/context/active/standards.md's "Content Editorial
+    Workflow" section — CITATION CORRECTED 2026-09-28, this cited
+    an "Object Authoring — Draft / Preview / Publish / Unpublish
+    Lifecycle" section that never existed), manages this SAME object's
 entries through a real Draft/Submit-for-Publishing/Unpublish state
 machine, independent of the raw Object Definition's own workflow setting.
 TC 135122-135125 are now driven through that surface via

@@ -14,8 +14,10 @@ cms/pages/home_latest_news/home_latest_news_admin_page.py's WORKFLOW
 FINDING for the full original evidence, kept for history). A newly
 confirmed Control_Panel surface, `object-authoring` ->
 `manage-news-article` (documented in
-.claude/context/active/standards.md's "Object Authoring — Draft / Preview
-/ Publish / Unpublish Lifecycle" section), manages this same object's
+.claude/context/active/standards.md's "Content Editorial
+    Workflow" section — CITATION CORRECTED 2026-09-28, this cited
+    an "Object Authoring — Draft / Preview / Publish / Unpublish
+    Lifecycle" section that never existed), manages this same object's
 entries through a real Draft/Submit-for-Publishing/Unpublish state
 machine, independent of the raw Object Definition's own workflow setting.
 TC 135279 is now driven through that surface via

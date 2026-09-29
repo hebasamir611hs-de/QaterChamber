@@ -309,7 +309,7 @@ def test_site_content_editor_can_author_preview_and_publish_the_135453(page, bro
     wider batch and are left untouched (out of this task's scope).
 
     CORRECTED 2026-09-07 (per standards.md's "Object Authoring Is the Only
-    Path for Publish/Unpublish/Draft/Preview Actions"): this test previously
+    Path for Content Operations"): this test previously
     drove Status via Content & Data's generic `publicationStatus` combobox +
     Save button. That is NOT the correct/supported lifecycle surface — a
     genuinely different, richer Object Authoring mechanism exists
