@@ -888,7 +888,10 @@ against qcdev, not assumed fixed):
 
 import time
 
-from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+from cms.pages.components.object_authoring_page import (
+    APPROVED_BANNER_SETTLE_TIMEOUT_MS,
+    ObjectAuthoringPage,
+)
 from config.settings import control_panel_url, settings
 
 SLUG = "department"
@@ -1750,3 +1753,228 @@ class OrgStructureAdminPage(ObjectAuthoringPage):
         locator = getattr(self, name)
         self._require_verified(locator, name)
         return self.is_visible(locator)
+
+    # ── Ported from automation/phase3, 2026-09-22 merge: the only way to observe
+    #    the live max-length warning (this module's own docstring notes the native
+    #    maxlength, but .fill() never fires the warning).
+    _MAX_LENGTH_WARNING_RELATIVE = 'xpath=ancestor::div[contains(@class, "form-group")][1]//*[@aria-live="polite"]'
+
+    def type_past_limit(self, field_locator: str, text: str) -> "OrgStructureAdminPage":
+        """Types `text` via real, per-character keystrokes
+        (`press_sequentially`) rather than `fill_text()`'s `.fill()` —
+        CONFIRMED LIVE 2026-09-21 (module docstring, finding 3) that a bare
+        `.fill()` sets the value directly with no keystroke events and
+        never triggers the max-length warning at all, even though the
+        native `maxlength` truncation still applies either way. Use this
+        (not `fill_text()`/`fill_department_form()`) whenever a test needs
+        to observe the live warning, not just the truncated value."""
+        field = self.page.locator(field_locator)
+        field.click()
+        field.press_sequentially(text, delay=15)
+        return self
+
+    def max_length_warning_text(self, field_locator: str) -> str:
+        """Real, live text of the field-scoped max-length warning (empty
+        string if not present/not yet rendered). See module docstring,
+        finding 3, for the confirmed-live English wording and the
+        confirmed-live ABSENCE of the claimed Arabic translation on the AR
+        fields — this method returns whatever actually rendered, verbatim,
+        never a guessed/localized value."""
+        warning = self.page.locator(field_locator).locator(self._MAX_LENGTH_WARNING_RELATIVE)
+        if warning.count() == 0:
+            return ""
+        return warning.first.inner_text().strip()
+
+# ══════════════════════════════════════════════════════════════════════════
+# Ported from the automation/phase3 branch in the 2026-09-22 merge.
+#
+# The `main` lineage of this module (kept above, for its tc_ traceability and
+# its try/finally baseline restores) has no Page Object for the About-Us
+# Page-Settings surface, and skips ADO-133307-133312 as
+# `_NO_PAGE_SETTINGS_SURFACE`.  That surface WAS located live on the phase3
+# branch, and five of those six tests are implemented for real against the two
+# classes below.  Both lineages' findings are therefore kept: `main`'s
+# department automation, plus this branch's hero-banner / page-title surface.
+# ══════════════════════════════════════════════════════════════════════════
+
+FIELD_HERO_BANNER_PAGE_KEY = "Page Key"
+FIELD_HERO_BANNER_IMAGE = "Banner Image"
+FIELD_HERO_BANNER_IMAGE_AR = "Banner Image (Arabic)"
+FIELD_HERO_BANNER_ALT_TEXT_EN = "Banner Image Alt Text"
+FIELD_HERO_BANNER_ALT_TEXT_AR = "Banner Image Alt Text — العربية"
+
+
+class AboutHeroBannerAdminPage(ObjectAuthoringPage):
+    """Drives the SHARED, generic "About Hero Banner" Object Authoring
+    surface (`manage-about-hero-banner`, object id 79334) — see this
+    module's own docstring ("HERO BANNER IS DIFFERENT" section) for the
+    full live-confirmed trail. This is a genuinely SEPARATE object from
+    Department — not org-structure-specific — already used by 5 real
+    entries for OTHER About-Us sub-pages (`about-us`, `chairman-message`,
+    `chamber-laws`, `vision-mission-objectives`), keyed by its own
+    mandatory `Page Key` field (also this object's Entry Title Field, so
+    every inherited `ObjectAuthoringPage` row-lookup/teardown method that
+    takes a "title" works directly with a Page Key value).
+
+    Composed here (rather than given its own `cms/pages/<page>/` folder)
+    because this pass's scope is limited to the two Organizational
+    Structure files — a project convention violation this creates
+    (cross-page shared surfaces normally belong in `cms/pages/components/`
+    per `object_authoring_page.py`'s own docstring) that should be
+    revisited if/when another page's test suite also needs to drive this
+    same object, to avoid duplicating this class."""
+
+    # CONFIRMED LIVE 2026-09-21 (module docstring, finding 2a): this
+    # object's own Submit button now reads "Submit for Review", not the
+    # base class's generic "Submit for Publishing" — a real, live,
+    # per-object drift discovered while implementing ADO-133311, fixed
+    # HERE ONLY (the shared ObjectAuthoringPage base and every other
+    # object composing it — Department, the new OrgStructurePageAdminPage
+    # below — were independently confirmed live to still say "Submit for
+    # Publishing"; widening the shared base would have been wrong). The
+    # entry still reaches a real, live "PUBLISHED" status on click (not a
+    # pending-review queue) — see row_status_text()'s own normalization,
+    # which for THIS object yields "Published", never "Approved".
+    SUBMIT_FOR_PUBLISHING_BUTTON = 'button:has-text("Submit for Review")'
+
+    def __init__(self, page):
+        super().__init__(page, ABOUT_HERO_BANNER_SLUG)
+
+    # ---- Navigation -------------------------------------------------------
+    def open_hero_banner_form(self) -> "AboutHeroBannerAdminPage":
+        """Mirrors `OrgStructureAdminPage.open_departments_list()`'s own
+        defensive login-if-needed shape — `manage-<slug>` performs no login
+        check of its own on this project (confirmed live project-wide, see
+        that method's docstring): a stale/expired session silently renders
+        the public "Coming Soon" template instead of redirecting to
+        login."""
+        from cms.pages.control_panel.login_page import CmsLoginPage
+
+        login = CmsLoginPage(self.page)
+        self.open(control_panel_url(OrgStructureAdminPage.ADMIN_HOME_EN_URL_PATH))
+        if not login.login_succeeded():
+            login.open_login().login(settings.test_user, settings.test_password)
+            self.open(control_panel_url(OrgStructureAdminPage.ADMIN_HOME_EN_URL_PATH))
+        self.open_new_entry_form()
+        return self
+
+    # ---- Form actions -------------------------------------------------------
+    def fill_hero_banner_form(
+        self,
+        page_key: str = None,
+        alt_text_en: str = None,
+        alt_text_ar: str = None,
+    ) -> "AboutHeroBannerAdminPage":
+        if page_key is not None:
+            self.fill_text(FIELD_HERO_BANNER_PAGE_KEY, page_key)
+        if alt_text_en is not None:
+            self.fill_text(FIELD_HERO_BANNER_ALT_TEXT_EN, alt_text_en)
+        if alt_text_ar is not None:
+            self.fill_text(FIELD_HERO_BANNER_ALT_TEXT_AR, alt_text_ar)
+        return self
+
+    def upload_banner_image(self, file_path: str) -> "AboutHeroBannerAdminPage":
+        self.upload_file(FIELD_HERO_BANNER_IMAGE, file_path)
+        return self
+
+    def upload_banner_image_ar(self, file_path: str) -> "AboutHeroBannerAdminPage":
+        """CONFIRMED LIVE 2026-09-21 (module docstring, finding 2 — ADO-
+        142200): the second, Arabic-specific "Banner Image (Arabic)" field
+        now exists on this real add/edit form (hidden filename textbox
+        accessible name confirmed live: "Banner Image (Arabic) Select
+        File", uniq=1) — drives it via the same generic upload_file() flow
+        as the EN field."""
+        self.upload_file(FIELD_HERO_BANNER_IMAGE_AR, file_path)
+        return self
+
+    def upload_banner_image_expect_rejected(self, file_path: str) -> bool:
+        """Safe ONLY for a small/instantly-rejected file (e.g. an
+        unsupported format) — CONFIRMED LIVE UNRELIABLE for a large
+        (multi-MB) file on this surface (see this module's own docstring,
+        finding (c)): the underlying `upload_file_expect_rejected()`'s
+        15000ms "Add" button timeout can race a slow real large-file
+        upload and report a false "rejected" for a file the product
+        actually accepts. For a file-size boundary case, drive
+        `upload_banner_image()` + `submit_for_publishing()` +
+        `row_status_text()` directly instead (see
+        test_hero_banner_en_over_2mb_rejected)."""
+        return self.upload_file_expect_rejected(FIELD_HERO_BANNER_IMAGE, file_path)
+
+    def save(self) -> "AboutHeroBannerAdminPage":
+        self.submit_for_publishing()
+        return self
+
+
+ORG_STRUCTURE_PAGE_SLUG = "org-structure-page"
+
+FIELD_ORG_PAGE_TITLE_EN = "Page Title"
+# CONFIRMED LIVE 2026-09-21: this is the field's real, exact accessible
+# name (its <label for="qc-ar-pageTitle">'s own text content), asterisk and
+# em-dash included — an exact-match fill_text()/field_value() call must use
+# this literal string, not a guessed "Page Title (AR)"-style label.
+FIELD_ORG_PAGE_TITLE_AR = "Page Title — العربية *"
+
+
+class OrgStructurePageAdminPage(ObjectAuthoringPage):
+    """Drives the NEW Object Authoring surface for the Organizational
+    Structure page's own settings (`manage-org-structure-page`, ERC
+    `QCDEMO-129399-ORG_STRUCTURE_PAGE`) — CONFIRMED LIVE 2026-09-21, see
+    this module's own docstring (RE-VERIFICATION section, finding 1) for
+    the full trail. This closes the gap the module's older "NO PAGE-
+    SETTINGS SURFACE" finding documented for Page Title specifically (Hero
+    Banner/Status on THIS object were not previously covered by that older
+    finding at all — this is a brand-new object, not a re-verification of
+    an old one).
+
+    Composed here (same file, same convention already established by
+    `AboutHeroBannerAdminPage` above) rather than a separate
+    `cms/pages/<page>/` folder — this object is specific to the
+    Organizational Structure page, so it belongs in this module's own
+    per-page folder either way.
+
+    **Entry-column caveat (same class as manage-strategic-pillar-card,
+    see `ObjectAuthoringPage`'s own docstring):** this object's list Entry
+    column renders a UUID/ERC, never the Page Title text — confirmed live
+    both for the pre-existing real row (`QCDEMO-129399-ORG_STRUCTURE_PAGE-
+    01`, dated 2026-09-19, already PUBLISHED — almost certainly the
+    developer's own fix-verification content; NEVER touch this row) and
+    for a disposable test-created row (a plain UUID). Always resolve a
+    just-created entry via `find_entry_code_by_field(FIELD_ORG_PAGE_
+    TITLE_EN, ...)` and tear down via `delete_entry_by_code()` — never a
+    title-based match, and never a positional/"last row" assumption (see
+    `ObjectAuthoringPage.newest_entry_code()`'s own incident note)."""
+
+    def __init__(self, page):
+        super().__init__(page, ORG_STRUCTURE_PAGE_SLUG)
+
+    # ---- Navigation -------------------------------------------------------
+    def open_org_structure_page_form(self) -> "OrgStructurePageAdminPage":
+        """Mirrors `AboutHeroBannerAdminPage.open_hero_banner_form()`'s own
+        login-if-needed shape — confirmed live project-wide that
+        `manage-<slug>` performs no login check of its own."""
+        from cms.pages.control_panel.login_page import CmsLoginPage
+
+        login = CmsLoginPage(self.page)
+        self.open(control_panel_url(OrgStructureAdminPage.ADMIN_HOME_EN_URL_PATH))
+        if not login.login_succeeded():
+            login.open_login().login(settings.test_user, settings.test_password)
+            self.open(control_panel_url(OrgStructureAdminPage.ADMIN_HOME_EN_URL_PATH))
+        self.open_new_entry_form()
+        return self
+
+    # ---- Form actions -------------------------------------------------------
+    def fill_page_title(self, title_en: str = None, title_ar: str = None) -> "OrgStructurePageAdminPage":
+        if title_en is not None:
+            self.fill_text(FIELD_ORG_PAGE_TITLE_EN, title_en)
+        if title_ar is not None:
+            self.fill_text(FIELD_ORG_PAGE_TITLE_AR, title_ar)
+        return self
+
+    def upload_hero_banner(self, file_path: str) -> "OrgStructurePageAdminPage":
+        self.upload_file("Hero Banner", file_path)
+        return self
+
+    def save(self) -> "OrgStructurePageAdminPage":
+        self.submit_for_publishing()
+        return self
+

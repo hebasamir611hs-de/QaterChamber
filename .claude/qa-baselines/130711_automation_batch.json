@@ -1,0 +1,3039 @@
+{
+  "pbi_id": 130711,
+  "pbi_title": "QC - Insights & Media - 003 - Publications",
+  "cases": [
+    {
+      "id": 143981,
+      "title": "Verify that the Publications page renders the page title, breadcrumb, search bar, filter and sort controls, quick filter chips, and card grid on initial load",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to Main Menu &gt; Insights &amp; Media &gt; Publications on the public site",
+          "expected": "Publications page loads without error"
+        },
+        {
+          "action": "Observe the hero section, breadcrumb, search bar, dropdowns, chips and card grid",
+          "expected": "Hero title &quot;Publications&quot;, breadcrumb &quot;Home / Insights &amp; Media&quot;, search bar &quot;Search Publications...&quot;, &quot;All Categories&quot; dropdown, &quot;Latest First&quot; dropdown, quick filter chips (All Publications, Research Papers, Guides, Reports, White Papers, Manuals, Brochures) and a grid of published publication cards are all visible"
+        }
+      ]
+    },
+    {
+      "id": 143982,
+      "title": "Verify that the hero title \"Publications\" renders in Cairo Bold 30px with 38px line-height",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Inspect the computed style of the hero title element",
+          "expected": "Hero title &quot;Publications&quot; computed style shows font-family Cairo, font-weight 700, font-size 30px, line-height 38px"
+        }
+      ]
+    },
+    {
+      "id": 143983,
+      "title": "Verify that the breadcrumb \"Home / Insights & Media\" renders in Cairo Regular 14px with 22px line-height and both links are clickable",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Inspect the computed style of the breadcrumb",
+          "expected": "Breadcrumb computed style shows font-family Cairo, font-weight 400, font-size 14px, line-height 22px"
+        },
+        {
+          "action": "Click &quot;Home&quot; in the breadcrumb",
+          "expected": "Navigates to the Home page"
+        },
+        {
+          "action": "Return to Publications and click &quot;Insights &amp; Media&quot; in the breadcrumb",
+          "expected": "Navigates to the Insights &amp; Media landing page"
+        }
+      ]
+    },
+    {
+      "id": 143984,
+      "title": "Verify that the search bar placeholder \"Search Publications...\" renders in color #A8A8A7",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Inspect the search input's placeholder text and its computed color",
+          "expected": "Placeholder text reads &quot;Search Publications...&quot; with computed color #A8A8A7"
+        }
+      ]
+    },
+    {
+      "id": 143985,
+      "title": "Verify that the \"All Categories\" and \"Latest First\" dropdown labels render in Cairo Regular 14px, color #343432",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Inspect the computed style of the &quot;All Categories&quot; label",
+          "expected": "&quot;All Categories&quot; label shows font-family Cairo, font-weight 400, font-size 14px, color #343432"
+        },
+        {
+          "action": "Inspect the computed style of the &quot;Latest First&quot; label",
+          "expected": "&quot;Latest First&quot; label shows the same font-family/weight/size/color"
+        }
+      ]
+    },
+    {
+      "id": 143986,
+      "title": "Verify that the active quick filter chip \"All Publications\" renders with the active dark-chip style and inactive chips render in color #6C6C6B",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Publications page with no filter applied",
+          "expected": "Page loads with &quot;All Publications&quot; active by default"
+        },
+        {
+          "action": "Inspect the &quot;All Publications&quot; chip's computed background/text color",
+          "expected": "&quot;All Publications&quot; chip shows the dark active-chip background with #FFFFFF text"
+        },
+        {
+          "action": "Inspect an inactive chip (e.g. &quot;Research Papers&quot;) computed text color",
+          "expected": "&quot;Research Papers&quot; chip text color is #6C6C6B, Cairo Regular"
+        }
+      ]
+    },
+    {
+      "id": 143987,
+      "title": "Verify that the \"Load More\" button renders in Cairo Semibold 16px, color #4A4A49, on a #FFFFFF page background",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to the Publications page with more than one page of published records",
+          "expected": "Page loads and &quot;Load More&quot; is visible"
+        },
+        {
+          "action": "Inspect the computed style of &quot;Load More&quot;",
+          "expected": "&quot;Load More&quot; shows font-family Cairo, font-weight 600, font-size 16px, color #4A4A49"
+        },
+        {
+          "action": "Inspect the computed background-color of the page body",
+          "expected": "Page background-color is #FFFFFF"
+        }
+      ]
+    },
+    {
+      "id": 143988,
+      "title": "Verify that the publication card element inventory renders correctly for a published record",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "Regression",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish a Publication record titled &quot;Qatar Economic Outlook 2026&quot; with a cover image, a PDF file, Type = Research Papers, Page Count = 42",
+          "expected": "Record is Published"
+        },
+        {
+          "action": "Navigate to the public Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Locate the card for &quot;Qatar Economic Outlook 2026&quot;",
+          "expected": "Card shows the cover thumbnail, &quot;Research Papers&quot; type badge, title &quot;Qatar Economic Outlook 2026&quot;, meta line with File Type (PDF), File Size, Page Count (42), current View/Download counts, and both &quot;View Details&quot; and &quot;Download&quot; actions"
+        }
+      ]
+    },
+    {
+      "id": 143989,
+      "title": "Verify that the Publications page layout is responsive on a desktop viewport",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Set the browser viewport to 1920x1080",
+          "expected": "Viewport applied"
+        },
+        {
+          "action": "Navigate to the Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Observe layout of hero, controls, chips and card grid",
+          "expected": "Card grid displays in a multi-column layout with no overlap, wrapping, or overflow"
+        }
+      ]
+    },
+    {
+      "id": 143990,
+      "title": "Verify that the Publications page layout is responsive on a tablet viewport",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Set the browser viewport to 768x1024",
+          "expected": "Viewport applied"
+        },
+        {
+          "action": "Navigate to the Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Observe layout of hero, controls, chips and card grid",
+          "expected": "Card grid re-flows to a reduced column count with controls stacked without overlap or horizontal scroll"
+        }
+      ]
+    },
+    {
+      "id": 143991,
+      "title": "Verify that the Publications page layout is responsive on a mobile viewport",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Set the browser viewport to 375x667",
+          "expected": "Viewport applied"
+        },
+        {
+          "action": "Navigate to the Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Observe layout of hero, controls, chips and card grid",
+          "expected": "Card grid collapses to a single column, chips become horizontally scrollable, and no element overflows the viewport width"
+        }
+      ]
+    },
+    {
+      "id": 143992,
+      "title": "Verify that the Publications page renders correctly in Light theme",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Set the site theme toggle to Light",
+          "expected": "Light theme applied"
+        },
+        {
+          "action": "Navigate to the Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Observe background, text and chip colors",
+          "expected": "Background is #FFFFFF, text and chip colors match the Light-theme tokens with no dark-theme remnants"
+        }
+      ]
+    },
+    {
+      "id": 143993,
+      "title": "Verify that the Publications page renders correctly in Dark theme",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Set the site theme toggle to Dark",
+          "expected": "Dark theme applied"
+        },
+        {
+          "action": "Navigate to the Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Observe background, text and chip colors",
+          "expected": "Background, text and chip colors switch to the Dark-theme token set with sufficient contrast and no Light-theme remnants"
+        }
+      ]
+    },
+    {
+      "id": 143994,
+      "title": "Verify that a Public Visitor can browse, search, filter, sort, view details of, and download published publications without logging in",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Open the public Publications page unauthenticated",
+          "expected": "Page loads with no login prompt"
+        },
+        {
+          "action": "Search for &quot;Guides&quot;, apply the &quot;Reports&quot; quick filter chip, sort by &quot;Most Downloaded&quot;",
+          "expected": "Search, filter and sort all apply without requiring authentication"
+        },
+        {
+          "action": "Click &quot;View Details&quot; then &quot;Download&quot; on a resulting card",
+          "expected": "View Details opens the file/detail page and Download downloads the file successfully"
+        }
+      ]
+    },
+    {
+      "id": 143995,
+      "title": "Verify that a Public Visitor cannot view a Draft or Unpublished publication via a direct link, in a fresh logged-out browser context",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor (test1@xyz.com), create a publication titled &quot;QCTEST-Draft-Publication&quot; and save as Draft, noting its detail URL",
+          "expected": "Record is saved as Draft"
+        },
+        {
+          "action": "Open a fresh browser context with no logged-in CMS user (new_context, use_auth_state=False)",
+          "expected": "Fresh unauthenticated context opened"
+        },
+        {
+          "action": "Navigate directly to the Draft publication's detail URL in that fresh context",
+          "expected": "The Draft publication is not accessible/not found on the public site; it does not render its title, file, or actions"
+        }
+      ]
+    },
+    {
+      "id": 143996,
+      "title": "Verify that a Site Content Editor can create, edit, preview, publish, unpublish, delete publication records and manage Publication Types",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Log into Object Authoring as Site Content Editor (test1@xyz.com)",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Create a publication record &quot;QCTEST-Editor-Full-Lifecycle&quot;, save, edit, preview, publish, then unpublish it, then delete it",
+          "expected": "Editor is able to complete every lifecycle action (create/edit/preview/publish/unpublish/delete) without a permission error"
+        },
+        {
+          "action": "Add, edit, reorder and deactivate a Publication Type",
+          "expected": "Editor is able to complete every Publication Type management action without a permission error"
+        }
+      ]
+    },
+    {
+      "id": 143997,
+      "title": "Verify that a Site Content Author can view and update an assigned publication record",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Log into Object Authoring as Site Content Author (Test2@xyz.com)",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Open an assigned publication record and update its Description EN field",
+          "expected": "Record opens for editing"
+        },
+        {
+          "action": "Save the record",
+          "expected": "Change is saved and reflected in the record; no publish action is triggered"
+        }
+      ]
+    },
+    {
+      "id": 143998,
+      "title": "Verify that a Site Content Author is denied Publish, Delete, and Manage Publication Types actions in Object Authoring",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Log into Object Authoring as Site Content Author (Test2@xyz.com)",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Open a publication record and attempt to click Publish",
+          "expected": "Publish action is unavailable/blocked with a permission message; record status does not change"
+        },
+        {
+          "action": "Attempt to click Delete on a record, and attempt to open Publication Type management",
+          "expected": "Delete is unavailable/blocked, and Publication Type management is not accessible to this role"
+        }
+      ]
+    },
+    {
+      "id": 143999,
+      "title": "Verify that only Published publications appear on the Publications page grid with correct card fields",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "As Site Content Editor, publish &quot;QCTEST-Published-A&quot; (Research Papers, PDF file, cover image, Page Count 10) and save &quot;QCTEST-Draft-B&quot; as Draft only",
+          "expected": "Published-A is Published; Draft-B is Draft"
+        },
+        {
+          "action": "Navigate to the public Publications page",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Locate the cards for both records",
+          "expected": "Published-A's card shows cover, type badge, title, File Type, File Size, Total Views, Total Downloads, Page Count, and both actions; Draft-B does not appear anywhere on the page"
+        }
+      ]
+    },
+    {
+      "id": 144000,
+      "title": "Verify that a Site Content Editor can create a new publication record via Object Authoring and save it as Draft",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Log into Object Authoring as Site Content Editor (test1@xyz.com)",
+          "expected": "Create form opens"
+        },
+        {
+          "action": "Select Create Publication and fill Title EN/AR, Type, Cover, File, Page Count, Publication Date",
+          "expected": "All fields accept the entered values"
+        },
+        {
+          "action": "Save the record",
+          "expected": "Record is saved with Status = Draft and is not visible on the public Publications page"
+        }
+      ]
+    },
+    {
+      "id": 144001,
+      "title": "Verify that cancelling the Create Publication form in Object Authoring discards all entered data",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Log into Object Authoring as Site Content Editor",
+          "expected": "Create form opens"
+        },
+        {
+          "action": "Start Create Publication and fill Title EN = &quot;QCTEST-Cancelled-Record&quot;",
+          "expected": "Fields are populated with the entered values"
+        },
+        {
+          "action": "Click Cancel/discard before saving",
+          "expected": "Form closes without saving"
+        },
+        {
+          "action": "Search the Publications listing for &quot;QCTEST-Cancelled-Record&quot;",
+          "expected": "No record titled &quot;QCTEST-Cancelled-Record&quot; exists in Object Authoring"
+        }
+      ]
+    },
+    {
+      "id": 144002,
+      "title": "Verify that a Site Content Editor can save a publication record as Draft via Object Authoring",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open an existing publication record in Object Authoring",
+          "expected": "Record opens for editing"
+        },
+        {
+          "action": "Click Save as Draft",
+          "expected": "Record Status is set to Draft, Liferay success toast is shown, and the record does not appear on the public Publications page"
+        }
+      ]
+    },
+    {
+      "id": 144003,
+      "title": "Verify that a Site Content Editor can preview a Draft publication record before publishing",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open a Draft publication record in Object Authoring",
+          "expected": "Record opens for editing"
+        },
+        {
+          "action": "Click Preview",
+          "expected": "Preview renders the record's Draft content exactly as authored; the record remains Draft and is still not visible on the live public Publications page"
+        }
+      ]
+    },
+    {
+      "id": 144004,
+      "title": "Verify that publishing a publication record via Object Authoring makes it visible on the public Publications page with correct field values",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "In Object Authoring, publish &quot;QCTEST-Publish-Flow&quot; (Title EN/AR, Type = Guides, cover, PDF file, Page Count = 5)",
+          "expected": "Record Status becomes Published; Liferay success toast shown"
+        },
+        {
+          "action": "Navigate to the public Publications page",
+          "expected": "&quot;QCTEST-Publish-Flow&quot; card is visible with Type badge Guides, Page Count 5, and matching Title/File Type/File Size"
+        }
+      ]
+    },
+    {
+      "id": 144005,
+      "title": "Verify that editing an already-published publication and republishing updates the value shown on the public Publications page, not a stale cached value",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish &quot;QCTEST-Republish-Flow&quot; with Title EN = &quot;Original Title&quot;",
+          "expected": "Record Published with &quot;Original Title&quot; visible publicly"
+        },
+        {
+          "action": "Edit the record's Title EN to &quot;Updated Title&quot; and republish",
+          "expected": "Title updated and republished; success toast shown"
+        },
+        {
+          "action": "Reload the public Publications page and locate the card",
+          "expected": "Public card shows &quot;Updated Title&quot;, not &quot;Original Title&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144006,
+      "title": "Verify that unpublishing a publication record via Object Authoring removes it from the public Publications page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish &quot;QCTEST-Unpublish-Flow&quot; and confirm it appears publicly",
+          "expected": "Record is visible publicly"
+        },
+        {
+          "action": "In Object Authoring, click Unpublish on the record",
+          "expected": "Record Status becomes Unpublished; success toast shown"
+        },
+        {
+          "action": "Open the public Publications page in a fresh logged-out browser context",
+          "expected": "&quot;QCTEST-Unpublish-Flow&quot; no longer appears anywhere on the public Publications page"
+        }
+      ]
+    },
+    {
+      "id": 144007,
+      "title": "Verify that a Site Content Editor can delete a publication record via Object Authoring",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish &quot;QCTEST-Delete-Flow&quot;",
+          "expected": "Record is Published and visible publicly"
+        },
+        {
+          "action": "In Object Authoring, click Delete on the record and confirm",
+          "expected": "Record is removed from Object Authoring"
+        },
+        {
+          "action": "Check Object Authoring listing and the public Publications page",
+          "expected": "Record no longer appears in Object Authoring listing or on the public Publications page"
+        }
+      ]
+    },
+    {
+      "id": 144008,
+      "title": "Verify that a Site Content Editor can add a new Publication Type via Object Authoring with EN/AR names",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "In Object Authoring, open Manage Publication Types",
+          "expected": "Manage Publication Types opens"
+        },
+        {
+          "action": "Add a new type with Name EN = &quot;Case Studies&quot;, Name AR = &quot;دراسات حالة&quot;, Status = Active",
+          "expected": "New type is saved; success toast shown and recorded in the audit log"
+        },
+        {
+          "action": "Navigate to the public Publications page filter dropdown",
+          "expected": "&quot;Case Studies&quot; appears as a selectable option in &quot;All Categories&quot; and as a quick filter chip"
+        }
+      ]
+    },
+    {
+      "id": 144009,
+      "title": "Verify that editing a Publication Type's EN/AR name reflects on the public filter dropdown and chips",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "In Object Authoring, edit the &quot;Guides&quot; type's Name EN to &quot;Reference Guides&quot;",
+          "expected": "Change is saved; success toast shown"
+        },
+        {
+          "action": "Navigate to the public Publications page",
+          "expected": "&quot;All Categories&quot; dropdown and the corresponding quick filter chip now read &quot;Reference Guides&quot; instead of &quot;Guides&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144010,
+      "title": "Verify that reordering Publication Types reflects the new order in the public filter dropdown and quick filter chips",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "In Object Authoring, move &quot;Brochures&quot; to the first position in the type order",
+          "expected": "New order is saved; success toast shown"
+        },
+        {
+          "action": "Navigate to the public Publications page",
+          "expected": "&quot;Brochures&quot; appears first in both the &quot;All Categories&quot; dropdown list and the quick filter chip row"
+        }
+      ]
+    },
+    {
+      "id": 144011,
+      "title": "Verify that deactivating a Publication Type removes it from the public \"All Categories\" dropdown and quick filter chips",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "In Object Authoring, set the &quot;Manuals&quot; type Status to Inactive",
+          "expected": "Status change is saved; success toast shown and recorded in the audit log"
+        },
+        {
+          "action": "Navigate to the public Publications page and open &quot;All Categories&quot; and view the quick filter chips",
+          "expected": "&quot;Manuals&quot; no longer appears in the &quot;All Categories&quot; dropdown or as a quick filter chip"
+        }
+      ]
+    },
+    {
+      "id": 144012,
+      "title": "Verify that reactivating a previously deactivated Publication Type makes it reappear in the public \"All Categories\" dropdown and quick filter chips",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Following TC-034, in Object Authoring set the &quot;Manuals&quot; type Status back to Active",
+          "expected": "Status change is saved; success toast shown"
+        },
+        {
+          "action": "Navigate to the public Publications page and open &quot;All Categories&quot; and view the quick filter chips",
+          "expected": "&quot;Manuals&quot; reappears in the &quot;All Categories&quot; dropdown and as a quick filter chip"
+        }
+      ]
+    },
+    {
+      "id": 144013,
+      "title": "Verify that a newly created publication record receives a unique, system-generated Publication ID upon save",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Create and save a new publication record &quot;QCTEST-ID-Uniqueness&quot;",
+          "expected": "Record is saved"
+        },
+        {
+          "action": "Inspect the record's Publication ID field",
+          "expected": "A non-blank, system-generated Publication ID is present and not user-editable"
+        },
+        {
+          "action": "Create and save a second record &quot;QCTEST-ID-Uniqueness-2&quot; and inspect its Publication ID",
+          "expected": "The second record's Publication ID is different from the first"
+        }
+      ]
+    },
+    {
+      "id": 144014,
+      "title": "Verify that editing and saving a published publication record updates its Last Modified Date timestamp",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open a Published record and note its current Last Modified Date",
+          "expected": "Current Last Modified Date is noted"
+        },
+        {
+          "action": "Edit the Description EN field and save",
+          "expected": "Save succeeds"
+        },
+        {
+          "action": "Reopen the record and check Last Modified Date",
+          "expected": "Last Modified Date is updated to the time of this save, later than the previously noted value"
+        }
+      ]
+    },
+    {
+      "id": 144015,
+      "title": "Verify that saving a change to a publication record displays the Liferay generic success toast and records the change in the audit log",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open a publication record in Object Authoring and change the Page Count value",
+          "expected": "Record opens"
+        },
+        {
+          "action": "Save the record",
+          "expected": "Liferay generic success toast is displayed on save"
+        },
+        {
+          "action": "Open the audit log for this record",
+          "expected": "Audit log shows a new entry for this change, with actor, timestamp, and the modified field"
+        }
+      ]
+    },
+    {
+      "id": 144016,
+      "title": "Verify that adding a new Publication Type displays the Liferay generic success toast and records the change in the audit log",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "In Object Authoring, add a new Publication Type &quot;QCTEST-Type-Audit&quot;",
+          "expected": "Liferay generic success toast is displayed on save"
+        },
+        {
+          "action": "Open the audit log for Publication Type management",
+          "expected": "Audit log shows a new entry recording the type addition, with actor and timestamp"
+        }
+      ]
+    },
+    {
+      "id": 144017,
+      "title": "Verify that entering a valid Publication Title EN is accepted and saved",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication in Object Authoring",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter Title EN = &quot;Qatar Economic Outlook 2026&quot;",
+          "expected": "Value is entered"
+        },
+        {
+          "action": "Save the record and reload it",
+          "expected": "Record saves; on reload, Title EN still shows &quot;Qatar Economic Outlook 2026&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144018,
+      "title": "Verify that leaving Publication Title EN empty is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication in Object Authoring",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Title EN empty and fill all other mandatory fields",
+          "expected": "Title EN left blank"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for missing required bilingual content is shown; record is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144019,
+      "title": "Verify that Publication Title EN accepts exactly 200 characters and rejects 201",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 200-character string in Title EN and save",
+          "expected": "200-character value is accepted and saved"
+        },
+        {
+          "action": "Edit the record, enter a 201-character string in Title EN, and attempt to save",
+          "expected": "201-character value is rejected with a max-length validation error; the field is not saved beyond 200 characters"
+        }
+      ]
+    },
+    {
+      "id": 144020,
+      "title": "Verify that entering only whitespace in Publication Title EN is rejected as if empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter &quot;   &quot; (spaces only) in Title EN and fill remaining mandatory fields",
+          "expected": "Whitespace-only value entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for a required field is shown; record is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144021,
+      "title": "Verify that entering a valid Publication Title AR is accepted and saved",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication in Object Authoring",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter Title AR = &quot;توقعات الاقتصاد القطري 2026&quot;",
+          "expected": "Value is entered"
+        },
+        {
+          "action": "Save the record and reload it",
+          "expected": "Record saves; on reload, Title AR still shows &quot;توقعات الاقتصاد القطري 2026&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144022,
+      "title": "Verify that leaving Publication Title AR empty is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication in Object Authoring",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Title AR empty and fill all other mandatory fields",
+          "expected": "Title AR left blank"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for missing required bilingual content is shown; record is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144023,
+      "title": "Verify that Publication Title AR accepts exactly 200 characters and rejects 201",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 200-character Arabic string in Title AR and save",
+          "expected": "200-character value is accepted and saved"
+        },
+        {
+          "action": "Edit the record, enter a 201-character Arabic string in Title AR, and attempt to save",
+          "expected": "201-character value is rejected with a max-length validation error"
+        }
+      ]
+    },
+    {
+      "id": 144024,
+      "title": "Verify that entering only whitespace in Publication Title AR is rejected as if empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter &quot;   &quot; (spaces only) in Title AR and fill remaining mandatory fields",
+          "expected": "Whitespace-only value entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for a required field is shown; record is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144025,
+      "title": "Verify that selecting a valid Publication Type from the dropdown is accepted and saved",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication in Object Authoring",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Select Publication Type = &quot;Research Papers&quot;",
+          "expected": "Type is selected"
+        },
+        {
+          "action": "Save and reload the record",
+          "expected": "Record saves; on reload, Publication Type still shows &quot;Research Papers&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144026,
+      "title": "Verify that leaving Publication Type unselected is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Publication Type unselected and fill all other mandatory fields",
+          "expected": "Type left unselected"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for missing required bilingual content (Type) is shown; record is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144027,
+      "title": "Verify that uploading a valid JPG cover/thumbnail image is accepted and displayed on the publication card",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication and upload a valid .jpg file as Cover/Thumbnail",
+          "expected": "Upload accepted"
+        },
+        {
+          "action": "Save and publish the record",
+          "expected": "Record is published"
+        },
+        {
+          "action": "View the record's card on the public Publications page",
+          "expected": "Card displays the uploaded thumbnail image"
+        }
+      ]
+    },
+    {
+      "id": 144028,
+      "title": "Verify that leaving Publication Cover/Thumbnail empty is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Cover/Thumbnail empty and fill all other mandatory fields",
+          "expected": "Cover/Thumbnail left empty"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for missing required Cover/Thumbnail is shown; record is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144029,
+      "title": "Verify that uploading an unsupported format for the Cover/Thumbnail is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Attempt to upload a .gif file as Cover/Thumbnail",
+          "expected": "Upload is rejected with a validation error naming the supported formats (JPG/PNG/JPEG)"
+        }
+      ]
+    },
+    {
+      "id": 144030,
+      "title": "Verify that uploading a valid PDF Publication File under 5 MB is accepted and drives the File Type/File Size meta line",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication and upload a valid 2 MB .pdf file as Publication File",
+          "expected": "Upload accepted"
+        },
+        {
+          "action": "Save and publish the record",
+          "expected": "Record is published"
+        },
+        {
+          "action": "View the record's card on the public Publications page",
+          "expected": "Card's meta line shows File Type = PDF and File Size ≈ 2 MB"
+        }
+      ]
+    },
+    {
+      "id": 144031,
+      "title": "Verify that leaving Publication File empty blocks publishing with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Publication File empty; fill all other mandatory fields",
+          "expected": "File left empty"
+        },
+        {
+          "action": "Attempt to Publish",
+          "expected": "Publishing is blocked with a validation error stating the Publication File is required"
+        }
+      ]
+    },
+    {
+      "id": 144032,
+      "title": "Verify that uploading an unsupported file format for Publication File is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Attempt to upload a .exe file as Publication File",
+          "expected": "Upload is rejected with a validation error naming the supported formats (JPG, PNG, JPEG, DOCX, DOC, XLSX, PDF)"
+        }
+      ]
+    },
+    {
+      "id": 144033,
+      "title": "Verify that uploading a Publication File exceeding 5 MB is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Attempt to upload a 6 MB .pdf file as Publication File",
+          "expected": "Upload is rejected with a validation error stating the 5 MB size limit is exceeded"
+        }
+      ]
+    },
+    {
+      "id": 144034,
+      "title": "Verify that entering a valid Publication Description EN up to 500 characters is accepted and saved",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter a 480-character Description EN",
+          "expected": "Value is entered"
+        },
+        {
+          "action": "Save and reload the record",
+          "expected": "Record saves; on reload, Description EN is unchanged"
+        }
+      ]
+    },
+    {
+      "id": 144035,
+      "title": "Verify that leaving Publication Description EN empty is accepted since the field is optional",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Description EN empty; fill all mandatory fields",
+          "expected": "Description EN left blank"
+        },
+        {
+          "action": "Save the record",
+          "expected": "Record saves successfully with Description EN empty"
+        }
+      ]
+    },
+    {
+      "id": 144036,
+      "title": "Verify that Publication Description EN accepts exactly 500 characters and rejects 501",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 500-character string in Description EN and save",
+          "expected": "500-character value is accepted and saved"
+        },
+        {
+          "action": "Edit the record, enter a 501-character string in Description EN, and attempt to save",
+          "expected": "501-character value is rejected with a max-length validation error"
+        }
+      ]
+    },
+    {
+      "id": 144037,
+      "title": "Verify that entering a valid Publication Description AR up to 500 characters is accepted and saved",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter a 480-character Arabic Description AR",
+          "expected": "Value is entered"
+        },
+        {
+          "action": "Save and reload the record",
+          "expected": "Record saves; on reload, Description AR is unchanged"
+        }
+      ]
+    },
+    {
+      "id": 144038,
+      "title": "Verify that leaving Publication Description AR empty is accepted since the field is optional",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Description AR empty; fill all mandatory fields",
+          "expected": "Description AR left blank"
+        },
+        {
+          "action": "Save the record",
+          "expected": "Record saves successfully with Description AR empty"
+        }
+      ]
+    },
+    {
+      "id": 144039,
+      "title": "Verify that Publication Description AR accepts exactly 500 characters and rejects 501",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 500-character Arabic string in Description AR and save",
+          "expected": "500-character value is accepted and saved"
+        },
+        {
+          "action": "Edit the record, enter a 501-character Arabic string in Description AR, and attempt to save",
+          "expected": "501-character value is rejected with a max-length validation error"
+        }
+      ]
+    },
+    {
+      "id": 144040,
+      "title": "Verify that entering a valid positive integer in Page Count is accepted and displayed on the card",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Value entered"
+        },
+        {
+          "action": "Enter Page Count = 42",
+          "expected": "Record published"
+        },
+        {
+          "action": "Save, publish, and view the record's card on the public Publications page",
+          "expected": "Card displays Page Count = 42"
+        }
+      ]
+    },
+    {
+      "id": 144041,
+      "title": "Verify that leaving Page Count empty is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Page Count empty; fill all other mandatory fields",
+          "expected": "Page Count left blank"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for missing required field is shown; record is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144042,
+      "title": "Verify that entering 0 or a negative number in Page Count is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication and enter Page Count = 0; attempt to save",
+          "expected": "Value 0 is rejected with a positive-integer validation error"
+        },
+        {
+          "action": "Change Page Count to -5; attempt to save",
+          "expected": "Value -5 is rejected with the same validation error"
+        }
+      ]
+    },
+    {
+      "id": 144043,
+      "title": "Verify that entering only whitespace in Page Count is rejected as if empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter &quot;   &quot; in Page Count; fill all other mandatory fields",
+          "expected": "Whitespace-only value entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for a required field is shown; record is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144044,
+      "title": "Verify that selecting a valid Publication Date is accepted and drives the Latest First sort order",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Date is entered"
+        },
+        {
+          "action": "Set Publication Date = today's date",
+          "expected": "Record published"
+        },
+        {
+          "action": "Save, publish, and sort the public Publications page by &quot;Latest First&quot;",
+          "expected": "Record appears at or near the top of the Latest First ordering, consistent with its date"
+        }
+      ]
+    },
+    {
+      "id": 144045,
+      "title": "Verify that leaving Publication Date empty is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Publication Date empty; fill all other mandatory fields",
+          "expected": "Publication Date left blank"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for missing required field is shown; record is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144046,
+      "title": "Verify that entering an invalid date string in Publication Date is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter &quot;32/13/2026&quot; (invalid date) in Publication Date",
+          "expected": "Invalid date entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for an invalid date is shown; record is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144047,
+      "title": "Verify that entering a valid Publication Type Name EN when adding a new type is accepted and saved",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "In Object Authoring, open Manage Publication Types &gt; Add",
+          "expected": "Add-type form opens"
+        },
+        {
+          "action": "Enter Name EN = &quot;Case Studies&quot; (and a valid Name AR)",
+          "expected": "Value is entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Type is saved with Name EN = &quot;Case Studies&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144048,
+      "title": "Verify that leaving Publication Type Name EN empty is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Manage Publication Types &gt; Add",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Name EN empty; fill Name AR",
+          "expected": "Name EN left blank"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for missing required field is shown; type is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144049,
+      "title": "Verify that entering only whitespace in Publication Type Name EN is rejected as if empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Manage Publication Types &gt; Add",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter &quot;   &quot; in Name EN; fill Name AR",
+          "expected": "Whitespace-only value entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for a required field is shown; type is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144050,
+      "title": "Verify that entering a valid Publication Type Name AR when adding a new type is accepted and saved",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "In Object Authoring, open Manage Publication Types &gt; Add",
+          "expected": "Add-type form opens"
+        },
+        {
+          "action": "Enter Name AR = &quot;دراسات حالة&quot; (and a valid Name EN)",
+          "expected": "Value is entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Type is saved with Name AR = &quot;دراسات حالة&quot;"
+        }
+      ]
+    },
+    {
+      "id": 144051,
+      "title": "Verify that leaving Publication Type Name AR empty is rejected with a validation error",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Manage Publication Types &gt; Add",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Name AR empty; fill Name EN",
+          "expected": "Name AR left blank"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for missing required field is shown; type is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144052,
+      "title": "Verify that entering only whitespace in Publication Type Name AR is rejected as if empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Manage Publication Types &gt; Add",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter &quot;   &quot; in Name AR; fill Name EN",
+          "expected": "Whitespace-only value entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Validation error for a required field is shown; type is not saved"
+        }
+      ]
+    },
+    {
+      "id": 144053,
+      "title": "Verify that searching by a keyword matching a Publication Title displays only matching publications",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "On the public Publications page, enter &quot;Economic Outlook&quot; in the search bar",
+          "expected": "Only publications whose Title contains &quot;Economic Outlook&quot; are displayed"
+        }
+      ]
+    },
+    {
+      "id": 144054,
+      "title": "Verify that searching by a keyword matching a Publication Type displays only publications of that type",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "On the public Publications page, enter &quot;Guides&quot; in the search bar",
+          "expected": "Only publications whose Publication Type matches &quot;Guides&quot; are displayed"
+        }
+      ]
+    },
+    {
+      "id": 144055,
+      "title": "Verify that searching with a keyword matching no publication displays the \"No results found\" message",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "On the public Publications page, enter &quot;zzzznonexistentquery&quot; in the search bar",
+          "expected": "No publication cards are displayed; a user-friendly &quot;No results found&quot; message is shown"
+        }
+      ]
+    },
+    {
+      "id": 144056,
+      "title": "Verify that filtering by a Publication Type via the \"All Categories\" dropdown displays only publications of that type",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "On the public Publications page, open &quot;All Categories&quot; and select &quot;Reports&quot;",
+          "expected": "Only publications of type Reports are displayed in the grid"
+        }
+      ]
+    },
+    {
+      "id": 144057,
+      "title": "Verify that selecting \"All Categories\" after filtering by a specific type displays all published publications again",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "With &quot;Reports&quot; filter applied, open the dropdown and select &quot;All Categories&quot;",
+          "expected": "All published publications are displayed again, across all types"
+        }
+      ]
+    },
+    {
+      "id": 144058,
+      "title": "Verify that sorting by \"Latest First\" orders publications by Publication Date descending",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "On the public Publications page, select &quot;Latest First&quot; from the sort dropdown",
+          "expected": "Sort is applied"
+        },
+        {
+          "action": "Compare Publication Dates of the resulting order",
+          "expected": "Publications are ordered from most recent Publication Date to oldest"
+        }
+      ]
+    },
+    {
+      "id": 144059,
+      "title": "Verify that sorting by \"Most Downloaded\" orders publications by Download Count descending",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "On the public Publications page, select &quot;Most Downloaded&quot; from the sort dropdown",
+          "expected": "Sort is applied"
+        },
+        {
+          "action": "Compare Download Counts of the resulting order",
+          "expected": "Publications are ordered from highest Download Count to lowest"
+        }
+      ]
+    },
+    {
+      "id": 144060,
+      "title": "Verify that selecting the \"Guides\" quick filter chip displays only publications of type Guides and highlights the chip as active",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "On the public Publications page, click the &quot;Guides&quot; quick filter chip",
+          "expected": "Only publications of type Guides are displayed; the &quot;Guides&quot; chip shows the active style and &quot;All Publications&quot; is no longer active"
+        }
+      ]
+    },
+    {
+      "id": 144061,
+      "title": "Verify that selecting the \"All Publications\" chip after a specific type chip was active restores the default view",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "With &quot;Guides&quot; chip active, click &quot;All Publications&quot;",
+          "expected": "All published publications are displayed again; &quot;All Publications&quot; shows the active style"
+        }
+      ]
+    },
+    {
+      "id": 144062,
+      "title": "Verify that clicking \"Load More\" reveals additional published publications beyond the initial page size",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Ensure more published records exist than the initial page size",
+          "expected": "Precondition confirmed"
+        },
+        {
+          "action": "Click &quot;Load More&quot;",
+          "expected": "Additional publication cards are appended to the grid below the initially displayed set"
+        }
+      ]
+    },
+    {
+      "id": 144063,
+      "title": "Verify that clicking \"Load More\" repeatedly until no further records remain hides or disables the action",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Click &quot;Load More&quot; repeatedly until all published records have been loaded",
+          "expected": "&quot;Load More&quot; is hidden or disabled once every published record has been displayed"
+        }
+      ]
+    },
+    {
+      "id": 144064,
+      "title": "Verify that clicking \"View Details\" on a published publication card opens the configured file/detail page and increments the Read Count",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Note the current Read Count on a published card",
+          "expected": "Current Read Count noted"
+        },
+        {
+          "action": "Click &quot;View Details&quot; on that card",
+          "expected": "The configured publication file or detail/view page opens, and the card's Read Count/Total Views increases by 1"
+        }
+      ]
+    },
+    {
+      "id": 144065,
+      "title": "Verify that clicking \"View Details\" a second time on the same publication increments the Read Count cumulatively",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "After TC-087, note the updated Read Count",
+          "expected": "Updated Read Count noted"
+        },
+        {
+          "action": "Click &quot;View Details&quot; again on the same card",
+          "expected": "Read Count/Total Views increases by 1 again, cumulatively (2 total increments from baseline)"
+        }
+      ]
+    },
+    {
+      "id": 144066,
+      "title": "Verify that clicking \"Download\" on a published publication card downloads the file and increments the Download Count",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Note the current Download Count on a published card",
+          "expected": "Current Download Count noted"
+        },
+        {
+          "action": "Click &quot;Download&quot; on that card",
+          "expected": "The configured publication file downloads successfully, and the card's Total Downloads increases by 1"
+        }
+      ]
+    },
+    {
+      "id": 144067,
+      "title": "Verify that clicking \"Download\" a second time on the same publication increments the Download Count cumulatively",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "After TC-089, note the updated Download Count",
+          "expected": "Updated Download Count noted"
+        },
+        {
+          "action": "Click &quot;Download&quot; again on the same card",
+          "expected": "Total Downloads increases by 1 again, cumulatively (2 total increments from baseline)"
+        }
+      ]
+    },
+    {
+      "id": 144068,
+      "title": "Verify that a publication record without a valid uploaded file does not display View Details or Download actions on its public card",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Identify or construct a publication record whose Publication File reference is invalid/broken while still Published (e.g. legacy data)",
+          "expected": "Precondition confirmed"
+        },
+        {
+          "action": "View its card on the public Publications page",
+          "expected": "The card does not display &quot;View Details&quot; or &quot;Download&quot; actions"
+        }
+      ]
+    },
+    {
+      "id": 144069,
+      "title": "Verify that filtering by a Publication Type with zero published records displays the \"No results found\" message",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Ensure a Publication Type exists with zero currently Published records",
+          "expected": "Precondition confirmed"
+        },
+        {
+          "action": "On the public Publications page, filter by that type",
+          "expected": "No publication cards are displayed; a user-friendly &quot;No results found&quot; message is shown"
+        }
+      ]
+    },
+    {
+      "id": 144070,
+      "title": "Verify that a publication with a missing Arabic translation falls back to displaying the active language content",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish a record with Title EN populated but Title AR left as the last-saved valid value only in English content areas is not possible since both are mandatory — instead: publish a record and view it while the AR locale content lookup for a related field fails (simulate a missing localized value)",
+          "expected": "Precondition set up"
+        },
+        {
+          "action": "View the record on the public Publications page with the site language set to Arabic",
+          "expected": "The record still renders, falling back to the active (available) language content for the field with a missing translation, instead of showing a blank or broken field"
+        }
+      ]
+    },
+    {
+      "id": 144071,
+      "title": "Verify that a published publication's Publication Type badge remains displayed after its Publication Type is later deactivated",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish &quot;QCTEST-Badge-Persistence&quot; with Type = &quot;White Papers&quot;",
+          "expected": "Record is Published with the White Papers badge"
+        },
+        {
+          "action": "In Object Authoring, deactivate the &quot;White Papers&quot; type",
+          "expected": "Type is deactivated; it no longer appears in the filter dropdown/chips"
+        },
+        {
+          "action": "Reload the public Publications page and locate the record's card (via direct link, since it no longer appears under the type filter)",
+          "expected": "The record's card still shows the &quot;White Papers&quot; badge, unaffected by the type's deactivation"
+        }
+      ]
+    },
+    {
+      "id": 144072,
+      "title": "Verify that a publication saved with a future Publication Date still appears immediately and does not disrupt Latest First sort",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish &quot;QCTEST-Future-Date&quot; with Publication Date set 30 days in the future",
+          "expected": "Record is Published with the future date"
+        },
+        {
+          "action": "Navigate to the public Publications page and sort by &quot;Latest First&quot;",
+          "expected": "Record appears immediately on the page (no scheduling/holdback) and is correctly ordered ahead of older-dated records under Latest First"
+        }
+      ]
+    },
+    {
+      "id": 144073,
+      "title": "Verify that an interrupted Publication File upload does not leave a partial file attached and keeps publishing blocked",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Open Create Publication and start uploading a valid Publication File",
+          "expected": "Upload begins"
+        },
+        {
+          "action": "Simulate a network drop mid-upload (throttle/disconnect)",
+          "expected": "Upload fails to complete; no partial/corrupt file is attached to the record"
+        },
+        {
+          "action": "Attempt to Publish the record",
+          "expected": "Publishing is blocked with a validation error stating the Publication File is required/invalid"
+        }
+      ]
+    },
+    {
+      "id": 144074,
+      "title": "Verify that rapidly double-clicking \"Download\" on the same publication card increments the Download Count consistently",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Note the current Download Count on a published card",
+          "expected": "Current Download Count noted"
+        },
+        {
+          "action": "Rapidly double-click &quot;Download&quot; on that card within under 300ms",
+          "expected": "Download Count increments by exactly the number of intended download actions (per the system's defined debounce behavior), with no corrupted or negative count"
+        }
+      ]
+    },
+    {
+      "id": 144075,
+      "title": "Verify that deleting a Published publication whose Download link was already shared results in a graceful not-found response",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish &quot;QCTEST-Delete-Reference&quot; and copy its public Download link",
+          "expected": "Record is Published and link is copied"
+        },
+        {
+          "action": "In Object Authoring, delete the record",
+          "expected": "Record is deleted"
+        },
+        {
+          "action": "Open the previously copied Download link directly",
+          "expected": "The old link resolves to a graceful not-found/empty-state response, not a broken link or server error"
+        }
+      ]
+    },
+    {
+      "id": 144076,
+      "title": "Verify that a category with exactly the initial page-size number of published publications does not display an actionable Load More button",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Ensure a Publication Type filter results in exactly the page-size number of published records (no more, no less)",
+          "expected": "Precondition confirmed"
+        },
+        {
+          "action": "Apply that filter on the public Publications page",
+          "expected": "All matching records display on the first render, and &quot;Load More&quot; is hidden or disabled without ever needing to be clicked"
+        }
+      ]
+    },
+    {
+      "id": 144080,
+      "title": "التحقق من أنه يتم عرض رسالة النجاح العامة من Liferay باللغة العربية عند حفظ تغيير في سجل منشور ولغة لوحة التحكم عربية",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "تسجيل الدخول إلى Object Authoring كمحرر محتوى الموقع مع اختيار اللغة العربية للواجهة",
+          "expected": "تسجيل الدخول ينجح والواجهة معروضة بالعربية"
+        },
+        {
+          "action": "فتح سجل منشور وتعديل حقل ثم الحفظ",
+          "expected": "تظهر رسالة نجاح Liferay العامة باللغة العربية بعد الحفظ"
+        }
+      ]
+    },
+    {
+      "id": 144081,
+      "title": "التحقق من أنه يتم عرض رسالة خطأ التحقق باللغة العربية عند عدم رفع ملف المنشور المطلوب ولغة لوحة التحكم عربية",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "تسجيل الدخول إلى Object Authoring مع اختيار اللغة العربية للواجهة",
+          "expected": "تسجيل الدخول ينجح والواجهة معروضة بالعربية"
+        },
+        {
+          "action": "فتح نموذج إنشاء منشور جديد وترك حقل ملف المنشور فارغاً",
+          "expected": "نموذج الإنشاء يُفتح وحقل الملف فارغ"
+        },
+        {
+          "action": "محاولة النشر",
+          "expected": "تظهر رسالة خطأ تحقق باللغة العربية تفيد بأن ملف المنشور مطلوب، ولا يتم النشر"
+        }
+      ]
+    },
+    {
+      "id": 144082,
+      "title": "التحقق من أنه يتم عرض رسالة \"لا توجد نتائج\" باللغة العربية عند عدم تطابق نتائج البحث أو التصفية مع لغة الموقع العربية",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "فتح صفحة المنشورات العامة باللغة العربية",
+          "expected": "الصفحة تُحمّل بالعربية"
+        },
+        {
+          "action": "إدخال كلمة بحث غير موجودة في أي منشور",
+          "expected": "لا تظهر أي بطاقات منشورات، وتظهر رسالة &quot;لا توجد نتائج&quot; باللغة العربية"
+        }
+      ]
+    }
+  ]
+}

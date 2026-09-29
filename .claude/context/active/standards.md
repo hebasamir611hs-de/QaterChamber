@@ -201,6 +201,105 @@ Modes*):
   it or explicitly scope the analysis down to only the core FR behavior, noting the
   exclusion in the sign-off.
 
+## Field-Coverage Depth — Tiered Derivation (TRIAL, 2026-09-22 — not yet ratified)
+
+> **TRIAL — not yet a ratified rule.** Added 2026-09-22 to be exercised on the
+> next CMS batches. It is **binding on those runs** so the trial produces real
+> data, but it is **not** settled practice and has **not** been pushed to the
+> repo as part of this file's standing instructions. It graduates only if it
+> proves effective; the QA Manager decides that, on the criteria below.
+>
+> **What "proves effective" means — review after the next 2–3 CMS PBIs:**
+> - cases folded per PBI, by tier, and the reduction actually achieved
+>   (predicted ~15–20% — record the real number, not the prediction);
+> - **zero** Tier-1 or never-reducible cases folded — a single one is a failure
+>   of the rule, not of the run;
+> - no defect later found in a folded area that a folded case would have caught;
+> - a measurable drop in Phase-3 authoring time for the same feature size.
+>
+> If it graduates: drop this banner, restore the `(agreed <date>)` heading form,
+> and commit. If it does not: remove the section and record why here.
+
+Applies at **Phase 1 derivation**, per inventory row, to `Control_Panel` and
+`Web` alike. It changes **how many cases a field earns** — not how a case is
+written, not the tag taxonomy, and not the phase structure.
+
+**Every reduction under this section is named in the run's reductions list**
+(`<rule> : <inventory-id> → <case-id>`), exactly like `SUBSUMED-BY-FLOW`. A
+case folded here is *recorded as folded*, never silently dropped. An unnamed
+reduction is a defect, not a saving.
+
+### Tier 1 — always derived, per field, never reducible
+
+- **1 positive** — the field accepts valid input and the value persists.
+- **1 negative** — mandatory enforcement (empty → blocked), where the field
+  is mandatory.
+- **Any negative that changes stored data or blocks a business flow.**
+
+These are the positive / negative scenarios this section exists to protect.
+No rule below may remove one.
+
+### Tier 2 — `REPRESENTATIVE-BY-FIELD-TYPE`
+
+Boundary / max-length / format-rejection cases are derived **once per field
+*type* per feature** — short text · long or rich text · numeric · URL · file
+upload — not once per field instance. These assert the **input component's**
+behaviour, not the field's business rule: proving the component once per type
+is the coverage; repeating it per field is duplication.
+
+Name the representative explicitly in the coverage plan, e.g.
+`REPRESENTATIVE-BY-FIELD-TYPE : short-text → Section Heading`, so a reviewer
+sees which field carries the type and which folded into it.
+
+> **Exemption — a field gets its own full boundary/format treatment,
+> regardless of type, if ANY of these hold:**
+> 1. it **drives navigation** (a URL or link target);
+> 2. it **feeds a calculation** or a stored numeric value;
+> 3. it carries a **format or regulatory rule** (email, CR number, ID);
+> 4. it **renders publicly into a size-constrained element**.
+>
+> Check every field against all four before folding it. Without this exemption
+> the rule eventually folds a field like `Read More URL` — P1 on this project.
+
+### Tier 3 — `COSMETIC-FOLD`
+
+Pure presentation checks — position, spacing, overlay placement, the styling
+of a single element — fold into the feature's single "renders per design" case
+(the Figma-verified overview case, where one exists).
+
+> **The dividing test, applied per case:**
+> - **Does a CMS-configured value reach the delivery surface?** → Tier 1,
+>   keep. This is the CMS value chain (`cms-testing.md`: no CMS case may stop
+>   at the authoring UI).
+> - **Is it positioned or styled per design?** → Tier 3, fold.
+>
+> Worked example (PBI 129389): `136090` "badge overlay displays the
+> **configured** numeric value and label" is **Tier 1** — a CMS value reaching
+> the page. `136089` (collage overlapping layout) and `136093` (sub-heading
+> position) are **Tier 3**.
+
+### Never reducible under any tier
+
+- `Functional-High` end-to-end flows (happy and sad).
+- `Auth` / RBAC cases.
+- The **last remaining case** of any category, any `LNG-n` (language), or any
+  `ENV-n` (browser / viewport) — per `analysis-framework.md`'s subsumption
+  rule. A viewport, language, or browser is never folded: the tablet
+  Compatibility case stays even when a mobile one exists.
+- Anything tagged `UAT` or `Regression`.
+
+### Expected magnitude — stated honestly
+
+Measured against PBI 129389's real injected set (53 cases), this section folds
+**8–10 cases, ~15–20%**. It does **not** produce a 50% reduction: per-field
+positive + mandatory coverage is ~60% of a CMS suite by design, and Tier 1
+protects all of it. The larger Phase-3 cost on this project is
+**environmental** — as measured 2026-09-22, 387 of 609 `cms/tests/` functions
+carry `@pytest.mark.skip` (64%, vs 8% in `web/tests/`), and 240 registered
+`tc_*` markers name the qcdev CMS login license/connection-limit gate as the
+blocker. That is a larger loss than anything derivational, and it is
+independent of this section; both are worth fixing.
+
 ## Dev-Environment Navigation Quirks (apply on every page load, Web + Control_Panel)
 Confirmed live on qcdev.ihorizons.com 2026-08-12 — handle both before any test
 interacts with the page, same as the website flow. Restored 2026-08-18: this
@@ -509,6 +608,43 @@ probe, after the serial-run instability above): Mission (49082) Pillar Title =
 (79878) Status = Published (baseline); Upcoming Event Pin (49205) pinnedEvent =
 `/web/qatar-chamber/events/novgorod-delegation`, active = True (baseline). All 4
 confirmed at baseline — no restore was needed.
+
+## Destructive-Precondition Tests Must Use Disposable Test Data, Never Real Content (agreed 2026-09-22)
+
+**Rule:** if a test case's precondition requires putting qcdev content into a state
+that mutates or removes real, shared content — permanently deleting a record,
+unpublishing down to a count that isn't otherwise reachable, leaving a record in
+Draft/blank-translation/etc. — that test must be built against a **disposable test
+record**, never against the site's real shared content. This holds even when the
+mutation is technically reversible (e.g. unpublish-then-republish): "reversible in
+principle" is not the bar — if the precondition is destructive in nature, use
+disposable data.
+
+**Why:** found live 2026-09-22 across the PBI 130714/130715/130713/131061/131062 Web
+automation batches — 68 of 342 cases (20%) were left `@pytest.mark.skip` specifically
+because the only way to reach the tested state was to mutate real shared content
+(delete a real album, unpublish all 3 real Advertisement rate cards down to 0/1,
+publish a record with a deliberately blank Arabic field, etc.). Most of these are
+buildable with test data instead of being permanently skipped.
+
+**How to apply, per case:**
+1. Create a clearly-named disposable record via Object Authoring (this project's
+   `QCTEST-<tc_id>-<short description>` convention), scoped to only the fields/state
+   that specific test needs.
+2. Run the test's real assertion against that disposable record, never the shared
+   real one.
+3. Delete (or otherwise tear down) the disposable record afterward, every run —
+   teardown is part of the test, not an afterthought or a "someone will clean it up
+   later."
+4. If the CMS genuinely provides no path to create the needed record/state at all
+   (no Control_Panel access this batch, no separate object exists for what the case
+   assumes, etc.), the case stays `@pytest.mark.skip` with the exact blocking reason
+   — this rule redirects destructive-but-buildable cases to test data, it does not
+   invent automation where the CMS can't support it.
+5. Any exception that still requires touching the real shared record (e.g. a state
+   that can only be reproduced there) needs its own explicit, ID-named user
+   approval — never inferred from a general "run the tests" / "fix and re-run"
+   instruction, same standing as the delete-by-position rule above.
 
 ## Draft/Unpublish Public-Visibility Checks — Mandatory Logged-Out Context (agreed 2026-09-07)
 

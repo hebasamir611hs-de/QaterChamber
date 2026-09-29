@@ -394,7 +394,12 @@ import uuid
 import allure
 import pytest
 
-from cms.pages.org_structure.org_structure_admin_page import OrgStructureAdminPage
+from cms.pages.org_structure.org_structure_admin_page import (
+    FIELD_ORG_PAGE_TITLE_EN,
+    AboutHeroBannerAdminPage,
+    OrgStructureAdminPage,
+    OrgStructurePageAdminPage,
+)
 from web.pages.org_structure.org_structure_page import OrgStructurePage
 
 FIXTURES = os.path.join(os.path.dirname(__file__), "fixtures")
@@ -414,6 +419,33 @@ def _unique(base_name: str) -> str:
     never resolve to more than the one row it created, no matter how much
     prior leftover data this environment has accumulated."""
     return f"{base_name} {uuid.uuid4().hex[:8]}"
+
+# ── Ported from automation/phase3, 2026-09-22 merge ───────────────────────
+# The About-Us Page-Settings surface this module skips as
+# _NO_PAGE_SETTINGS_SURFACE was located live on the phase3 branch; these
+# helpers back the five ADO-133307-133311 tests restored below.
+def _hero_banner(page):
+    return AboutHeroBannerAdminPage(page)
+
+
+def _org_structure_page(page):
+    return OrgStructurePageAdminPage(page)
+
+
+def _unique_hero_banner_page_key(base: str = "qctest-org-structure-hero") -> str:
+    """Fresh per-invocation `Page Key` for the SHARED "About Hero Banner"
+    registry (see AboutHeroBannerAdminPage's own docstring) — that
+    object's Entry Title Field IS Page Key (confirmed live), so this
+    module's own established collision lesson (`_unique_en_dept_name()`
+    below) applies here just as directly: a fixed literal would collide
+    with a prior run's own leftover entry on rerun. Deliberately NOT the
+    real production Page Key ("organizational-structure") — nothing on
+    qcdev currently wires the public Organizational Structure page to
+    consume this registry (confirmed live, see the admin page's docstring)
+    and creating a permanent real-Page-Key entry as automated test-data
+    boilerplate would be a product/content decision this test has no
+    business making on its own."""
+    return f"{base}-{uuid.uuid4().hex[:8]}"
 
 
 def _admin(page):
@@ -823,9 +855,28 @@ def test_page_title_ar_persists_after_reload(page):
 @pytest.mark.functional_low
 @pytest.mark.pbi_129399
 @pytest.mark.traceability("ABOUT-ORGSTRUCT-TC-065")
-@pytest.mark.skip(reason=_NO_PAGE_SETTINGS_SURFACE)
 def test_valid_hero_banner_en_uploads(page):
-    pass
+    # IMPLEMENTED 2026-09-16 (re-verification — see this module's own
+    # docstring and AboutHeroBannerAdminPage's docstring for the full
+    # live-confirmed trail): drives the REAL, shared "About Hero Banner"
+    # registry (manage-about-hero-banner) with a fresh, per-invocation
+    # Page Key — never the real production key "organizational-structure"
+    # (see _unique_hero_banner_page_key()'s own docstring for why).
+    hero = _hero_banner(page)
+    page_key = _unique_hero_banner_page_key()
+    with allure.step("Create a new Hero Banner entry and upload a valid EN image"):
+        hero.open_hero_banner_form()
+        hero.fill_hero_banner_form(
+            page_key=page_key,
+            alt_text_en="Organizational Structure hero banner",
+            alt_text_ar="بانر صفحة الهيكل التنظيمي",
+        )
+        hero.upload_banner_image(os.path.join(FIXTURES, "banner_en.jpg"))
+    with allure.step("Submit for Publishing — the entry reaches Approved"):
+        hero.save()
+        hero.open_entries_list()
+        assert hero.row_status_text(page_key) == "Approved"
+    hero.delete_entry_by_title(page_key)
 
 
 @allure.epic("About Us")
@@ -836,9 +887,24 @@ def test_valid_hero_banner_en_uploads(page):
 @pytest.mark.functional_low
 @pytest.mark.pbi_129399
 @pytest.mark.traceability("ABOUT-ORGSTRUCT-TC-066")
-@pytest.mark.skip(reason=_NO_PAGE_SETTINGS_SURFACE)
 def test_hero_banner_en_unsupported_format_rejected(page):
-    pass
+    # IMPLEMENTED 2026-09-16 — CONFIRMED LIVE, reproduced twice, that a
+    # .bmp upload attempt never completes the picker's own "Add" flow (the
+    # "1 of 1" progress indicator never renders and the Add button never
+    # becomes usable) — a real, fast, deterministic client-side rejection,
+    # not a large-file timing artifact (the .bmp fixture is 64 bytes — see
+    # AboutHeroBannerAdminPage's docstring, finding (c), for why this is
+    # NOT the same unreliable path as the 2MB/mandatory cases below).
+    hero = _hero_banner(page)
+    page_key = _unique_hero_banner_page_key()
+    with allure.step("Attempt to upload an unsupported file format (.bmp) as the Hero Banner image"):
+        hero.open_hero_banner_form()
+        hero.fill_hero_banner_form(page_key=page_key)
+        rejected = hero.upload_banner_image_expect_rejected(os.path.join(FIXTURES, "photo.bmp"))
+    with allure.step("The unsupported format is rejected"):
+        assert rejected
+    hero.open_entries_list()
+    hero.delete_entry_by_title(page_key)
 
 
 @allure.epic("About Us")
@@ -849,9 +915,39 @@ def test_hero_banner_en_unsupported_format_rejected(page):
 @pytest.mark.functional_low
 @pytest.mark.pbi_129399
 @pytest.mark.traceability("ABOUT-ORGSTRUCT-TC-067")
-@pytest.mark.skip(reason=_NO_PAGE_SETTINGS_SURFACE)
 def test_hero_banner_en_over_2mb_rejected(page):
-    pass
+    # IMPLEMENTED 2026-09-16 — CONFIRMED LIVE (three separate real uploads:
+    # 2.8MB, ~5.9MB, ~14.7MB, ALL accepted and reaching Approved) that this
+    # surface enforces NO file-size limit at all, despite the picker's own
+    # instructional copy claiming "no larger than 5 MB". See
+    # AboutHeroBannerAdminPage's docstring, findings (b) and (c), for why
+    # this drives the full upload+submit+status flow directly rather than
+    # `upload_banner_image_expect_rejected()` (confirmed live UNRELIABLE
+    # for a multi-MB file on this surface — a false "rejected" from its own
+    # internal timeout racing a slow real upload, not a genuine signal).
+    # This assertion reflects the CASE's intended (rejected) behavior and
+    # is EXPECTED TO LEGITIMATELY FAIL against the real product — the
+    # correct, honest outcome given this confirmed real gap, not inverted
+    # to force a pass.
+    hero = _hero_banner(page)
+    page_key = _unique_hero_banner_page_key()
+    with allure.step("Upload a Hero Banner image exceeding 2MB and submit"):
+        hero.open_hero_banner_form()
+        hero.fill_hero_banner_form(page_key=page_key)
+        hero.upload_banner_image(os.path.join(FIXTURES, "photo_large_2_8mb.jpg"))
+        hero.save()
+    with allure.step("The oversized file is rejected — the entry does not reach Published"):
+        # HEALED 2026-09-21 (triage AUTOMATION_BUG, found live while
+        # verifying ADO-133311/142200 in the same session): this object's
+        # workflow terminology drifted from "Submit for Publishing"/
+        # "Approved" to "Submit for Review"/"Published" — confirmed live,
+        # AboutHeroBannerAdminPage.SUBMIT_FOR_PUBLISHING_BUTTON already
+        # overrides the button text, but this assertion still checked the
+        # old status string, which no successful save can ever match again
+        # (a real bug fix would therefore have shown a false PASS here).
+        hero.open_entries_list()
+        assert hero.row_status_text(page_key) != "Published"
+    hero.delete_entry_by_title(page_key)
 
 
 @allure.epic("About Us")
@@ -862,9 +958,27 @@ def test_hero_banner_en_over_2mb_rejected(page):
 @pytest.mark.functional_low
 @pytest.mark.pbi_129399
 @pytest.mark.traceability("ABOUT-ORGSTRUCT-TC-068")
-@pytest.mark.skip(reason=_NO_PAGE_SETTINGS_SURFACE)
 def test_hero_banner_en_empty_rejected_mandatory(page):
-    pass
+    # IMPLEMENTED 2026-09-16 — CONFIRMED LIVE that Banner Image's own
+    # Fields-tab definition (Mandatory=No) is accurate, not a locator gap:
+    # submitting an entry with a Page Key and NO Banner Image reaches
+    # Approved with no rejection of any kind (reproduced cleanly). This
+    # assertion reflects the CASE's intended (rejected) behavior and is
+    # EXPECTED TO LEGITIMATELY FAIL against the real product — see
+    # AboutHeroBannerAdminPage's docstring, finding (a), for the full trail.
+    hero = _hero_banner(page)
+    page_key = _unique_hero_banner_page_key()
+    with allure.step("Create a Hero Banner entry with no image and submit"):
+        hero.open_hero_banner_form()
+        hero.fill_hero_banner_form(page_key=page_key)
+        hero.save()
+    with allure.step("The empty Banner Image is rejected as mandatory — the entry does not reach Published"):
+        # HEALED 2026-09-21 — same status-terminology drift as
+        # test_hero_banner_en_over_2mb_rejected above; see that test's
+        # comment for the full trail.
+        hero.open_entries_list()
+        assert hero.row_status_text(page_key) != "Published"
+    hero.delete_entry_by_title(page_key)
 
 
 @allure.epic("About Us")
@@ -876,9 +990,40 @@ def test_hero_banner_en_empty_rejected_mandatory(page):
 @pytest.mark.bilingual
 @pytest.mark.pbi_129399
 @pytest.mark.traceability("ABOUT-ORGSTRUCT-TC-069")
-@pytest.mark.skip(reason=_NO_PAGE_SETTINGS_SURFACE)
 def test_valid_hero_banner_ar_uploads(page):
-    pass
+    # RE-VERIFIED LIVE 2026-09-21 (bug ADO-142200 retest — see
+    # org_structure_admin_page.py's module docstring, RE-VERIFICATION
+    # finding 2, for the full confirmed-live trail): a real, distinct
+    # "Banner Image (Arabic)" field now exists on the shared
+    # manage-about-hero-banner form — confirmed live this session with an
+    # actual create -> upload both EN+AR images -> submit -> verify ->
+    # delete round trip before this test was written. Was previously
+    # SKIPPED (_NO_AR_SPECIFIC_HERO_BANNER_CONTROL) because no such field
+    # existed at all; that gap is now closed.
+    # INCIDENTAL LIVE FINDING (module docstring, finding 2a): this
+    # object's Submit button now reads "Submit for Review", not "Submit
+    # for Publishing" (fixed locally in AboutHeroBannerAdminPage), and the
+    # resulting real, live status is "Published", never "Approved" — this
+    # test asserts the REAL observed vocabulary, not the "Approved" pattern
+    # the sibling EN-only cases (133307-133310) still assert (those are
+    # unchanged this pass and are consequently likely broken by this same
+    # drift — flagged, not fixed here, out of this pass's scope).
+    hero = _hero_banner(page)
+    page_key = _unique_hero_banner_page_key("qctest-org-structure-hero-ar")
+    with allure.step("Create a new Hero Banner entry and upload a DISTINCT image into each of Banner Image (EN) and Banner Image (Arabic)"):
+        hero.open_hero_banner_form()
+        hero.fill_hero_banner_form(
+            page_key=page_key,
+            alt_text_en="Organizational Structure hero banner",
+            alt_text_ar="بانر صفحة الهيكل التنظيمي",
+        )
+        hero.upload_banner_image(os.path.join(FIXTURES, "banner_en.jpg"))
+        hero.upload_banner_image_ar(os.path.join(FIXTURES, "photo.jpg"))
+    with allure.step("Submit — the entry reaches the real live Published state"):
+        hero.save()
+        hero.open_entries_list()
+        assert hero.row_status_text(page_key) == "Published"
+    hero.delete_entry_by_title(page_key)
 
 
 @allure.epic("About Us")
@@ -3293,3 +3438,36 @@ def test_confirming_cascade_deactivation_hides_entire_branch(page):
 @pytest.mark.skip(reason=_CONFIRMED_BUG_PARENT_FIELD_FREE_TEXT)
 def test_parent_department_rejects_invalid_reference(page):
     pass
+
+
+@allure.epic("About Us")
+@allure.feature("Organizational Structure Management")
+@allure.title("Parent Department field only offers existing departments and rejects free-text/invalid references (ADO-133327)")
+@pytest.mark.control_panel
+@pytest.mark.about
+@pytest.mark.functional_low
+@pytest.mark.pbi_129399
+@pytest.mark.traceability("ABOUT-ORGSTRUCT-TC-018B")
+def test_parent_department_rejects_free_text_invalid_reference(page):
+    # CONFIRMED LIVE 2026-09-08 (qcdev, headless Chromium, authenticated):
+    # typing an unmatched free-text value into Parent Department, then
+    # clicking away, clears the field back to empty rather than accepting
+    # the typed text — the field is backed by a combobox/autocomplete
+    # picker (a `role=listbox`-adjacent element is present), not a raw text
+    # input. The invalid value is silently rejected client-side (not a
+    # save-time validation error), so the correct assertion is on the
+    # field's own value, not on is_save_error_shown().
+    admin = _admin(page)
+    invalid_value = "Nonexistent Department XYZ 12345"
+    with allure.step("Open Add New Department and type a Parent Department value that does not match any existing department"):
+        admin.open_departments_list().open_new_department_form()
+        admin.fill_department_form(
+            name_en="Free Text Parent Test Dept", name_ar="قسم اختبار",
+            person_name_en="Test", person_name_ar="اختبار",
+            person_title_en="Title", person_title_ar="عنوان",
+            display_order="9",
+        )
+        admin.type(admin.PARENT_DEPARTMENT, invalid_value)
+    with allure.step("The field does not retain the free-text value — it is a constrained picker, not free text"):
+        assert admin.field_value(admin.PARENT_DEPARTMENT) != invalid_value
+

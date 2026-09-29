@@ -1,0 +1,3337 @@
+{
+  "pbi_id": 130712,
+  "pbi_title": "QC - Insights & Media - 004 - Annual Reports",
+  "cases": [
+    {
+      "id": 143571,
+      "title": "Verify that the Annual Reports hero renders per the verified Figma tokens on EN/Light/Desktop",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UAT",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate to Main Menu → Insights &amp; Media → Annual Reports (EN, desktop, light theme)",
+          "expected": "Page loads"
+        },
+        {
+          "action": "Inspect the hero eyebrow, title, description, banner, and breadcrumb",
+          "expected": "Eyebrow &quot;Insights &amp; Media&quot; renders Text-sm/Regular Cairo 400 14px/22px hero variant (white on banner); Title &quot;Annual Reports&quot; renders display-lg/Bold Cairo 700 48px/60px #FFFFFF; Description renders Text-md/Regular Cairo 400 16px/24px rgba(255,255,255,0.7); breadcrumb &quot;Home › Insights &amp; Media&quot; renders Text-sm/Regular Cairo 400 14px/22px #FFFFFF"
+        }
+      ]
+    },
+    {
+      "id": 143572,
+      "title": "Verify that the Annual Reports hero renders correctly in Dark theme",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Toggle Dark theme",
+          "expected": "Dark theme applied"
+        },
+        {
+          "action": "Reload the Annual Reports page",
+          "expected": "Hero text remains legible against the dark background (no white-on-white / low-contrast regressions); all hero elements still present"
+        }
+      ]
+    },
+    {
+      "id": 143573,
+      "title": "Verify that the Report Archive section renders per the verified Figma tokens on EN/Light/Desktop",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UAT",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Scroll to the Report Archive section",
+          "expected": "Section visible"
+        },
+        {
+          "action": "Inspect eyebrow, heading, description, and search box",
+          "expected": "Eyebrow &quot;Report archive&quot; renders Text-sm/Regular Cairo 400 14px/22px #911731; heading &quot;Institutional reporting by year&quot; renders display-sm/Bold Cairo 700 36px/44px #1D1D1B; description renders Text-md/Regular Cairo 400 16px/24px #6C6C6B; search box shows placeholder &quot;Search..&quot;, 1px border #EDEDED, 8px border-radius"
+        }
+      ]
+    },
+    {
+      "id": 143574,
+      "title": "Verify that a report card renders per the verified Figma tokens on EN/Light/Desktop",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UAT",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Load the Report Archive grid",
+          "expected": "Card renders"
+        },
+        {
+          "action": "Inspect one report card's elements",
+          "expected": "Title &quot;Annual Report 2025&quot; renders Text-lg/Bold Cairo 700 18px/28px #1D1D1B; description renders Text-sm/Regular Cairo 400 14px/22px #4A4A49; meta line renders Text-sm/Regular Cairo 400 14px/22px #6C6C6B with 4x4px #D0D0D0 separator dots; &quot;View Details&quot;/&quot;Download&quot; render as pill buttons, #FFFFFF background, 1px #DEDEDD border, 9999px radius, label Text-sm/Semibold Cairo 600 14px/22px #4A4A49"
+        }
+      ]
+    },
+    {
+      "id": 143575,
+      "title": "Verify that a report card renders correctly in Dark theme",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Toggle Dark theme",
+          "expected": "Dark theme applied"
+        },
+        {
+          "action": "Inspect a report card",
+          "expected": "Card text/border remain legible against the dark background; no invisible/clipped elements"
+        }
+      ]
+    },
+    {
+      "id": 143576,
+      "title": "Verify that the search input shows its default, focus, and typed states per Figma tokens",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Load the page; inspect default search box",
+          "expected": "Placeholder &quot;Search..&quot; renders Text-sm/Regular #A8A8A7, 1px border #EDEDED"
+        },
+        {
+          "action": "Click into the search box (focus)",
+          "expected": "Focus state shows a visible focus indicator (border/outline change)"
+        },
+        {
+          "action": "Type &quot;2024&quot;",
+          "expected": "Typed text &quot;2024&quot; renders in the input in the standard input text color"
+        }
+      ]
+    },
+    {
+      "id": 143577,
+      "title": "Verify that the Load More button renders its default state per Figma tokens",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Load the Report Archive with more than one page of reports",
+          "expected": "Grid shows the first page of cards"
+        },
+        {
+          "action": "Inspect the Load More button",
+          "expected": "Load More renders as a pill button, #FFFFFF background, 1px #DEDEDD border, 9999px radius, label Text-md/Semibold Cairo 600 16px/24px #4A4A49"
+        }
+      ]
+    },
+    {
+      "id": 143578,
+      "title": "Verify that the Hero Description rich text (headings/bullets/links) renders unstripped on the live page",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Author Hero Description with a heading, a 2-item bullet list, and a link to https://qcdev.ihorizons.com/en/contact-us",
+          "expected": "Content saved"
+        },
+        {
+          "action": "Publish the page",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load the live Annual Reports page",
+          "expected": "The heading renders as a heading, the bullet list renders as a real list, and the link renders as a clickable, correctly-targeted anchor — none of the markup is stripped or shown as raw tags"
+        }
+      ]
+    },
+    {
+      "id": 143579,
+      "title": "Verify that the Report Archive Section Description rich text renders unstripped on the live page",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Author Section Description with a bold phrase and a link",
+          "expected": "Saved"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load the live page",
+          "expected": "Bold phrase renders bold; link renders as a clickable anchor on the live page — identical markup to what was authored"
+        }
+      ]
+    },
+    {
+      "id": 143580,
+      "title": "Verify that the no-search-results empty state renders correctly (EN)",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter a search query with no matches, e.g. &quot;zzzznomatch&quot;",
+          "expected": "Grid area is empty"
+        },
+        {
+          "action": "Inspect the empty-state area",
+          "expected": "The message &quot;No reports found for the selected search.&quot; displays centered in the archive area, replacing the card grid, with no leftover card placeholders"
+        }
+      ]
+    },
+    {
+      "id": 143581,
+      "title": "Verify that the no-reports-published empty state renders correctly (EN)",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Ensure zero Annual Report records are Published",
+          "expected": "Precondition set"
+        },
+        {
+          "action": "Load the Annual Reports page",
+          "expected": "The message &quot;No reports are currently available.&quot; displays centered in the archive area in place of the grid"
+        }
+      ]
+    },
+    {
+      "id": 143582,
+      "title": "Verify that the breadcrumb renders bilingually (Home › Insights & Media)",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 4,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Load the page in EN",
+          "expected": "Breadcrumb reads &quot;Home › Insights &amp; Media&quot; with each segment a clickable link"
+        },
+        {
+          "action": "Switch to AR",
+          "expected": "Breadcrumb reads the Arabic equivalent, mirrored RTL, each segment still a clickable link"
+        }
+      ]
+    },
+    {
+      "id": 143583,
+      "title": "Verify that the Annual Reports page renders correctly at desktop viewport width",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Resize browser to 1920x1080",
+          "expected": "Viewport set"
+        },
+        {
+          "action": "Load the Annual Reports page",
+          "expected": "Hero, Report Archive section, and card grid (multi-column) render fully with no overlap, clipping, or horizontal scroll"
+        }
+      ]
+    },
+    {
+      "id": 143584,
+      "title": "Verify that the Annual Reports page renders correctly at tablet viewport width",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Resize browser to 768x1024",
+          "expected": "Viewport set"
+        },
+        {
+          "action": "Load the page",
+          "expected": "Layout reflows to a tablet column count for the card grid; hero and search box remain fully visible and usable with no overlap"
+        }
+      ]
+    },
+    {
+      "id": 143586,
+      "title": "Verify that the Annual Reports page renders correctly at mobile viewport width",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Resize browser to 375x667",
+          "expected": "Viewport set"
+        },
+        {
+          "action": "Load the page",
+          "expected": "Layout reflows to single-column cards; View Details/Download buttons remain tap-target sized (&gt;=44x44px) and are not clipped"
+        }
+      ]
+    },
+    {
+      "id": 143588,
+      "title": "Verify that the Annual Reports page renders correctly under the Light theme",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Confirm Light theme active",
+          "expected": "Theme confirmed"
+        },
+        {
+          "action": "Load the page",
+          "expected": "All hero/section/card text meets legible contrast against the light background; no theme-leak from Dark styling"
+        }
+      ]
+    },
+    {
+      "id": 143590,
+      "title": "Verify that the Annual Reports page renders correctly under the Dark theme",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Compatibility",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Toggle Dark theme",
+          "expected": "Theme toggled"
+        },
+        {
+          "action": "Load the page",
+          "expected": "All hero/section/card text/backgrounds swap to the dark palette; no residual light-theme elements remain"
+        }
+      ]
+    },
+    {
+      "id": 143592,
+      "title": "Verify that a Public Visitor can view, search, and download published reports without logging in",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Open the Annual Reports page in a fresh, logged-out browser context",
+          "expected": "Page loads with no login prompt"
+        },
+        {
+          "action": "Search, view details, and download a report",
+          "expected": "Search, View Details preview, and Download all succeed without any authentication challenge"
+        }
+      ]
+    },
+    {
+      "id": 143594,
+      "title": "Verify that an unauthenticated user is denied direct access to the Annual Reports CMS admin area",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "In a fresh logged-out context, navigate directly to the Annual Reports Object Authoring management URL",
+          "expected": "Navigation attempted"
+        },
+        {
+          "action": "Observe the result",
+          "expected": "Access is denied; the user is redirected to the CMS login page, no admin content or data is exposed"
+        }
+      ]
+    },
+    {
+      "id": 143595,
+      "title": "Verify that a Site Content Editor can perform the full Annual Report lifecycle (create, edit, preview, publish, unpublish, delete)",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Create a report record via Object Authoring",
+          "expected": "Record created and saved"
+        },
+        {
+          "action": "Edit it, preview it, publish it, unpublish it, then delete it",
+          "expected": "Each action (edit/preview/publish/unpublish/delete) is available and completes successfully with no permission error"
+        }
+      ]
+    },
+    {
+      "id": 143598,
+      "title": "Verify that a Site Content Author can create and edit an Annual Report record and submit it for review",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Author",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Create a report record, edit its fields, and submit for review",
+          "expected": "Record is created, edited, and successfully submitted for review (moves to a pending/review state)"
+        }
+      ]
+    },
+    {
+      "id": 143600,
+      "title": "Verify that a Site Content Author cannot directly publish, unpublish, or delete an Annual Report record",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Auth",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Author",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Attempt to click Publish, Unpublish, and Delete on a record",
+          "expected": "Each action is unavailable/disabled or is rejected with a permission-denied response; the record's state does not change"
+        }
+      ]
+    },
+    {
+      "id": 143601,
+      "title": "Verify that a visitor can browse, search, view details, and download an Annual Report end-to-end",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Navigate Insights &amp; Media → Annual Reports",
+          "expected": "Page loads with hero + archive grid"
+        },
+        {
+          "action": "Search &quot;2023&quot;",
+          "expected": "Grid filters to the card(s) matching &quot;2023&quot;"
+        },
+        {
+          "action": "Click View Details on &quot;Annual Report 2023&quot;",
+          "expected": "PDF opens in a preview view"
+        },
+        {
+          "action": "Close preview; click Download on the same card",
+          "expected": "Browser downloads the PDF file to the local device"
+        }
+      ]
+    },
+    {
+      "id": 143603,
+      "title": "Verify that Load More reveals additional reports and hides once exhausted",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Load the Annual Reports page",
+          "expected": "First page of cards displays; Load More visible"
+        },
+        {
+          "action": "Click Load More repeatedly until all reports are shown",
+          "expected": "Each click reveals additional cards; once all 7 are shown, Load More is hidden or disabled"
+        }
+      ]
+    },
+    {
+      "id": 143605,
+      "title": "Verify that a zero-match search displays \"No reports found for the selected search.\" (EN)",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter &quot;zzzznomatch&quot; in the search box",
+          "expected": "Grid is replaced by the message &quot;No reports found for the selected search.&quot;"
+        }
+      ]
+    },
+    {
+      "id": 143608,
+      "title": "Verify that zero published reports displays \"No reports are currently available.\" (EN)",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Load the Annual Reports page with no Published records",
+          "expected": "Message &quot;No reports are currently available.&quot; displays instead of the grid"
+        }
+      ]
+    },
+    {
+      "id": 143610,
+      "title": "Verify that published reports list in descending order by Publication Year",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Load the Annual Reports page",
+          "expected": "Grid loads"
+        },
+        {
+          "action": "Read the Publication Year of each card top-to-bottom / left-to-right",
+          "expected": "Order is 2025, 2024, 2023, 2022, 2021, 2020 — strictly descending"
+        }
+      ]
+    },
+    {
+      "id": 143612,
+      "title": "Verify that a Draft Annual Report record does not appear on the live page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "In a fresh logged-out browser context, load the Annual Reports page",
+          "expected": "Page loads showing only Published cards"
+        },
+        {
+          "action": "Search for &quot;2026&quot;",
+          "expected": "No card for the Draft &quot;2026&quot; record appears; search returns &quot;No reports found for the selected search.&quot;"
+        }
+      ]
+    },
+    {
+      "id": 143614,
+      "title": "Verify that an Unpublished Annual Reports page is not accessible on the live site",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Set the Annual Reports page Status to Unpublished",
+          "expected": "Status saved"
+        },
+        {
+          "action": "In a fresh logged-out context, navigate to the page URL",
+          "expected": "The public page returns a not-found/unavailable response — no hero or archive content renders"
+        }
+      ]
+    },
+    {
+      "id": 143616,
+      "title": "Verify that an admin can create, save as draft, preview, and publish a new Annual Report record, and it appears on the live page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web",
+        "Workflow"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor; create the record via Object Authoring with Title EN/AR, Description EN/AR, Cover Image, Year=2026, Date=2026-03-01, Page Count=15, PDF attached; Save as Draft",
+          "expected": "Record saved with Status=Draft; success toast shown; audit log records the create"
+        },
+        {
+          "action": "Open Preview and confirm rendering",
+          "expected": "Preview shows the entered content accurately"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "Status changes to Published; success toast shown; audit log records the publish"
+        },
+        {
+          "action": "In a separate logged-out context, poll the live Annual Reports page for &quot;Annual Report 2026&quot; up to 5s",
+          "expected": "&quot;Annual Report 2026&quot; card appears on the live page within the 5s budget, listed above 2025 (descending order)"
+        }
+      ]
+    },
+    {
+      "id": 143641,
+      "title": "Verify that editing a published report's Title and republishing shows the new value on the live page, not the stale cached one",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor; open the record via Object Authoring; change Report Title EN to &quot;Annual Report 2025 (Revised)&quot;; publish",
+          "expected": "Save/publish succeeds; toast shown; audit log records the edit"
+        },
+        {
+          "action": "In a logged-out context, poll the live page (5s/0.5s) for the new title",
+          "expected": "The live card shows &quot;Annual Report 2025 (Revised)&quot; within budget — the old title is not still displayed"
+        }
+      ]
+    },
+    {
+      "id": 143642,
+      "title": "Verify that unpublishing a published report removes it from the live page",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor; open the record; click Unpublish",
+          "expected": "Status changes to Unpublished; toast shown; audit log records the unpublish"
+        },
+        {
+          "action": "In a logged-out context, poll the live page (5s/0.5s) confirming the card is gone",
+          "expected": "The card disappears from the live grid within budget; searching its title returns no match"
+        }
+      ]
+    },
+    {
+      "id": 143643,
+      "title": "Verify that deleting a report record removes it from the live page and its PDF link no longer resolves",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor; delete the QCTEST- report record via Object Authoring",
+          "expected": "Record deleted; toast shown; audit log records the deletion"
+        },
+        {
+          "action": "In a logged-out context, confirm the card is absent from the live grid and the previously-copied PDF/download URL no longer resolves to content",
+          "expected": "Card is gone from the live grid; the old PDF URL returns not-found rather than stale content"
+        }
+      ]
+    },
+    {
+      "id": 143644,
+      "title": "Verify that every admin create/edit/publish/unpublish/delete action shows the Liferay generic success toast and is recorded in the audit log",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Workflow"
+      ],
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor; publish a Draft record",
+          "expected": "A generic success toast (EN/AR per active locale) displays immediately after the action"
+        },
+        {
+          "action": "Open the Liferay audit log and locate the entry for this action",
+          "expected": "The audit log contains an entry naming the actor, the action (publish), the record, and a timestamp"
+        }
+      ]
+    },
+    {
+      "id": 143645,
+      "title": "Verify that View Details opens the report PDF for preview without triggering a file download",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Click View Details on a published report card",
+          "expected": "The PDF opens in an in-browser preview view"
+        },
+        {
+          "action": "Confirm no file appears in the browser's downloads",
+          "expected": "No download entry is created; the file is not saved to disk"
+        }
+      ]
+    },
+    {
+      "id": 143646,
+      "title": "Verify that Download saves the PDF directly to the visitor's device without opening a preview",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Click Download on a published report card",
+          "expected": "No in-browser preview opens"
+        },
+        {
+          "action": "Confirm the downloaded file",
+          "expected": "The PDF file is saved to the local downloads folder, matching the report's PDF attachment"
+        }
+      ]
+    },
+    {
+      "id": 143647,
+      "title": "Verify that View Details and Download on the same card operate independently without interfering with each other",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Click View Details; close the preview",
+          "expected": "Preview opens then closes cleanly, no residual overlay"
+        },
+        {
+          "action": "Then click Download on the same card",
+          "expected": "Download proceeds normally and completes, unaffected by the prior preview action"
+        }
+      ]
+    },
+    {
+      "id": 143648,
+      "title": "Verify that a valid Eyebrow Label (EN/AR) is saved and displayed on the hero",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter Eyebrow EN=&quot;Insights &amp; Media&quot;, AR=&quot;الإعلام والمنشورات&quot;",
+          "expected": "Values entered"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load the live page",
+          "expected": "Hero eyebrow shows the entered text in the active locale"
+        }
+      ]
+    },
+    {
+      "id": 143649,
+      "title": "Verify that an empty Eyebrow Label (EN) is rejected on publish",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Eyebrow EN empty",
+          "expected": "Field empty"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked; a required-field validation message displays; value not saved as published"
+        }
+      ]
+    },
+    {
+      "id": 143650,
+      "title": "Verify that an Eyebrow Label exceeding 60 characters is rejected at the boundary",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 61-character value",
+          "expected": "Value entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Save is blocked or the input is capped at 60 characters with a max-length validation message"
+        }
+      ]
+    },
+    {
+      "id": 143651,
+      "title": "Verify that a whitespace-only Eyebrow Label is rejected as empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces",
+          "expected": "Value entered"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with the same required-field validation as a truly empty field"
+        }
+      ]
+    },
+    {
+      "id": 143652,
+      "title": "Verify that a valid Page Title (EN/AR) is saved and displayed",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter Page Title EN=&quot;Annual Reports&quot;, AR=&quot;التقارير السنوية&quot;",
+          "expected": "Entered"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Hero title displays the entered text"
+        }
+      ]
+    },
+    {
+      "id": 143653,
+      "title": "Verify that an empty Page Title (EN) is rejected on publish",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Page Title EN empty",
+          "expected": "Empty"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with required-field validation"
+        }
+      ]
+    },
+    {
+      "id": 143654,
+      "title": "Verify that a Page Title exceeding 120 characters is rejected at the boundary",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 121-character title",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Save blocked or capped at 120 chars with a max-length message"
+        }
+      ]
+    },
+    {
+      "id": 143655,
+      "title": "Verify that a whitespace-only Page Title is rejected as empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked as if empty"
+        }
+      ]
+    },
+    {
+      "id": 143656,
+      "title": "Verify that a valid Hero Description with heading/bullet/link is saved and displayed",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter rich-text description &lt;=200 chars with a bullet and a link",
+          "expected": "Entered"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Description displays with formatting intact"
+        }
+      ]
+    },
+    {
+      "id": 143657,
+      "title": "Verify that an empty Hero Description (EN) is rejected on publish",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Hero Description EN empty",
+          "expected": "Empty"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with required-field validation"
+        }
+      ]
+    },
+    {
+      "id": 143658,
+      "title": "Verify that a Hero Description exceeding 200 characters is rejected at the boundary",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 201-character description",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Save blocked or capped at 200 chars"
+        }
+      ]
+    },
+    {
+      "id": 143659,
+      "title": "Verify that a whitespace-only Hero Description is rejected as empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces/line breaks",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked as if empty"
+        }
+      ]
+    },
+    {
+      "id": 143660,
+      "title": "Verify that a valid Hero Banner (JPG, 1.5MB) is uploaded and displayed",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Upload a 1.5MB JPG banner",
+          "expected": "Upload succeeds"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Banner image displays as the hero background"
+        }
+      ]
+    },
+    {
+      "id": 143661,
+      "title": "Verify that publishing without a Hero Banner is blocked",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Hero Banner empty",
+          "expected": "No file selected"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with a required-field validation message"
+        }
+      ]
+    },
+    {
+      "id": 143662,
+      "title": "Verify that an unsupported Hero Banner format is rejected",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to upload banner.gif",
+          "expected": "Upload attempted"
+        },
+        {
+          "action": "Observe result",
+          "expected": "Rejected with an unsupported-file-type message; file not attached"
+        }
+      ]
+    },
+    {
+      "id": 143663,
+      "title": "Verify that an oversized Hero Banner (>2MB) is rejected",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to upload a 2.5MB PNG",
+          "expected": "Upload attempted"
+        },
+        {
+          "action": "Observe result",
+          "expected": "Rejected with an oversized-file message; file not attached"
+        }
+      ]
+    },
+    {
+      "id": 143664,
+      "title": "Verify that setting page Status=Published takes effect on save",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Select Status=Published",
+          "expected": "Selected"
+        },
+        {
+          "action": "Save",
+          "expected": "Page saves as Published; live page becomes accessible"
+        }
+      ]
+    },
+    {
+      "id": 143665,
+      "title": "Verify that leaving page Status unselected blocks save",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Status unselected on a new page draft",
+          "expected": "Unselected"
+        },
+        {
+          "action": "Attempt Save",
+          "expected": "Save blocked with a required-field validation message"
+        }
+      ]
+    },
+    {
+      "id": 143666,
+      "title": "Verify that Created/Last Modified Date auto-stamps correctly on create and update",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Create a new record; note Created Date",
+          "expected": "Created Date auto-populates with the current server date/time"
+        },
+        {
+          "action": "Edit and save the record; note Last Modified Date",
+          "expected": "Last Modified Date updates to the edit's timestamp; Created Date remains unchanged; both values appear in the audit log entry"
+        }
+      ]
+    },
+    {
+      "id": 143667,
+      "title": "Verify that a valid Section Badge (Report archive) is saved and displayed",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter Section Badge EN=&quot;Report archive&quot;, AR equivalent",
+          "expected": "Entered"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Badge displays on the section"
+        }
+      ]
+    },
+    {
+      "id": 143668,
+      "title": "Verify that an empty Section Badge (EN) is rejected on publish",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Section Badge EN empty",
+          "expected": "Empty"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with required-field validation"
+        }
+      ]
+    },
+    {
+      "id": 143669,
+      "title": "Verify that a Section Badge exceeding 100 characters is rejected at the boundary",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 101-character value",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Save blocked or capped at 100 chars"
+        }
+      ]
+    },
+    {
+      "id": 143670,
+      "title": "Verify that a whitespace-only Section Badge is rejected as empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked as if empty"
+        }
+      ]
+    },
+    {
+      "id": 143711,
+      "title": "Verify that a valid Section Title (Institutional reporting by year) is saved and displayed",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter the value in EN/AR",
+          "expected": "Entered"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Heading displays exactly as entered"
+        }
+      ]
+    },
+    {
+      "id": 143712,
+      "title": "Verify that an empty Section Title (EN) is rejected on publish",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Section Title EN empty",
+          "expected": "Empty"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with required-field validation"
+        }
+      ]
+    },
+    {
+      "id": 143713,
+      "title": "Verify that a Section Title exceeding 150 characters is rejected at the boundary",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 151-character value",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Save blocked or capped at 150 chars"
+        }
+      ]
+    },
+    {
+      "id": 143714,
+      "title": "Verify that a whitespace-only Section Title is rejected as empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked as if empty"
+        }
+      ]
+    },
+    {
+      "id": 143715,
+      "title": "Verify that a valid Section Description is saved and rendered correctly",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter the given description text &lt;=300 chars in EN/AR",
+          "expected": "Entered"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Description displays as entered"
+        }
+      ]
+    },
+    {
+      "id": 143716,
+      "title": "Verify that an empty Section Description (EN) is rejected on publish",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Section Description EN empty",
+          "expected": "Empty"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with required-field validation"
+        }
+      ]
+    },
+    {
+      "id": 143717,
+      "title": "Verify that a Section Description exceeding 300 characters is rejected at the boundary",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 301-character description",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Save blocked or capped at 300 chars"
+        }
+      ]
+    },
+    {
+      "id": 143718,
+      "title": "Verify that a whitespace-only Section Description is rejected as empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces/line breaks",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked as if empty"
+        }
+      ]
+    },
+    {
+      "id": 143719,
+      "title": "Verify that a valid Report Title (Annual Report 2025) is saved and displayed on the card",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter Report Title EN=&quot;Annual Report 2025&quot;, AR equivalent",
+          "expected": "Entered"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Card title shows &quot;Annual Report 2025&quot;"
+        }
+      ]
+    },
+    {
+      "id": 143720,
+      "title": "Verify that an empty Report Title (EN) is rejected on publish",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Report Title EN empty",
+          "expected": "Empty"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with required-field validation"
+        }
+      ]
+    },
+    {
+      "id": 143721,
+      "title": "Verify that a Report Title exceeding 200 characters is rejected at the boundary",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 201-character title",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Save blocked or capped at 200 chars"
+        }
+      ]
+    },
+    {
+      "id": 143722,
+      "title": "Verify that a whitespace-only Report Title is rejected as empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked as if empty"
+        }
+      ]
+    },
+    {
+      "id": 143723,
+      "title": "Verify that a valid Report Description is saved and displayed on the card",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter a description &lt;=500 chars in EN/AR",
+          "expected": "Entered"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Card description shows the entered text"
+        }
+      ]
+    },
+    {
+      "id": 143724,
+      "title": "Verify that an empty Report Description (EN) is rejected on publish",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Report Description EN empty",
+          "expected": "Empty"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with required-field validation"
+        }
+      ]
+    },
+    {
+      "id": 143725,
+      "title": "Verify that a Report Description exceeding 500 characters is rejected at the boundary",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter a 501-character description",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt to save",
+          "expected": "Save blocked or capped at 500 chars"
+        }
+      ]
+    },
+    {
+      "id": 143726,
+      "title": "Verify that a whitespace-only Report Description is rejected as empty",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter only spaces",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked as if empty"
+        }
+      ]
+    },
+    {
+      "id": 143727,
+      "title": "Verify that a valid Cover Image (JPG) is uploaded and displayed on the card",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Upload a JPG cover image",
+          "expected": "Upload succeeds"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Card displays the uploaded cover image"
+        }
+      ]
+    },
+    {
+      "id": 143728,
+      "title": "Verify that publishing without a Cover Image is blocked",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Cover Image empty",
+          "expected": "No file selected"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with a required-field validation message"
+        }
+      ]
+    },
+    {
+      "id": 143729,
+      "title": "Verify that an unsupported Cover Image format is rejected",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to upload cover.bmp",
+          "expected": "Upload attempted"
+        },
+        {
+          "action": "Observe result",
+          "expected": "Rejected with an unsupported-file-type message; file not attached"
+        }
+      ]
+    },
+    {
+      "id": 143730,
+      "title": "Verify that selecting a valid Publication Year (2025) saves and drives the card's sort position",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Select Publication Year=2025",
+          "expected": "Selected"
+        },
+        {
+          "action": "Publish alongside other years",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Card appears in the correct descending-order position for 2025"
+        }
+      ]
+    },
+    {
+      "id": 143731,
+      "title": "Verify that leaving Publication Year unselected blocks save",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Publication Year unselected",
+          "expected": "Unselected"
+        },
+        {
+          "action": "Attempt Save",
+          "expected": "Save blocked with a required-field validation message"
+        }
+      ]
+    },
+    {
+      "id": 143732,
+      "title": "Verify that a valid Publication Date is entered and saved",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter Publication Date = 2025-03-15",
+          "expected": "Entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Value saves and persists on reload"
+        }
+      ]
+    },
+    {
+      "id": 143733,
+      "title": "Verify that leaving Publication Date empty blocks save",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Publication Date empty",
+          "expected": "Empty"
+        },
+        {
+          "action": "Attempt Save",
+          "expected": "Save blocked with a required-field validation message"
+        }
+      ]
+    },
+    {
+      "id": 143734,
+      "title": "Verify that an invalid Publication Date format is rejected",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter 32/13/2025 in the date field",
+          "expected": "Value entered"
+        },
+        {
+          "action": "Attempt Save",
+          "expected": "Save blocked with an invalid-date validation message"
+        }
+      ]
+    },
+    {
+      "id": 143735,
+      "title": "Verify that a valid Page Count (20) is saved and displayed as 20 Pages",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter Page Count = 20",
+          "expected": "Entered"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load live page",
+          "expected": "Meta line shows &quot;20 Pages&quot;"
+        }
+      ]
+    },
+    {
+      "id": 143736,
+      "title": "Verify that leaving Page Count empty blocks save",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Page Count empty",
+          "expected": "Empty"
+        },
+        {
+          "action": "Attempt Save",
+          "expected": "Save blocked with a required-field validation message"
+        }
+      ]
+    },
+    {
+      "id": 143737,
+      "title": "Verify that Page Count = 0 is rejected as invalid",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter Page Count = 0",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt Save",
+          "expected": "Save blocked with a validation message requiring a positive integer"
+        }
+      ]
+    },
+    {
+      "id": 143738,
+      "title": "Verify that a negative Page Count (-5) is rejected as invalid",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter Page Count = -5",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt Save",
+          "expected": "Save blocked with a validation message requiring a positive integer"
+        }
+      ]
+    },
+    {
+      "id": 143739,
+      "title": "Verify that a non-numeric Page Count (abc) is rejected as invalid",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Enter Page Count = &quot;abc&quot;",
+          "expected": "Entered"
+        },
+        {
+          "action": "Attempt Save",
+          "expected": "Save blocked with a validation message requiring a numeric value"
+        }
+      ]
+    },
+    {
+      "id": 143740,
+      "title": "Verify that a valid PDF (4MB) is uploaded and the record publishes successfully",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Upload a 4MB PDF",
+          "expected": "Upload succeeds"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Click Download on the live card",
+          "expected": "The downloaded file matches the uploaded PDF"
+        }
+      ]
+    },
+    {
+      "id": 143781,
+      "title": "Verify that publishing without a PDF attachment is blocked with A PDF attachment is required",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Leave PDF Attachment empty",
+          "expected": "No file selected"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked; message &quot;A PDF attachment is required.&quot; / &quot;ملف PDF مطلوب.&quot; displays"
+        }
+      ]
+    },
+    {
+      "id": 143782,
+      "title": "Verify that an unsupported PDF Attachment format is rejected with Unsupported file type or size",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to upload report.docx as the PDF Attachment",
+          "expected": "Upload attempted"
+        },
+        {
+          "action": "Observe result",
+          "expected": "Rejected; message &quot;Unsupported file type or size.&quot; / &quot;نوع الملف أو حجمه غير مدعوم.&quot; displays; file not attached"
+        }
+      ]
+    },
+    {
+      "id": 143783,
+      "title": "Verify that an oversized PDF Attachment (6MB) is rejected with Unsupported file type or size",
+      "type": "Functional",
+      "scenario": "negative",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to upload a 6MB PDF",
+          "expected": "Upload attempted"
+        },
+        {
+          "action": "Observe result",
+          "expected": "Rejected; message &quot;Unsupported file type or size.&quot; / &quot;نوع الملف أو حجمه غير مدعوم.&quot; displays; file not attached"
+        }
+      ]
+    },
+    {
+      "id": 143784,
+      "title": "Verify that a PDF exactly at the 5MB boundary is accepted",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Upload a PDF of exactly 5.00MB",
+          "expected": "Upload accepted"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish succeeds — the boundary value is treated as within the limit, not over it"
+        }
+      ]
+    },
+    {
+      "id": 143785,
+      "title": "Verify that selecting Active Status=Published takes effect and the record appears live",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Select Active Status=Published on a fully-valid record",
+          "expected": "Selected"
+        },
+        {
+          "action": "Save",
+          "expected": "Record saves as Published and appears on the live grid"
+        }
+      ]
+    },
+    {
+      "id": 143786,
+      "title": "Verify that leaving Active Status unselected on a new record blocks save",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Active Status unselected",
+          "expected": "Unselected"
+        },
+        {
+          "action": "Attempt Save",
+          "expected": "Save blocked with a required-field validation message"
+        }
+      ]
+    },
+    {
+      "id": 143787,
+      "title": "Verify that search matches by Report Title keyword",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter &quot;2025&quot; (part of Annual Report 2025)",
+          "expected": "Entered"
+        },
+        {
+          "action": "Observe results",
+          "expected": "Grid filters to cards whose Title contains &quot;2025&quot;"
+        }
+      ]
+    },
+    {
+      "id": 143788,
+      "title": "Verify that search matches by Report Description keyword",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter &quot;sustainability&quot;",
+          "expected": "Entered"
+        },
+        {
+          "action": "Observe results",
+          "expected": "Grid filters to the card(s) whose description contains that word"
+        }
+      ]
+    },
+    {
+      "id": 143789,
+      "title": "Verify that search matches by Publication Year",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter &quot;2022&quot;",
+          "expected": "Entered"
+        },
+        {
+          "action": "Observe results",
+          "expected": "Grid filters to the card whose Publication Year is 2022"
+        }
+      ]
+    },
+    {
+      "id": 143790,
+      "title": "Verify that clearing the search box restores the full report list",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Enter a search term, confirm filtered results",
+          "expected": "Grid filters"
+        },
+        {
+          "action": "Clear the search box",
+          "expected": "Grid returns to showing all published reports in descending order"
+        }
+      ]
+    },
+    {
+      "id": 143791,
+      "title": "Verify that double-clicking Load More does not duplicate cards in the grid",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Rapidly double-click Load More",
+          "expected": "Click registered once functionally"
+        },
+        {
+          "action": "Inspect the resulting grid for duplicate cards",
+          "expected": "Each report appears exactly once; no duplicate card renders"
+        }
+      ]
+    },
+    {
+      "id": 143793,
+      "title": "Verify that replacing a published report's Cover Image fully removes the old image reference on delivery",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "On a published record, replace Cover Image with a new file",
+          "expected": "New file selected"
+        },
+        {
+          "action": "Publish",
+          "expected": "Publish succeeds"
+        },
+        {
+          "action": "Load the live card",
+          "expected": "Card displays only the new image; the old image is not visible via any cached/alternate URL"
+        }
+      ]
+    },
+    {
+      "id": 143794,
+      "title": "Verify that two published reports may share the same Publication Year and both display correctly",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Publish two records both with Publication Year=2024",
+          "expected": "Both publish successfully"
+        },
+        {
+          "action": "Load the live page",
+          "expected": "Both cards appear, correctly grouped/adjacent in the descending-year order, with no data corruption or one overwriting the other"
+        }
+      ]
+    },
+    {
+      "id": 143796,
+      "title": "Verify that exactly one published report hides the Load More action",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Ensure exactly 1 Published record exists",
+          "expected": "Precondition set"
+        },
+        {
+          "action": "Load the Annual Reports page",
+          "expected": "The single card displays; Load More is hidden or disabled since no further records remain"
+        }
+      ]
+    },
+    {
+      "id": 143797,
+      "title": "Verify that a previously publish-blocked record succeeds once its missing PDF is added",
+      "type": "Edge",
+      "scenario": "positive",
+      "category": "Edge",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Attempt to publish a record with no PDF (blocked, per TC-098)",
+          "expected": "Blocked with &quot;A PDF attachment is required.&quot;"
+        },
+        {
+          "action": "Attach a valid PDF",
+          "expected": "PDF attached"
+        },
+        {
+          "action": "Retry Publish",
+          "expected": "Publish now succeeds; record appears on the live page"
+        }
+      ]
+    },
+    {
+      "id": 143824,
+      "title": "التحقق من أنه يتم عرض قسم البطل (الهيرو) في صفحة التقارير السنوية بشكل صحيح باللغة العربية (من اليمين إلى اليسار)",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Switch to Arabic / navigate via /ar path",
+          "expected": "Page renders in Arabic with the Arabic Eyebrow/Title/Description text"
+        },
+        {
+          "action": "Inspect hero layout direction and text alignment",
+          "expected": "Layout mirrors to RTL — text right-aligned, breadcrumb order reversed, no clipped/overlapping text"
+        }
+      ]
+    },
+    {
+      "id": 143825,
+      "title": "التحقق من أنه يتم عرض قسم أرشيف التقارير بشكل صحيح باللغة العربية (من اليمين إلى اليسار)",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Switch to Arabic",
+          "expected": "Arabic eyebrow/heading/description render"
+        },
+        {
+          "action": "Inspect section layout",
+          "expected": "Search box mirrors to RTL (placeholder text right-aligned, icon position mirrored if present)"
+        }
+      ]
+    },
+    {
+      "id": 143826,
+      "title": "التحقق من أنه يتم عرض بطاقة التقرير بشكل صحيح باللغة العربية (من اليمين إلى اليسار)",
+      "type": "UI",
+      "scenario": "positive",
+      "category": "UI",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "MEDIA",
+        "UI",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Switch to Arabic",
+          "expected": "Arabic title/description render"
+        },
+        {
+          "action": "Inspect the same report card",
+          "expected": "Card mirrors to RTL; meta line separator order reverses correctly; buttons remain fully legible with Arabic labels"
+        }
+      ]
+    },
+    {
+      "id": 143827,
+      "title": "التحقق من أنه يُحظر نشر محتوى قسم البطل (الهيرو) الخاص بالصفحة عند ترك الحقول العربية فارغة، مع ظهور رسالة \"المحتوى بالعربية مطلوب.\"",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Hero Eyebrow AR, Page Title AR, Hero Description AR empty; fill EN equivalents",
+          "expected": "Fields entered as described"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish is blocked; message &quot;Arabic content is required.&quot; / &quot;المحتوى بالعربية مطلوب.&quot; displays; page Status remains unpublished"
+        }
+      ]
+    },
+    {
+      "id": 143828,
+      "title": "التحقق من أنه يُحظر نشر محتوى قسم أرشيف التقارير عند ترك الحقول العربية فارغة، مع ظهور رسالة \"المحتوى بالعربية مطلوب.\"",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA"
+      ],
+      "steps": [
+        {
+          "action": "Leave Section Badge AR, Section Title AR, Section Description AR empty; fill EN",
+          "expected": "Fields entered"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with &quot;Arabic content is required.&quot; / &quot;المحتوى بالعربية مطلوب.&quot;; section content remains unpublished"
+        }
+      ]
+    },
+    {
+      "id": 143829,
+      "title": "التحقق من أنه يُحظر نشر سجل التقرير السنوي عند ترك حقلي العنوان والوصف باللغة العربية فارغين، مع ظهور رسالة \"المحتوى بالعربية مطلوب.\"",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 1,
+      "execution_type": "Automated",
+      "impact_area": "Both",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-High",
+        "MEDIA",
+        "Regression"
+      ],
+      "steps": [
+        {
+          "action": "Create a record with Report Title AR and Report Description AR empty, EN filled, valid PDF attached",
+          "expected": "Record created in Draft"
+        },
+        {
+          "action": "Attempt Publish",
+          "expected": "Publish blocked with &quot;Arabic content is required.&quot; / &quot;المحتوى بالعربية مطلوب.&quot;; record remains unpublished"
+        }
+      ]
+    },
+    {
+      "id": 143830,
+      "title": "التحقق من أنه يتم الرجوع تلقائيًا إلى اللغة النشطة عند عرض تقرير لا تتوفر له ترجمة عربية",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-High",
+      "classification_source": "tags",
+      "priority": 2,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Functional-High",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Ensure a published record has EN content but the AR translation is missing",
+          "expected": "Precondition set"
+        },
+        {
+          "action": "Load the page in Arabic (ar locale)",
+          "expected": "The card displays the EN content instead of a blank/broken field — per the PBI's own stated fallback rule"
+        }
+      ]
+    },
+    {
+      "id": 143831,
+      "title": "التحقق من أنه يتم عرض رسالة \"لا توجد تقارير مطابقة لبحثك.\" عند عدم وجود نتائج بحث مطابقة باللغة العربية",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Switch to Arabic",
+          "expected": "Arabic locale active"
+        },
+        {
+          "action": "Enter &quot;zzzznomatch&quot;",
+          "expected": "Message &quot;لا توجد تقارير مطابقة لبحثك.&quot; displays in place of the grid"
+        }
+      ]
+    },
+    {
+      "id": 143832,
+      "title": "التحقق من أنه يتم عرض رسالة \"لا توجد تقارير متاحة حالياً.\" عند عدم وجود أي تقارير منشورة باللغة العربية",
+      "type": "Functional",
+      "scenario": "positive",
+      "category": "Functional-Low",
+      "classification_source": "tags",
+      "priority": 3,
+      "execution_type": "Automated",
+      "impact_area": "UI",
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Functional-Low",
+        "MEDIA",
+        "Web"
+      ],
+      "steps": [
+        {
+          "action": "Switch to Arabic",
+          "expected": "Arabic locale active"
+        },
+        {
+          "action": "Load the page with zero Published records",
+          "expected": "Message &quot;لا توجد تقارير متاحة حالياً.&quot; displays in place of the grid"
+        }
+      ]
+    }
+  ]
+}

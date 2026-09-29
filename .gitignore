@@ -43,3 +43,8 @@ temp/
 # to any repo review. Delete _to_delete/ manually after confirming nothing
 # in it is needed.
 _to_delete/
+
+# Local QA Engine plugin checkout — a separate repo, accidentally committed
+# as a bare gitlink (mode 160000) with no .gitmodules, which left every clone
+# with an uninitialisable submodule. Untracked here on purpose.
+AI-Plugin/
