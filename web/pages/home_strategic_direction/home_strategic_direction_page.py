@@ -180,6 +180,51 @@ value):
     (`document.documentElement.scrollWidth == clientWidth`) at 375x812,
     768x1024, or 1920x1080, and the section/stage render with a real,
     non-zero box at each width.
+
+--- Additional verification, origin/main merge (2026-08-31 / 2026-09-01) ---
+
+CONFIRMED LIVE this session (2026-08-31, headless Chromium, 1920x1080, real
+qcdev Home Page HTML, via the same one-process Python probe documented in
+home_strategic_direction_admin_page.py's module docstring) — content not
+covered by the extraction pass above:
+
+  - The section is SERVER-RENDERED: all 3 pillar cards' full markup
+    (title + description + icon) are present in the initial HTML response
+    for the un-authenticated public Home Page — confirmed by reading
+    `body.inner_text()`/`inner_html()` right after `page.goto()` with only a
+    short settle wait, no client-side fetch/poll needed to see the content.
+    Per cms-profile.md's scope note (written for the JAX-RS-backed Board of
+    Directors pages), this does NOT generalize automatically to every
+    content type on this project — Strategic Pillar Cards' own render path
+    was independently confirmed server-side this session, not assumed.
+  - Confirmed live pairing with the admin surface: each card's icon <img>
+    src embeds `objectEntryExternalReferenceCode=QCDEMO-129381-
+    STRATEGIC_PILLAR_CARD-0N`, confirming this public section is driven by
+    exactly the admin Object Definition entries documented in
+    home_strategic_direction_admin_page.py (ID 49056/49082/49108 ->
+    ...-01/-02/-03 respectively) — not a separate/duplicated content source.
+
+VERDICT (2026-09-01, framework-improvement review): a permanent dedicated
+"QA-TEST Pillar Card" record was considered as a safer alternative to
+mutate-then-restore against the real "Mission" record for TC 135557. NOT
+adopted. Reasoning is NOT that the layout is a fixed-N grid (not verified
+either way this session — all 3 cards are simply present in
+`.qc-sd-stage`'s DOM together, which is consistent with either a fixed or a
+variable-length carousel) — the reasoning is that a permanent test record
+here would render on the LIVE public Home Page for every real visitor, not
+just in a test context, since this section is server-rendered directly
+from the Object Definition entries. That is real, user-facing content
+pollution regardless of how the carousel happens to size itself, and is
+reason enough on its own not to add one. TC 135557 continues to
+mutate-then-restore the real Mission record (baseline capture/restore
+discipline), per cms-profile.md's TEST_OWNED-vs-real tradeoff — correctness
+over convenience.
+  - No dedicated "cache refresh" UI action was found or needed to observe a
+    change (see the admin Page Object's docstring on propagation) — a plain
+    page reload is what `reload_until_card_visible()` /
+    `reload_until_card_description_matches()` below perform, polled rather
+    than a bare sleep per cms-profile.md's Publish/Propagation Latency
+    Budget guidance.
 """
 
 import re
@@ -270,6 +315,10 @@ class HomeStrategicDirectionPage(BasePage):
         self.wait_for(self.SECTION)
         return self
 
+    def wait_for_carousel(self) -> "HomeStrategicDirectionPage":
+        self.wait_for(self.STAGE)
+        return self
+
     def scroll_to_section(self) -> "HomeStrategicDirectionPage":
         self.page.locator(self.SECTION).scroll_into_view_if_needed()
         return self
@@ -352,6 +401,25 @@ class HomeStrategicDirectionPage(BasePage):
     def card_count(self) -> int:
         return self.page.locator(self.CARD).count()
 
+    def card_locator_by_title(self, title: str) -> str:
+        return f'{self.CARD}:has({self.CARD_TITLE}:text-is("{title}"))'
+
+    def is_card_visible(self, title: str) -> bool:
+        """Presence-in-DOM check by pillar title — distinct from
+        `is_active_card_visible()`, since all 3 cards are present in
+        `.qc-sd-stage`'s DOM simultaneously (server-rendered, confirmed
+        live) regardless of which one currently carries `.is-active`."""
+        return self.is_visible(self.card_locator_by_title(title))
+
+    def card_description(self, title: str) -> str:
+        return self.text(f"{self.card_locator_by_title(title)} p")
+
+    def card_titles_all(self) -> list:
+        """All 3 pillar titles regardless of active/inactive opacity state —
+        contrast with `visible_card_titles()`, which filters to only the
+        computed-opacity-visible (active) card(s)."""
+        return self.page.locator(f"{self.CARD} {self.CARD_TITLE}").all_inner_texts()
+
     def active_card_title_text(self) -> str:
         return self.page.locator(self.ACTIVE_CARD).locator(self.CARD_TITLE).inner_text()
 
@@ -385,6 +453,37 @@ class HomeStrategicDirectionPage(BasePage):
         raw = self.active_card_style()["transitionDuration"]
         first = raw.split(",")[0].strip()
         return float(first.replace("s", "")) if first.endswith("s") else 0.0
+
+    # ── Content propagation polling (admin <-> public, TC 135557) ────────
+    def reload_until_card_description_matches(
+        self, title: str, expected_text: str, timeout_ms: int = 5000, interval_ms: int = 500
+    ) -> bool:
+        """Poll (reload + re-check), never a bare sleep — per
+        cms-profile.md's Publish/Propagation Latency Budget guidance
+        (measured ~0s for the Board Members data source; not
+        independently re-measured for Strategic Pillar Cards this
+        session, so the conservative default timeout/interval is used
+        rather than assuming the same near-instant figure)."""
+        elapsed = 0
+        while elapsed <= timeout_ms:
+            self.open_home()
+            self.wait_for_carousel()
+            if self.is_card_visible(title) and self.card_description(title) == expected_text:
+                return True
+            self.page.wait_for_timeout(interval_ms)
+            elapsed += interval_ms
+        return False
+
+    def reload_until_card_visible(self, title: str, timeout_ms: int = 5000, interval_ms: int = 500) -> bool:
+        elapsed = 0
+        while elapsed <= timeout_ms:
+            self.open_home()
+            self.wait_for_carousel()
+            if self.is_card_visible(title):
+                return True
+            self.page.wait_for_timeout(interval_ms)
+            elapsed += interval_ms
+        return False
 
     # ── Nav arrows ───────────────────────────────────────────────────────
     def _arrow_locator(self, which: str) -> str:

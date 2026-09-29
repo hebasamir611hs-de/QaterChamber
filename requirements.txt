@@ -10,8 +10,22 @@ allure-pytest==2.13.5
 playwright==1.47.0
 pytest-playwright==0.5.2
 
-# --- axe-playwright-python REMOVED (2026-08-18 mentor review): it was added
-#     for web/tests/header/test_accessibility.py, a file that does not exist
-#     in this tree — a dead dependency pointing at a dead reference. Re-add
-#     it (pinned) in the same commit that actually adds the contrast-audit
-#     test (PBI 133381 / GLOBAL-ACCESSIBILITY-TC-005), not before. ---
+# --- Accessibility (WCAG contrast audit) ---
+# axe-playwright-python was REMOVED 2026-08-18 (mentor review): it had been
+# added for web/tests/header/test_accessibility.py, a file that never existed
+# in this tree — a dead dependency pointing at a dead reference. The removal
+# comment originally gated re-adding it on "PBI 133381 / GLOBAL-ACCESSIBILITY-
+# TC-005" — that PBI number was itself stale, corrected in pytest.ini on
+# 2026-08-19: 133381 was an orphaned duplicate "User Story" sharing the same
+# title as the real PBI, 129364 (QC-GBL-003 "Accessibility Tools"). Re-added
+# here, pinned, in the same commit that adds ADO #134632's real contrast-
+# audit test (AccessibilityToolsComponent.run_color_contrast_audit(),
+# web/tests/components/test_accessibility_tools_web.py) — this project's PBI
+# 129364, not 133381.
+# Pinned to 0.1.8 (latest on PyPI as of this pass): its only runtime
+# dependency is playwright>=1.36.0, comfortably satisfied by this file's
+# playwright==1.47.0 pin (and the 1.55.0 actually installed in this
+# environment) on Python 3.13 — confirmed by installing and running a real
+# axe-core color-contrast audit against the live qcdev homepage before
+# writing the test (0 violations observed with High Contrast active).
+axe-playwright-python==0.1.8

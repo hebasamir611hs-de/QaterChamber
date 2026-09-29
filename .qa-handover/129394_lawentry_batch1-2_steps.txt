@@ -1,0 +1,108 @@
+
+### 134940 — Verify that a valid SVG Law Entry Icon under 2 MB is accepted
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the Law Entry Icon field available
+  2. Upload law-icon.svg (SVG, 40 KB) to the Law Entry Icon field and click Save
+     -> Upload is accepted with no validation error and the success toast is shown
+  3. Reload the law entry record
+     -> The Law Entry Icon field shows law-icon.svg as the stored image
+
+### 134941 — Verify that a Law Entry Icon in an unsupported format is rejected
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the Law Entry Icon field available
+  2. Upload law-icon.gif (GIF, 80 KB) to the Law Entry Icon field
+     -> Upload is rejected with an image-format validation error naming JPG, PNG and SVG as the permitted formats, and the previously stored icon is unchanged
+
+### 134942 — Verify that a Law Entry Icon above 2 MB is rejected at the size boundary
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with the Law Entry Icon field available
+  2. Upload icon-2mb.png (PNG, exactly 2 MB) to the Law Entry Icon field and click Save
+     -> The exactly-2 MB file is accepted and saved with the success toast shown
+  3. Upload icon-oversize.png (PNG, 2.1 MB) to the same field
+     -> The 2.1 MB file is rejected with 'Image size must not exceed 2 MB.' and the stored icon is unchanged
+  4. Upload icon-1_5mb.png (PNG, 1.5 MB) to the same field
+     -> The 1.5 MB file is accepted and saved - the field is not capped at the 1 MB figure printed in the PBI field table
+
+### 134943 — Verify that saving a law entry without an icon is blocked
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Create a new law entry under the Chamber's Law page with all other mandatory fields completed and the Law Entry Icon field empty
+     -> The law entry form is completed except for the icon
+  2. Click Save
+     -> Save is blocked with a required-field validation error against Law Entry Icon and no success toast appears
+  3. Check the Law Entry list
+     -> No new law entry record appears in the Law Entry list
+
+### 134944 — Verify that a valid English Law Number is accepted and saved
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Number (EN) editable
+  2. Enter 'Law No. 11 of 1990' in Law Number (EN) and click Save
+     -> Value is accepted with no validation error and the success toast is shown
+  3. Reload the law entry record
+     -> Law Number (EN) reads 'Law No. 11 of 1990' with its punctuation preserved
+
+### 134945 — Verify that an empty English Law Number is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record with Law Number (EN) populated
+     -> Law entry record opens with Law Number (EN) populated
+  2. Clear Law Number (EN) completely and click Save
+     -> Save is blocked with a required-field validation error against Law Number (EN) and no success toast appears
+  3. Reload the law entry record
+     -> Law Number (EN) retains its previous value
+
+### 134946 — Verify that the English Law Number accepts exactly 100 characters and rejects 101
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Number (EN) editable
+  2. Enter a 100-character string in Law Number (EN) and click Save
+     -> The 100-character value is accepted and saved with the success toast shown
+  3. Enter a 101-character string in Law Number (EN) and click Save
+     -> The 101st character is not accepted — the field caps at 100 characters or a max-length validation error is shown and the value is not saved
+
+### 134947 — Verify that a whitespace-only English Law Number is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Number (EN) editable
+  2. Enter four space characters in Law Number (EN) and click Save
+     -> Save is blocked with a required-field validation error and no success toast appears
+  3. Reload the law entry record
+     -> Law Number (EN) retains its previous value and is not stored as blank or spaces
+
+### 134948 — Verify that a valid Arabic Law Number is accepted and saved
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Number (AR) editable
+  2. Enter 'القانون رقم 11 لسنة 1990' in Law Number (AR) and click Save
+     -> Value is accepted with no validation error and the success toast is shown
+  3. Reload the law entry record
+     -> Law Number (AR) reads 'القانون رقم 11 لسنة 1990' with the Arabic text and the digits 11 and 1990 intact and in the correct order
+
+### 134949 — Verify that an empty Arabic Law Number is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record with Law Number (AR) populated
+     -> Law entry record opens with Law Number (AR) populated
+  2. Clear Law Number (AR) completely and click Save
+     -> Save is blocked with a required-field validation error against Law Number (AR) and no success toast appears
+  3. Reload the law entry record
+     -> Law Number (AR) retains its previous value
+
+### 134950 — Verify that the Arabic Law Number accepts exactly 100 characters and rejects 101
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Number (AR) editable
+  2. Enter a 100-character Arabic string in Law Number (AR) and click Save
+     -> The 100-character Arabic value is accepted and saved with the success toast shown
+  3. Enter a 101-character Arabic string in Law Number (AR) and click Save
+     -> The 101st character is not accepted — the field caps at 100 characters or a max-length validation error is shown and the value is not saved
+
+### 134951 — Verify that a whitespace-only Arabic Law Number is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Number (AR) editable
+  2. Enter four space characters in Law Number (AR) and click Save
+     -> Save is blocked with a required-field validation error and no success toast appears
+  3. Reload the law entry record
+     -> Law Number (AR) retains its previous value and is not stored as blank or spaces

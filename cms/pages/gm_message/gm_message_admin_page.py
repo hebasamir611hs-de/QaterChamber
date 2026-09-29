@@ -85,7 +85,7 @@ module docstring is RESOLVED; see that module's updated note):
     docstrings for precedent).
 
   CORRECTED 2026-09-07 (per .claude/context/active/standards.md's "Object
-  Authoring Is the Only Path for Publish/Unpublish/Draft/Preview Actions"):
+  Authoring Is the Only Path for Content Operations"):
   the "No dedicated Preview action" / "Status field IS the publish control"
   notes directly above describe the **Content & Data** surface only, and
   that surface is NOT the correct/supported path for lifecycle actions.

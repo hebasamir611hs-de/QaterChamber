@@ -207,6 +207,13 @@ class HeaderComponent(BasePage):
     LANGUAGE_SWITCHER = f"{HEADER} >> a.qc-lang-switcher"
     ACCESSIBILITY_BUTTON = f'{HEADER} >> role=button[name="Accessibility tools"]'
     SEARCH_BUTTON = f"{HEADER} >> a.qc-search-btn"
+    # Mobile/tablet menu trigger. Confirmed live 2026-09-17 (PBI 129408's
+    # responsive cases): at <=768px the desktop `nav.qc-nav` collapses to a
+    # zero box and this hamburger renders in its place; at 1920px the reverse
+    # holds. Declared here rather than in a Page Object because it is a header
+    # element — nothing else in the tree had declared it yet, so this adds a
+    # locator rather than duplicating one.
+    MOBILE_HAMBURGER = f"{HEADER} >> .qc-hamburger"
 
     # ── Second pass: nav sub-menu affordance / dropdown collapse state ──
     # `.qc-has-children` marks the 3 of 11 top-level items that carry a
@@ -322,6 +329,12 @@ class HeaderComponent(BasePage):
 
     def is_accessibility_button_visible(self) -> bool:
         return self.is_visible(self.ACCESSIBILITY_BUTTON)
+
+    def is_desktop_nav_visible(self) -> bool:
+        return self.is_visible(self.NAV)
+
+    def is_mobile_hamburger_visible(self) -> bool:
+        return self.is_visible(self.MOBILE_HAMBURGER)
 
     def open_search(self) -> "HeaderComponent":
         self.click(self.SEARCH_BUTTON)

@@ -1,0 +1,72 @@
+
+### 134952 — Verify that a valid English Law Title is accepted and saved
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Title (EN) editable
+  2. Enter 'Establishment of the Qatar Chamber of Commerce and Industry' in Law Title (EN) and click Save
+     -> Value is accepted with no validation error and the success toast is shown
+  3. Reload the law entry record
+     -> Law Title (EN) reads 'Establishment of the Qatar Chamber of Commerce and Industry'
+
+### 134953 — Verify that an empty English Law Title is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record with Law Title (EN) populated
+     -> Law entry record opens with Law Title (EN) populated
+  2. Clear Law Title (EN) completely and click Save
+     -> Save is blocked with a required-field validation error against Law Title (EN) and no success toast appears
+  3. Reload the law entry record
+     -> Law Title (EN) retains its previous value
+
+### 134954 — Verify that the English Law Title accepts exactly 200 characters and rejects 201
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Title (EN) editable
+  2. Enter a 200-character string in Law Title (EN) and click Save
+     -> The 200-character value is accepted and saved with the success toast shown
+  3. Enter a 201-character string in Law Title (EN) and click Save
+     -> The 201st character is not accepted — the field caps at 200 characters or a max-length validation error is shown and the value is not saved
+
+### 134955 — Verify that a whitespace-only English Law Title is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Title (EN) editable
+  2. Enter four space characters in Law Title (EN) and click Save
+     -> Save is blocked with a required-field validation error and no success toast appears
+  3. Reload the law entry record
+     -> Law Title (EN) retains its previous value and is not stored as blank or spaces
+
+### 134956 — Verify that a valid Arabic Law Title is accepted and saved
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Title (AR) editable
+  2. Enter 'تأسيس غرفة قطر للتجارة والصناعة' in Law Title (AR) and click Save
+     -> Value is accepted with no validation error and the success toast is shown
+  3. Reload the law entry record
+     -> Law Title (AR) reads 'تأسيس غرفة قطر للتجارة والصناعة' with the Arabic characters intact
+
+### 134957 — Verify that an empty Arabic Law Title is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record with Law Title (AR) populated
+     -> Law entry record opens with Law Title (AR) populated
+  2. Clear Law Title (AR) completely and click Save
+     -> Save is blocked with a required-field validation error against Law Title (AR) and no success toast appears
+  3. Reload the law entry record
+     -> Law Title (AR) retains its previous value
+
+### 134958 — Verify that the Arabic Law Title accepts exactly 200 characters and rejects 201
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Title (AR) editable
+  2. Enter a 200-character Arabic string in Law Title (AR) and click Save
+     -> The 200-character Arabic value is accepted and saved with the success toast shown
+  3. Enter a 201-character Arabic string in Law Title (AR) and click Save
+     -> The 201st character is not accepted — the field caps at 200 characters or a max-length validation error is shown and the value is not saved
+
+### 134959 — Verify that a whitespace-only Arabic Law Title is rejected on save
+tags: ABOUT, Ai_MCP_Injected, Automation, Bilingual, Control_Panel, Functional-Low
+  1. Open a law entry record under the Chamber's Law page in Liferay CMS
+     -> Law entry record opens with Law Title (AR) editable
+  2. Enter four space characters in Law Title (AR) and click Save
+     -> Save is blocked with a required-field validation error and no success toast appears
+  3. Reload the law entry record
+     -> Law Title (AR) retains its previous value and is not stored as blank or spaces

@@ -24,11 +24,35 @@ Output is one line per element, ranked best-tier first:
 """
 import argparse
 import sys
+from pathlib import Path
 
 try:
     from playwright.sync_api import sync_playwright
 except ImportError:
     sys.exit("playwright not installed. Run: pip install playwright && playwright install chromium")
+
+# This script's own directory (tools/) is what Python puts on sys.path[0] when
+# invoked as `python tools/extract_locators.py` from the project root -- NOT
+# the project root itself. Insert the root explicitly so `core.web.*` below
+# resolves regardless of the cwd this was launched from (found live: a plain
+# `python tools/extract_locators.py --url .../home` returned ZERO candidates
+# against qcdev because the dev-instance license-gate interstitial
+# (core/web/license_gate.py) intercepted the navigation and this script had
+# no path to import the same guard BasePage.open() uses).
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
+# Optional site-specific navigation guards (license gate / blocking overlays).
+# Not every project has these -- import defensively so the extractor stays a
+# generic, reusable tool: absent on a fresh scaffold, present here because
+# this project's core/web/ already wires them into BasePage.open().
+try:
+    from core.web.license_gate import clear_license_gate, remember_target
+    from core.web.overlays import dismiss_overlays, MOUNT_GRACE_MS
+    _SITE_GUARDS = True
+except ImportError:
+    _SITE_GUARDS = False
 
 # Best -> worst. The extractor prefers the highest tier that is UNIQUE on the page.
 TIER_ORDER = ["testid", "role", "id", "css"]
@@ -122,6 +146,16 @@ def build_candidate(page, rec):
 
 
 def main():
+    # Windows consoles often default stdout to cp1252, which cannot encode
+    # the "⚠" warning glyph below (or Arabic labels harvested from an
+    # RTL page) and crashes the whole run with UnicodeEncodeError right as
+    # results are about to print. Force UTF-8 defensively; a no-op on
+    # terminals already UTF-8. Found live extracting for PBI 129365.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # noqa: BLE001 — never let a console-encoding quirk crash extraction
+        pass
+
     ap = argparse.ArgumentParser(description="CLI-first web locator extractor")
     ap.add_argument("--url", required=True)
     ap.add_argument("--scope", default=None, help="CSS to limit harvesting to a container")
@@ -142,7 +176,15 @@ def main():
         ctx = browser.new_context(**ctx_kwargs)
         page = ctx.new_page()
         page.set_default_timeout(args.timeout)
+        if _SITE_GUARDS:
+            remember_target(page, args.url)
         page.goto(args.url, wait_until="domcontentloaded")
+        if _SITE_GUARDS:
+            # Same guard sequence as BasePage.open() -- clears the license
+            # interstitial and the announcement overlay before harvesting,
+            # so extraction sees the real target page, not a blocked one.
+            clear_license_gate(page, args.url)
+            dismiss_overlays(page, grace_ms=MOUNT_GRACE_MS)
         try:
             page.wait_for_load_state("networkidle", timeout=5000)
         except Exception:

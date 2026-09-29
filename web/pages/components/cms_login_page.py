@@ -91,30 +91,65 @@ class CmsLoginPage(BasePage):
     SUBMIT_BUTTON = (
         '#_com_liferay_login_web_portlet_LoginPortlet_loginForm button[type="submit"]'
     )
-    # OR'd with the Product Menu toggle (2026-08-25) — both were confirmed
-    # present together right after a real login, but ORing guards against a
-    # render-order race between the two nav elements rather than relying on
-    # either alone. See module docstring's "Merged 2026-08-31" note.
-    LOGIN_SUCCESS_INDICATOR = 'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'
+    # CORRECTED 2026-09-28 — this was ADMIN-ONLY and silently broke every
+    # non-privileged role login. The previous indicator was
+    # `nav[aria-label="Control Menu"], [data-qa-id="productMenu"]`, chosen in
+    # 2026-08 when the only account available was the super-admin. The
+    # Control Menu is a staff toolbar that Liferay renders only for users
+    # with admin-level permissions, so `login()` timed out after a perfectly
+    # successful sign-in for anyone else.
+    #
+    # Measured live 2026-09-28, immediately after a real login on each of the
+    # three role accounts:
+    #
+    #   role                   signedIn  body.signed-in  Control Menu
+    #   Site Content Editor    True      True            True
+    #   Site Content Author    True      True            FALSE
+    #   Site Member (no role)  True      True            FALSE
+    #
+    # `body.signed-in` is the only one true for every role, so it is the
+    # success signal. It is also the right *semantic* signal: the question
+    # login() asks is "is a session established", not "is this user an admin".
+    LOGIN_SUCCESS_INDICATOR = "body.signed-in"
+
+    # Kept separately because it IS a real, useful signal — just of privilege,
+    # not of login. Use has_admin_toolbar() to assert that a role does or does
+    # not get the staff toolbar; never to decide whether login worked.
+    ADMIN_TOOLBAR_INDICATOR = 'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'
 
     def open_login(self) -> "CmsLoginPage":
         self.open(control_panel_url(self.LOGIN_PATH))
         return self
 
     def login(self, username: str, password: str) -> "CmsLoginPage":
+        """Sign in and wait for a session to actually exist. Works for every
+        role, privileged or not — see LOGIN_SUCCESS_INDICATOR's note.
+
+        `state="attached"` rather than `"visible"`: the signal is a class on
+        <body>, which is a layout element Playwright does not consider
+        "visible" in the usual sense. `.first` is kept because BasePage's
+        bare locator wait enforces strict mode."""
         self.type(self.USERNAME_INPUT, username)
         self.type(self.PASSWORD_INPUT, password)
         self.click(self.SUBMIT_BUTTON)
-        # .first: LOGIN_SUCCESS_INDICATOR legitimately matches BOTH the
-        # Control Menu nav AND the Product Menu toggle once logged in.
-        # BasePage.wait_for()'s bare page.locator(...).wait_for() enforces
-        # Playwright strict mode and throws on a 2-element match, so it's
-        # called directly here rather than through the generic wrapper.
-        self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="visible", timeout=10000)
+        self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.wait_for(
+            state="attached", timeout=15000
+        )
         return self
 
     def login_succeeded(self) -> bool:
+        """True when a session exists — for any role. Never raises."""
         try:
-            return self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.is_visible()
+            return self.page.locator(self.LOGIN_SUCCESS_INDICATOR).count() > 0
         except Exception:  # noqa: BLE001 — mirrors BasePage.is_visible's never-throws contract
+            return False
+
+    def has_admin_toolbar(self) -> bool:
+        """True when this session renders Liferay's staff toolbar — a
+        PRIVILEGE check, not a login check. Confirmed live 2026-09-28: true
+        for Site Content Editor, false for Site Content Author and for a
+        site-member-only account. Never raises."""
+        try:
+            return self.page.locator(self.ADMIN_TOOLBAR_INDICATOR).count() > 0
+        except Exception:  # noqa: BLE001
             return False

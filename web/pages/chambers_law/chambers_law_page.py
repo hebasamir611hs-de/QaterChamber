@@ -205,8 +205,26 @@ class ChambersLawPage(BasePage):
     def intro_image_alt(self) -> str:
         return self.page.locator(self.INTRO_IMG).get_attribute("alt") or ""
 
+    def intro_image_src(self) -> str:
+        """`src` of the intro figure image -- this is the **Content Image**
+        authored on the `Chamber Laws Page` singleton record (NOT a card's
+        Law Icon). CONFIRMED LIVE 2026-09-15, anonymous/logged-out: the URL
+        carries `objectEntryExternalReferenceCode=
+        QCDEMO-129394-CHAMBER_LAWS_PAGE-ENTRY`, i.e. the delivered image
+        names that object entry as its owner -- which is what makes this a
+        real proof of WHICH file a published Content Image resolves to,
+        exactly as `card_icon_src()` is for a Law Entry's Law Icon.
+        Returns "" when no intro image renders at all."""
+        img = self.page.locator(self.INTRO_IMG)
+        if img.count() == 0:
+            return ""
+        return img.first.get_attribute("src") or ""
+
     def is_intro_image_visible(self) -> bool:
         return self.is_visible(self.INTRO_IMG)
+
+    def is_intro_section_visible(self) -> bool:
+        return self.is_visible(self.INTRO_SECTION)
 
     # ---- References section ----------------------------------------------------
     def is_refs_heading_visible(self) -> bool:
@@ -245,11 +263,37 @@ class ChambersLawPage(BasePage):
     def card_icon_visible(self, law_number: str) -> bool:
         return self._card(law_number).locator(".qc-cl-card-icon").is_visible()
 
+    def card_icon_src(self, law_number: str) -> str:
+        """`src` of the card's rendered icon image — confirmed live
+        2026-09-09 as `<span class="qc-cl-card-icon"><img
+        class="qc-cl-card-icon-img" src="/documents/.../law-icon.svg/...">`.
+        Used to prove WHICH file a published Law Icon resolves to, since the
+        authoring form's own filename readout cannot be trusted for that
+        (see ObjectAuthoringPage.current_file_name()'s docstring)."""
+        return (
+            self._card(law_number)
+            .locator(".qc-cl-card-icon-img")
+            .get_attribute("src")
+            or ""
+        )
+
     def card_cta_count(self, law_number: str) -> int:
         return self._card(law_number).locator(".qc-cl-card-cta").count()
 
     def card_cta_label(self, law_number: str) -> str:
         return self._card(law_number).locator(".qc-cl-cta-label").inner_text()
+
+    def card_title_is_link(self, law_number: str) -> bool:
+        """True when the card's title element is an ANCHOR at all.
+
+        Added 2026-09-15 for TC 134971, which clears a law entry's External
+        Link URL and then asks that the public card show "no broken or
+        empty-destination CTA". Without this, "" from card_title_href()
+        conflates two opposite outcomes -- the title rendered as plain text
+        (correct: nothing to click) and the title rendered as an <a> whose
+        href is empty (the defect the case is looking for) -- and the test
+        would report a bug for the correct behaviour."""
+        return self._card(law_number).locator("a.qc-cl-card-title").count() > 0
 
     def card_title_href(self, law_number: str) -> str:
         return self._card(law_number).locator(".qc-cl-card-title").get_attribute("href") or ""
@@ -281,6 +325,27 @@ class ChambersLawPage(BasePage):
             return new_page_info.value
         except Exception:  # noqa: BLE001 — no new tab opened (same-tab nav)
             return None
+
+    # ---- Whole-page state ---------------------------------------------------
+    def body_text(self) -> str:
+        """Full rendered text of the page, for "this string must NOT appear
+        anywhere publicly" draft-leak assertions. Lives here (not as a raw
+        `text("body")` call in a test) so no test has to hold a locator."""
+        return self.page.locator("body").inner_text()
+
+    def renders_page_level_content(self, page_title: str) -> bool:
+        """True when the page-level content authored on the `Chamber Laws
+        Page` record is actually being SERVED: the hero `<h1>` renders and
+        carries the given (CMS-captured, never hardcoded) Page Title.
+        Written as a never-throwing state query so it can be polled against
+        a page that may legitimately stop serving altogether while the
+        record is unpublished."""
+        try:
+            if self.page.locator(self.HERO_TITLE).count() == 0:
+                return False
+            return self.page.locator(self.HERO_TITLE).first.inner_text().strip() == page_title.strip()
+        except Exception:  # noqa: BLE001 -- mirrors is_visible()'s contract
+            return False
 
     # ---- Layout / direction -----------------------------------------------------
     def document_direction(self) -> str:

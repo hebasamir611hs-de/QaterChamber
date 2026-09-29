@@ -517,3 +517,193 @@ def test_preview_shows_section_before_publishing(page):
             authoring.delete_entry_by_title(title)
         except Exception:
             logger.warning("teardown for %r did not complete — leftover QCTEST data may remain", title)
+
+
+# ---------------------------------------------------------------------------
+# ADO 135348 / 135350 -- added 2026-09-10
+#
+# THESE TWO ARE NOT News Article cases. They were handed over in a batch
+# labelled "News Articles", but their own ADO tags say **SVC** and their
+# expected results name "Tag/heading/description/tabs/cards" and "Our
+# Services section" -- i.e. this module's subject, PBI 129371. Recorded
+# here rather than silently retargeting, so the mismatch is visible.
+#
+# OBJECT NAMES (cms/Content-Admin-Guide.docx section 8 "Home - Our
+# Services"): **ServiceCard** (`manage-service-card`) and **FilterTab**.
+# The guide lists NO third object for this section -- so the section's own
+# Tag / Heading / Description trio is NOT object-authorable content. It is
+# the Page Builder section-header fragment already documented in this
+# module's SURFACE FINDING, which is exactly why TC 135346 above is
+# skipped. That constraint is what shapes both cases below.
+# ---------------------------------------------------------------------------
+
+_TC_135350_SKIP_REASON = (
+    "ADO-135350 requires the WHOLE 'Our Services' section to disappear from "
+    "the live Home Page ('Our Services section no longer appears'). On this "
+    "build there is no object-level way to reach that state: the section is a "
+    "Page Builder fragment (see this module's SURFACE FINDING and TC 135346), "
+    "and standards.md puts fragments and page layout absolutely off-limits to "
+    "automation. The only object-level approximation -- unpublishing or "
+    "deactivating EVERY real ServiceCard until the section renders its empty "
+    "state -- would take the live Our Services section down for the duration "
+    "of a run on a SHARED environment and would mutate real editorial rows, "
+    "which standards.md forbids outright. Deliberately NOT force-fit onto "
+    "unpublishing a single fixture card: that removes one CARD, not the "
+    "SECTION, and asserting it would silently rewrite the case. Referred to "
+    "the QA Manager/BA: either the case belongs on a disposable environment "
+    "where the fragment can be unpublished, or it should be reworded to the "
+    "card-level behaviour that TC 135352 and the Promotional Banner unpublish "
+    "cases already cover."
+)
+
+
+@allure.epic("Home Page")
+@allure.feature("Our Services")
+@allure.story("Content workflow - publish")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Publish makes the configured section live on the Home Page")
+@pytest.mark.control_panel
+@pytest.mark.svc
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.pbi_129371
+@pytest.mark.tc_135348
+@pytest.mark.traceability("135348")
+def test_publish_makes_configured_section_live_on_home_page(page, browser):
+    """ADO-135348 (Control_Panel, SVC, Regression, UAT; Priority 1).
+    Steps, quoted verbatim from the Azure DevOps work item:
+      1. Click Publish -> Liferay generic success toast shown
+      2. Refresh cache -> Cache refreshed
+      3. Open live Home Page -> Home Page displays the published
+         Tag/heading/description/tabs/cards exactly as configured
+
+    SCOPE, DISCLOSED. The case has no Arrange step -- it continues from
+    its predecessors (135346 draft / 135347 preview), so "Click Publish"
+    means "publish the thing those cases configured". The Tag / Heading /
+    Description trio is Page Builder fragment config with no safe
+    disposable authoring surface (see _SECTION_HEADER_SKIP_REASON), so
+    this test publishes what IS object-authorable -- a QCTEST ServiceCard
+    -- and then asserts the case's step-3 expected result in full: that
+    the live Home Page renders Tag, heading, description, the tab strip
+    AND the cards, with the newly published card among them.
+
+    That is the same adaptation TC 135347 above already makes for Preview,
+    and it keeps the assertion honest: the header trio is asserted as
+    RENDERED-AS-CONFIGURED (read from the live page), never as written by
+    this test. What this test does NOT prove is that publishing the
+    fragment itself works -- unreachable, same reason 135346 is skipped.
+
+    Step 2's "refresh cache" is a real condition-based poll, and step 3's
+    read runs in a fresh LOGGED-OUT context (mandatory per standards.md).
+    """
+    from core.web.browser import new_context
+
+    authoring = ObjectAuthoringPage(page, slug="service-card")
+    anon_context = new_context(browser, use_auth_state=False)
+    services = HomeServicesPage(anon_context.new_page())
+    title = "QCTEST-135348 Publish Section Card"
+
+    try:
+        with allure.step("Clear any same-titled leftover from a previous run of this case"):
+            authoring.delete_all_entries_by_title(title)
+
+        with allure.step("Configure a Service Card in the section"):
+            authoring.open_new_entry_form()
+            authoring.fill_text("Title", title)
+            authoring.fill_text("Short Description", "QCTEST fixture card for ADO-135348.")
+            authoring.fill_text("Redirect URL", "/web/qatar-chamber/services/qctest-135348")
+            authoring.fill_number("Display Order", "902")
+            authoring.select_combobox_option("Assigned Tab", "Information")
+            authoring.set_checkbox("Active Status", True)
+            authoring.upload_file("Icon", IMAGE_FIXTURE)
+            assert authoring.uploaded_filename("Icon") != "", (
+                "Icon upload did not populate the field before Save"
+            )
+            authoring.upload_file("Image Thumbnail", IMAGE_FIXTURE)
+            assert authoring.uploaded_filename("Image Thumbnail") != "", (
+                "Image Thumbnail upload did not populate the field before Save"
+            )
+            authoring.save_as_draft()
+
+        with allure.step("Click Publish"):
+            authoring.open_entry_by_edit_link(title)
+            authoring.submit_for_publishing()
+            status_published = authoring.row_status_text(title)
+        assert status_published == "Approved", (
+            f"card {title!r} did not reach Approved (this build's Published), "
+            f"got {status_published!r}"
+        )
+
+        with allure.step("Refresh cache and open the live Home Page (anonymous context)"):
+            appeared = services.reload_until(
+                lambda p: title in p.card_titles()
+            )
+        assert appeared, (
+            f"published card {title!r} did not appear in the live Our Services "
+            f"section within {services.RELOAD_POLL_TIMEOUT_MS}ms"
+        )
+
+        with allure.step("Assert the section renders Tag, heading, description, tabs and cards as configured"):
+            services.scroll_to_section()
+            rendered = {
+                "section": services.is_section_visible(),
+                "tag": services.tag_text().strip(),
+                "heading": services.heading_text().strip(),
+                "description": services.description_text().strip(),
+                "tablist": services.is_tablist_visible(),
+                "tabs": services.tab_texts(),
+                "cards": services.total_card_count(),
+            }
+        assert rendered["section"], "the Our Services section is not visible on the live Home Page"
+        assert rendered["tag"], f"section Tag rendered empty: {rendered}"
+        assert rendered["heading"], f"section heading rendered empty: {rendered}"
+        assert rendered["description"], f"section description rendered empty: {rendered}"
+        assert rendered["tablist"] and rendered["tabs"], f"section tab strip not rendered: {rendered}"
+        assert rendered["cards"] > 0, f"section rendered no cards: {rendered}"
+    finally:
+        try:
+            authoring.open_entries_list()
+            if authoring.row_visible(title):
+                authoring.open_entry_by_edit_link(title)
+                if authoring.current_status() == "Approved":
+                    authoring.unpublish_to_edit_as_draft()
+                authoring.set_checkbox("Active Status", False)
+                authoring.save_as_draft()
+        except Exception:  # noqa: BLE001 -- teardown must never mask the real failure
+            logger.warning(
+                "restore for %r did not complete -- a QCTEST card may still be "
+                "live in the Our Services section", title
+            )
+        anon_context.close()
+
+
+@allure.epic("Home Page")
+@allure.feature("Our Services")
+@allure.story("Content workflow - unpublish")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("BLOCKED — Unpublish removes the section from the live Home Page (Page Builder fragment, no safe authoring surface)")
+@pytest.mark.control_panel
+@pytest.mark.svc
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.pbi_129371
+@pytest.mark.tc_135350
+@pytest.mark.traceability("135350")
+@pytest.mark.skip(reason=_TC_135350_SKIP_REASON)
+def test_unpublish_removes_section_from_live_home_page():
+    """ADO-135350 (Control_Panel, SVC, Regression; Priority 2).
+    Steps, quoted verbatim from the Azure DevOps work item:
+      1. Click Unpublish -> Liferay generic success toast shown
+      2. Refresh cache -> Cache refreshed
+      3. Open live Home Page -> Our Services section no longer appears on
+         the Home Page
+
+    Skipped with a concrete, environment-specific reason rather than
+    force-fit onto a green -- see _TC_135350_SKIP_REASON above, and the
+    module's SURFACE FINDING for the underlying fragment constraint. This
+    is the same class of block as TC 135346, and it is reported as a
+    case-vs-build mismatch for the QA Manager to resolve, not resolved
+    unilaterally here.
+    """
+    pytest.fail("Not reached — see the skip reason.")

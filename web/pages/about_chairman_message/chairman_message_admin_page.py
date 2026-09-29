@@ -2,183 +2,175 @@
 web/pages/about_chairman_message/chairman_message_admin_page.py — ChairmanMessageAdminPage.
 
 PBI 129393 / QC-ABOUT-002 "Chairman's Message" — Control_Panel-tagged cases
-(ADO 134759, 134760, 134774, 134776, 134777, 134779, 134780, 134783, 134784,
-134787, 134828, 134829, 134834): the Liferay CMS "Chairman's Message" page
-record — Page Title, Message Content (rich text: heading/paragraphs/bullets/
-inline hyperlink), Chairman Portrait (upload/replace + alt text), Hero Banner
-alt text, Chairman Name/Designation, Publish/Unpublish/Save-as-draft, and the
-Liferay audit log. Sibling of chairman_message_page.py (the public Web-
-platform Page Object for this same PBI). Composes the shared
-web/pages/components/cms_login_page.py for the login step, per this project's
-established reuse convention (never re-author login locators — see
-footer_admin_component.py / home_featured_event_admin_page.py).
+(ADO 134759, 134760, 134774, 134776, 134777, 134778, 134779, 134780, 134783,
+134784, 134787, 134828, 134829, 134834): the Liferay "Chairman Message Page"
+Object Definition entry that drives the public
+/web/qatar-chamber/about-us/chairman-message page (see chairman_message_page.py
+for the public-frontend counterpart).
 
-STATUS: BLOCKED, not guessed (2026-08-26) — the SAME real, confirmed blocker
-this project's own git history already documents for every prior
-Control_Panel batch this sprint (PBI 129366/129382/129390, most recently
-commit 2cbbb4c / test_footer_control_panel.py's `_UNRESOLVED` gate). Login
-itself is real and CLI-confirmed (CmsLoginPage's own docstring, re-confirmed
-2026-08-24) — everything PAST login on the Chairman's Message record (every
-field, upload control, Publish/Unpublish/Save-as-draft button, and the audit
-log screen) is BLOCKED: TEST_USER/TEST_PASSWORD are both blank in .env, and no
-Playwright MCP fallback was available this session either.
+CORRECTED 2026-09-07 (per .claude/context/active/standards.md's "Object
+Authoring Is the Only Path for Content Operations — Not Content & Data",
+superseded/broadened same day): an EARLIER version of this file drove every
+field/lifecycle action through Content & Data (objectDefinitionId=78084) —
+that surface is RETIRED project-wide for this kind of record, not merely for
+publish/unpublish/draft/preview but for field edits too. This file now
+composes `ObjectAuthoringPage` (cms/pages/components/object_authoring_page.py)
+— the same generic, per-object-agnostic Page Object `GmMessageAdminPage` /
+other already-migrated admin pages use — exactly per that file's own
+convention: field-level locators (here, accessible-name label CONSTANTS,
+since this surface has no stable ids/classes and is driven via
+`page.get_by_role(<role>, name=<label>, exact=True)`) stay on THIS class;
+the generic Draft/Preview/Publish/Unpublish state machine stays on
+`ObjectAuthoringPage` and is never duplicated here.
 
-Every locator below is the literal TODO placeholder string (never a
-guessed-but-plausible Liferay selector) — same `_todo()` convention as
-footer_admin_component.py. Replace only after a real authenticated Site
-Content Editor session confirms the real screen live via
-`tools/extract_locators.py --storage-state .auth/state.json` (once
-`tools/save_auth.py` has a working Control Panel login to capture) — never
-mark this file "done" by guessing a plausible-looking Liferay fragment-
-configuration class name.
+REAL, CLI-CONFIRMED FACTS (2026-09-07, headless Chromium against qcdev,
+authenticated via `.auth/state.json`; a second, disclosed, scoped Playwright
+script — still CLI, never the Playwright MCP — since `tools/extract_locators.py`'s
+static harvester does not resolve accessible names the way
+`get_by_role(..., name=...)` does):
+
+  - **Slug**: `chairman-message-page` (i.e. `manage-chairman-message-page`),
+    confirmed live via the Object Authoring listing page
+    (`https://qcdev.ihorizons.com/object-authoring`) — "Chairman Message
+    Page" -> `/web/qatar-chamber/manage-chairman-message-page`.
+  - **Singleton entry code**: `QCDEMO-129393-chairmans-message` (the entries
+    table's own Entry-column text; confirmed live, one row, Status
+    "APPROVED").
+  - **Field labels** (confirmed live via `page.accessibility.snapshot()` on
+    the opened entry, matched with `get_by_role(<role>, name=<label>,
+    exact=True)` — trailing whitespace in the raw accessible name of some
+    fields, e.g. `"Page Title "`, does NOT prevent `exact=True` from
+    matching the plain, trimmed label; confirmed live for every field
+    below): each bilingual field renders as TWO separately-named textboxes
+    (`"<Label>"` for EN, `"<Label> — العربية"` for AR) — no locale-toggle
+    click needed, exactly the pattern `object_authoring_page.py`'s own
+    `field_value()` docstring already documents for GM's Message. Field
+    inventory confirmed live, in on-screen order: Page Title, Hero Banner
+    Image (upload), Hero Banner Alt Text, Chairman Portrait (upload),
+    Chairman Portrait Alt Text, Chairman Name, Chairman Designation,
+    Message Content (rich text, 2 CKEditor instances EN/AR — same
+    `DESCRIPTION_EDITOR_IFRAME`/`fill_rich_text()`/`rich_text_value()`
+    generic mechanism `ObjectAuthoringPage` already provides), Hyperlink
+    Title, Hyperlink URL (NOT bilingual — confirmed live, no
+    "— العربية" counterpart), Status (an extra, redundant combobox on this
+    particular object — NOT used; the real lifecycle actions are the
+    generic Save as Draft / Submit for Publishing / Unpublish to edit as
+    draft buttons `ObjectAuthoringPage` already exposes).
+  - **Preview IS a real, working mechanism on this surface** — CONFIRMED
+    LIVE, correcting an EARLIER (Content & Data-based) finding that
+    wrongly concluded no Preview mechanism exists for this object (that
+    finding was reached through the now-retired surface — see standards.md's
+    explicit warning to re-verify rather than assume a Content & Data-era
+    finding still holds). The entries list's own row-level "Preview" link
+    (`ObjectAuthoringPage.row_preview_url_by_code()`, scoped by this
+    object's Entry-column CODE since it shows the externalReferenceCode,
+    not a friendly title) resolves to
+    `/web/qatar-chamber/about-us/chairman-message?qcPreview=chairmanmessagepages%3A78261`
+    — a real navigation to the live public page with that record pinned for
+    preview, confirmed live to render the status banner
+    "PREVIEW — showing a published chairmanmessagepages record, exactly as
+    visitors see it." (or the Draft equivalent) via
+    `ObjectAuthoringPage.preview_banner_text()`.
+  - **No Download mechanism exists for the Chairman Portrait / Hero Banner
+    Image fields on this surface** (confirmed live via the full
+    accessibility-tree button inventory near both upload fields: only
+    "Select File" and "Remove file" — no "Download"), which is WORSE than
+    the (also real, but now-retired) Content & Data surface's own Download
+    button for the same field. This is why TC 134783 (Replace Portrait) and
+    134784 (Upload for the first time) remain scripted as SKIPPED in the
+    test module rather than executed — see that module's docstring.
+
+**⚠ REAL, LIVE, DISCLOSED CONTENT FINDING (2026-09-07) — independently
+re-confirmed THREE separate ways this session, not a script bug:** (1)
+reading `Page Title`/`Chairman Name`/`Chairman Designation`/etc. via the
+(now-retired) Content & Data surface, (2) reading the SAME fields via this
+corrected Object Authoring surface, and (3) loading the PUBLIC page itself
+in a genuinely fresh, unauthenticated browser context — ALL THREE report
+**Arabic text** for what this record's own English ("en-us"/default-locale)
+fields are supposed to hold (e.g. Chairman Name reads "الشيخ خليفة بن جاسم بن
+محمد آل ثاني", Page Title reads "رسالة رئيس مجلس الإدارة" — the Arabic
+translation of "Chairman's Message"). This directly contradicts the values
+several EXISTING (uncommitted, prior-session) assertions in
+`chairman_message_page.py` / `test_chairman_message_web.py` assume are
+currently live (English). Root cause undetermined — flagged to the QA
+Manager, not silently resolved or worked around. This does NOT block
+automating the 8 cases in this batch: every CMS-mutating test here is
+TEST_OWNED (cms-profile.md's Test-Data Policy) — it dynamically READS the
+record's current value immediately before mutating and restores that SAME
+captured value in `finally`, regardless of language, rather than assuming
+any particular baseline.
+
+Every OTHER Control_Panel case in this PBI's batch NOT in the current 8-case
+scope (134759, 134760, 134779, 134828, 134829, 134834, plus the audit-log
+half of any case) still reflects the OLDER, now-superseded Content & Data
+findings from 2026-09-01 — flagged here, not silently left stale, for
+whichever future pass migrates those to Object Authoring too.
 """
 
+from cms.pages.components.object_authoring_page import ObjectAuthoringPage
 from core.web.base_page import BasePage
-from config.settings import control_panel_url
 
-_TODO_PREFIX = "TODO:"
-
-
-def _todo(what: str) -> str:
-    return f"{_TODO_PREFIX} run tools/extract_locators.py (as an authenticated Site Content Editor) against the live screen and paste the confirmed selector for {what}"
+# ---- Object Authoring path — the ONLY correct path for this record per
+# standards.md's 2026-09-07 rule (confirmed live, see module docstring) -----
+CHAIRMAN_MESSAGE_OBJECT_AUTHORING_SLUG = "chairman-message-page"
+CHAIRMAN_MESSAGE_ENTRY_CODE = "QCDEMO-129393-chairmans-message"
 
 
 class ChairmanMessageAdminPage(BasePage):
-    # ── Entry point — unreachable without an authenticated session, see docstring ──
-    CHAIRMAN_MESSAGE_RECORD_LINK = _todo("the 'Chairman's Message' content record under Site Content Editor")
-    RECORD_SCREEN = _todo("the Chairman's Message record editor screen's own container")
-    RECORD_STATUS_LABEL = _todo("the record's Status label (Published / Unpublished / Draft)")
+    """Thin holder of this object's field-label constants + entry
+    identity. All navigation/state/lifecycle behaviour is delegated to
+    `ObjectAuthoringPage` via `open_object_authoring_form()` — this class
+    does not duplicate that state machine (see module docstring)."""
 
-    # ── Shared across the record's form ─────────────────────────────────
-    PUBLISH_BUTTON = _todo("the record's Publish button")
-    UNPUBLISH_BUTTON = _todo("the record's Unpublish button")
-    SAVE_DRAFT_BUTTON = _todo("the record's Save as Draft button")
-    SUCCESS_TOAST = _todo("the Liferay generic success toast/notification")
-    REQUIRED_FIELD_ERROR = _todo("the inline required-field validation message")
+    # ---- Field labels — accessible names, confirmed live 2026-09-07 (see
+    # module docstring). Bilingual fields: pass the plain label for EN, or
+    # f"{LABEL} — العربية" for AR, directly to ObjectAuthoringPage.fill_text()
+    # / .field_value() — no locale-toggle click needed on this surface. -----
+    PAGE_TITLE_LABEL = "Page Title"
+    HERO_BANNER_ALT_TEXT_LABEL = "Hero Banner Alt Text"
+    CHAIRMAN_PORTRAIT_ALT_TEXT_LABEL = "Chairman Portrait Alt Text"
+    CHAIRMAN_NAME_LABEL = "Chairman Name"
+    CHAIRMAN_DESIGNATION_LABEL = "Chairman Designation"
+    HYPERLINK_TITLE_LABEL = "Hyperlink Title"  # not bilingual — confirmed live
+    HYPERLINK_URL_LABEL = "Hyperlink URL"  # not bilingual — confirmed live
+    CHAIRMAN_PORTRAIT_UPLOAD_LABEL = "Chairman Portrait"
+    HERO_BANNER_IMAGE_UPLOAD_LABEL = "Hero Banner Image"
+    ARABIC_SUFFIX = " — العربية"
 
-    # ── Page Title / Salutation / Body (ADO 134774, 134777, 134779) ──────
-    PAGE_TITLE_EN_INPUT = _todo("the Page Title (EN) field")
-    MESSAGE_CONTENT_EN_EDITOR = _todo("the Message Content (EN) rich-text editor")
-    MESSAGE_CONTENT_AR_EDITOR = _todo("the Message Content (AR) rich-text editor")
-
-    # ── Rich text controls inside the editor (ADO 134759) ────────────────
-    RICH_TEXT_HEADING_BUTTON = _todo("the rich-text editor's Heading formatting control")
-    RICH_TEXT_BULLET_LIST_BUTTON = _todo("the rich-text editor's Bullet List formatting control")
-    RICH_TEXT_LINK_BUTTON = _todo("the rich-text editor's Insert Link control")
-    RICH_TEXT_LINK_URL_INPUT = _todo("the Insert Link dialog's URL field")
-
-    # ── Hyperlink Title / URL fields (ADO 134780, 134828, 134829, 134834) ─
-    HYPERLINK_TITLE_INPUT = _todo("the message hyperlink's Title field")
-    HYPERLINK_URL_INPUT = _todo("the message hyperlink's URL field")
-    HYPERLINK_OPEN_BEHAVIOUR_TOGGLE = _todo("the message hyperlink's 'Open in new tab' toggle")
-
-    # ── Chairman Name / Designation (ADO 134774, 134787) ─────────────────
-    CHAIRMAN_NAME_EN_INPUT = _todo("the Chairman Name (EN) field")
-    CHAIRMAN_DESIGNATION_EN_INPUT = _todo("the Chairman Designation (EN) field")
-    NAME_FIELD_COUNT_PER_LANGUAGE = _todo("all Chairman Name input fields, scoped per language, to confirm exactly one exists")
-    DESIGNATION_FIELD_COUNT_PER_LANGUAGE = _todo("all Chairman Designation input fields, scoped per language, to confirm exactly one exists")
-
-    # ── Hero Banner / Chairman Portrait alt text (ADO 134760) ────────────
-    HERO_ALT_TEXT_EN_INPUT = _todo("the Hero Banner Alt Text (EN) field")
-    PORTRAIT_ALT_TEXT_EN_INPUT = _todo("the Chairman Portrait Alt Text (EN) field")
-
-    # ── Chairman Portrait upload / replace (ADO 134783, 134784) ──────────
-    PORTRAIT_UPLOAD_INPUT = _todo("the Chairman Portrait upload control")
-    PORTRAIT_CURRENT_PREVIEW = _todo("the record's current Chairman Portrait preview thumbnail")
-
-    # ── Liferay audit log (ADO 134779) ────────────────────────────────────
-    AUDIT_LOG_LINK = _todo("the Liferay audit log nav item")
-    AUDIT_LOG_SCREEN = _todo("the audit log screen's own container")
-    AUDIT_LOG_LATEST_ENTRY = _todo("the audit log's most recent entry row for this record")
+    # HEALED 2026-09-07 (live incident, tc_134777 — see
+    # ObjectAuthoringPage.DESCRIPTION_EDITOR_IFRAME's own docstring for the
+    # full investigation): Message Content's EN/default-locale CKEditor
+    # iframe DOM id is confirmed live to always contain
+    # `ObjectField_messageContent` (Liferay's own canonical object-field
+    # name for this field), independent of DOM mount order — pass this to
+    # `ObjectAuthoringPage.fill_rich_text()`/`.rich_text_value()`'s
+    # `field_name` parameter for a locale-safe, reflow-safe read/write of
+    # this field, instead of the class's default `nth=0` mount-order guess.
+    MESSAGE_CONTENT_FIELD_NAME = "messageContent"
 
     def __init__(self, page):
         super().__init__(page)
 
-    # ── Navigation ───────────────────────────────────────────────────────
-    def open_control_panel_home(self) -> "ChairmanMessageAdminPage":
-        self.open(control_panel_url("/group/qatar-chamber"))
-        return self
+    def open_object_authoring_form(self) -> "ObjectAuthoringPage":
+        """Opens the singleton Chairman's Message entry via Object
+        Authoring — the ONLY correct path for any field edit or lifecycle
+        action on this record (see module docstring). Returns the
+        `ObjectAuthoringPage` directly; callers use its own
+        fill_text()/field_value()/fill_rich_text()/rich_text_value()/
+        save_as_draft()/submit_for_publishing()/unpublish_to_edit_as_draft()/
+        current_status()/row_preview_url_by_code()/preview_banner_text()
+        API, per this project's established convention (see
+        GmMessageAdminPage.open_object_authoring_form() for the identical
+        pattern on a sibling object)."""
+        authoring = ObjectAuthoringPage(self.page, slug=CHAIRMAN_MESSAGE_OBJECT_AUTHORING_SLUG)
+        authoring.open_entry_by_code(CHAIRMAN_MESSAGE_ENTRY_CODE)
+        return authoring
 
-    def navigate_to_chairman_message_record(self) -> "ChairmanMessageAdminPage":
-        self.click(self.CHAIRMAN_MESSAGE_RECORD_LINK)
-        self.wait_for(self.RECORD_SCREEN)
-        return self
-
-    # ── State queries — no asserts, tests do the asserting ──────────────
-    def is_record_screen_visible(self) -> bool:
-        return self.is_visible(self.RECORD_SCREEN)
-
-    def record_status_text(self) -> str:
-        return self.text(self.RECORD_STATUS_LABEL)
-
-    def is_success_toast_visible(self) -> bool:
-        return self.is_visible(self.SUCCESS_TOAST)
-
-    def success_toast_text(self) -> str:
-        return self.text(self.SUCCESS_TOAST)
-
-    def is_required_field_error_visible(self) -> bool:
-        return self.is_visible(self.REQUIRED_FIELD_ERROR)
-
-    def required_field_error_text(self) -> str:
-        return self.text(self.REQUIRED_FIELD_ERROR)
-
-    def name_field_count(self) -> int:
-        return self.page.locator(self.NAME_FIELD_COUNT_PER_LANGUAGE).count()
-
-    def designation_field_count(self) -> int:
-        return self.page.locator(self.DESIGNATION_FIELD_COUNT_PER_LANGUAGE).count()
-
-    # ── Actions ──────────────────────────────────────────────────────────
-    def click_publish(self) -> "ChairmanMessageAdminPage":
-        self.click(self.PUBLISH_BUTTON)
-        return self
-
-    def click_unpublish(self) -> "ChairmanMessageAdminPage":
-        self.click(self.UNPUBLISH_BUTTON)
-        return self
-
-    def click_save_draft(self) -> "ChairmanMessageAdminPage":
-        self.click(self.SAVE_DRAFT_BUTTON)
-        return self
-
-    def set_page_title(self, title_en: str) -> "ChairmanMessageAdminPage":
-        self.type(self.PAGE_TITLE_EN_INPUT, title_en)
-        return self
-
-    def set_message_content_en(self, content_en: str) -> "ChairmanMessageAdminPage":
-        self.type(self.MESSAGE_CONTENT_EN_EDITOR, content_en)
-        return self
-
-    def set_chairman_name(self, name_en: str) -> "ChairmanMessageAdminPage":
-        self.type(self.CHAIRMAN_NAME_EN_INPUT, name_en)
-        return self
-
-    def set_chairman_designation(self, designation_en: str) -> "ChairmanMessageAdminPage":
-        self.type(self.CHAIRMAN_DESIGNATION_EN_INPUT, designation_en)
-        return self
-
-    def set_hero_alt_text(self, alt_en: str) -> "ChairmanMessageAdminPage":
-        self.type(self.HERO_ALT_TEXT_EN_INPUT, alt_en)
-        return self
-
-    def set_portrait_alt_text(self, alt_en: str) -> "ChairmanMessageAdminPage":
-        self.type(self.PORTRAIT_ALT_TEXT_EN_INPUT, alt_en)
-        return self
-
-    def upload_portrait(self, file_path: str) -> "ChairmanMessageAdminPage":
-        self.page.locator(self.PORTRAIT_UPLOAD_INPUT).set_input_files(file_path)
-        return self
-
-    def set_hyperlink(self, title: str, url: str) -> "ChairmanMessageAdminPage":
-        self.type(self.HYPERLINK_TITLE_INPUT, title)
-        self.type(self.HYPERLINK_URL_INPUT, url)
-        return self
-
-    def navigate_to_audit_log(self) -> "ChairmanMessageAdminPage":
-        self.click(self.AUDIT_LOG_LINK)
-        self.wait_for(self.AUDIT_LOG_SCREEN)
-        return self
-
-    def audit_log_latest_entry_text(self) -> str:
-        return self.text(self.AUDIT_LOG_LATEST_ENTRY)
+    def open_entries_list(self) -> "ObjectAuthoringPage":
+        """Opens the entries list (not a specific entry's edit form) — used
+        to resolve the row-level Preview link via
+        `row_preview_url_by_code(CHAIRMAN_MESSAGE_ENTRY_CODE)` (TC 134778),
+        since that link is not present on the edit form itself."""
+        authoring = ObjectAuthoringPage(self.page, slug=CHAIRMAN_MESSAGE_OBJECT_AUTHORING_SLUG)
+        authoring.open_entries_list()
+        return authoring

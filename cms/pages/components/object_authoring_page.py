@@ -2,18 +2,94 @@
 cms/pages/components/object_authoring_page.py — ObjectAuthoringPage.
 
 Shared, per-object-agnostic Control_Panel Page Object for the
-`object-authoring` -> `manage-<slug>` Draft / Preview / Publish / Unpublish
-lifecycle documented in .claude/context/active/standards.md's "Object
-Authoring — Draft / Preview / Publish / Unpublish Lifecycle" section
-(confirmed live 2026-09-03). Lives under pages/components/ (the plugin's
-flat shared-component exception) because the state machine itself is
-generic across every listed Object — only the slug and field data vary
-per object, per that section's own "Testing implication" note. Field-level
-locators (Title, Banner Alt Text (EN), etc.) stay OUT of this class — they
-belong to each object's own admin Page Object (e.g.
-HomeLatestNewsAdminPage, HomePromoBannersAdminPage), which now composes
-this class for its Draft/Preview/Publish/Unpublish cases instead of
-duplicating the state machine.
+`object-authoring` -> `manage-<slug>` editorial lifecycle, documented in
+.claude/context/active/standards.md's "Content Editorial Workflow — Seven
+States, and the Account Decides the Path" section.
+
+CITATION CORRECTED 2026-09-28. This docstring previously cited a
+standards.md section titled "Object Authoring — Draft / Preview / Publish /
+Unpublish Lifecycle". **That section never existed** — checked against the
+full history of standards.md, it was never written under that name. The
+reference nonetheless read as though the two-state Draft/Approved model
+below had been independently agreed and written down, when in fact it only
+ever lived in this docstring, derived from probing the live site through a
+super-admin session. That borrowed authority is a large part of why the
+wrong model went unchallenged for weeks: a reader had no obvious reason to
+re-derive something standards.md appeared to already mandate. The lifecycle
+is now genuinely documented, in the section named above.
+
+Lives under pages/components/ (the plugin's flat shared-component
+exception) because the state machine really is generic across every listed
+Object — only the slug and field data vary per object. That genericity is
+not taken on faith from the phantom section's supposed "Testing
+implication" note: it was verified directly on 2026-09-28 across eight
+objects (law-entry, news-article, promotional-banner, hero-banner-slide,
+publication, about-hero-banner, social-media-icon, strategic-partner),
+every one of which renders the same buttons, badges and row actions.
+
+Field-level locators (Title, Banner Alt Text (EN), etc.) stay OUT of this
+class — they belong to each object's own admin Page Object (e.g.
+HomeLatestNewsAdminPage, HomePromoBannersAdminPage), which composes this
+class for its lifecycle cases instead of duplicating the state machine.
+
+SUPERSEDED IN PART 2026-09-28 — READ THIS BEFORE THE 2026-09-03 NOTES BELOW.
+=============================================================================
+Everything below dated 2026-09-03 was observed through an **admin session**
+(`test@liferay.com`). That account is a *privileged submitter*, and the site
+runs a real Kaleo editorial workflow (`build-resources/workflow/
+qc-editorial-approval.xml`) whose condition node routes privileged submitters
+straight past the review step. So the two-state Draft/Approved machine those
+notes describe is not the system's behaviour — it is one account's view of it.
+
+Re-verified live 2026-09-28 by walking a single probe record end to end on
+manage-law-entry as QC Site Content Author (156492) and QC Site Content Editor
+(156488), then cross-checking seven further objects (news-article,
+promotional-banner, hero-banner-slide, publication, about-hero-banner,
+social-media-icon, strategic-partner). The workflow is GLOBAL, not per-object:
+every one of them shows the same buttons, badges and row actions.
+
+What actually changed versus the notes below:
+
+  - The form button reads **"Submit for Review"**, not "Submit for
+    Publishing". The old string matches nothing. Toast on success is
+    "Saved and submitted for review."
+  - The same button lands on DIFFERENT states depending on the account —
+    confirmed on one record submitted twice: Author -> "Pending Review"
+    (not public), Editor -> "Published" directly. A test that asserts a
+    lifecycle outcome without pinning the account is asserting nothing.
+  - The entries-table badge reads **PUBLISHED**, not APPROVED.
+  - There are seven states, not two: Draft, Pending Review, Rejected,
+    Published, Unpublished, Archived, Scheduled. See WORKFLOW_STATUSES.
+  - The editing banner CAPITALISES the state — "Editing <title> (Draft).
+    Save as Draft or Submit for Review updates this record." The old
+    case-sensitive "(draft)"/"(approved)" parsing therefore reported
+    "Unknown" even for a plain draft.
+  - Unpublish lands on **Unpublished**, a distinct state — NOT Draft. Its
+    confirm() says so verbatim. Archive is reachable from Unpublished only;
+    Restore returns to Unpublished, not to Published.
+  - Row workflow actions (Approve, Reject, Resubmit, Publish, Unpublish,
+    Archive, Restore, Return to Author, Schedule, History) each carry a
+    stable `data-qc-oel-<action>="<entryId>"` attribute, the same convention
+    the pre-existing `data-qc-oel-delete` used. Which ones render depends on
+    the row's status AND the signed-in role.
+  - Those actions drive NATIVE confirm()/prompt() dialogs, often CHAINED
+    (confirm then prompt). Reject and Return to Author raise a prompt whose
+    comment reaches the author and is kept in History; Return's is required.
+  - Each row has a **History** modal holding the audit trail (actor,
+    timestamp, comment) — previously unmodelled, and the best available
+    evidence for a workflow assertion.
+  - `Active Status` is a real form field and **defaults to unchecked** on a
+    new entry. It is a second, independent visibility gate: "Published"
+    alone does not put a record in front of a visitor.
+  - Saving a Draft skips required-field validation; Submit for Review
+    enforces it and refuses with "Please complete the required fields before
+    proceeding with the workflow action for <title>. Nothing has been
+    submitted." — nothing is written in that case.
+  - The entries list's Status filter is built from the statuses actually
+    present in the list, not from a fixed vocabulary.
+
+Not yet exercised live: the Scheduled state (status 7) and the Publish action
+from Unpublished. Treat those two as unverified until someone walks them.
 
 CONFIRMED LIVE 2026-09-03 (headed-equivalent Chromium via Playwright MCP,
 qcdev, existing authenticated admin session) — live end-to-end cycle run
@@ -126,6 +202,67 @@ logger = get_logger("object_authoring_page")
 APPROVED_BANNER_SETTLE_TIMEOUT_MS = 8000
 
 
+# ── Workflow status vocabulary ──────────────────────────────────────────
+# CONFIRMED LIVE 2026-09-28 by walking the full loop on manage-law-entry as
+# Author (156492) then Editor (156488), and cross-checked on seven further
+# objects. The entries-table badge renders UPPERCASE; these are the
+# normalized forms every reader below returns and every caller compares to.
+STATUS_DRAFT = "Draft"
+STATUS_PENDING_REVIEW = "Pending Review"
+STATUS_REJECTED = "Rejected"
+STATUS_PUBLISHED = "Published"
+STATUS_UNPUBLISHED = "Unpublished"
+STATUS_ARCHIVED = "Archived"
+STATUS_SCHEDULED = "Scheduled"
+STATUS_UNKNOWN = "Unknown"
+
+WORKFLOW_STATUSES = (
+    STATUS_DRAFT,
+    STATUS_PENDING_REVIEW,
+    STATUS_REJECTED,
+    STATUS_PUBLISHED,
+    STATUS_UNPUBLISHED,
+    STATUS_ARCHIVED,
+    STATUS_SCHEDULED,
+)
+
+# Only this one is visible to an anonymous visitor, and only while the
+# record's own `Active Status` field is ticked — that checkbox is a second,
+# independent gate and it DEFAULTS TO UNCHECKED on a new entry (confirmed
+# live 2026-09-28). "Published" alone is NOT sufficient for visitor
+# visibility; assert both.
+VISITOR_VISIBLE_STATUS = STATUS_PUBLISHED
+
+# Deprecated: this build has no "Approved" badge — it reads "Published".
+# Kept so a stale comparison fails loudly at import review rather than
+# silently never matching.
+STATUS_APPROVED_LEGACY = STATUS_PUBLISHED
+
+
+def normalize_status(raw: str) -> str:
+    """Map any rendered status badge / banner fragment onto the canonical
+    vocabulary above, case- and whitespace-insensitively.
+
+    REPLACES the previous `.strip().capitalize()` normalization, which was
+    actively wrong for the only two-word status: `"PENDING REVIEW"
+    .capitalize()` yields `"Pending review"`, so a caller comparing against
+    `"Pending Review"` could never match no matter how correct the app was.
+    Returns STATUS_UNKNOWN (never raises) for anything unrecognized, so an
+    unexpected state surfaces as an explicit unknown instead of being
+    silently coerced into a neighbouring one."""
+    if not raw:
+        return STATUS_UNKNOWN
+    collapsed = " ".join(raw.strip().split()).casefold()
+    for known in WORKFLOW_STATUSES:
+        if collapsed == known.casefold():
+            return known
+    # The legacy build's wording, still possible on an un-migrated object.
+    if collapsed == "approved":
+        return STATUS_PUBLISHED
+    return STATUS_UNKNOWN
+
+
+
 class ObjectAuthoringPage(BasePage):
     """Drives one Object's `manage-<slug>` page via the object-authoring
     surface. Construct with the object's slug (e.g. "news-article",
@@ -135,8 +272,36 @@ class ObjectAuthoringPage(BasePage):
     Page Object) varies per object."""
 
     SAVE_AS_DRAFT_BUTTON = 'button:has-text("Save as Draft")'
-    SUBMIT_FOR_PUBLISHING_BUTTON = 'button:has-text("Submit for Publishing")'
-    UNPUBLISH_BUTTON = 'button:has-text("Unpublish to edit as draft")'
+    # RENAMED LIVE 2026-09-28 — the form button reads "Submit for Review"
+    # on every object sampled (see module docstring). The old
+    # "Submit for Publishing" string matches NOTHING on the current build;
+    # SUBMIT_FOR_PUBLISHING_BUTTON is kept only as a deprecated alias so
+    # existing callers keep resolving, and points at the same real button.
+    SUBMIT_FOR_REVIEW_BUTTON = 'button:has-text("Submit for Review")'
+    SUBMIT_FOR_PUBLISHING_BUTTON = SUBMIT_FOR_REVIEW_BUTTON
+    # Row-level workflow actions carry a stable `data-qc-oel-<action>="<entryId>"`
+    # attribute (confirmed live 2026-09-28 on manage-publication /
+    # manage-law-entry / manage-social-media-icon) — the same convention the
+    # pre-existing `data-qc-oel-delete` already used. Preferred over text
+    # matching: the visible label is localised, the attribute is not.
+    ROW_ACTION_ATTRS = {
+        "approve": "data-qc-oel-approve",
+        "reject": "data-qc-oel-reject",
+        "resubmit": "data-qc-oel-resubmit",
+        "publish": "data-qc-oel-publish",
+        "unpublish": "data-qc-oel-unpublish",
+        "archive": "data-qc-oel-archive",
+        "restore": "data-qc-oel-restore",
+        "return": "data-qc-oel-return",
+        "schedule": "data-qc-oel-schedule",
+        "history": "data-qc-oel-history",
+        "delete": "data-qc-oel-delete",
+    }
+    # Legacy in-form Unpublish button. CONFIRMED LIVE 2026-09-28: the
+    # current build exposes Unpublish as a ROW action (see unpublish_entry())
+    # and the in-form button, where present, no longer carries the
+    # "to edit as draft" wording — it is matched on the verb alone.
+    UNPUBLISH_BUTTON = 'button:has-text("Unpublish")'
     CANCEL_AND_ADD_NEW_LINK = 'a:has-text("Cancel and add a new entry instead")'
     ENTRIES_TABLE_ROW = "table tbody tr"
 
@@ -163,27 +328,47 @@ class ObjectAuthoringPage(BasePage):
     # editor on a freshly opened create/edit form, before any locale toggle
     # is touched — the only state this class's fill_rich_text()/
     # rich_text_value() are used in.
+    # RESTORED 2026-09-28 (dropped by the merge; description_editor_iframe()
+    # builds per-field selectors from it).
+    RICH_TEXT_EDITOR_IFRAME_CSS = 'iframe[title="editor"]'
     DESCRIPTION_EDITOR_IFRAME = 'iframe[title="editor"] >> nth=0'
 
-    def fill_rich_text(self, text: str) -> "ObjectAuthoringPage":
-        self.fill_iframe_editor(self.DESCRIPTION_EDITOR_IFRAME, text)
+    def fill_rich_text(self, text: str, field_name: str | None = None) -> "ObjectAuthoringPage":
+        self.fill_iframe_editor(self.description_editor_iframe(field_name), text)
         return self
 
-    def rich_text_value(self) -> str:
-        return self.iframe_editor_text(self.DESCRIPTION_EDITOR_IFRAME)
+    def rich_text_value(self, field_name: str | None = None) -> str:
+        return self.iframe_editor_text(self.description_editor_iframe(field_name))
 
     def __init__(self, page, slug: str):
         super().__init__(page)
         self.slug = slug
+        # RESTORED 2026-09-28 (dropped by the merge). Entry code of whatever
+        # record was last opened for edit through this object — set by
+        # open_entry_by_code()/open_entry_by_edit_link() so reopen() and
+        # wait_for_status() can re-read it from a FRESH navigation instead
+        # of trusting a stale, post-save-reflowed DOM.
+        self._entry_code: str | None = None
+        # Interface locale this object last navigated in ("en"/"ar"/None for
+        # "whatever the session happens to be") — see _manage_url().
+        self._locale: str | None = None
 
     # ---- Navigation -----------------------------------------------------
-    def _manage_url(self, edit_entry: str | None = None) -> str:
-        path = f"/web/qatar-chamber/manage-{self.slug}"
+    def _manage_url(
+        self, edit_entry: str | None = None, locale: str | None = None
+    ) -> str:
+        # `locale` RESTORED 2026-09-28 (dropped by the merge). Pinning the
+        # interface language matters: an Edit link clicked out of an UNPINNED
+        # list inherits whatever locale the session drifted to (ar_SA on the
+        # shared qcdev authoring account), against which every English
+        # label_pattern() lookup on the form resolves ZERO controls.
+        prefix = f"/{locale}" if locale else ""
+        path = f"{prefix}/web/qatar-chamber/manage-{self.slug}"
         if edit_entry:
             path += f"?editEntry={edit_entry}"
         return control_panel_url(path)
 
-    def open_new_entry_form(self) -> "ObjectAuthoringPage":
+    def open_new_entry_form(self, locale: str | None = None) -> "ObjectAuthoringPage":
         """`manage-<slug>` with no editEntry param IS the create-new form —
         no separate "Add"/"New" button to click first. Widened to 35000ms
         (from 20000ms) 2026-09-03: manage-promotional-banner's cold first
@@ -193,11 +378,13 @@ class ObjectAuthoringPage(BasePage):
         an already-warm, long-lived session — a real page-load latency
         difference on first hit, not a wrong locator (SAVE_AS_DRAFT_BUTTON
         itself was never wrong)."""
-        self.open(self._manage_url())
+        self.open(self._manage_url(locale=locale))
+        self._entry_code = None
+        self._locale = locale
         self.wait_for(self.SAVE_AS_DRAFT_BUTTON, timeout=35000)
         return self
 
-    def open_entries_list(self) -> "ObjectAuthoringPage":
+    def open_entries_list(self, locale: str | None = None) -> "ObjectAuthoringPage":
         """Navigates to `manage-<slug>` and waits on the entries table
         itself (`a[data-qc-oel-delete]`, first match) rather than the
         create-new form's own Save-as-Draft button — teardown only needs
@@ -220,7 +407,8 @@ class ObjectAuthoringPage(BasePage):
         bug (`a[data-qc-oel-delete]` itself was never wrong) — a real,
         environment-load-dependent render-latency budget, same class of
         finding as `open_new_entry_form()`'s own note."""
-        self.open(self._manage_url())
+        self._locale = locale
+        self.open(self._manage_url(locale=locale))
         self.wait_for("a[data-qc-oel-delete]", first=True, timeout=35000)
         return self
 
@@ -278,19 +466,20 @@ class ObjectAuthoringPage(BasePage):
 
     # ---- List state queries ----------------------------------------------
     def row_status_text(self, title: str) -> str:
-        """Normalized (`.strip().capitalize()`) Status cell text — e.g.
-        "Draft", "Approved". Confirmed live 2026-09-03: the RAW rendered
-        text differs by object due to per-object CSS (`text-transform:
-        uppercase` on manage-promotional-banner's Status column reads
-        "APPROVED"/"DRAFT" via `.inner_text()`, while manage-news-article's
-        equivalent column has no such transform and reads "Approved"/
-        "Draft" as-is) — normalizing here keeps every caller's comparison
-        (`== "Draft"` / `== "Approved"`) object-agnostic rather than each
-        test needing to know its own object's CSS quirk."""
+        """Status cell text, normalized onto the canonical vocabulary via
+        `normalize_status()` — e.g. "Draft", "Pending Review", "Published".
+
+        The RAW rendered text differs by object due to per-object CSS
+        (`text-transform: uppercase`), which is why it is normalized here
+        rather than in each caller. CORRECTED 2026-09-28: this used
+        `.capitalize()`, which silently broke the only two-word status
+        ("PENDING REVIEW" -> "Pending review"); see `normalize_status()`.
+        Returns "" when no row matches, and STATUS_UNKNOWN when a row
+        matches but its badge is not a status this class knows."""
         row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{title}")')
         if row.count() == 0:
             return ""
-        return row.locator("td").nth(1).inner_text().strip().capitalize()
+        return normalize_status(row.locator("td").nth(1).inner_text())
 
     def row_visible(self, title: str) -> bool:
         return self.is_visible(f'{self.ENTRIES_TABLE_ROW}:has-text("{title}")')
@@ -429,12 +618,14 @@ class ObjectAuthoringPage(BasePage):
         row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{entry_code}")')
         if row.count() == 0:
             return ""
-        return row.locator("td").nth(1).inner_text().strip().capitalize()
+        return normalize_status(row.locator("td").nth(1).inner_text())
 
     def row_visible_by_code(self, entry_code: str) -> bool:
         return self.is_visible(f'{self.ENTRIES_TABLE_ROW}:has-text("{entry_code}")')
 
-    def open_entry_by_code(self, entry_code: str) -> "ObjectAuthoringPage":
+    def open_entry_by_code(
+        self, entry_code: str, locale: str | None = None
+    ) -> "ObjectAuthoringPage":
         """Opens an existing entry for edit by navigating directly to its
         own `?editEntry=<code>` URL — confirmed live this IS the entry's own
         Entry-column code, so this never depends on a row's Edit link/title
@@ -446,7 +637,9 @@ class ObjectAuthoringPage(BasePage):
         read straight off a fresh entries list for a different, read-only
         purpose) — never with newest_entry_code()'s positional guess when
         the result will be acted on."""
-        self.open(self._manage_url(edit_entry=entry_code))
+        self.open(self._manage_url(edit_entry=entry_code, locale=locale))
+        self._entry_code = entry_code
+        self._locale = locale
         self._wait_for_network_settle()
         self.wait_for(self.CANCEL_AND_ADD_NEW_LINK, timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS)
         return self
@@ -495,18 +688,29 @@ class ObjectAuthoringPage(BasePage):
         return self.page.get_by_role("textbox", name=field_label, exact=True).input_value()
 
     def current_status(self) -> str:
-        """"Approved"/"Draft"/"Unknown" parsed out of editing_banner_text()'s
-        confirmed-live wording ("...(approved)...")/"...(draft)...") — the
-        same normalized vocabulary row_status_text()/row_status_text_by_code()
-        already return, so callers can compare against either interchangeably.
-        Only valid when called on an entry opened via open_entry_by_code()/
-        open_entry_by_edit_link() (i.e. the editing banner is present)."""
+        """The record's status parsed out of `editing_banner_text()`, returned
+        on the same canonical vocabulary as `row_status_text()` so callers can
+        compare against either interchangeably. Only valid on an entry opened
+        via `open_entry_by_code()`/`open_entry_by_edit_link()` (i.e. the
+        editing banner is present).
+
+        CORRECTED 2026-09-28. The previous implementation matched the two
+        literals `"(approved)"` and `"(draft)"` CASE-SENSITIVELY and returned
+        "Unknown" for everything else. Both halves were wrong on the current
+        build: the banner capitalises the state (confirmed live:
+        `Editing <title> (Draft). Save as Draft or Submit for Review updates
+        this record.`), so even a plain draft fell through to "Unknown"; and
+        five of the seven real states had no branch at all. A caller polling
+        for a status it could never read is the failure mode this project has
+        already been bitten by — see test_home_business_events_control_panel.py's
+        own post-Unpublish poll."""
         text = self.editing_banner_text()
-        if "(approved)" in text:
-            return "Approved"
-        if "(draft)" in text:
-            return "Draft"
-        return "Unknown"
+        for status in WORKFLOW_STATUSES:
+            if f"({status})".casefold() in text.casefold():
+                return status
+        if "(approved)" in text.casefold():  # legacy wording, pre-workflow build
+            return STATUS_PUBLISHED
+        return STATUS_UNKNOWN
 
     def fill_number(self, field_label: str, value: str) -> "ObjectAuthoringPage":
         self.page.get_by_role("spinbutton", name=field_label, exact=True).fill(value)
@@ -781,10 +985,196 @@ class ObjectAuthoringPage(BasePage):
         self._wait_for_settle()
         return self
 
-    def submit_for_publishing(self) -> "ObjectAuthoringPage":
-        self.click(self.SUBMIT_FOR_PUBLISHING_BUTTON)
+    def submit_for_review(self) -> "ObjectAuthoringPage":
+        """Click the form's "Submit for Review" button.
+
+        WHAT THIS LANDS ON DEPENDS ON THE SIGNED-IN ACCOUNT — confirmed live
+        2026-09-28 on ONE record, submitted twice:
+          - as QC Site Content Author (156492) -> "Pending Review", not public;
+          - as QC Site Content Editor (156488) -> straight to "Published".
+        The editorial workflow routes a *privileged* submitter past the review
+        step (Kaleo `qc-editorial-approval.xml`'s condition node). This method
+        therefore deliberately does NOT assert a resulting status: the caller
+        knows which account it authenticated as and must assert accordingly.
+        Callers that want the record live regardless of role should submit and
+        then `approve_entry()` as an Editor."""
+        self.click(self.SUBMIT_FOR_REVIEW_BUTTON)
         self._wait_for_settle()
         return self
+
+    def submit_for_publishing(self) -> "ObjectAuthoringPage":
+        """DEPRECATED alias for `submit_for_review()`, kept so the existing
+        call sites across the cms/ suite keep resolving. The button has read
+        "Submit for Review" since at least 2026-09-28 and the old label
+        matches nothing; the name also implies an outcome ("publishing") that
+        is only true for a privileged submitter. Prefer submit_for_review()."""
+        return self.submit_for_review()
+
+    # ---- Row-level workflow transitions -------------------------------------
+    # CONFIRMED LIVE 2026-09-28 (manage-law-entry, one probe record walked
+    # Draft -> Pending Review -> Rejected -> Pending Review -> Published ->
+    # Unpublished -> Archived -> Unpublished -> Draft, as Author then Editor).
+    #
+    # Which actions a row offers depends on BOTH its status and the signed-in
+    # role. Observed action sets, by status (as Editor):
+    #   Draft          : history, delete
+    #   Pending Review : approve, reject, schedule, history, delete
+    #   Rejected       : resubmit, history, delete
+    #   Published      : unpublish, history, delete
+    #   Unpublished    : publish, return, archive, schedule, history, delete
+    #   Archived       : restore, history, delete
+    # An Author sees none of the transition actions on rows it does not own.
+    #
+    # Every one of these drives NATIVE browser dialogs, not DOM modals, and
+    # several CHAIN two of them (a confirm() immediately followed by a
+    # prompt()). Observed shapes:
+    #   reject  : prompt (comment shown to the author)
+    #   return  : prompt (comment REQUIRED)
+    #   approve : confirm -> prompt (comment optional)
+    #   resubmit: confirm -> prompt (comment optional)
+    #   unpublish / archive / restore / delete : confirm only
+    # _run_row_action() accepts an arbitrary run of them, so a caller never
+    # has to know how many a given action raises.
+
+    def _row_locator(self, title_or_code: str):
+        return self.page.locator(
+            f'{self.ENTRIES_TABLE_ROW}:has-text("{title_or_code}")'
+        ).first
+
+    def _run_row_action(
+        self, title_or_code: str, action: str, comment: str = ""
+    ) -> "ObjectAuthoringPage":
+        """Click one `data-qc-oel-<action>` control on the row matching
+        `title_or_code`, accepting every native dialog it raises (answering
+        any prompt with `comment`), then wait for the list to settle.
+
+        Scoped by the row's own stable data attribute rather than the visible
+        label: the label is localised, the attribute is not."""
+        attr = self.ROW_ACTION_ATTRS.get(action)
+        if attr is None:
+            raise ValueError(
+                f"Unknown row action {action!r}. Known: "
+                f"{', '.join(sorted(self.ROW_ACTION_ATTRS))}"
+            )
+        control = self._row_locator(title_or_code).locator(f"[{attr}]")
+        if control.count() == 0:
+            raise AssertionError(
+                f"Row {title_or_code!r} offers no {action!r} action "
+                f"([{attr}] is absent). Its current status and the signed-in "
+                f"role decide which actions render — read row_status_text() "
+                f"and check the role before calling this."
+            )
+
+        def _accept(dialog):
+            try:
+                dialog.accept(comment)
+            except Exception:  # noqa: BLE001 — dialog already handled/closed
+                pass
+
+        self.page.on("dialog", _accept)
+        try:
+            # force=True mirrors delete_entry_by_code()'s own rationale: the
+            # site-wide chatbot launcher can intercept pointer events over the
+            # actions column, and the native confirm() is the real gate on the
+            # action, not the click.
+            control.first.click(force=True)
+            self._wait_for_settle()
+        finally:
+            self.page.remove_listener("dialog", _accept)
+        return self
+
+    def approve_entry(self, title_or_code: str, comment: str = "") -> "ObjectAuthoringPage":
+        """Approve a Pending Review record -> Published. Editor-only."""
+        return self._run_row_action(title_or_code, "approve", comment)
+
+    def reject_entry(self, title_or_code: str, comment: str = "") -> "ObjectAuthoringPage":
+        """Reject a Pending Review record -> Rejected. Editor-only. The
+        comment is shown to the author and recorded in History."""
+        return self._run_row_action(title_or_code, "reject", comment)
+
+    def resubmit_entry(self, title_or_code: str, comment: str = "") -> "ObjectAuthoringPage":
+        """Resubmit a Rejected record -> Pending Review."""
+        return self._run_row_action(title_or_code, "resubmit", comment)
+
+    def publish_entry(self, title_or_code: str, comment: str = "") -> "ObjectAuthoringPage":
+        """Publish an Unpublished record -> Published. Editor-only."""
+        return self._run_row_action(title_or_code, "publish", comment)
+
+    def unpublish_entry(self, title_or_code: str, comment: str = "") -> "ObjectAuthoringPage":
+        """Unpublish a Published record -> Unpublished. Editor-only.
+
+        NOTE the destination: "Unpublished" is its own state, NOT "Draft" —
+        the confirm() text says so verbatim ("...and shows as Unpublished").
+        Code that polls for "Draft" after unpublishing is asserting the wrong
+        thing."""
+        return self._run_row_action(title_or_code, "unpublish", comment)
+
+    def archive_entry(self, title_or_code: str, comment: str = "") -> "ObjectAuthoringPage":
+        """Archive an Unpublished record -> Archived. Reachable from
+        Unpublished only, so a Published record needs unpublish_entry() first."""
+        return self._run_row_action(title_or_code, "archive", comment)
+
+    def restore_entry(self, title_or_code: str, comment: str = "") -> "ObjectAuthoringPage":
+        """Restore an Archived record -> Unpublished (NOT straight to
+        Published — the confirm() text states this)."""
+        return self._run_row_action(title_or_code, "restore", comment)
+
+    def return_to_author(self, title_or_code: str, comment: str) -> "ObjectAuthoringPage":
+        """Send an Unpublished record back to its author -> Draft. The comment
+        is REQUIRED by the surface, so it is a required argument here."""
+        if not comment:
+            raise ValueError(
+                "return_to_author() requires a comment — the surface's own "
+                "prompt marks it required."
+            )
+        return self._run_row_action(title_or_code, "return", comment)
+
+    # History is NOT a modal — CONFIRMED LIVE 2026-09-28. Clicking the row's
+    # History action expands an extra row INSIDE the entries table
+    # (`td.qc-oel__history`) holding `ul.qc-oel__history-list`, one `li` per
+    # workflow move, each with three structured spans. Reading it as a dialog
+    # finds nothing.
+    HISTORY_LIST = "ul.qc-oel__history-list"
+    HISTORY_WHO = ".qc-oel__history-who"
+    HISTORY_WHEN = ".qc-oel__history-when"
+    HISTORY_COMMENT = ".qc-oel__history-comment"
+
+    def history_entries(self, title_or_code: str) -> list[dict[str, str]]:
+        """Expand the row's History and return its audit trail, newest last,
+        as `{"who": ..., "when": ..., "comment": ...}` dicts — who moved the
+        record, when, and the comment they left.
+
+        This is the strongest evidence available for a workflow assertion:
+        it proves a transition was actually recorded, not merely that a badge
+        changed. Returns [] (never raises) when the row has no history yet or
+        the list does not render."""
+        self._run_row_action(title_or_code, "history")
+        history_list = self.page.locator(self.HISTORY_LIST).first
+        try:
+            history_list.wait_for(
+                state="visible", timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS
+            )
+        except Exception:  # noqa: BLE001 — reported as empty, never raised
+            logger.warning("History list did not render for %s", title_or_code)
+            return []
+
+        entries: list[dict[str, str]] = []
+        items = history_list.locator("li")
+        for i in range(items.count()):
+            item = items.nth(i)
+
+            def _part(selector: str) -> str:
+                node = item.locator(selector)
+                return node.inner_text().strip() if node.count() else ""
+
+            entries.append(
+                {
+                    "who": _part(self.HISTORY_WHO),
+                    "when": _part(self.HISTORY_WHEN),
+                    "comment": _part(self.HISTORY_COMMENT),
+                }
+            )
+        return entries
 
     def _wait_for_settle(self) -> None:
         """POSITIVE-signal wait — HEALED 2026-09-14 (Group B triage of
@@ -910,3 +1300,400 @@ class ObjectAuthoringPage(BasePage):
         page's PREVIEW mode injects (see module docstring)."""
         self.open(preview_url)
         return self.page.locator('[role="status"]').first.inner_text()
+
+    # ---- RESTORED 2026-09-28 ------------------------------------------------
+    # The 2026-09-28 merge resolved this file with "upstream wins". Upstream
+    # simply never had the members below, so resolving that way silently
+    # deleted API that six modules call (chambers_law x2, about_qatar_chamber,
+    # home_latest_news, home_services, chairman_message). Restored verbatim
+    # from 3f73561, the last commit that had them. Nothing here overrides an
+    # upstream implementation — every one of these is a member upstream lacks.
+
+    def delete_all_entries_by_title(self, title: str, max_rows: int = 10) -> int:
+        """Delete EVERY entry whose row matches `title` exactly, one at a
+        time, re-reading the list between deletes. Returns how many were
+        removed.
+
+        Why this exists (2026-09-10): `delete_entry_by_title()` cannot
+        clear duplicates — its `row_entry_id()` builds a plural row
+        locator, so with two same-titled rows it raises a strict-mode
+        violation, gets swallowed by that method's never-raise contract,
+        and silently deletes nothing. Leaving newly-created entries in
+        place (the standing test-data instruction) means a re-run of a
+        create-case produces exactly that duplicate, which then breaks
+        `open_entry_by_edit_link()` for every subsequent run.
+
+        SAFETY — this is the one method here that deletes more than one
+        row, so it is deliberately narrow: it refuses any title outside
+        the project's disposable `QCTEST-` namespace, and it matches on
+        the caller's exact title string, never on position ("newest"/
+        "last row"). Real editorial rows can therefore never be reached by
+        it, which is what standards.md requires of any multi-row delete on
+        a shared environment.
+        """
+        if not title.startswith("QCTEST-"):
+            raise ValueError(
+                f"refusing to bulk-delete {title!r}: this method is limited to "
+                "the disposable QCTEST- namespace"
+            )
+        removed = 0
+        for _ in range(max_rows):
+            self.open_entries_list()
+            rows = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{title}")')
+            if rows.count() == 0:
+                return removed
+            delete_link = rows.first.locator("a[data-qc-oel-delete]").first
+            entry_id = delete_link.get_attribute("data-qc-oel-delete")
+            if not entry_id:
+                return removed
+            self.page.once("dialog", lambda d: d.accept())
+            self.page.locator(f'a[data-qc-oel-delete="{entry_id}"]').click(force=True)
+            self._wait_for_network_settle()
+            removed += 1
+        logger.warning(
+            "delete_all_entries_by_title(%r) hit the %d-row cap — more leftovers may remain",
+            title, max_rows,
+        )
+        return removed
+
+    def download_current_file(self, field_label: str, dest_path: str) -> str:
+        """Downloads the field's CURRENT file to `dest_path` via an
+        authenticated request on this same page's context (reuses its
+        session cookies — no separate login) — the TEST_OWNED baseline
+        capture step for a binary restore. Returns "" (no-op) if the field
+        is currently empty."""
+        url = self.current_file_download_url(field_label)
+        if not url:
+            return ""
+        response = self.page.context.request.get(url)
+        with open(dest_path, "wb") as handle:
+            handle.write(response.body())
+        return dest_path
+
+    def select_existing_file(
+        self, field_label: str, file_name: str, folder: str | None = None
+    ) -> "ObjectAuthoringPage":
+        """Picks an ALREADY-EXISTING Documents & Media file for an attachment
+        field, instead of uploading from disk like `upload_file()` does.
+
+        CONFIRMED LIVE 2026-09-09 (scoped CLI Playwright probe against qcdev,
+        manage-law-entry's `Law Icon` field): the same "Select File" button
+        opens the same picker iframe, which is a full Documents & Media
+        browser — root shows `about-us-hero.png` plus the folders `Flickr`,
+        `qatar-chamber-website`, `QC Footer Social Icons` and
+        `request-to-media-dept`. Clicking a folder's link navigates into it;
+        clicking a FILE's own name **immediately closes the picker and fills
+        the field** — there is NO "Add" button step on this path (unlike
+        `upload_file()`, whose Add button belongs to the upload flow). Like
+        every attachment change on this surface the selection only takes
+        effect on Save (guide: "Remove file / Undo remove take effect only on
+        save").
+
+        `folder` navigates one level down first; omit it for a root-level
+        file. Verified selectable icons live in `QC Footer Social Icons`
+        (`qc-social-facebook.svg` … `qc-social-youtube.svg`)."""
+        hidden_textbox = self.page.get_by_role(
+            "textbox", name=f"{field_label} Select File"
+        )
+        hidden_textbox.locator("xpath=..").get_by_role(
+            "button", name="Select File"
+        ).click()
+        frame = self.page.frame_locator(self.UPLOAD_MODAL_IFRAME)
+        if folder:
+            frame.get_by_role("link", name=folder).first.click()
+            # The folder navigation is a real page load inside the iframe —
+            # wait for the target file itself to render rather than sleeping.
+            frame.get_by_text(file_name, exact=True).first.wait_for(
+                state="visible", timeout=15000
+            )
+        frame.get_by_text(file_name, exact=True).first.click()
+        # HARDENED 2026-09-09 — the file-name click's effect is INTERMITTENT
+        # (both behaviours confirmed live within minutes of each other): it
+        # usually closes the picker outright, but it can instead merely
+        # SELECT the card and leave the modal open. When that happened,
+        # tc_134884's next action (`Submit for Publishing`) failed with
+        # `Locator.click: Timeout 30000ms` because the still-open modal
+        # overlaid the button — a silent, misleading failure mode, so this
+        # method now refuses to return while the picker is still up.
+        if not self._picker_closed(4000):
+            for label in ("Add", "Select", "Choose", "Done"):
+                try:
+                    btn = frame.get_by_role("button", name=label)
+                    if btn.count():
+                        btn.first.click(timeout=8000)
+                        break
+                except Exception:  # noqa: BLE001 — try the next candidate label
+                    continue
+        if not self._picker_closed(6000):
+            # Last resort: some item-selector builds treat a single click as
+            # select-only and require a double-click to commit.
+            try:
+                frame.get_by_text(file_name, exact=True).first.dblclick()
+            except Exception:  # noqa: BLE001 — the assertion below is the real gate
+                pass
+        if not self._picker_closed(8000):
+            raise AssertionError(
+                f"the Documents & Media picker stayed open after selecting "
+                f"{file_name!r} — refusing to continue, because a still-open "
+                "modal silently overlays the form's Save/Publish buttons and "
+                "turns the next click into an unexplained 30s timeout"
+            )
+        return self
+
+    def _file_upload_container(self, field_label: str):
+        hidden_textbox = self.page.get_by_role(
+            "textbox", name=f"{field_label} Select File"
+        )
+        return hidden_textbox.locator("xpath=../../..")
+
+    def _picker_closed(self, timeout: int) -> bool:
+        """True once the file-picker iframe is detached; False on timeout."""
+        try:
+            self.page.locator(self.UPLOAD_MODAL_IFRAME).wait_for(
+                state="detached", timeout=timeout
+            )
+            return True
+        except Exception:  # noqa: BLE001 — caller decides what to do next
+            return False
+
+    def description_editor_iframe(self, field_name: str | None = None) -> str:
+        """Locator for a bilingual rich-text field's EN/default-locale
+        CKEditor iframe. See DESCRIPTION_EDITOR_IFRAME's own docstring note
+        above for the full live investigation. `field_name` is the field's
+        own Liferay object-field name (e.g. "messageContent", matching the
+        DOM id substring `ObjectField_<fieldName>` confirmed live) — when
+        given, returns a locale-safe, reflow-safe locator scoped to that
+        field's own container; when omitted, returns the original
+        `DESCRIPTION_EDITOR_IFRAME` (`>> nth=0`) unchanged."""
+        if field_name:
+            return f'div[id*="ObjectField_{field_name}"] {self.RICH_TEXT_EDITOR_IFRAME_CSS}'
+        return self.DESCRIPTION_EDITOR_IFRAME
+
+    @staticmethod
+    def label_pattern(field_label: str) -> "re.Pattern":
+        """Anchored accessible-name matcher tolerant of a required field's
+        trailing ` *` (see the note above). Use this instead of
+        `exact=True` for every role-based form-field lookup on this
+        surface."""
+        return re.compile(r"^\s*" + re.escape(field_label) + r"\s*\*?\s*$")
+
+    def current_file_download_url(self, field_label: str) -> str:
+        """Absolute URL of the current file's own `Download` link (see class
+        docstring above) — "" if no current file is set."""
+        meta = self._file_upload_container(field_label).locator(
+            ".qc-oel__current-file-meta"
+        )
+        if meta.count() == 0:
+            return ""
+        link = meta.get_by_role("link", name="Download")
+        if link.count() == 0:
+            return ""
+        href = link.first.get_attribute("href") or ""
+        return control_panel_url(href) if href else ""
+
+    def remove_current_file(self, field_label: str) -> "ObjectAuthoringPage":
+        """Clicks this field's own "Remove file" button — confirmed live a
+        plain, no-dialog action (unlike row Delete/Unpublish's native
+        `confirm()`).
+
+        ⚠ REAL, LIVE-CONFIRMED FINDING (2026-09-07, manage-chamber-laws-page
+        Content Image, reproduced twice): `remove_current_file()` followed
+        DIRECTLY by `upload_file()` on the SAME still-open form, then
+        Submit for Publishing, does **not** persist the new file — a fresh
+        re-open after that sequence still shows the OLD file untouched
+        (confirmed live via both the admin read-back AND the public
+        delivery surface's own document id, which never changed). This is
+        a genuine two-step widget quirk, not a locator bug: `remove_current_
+        file()` needs its OWN separate save (`save_as_draft()` or
+        `submit_for_publishing()`) to actually commit the empty state
+        BEFORE a subsequent `upload_file()` on a freshly re-opened form
+        will attach correctly. CONFIRMED LIVE this two-phase sequence DOES
+        work (`remove_current_file()` -> `save_as_draft()` -> re-open ->
+        `upload_file()` -> `submit_for_publishing()`), reproduced twice
+        (fresh upload AND restoring the original file's downloaded bytes
+        back). A DIRECT replace with no `remove_current_file()` step at all
+        (`upload_file()` straight over an existing file, i.e. exactly the
+        "Select File only if you want to REPLACE it" wording the widget's
+        own on-screen help text uses) is unaffected by this — that path
+        was confirmed live to persist correctly in ONE save, no two-phase
+        needed. Callers reaching a genuinely EMPTY-field precondition (a
+        case that literally requires "no file set") MUST use the two-phase
+        sequence; callers simply replacing an existing file should call
+        `upload_file()` directly, never through this method first."""
+        self._file_upload_container(field_label).get_by_role(
+            "button", name="Remove file"
+        ).click()
+        return self
+
+    # ---- Lifecycle actions --------------------------------------------------
+
+    def is_checked(self, field_label: str) -> bool:
+        """Read-back counterpart to `set_checkbox()` — the class had a
+        setter but no reader until 2026-09-09 (PBI 129394 tc_134887/
+        tc_134888 needed to capture an `Active Status` baseline before
+        flipping it, which is exactly the TEST_OWNED pattern standards.md
+        requires for a shared real record)."""
+        return self.page.get_by_role(
+            "checkbox", name=self.label_pattern(field_label)
+        ).is_checked()
+
+    def rendered_body_text(self) -> str:
+        """Full rendered text of whatever this object is currently showing --
+        used after `preview_banner_text()` to prove the PREVIEW surface
+        really renders an unpublished record's text. Lives here so a test
+        never has to hold a raw `"body"` selector of its own."""
+        return self.page.locator("body").inner_text()
+
+    def spinbutton_value(self, field_label: str) -> str:
+        """Read-back counterpart to fill_number() — mirrors field_value()'s
+        exact-name-match textbox read, scoped to the spinbutton role instead
+        (e.g. "Display Order"). Added 2026-09-08 (PBI 129367, tc_135009):
+        no prior caller needed a numeric-field read-back on this surface."""
+        return self.page.get_by_role(
+            "spinbutton", name=self.label_pattern(field_label)
+        ).input_value()
+
+    def current_file_placeholder(self, field_label: str) -> str:
+        """Persisted-file signal for a THIRD upload-widget variant this
+        class's uploaded_filename()/current_file_name() do not cover —
+        CONFIRMED LIVE 2026-09-08 (PBI 129367/tc_135009, manage-hero-
+        banner-slide's Banner Image field): on a fresh reopen, this field's
+        own `<strong role="textbox">` filename readout (uploaded_filename()'s
+        target) stays empty — matching current_file_name()'s own already-
+        documented finding for that element on OTHER objects — and this
+        field ALSO has no richer `.qc-oel__current-file-meta` block
+        (current_file_name()'s target: confirmed live absent here, unlike
+        manage-chamber-laws-page/manage-law-entry). The ONLY confirmed-live
+        persisted-file signal on THIS variant is the field's own hidden
+        `<input type="text" ... placeholder="Current file: <name> — pick a
+        file to replace it">`'s placeholder attribute — confirmed live via a
+        real create -> Submit for Publishing -> fresh reopen round trip.
+        Returns "" if the field has no current file (placeholder text does
+        not start with "Current file:")."""
+        hidden_textbox = self.page.get_by_role(
+            "textbox", name=f"{field_label} Select File"
+        )
+        placeholder = hidden_textbox.get_attribute("placeholder") or ""
+        return placeholder if placeholder.startswith("Current file:") else ""
+
+    @property
+    def entry_code(self) -> str:
+        """The entry code of whatever record was last opened for edit through
+        this object, or "" when none was (e.g. the create-new form).
+
+        Read-only, and public because a test needs the IDENTITY of a record
+        it has just created without reconstructing it from a URL by hand --
+        PBI 129394's tc_134978 asks whether a Law Entry's ID is
+        auto-generated and unique, and this (with the entries list's own
+        `row_entry_id()`) is where that identity is actually observable: the
+        Law Entry edit FORM renders no ID control at all."""
+        return self._entry_code or ""
+
+    # ---- Fresh re-read of the record under edit ---------------------------
+    # REAL, LIVE-MEASURED NEED (2026-09-15, PBI 129394): a lifecycle action's
+    # own settle proves nothing about the record's committed state. Measured
+    # live on manage-chamber-laws-page / manage-law-entry, 3 iterations each:
+    #   - "Unpublish to edit as draft" -> status reads Draft in 1.20-1.38s
+    #   - "Submit for Publishing"      -> status reads Approved in 27-30s
+    # `submit_for_publishing()`'s ~2.5s settle is an order of magnitude short
+    # of that, so anything that publishes and then immediately reads the
+    # status (or polls the public page on a 20s budget) races a transition
+    # that has not happened yet -- and a TEST_OWNED `finally` restore that
+    # "publishes and assumes" leaves a real shared record stuck in Draft,
+    # which is exactly how one failed test cascaded into three others' broken
+    # preconditions. reopen()/wait_for_status() make the commit CHECKED
+    # rather than assumed, from a FRESH navigation (never a stale,
+    # post-save-reflowed DOM -- see TC 134877's own read-back-race note).
+
+    def wait_for_status(
+        self, expected: str, timeout: float = 90.0, poll: float = 3.0
+    ) -> "ObjectAuthoringPage":
+        """Polls until the record's OWN status reaches `expected`, re-opening
+        it fresh on every poll. Raises WaitTimeoutError if it never does --
+        a lifecycle action that silently did not commit must fail loudly,
+        never be assumed to have worked.
+
+        Both sides go through `normalize_status()` (2026-09-28), which draws a
+        deliberate line between two different kinds of change:
+          - a RENAME heals itself. The badge that used to read "Approved" now
+            reads "Published"; both normalize to Published, so an existing
+            `wait_for_status("Approved")` keeps expressing its real intent
+            ("wait until this is live") and keeps working.
+          - a BEHAVIOUR change stays red. Unpublish now lands on "Unpublished",
+            which is NOT "Draft" under any normalization, so a caller waiting
+            for Draft after unpublishing still fails — correctly, because that
+            is a genuine difference in what the product does, not in what it
+            calls things. Do not "fix" such a failure by relabelling it."""
+        expected_status = normalize_status(expected)
+
+        def _reached() -> bool:
+            return self.reopen().current_status() == expected_status
+
+        wait_until(
+            _reached,
+            timeout=timeout,
+            poll=poll,
+            message=(
+                f"record {self._entry_code!r} on manage-{self.slug} never "
+                f"reached status {expected_status!r}"
+                + (f" (caller asked for {expected!r})"
+                   if expected_status != expected else "")
+            ),
+        )
+        return self
+
+    def field_count(self, field_label: str) -> int:
+        """Count of textboxes whose accessible name EXACTLY matches
+        `field_label` — used to verify "exactly one field named X exists"
+        cases (e.g. PBI 129393's TC 134787: exactly one Chairman Name field
+        and one Chairman Designation field per language, no separate
+        signature-block field) without a test ever touching raw Playwright
+        (`get_by_role` stays inside this Page Object, never a test body).
+        An exact-name match against a DIFFERENT label (e.g. a hypothetical
+        separate signature-block field) never counts here, so a result of 1
+        already proves both "exists" and "no duplicate/alternate field"."""
+        return self.page.get_by_role(
+            "textbox", name=self.label_pattern(field_label)
+        ).count()
+
+    def current_file_name(self, field_label: str) -> str:
+        """Returns "" when the field is genuinely empty (no `Current file:`
+        block rendered) — confirmed live to be the correct empty-state signal on
+        this variant (see class docstring above), unlike
+        `uploaded_filename()`'s own `<strong role="textbox">` scope, which
+        stays empty on THIS variant even when a file IS set (that element
+        only reflects a NEWLY selected, not-yet-saved file here)."""
+        meta = self._file_upload_container(field_label).locator(
+            ".qc-oel__current-file-meta"
+        )
+        if meta.count() == 0:
+            return ""
+        text = meta.first.inner_text()
+        import re
+
+        # HEALED 2026-09-07 (live incident, PBI 129394): Liferay auto-
+        # dedupes a same-named re-upload by inserting "(<n>)" INSIDE the
+        # filename, before the extension (e.g. "lawbook (4).png") — a
+        # non-greedy match up to the FIRST "(" (the original version of
+        # this regex) truncated the result to "lawbook" on exactly that
+        # filename shape, dropping "(4).png" entirely (reproduced live
+        # re-uploading the same fixture file multiple times in one
+        # session). The trailing "(<size> KB/MB)" group is always the
+        # LAST parenthesised run on the line, so matching greedily up to
+        # the last "(" is the correct, reflow-safe boundary regardless of
+        # how many "(...)" groups the filename itself contains.
+        match = re.search(r"Current file:\s*(.+)\s*\(", text)
+        return match.group(1).strip() if match else ""
+
+    def reopen(self) -> "ObjectAuthoringPage":
+        """Re-navigates to the record last opened through this object, so
+        every read afterwards comes off a freshly rendered form."""
+        if not self._entry_code:
+            raise AssertionError(
+                "reopen() needs a record opened via open_entry_by_code() "
+                "first -- there is no entry code to navigate back to."
+            )
+        # Re-navigates in the SAME pinned locale the record was opened in --
+        # a reopen that silently dropped the pin would flip the field labels
+        # (and the validation-message language) mid-test.
+        return self.open_entry_by_code(self._entry_code, locale=self._locale)

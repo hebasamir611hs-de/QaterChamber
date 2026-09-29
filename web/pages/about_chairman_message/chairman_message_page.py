@@ -286,8 +286,52 @@ class ChairmanMessagePage(BasePage):
         self.header.open_home()
         self.page.locator(self.header.NAV_LINK_ABOUT_US).hover()
         self.page.locator(self.NAV_SUBMENU_CHAIRMAN_LINK).click()
-        self.page.wait_for_load_state("networkidle")
+        self._settle_tolerant()
         self.wait_for(self.HERO_TITLE)
+        return self
+
+    def _settle_tolerant(self) -> None:
+        """Bounded, never-raising settle.
+
+        FIXED 2026-09-10 (live, TC 134777): all four call sites in this class
+        used a RAW `wait_for_load_state("networkidle")` with no timeout, i.e.
+        Playwright's 30s default. `networkidle` never fires on qcdev -- the
+        site-wide chatbot widget polls continuously -- so every one of these
+        was a guaranteed 30s stall that then RAISED. Three of them are
+        followed by a real `wait_for(HERO_TITLE)` condition wait, which is the
+        actual gate, so the settle only ever needed to be best-effort; the
+        fourth (`open_en_expecting_no_content`) has no trailing wait by design
+        and was failing TC 134777 outright.
+
+        Degrades networkidle -> load -> domcontentloaded and swallows the
+        timeout: this is a settle, not an assertion. Mirrors
+        ObjectAuthoringPage._wait_for_settle()'s established shape.
+        """
+        for state, budget in (("networkidle", 4000), ("load", 4000), ("domcontentloaded", 4000)):
+            try:
+                self.page.wait_for_load_state(state, timeout=budget)
+                return
+            except Exception:  # noqa: BLE001 -- best-effort settle, never raises
+                continue
+
+    def open_en_expecting_no_content(self) -> "ChairmanMessagePage":
+        """TC 134777 — opens the public EN page WITHOUT waiting for HERO_TITLE to
+        become visible, for the case where the backing record is deliberately in
+        Draft and the page is therefore expected to render unpopulated.
+
+        CONFIRMED LIVE 2026-09-09: while the Chairman's Message record is a
+        draft, this page still returns 200 and renders its full chrome (header,
+        breadcrumb, footer), but every content slot comes back EMPTY — the hero
+        `<h1 class="qc-cm-hero-title">` is present in the DOM with no text, and
+        is therefore *hidden*, not merely blank. `open_en()`'s trailing
+        `wait_for(HERO_TITLE)` (state="visible") consequently times out, which
+        is correct behaviour for that method — it exists to assert a normally
+        published page finished rendering — but makes it the wrong entry point
+        for asserting the *absence* of published content. Use this method for
+        draft/unpublished-state checks and `open_en()` everywhere else.
+        """
+        self.open(web_url(CHAIRMAN_MESSAGE_PATH))
+        self._settle_tolerant()
         return self
 
     def open_nonexistent_page(self) -> "ChairmanMessagePage":
@@ -299,13 +343,13 @@ class ChairmanMessagePage(BasePage):
 
     def switch_to_arabic(self) -> "ChairmanMessagePage":
         self.click(self.header.LANGUAGE_SWITCHER)
-        self.page.wait_for_load_state("networkidle")
+        self._settle_tolerant()
         self.wait_for(self.HERO_TITLE)
         return self
 
     def switch_to_english(self) -> "ChairmanMessagePage":
         self.click(self.header.LANGUAGE_SWITCHER)
-        self.page.wait_for_load_state("networkidle")
+        self._settle_tolerant()
         self.wait_for(self.HERO_TITLE)
         return self
 

@@ -15,7 +15,7 @@ DISCLOSED SUBSTITUTIONS / DEVIATIONS FROM THE SOURCE CASE TEXT (read before
 touching this module):
 
   CORRECTED 2026-09-07 (per .claude/context/active/standards.md's "Object
-  Authoring Is the Only Path for Publish/Unpublish/Draft/Preview Actions"
+  Authoring Is the Only Path for Content Operations"
   and "Draft/Unpublish Public-Visibility Checks — Mandatory Logged-Out
   Context"): TC 135556, TC 135557, and TC 135562 (immediately below) were
   re-verified against Object Authoring (`manage-strategic-pillar-card`,
@@ -222,7 +222,7 @@ MISSION_TITLE = "Mission"
 @pytest.mark.regression
 def test_create_publish_and_verify_new_pillar_card_on_home_page(page, browser):
     # QA-135556 — CORRECTED 2026-09-07 per standards.md's "Object Authoring
-    # Is the Only Path for Publish/Unpublish/Draft/Preview Actions": the
+    # Is the Only Path for Content Operations": the
     # PRIOR version of this test drove Save (Active Status checked) through
     # `HomeStrategicDirectionAdminPage` (the raw Content & Data editor,
     # confirmed absent any Draft/Preview/Publish pipeline) and substituted
@@ -335,7 +335,7 @@ def test_create_publish_and_verify_new_pillar_card_on_home_page(page, browser):
 @pytest.mark.xdist_group("mission_49082")
 def test_edit_existing_mission_pillar_card_reflects_on_home_page(page, browser):
     # QA-135557 — CORRECTED 2026-09-07 per standards.md's "Object Authoring
-    # Is the Only Path for Publish/Unpublish/Draft/Preview Actions": the
+    # Is the Only Path for Content Operations": the
     # edit+publish flow now goes through `manage-strategic-pillar-card`
     # (ObjectAuthoringPage), never the raw Content & Data editor. Mission's
     # own entry code is resolved via the VERIFIED (never positional)
@@ -446,7 +446,7 @@ def test_edit_existing_mission_pillar_card_reflects_on_home_page(page, browser):
 @pytest.mark.xdist_group("mission_49082")
 def test_publish_blocked_when_pillar_title_left_empty(page):
     # QA-135562 — CORRECTED 2026-09-07 per standards.md's "Object Authoring
-    # Is the Only Path for Publish/Unpublish/Draft/Preview Actions": the
+    # Is the Only Path for Content Operations": the
     # PRIOR version cleared Pillar Title and clicked the raw Content & Data
     # editor's Save button. Re-verified via Object Authoring
     # (`manage-strategic-pillar-card`): clear the required EN title field ->
@@ -544,10 +544,20 @@ def test_publish_blocked_when_pillar_title_left_empty(page):
 # drives `HomeStrategicDirectionAdminPage`, the raw Object Definitions editor
 # — confirmed (2026-08-31) to expose Save/Cancel only, no Draft/Preview/
 # Publish/Unpublish pipeline. Since then, `.claude/context/active/
-# standards.md`'s "Object Authoring — Draft / Preview / Publish / Unpublish
-# Lifecycle" section (confirmed live 2026-09-03) mandates that any case
-# exercising draft/preview/publish/unpublish drive it through the
-# `object-authoring` -> `manage-<slug>` surface instead. This batch's own
+# standards.md`'s "Object Authoring Is the Only Path for Content Operations
+# — Not Content & Data" section mandates that any case exercising
+# draft/preview/publish/unpublish drive it through the `object-authoring` ->
+# `manage-<slug>` surface instead.
+#   CITATION CORRECTED 2026-09-28: this previously cited a section titled
+#   "Object Authoring — Draft / Preview / Publish / Unpublish Lifecycle",
+#   which never existed in standards.md. The rule itself is real and still
+#   binding — it is the "Original rule text (still correct for the narrower
+#   lifecycle-action case, now subsumed by the broader rule above)" paragraph
+#   at the end of the section now named above. Only the pointer was wrong.
+#   For the states those actions move a record between, see standards.md's
+#   "Content Editorial Workflow" section — and note that this batch's
+#   observations below were made through a super-admin session, which
+#   bypasses the review step (see that section's own warning). This batch's own
 # live probe (2026-09-03, one-process Python script via this repo's own
 # CmsLoginPage + ObjectAuthoringPage, real qcdev session) CONFIRMED that
 # surface exists for THIS object too:
