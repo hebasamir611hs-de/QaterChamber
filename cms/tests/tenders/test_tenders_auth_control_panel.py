@@ -22,6 +22,7 @@ import os
 import pytest
 
 from cms.pages.control_panel.login_page import CmsLoginPage
+from cms.pages.components.object_authoring_page import STATUS_PENDING_REVIEW
 from cms.pages.tenders.eoi_submission_admin_page import EoiSubmissionAdminPage
 from cms.pages.tenders.tender_admin_page import TenderAdminPage
 from config.settings import cms_role_credentials, control_panel_url
@@ -53,7 +54,7 @@ def test_site_content_editor_can_approve_reject_publish(page):
     this session."""
     email, password = cms_role_credentials("Site Content Editor")
     submissions = EoiSubmissionAdminPage(page).open_list(email, password)
-    assert submissions.is_visible('nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'), (
+    assert CmsLoginPage(page).login_succeeded(), (
         "Site Content Editor must at least reach the review-panel list view"
     )
     if not submissions.has_entries():
@@ -69,10 +70,17 @@ def test_site_content_author_cannot_directly_publish(page):
     """INVEST-TENDERS-TC-041 — Azure TC 146107."""
     email, password = cms_role_credentials("Site Content Author")
     tender = TenderAdminPage(page).open_create_form(email, password)
+    # Proves the session is the Author: the page fixture pre-loads TEST_USER,
+    # and until 2026-09-30 the login step was skipped because of it.
+    assert not CmsLoginPage(page).has_admin_toolbar(), (
+        "precondition: this case must run as Site Content Author, but the session has the admin toolbar"
+    )
     tender.fill_valid_form(_VALID_PDF)
-    tender.submit_for_publishing()
-    assert tender.current_status() != "Approved", (
-        "a Site Content Author must not be able to directly publish a tender submission"
+    tender.submit_for_review()
+    # An Author's submit is routed to review (qc-editorial-approval workflow);
+    # "not Published" alone would also pass on an unreadable banner.
+    assert tender.current_status() == STATUS_PENDING_REVIEW, (
+        "a Site Content Author's submission must go to Pending Review, not straight to Published"
     )
 
 

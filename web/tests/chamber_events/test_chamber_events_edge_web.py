@@ -10,7 +10,14 @@ check or a live clock/admin-session race that this framework's own
 sequential Playwright driving cannot reliably reproduce — and are
 intentionally NOT scripted here. See the batch report for the full
 disclosure.
+
+CORRECTED 2026-09-30: the visitor side of both admin-seeded cases ran in the
+CMS-authenticated `page` — a session that can see records a visitor cannot
+(standards.md, public-visibility checks). The visitor now gets a fresh,
+logged-out context; the admin keeps `page`.
 """
+
+import pathlib
 
 import pytest
 
@@ -18,6 +25,12 @@ from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 from cms.pages.chamber_events.chamber_events_admin_page import ChamberEventsAdminPage
 
 pytestmark = [pytest.mark.web, pytest.mark.event, pytest.mark.pbi_130704, pytest.mark.edge]
+
+VALID_JPG = str(pathlib.Path(__file__).resolve().parent / "fixtures" / "valid_event_image.jpg")
+
+
+def _not_on_site(title: str) -> str:
+    return f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
 
 
 @pytest.mark.tc_145362
@@ -35,12 +48,13 @@ def test_nth_registration_succeeds_nplus1th_blocked_at_limit(page):
     admin.set_end_date_time("2027-01-05T17:00")
     admin.set_registration_enabled(True)
     admin.fill_registration_limit("1")
-    admin.publish()
+    admin.fill_required_publish_fields(title, VALID_JPG)
+    visitor_ctx = page.context.browser.new_context()
+    visitor = visitor_ctx.new_page()
     try:
-        listing = ChamberEventsPage(page).open_listing()
-        listing.search(title)
-        if listing.card_count() == 0:
-            pytest.skip("QCTEST event did not propagate to the public listing in time")
+        admin.publish_and_confirm(title)
+        listing = ChamberEventsPage(visitor)
+        assert listing.wait_for_event_card(title), _not_on_site(title)
         detail = listing.open_first_card_in_tab(listing.TAB_ALL)
         # Act — 1st registration (fills the Nth=1 slot)
         detail.open_register_modal().fill_registration(
@@ -53,12 +67,12 @@ def test_nth_registration_succeeds_nplus1th_blocked_at_limit(page):
         detail.submit()
         assert detail.is_success_shown()
         # Act — (N+1)th registration must be blocked
-        detail2 = ChamberEventsPage(page).open_listing().search(title) or ChamberEventsPage(page)
-        listing2 = ChamberEventsPage(page).open_listing()
+        listing2 = ChamberEventsPage(visitor).open_listing()
         listing2.search(title)
         detail2 = listing2.open_first_card_in_tab(listing2.TAB_ALL)
         assert not detail2.is_register_visible() or detail2.is_closed_message_shown_en()
     finally:
+        visitor_ctx.close()
         admin.open_events_list()
         admin.delete_entry_by_title(title)
 
@@ -101,24 +115,25 @@ def test_stale_tab_unpublished_event_blocks_registration_on_refresh(page):
     admin.set_start_date_time("2027-02-01T09:00")
     admin.set_end_date_time("2027-02-01T17:00")
     admin.set_registration_enabled(True)
-    admin.publish()
+    admin.fill_required_publish_fields(title, VALID_JPG)
+    visitor_ctx = page.context.browser.new_context()
+    visitor = visitor_ctx.new_page()
     try:
-        listing = ChamberEventsPage(page).open_listing()
-        listing.search(title)
-        if listing.card_count() == 0:
-            pytest.skip("QCTEST event did not propagate to the public listing in time")
+        admin.publish_and_confirm(title)
+        listing = ChamberEventsPage(visitor)
+        assert listing.wait_for_event_card(title), _not_on_site(title)
         event_id = listing.card_for_title(title).get_attribute("href").split("id=")[-1]
         detail = listing.open_event_by_id(event_id)
         assert detail.is_register_visible()
         # Admin unpublishes in the same admin session (sequential, per
-        # standards.md's "no concurrent live-browser agents" rule).
+        # standards.md's "no concurrent live-browser agents" rule). Unpublish
+        # is a row action on the current build.
         admin.open_events_list()
-        admin.open_entry_by_edit_link(title)
-        admin.unpublish()
+        admin.unpublish_entry(title)
         # Visitor refreshes the stale detail tab
-        detail.open(detail.page.url) if hasattr(detail, "open") else None
-        page.reload()
+        visitor.reload()
         assert not detail.is_register_visible()
     finally:
+        visitor_ctx.close()
         admin.open_events_list()
         admin.delete_entry_by_title(title)

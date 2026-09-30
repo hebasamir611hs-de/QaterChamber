@@ -147,6 +147,30 @@ class ChamberEventsPage(BasePage):
     def card_count(self) -> int:
         return self.page.locator(self.CARD).count()
 
+    # Measured 2026-09-30: a record published from manage-business-event was
+    # on the anonymous listing on the first look. The budget is headroom for
+    # qcdev's asynchronously refreshed read index (standards.md, Wait-Strategy
+    # Audit), not an expected delay.
+    PUBLIC_PROPAGATION_TIMEOUT_S = 60
+    PUBLIC_PROPAGATION_POLL_MS = 5000
+
+    def wait_for_event_card(self, title: str, timeout_s: int | None = None) -> bool:
+        """Reload the listing, search `title`, and repeat until a card shows
+        or the budget runs out. Returns whether it showed — the caller
+        asserts. Call it from an ANONYMOUS context: a CMS session can see
+        records a visitor cannot."""
+        import time
+
+        deadline = time.monotonic() + (timeout_s or self.PUBLIC_PROPAGATION_TIMEOUT_S)
+        while True:
+            self.open_listing()
+            self.search(title)
+            if self.card_count() > 0:
+                return True
+            if time.monotonic() >= deadline:
+                return False
+            self.page.wait_for_timeout(self.PUBLIC_PROPAGATION_POLL_MS)
+
     def _title_locator(self, title: str):
         # Regex match instead of a :text-is('...') string — titles can contain
         # quotes (e.g. "Novgorod Region's government") that break CSS parsing.

@@ -34,6 +34,7 @@ import os
 
 import pytest
 
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 from cms.pages.tenders.eoi_submission_admin_page import EoiSubmissionAdminPage
 from cms.pages.tenders.tender_admin_page import (
     TenderAdminPage,
@@ -102,7 +103,7 @@ def test_duplicate_reference_number_rejected(page):
     tender.fill_valid_form(VALID_PDF)
     tender.fill_reference_number(existing_ref)
     tender.save_as_draft()
-    assert tender.current_status() != "Approved", (
+    assert tender.current_status() != STATUS_PUBLISHED, (
         f"submitting a duplicate Tender Reference Number ({existing_ref!r}) must be rejected"
     )
 
@@ -126,7 +127,7 @@ def test_title_rejected_when_en_or_ar_empty(page):
     tender = TenderAdminPage(page).open_create_form(email, password)
     tender.fill_valid_form(VALID_PDF, skip_fields={FIELD_TENDER_TITLE_AR})
     tender.save_as_draft()
-    assert tender.current_status() != "Approved", "leaving Tender Title AR empty must be rejected"
+    assert tender.current_status() != STATUS_PUBLISHED, "leaving Tender Title AR empty must be rejected"
 
 
 @pytest.mark.tc_146147
@@ -138,7 +139,7 @@ def test_whitespace_only_title_rejected(page):
     tender.fill_valid_form(VALID_PDF)
     tender.fill_text(FIELD_TENDER_TITLE, "   ")
     tender.save_as_draft()
-    assert tender.current_status() != "Approved", "a whitespace-only Tender Title must be rejected"
+    assert tender.current_status() != STATUS_PUBLISHED, "a whitespace-only Tender Title must be rejected"
 
 
 @pytest.mark.tc_146148
@@ -160,7 +161,7 @@ def test_organization_name_rejected_when_empty(page):
     tender = TenderAdminPage(page).open_create_form(email, password)
     tender.fill_valid_form(VALID_PDF, skip_fields={FIELD_ORGANIZATION_NAME_AR})
     tender.save_as_draft()
-    assert tender.current_status() != "Approved", "leaving Organization Name AR empty must be rejected"
+    assert tender.current_status() != STATUS_PUBLISHED, "leaving Organization Name AR empty must be rejected"
 
 
 @pytest.mark.tc_146150
@@ -172,7 +173,7 @@ def test_whitespace_only_organization_name_rejected(page):
     tender.fill_valid_form(VALID_PDF)
     tender.fill_text(FIELD_ORGANIZATION_NAME, "   ")
     tender.save_as_draft()
-    assert tender.current_status() != "Approved", "a whitespace-only Organization Name must be rejected"
+    assert tender.current_status() != STATUS_PUBLISHED, "a whitespace-only Organization Name must be rejected"
 
 
 @pytest.mark.tc_146151
@@ -245,7 +246,7 @@ def test_closing_date_equal_or_before_opening_rejected(page):
     tender.fill_valid_form(VALID_PDF)
     tender.fill_date(FIELD_CLOSING_DATE, "2026-10-01")  # equals baseline Opening Date
     tender.save_as_draft()
-    assert tender.current_status() != "Approved", "a Closing Date <= Opening Date must be rejected"
+    assert tender.current_status() != STATUS_PUBLISHED, "a Closing Date <= Opening Date must be rejected"
 
 
 @pytest.mark.tc_146157
@@ -257,7 +258,7 @@ def test_past_closing_date_rejected_on_creation(page):
     tender.fill_valid_form(VALID_PDF)
     tender.fill_date(FIELD_CLOSING_DATE, "2020-01-01")
     tender.save_as_draft()
-    assert tender.current_status() != "Approved", "a past Closing Date must be rejected on creation"
+    assert tender.current_status() != STATUS_PUBLISHED, "a past Closing Date must be rejected on creation"
 
 
 @pytest.mark.tc_146158
@@ -281,7 +282,7 @@ def test_publish_without_publication_date_blocked(page):
     tender = TenderAdminPage(page).open_create_form(email, password)
     tender.fill_valid_form(VALID_PDF, skip_fields={FIELD_PUBLICATION_DATE})
     tender.submit_for_publishing()
-    assert tender.current_status() != "Approved", "publishing without a Publication Date must be blocked"
+    assert tender.current_status() != STATUS_PUBLISHED, "publishing without a Publication Date must be blocked"
 
 
 @pytest.mark.tc_146160
@@ -334,7 +335,7 @@ def test_publish_without_tender_document_blocked(page):
     tender = TenderAdminPage(page).open_create_form(email, password)
     tender.fill_valid_form(VALID_PDF, skip_fields={FIELD_UPLOAD_TENDER_DOCUMENTS})
     tender.submit_for_publishing()
-    assert tender.current_status() != "Approved", "publishing without a Tender Document must be blocked"
+    assert tender.current_status() != STATUS_PUBLISHED, "publishing without a Tender Document must be blocked"
 
 
 @pytest.mark.tc_146164
@@ -379,7 +380,7 @@ def test_publish_without_boq_blocked(page):
     tender = TenderAdminPage(page).open_create_form(email, password)
     tender.fill_valid_form(VALID_PDF, skip_fields={FIELD_BILL_OF_QUANTITIES})
     tender.submit_for_publishing()
-    assert tender.current_status() != "Approved", "publishing without a BOQ must be blocked"
+    assert tender.current_status() != STATUS_PUBLISHED, "publishing without a BOQ must be blocked"
 
 
 @pytest.mark.tc_146280

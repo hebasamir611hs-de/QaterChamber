@@ -22,6 +22,7 @@ import os
 
 import pytest
 
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 from cms.pages.tenders.eoi_submission_admin_page import EoiSubmissionAdminPage
 from cms.pages.tenders.tender_admin_page import (
     TenderAdminPage,
@@ -98,7 +99,7 @@ def test_administrator_can_manually_create_and_publish_a_tender(page):
     code = tender.find_entry_code_by_field(FIELD_TENDER_TITLE, "QCTEST Manual Tender")
     assert code, "the manually-created tender should be findable by its own Tender Title after publishing"
     tender.open_entry_by_code(code)
-    assert tender.current_status() == "Approved", (
+    assert tender.current_status() == STATUS_PUBLISHED, (
         "a manually-created (Path 2) tender must reach the Approved/published state without any "
         "public submission"
     )
@@ -159,7 +160,7 @@ def test_inactive_status_hides_a_published_tender(page):
     assert code
     tender.open_entry_by_code(code)
     tender.unpublish_to_edit_as_draft()
-    assert tender.current_status() != "Approved", (
+    assert tender.current_status() != STATUS_PUBLISHED, (
         "an inactive/unpublished tender must not remain in the Approved/published state"
     )
     tender.delete_entry_by_code(code)

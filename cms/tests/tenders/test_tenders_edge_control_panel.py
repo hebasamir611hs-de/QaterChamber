@@ -15,6 +15,7 @@ import os
 
 import pytest
 
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 from cms.pages.tenders.tender_admin_page import TenderAdminPage, FIELD_TENDER_TITLE, FIELD_CLOSING_DATE
 from config.settings import cms_role_credentials
 
@@ -63,7 +64,7 @@ def test_manual_and_approved_submission_reference_numbers_do_not_collide(page):
     tender.fill_valid_form(_VALID_PDF)
     tender.fill_reference_number(existing_ref)
     tender.save_as_draft()
-    assert tender.current_status() != "Approved", (
+    assert tender.current_status() != STATUS_PUBLISHED, (
         f"a second manually-created tender reusing an existing Reference Number ({existing_ref!r}) "
         "must not collide/be accepted"
     )
@@ -80,7 +81,7 @@ def test_zero_day_validity_rejected_manual_create_side(page):
     tender.fill_valid_form(_VALID_PDF)
     tender.fill_date(FIELD_CLOSING_DATE, "2026-10-01")  # equals baseline Opening Date
     tender.save_as_draft()
-    assert tender.current_status() != "Approved", (
+    assert tender.current_status() != STATUS_PUBLISHED, (
         "a Closing Date exactly equal to the Opening Date (zero-day validity) must be rejected "
         "on the CMS manual-create path"
     )

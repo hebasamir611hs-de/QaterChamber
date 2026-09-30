@@ -29,11 +29,14 @@ from cms.pages.chamber_events.chamber_events_admin_page import (
     ChamberEventsAdminPage,
     ChamberEventsListingConfigAdminPage,
     FIELD_CATEGORY_SECTOR,
+    FIELD_EVENT_IMAGE,
+    FIELD_PIN_TO_HOME,
 )
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 pytestmark = [pytest.mark.control_panel, pytest.mark.event, pytest.mark.pbi_130704, pytest.mark.functional_low]
 
-FIXTURES_DIR = pathlib.Path(__file__).resolve().parents[2] / "web" / "tests" / "chamber_events" / "fixtures"
+FIXTURES_DIR = pathlib.Path(__file__).resolve().parents[3] / "web" / "tests" / "chamber_events" / "fixtures"
 VALID_JPG = str(FIXTURES_DIR / "valid_event_image.jpg")
 OVERSIZE_JPG = str(FIXTURES_DIR / "oversize_event_image.jpg")
 UNSUPPORTED_FILE = str(FIXTURES_DIR / "unsupported_event_image.bmp")
@@ -69,7 +72,7 @@ def test_eyebrow_label_rejected_when_empty(page):
     config.fill_eyebrow_label_en("")
     config.fill_page_title_en("Chamber Events")
     config.save_draft()
-    assert config.current_status() != "Approved"
+    assert config.current_status() != STATUS_PUBLISHED
 
 
 @pytest.mark.tc_145254
@@ -90,7 +93,7 @@ def test_eyebrow_label_rejects_whitespace_only(page):
     config.fill_eyebrow_label_en("     ")
     config.fill_page_title_en("Chamber Events")
     config.save_draft()
-    assert config.current_status() != "Approved"
+    assert config.current_status() != STATUS_PUBLISHED
 
 
 @pytest.mark.tc_145257
@@ -102,7 +105,7 @@ def test_page_title_rejected_when_en_empty(page):
     config.fill_page_title_en("")
     config.fill_page_title_ar("فعاليات الغرفة")
     config.save_draft()
-    assert config.current_status() != "Approved"
+    assert config.current_status() != STATUS_PUBLISHED
 
 
 @pytest.mark.tc_145258
@@ -122,7 +125,7 @@ def test_page_title_rejects_whitespace_only(page):
     config.open_config_form(email, password)
     config.fill_page_title_en("     ")
     config.save_draft()
-    assert config.current_status() != "Approved"
+    assert config.current_status() != STATUS_PUBLISHED
 
 
 @pytest.mark.tc_145260
@@ -143,7 +146,7 @@ def test_hero_description_rejected_when_empty(page):
     config.fill_page_title_en("Chamber Events")
     config.fill_hero_description("")
     config.save_draft()
-    assert config.current_status() != "Approved"
+    assert config.current_status() != STATUS_PUBLISHED
 
 
 @pytest.mark.tc_145262
@@ -163,7 +166,7 @@ def test_hero_description_rejects_whitespace_only(page):
     config.open_config_form(email, password)
     config.fill_hero_description("     ")
     config.save_draft()
-    assert config.current_status() != "Approved"
+    assert config.current_status() != STATUS_PUBLISHED
 
 
 @pytest.mark.tc_145264
@@ -183,7 +186,7 @@ def test_hero_image_rejected_when_not_provided(page):
     config.fill_eyebrow_label_en("Connect. Learn. Participate.")
     config.fill_page_title_en("Chamber Events")
     config.save_draft()
-    assert config.current_status() != "Approved"
+    assert config.current_status() != STATUS_PUBLISHED
 
 
 @pytest.mark.tc_145266
@@ -217,7 +220,7 @@ def test_hero_status_reaches_draft_published_unpublished(page):
     config.save_draft()
     assert config.current_status() == "Draft"
     config.publish()
-    assert config.current_status() == "Approved"
+    assert config.current_status() == STATUS_PUBLISHED
     config.unpublish()
     assert config.current_status() == "Draft"
 
@@ -260,17 +263,16 @@ def test_what_to_expect_item_reflected_publicly_after_publish(page):
     admin.set_end_date_time("2027-04-02T17:00")
     bullet_text = "Live networking with regional trade delegations"
     try:
-        admin.fill_what_to_expect_item(1, bullet_text)
-        admin.publish()
+        admin.fill_what_to_expect(bullet_text)
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
         anon_page = anon_context.new_page()
         try:
-            listing = ChamberEventsPage(anon_page).open_listing()
-            listing.search(title)
-            if listing.card_count() == 0:
-                pytest.skip("QCTEST event did not propagate to the public listing in time")
+            listing = ChamberEventsPage(anon_page)
+            assert listing.wait_for_event_card(title), f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
             detail = listing.open_first_card_in_tab(listing.TAB_ALL)
             assert bullet_text in " ".join(detail.what_to_expect_bullets())
         finally:
@@ -315,7 +317,7 @@ def test_event_title_rejected_when_en_empty(page):
     admin.set_start_date_time("2027-04-03T09:00")
     admin.set_end_date_time("2027-04-03T17:00")
     admin.publish()
-    assert admin.current_status() != "Approved"
+    assert admin.current_status() != STATUS_PUBLISHED
 
 
 @pytest.mark.tc_145315
@@ -337,7 +339,7 @@ def test_event_title_rejects_whitespace_only(page):
     admin.set_start_date_time("2027-04-04T09:00")
     admin.set_end_date_time("2027-04-04T17:00")
     admin.publish()
-    assert admin.current_status() != "Approved"
+    assert admin.current_status() != STATUS_PUBLISHED
 
 
 @pytest.mark.tc_145317
@@ -360,8 +362,12 @@ def test_event_description_rejected_when_empty(page):
     admin.set_start_date_time("2027-04-05T09:00")
     admin.set_end_date_time("2027-04-05T17:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -389,8 +395,12 @@ def test_event_description_rejects_whitespace_only(page):
     admin.set_start_date_time("2027-04-06T09:00")
     admin.set_end_date_time("2027-04-06T17:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -402,7 +412,7 @@ def test_category_sector_accepts_valid_lookup_value(page):
     admin = ChamberEventsAdminPage(page)
     admin.open_create_event_form(email, password)
     admin.select_category_sector("Investment")
-    assert admin.page.get_by_role("combobox", name=FIELD_CATEGORY_SECTOR, exact=True).input_value() == "Investment"
+    assert admin.page.get_by_role("textbox", name=FIELD_CATEGORY_SECTOR, exact=True).input_value() == "Investment"
 
 
 @pytest.mark.tc_145322
@@ -417,8 +427,12 @@ def test_category_sector_rejected_when_unselected(page):
     admin.set_start_date_time("2027-04-07T09:00")
     admin.set_end_date_time("2027-04-07T17:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG, include_category=False)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -438,15 +452,16 @@ def test_event_format_non_workshop_routes_to_chamber_events(page):
     admin.set_start_date_time("2027-04-08T09:00")
     admin.set_end_date_time("2027-04-08T17:00")
     try:
-        admin.publish()
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
         anon_page = anon_context.new_page()
         try:
-            listing = ChamberEventsPage(anon_page).open_listing()
-            listing.search(title)
-            assert listing.card_count() >= 0  # propagation best-effort, see FH-005/145244
+            listing = ChamberEventsPage(anon_page)
+            assert listing.wait_for_event_card(title), f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
+            assert listing.has_card_with_title(title)
         finally:
             anon_context.close()
     finally:
@@ -468,7 +483,8 @@ def test_event_format_workshop_routes_to_workshop_page_only(page):
     admin.set_start_date_time("2027-04-09T09:00")
     admin.set_end_date_time("2027-04-09T17:00")
     try:
-        admin.publish()
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
@@ -496,8 +512,12 @@ def test_event_format_rejected_when_unselected(page):
     admin.set_start_date_time("2027-04-10T09:00")
     admin.set_end_date_time("2027-04-10T17:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -509,7 +529,7 @@ def test_event_image_accepts_valid_jpg_under_2mb(page):
     admin = ChamberEventsAdminPage(page)
     admin.open_create_event_form(email, password)
     admin.upload_event_image(VALID_JPG)
-    assert admin.uploaded_filename("Event Image") != ""
+    assert admin.uploaded_filename(FIELD_EVENT_IMAGE) != ""
 
 
 @pytest.mark.tc_145327
@@ -524,8 +544,12 @@ def test_event_image_rejected_when_not_provided(page):
     admin.set_start_date_time("2027-04-11T09:00")
     admin.set_end_date_time("2027-04-11T17:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG, include_image=False)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -537,7 +561,7 @@ def test_event_image_rejects_over_2mb(page):
     admin = ChamberEventsAdminPage(page)
     admin.open_create_event_form(email, password)
     admin.upload_event_image(OVERSIZE_JPG)
-    assert admin.uploaded_filename("Event Image") == ""
+    assert admin.uploaded_filename(FIELD_EVENT_IMAGE) == ""
 
 
 @pytest.mark.tc_145329
@@ -546,7 +570,7 @@ def test_event_image_rejects_unsupported_format(page):
     admin = ChamberEventsAdminPage(page)
     admin.open_create_event_form(email, password)
     admin.upload_event_image(UNSUPPORTED_FILE)
-    assert admin.uploaded_filename("Event Image") == ""
+    assert admin.uploaded_filename(FIELD_EVENT_IMAGE) == ""
 
 
 @pytest.mark.tc_145330
@@ -570,8 +594,12 @@ def test_start_date_time_rejected_when_empty(page):
     admin.fill_venue("Qatar Chamber, Doha")
     admin.set_end_date_time("2027-05-01T17:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -610,8 +638,12 @@ def test_end_date_time_rejected_when_empty(page):
     admin.fill_venue("Qatar Chamber, Doha")
     admin.set_start_date_time("2027-05-03T09:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -629,8 +661,12 @@ def test_end_date_time_rejected_before_start(page):
     admin.set_start_date_time("2027-05-04T17:00")
     admin.set_end_date_time("2027-05-04T09:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -648,8 +684,12 @@ def test_end_date_time_equal_to_start_rejected_boundary(page):
     admin.set_start_date_time("2027-05-05T09:00")
     admin.set_end_date_time("2027-05-05T09:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -667,8 +707,12 @@ def test_end_date_time_in_past_rejected(page):
     admin.set_start_date_time("2020-01-01T09:00")
     admin.set_end_date_time("2020-01-01T17:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -694,8 +738,12 @@ def test_venue_rejected_when_en_empty(page):
     admin.set_start_date_time("2027-05-06T09:00")
     admin.set_end_date_time("2027-05-06T17:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -722,8 +770,12 @@ def test_venue_rejects_whitespace_only(page):
     admin.set_start_date_time("2027-05-07T09:00")
     admin.set_end_date_time("2027-05-07T17:00")
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED, (
+            f"{title!r} was published although the field under test was invalid"
+        )
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -742,16 +794,15 @@ def test_registration_enabled_true_shows_register_control(page):
     admin.set_end_date_time("2027-05-08T17:00")
     admin.set_registration_enabled(True)
     try:
-        admin.publish()
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
         anon_page = anon_context.new_page()
         try:
-            listing = ChamberEventsPage(anon_page).open_listing()
-            listing.search(title)
-            if listing.card_count() == 0:
-                pytest.skip("QCTEST event did not propagate in time")
+            listing = ChamberEventsPage(anon_page)
+            assert listing.wait_for_event_card(title), f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
             detail = listing.open_first_card_in_tab(listing.TAB_ALL)
             assert detail.is_register_visible()
         finally:
@@ -774,16 +825,15 @@ def test_registration_enabled_false_hides_register_control(page):
     admin.set_end_date_time("2027-05-09T17:00")
     admin.set_registration_enabled(False)
     try:
-        admin.publish()
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
         anon_page = anon_context.new_page()
         try:
-            listing = ChamberEventsPage(anon_page).open_listing()
-            listing.search(title)
-            if listing.card_count() == 0:
-                pytest.skip("QCTEST event did not propagate in time")
+            listing = ChamberEventsPage(anon_page)
+            assert listing.wait_for_event_card(title), f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
             detail = listing.open_first_card_in_tab(listing.TAB_ALL)
             assert not detail.is_register_visible()
         finally:
@@ -826,8 +876,8 @@ def test_registration_limit_empty_means_unlimited(page):
     admin.set_end_date_time("2027-05-10T17:00")
     admin.set_registration_enabled(True)
     try:
-        admin.publish()
-        assert admin.current_status() == "Approved"
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -879,16 +929,15 @@ def test_add_to_calendar_enabled_true_shows_control(page):
     admin.set_end_date_time("2027-05-11T17:00")
     admin.set_add_to_calendar_enabled(True)
     try:
-        admin.publish()
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
         anon_page = anon_context.new_page()
         try:
-            listing = ChamberEventsPage(anon_page).open_listing()
-            listing.search(title)
-            if listing.card_count() == 0:
-                pytest.skip("QCTEST event did not propagate in time")
+            listing = ChamberEventsPage(anon_page)
+            assert listing.wait_for_event_card(title), f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
             detail = listing.open_first_card_in_tab(listing.TAB_ALL)
             assert detail.is_add_to_calendar_visible()
         finally:
@@ -911,16 +960,15 @@ def test_add_to_calendar_enabled_false_hides_control(page):
     admin.set_end_date_time("2027-05-12T17:00")
     admin.set_add_to_calendar_enabled(False)
     try:
-        admin.publish()
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
         anon_page = anon_context.new_page()
         try:
-            listing = ChamberEventsPage(anon_page).open_listing()
-            listing.search(title)
-            if listing.card_count() == 0:
-                pytest.skip("QCTEST event did not propagate in time")
+            listing = ChamberEventsPage(anon_page)
+            assert listing.wait_for_event_card(title), f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
             detail = listing.open_first_card_in_tab(listing.TAB_ALL)
             assert not detail.is_add_to_calendar_visible()
         finally:
@@ -945,7 +993,7 @@ def test_pin_to_home_true_saved(page):
     try:
         admin.save_draft()
         admin.open_entry_by_edit_link(title)
-        assert admin.page.get_by_role("checkbox", name="Pin to Home/Featured", exact=True).is_checked()
+        assert admin.page.get_by_role("checkbox", name=FIELD_PIN_TO_HOME, exact=True).is_checked()
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -966,7 +1014,7 @@ def test_pin_to_home_false_saved(page):
     try:
         admin.save_draft()
         admin.open_entry_by_edit_link(title)
-        assert not admin.page.get_by_role("checkbox", name="Pin to Home/Featured", exact=True).is_checked()
+        assert not admin.page.get_by_role("checkbox", name=FIELD_PIN_TO_HOME, exact=True).is_checked()
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -994,8 +1042,10 @@ def test_calendar_export_type_rejected_when_unselected(page):
     admin.set_end_date_time("2027-05-15T17:00")
     admin.set_add_to_calendar_enabled(True)
     try:
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
-        assert admin.current_status() != "Approved"
+        admin.open_events_list(email, password)
+        assert admin.row_status_text(title) != STATUS_PUBLISHED
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -1017,16 +1067,15 @@ def test_individually_toggling_provider_booleans_reflects_only_enabled(page):
     admin.set_outlook_enabled(False)
     admin.set_ics_enabled(False)
     try:
-        admin.publish()
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
         anon_page = anon_context.new_page()
         try:
-            listing = ChamberEventsPage(anon_page).open_listing()
-            listing.search(title)
-            if listing.card_count() == 0:
-                pytest.skip("QCTEST event did not propagate in time")
+            listing = ChamberEventsPage(anon_page)
+            assert listing.wait_for_event_card(title), f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
             detail = listing.open_first_card_in_tab(listing.TAB_ALL)
             detail.open_calendar_menu()
             options = detail.calendar_option_labels()
@@ -1056,16 +1105,15 @@ def test_disabling_all_providers_hides_calendar_option_list(page):
     admin.set_outlook_enabled(False)
     admin.set_ics_enabled(False)
     try:
-        admin.publish()
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
         anon_page = anon_context.new_page()
         try:
-            listing = ChamberEventsPage(anon_page).open_listing()
-            listing.search(title)
-            if listing.card_count() == 0:
-                pytest.skip("QCTEST event did not propagate in time")
+            listing = ChamberEventsPage(anon_page)
+            assert listing.wait_for_event_card(title), f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
             detail = listing.open_first_card_in_tab(listing.TAB_ALL)
             assert not detail.is_add_to_calendar_visible()
         finally:
@@ -1090,20 +1138,20 @@ def test_time_zone_reflected_in_exported_calendar_entry(page):
     admin.set_add_to_calendar_enabled(True)
     admin.set_ics_enabled(True)
     try:
-        admin.publish()
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
         anon_page = anon_context.new_page()
         try:
-            listing = ChamberEventsPage(anon_page).open_listing()
-            listing.search(title)
-            if listing.card_count() == 0:
-                pytest.skip("QCTEST event did not propagate in time")
+            listing = ChamberEventsPage(anon_page)
+            assert listing.wait_for_event_card(title), f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
             detail = listing.open_first_card_in_tab(listing.TAB_ALL)
             detail.open_calendar_menu()
-            if "Download .ics file" not in detail.calendar_option_labels():
-                pytest.skip("ICS export not available for this event")
+            assert "Download .ics file" in detail.calendar_option_labels(), (
+                "ICS Download Enabled was ticked, but the public calendar menu offers no .ics download"
+            )
             download = detail.download_ics()
             content = open(download.path(), encoding="utf-8").read()
             assert "TZID" in content or "Qatar" in content
@@ -1126,8 +1174,8 @@ def test_time_zone_can_be_left_blank_default(page):
     admin.set_start_date_time("2027-05-19T09:00")
     admin.set_end_date_time("2027-05-19T17:00")
     try:
-        admin.publish()
-        assert admin.current_status() == "Approved"
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
     finally:
         admin.open_events_list(email, password)
         admin.delete_entry_by_title(title)
@@ -1148,20 +1196,20 @@ def test_description_source_maps_calendar_entry_description(page):
     admin.set_add_to_calendar_enabled(True)
     admin.set_ics_enabled(True)
     try:
-        admin.publish()
+        admin.fill_required_publish_fields(title, VALID_JPG)
+        admin.publish_and_confirm(title, email, password)
         from web.pages.chamber_events.chamber_events_page import ChamberEventsPage
 
         anon_context = page.context.browser.new_context()
         anon_page = anon_context.new_page()
         try:
-            listing = ChamberEventsPage(anon_page).open_listing()
-            listing.search(title)
-            if listing.card_count() == 0:
-                pytest.skip("QCTEST event did not propagate in time")
+            listing = ChamberEventsPage(anon_page)
+            assert listing.wait_for_event_card(title), f"{title!r} is Published and Active in the CMS but never appeared on the anonymous Chamber Events listing"
             detail = listing.open_first_card_in_tab(listing.TAB_ALL)
             detail.open_calendar_menu()
-            if "Download .ics file" not in detail.calendar_option_labels():
-                pytest.skip("ICS export not available for this event")
+            assert "Download .ics file" in detail.calendar_option_labels(), (
+                "ICS Download Enabled was ticked, but the public calendar menu offers no .ics download"
+            )
             download = detail.download_ics()
             content = open(download.path(), encoding="utf-8").read()
             assert "DESCRIPTION" in content
