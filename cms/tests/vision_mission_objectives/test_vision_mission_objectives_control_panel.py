@@ -136,9 +136,7 @@ def _cms_admin(page) -> VmoAdminPage:
 
     login = CmsLoginPage(page)
     page.goto(control_panel_url("/home"))
-    already_authenticated = (
-        page.locator(login.LOGIN_SUCCESS_INDICATOR).first.is_visible()
-    )
+    already_authenticated = login.login_succeeded()
     if not already_authenticated:
         login.open_login()
         user = os.environ.get("TEST_USER") or os.environ.get("CMS_USERNAME")

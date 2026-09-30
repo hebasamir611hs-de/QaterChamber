@@ -257,7 +257,7 @@ class HomePublicationsAdminPage(ObjectAuthoringPage):
         except Exception:  # noqa: BLE001 — did not land on the reset page, proceed to the normal check
             pass
         try:
-            self.page.locator(CmsLoginPage.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="visible", timeout=10000)
+            self.page.locator(CmsLoginPage.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="attached", timeout=10000)
             return "ok"
         except Exception:  # noqa: BLE001 — neither a recognized blocker nor a confirmed success
             return "unknown"

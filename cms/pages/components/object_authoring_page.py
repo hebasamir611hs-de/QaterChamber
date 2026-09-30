@@ -188,6 +188,8 @@ probes on manage-promotional-banner:
         record, exactly as visitors see it."
 """
 
+import re
+
 from core.utils.logger import get_logger
 from core.utils.waits import WaitTimeoutError, wait_until
 from core.web.base_page import BasePage
@@ -277,7 +279,19 @@ class ObjectAuthoringPage(BasePage):
     # "Submit for Publishing" string matches NOTHING on the current build;
     # SUBMIT_FOR_PUBLISHING_BUTTON is kept only as a deprecated alias so
     # existing callers keep resolving, and points at the same real button.
-    SUBMIT_FOR_REVIEW_BUTTON = 'button:has-text("Submit for Review")'
+    #
+    # CORRECTED 2026-09-30 — the label is ROLE-DEPENDENT, not fixed. Read live
+    # on manage-business-event as TEST_USER: the same submit button reads
+    # "Publish", with the helper text "As an Editor, what you publish here
+    # goes live straight away." "Submit for Review" is what a non-privileged
+    # submitter (Site Content Author) gets. Matching only "Submit for Review"
+    # therefore timed out on every admin/Editor submit. Both labels are
+    # matched here; `text-is` keeps "Unpublish" out, and the form only ever
+    # renders one of the two.
+    SUBMIT_FOR_REVIEW_BUTTON = (
+        'button[type="submit"]:text-is("Submit for Review"), '
+        'button[type="submit"]:text-is("Publish")'
+    )
     SUBMIT_FOR_PUBLISHING_BUTTON = SUBMIT_FOR_REVIEW_BUTTON
     # Row-level workflow actions carry a stable `data-qc-oel-<action>="<entryId>"`
     # attribute (confirmed live 2026-09-28 on manage-publication /
