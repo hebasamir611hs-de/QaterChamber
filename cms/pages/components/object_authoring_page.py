@@ -851,12 +851,23 @@ class ObjectAuthoringPage(BasePage):
              current_status() does not become "Approved" afterward.
         Returns True if either signal fired. Callers must NOT loosen this
         further or treat a False return as anything but a real, honestly-
-        reported "the over-limit value was accepted" finding."""
+        reported "the over-limit value was accepted" finding.
+
+        KNOWN WEAKNESS (2026-09-30). Until today branch 2 compared with
+        "Approved", which the normalized status never equals, so this always
+        returned True once truncation failed. It now compares with
+        STATUS_PUBLISHED. Branch 2 is still only trustworthy on an entry that
+        was OPEN for edit (the editing banner is what current_status() reads).
+        On a create-new form a successful submit can land back on an empty
+        form with no banner — current_status() is then "Unknown", which also
+        reads as "rejected". Callers on create forms should confirm through
+        the entries list (row status by title/code) until this has a
+        positive "accepted" signal."""
         self.fill_text(field_label, attempted)
         if len(self.field_value(field_label)) <= limit:
             return True
         self.submit_for_publishing()
-        return self.current_status() != "Approved"
+        return self.current_status() != STATUS_PUBLISHED
 
     def select_existing_file_from_library(
         self, field_label: str, folder_name: str, file_name: str

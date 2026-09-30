@@ -111,6 +111,7 @@ from cms.pages.home_promo_banners.home_promo_banners_admin_page import HomePromo
 from core.utils.logger import get_logger
 from cms.pages.components.object_authoring_page import ObjectAuthoringPage
 from web.pages.home_promo_banners.home_promo_banners_page import HomePromoBannersPage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 logger = get_logger("test_home_promo_banners_control_panel")
 
@@ -551,7 +552,7 @@ def test_submit_draft_banner_for_review(page):
 
         with allure.step("Assert the banner's status changed off Draft"):
             status_after = authoring.row_status_text(alt_en)
-        assert status_after == "Approved", (
+        assert status_after == STATUS_PUBLISHED, (
             f"banner {alt_en!r} status did not change after Submit for "
             f"Publishing, got {status_after!r}"
         )
@@ -625,7 +626,7 @@ def test_publishing_pending_review_banner_makes_it_live(page):
 
         with allure.step("Assert status changed to Approved (this build's Published-equivalent)"):
             status_after = authoring.row_status_text(alt_en)
-        assert status_after == "Approved", (
+        assert status_after == STATUS_PUBLISHED, (
             f"banner {alt_en!r} did not reach Approved/Published status, "
             f"got {status_after!r}"
         )
@@ -698,7 +699,7 @@ def test_unpublishing_banner_removes_it_from_home_page(page, browser):
             authoring.save_as_draft()
             authoring.open_entry_by_edit_link(alt_en)
             authoring.submit_for_publishing()
-            assert authoring.row_status_text(alt_en) == "Approved", (
+            assert authoring.row_status_text(alt_en) == STATUS_PUBLISHED, (
                 f"fixture banner {alt_en!r} did not reach Approved before "
                 f"the unpublish assertion, got {authoring.row_status_text(alt_en)!r}"
             )
@@ -794,7 +795,7 @@ def test_deactivate_published_banner_preserves_workflow_state(page):
         with allure.step("Confirm the fixture banner is published (Status=APPROVED) and visible while Active=true"):
             admin.open_promo_banners_list()
             status_before = admin.row_status_text(alt_en)
-            assert "APPROVED" in status_before, (
+            assert "PUBLISHED" in status_before, (
                 f"expected fixture banner Status=APPROVED before toggle, got {status_before!r}"
             )
             visible_before = home.reload_until_banner_matches(alt_en, expected_visible=True)
@@ -816,7 +817,7 @@ def test_deactivate_published_banner_preserves_workflow_state(page):
         with allure.step("Assert the banner's workflow/publish state (Status column) is unchanged after Save"):
             admin.open_promo_banners_list()
             status_after = admin.row_status_text(alt_en)
-            assert "APPROVED" in status_after, (
+            assert "PUBLISHED" in status_after, (
                 f"Status changed after deactivating (still expected APPROVED/"
                 f"published), got {status_after!r}"
             )
@@ -987,7 +988,7 @@ def test_create_and_publish_new_banner_slot(page):
 
         with allure.step("Assert status changed to Published (Approved, this build's equivalent)"):
             status_after = authoring.row_status_text(alt_en)
-        assert status_after == "Approved", (
+        assert status_after == STATUS_PUBLISHED, (
             f"banner {alt_en!r} did not reach Published/Approved status, got {status_after!r}"
         )
     finally:
@@ -1062,7 +1063,7 @@ def test_create_publish_and_see_banner_on_home_page_e2e(page, browser):
 
         with allure.step("Assert the banner reached Published/Approved status"):
             status_after = authoring.row_status_text(alt_en)
-        assert status_after == "Approved", (
+        assert status_after == STATUS_PUBLISHED, (
             f"banner {alt_en!r} did not reach Published/Approved status, got {status_after!r}"
         )
 
@@ -1135,7 +1136,7 @@ def test_unpublishing_banner_removes_it_after_cache_refresh(page, browser):
             authoring.save_as_draft()
             authoring.open_entry_by_edit_link(alt_en)
             authoring.submit_for_publishing()
-            assert authoring.row_status_text(alt_en) == "Approved", (
+            assert authoring.row_status_text(alt_en) == STATUS_PUBLISHED, (
                 f"fixture banner {alt_en!r} did not reach Published/Approved "
                 f"before this test's own unpublish action, got "
                 f"{authoring.row_status_text(alt_en)!r}"

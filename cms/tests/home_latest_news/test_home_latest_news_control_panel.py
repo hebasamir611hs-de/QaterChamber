@@ -42,6 +42,7 @@ from cms.pages.home_latest_news.home_latest_news_admin_page import HomeLatestNew
 from core.utils.logger import get_logger
 from cms.pages.components.object_authoring_page import ObjectAuthoringPage
 from web.pages.home_latest_news.home_latest_news_page import HomeLatestNewsPage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 logger = get_logger("test_home_latest_news_control_panel")
 
@@ -209,7 +210,7 @@ def _retire_created_article(authoring: ObjectAuthoringPage, title: str) -> None:
     if not authoring.row_visible(title):
         return
     authoring.open_entry_by_edit_link(title)
-    if authoring.current_status() == "Approved":
+    if authoring.current_status() == STATUS_PUBLISHED:
         authoring.unpublish_to_edit_as_draft()
     authoring.set_checkbox("Active/Published Status", False)
     authoring.save_as_draft()
@@ -280,7 +281,7 @@ def test_publishing_news_article_surfaces_it_newest_first(page, browser):
             authoring.open_entry_by_edit_link(title)
             authoring.submit_for_publishing()
             status_published = authoring.row_status_text(title)
-        assert status_published == "Approved", (
+        assert status_published == STATUS_PUBLISHED, (
             f"article {title!r} did not reach Approved (this build's "
             f"Published), got {status_published!r}"
         )
@@ -365,7 +366,7 @@ def test_unpublishing_news_article_removes_it_from_latest_news(page, browser):
             authoring.open_entry_by_edit_link(title)
             authoring.submit_for_publishing()
             status_before = authoring.row_status_text(title)
-        assert status_before == "Approved", (
+        assert status_before == STATUS_PUBLISHED, (
             f"precondition failed: fixture article {title!r} is not Published/"
             f"Approved, got {status_before!r}"
         )

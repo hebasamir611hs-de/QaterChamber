@@ -63,6 +63,7 @@ import pytest
 
 from cms.pages.gm_message.gm_message_admin_page import GmMessageAdminPage
 from web.pages.gm_message.gm_message_page import GM_MESSAGE_PATH, GmMessagePage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 
 @allure.epic("About Us")
@@ -431,7 +432,7 @@ def test_site_content_editor_can_author_preview_and_publish_the_135453(page, bro
             authoring.submit_for_publishing()
 
         # Assert: Step 3 — Publish succeeds, status is Approved again.
-        assert authoring.current_status() == "Approved"
+        assert authoring.current_status() == STATUS_PUBLISHED
 
         with allure.step("Reopen the record and read EN + AR field values back (Preview/persistence check)"):
             authoring = admin.open_object_authoring_form()
@@ -478,7 +479,7 @@ def test_site_content_editor_can_author_preview_and_publish_the_135453(page, bro
                 authoring.fill_text("GM Name", baseline_name_en)
                 authoring.fill_text("Salutation Heading", baseline_salutation_en)
                 authoring.fill_text("Signature Closing Text", baseline_closing_en)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
                 else:
                     authoring.save_as_draft()
@@ -882,7 +883,7 @@ def test_draft_content_saved_but_not_yet_published_is_never_135457(page, browser
                     authoring.unpublish_to_edit_as_draft()
                 if authoring.field_value("Salutation Heading") != baseline_salutation_en:
                     authoring.fill_text("Salutation Heading", baseline_salutation_en)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
                 else:
                     authoring.save_as_draft()

@@ -77,6 +77,7 @@ from cms.pages.board_of_directors.board_members_admin_page import BoardMembersAd
 from core.web.browser import new_context
 from web.pages.board_of_directors.board_member_profile_page import BoardMemberProfilePage
 from web.pages.board_of_directors.board_of_directors_page import BoardOfDirectorsPage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 
 @pytest.fixture
@@ -1177,7 +1178,7 @@ def test_create_board_member_end_to_end_draft_through_publish(page, browser):
             admin.submit_for_publishing()
 
         admin.open_entries_list()
-        assert admin.row_status_text(qctest_name) == "Approved", (
+        assert admin.row_status_text(qctest_name) == STATUS_PUBLISHED, (
             f"expected {qctest_name!r} to show Status 'Approved' in the "
             f"entries list immediately after Submit for Publishing"
         )
@@ -1364,7 +1365,7 @@ def test_unpublish_removes_from_public_retains_in_cms(page, browser):
             except Exception:  # noqa: BLE001 — best-effort restore, verified below
                 pass
         restored_status = admin.row_status_text(member_name) if admin.row_visible(member_name) else ""
-        assert restored_status == "Approved", (
+        assert restored_status == STATUS_PUBLISHED, (
             f"FAILED TO RESTORE baseline: {member_name!r} status is "
             f"{restored_status!r}, expected 'Approved' — manual qcdev "
             f"cleanup may be required"
@@ -1413,7 +1414,7 @@ def test_delete_board_member_removes_from_cms_and_public_site(page, browser):
         # test_create_board_member_end_to_end_draft_through_publish's own
         # comment for the confirmed-live reason.
         admin.open_entries_list()
-        assert admin.row_status_text(qctest_name) == "Approved", (
+        assert admin.row_status_text(qctest_name) == STATUS_PUBLISHED, (
             f"expected {qctest_name!r} to show Status 'Approved' immediately "
             f"after Submit for Publishing"
         )
@@ -1713,7 +1714,7 @@ def test_preview_draft_member_accurate_and_not_public(page, browser):
             except Exception:  # noqa: BLE001 — best-effort restore, verified below
                 pass
         restored_status = admin.row_status_text(member_name) if admin.row_visible(member_name) else ""
-        assert restored_status == "Approved", (
+        assert restored_status == STATUS_PUBLISHED, (
             f"FAILED TO RESTORE baseline: {member_name!r} status is "
             f"{restored_status!r}, expected 'Approved' — manual qcdev "
             f"cleanup may be required"
@@ -3133,7 +3134,7 @@ def test_page_status_draft_blocks_then_published_restores_public_access(page, br
     try:
         with allure.step("Precondition: confirm MAIN is Approved/live and capture its exact original title"):
             admin.open_main_entry()
-            assert admin.current_status() == "Approved", (
+            assert admin.current_status() == STATUS_PUBLISHED, (
                 f"expected the MAIN entry to start Approved/published, got "
                 f"{admin.current_status()!r} — refusing to proceed with a "
                 f"Draft/Publish cycle against a record not confirmed live "
@@ -3174,7 +3175,7 @@ def test_page_status_draft_blocks_then_published_restores_public_access(page, br
         with allure.step("Verify restoration: CMS Status, Page Title field, and the live public page all match the original exactly"):
             admin.open_entries_list()
             restored_status = admin.row_status_text_by_code(MAIN_ENTRY_CODE)
-            assert restored_status == "Approved", (
+            assert restored_status == STATUS_PUBLISHED, (
                 f"CRITICAL — RESTORE FAILED: expected MAIN entry Status "
                 f"'Approved' after Submit for Publishing, got "
                 f"{restored_status!r}. The real production Board of "
@@ -4913,7 +4914,7 @@ def test_active_status_false_hides_published_member(page, browser):
         )
 
         admin.open_board_members_list()
-        assert admin.row_status_text(name) == "Approved", (
+        assert admin.row_status_text(name) == STATUS_PUBLISHED, (
             f"expected {name!r} to remain 'Approved' in the CMS despite "
             f"Active Status=False, got {admin.row_status_text(name)!r}"
         )

@@ -801,6 +801,7 @@ from web.pages.chambers_law.chambers_law_page import ChambersLawPage
 from core.web.browser import new_context
 from core.utils.logger import get_logger
 from core.utils.waits import wait_until
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 logger = get_logger("test_chambers_law_field_validation")
 
@@ -1875,7 +1876,7 @@ class _LawEntryForm:
 def _unpublish_and_confirm(authoring):
     """Takes the record off the live site and PROVES it landed in Draft.
     Idempotent: a record already in Draft is left alone."""
-    if authoring.current_status() == "Approved":
+    if authoring.current_status() == STATUS_PUBLISHED:
         authoring.unpublish_to_edit_as_draft()
     authoring.wait_for_status("Draft", timeout=UNPUBLISH_CONFIRM_TIMEOUT)
     return authoring
@@ -1884,7 +1885,7 @@ def _unpublish_and_confirm(authoring):
 def _publish_and_confirm(authoring):
     """Submits for publishing and PROVES the record reached Approved."""
     authoring.submit_for_publishing()
-    authoring.wait_for_status("Approved", timeout=PUBLISH_CONFIRM_TIMEOUT)
+    authoring.wait_for_status(STATUS_PUBLISHED, timeout=PUBLISH_CONFIRM_TIMEOUT)
     return authoring
 
 
@@ -1989,13 +1990,13 @@ def _restore_law_entry_text(
     def _restore():
         authoring = admin.open_law_entry(entry_code)
         if authoring.field_value(field_label) != baseline_value:
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.fill_text(field_label, baseline_value)
                 _publish_and_confirm(authoring)
             else:
                 _unpublish_and_confirm(authoring)
                 authoring.fill_text(field_label, baseline_value)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     _publish_and_confirm(authoring)
                 else:
                     authoring.save_as_draft()
@@ -2042,7 +2043,7 @@ def _restore_law_icon(
             current = authoring.current_file_name(admin.LAW_ICON_UPLOAD_LABEL)
             stem = baseline_file_name.rsplit(".", 1)[0] if baseline_file_name else ""
             if not stem or stem not in current:
-                if authoring.current_status() != "Approved":
+                if authoring.current_status() != STATUS_PUBLISHED:
                     _unpublish_and_confirm(authoring)
                 authoring.upload_file(admin.LAW_ICON_UPLOAD_LABEL, baseline_bytes_path)
                 _publish_and_confirm(authoring)
@@ -5094,13 +5095,13 @@ def _restore_external_link_url(
     def _restore():
         authoring = admin.open_law_entry(entry_code, locale=locale)
         if authoring.field_value(label) != baseline_value:
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.fill_text(label, baseline_value)
                 _publish_and_confirm(authoring)
             else:
                 _unpublish_and_confirm(authoring)
                 authoring.fill_text(label, baseline_value)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     _publish_and_confirm(authoring)
                 else:
                     authoring.save_as_draft()
@@ -5750,7 +5751,7 @@ def test_chambers_law_cp_134971_an_empty_external_link_url_is_allowed_because_th
         assert stored == "", (
             f"expected External Link URL to be stored empty; it reads {stored!r}"
         )
-        assert status_after_publish == "Approved", (
+        assert status_after_publish == STATUS_PUBLISHED, (
             "expected the law entry to be published after Submit for Publishing; "
             f"its status is {status_after_publish!r}"
         )
@@ -5972,13 +5973,13 @@ def _restore_display_order(
     def _restore():
         authoring = admin.open_law_entry(entry_code, locale=locale)
         if authoring.spinbutton_value(label) != baseline_value:
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.fill_number(label, baseline_value)
                 _publish_and_confirm(authoring)
             else:
                 _unpublish_and_confirm(authoring)
                 authoring.fill_number(label, baseline_value)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     _publish_and_confirm(authoring)
                 else:
                     authoring.save_as_draft()
@@ -7141,13 +7142,13 @@ def _restore_active_status(
     def _restore():
         authoring = admin.open_law_entry(entry_code, locale=locale)
         if authoring.is_checked(label) != baseline_checked:
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.set_checkbox(label, baseline_checked)
                 _publish_and_confirm(authoring)
             else:
                 _unpublish_and_confirm(authoring)
                 authoring.set_checkbox(label, baseline_checked)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     _publish_and_confirm(authoring)
                 else:
                     authoring.save_as_draft()
