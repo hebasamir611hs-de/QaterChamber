@@ -187,6 +187,14 @@ def is_dead_session(page) -> bool:
             return False
         if is_login_form_showing(page):
             return False
+        # Roles without Control Panel access (Author, Contributor, …) never
+        # render the Control Menu; a signed-in ThemeDisplay means the session
+        # is alive, and re-logging in as TEST_USER would swap the account.
+        if page.evaluate(
+            "() => !!(window.Liferay && Liferay.ThemeDisplay"
+            " && Liferay.ThemeDisplay.isSignedIn())"
+        ):
+            return False
         return page.locator(LOGIN_SUCCESS_INDICATOR).count() == 0
     except Exception:  # noqa: BLE001 — detection must never mask a real failure
         return False

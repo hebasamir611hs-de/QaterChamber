@@ -188,6 +188,8 @@ probes on manage-promotional-banner:
         record, exactly as visitors see it."
 """
 
+import re
+
 from core.utils.logger import get_logger
 from core.utils.waits import WaitTimeoutError, wait_until
 from core.web.base_page import BasePage
