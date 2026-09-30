@@ -77,8 +77,9 @@ read-only — nothing saved). Corrections to the TODO(locator) list above:
     "Pin to Home (Featured)".
   - Active Status is present and CHECKED by default on this object (unlike
     manage-law-entry, where it defaults unchecked). Still set explicitly.
-  - The submit button reads "Publish" for TEST_USER/Editor, "Submit for
-    Review" for an Author — see ObjectAuthoringPage.SUBMIT_FOR_REVIEW_BUTTON.
+  - The submit button read "Publish" for TEST_USER here; the 2026-09-28
+    workflow notes record "Submit for Review" for Author and Editor on
+    manage-law-entry. SUBMIT_FOR_REVIEW_BUTTON matches either.
 """
 
 from cms.pages.components.object_authoring_page import ObjectAuthoringPage
@@ -230,8 +231,8 @@ class ChamberEventsAdminPage(_ChamberEventsBaseAdminPage):
         return self._row_locator(title).locator(f"[{self.ROW_ACTION_ATTRS[action]}]").count() > 0
 
     def submit_button_label(self) -> str:
-        """"Publish" for a privileged account, "Submit for Review" for an
-        Author — read live 2026-09-30, see SUBMIT_FOR_REVIEW_BUTTON."""
+        """The form's submit label — "Publish" (read for TEST_USER
+        2026-09-30) or "Submit for Review"; see SUBMIT_FOR_REVIEW_BUTTON."""
         return self.page.locator(self.SUBMIT_FOR_REVIEW_BUTTON).first.inner_text().strip()
 
     def delete_entry_by_title(self, title: str) -> bool:

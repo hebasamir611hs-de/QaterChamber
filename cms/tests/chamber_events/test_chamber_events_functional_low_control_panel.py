@@ -427,7 +427,11 @@ def test_category_sector_rejected_when_unselected(page):
     admin.set_start_date_time("2027-04-07T09:00")
     admin.set_end_date_time("2027-04-07T17:00")
     try:
-        admin.fill_required_publish_fields(title, VALID_JPG, include_category=False)
+        # Category / Sector (the text field this case names) stays empty;
+        # every required field — Event Category included — is filled, so a
+        # refusal can only come from Category / Sector. Read live 2026-09-30:
+        # the form does not mark Category / Sector required.
+        admin.fill_required_publish_fields(title, VALID_JPG)
         admin.publish()
         admin.open_events_list(email, password)
         assert admin.row_status_text(title) != STATUS_PUBLISHED, (

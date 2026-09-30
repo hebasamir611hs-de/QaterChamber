@@ -280,14 +280,13 @@ class ObjectAuthoringPage(BasePage):
     # SUBMIT_FOR_PUBLISHING_BUTTON is kept only as a deprecated alias so
     # existing callers keep resolving, and points at the same real button.
     #
-    # CORRECTED 2026-09-30 — the label is ROLE-DEPENDENT, not fixed. Read live
-    # on manage-business-event as TEST_USER: the same submit button reads
-    # "Publish", with the helper text "As an Editor, what you publish here
-    # goes live straight away." "Submit for Review" is what a non-privileged
-    # submitter (Site Content Author) gets. Matching only "Submit for Review"
-    # therefore timed out on every admin/Editor submit. Both labels are
-    # matched here; `text-is` keeps "Unpublish" out, and the form only ever
-    # renders one of the two.
+    # CORRECTED 2026-09-30 — the label is not fixed. Read live on
+    # manage-business-event as TEST_USER: the submit button reads "Publish",
+    # with the helper text "As an Editor, what you publish here goes live
+    # straight away." The 2026-09-28 walk above saw "Submit for Review" for
+    # Author and Editor on manage-law-entry. Matching only "Submit for Review"
+    # timed out on the TEST_USER form, so both labels are matched; `text-is`
+    # keeps "Unpublish" out, and the form renders one of the two.
     SUBMIT_FOR_REVIEW_BUTTON = (
         'button[type="submit"]:text-is("Submit for Review"), '
         'button[type="submit"]:text-is("Publish")'
