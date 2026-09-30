@@ -111,6 +111,11 @@ Publish Lifecycle" (route-automation hand-off, batch 2 of 4): ADO cases
     Blocks 131154, 131155, 131163, 131167, 131200 at their own Step 1 —
     written per the case's real intent and left to fail there honestly,
     never invented around.
+    UPDATE 2026-09-30: the eight role accounts were re-provisioned
+    2026-09-27 (see .env.example); the .env values this note tested are the
+    retired ones. Separately, CmsLoginPage.login() waited for the admin-only
+    Control Menu until 2026-09-30, so even valid non-admin credentials timed
+    out at login. Both are fixed; with current .env values these cases run.
   - ADO Bug #142266 (filed this session, real PRODUCT bug, independently
     reproduced): the Documents-and-Media icon-image upload picker fails
     server-side ("An unexpected error occurred while uploading your file")
@@ -162,6 +167,7 @@ from cms.pages.components.footer_admin_component import (
     PRODUCTION_ENTRY_CODES,
     SocialMediaIconAdminPage,
 )
+from cms.pages.components.object_authoring_page import STATUS_PENDING_REVIEW, STATUS_PUBLISHED
 from cms.pages.control_panel.login_page import CmsLoginPage
 from config.settings import cms_role_credentials
 from core.web.browser import new_context
@@ -311,7 +317,7 @@ def test_valid_platform_name_en_saves(page):
         with allure.step("Verify via the entries list"):
             code = admin.find_entry_code_by_alt_text_en(alt_en)
             assert code, "created entry was not found back by its own Icon Alt Text (EN)"
-            assert admin.row_status_text_by_code(code) == "Approved"
+            assert admin.row_status_text_by_code(code) == STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
@@ -514,7 +520,7 @@ def test_valid_png_icon_image_saves(page):
         admin.save()
         code = admin.find_entry_code_by_alt_text_en(alt_en)
         assert code
-        assert admin.row_status_text_by_code(code) == "Approved"
+        assert admin.row_status_text_by_code(code) == STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
@@ -544,7 +550,7 @@ def test_valid_svg_icon_image_saves(page):
         admin.save()
         code = admin.find_entry_code_by_alt_text_en(alt_en)
         assert code
-        assert admin.row_status_text_by_code(code) == "Approved"
+        assert admin.row_status_text_by_code(code) == STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
@@ -653,7 +659,7 @@ def test_oversized_icon_image_rejected(page):
                 attachment_type=allure.attachment_type.PNG,
             )
         with allure.step("The oversized file is rejected — the entry does not reach Approved"):
-            assert code == "" or admin.row_status_text_by_code(code) != "Approved"
+            assert code == "" or admin.row_status_text_by_code(code) != STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
@@ -721,7 +727,7 @@ def test_valid_redirect_url_saves(page):
         admin.save()
         code = admin.find_entry_code_by_alt_text_en(alt_en)
         assert code
-        assert admin.row_status_text_by_code(code) == "Approved"
+        assert admin.row_status_text_by_code(code) == STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
@@ -899,7 +905,7 @@ def test_active_true_with_invalid_url_cannot_publish(page):
         admin.save()
         code = admin.find_entry_code_by_alt_text_en(alt_en)
         with allure.step("The entry with an invalid URL does not reach Approved despite Active=True"):
-            assert code == "" or admin.row_status_text_by_code(code) != "Approved"
+            assert code == "" or admin.row_status_text_by_code(code) != STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
@@ -956,7 +962,7 @@ def test_valid_display_order_reflects_frontend_position(page, browser):
         admin.save()
         code = admin.find_entry_code_by_alt_text_en(alt_en)
         assert code
-        assert admin.row_status_text_by_code(code) == "Approved"
+        assert admin.row_status_text_by_code(code) == STATUS_PUBLISHED
 
         marker = redirect_url_en.split("qctest-")[1]
         anon_ctx = new_context(browser, use_auth_state=False)
@@ -1007,7 +1013,7 @@ def test_display_order_zero_rejected(page):
         admin.upload_icon_image(ICON_PNG_VALID)
         admin.save()
         code = admin.find_entry_code_by_alt_text_en(alt_en)
-        assert code == "" or admin.row_status_text_by_code(code) != "Approved"
+        assert code == "" or admin.row_status_text_by_code(code) != STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
@@ -1044,7 +1050,7 @@ def test_display_order_negative_rejected(page):
                 name=f"ADO-131190 evidence — entry {code} after negative (-5) Display Order + Submit",
                 attachment_type=allure.attachment_type.PNG,
             )
-        assert code == "" or admin.row_status_text_by_code(code) != "Approved"
+        assert code == "" or admin.row_status_text_by_code(code) != STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
@@ -1187,7 +1193,7 @@ def test_active_status_false_excludes_from_public_footer(page, browser):
         admin.save()
         code = admin.find_entry_code_by_alt_text_en(alt_en)
         assert code
-        assert admin.row_status_text_by_code(code) == "Approved"
+        assert admin.row_status_text_by_code(code) == STATUS_PUBLISHED
 
         marker = redirect_url_en.split("qctest-")[1]
         anon_ctx = new_context(browser, use_auth_state=False)
@@ -1354,7 +1360,7 @@ def test_site_content_editor_can_access_and_publish_directly(page):
         with allure.step("Entry publishes immediately — no additional approval step required"):
             code = admin.find_entry_code_by_alt_text_en(alt_en)
             assert code, "created entry was not found back by its own Icon Alt Text (EN)"
-            assert admin.row_status_text_by_code(code) == "Approved"
+            assert admin.row_status_text_by_code(code) == STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
@@ -1392,15 +1398,13 @@ def test_site_content_author_can_access_but_cannot_publish_directly(page):
             admin.upload_icon_image(ICON_PNG_VALID)
             admin.save()
         with allure.step("Only Submit for Review is effective — entry moves to Pending Review, not Published"):
-            # Independent, second reason this may legitimately fail even
-            # past the credential blocker: this project has already twice
-            # confirmed live (test_home_promo_banners_control_panel.py,
-            # test_home_strategic_direction_control_panel.py) that this
-            # Object Authoring state machine has no separate Pending Review
-            # status — only Draft/Approved.
+            # WITHDRAWN 2026-09-28: the earlier "no Pending Review status,
+            # only Draft/Approved" finding was the super-admin's view — an
+            # admin's submit skips review. An Author's lands on Pending
+            # Review (ObjectAuthoringPage module docstring).
             code = admin.find_entry_code_by_alt_text_en(alt_en)
             assert code
-            assert admin.row_status_text_by_code(code) == "Pending review"
+            assert admin.row_status_text_by_code(code) == STATUS_PENDING_REVIEW
     finally:
         _teardown(admin, alt_en)
 
@@ -1554,7 +1558,7 @@ def test_editor_adds_new_icon_appears_live_after_publish(page, browser):
             admin.save()
             code = admin.find_entry_code_by_alt_text_en(alt_en)
             assert code
-            assert admin.row_status_text_by_code(code) == "Approved"
+            assert admin.row_status_text_by_code(code) == STATUS_PUBLISHED
         with allure.step("Load the live Home page — YouTube icon appears in the section"):
             # Presence-only, not an exact index=5 assertion — this session
             # independently confirmed only 3 of the 9 real entries' own
@@ -1606,7 +1610,7 @@ def test_editor_edits_existing_icon_image_url_order(page, browser):
             admin.fill_icon_form(redirect_url_en=new_redirect_url, display_order="1")
             admin.save()
         with allure.step("Success toast shown; entry re-published with updated values"):
-            assert admin.current_status() == "Approved"
+            assert admin.current_status() == STATUS_PUBLISHED
         with allure.step("Live Home page: X/Twitter renders at the new position, new image, new URL"):
             marker = new_redirect_url.split("qctest-")[1]
             anon_ctx = new_context(browser, use_auth_state=False)
@@ -1737,9 +1741,8 @@ def test_editor_toggles_existing_inactive_icon_active_restores_on_live(page, bro
 def test_author_drafted_icon_live_only_after_editor_approval(page):
     # BLOCKED — see module docstring's "NEW BLOCKER" note: Site Content
     # Author's .env credentials do not authenticate live against qcdev.
-    # Also independent of that: this project has already twice confirmed
-    # live that this state machine has no separate Pending Review/Approve
-    # step. Written per the case's own real intent, left to fail honestly.
+    # (The earlier "no Pending Review/Approve step" note was withdrawn
+    # 2026-09-28 — it was the super-admin's view; see ObjectAuthoringPage.)
     with allure.step('Log in as Site Content Author; add a "Flickr" entry and click "Submit for Review"'):
         admin = _login_as(page, "Site Content Author")
     alt_en = _unique_alt_text_en("FlickrDraftApproval")
@@ -1758,7 +1761,7 @@ def test_author_drafted_icon_live_only_after_editor_approval(page):
         with allure.step("Entry saves with status Pending Review; no toast implying publish"):
             code = admin.find_entry_code_by_alt_text_en(alt_en)
             assert code
-            assert admin.row_status_text_by_code(code) == "Pending review"
+            assert admin.row_status_text_by_code(code) == STATUS_PENDING_REVIEW
         with allure.step("Log out; log in as Site Content Editor"):
             admin.logout_and_return()
             admin.login_as(*cms_role_credentials("Site Content Editor"))
@@ -1766,7 +1769,7 @@ def test_author_drafted_icon_live_only_after_editor_approval(page):
             admin.open_entry_by_code(code)
             admin.save()
         with allure.step("Flickr icon now appears on the live Home page"):
-            assert admin.row_status_text_by_code(code) == "Approved"
+            assert admin.row_status_text_by_code(code) == STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
@@ -1790,7 +1793,7 @@ def test_editor_unpublishes_icon_removed_live_retained_in_cms(page, browser):
     try:
         with allure.step('Open the existing "LinkedIn" entry — status Published'):
             admin.open_entry_by_code(entry_code)
-            assert admin.current_status() == "Approved"
+            assert admin.current_status() == STATUS_PUBLISHED
         with allure.step("Click Unpublish"):
             admin.unpublish_to_edit_as_draft()
         with allure.step("LinkedIn icon no longer appears live"):
@@ -1811,7 +1814,7 @@ def test_editor_unpublishes_icon_removed_live_retained_in_cms(page, browser):
         with allure.step("Teardown: republish LinkedIn back to Approved"):
             admin.restore_icon_baseline(baseline)  # fills baseline values + submit_for_publishing()
             admin.open_entry_by_code(entry_code)
-            assert admin.current_status() == "Approved", "Teardown restore did not republish LinkedIn"
+            assert admin.current_status() == STATUS_PUBLISHED, "Teardown restore did not republish LinkedIn"
 
 
 @allure.epic("Global Components")
@@ -1937,7 +1940,7 @@ def test_rejected_icon_entry_not_on_frontend(page):
         admin.save()
         code = admin.find_entry_code_by_alt_text_en(alt_en)
         assert code
-        assert admin.row_status_text_by_code(code) == "Pending review"
+        assert admin.row_status_text_by_code(code) == STATUS_PENDING_REVIEW
 
         with allure.step("As Editor, open the Pending Review entry and click Reject"):
             admin.logout_and_return()
@@ -1945,7 +1948,7 @@ def test_rejected_icon_entry_not_on_frontend(page):
             admin.open_entry_by_code(code)
             admin.reject()  # raises: REJECT_BUTTON is an unresolved placeholder (see docstring)
         with allure.step("Telegram icon does not appear anywhere on the live Home page"):
-            assert admin.row_status_text_by_code(code) != "Approved"
+            assert admin.row_status_text_by_code(code) != STATUS_PUBLISHED
     finally:
         _teardown(admin, alt_en)
 
