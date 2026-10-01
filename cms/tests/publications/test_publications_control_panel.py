@@ -584,6 +584,11 @@ def test_unpublish_updates_status_cms(page, disposable, anon_pages):
     require_no_leftovers(admin, title)
     entry = create(admin, disposable, _data(title), publish=True)
     assert wait_row_status(admin, entry, STATUS_PUBLISHED) == STATUS_PUBLISHED
+    # Public visibility needs Published AND a STORED Active Status; ticking
+    # the box on the form proves nothing until it is read back.
+    admin.open_entry(entry)
+    assert admin.active_status() is True, "Active Status was ticked but is not stored on the record"
+    admin.open_entries_list()
     assert_publicly_visible(anon_pages, title)
 
     assert_still_pinned(admin, ROLE_EDITOR)
@@ -618,6 +623,11 @@ def test_delete_record_cms(page, disposable, anon_pages):
     require_no_leftovers(admin, title)
     entry = create(admin, disposable, _data(title), publish=True)
     assert wait_row_status(admin, entry, STATUS_PUBLISHED) == STATUS_PUBLISHED
+    # Public visibility needs Published AND a STORED Active Status; ticking
+    # the box on the form proves nothing until it is read back.
+    admin.open_entry(entry)
+    assert admin.active_status() is True, "Active Status was ticked but is not stored on the record"
+    admin.open_entries_list()
     # Positive control (review M5): the record must first be publicly visible,
     # otherwise its later absence proves nothing.
     assert_publicly_visible(anon_pages, title)
@@ -785,6 +795,11 @@ def test_edit_published_updates_last_modified(page, disposable):
     require_no_leftovers(admin, title)
     entry = create(admin, disposable, _data(title), publish=True)
     assert wait_row_status(admin, entry, STATUS_PUBLISHED) == STATUS_PUBLISHED
+    # Public visibility needs Published AND a STORED Active Status; ticking
+    # the box on the form proves nothing until it is read back.
+    admin.open_entry(entry)
+    assert admin.active_status() is True, "Active Status was ticked but is not stored on the record"
+    admin.open_entries_list()
     before_text = admin.row_modified(entry)
     before = parse_when(before_text)
     assert before, f"unreadable Last Modified {before_text!r}"
@@ -2212,6 +2227,11 @@ def test_delete_removes_from_admin_grid_cms(page, disposable):
     require_no_leftovers(admin, title)
     entry = create(admin, disposable, _data(title), publish=True)
     assert wait_row_status(admin, entry, STATUS_PUBLISHED) == STATUS_PUBLISHED
+    # Public visibility needs Published AND a STORED Active Status; ticking
+    # the box on the form proves nothing until it is read back.
+    admin.open_entry(entry)
+    assert admin.active_status() is True, "Active Status was ticked but is not stored on the record"
+    admin.open_entries_list()
 
     assert_still_pinned(admin, ROLE_EDITOR)
     assert admin.delete_disposable_entry(entry), "the delete did not remove the record"
@@ -2254,6 +2274,11 @@ def test_success_toast_arabic_cp_locale(page, disposable):
     require_no_leftovers(admin, title)
     entry = create(admin, disposable, _data(title), publish=True)
     assert wait_row_status(admin, entry, STATUS_PUBLISHED) == STATUS_PUBLISHED
+    # Public visibility needs Published AND a STORED Active Status; ticking
+    # the box on the form proves nothing until it is read back.
+    admin.open_entry(entry)
+    assert admin.active_status() is True, "Active Status was ticked but is not stored on the record"
+    admin.open_entries_list()
     try:
         admin.open_entry_in_locale(entry, "ar")
         assert admin.interface_language().startswith("ar"), (
