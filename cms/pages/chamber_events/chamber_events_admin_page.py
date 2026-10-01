@@ -189,19 +189,29 @@ class ChamberEventsAdminPage(_ChamberEventsBaseAdminPage):
     # the overrides below apply it first.
     ENTRIES_SEARCH_INPUT = 'input[placeholder^="Search entries"]'
 
+    # The search reads an index that lags a fresh save: live 2026-10-01 a
+    # draft saved by the Author was not found 5s later, and was found when
+    # searched again shortly after. Re-run the search until it shows or the
+    # budget runs out — no match is still a valid answer.
+    ENTRIES_SEARCH_TIMEOUT_MS = 20000
+    ENTRIES_SEARCH_RETRY_MS = 4000
+
     def filter_entries(self, text: str) -> "ChamberEventsAdminPage":
         box = self.page.locator(self.ENTRIES_SEARCH_INPUT)
         if box.count() == 0:
             return self
-        box.fill(text)
-        box.press("Enter")
-        try:
-            self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{text}")').first.wait_for(
-                state="visible", timeout=5000
-            )
-        except Exception:  # noqa: BLE001 — no match is a valid answer; callers decide
-            pass
-        return self
+        row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{text}")').first
+        waited = 0
+        while True:
+            box.fill(text)
+            box.press("Enter")
+            try:
+                row.wait_for(state="visible", timeout=self.ENTRIES_SEARCH_RETRY_MS)
+                return self
+            except Exception:  # noqa: BLE001 — not (yet) found; retry within budget
+                waited += self.ENTRIES_SEARCH_RETRY_MS
+                if waited >= self.ENTRIES_SEARCH_TIMEOUT_MS:
+                    return self
 
     def row_status_text(self, title: str) -> str:
         self.filter_entries(title)

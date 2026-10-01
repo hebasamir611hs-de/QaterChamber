@@ -422,7 +422,11 @@ class ObjectAuthoringPage(BasePage):
         finding as `open_new_entry_form()`'s own note."""
         self._locale = locale
         self.open(self._manage_url(locale=locale))
-        self.wait_for("a[data-qc-oel-delete]", first=True, timeout=35000)
+        # Wait for any entries row, not a Delete link (CORRECTED 2026-10-01):
+        # a Site Content Author sees Delete only on rows it owns — live, its
+        # first page rendered 10 rows and zero `a[data-qc-oel-delete]`, so
+        # this timed out for every non-admin account.
+        self.wait_for(self.ENTRIES_TABLE_ROW, first=True, timeout=35000)
         return self
 
     def open_entry_by_edit_link(self, title: str) -> "ObjectAuthoringPage":
