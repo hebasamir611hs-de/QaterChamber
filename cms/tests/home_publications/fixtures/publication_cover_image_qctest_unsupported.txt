@@ -1,0 +1,1 @@
+QCTEST unsupported cover image format fixture - not a real image

@@ -51,9 +51,19 @@ re-targeted at the observed value:
     differs. No visually distinct per-type styling exists.
 """
 
+import os
+from uuid import uuid4
+
 import allure
 import pytest
 
+from cms.pages.home_publications.home_publications_admin_page import (
+    PUBLICATION_STATUS_PUBLISHED,
+    PUBLICATION_TYPE_GUIDES,
+    PUBLICATION_TYPE_REPORT,
+    HomePublicationsAdminPage,
+)
+from core.web.browser import new_context
 from web.pages.home_publications.home_publications_page import HomePublicationsPage
 
 PBI = "129386"
@@ -436,3 +446,277 @@ def test_publication_type_badge_color_and_label_match_design_token(page):
         "expected each publication type's badge to carry visually distinct styling "
         f"(color/background), but Report and Guides badges are identical: {report_style}"
     )
+
+
+# --------------------------------------------------------------------------
+# web/tests/home_publications/test_home_publications_web.py — Web-platform
+# companion tests for PBI 129386 (QC-HOME-010 — Publications Section)'s dual
+# Control_Panel+Web cases (Publication Type badge/filter-tab visibility, ADO
+# 134380/134381; Active Status visibility/persistence, ADO 134399-134401).
+#
+# Each test here is a genuinely SEPARATE test function from its
+# Control_Panel-tagged sibling in
+# cms/tests/home_publications/test_home_publications_control_panel.py — per
+# automation-standards.md's "one test per platform, sharing step intent, not
+# one test with a branch" rule. Every test below still needs the SAME
+# Object-Authoring admin setup (create a disposable QCTEST- entry, publish
+# it) to have anything to assert against on the public surface — mirrors the
+# already-established precedent in
+# web/tests/chamber_events/test_chamber_events_edge_web.py (a `web`-marked
+# test importing a CMS admin Page Object for its own setup) rather than
+# inventing a new pattern. Each test is otherwise self-contained (creates its
+# OWN disposable entry, never relies on the Control_Panel module's data) and
+# deletes it in `finally`.
+#
+# ADO 134379 ("Publication Type is enforced as mandatory") is NOT mirrored
+# here — a native HTML `required`-attribute check is an authoring-surface-only
+# concept with no real public-side counterpart to assert on; only
+# 134380/134381 (which DO have a genuine, distinct public-surface behavior —
+# badge/filter-tab visibility) get a Web-platform companion. Disclosed
+# judgment call, not a silent scope drop.
+# --------------------------------------------------------------------------
+
+FIXTURES = os.path.join(
+    os.path.dirname(__file__), "..", "..", "..", "cms", "tests", "home_publications", "fixtures"
+)
+COVER_IMAGE_FIXTURE = os.path.join(FIXTURES, "publication_cover_image_qctest.jpg")
+FILE_ATTACHMENT_FIXTURE = os.path.join(FIXTURES, "publication_attachment_qctest.pdf")
+
+
+def _create_and_publish(admin: HomePublicationsAdminPage, title_en: str, title_ar: str, ptype: str, active: bool = True) -> str:
+    admin.open_new_entry_form()
+    admin.set_title_en(title_en)
+    admin.set_title_ar(title_ar)
+    admin.select_publication_type(ptype)
+    admin.set_publication_date("2026-08-15")
+    admin.upload_cover_image(COVER_IMAGE_FIXTURE)
+    admin.upload_file_attachment(FILE_ATTACHMENT_FIXTURE)
+    admin.set_active_status(active)
+    admin.save_as_draft()
+    entry_code = admin.find_entry_code_by_title(title_en)
+    assert entry_code, f"could not resolve the just-created entry {title_en!r}"
+    admin.open_entry_by_code(entry_code)
+    admin.select_publication_status(PUBLICATION_STATUS_PUBLISHED)
+    admin.submit_for_publishing()
+    return entry_code
+
+
+def _delete_by_title(admin: HomePublicationsAdminPage, title_en: str) -> None:
+    try:
+        admin.open_entries_list()
+        admin.delete_entry_by_title(title_en)
+    except Exception:  # noqa: BLE001 — best-effort teardown only
+        pass
+
+
+@allure.epic("Home Page")
+@allure.feature("Publications Section")
+@allure.story("Publication Type")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("A publication's filter-tab visibility matches its assigned Type (Web side)")
+@allure.label("pbi", "129386")
+@allure.label("testcase", "134380")
+@pytest.mark.web
+@pytest.mark.media
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.pbi_129386
+@pytest.mark.tc_134380
+@pytest.mark.traceability("MEDIA-PUBLICATIONS-TC-060")
+def test_publication_type_filter_tab_visibility_matches_type(page, browser):
+    """MEDIA-PUBLICATIONS-TC-060 / ADO-134380 (Web half of this dual case —
+    see test_home_publications_control_panel.py's own
+    test_publication_type_badge_matches_assigned_type for the Control_Panel
+    half, which asserts the card's own badge text). This test instead
+    exercises the type-filter TABS themselves: the card is visible under
+    its own assigned type's tab, and NOT visible under an unrelated tab."""
+    admin = HomePublicationsAdminPage(page)
+    title_en = f"QCTEST-134380W {uuid4().hex[:8]}"
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePublicationsPage(anon_context.new_page())
+    try:
+        _create_and_publish(admin, title_en, "QCTEST-134380W-AR", PUBLICATION_TYPE_REPORT)
+        home.reload_until(lambda p: p.has_card_with_title(title_en))
+        home.click_type_tab(home.TYPE_TO_TAB_FILTER[PUBLICATION_TYPE_REPORT])
+        assert home.is_card_visible(title_en), "card not visible under its own assigned Report tab"
+        home.click_type_tab(home.TYPE_TO_TAB_FILTER[PUBLICATION_TYPE_GUIDES])
+        assert not home.is_card_visible(title_en), "card visible under an unrelated Guides tab"
+    finally:
+        _delete_by_title(admin, title_en)
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001
+            pass
+
+
+@allure.epic("Home Page")
+@allure.feature("Publications Section")
+@allure.story("Publication Type")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Changing a published publication's Type relocates it to the correct filter tab (Web side)")
+@allure.label("pbi", "129386")
+@allure.label("testcase", "134381")
+@pytest.mark.web
+@pytest.mark.media
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.pbi_129386
+@pytest.mark.tc_134381
+@pytest.mark.traceability("MEDIA-PUBLICATIONS-TC-061")
+def test_changing_publication_type_relocates_filter_tab_web(page, browser):
+    """MEDIA-PUBLICATIONS-TC-061 / ADO-134381 (Web half — see
+    test_home_publications_control_panel.py's own
+    test_changing_publication_type_relocates_filter_tab for the
+    Control_Panel-authored full edit flow; this test re-verifies the SAME
+    relocation purely from the tab-visibility angle with its own,
+    independent disposable entry)."""
+    admin = HomePublicationsAdminPage(page)
+    title_en = f"QCTEST-134381W {uuid4().hex[:8]}"
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePublicationsPage(anon_context.new_page())
+    try:
+        entry_code = _create_and_publish(admin, title_en, "QCTEST-134381W-AR", PUBLICATION_TYPE_REPORT)
+        home.reload_until(lambda p: p.has_card_with_title(title_en))
+        home.click_type_tab(home.TYPE_TO_TAB_FILTER[PUBLICATION_TYPE_REPORT])
+        assert home.is_card_visible(title_en), "card not visible under its initial Report tab"
+
+        admin.open_entry_by_code(entry_code)
+        admin.unpublish_to_edit_as_draft()
+        admin.select_publication_type(PUBLICATION_TYPE_GUIDES)
+        admin.select_publication_status(PUBLICATION_STATUS_PUBLISHED)
+        admin.submit_for_publishing()
+
+        home.reload_until(lambda p: p.card_badge_text(title_en) == PUBLICATION_TYPE_GUIDES)
+        home.click_type_tab(home.TYPE_TO_TAB_FILTER[PUBLICATION_TYPE_GUIDES])
+        assert home.is_card_visible(title_en), "card not visible under the NEW Guides tab after the Type change"
+        home.click_type_tab(home.TYPE_TO_TAB_FILTER[PUBLICATION_TYPE_REPORT])
+        assert not home.is_card_visible(title_en), "card still visible under the OLD Report tab after the Type change"
+    finally:
+        _delete_by_title(admin, title_en)
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001
+            pass
+
+
+@allure.epic("Home Page")
+@allure.feature("Publications Section")
+@allure.story("Active Status")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Active Status = True on a Published record shows it on the Home Page (Web side)")
+@allure.label("pbi", "129386")
+@allure.label("testcase", "134399")
+@pytest.mark.web
+@pytest.mark.media
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.pbi_129386
+@pytest.mark.tc_134399
+@pytest.mark.traceability("MEDIA-PUBLICATIONS-TC-062")
+def test_active_status_true_shows_on_home_page_web(page, browser):
+    """MEDIA-PUBLICATIONS-TC-062 / ADO-134399 (Web half — see
+    test_home_publications_control_panel.py's own companion for the
+    Control_Panel half)."""
+    admin = HomePublicationsAdminPage(page)
+    title_en = f"QCTEST-134399W {uuid4().hex[:8]}"
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePublicationsPage(anon_context.new_page())
+    try:
+        _create_and_publish(admin, title_en, "QCTEST-134399W-AR", PUBLICATION_TYPE_REPORT, active=True)
+        appeared = home.reload_until(lambda p: p.has_card_with_title(title_en))
+        assert appeared, "an Active=True, Published entry did not appear on the public Home Page"
+    finally:
+        _delete_by_title(admin, title_en)
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001
+            pass
+
+
+@allure.epic("Home Page")
+@allure.feature("Publications Section")
+@allure.story("Active Status")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Active Status = False on a Published record hides it from the Home Page (Web side)")
+@allure.label("pbi", "129386")
+@allure.label("testcase", "134400")
+@pytest.mark.web
+@pytest.mark.media
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.pbi_129386
+@pytest.mark.tc_134400
+@pytest.mark.traceability("MEDIA-PUBLICATIONS-TC-063")
+def test_active_status_false_hides_from_home_page_web(page, browser):
+    """MEDIA-PUBLICATIONS-TC-063 / ADO-134400 (Web half — see
+    test_home_publications_control_panel.py's own companion for the
+    Control_Panel half). Uses a fresh, anonymous browser context for the
+    public-visibility check per standards.md's "Draft/Unpublish
+    Public-Visibility Checks — Mandatory Logged-Out Context" rule, and
+    creates a SIBLING Active=True entry in the same test so the negative
+    result is a real comparison, not just an absence that could equally be
+    a propagation-latency false negative."""
+    admin = HomePublicationsAdminPage(page)
+    title_hidden = f"QCTEST-134400W-HIDDEN {uuid4().hex[:8]}"
+    title_control = f"QCTEST-134400W-CONTROL {uuid4().hex[:8]}"
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePublicationsPage(anon_context.new_page())
+    try:
+        _create_and_publish(admin, title_control, "QCTEST-134400W-CONTROL-AR", PUBLICATION_TYPE_REPORT, active=True)
+        _create_and_publish(admin, title_hidden, "QCTEST-134400W-HIDDEN-AR", PUBLICATION_TYPE_REPORT, active=False)
+        control_appeared = home.reload_until(lambda p: p.has_card_with_title(title_control))
+        assert control_appeared, "sanity check failed: the Active=True sibling entry never appeared either"
+        assert not home.has_card_with_title(title_hidden), "an Active=False, Published entry appeared on the public Home Page"
+    finally:
+        _delete_by_title(admin, title_hidden)
+        _delete_by_title(admin, title_control)
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001
+            pass
+
+
+@allure.epic("Home Page")
+@allure.feature("Publications Section")
+@allure.story("Active Status")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Active Status change is reflected on the Home Page after reload (Web side)")
+@allure.label("pbi", "129386")
+@allure.label("testcase", "134401")
+@pytest.mark.web
+@pytest.mark.media
+@pytest.mark.functional_low
+@pytest.mark.pbi_129386
+@pytest.mark.tc_134401
+@pytest.mark.traceability("MEDIA-PUBLICATIONS-TC-064")
+def test_active_status_change_reflected_on_home_page_after_reload(page, browser):
+    """MEDIA-PUBLICATIONS-TC-064 / ADO-134401 (Web half — see
+    test_home_publications_control_panel.py's own companion, which asserts
+    persistence purely on the CMS-side field readback). This test asserts
+    the SAME underlying persistence from the delivery-surface angle: toggle
+    Active Status True -> False on an already-published entry and confirm
+    the public Home Page reflects the LATEST value after a reload, not a
+    stale cached one."""
+    admin = HomePublicationsAdminPage(page)
+    title_en = f"QCTEST-134401W {uuid4().hex[:8]}"
+    anon_context = new_context(browser, use_auth_state=False)
+    home = HomePublicationsPage(anon_context.new_page())
+    try:
+        entry_code = _create_and_publish(admin, title_en, "QCTEST-134401W-AR", PUBLICATION_TYPE_REPORT, active=True)
+        appeared = home.reload_until(lambda p: p.has_card_with_title(title_en))
+        assert appeared, "the initial Active=True entry never appeared — cannot test the toggle meaningfully"
+
+        admin.open_entry_by_code(entry_code)
+        admin.unpublish_to_edit_as_draft()
+        admin.set_active_status(False)
+        admin.select_publication_status(PUBLICATION_STATUS_PUBLISHED)
+        admin.submit_for_publishing()
+
+        disappeared = not home.reload_until(lambda p: p.has_card_with_title(title_en), timeout_ms=8000)
+        assert disappeared, "Active Status was flipped to False, but the card still shows on the Home Page after reload"
+    finally:
+        _delete_by_title(admin, title_en)
+        try:
+            anon_context.close()
+        except Exception:  # noqa: BLE001
+            pass
