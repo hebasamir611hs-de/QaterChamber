@@ -3,6 +3,10 @@
 > Process-level rules for the Qatar Chamber QA system. Keep test cases and
 > deliverables consistent with these. Domain/service/role details come from
 > `@.claude/context/active/background.md`.
+>
+> What counts as a bug, one-bug-per-root-cause filing, P1/P2-first run order,
+> pixel tolerance and char-limit outcomes → `@.claude/context/active/bug-rules.md`
+> (binding, read with this file).
 
 ## Service / Module Codes
 Use in test case IDs and grouping — mapped to the BRD's website structure:
