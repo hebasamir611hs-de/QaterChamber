@@ -1,0 +1,1230 @@
+- generic [ref=f20e2]:
+  - navigation "Quick Links":
+    - list:
+      - listitem:
+        - link "Skip to Main Content" [ref=f20e3] [cursor=pointer]:
+          - /url: "#main-content"
+      - listitem:
+        - button "Open Accessibility Menu" [ref=f20e4] [cursor=pointer]
+  - generic [ref=f20e5]:
+    - navigation "Control Menu" [ref=f20e6]:
+      - generic [ref=f20e7]:
+        - generic [ref=f20e9]:
+          - list [ref=f20e11]:
+            - listitem [ref=f20e12]:
+              - tablist [ref=f20e13]:
+                - tab "Open Product Menu" [ref=f20e14]
+          - generic [ref=f20e20]:
+            - 'heading "Manage: Media Center Feed Section Draft Restricted Page" [level=1] [ref=f20e22]':
+              - text: "Manage: Media Center Feed Section"
+              - generic [ref=f20e23]: Draft
+              - generic [ref=f20e24]: Restricted Page
+            - generic "Restricted Page" [ref=f20e25]
+          - generic:
+            - list
+          - list [ref=f20e28]:
+            - listitem [ref=f20e29]:
+              - generic "Edit" [ref=f20e30]:
+                - link "Edit" [ref=f20e31] [cursor=pointer]:
+                  - /url: https://qcdev.ihorizons.com/9b43d9d4-0f44-0d5c-cad7-e61c81e7575f?p_l_back_url=https%3A%2F%2Fqcdev.ihorizons.com%2Fmanage-media-center-feed-section&p_l_back_url_title=Manage%3A+Media+Center+Feed+Section&p_l_mode=edit
+            - listitem [ref=f20e36]:
+              - link "Configure Page" [ref=f20e37] [cursor=pointer]:
+                - /url: https://qcdev.ihorizons.com:443/group/qatar-chamber/~/control_panel/manage?p_p_id=com_liferay_layout_admin_web_portlet_GroupPagesPortlet&p_p_lifecycle=0&p_p_state=maximized&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_mvcRenderCommandName=%2Flayout_admin%2Fedit_layout&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_redirect=%2Fweb%2Fqatar-chamber%2Fmanage-media-center-feed-section&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_backURL=%2Fweb%2Fqatar-chamber%2Fmanage-media-center-feed-section&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_groupId=37246&p_r_p_selPlid=771&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_backURLTitle=Manage%3A+Media+Center+Feed+Section&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_privateLayout=false&p_p_auth=HE1ur4kA
+            - listitem [ref=f20e41]:
+              - button "Simulation" [ref=f20e42] [cursor=pointer]
+            - listitem [ref=f20e46]:
+              - button "Content Performance" [ref=f20e47] [cursor=pointer]
+            - listitem [ref=f20e49]:
+              - button "A/B Test" [ref=f20e50] [cursor=pointer]
+            - listitem [ref=f20e52]:
+              - button "Page Audit" [ref=f20e53] [cursor=pointer]
+            - listitem [ref=f20e55]:
+              - button "Open Applications Menu Ctrl + Alt + A" [ref=f20e56] [cursor=pointer]
+              - generic [ref=f20e58]:
+                - generic [ref=f20e59]: Open Applications Menu
+                - generic [ref=f20e60]:
+                  - generic [ref=f20e61]: Ctrl
+                  - text: +
+                  - generic [ref=f20e62]: Alt
+                  - text: +
+                  - generic [ref=f20e63]: A
+        - generic [ref=f20e66]:
+          - alert [ref=f20e67]:
+            - generic [ref=f20e74]:
+              - text: Update your
+              - link "activation key" [ref=f20e75] [cursor=pointer]:
+                - /url: /c/portal/license
+              - text: because it will expire in 1 days.
+          - button "Close" [ref=f20e76] [cursor=pointer]
+    - generic [ref=f20e78]:
+      - banner [ref=f20e79]:
+        - generic [ref=f20e82]:
+          - link "Go to Qatar Chamber" [ref=f20e83] [cursor=pointer]:
+            - /url: https://qcdev.ihorizons.com
+            - heading [level=1] [aria-hidden] [ref=f20e84]: Qatar Chamber
+          - search [ref=f20e86]:
+            - generic [ref=f20e88]:
+              - generic [ref=f20e89]:
+                - generic [ref=f20e90]: Search Bar
+                - list [ref=f20e91]:
+                  - button "Options" [ref=f20e94] [cursor=pointer]
+              - generic [ref=f20e103]:
+                - status [ref=f20e104]
+                - generic [ref=f20e105]:
+                  - textbox "Search" [ref=f20e106]:
+                    - /placeholder: Search...
+                  - button "Search" [ref=f20e108] [cursor=pointer]
+          - generic [ref=f20e112]:
+            - button "Alaa Medhat User Profile" [ref=f20e115] [cursor=pointer]
+            - link "2200 New Notification" [ref=f20e116] [cursor=pointer]:
+              - /url: https://qcdev.ihorizons.com:443/manage?p_p_id=com_liferay_notifications_web_portlet_NotificationsPortlet&p_p_lifecycle=0&_com_liferay_notifications_web_portlet_NotificationsPortlet_backURL=&p_p_auth=GOM1xGQO
+              - generic [ref=f20e117]: "2200"
+        - generic [ref=f20e123]:
+          - generic [ref=f20e124]:
+            - generic [ref=f20e125]: Menu Display
+            - list [ref=f20e126]:
+              - button "Add" [ref=f20e128] [cursor=pointer]
+            - list [ref=f20e132]:
+              - button "Options" [ref=f20e135] [cursor=pointer]
+          - menubar "Site Pages" [ref=f20e142]:
+            - menuitem "Home" [ref=f20e143] [cursor=pointer]
+            - menuitem "Search Results" [ref=f20e145] [cursor=pointer]
+            - menuitem "Newsletter Unsubscribe" [ref=f20e147] [cursor=pointer]
+            - menuitem "News" [ref=f20e149] [cursor=pointer]
+            - menuitem "Podcast" [ref=f20e151] [cursor=pointer]
+            - menuitem "Contact Us" [ref=f20e153] [cursor=pointer]
+            - menuitem "Event Media, PR & Communications Support" [ref=f20e155] [cursor=pointer]
+            - menuitem "Event Media/PR Request Form" [ref=f20e157] [cursor=pointer]
+            - menuitem "Event Media/PR Admin Review" [ref=f20e159] [cursor=pointer]
+            - menuitem "Suggestions and Complaints" [ref=f20e161] [cursor=pointer]
+            - menuitem "Privacy Policy" [ref=f20e163] [cursor=pointer]
+            - menuitem "Suggestions and Complaints Privacy Policy" [ref=f20e165] [cursor=pointer]
+            - menuitem "Suggestions & Complaints — Review" [ref=f20e167] [cursor=pointer]
+            - menuitem "Request to Join a Committee" [ref=f20e169] [cursor=pointer]
+            - menuitem "Business Council Joining Request" [ref=f20e171] [cursor=pointer]
+      - main [ref=f20e174]:
+        - generic [ref=f20e177]:
+          - navigation "Object authoring" [ref=f20e181]:
+            - link "Objects Home" [ref=f20e182] [cursor=pointer]:
+              - /url: /web/qatar-chamber/object-authoring
+              - text: ⌂ Objects Home
+            - generic [ref=f20e183] [cursor=pointer]: Filter objects
+            - searchbox "Filter objects" [ref=f20e184]
+            - list [ref=f20e186]:
+              - listitem [ref=f20e187]:
+                - link "ATA Carnet CTA" [ref=f20e188] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ata-carnet-cta
+              - listitem [ref=f20e189]:
+                - link "ATA Carnet Page" [ref=f20e190] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ata-carnet-page
+              - listitem [ref=f20e191]:
+                - link "ATA Checklist Item" [ref=f20e192] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ata-checklist-item
+              - listitem [ref=f20e193]:
+                - link "ATA Covered Category" [ref=f20e194] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ata-covered-category
+              - listitem [ref=f20e195]:
+                - link "ATA Eligible Tile" [ref=f20e196] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ata-eligible-tile
+              - listitem [ref=f20e197]:
+                - link "ATA Fee Row" [ref=f20e198] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ata-fee-row
+              - listitem [ref=f20e199]:
+                - link "ATA Member Country" [ref=f20e200] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ata-member-country
+              - listitem [ref=f20e201]:
+                - link "ATA Operating Hour" [ref=f20e202] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ata-operating-hour
+              - listitem [ref=f20e203]:
+                - link "ATA Quick Fact" [ref=f20e204] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ata-quick-fact
+              - listitem [ref=f20e205]:
+                - link "ATA Section" [ref=f20e206] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ata-section
+              - listitem [ref=f20e207]:
+                - link "About Hero Banner" [ref=f20e208] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-about-hero-banner
+              - listitem [ref=f20e209]:
+                - link "About Qatar Chamber Page" [ref=f20e210] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-about-qatar-chamber-page
+              - listitem [ref=f20e211]:
+                - link "About the Exhibition Section" [ref=f20e212] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-about-the-exhibition-section
+              - listitem [ref=f20e213]:
+                - link "About Us Counter" [ref=f20e214] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-about-us-counter
+              - listitem [ref=f20e215]:
+                - link "About Us Section" [ref=f20e216] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-about-us-section
+              - listitem [ref=f20e217]:
+                - link "Accessibility Header Configuration" [ref=f20e218] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-accessibility-header-configuration
+              - listitem [ref=f20e219]:
+                - link "Achievement Counter" [ref=f20e220] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-achievement-counter
+              - listitem [ref=f20e221]:
+                - link "Add Company Request" [ref=f20e222] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-add-company-request
+                - emphasis [ref=f20e223]: (view only)
+              - listitem [ref=f20e224]:
+                - link "Advertisement Booking Request" [ref=f20e225] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-advertisement-booking-request
+                - emphasis [ref=f20e226]: (view only)
+              - listitem [ref=f20e227]:
+                - link "Advertisement Rate Card" [ref=f20e228] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-advertisement-rate-card
+              - listitem [ref=f20e229]:
+                - link "Annual Report" [ref=f20e230] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ann-rpt
+              - listitem [ref=f20e231]:
+                - link "Announcement Popup" [ref=f20e232] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-announcement-popup
+              - listitem [ref=f20e233]:
+                - link "Annual Reports Page" [ref=f20e234] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-annual-reports-page
+              - listitem [ref=f20e235]:
+                - link "Apply Online CTA" [ref=f20e236] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-apply-online-cta
+              - listitem [ref=f20e237]:
+                - link "B2B Company Registration" [ref=f20e238] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-b2-b-company-registration
+                - emphasis [ref=f20e239]: (view only)
+              - listitem [ref=f20e240]:
+                - link "B2B Contact Request" [ref=f20e241] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-b2-b-contact-request
+                - emphasis [ref=f20e242]: (view only)
+              - listitem [ref=f20e243]:
+                - link "BG Checklist Item" [ref=f20e244] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-bg-checklist-item
+              - listitem [ref=f20e245]:
+                - link "BG Highlight Item" [ref=f20e246] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-bg-highlight-item
+              - listitem [ref=f20e247]:
+                - link "BG Info Page" [ref=f20e248] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-bg-info-page
+              - listitem [ref=f20e249]:
+                - link "BG Info Section" [ref=f20e250] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-bg-info-section
+              - listitem [ref=f20e251]:
+                - link "BG Official Source Link" [ref=f20e252] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-bg-official-source-link
+              - listitem [ref=f20e253]:
+                - link "BG Sector Tile" [ref=f20e254] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-bg-sector-tile
+              - listitem [ref=f20e255]:
+                - link "BG Sub-topic Block" [ref=f20e256] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-bg-sub-topic-block
+              - listitem [ref=f20e257]:
+                - link "Board Directory Page" [ref=f20e258] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-board-directory-page
+              - listitem [ref=f20e259]:
+                - link "Board Member" [ref=f20e260] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-board-member
+              - listitem [ref=f20e261]:
+                - link "Bottom Bar Link" [ref=f20e262] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-bottom-bar-link
+              - listitem [ref=f20e263]:
+                - link "Business Council Country" [ref=f20e264] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-business-council-country
+              - listitem [ref=f20e265]:
+                - link "Business Council Membership Request" [ref=f20e266] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-business-council-membership-request
+                - emphasis [ref=f20e267]: (view only)
+              - listitem [ref=f20e268]:
+                - link "Business Council Request Page" [ref=f20e269] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-business-council-request-page
+              - listitem [ref=f20e270]:
+                - link "Business Event" [ref=f20e271] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-business-event
+              - listitem [ref=f20e272]:
+                - link "Business Event Category" [ref=f20e273] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-business-event-category
+              - listitem [ref=f20e274]:
+                - link "Business Events Section" [ref=f20e275] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-business-events-section
+              - listitem [ref=f20e276]:
+                - link "Business Opportunity" [ref=f20e277] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-business-opportunity
+              - listitem [ref=f20e278]:
+                - link "Business Opportunity Page" [ref=f20e279] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-business-opportunity-page
+              - listitem [ref=f20e280]:
+                - link "COO Call To Action" [ref=f20e281] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-coo-cta
+              - listitem [ref=f20e282]:
+                - link "COO Document Requirement" [ref=f20e283] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-coo-document-requirement
+              - listitem [ref=f20e284]:
+                - link "COO Download Card" [ref=f20e285] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-coo-download-card
+              - listitem [ref=f20e286]:
+                - link "COO Finder Document" [ref=f20e287] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-coo-finder-document
+              - listitem [ref=f20e288]:
+                - link "COO Finder Option" [ref=f20e289] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-coo-finder-option
+              - listitem [ref=f20e290]:
+                - link "COO Info Card" [ref=f20e291] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-coo-info-card
+              - listitem [ref=f20e292]:
+                - link "COO Page Content" [ref=f20e293] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-coo-page-content
+              - listitem [ref=f20e294]:
+                - link "COO Process Step" [ref=f20e295] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-coo-process-step
+              - listitem [ref=f20e296]:
+                - link "COO Quick Fact" [ref=f20e297] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-coo-quick-fact
+              - listitem [ref=f20e298]:
+                - link "COO Section" [ref=f20e299] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-coo-section
+              - listitem [ref=f20e300]:
+                - link "Chairman Message Page" [ref=f20e301] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-chairman-message-page
+              - listitem [ref=f20e302]:
+                - link "Chamber Laws Page" [ref=f20e303] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-chamber-laws-page
+              - listitem [ref=f20e304]:
+                - link "Circular" [ref=f20e305] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-circular
+              - listitem [ref=f20e306]:
+                - link "Circular Subscriber" [ref=f20e307] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-circular-subscriber
+                - emphasis [ref=f20e308]: (view only)
+              - listitem [ref=f20e309]:
+                - link "Co Investment" [ref=f20e310] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-co-investment
+              - listitem [ref=f20e311]:
+                - link "Collapsible Section" [ref=f20e312] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-collapsible-section
+              - listitem [ref=f20e313]:
+                - link "Committee CTA Card" [ref=f20e314] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-committee-cta-card
+              - listitem [ref=f20e315]:
+                - link "Committee Item" [ref=f20e316] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-committee-item
+              - listitem [ref=f20e317]:
+                - link "Committee Joining Request" [ref=f20e318] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-committee-joining-request
+                - emphasis [ref=f20e319]: (view only)
+              - listitem [ref=f20e320]:
+                - link "Committee Leader Card" [ref=f20e321] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-committee-leader-card
+              - listitem [ref=f20e322]:
+                - link "Committee Lookup Status" [ref=f20e323] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-committee-lookup-status
+              - listitem [ref=f20e324]:
+                - link "Committee Mandate Item" [ref=f20e325] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-committee-mandate-item
+              - listitem [ref=f20e326]:
+                - link "Community Partner" [ref=f20e327] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-community-partner
+              - listitem [ref=f20e328]:
+                - link "Community Partners Configuration" [ref=f20e329] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-community-partners-configuration
+              - listitem [ref=f20e330]:
+                - link "Consultation Request" [ref=f20e331] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-consultation-request
+                - emphasis [ref=f20e332]: (view only)
+              - listitem [ref=f20e333]:
+                - link "Copyright Bar" [ref=f20e334] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-copyright-bar
+              - listitem [ref=f20e335]:
+                - link "Department" [ref=f20e336] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-department
+              - listitem [ref=f20e337]:
+                - link "Downloadable Resource" [ref=f20e338] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-downloadable-resource
+              - listitem [ref=f20e339]:
+                - link "Downloadable Resources - Resource Item" [ref=f20e340] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-downloadable-resource-item
+              - listitem [ref=f20e341]:
+                - link "Dynamic Widget" [ref=f20e342] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-dynamic-widget
+              - listitem [ref=f20e343]:
+                - link "EOISubmission" [ref=f20e344] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-eoi-submission
+                - emphasis [ref=f20e345]: (view only)
+              - listitem [ref=f20e346]:
+                - link "EOI Submission Document" [ref=f20e347] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-eoi-submission-document
+                - emphasis [ref=f20e348]: (view only)
+              - listitem [ref=f20e349]:
+                - link "Economic Consultancy Area Card" [ref=f20e350] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-economic-consultancy-area-card
+              - listitem [ref=f20e351]:
+                - link "Economic Consultancy FAQ Item" [ref=f20e352] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-economic-consultancy-faq-item
+              - listitem [ref=f20e353]:
+                - link "Economic Consultancy Highlight Item" [ref=f20e354] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-economic-consultancy-highlight-item
+              - listitem [ref=f20e355]:
+                - link "Economic Consultancy Info Card" [ref=f20e356] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-economic-consultancy-info-card
+              - listitem [ref=f20e357]:
+                - link "Economic Consultancy Page" [ref=f20e358] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-economic-consultancy-page
+              - listitem [ref=f20e359]:
+                - link "Economic Consultancy Quick Fact" [ref=f20e360] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-economic-consultancy-quick-fact
+              - listitem [ref=f20e361]:
+                - link "Economic Consultancy Scope Item" [ref=f20e362] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-economic-consultancy-scope-item
+              - listitem [ref=f20e363]:
+                - link "Economic Consultancy Section" [ref=f20e364] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-economic-consultancy-section
+              - listitem [ref=f20e365]:
+                - link "Economic Research Listing Page" [ref=f20e366] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-economic-research-listing-page
+              - listitem [ref=f20e367]:
+                - link "Economic Research Report" [ref=f20e368] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-economic-research-report
+              - listitem [ref=f20e369]:
+                - link "Photo Gallery Event Category" [ref=f20e370] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-event-category
+              - listitem [ref=f20e371]:
+                - link "Event Coverage Request Card" [ref=f20e372] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-event-coverage-request-card
+              - listitem [ref=f20e373]:
+                - link "MDR - Event Coverage Request Submission" [ref=f20e374] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-event-coverage-request-submission
+                - emphasis [ref=f20e375]: (view only)
+              - listitem [ref=f20e376]:
+                - link "Event Coverage Submission" [ref=f20e377] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-event-coverage-submission
+                - emphasis [ref=f20e378]: (view only)
+              - listitem [ref=f20e379]:
+                - link "Event Media PR Support Request" [ref=f20e380] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-event-media-pr-support-request
+                - emphasis [ref=f20e381]: (view only)
+              - listitem [ref=f20e382]:
+                - link "Event Registration" [ref=f20e383] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-event-registration
+                - emphasis [ref=f20e384]: (view only)
+              - listitem [ref=f20e385]:
+                - link "Events Listing Page" [ref=f20e386] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-events-listing-page
+              - listitem [ref=f20e387]:
+                - link "Explore Made in China CTA Card" [ref=f20e388] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-explore-made-in-china-cta-card
+              - listitem [ref=f20e389]:
+                - link "Explore Made in Qatar CTA Card" [ref=f20e390] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-explore-made-in-qatar-cta-card
+              - listitem [ref=f20e391]:
+                - link "Export Report" [ref=f20e392] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-export-report
+              - listitem [ref=f20e393]:
+                - link "Export Report Page" [ref=f20e394] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-export-report-page
+              - listitem [ref=f20e395]:
+                - link "FAQ Category" [ref=f20e396] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-faq-category
+              - listitem [ref=f20e397]:
+                - link "FAQ Entry" [ref=f20e398] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-faq-entry
+              - listitem [ref=f20e399]:
+                - link "FH Callout" [ref=f20e400] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-fh-callout
+              - listitem [ref=f20e401]:
+                - link "FH Contact Channel" [ref=f20e402] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-fh-contact-channel
+              - listitem [ref=f20e403]:
+                - link "FH Fee Tile" [ref=f20e404] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-fh-fee-tile
+              - listitem [ref=f20e405]:
+                - link "FH List Item" [ref=f20e406] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-fh-list-item
+              - listitem [ref=f20e407]:
+                - link "FH Platform CTA" [ref=f20e408] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-fh-platform-cta
+              - listitem [ref=f20e409]:
+                - link "FH Quick Fact" [ref=f20e410] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-fh-quick-fact
+              - listitem [ref=f20e411]:
+                - link "FH Section" [ref=f20e412] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-fh-section
+              - listitem [ref=f20e413]:
+                - link "FH Text Block" [ref=f20e414] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-fh-text-block
+              - listitem [ref=f20e415]:
+                - link "FH Training Option" [ref=f20e416] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-fh-training-option
+              - listitem [ref=f20e417]:
+                - link "FH Training Sub Option" [ref=f20e418] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-fh-training-sub-option
+              - listitem [ref=f20e419]:
+                - link "Filter Tab" [ref=f20e420] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-filter-tab
+              - listitem [ref=f20e421]:
+                - link "Flickr Album" [ref=f20e422] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-flickr-album
+              - listitem [ref=f20e423]:
+                - link "Flickr Video" [ref=f20e424] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-flickr-video
+              - listitem [ref=f20e425]:
+                - link "Food Handlers Page" [ref=f20e426] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-food-handlers-page
+              - listitem [ref=f20e427]:
+                - link "Footer Configuration" [ref=f20e428] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-footer-configuration
+              - listitem [ref=f20e429]:
+                - link "Footer Link" [ref=f20e430] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-footer-link
+              - listitem [ref=f20e431]:
+                - link "Footer Navigation Column" [ref=f20e432] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-footer-navigation-column
+              - listitem [ref=f20e433]:
+                - link "Footer Navigation Link" [ref=f20e434] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-footer-navigation-link
+              - listitem [ref=f20e435]:
+                - link "General Manager Message" [ref=f20e436] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-general-manager-message
+              - listitem [ref=f20e437]:
+                - link "HTSB Checklist Item" [ref=f20e438] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-htsb-checklist-item
+              - listitem [ref=f20e439]:
+                - link "HTSB Decision Card" [ref=f20e440] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-htsb-decision-card
+              - listitem [ref=f20e441]:
+                - link "HTSB Info Page" [ref=f20e442] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-htsb-info-page
+              - listitem [ref=f20e443]:
+                - link "HTSB Info Section" [ref=f20e444] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-htsb-info-section
+              - listitem [ref=f20e445]:
+                - link "HTSB Journey Stage" [ref=f20e446] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-htsb-journey-stage
+              - listitem [ref=f20e447]:
+                - link "HTSB Section Link" [ref=f20e448] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-htsb-section-link
+              - listitem [ref=f20e449]:
+                - link "HTSB Topic Tag" [ref=f20e450] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-htsb-topic-tag
+              - listitem [ref=f20e451]:
+                - link "Hall" [ref=f20e452] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall
+              - listitem [ref=f20e453]:
+                - link "Hall Booking CTA Banner" [ref=f20e454] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall-booking-cta-banner
+              - listitem [ref=f20e455]:
+                - link "Hall Booking Guideline" [ref=f20e456] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall-booking-guideline
+              - listitem [ref=f20e457]:
+                - link "Hall Booking Overview Card" [ref=f20e458] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall-booking-overview-card
+              - listitem [ref=f20e459]:
+                - link "Hall Booking Quick Fact" [ref=f20e460] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall-booking-quick-fact
+              - listitem [ref=f20e461]:
+                - link "Hall Booking Request" [ref=f20e462] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall-booking-request
+                - emphasis [ref=f20e463]: (view only)
+              - listitem [ref=f20e464]:
+                - link "Hall Booking Section" [ref=f20e465] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall-booking-section
+              - listitem [ref=f20e466]:
+                - link "Hall Feature Badge" [ref=f20e467] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall-feature-badge
+              - listitem [ref=f20e468]:
+                - link "Hall Album Slide" [ref=f20e469] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall-gallery-image
+              - listitem [ref=f20e470]:
+                - link "Hall Gallery Item" [ref=f20e471] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall-gallery-item
+              - listitem [ref=f20e472]:
+                - link "Hall Overview Checklist Item" [ref=f20e473] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hall-overview-checklist-item
+              - listitem [ref=f20e474]:
+                - link "Header Configuration" [ref=f20e475] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-header-configuration
+              - listitem [ref=f20e476]:
+                - link "Hero Banner Slide" [ref=f20e477] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-hero-banner-slide
+              - listitem [ref=f20e478]:
+                - link "Home Latest News Section" [ref=f20e479] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-home-latest-news-section
+              - listitem [ref=f20e480]:
+                - link "IINC Checklist Item" [ref=f20e481] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-iinc-checklist-item
+              - listitem [ref=f20e482]:
+                - link "IINC Highlight Item" [ref=f20e483] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-iinc-highlight-item
+              - listitem [ref=f20e484]:
+                - link "IINC Incentive Item" [ref=f20e485] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-iinc-incentive-item
+              - listitem [ref=f20e486]:
+                - link "IINC Info Page" [ref=f20e487] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-iinc-info-page
+              - listitem [ref=f20e488]:
+                - link "IINC Info Section" [ref=f20e489] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-iinc-info-section
+              - listitem [ref=f20e490]:
+                - link "IINC Section Link" [ref=f20e491] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-iinc-section-link
+              - listitem [ref=f20e492]:
+                - link "Inquiry" [ref=f20e493] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-inquiry
+                - emphasis [ref=f20e494]: (view only)
+              - listitem [ref=f20e495]:
+                - link "Inquiry Category" [ref=f20e496] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-inquiry-category
+              - listitem [ref=f20e497]:
+                - link "Interview Request Card" [ref=f20e498] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-interview-request-card
+              - listitem [ref=f20e499]:
+                - link "MDR - Interview Request Submission" [ref=f20e500] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-interview-request-submission
+                - emphasis [ref=f20e501]: (view only)
+              - listitem [ref=f20e502]:
+                - link "KGS Checklist Item" [ref=f20e503] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-kgs-checklist-item
+              - listitem [ref=f20e504]:
+                - link "KGS Highlight Item" [ref=f20e505] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-kgs-highlight-item
+              - listitem [ref=f20e506]:
+                - link "KGS Info Page" [ref=f20e507] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-kgs-info-page
+              - listitem [ref=f20e508]:
+                - link "KGS Info Section" [ref=f20e509] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-kgs-info-section
+              - listitem [ref=f20e510]:
+                - link "KGS Section Link" [ref=f20e511] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-kgs-section-link
+              - listitem [ref=f20e512]:
+                - link "KGS Sector Theme" [ref=f20e513] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-kgs-sector-theme
+              - listitem [ref=f20e514]:
+                - link "Key Highlight" [ref=f20e515] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-key-highlight
+              - listitem [ref=f20e516]:
+                - link "Law Entry" [ref=f20e517] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-law-entry
+              - listitem [ref=f20e518]:
+                - link "Law Regulation" [ref=f20e519] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-law-regulation
+              - listitem [ref=f20e520]:
+                - link "Legal Consultation Page" [ref=f20e521] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-legal-consultation-page
+              - listitem [ref=f20e522]:
+                - link "Legal Eligibility Criteria" [ref=f20e523] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-legal-criteria
+              - listitem [ref=f20e524]:
+                - link "Legal FAQ Item" [ref=f20e525] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-legal-faq-item
+              - listitem [ref=f20e526]:
+                - link "Legal Info Card" [ref=f20e527] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-legal-info-card
+              - listitem [ref=f20e528]:
+                - link "Legal Process Step" [ref=f20e529] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-legal-process-step
+              - listitem [ref=f20e530]:
+                - link "Legal Quick Fact" [ref=f20e531] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-legal-quick-fact
+              - listitem [ref=f20e532]:
+                - link "Legal Scope Item" [ref=f20e533] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-legal-scope-item
+              - listitem [ref=f20e534]:
+                - link "Legal Section" [ref=f20e535] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-legal-section
+              - listitem [ref=f20e536]:
+                - link "Made in China Expo About Section" [ref=f20e537] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-made-in-china-expo-about-section
+              - listitem [ref=f20e538]:
+                - link "Made in China Expo Hero" [ref=f20e539] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-made-in-china-expo-hero
+              - listitem [ref=f20e540]:
+                - link "Made in Qatar Expo Hero" [ref=f20e541] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-made-in-qatar-expo-hero
+              - listitem [ref=f20e542]:
+                - link "Magazine Issue" [ref=f20e543] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-magazine-issue
+              - listitem [ref=f20e544]:
+                - link "Media Center Count Widget" [ref=f20e545] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-media-center-count-widget
+              - listitem [ref=f20e546]:
+                - link "Media Center Feed Section" [ref=f20e547] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-media-center-feed-section
+              - listitem [ref=f20e548]:
+                - link "Media Center Hero" [ref=f20e549] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-media-center-hero
+              - listitem [ref=f20e550]:
+                - link "Media Center Quick Access Card" [ref=f20e551] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-media-center-quick-access-card
+              - listitem [ref=f20e552]:
+                - link "Media Dept Page" [ref=f20e553] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-media-dept-page
+              - listitem [ref=f20e554]:
+                - link "Media Dept Request Page" [ref=f20e555] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-media-dept-request-page
+              - listitem [ref=f20e556]:
+                - link "Media Inquiry Card" [ref=f20e557] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-media-inquiry-card
+              - listitem [ref=f20e558]:
+                - link "MDR - Media Inquiry Submission" [ref=f20e559] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-media-inquiry-submission
+                - emphasis [ref=f20e560]: (view only)
+              - listitem [ref=f20e561]:
+                - link "Media Item" [ref=f20e562] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-media-item
+              - listitem [ref=f20e563]:
+                - link "Media Service Card" [ref=f20e564] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-media-service-card
+              - listitem [ref=f20e565]:
+                - link "Mediation Benefit Card" [ref=f20e566] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-mediation-benefit-card
+              - listitem [ref=f20e567]:
+                - link "Mediation Eligibility Criterion" [ref=f20e568] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-mediation-criteria
+              - listitem [ref=f20e569]:
+                - link "Mediation FAQ Item" [ref=f20e570] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-mediation-faq-item
+              - listitem [ref=f20e571]:
+                - link "Mediation Page" [ref=f20e572] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-mediation-page
+              - listitem [ref=f20e573]:
+                - link "Mediation Prepare Item" [ref=f20e574] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-mediation-prepare-item
+              - listitem [ref=f20e575]:
+                - link "Mediation Process Step" [ref=f20e576] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-mediation-process-step
+              - listitem [ref=f20e577]:
+                - link "Mediation Quick Fact" [ref=f20e578] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-mediation-quick-fact
+              - listitem [ref=f20e579]:
+                - link "Mediation Request" [ref=f20e580] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-mediation-request
+                - emphasis [ref=f20e581]: (view only)
+              - listitem [ref=f20e582]:
+                - link "Mediation Section" [ref=f20e583] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-mediation-section
+              - listitem [ref=f20e584]:
+                - link "Member Service" [ref=f20e585] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-member-service
+              - listitem [ref=f20e586]:
+                - link "Member Services Page" [ref=f20e587] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-member-services-page
+              - listitem [ref=f20e588]:
+                - link "Membership Tier" [ref=f20e589] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-membership-tier
+              - listitem [ref=f20e590]:
+                - link "Navigation Item" [ref=f20e591] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-nav-item
+              - listitem [ref=f20e592]:
+                - link "News Article" [ref=f20e593] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-news-article
+              - listitem [ref=f20e594]:
+                - link "Newsletter" [ref=f20e595] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-newsletter
+              - listitem [ref=f20e596]:
+                - link "Newsletter Subscriber" [ref=f20e597] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-newsletter-subscriber
+                - emphasis [ref=f20e598]: (view only)
+              - listitem [ref=f20e599]:
+                - link "Opportunity Inquiry" [ref=f20e600] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-opportunity-inquiry
+                - emphasis [ref=f20e601]: (view only)
+              - listitem [ref=f20e602]:
+                - link "Opportunity Section" [ref=f20e603] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-opportunity-section
+              - listitem [ref=f20e604]:
+                - link "Opportunity Submission" [ref=f20e605] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-opportunity-submission
+                - emphasis [ref=f20e606]: (view only)
+              - listitem [ref=f20e607]:
+                - link "Organizational Structure Page" [ref=f20e608] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-org-structure-page
+              - listitem [ref=f20e609]:
+                - link "Our Services Section" [ref=f20e610] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-our-services-section
+              - listitem [ref=f20e611]:
+                - link "Our Services Tab Mapping" [ref=f20e612] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-our-services-tab-mapping
+              - listitem [ref=f20e613]:
+                - link "Overview - Body + Info Card" [ref=f20e614] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-overview-section-and-info-card
+              - listitem [ref=f20e615]:
+                - link "Photo Gallery Page Hero" [ref=f20e616] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-page-hero
+              - listitem [ref=f20e617]:
+                - link "Partner Category" [ref=f20e618] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-partner-category
+              - listitem [ref=f20e619]:
+                - link "Partner Offer" [ref=f20e620] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-partner-offer
+              - listitem [ref=f20e621]:
+                - link "Partners Offers Page" [ref=f20e622] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-partners-offers-page
+              - listitem [ref=f20e623]:
+                - link "Photo Album" [ref=f20e624] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-photo-album
+              - listitem [ref=f20e625]:
+                - link "Podcast Episode" [ref=f20e626] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-podcast-episode
+              - listitem [ref=f20e627]:
+                - link "Podcast Platform Link" [ref=f20e628] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-podcast-platform-link
+              - listitem [ref=f20e629]:
+                - link "Podcast Show Configuration" [ref=f20e630] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-podcast-show-config
+              - listitem [ref=f20e631]:
+                - link "Podcast Subscriber" [ref=f20e632] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-podcast-subscriber
+              - listitem [ref=f20e633]:
+                - link "Press Kit Card" [ref=f20e634] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-press-kit-card
+              - listitem [ref=f20e635]:
+                - link "Project Gallery Item" [ref=f20e636] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-project-gallery-item
+              - listitem [ref=f20e637]:
+                - link "Promotional Banner" [ref=f20e638] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-promotional-banner
+              - listitem [ref=f20e639]:
+                - link "Proposal for Research Page / Hero" [ref=f20e640] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-proposal-for-research-page
+              - listitem [ref=f20e641]:
+                - link "Quick-Facts Tile" [ref=f20e642] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-proposal-research-quick-facts-tile
+              - listitem [ref=f20e643]:
+                - link "Section Index / Section" [ref=f20e644] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-proposal-research-section-index-entry
+              - listitem [ref=f20e645]:
+                - link "Publication" [ref=f20e646] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-publication
+              - listitem [ref=f20e647]:
+                - link "QC Content Draft" [ref=f20e648] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-qc-content-draft
+                - emphasis [ref=f20e649]: (view only)
+              - listitem [ref=f20e650]:
+                - link "News" [ref=f20e651] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-qcdemo131059-news
+              - listitem [ref=f20e652]:
+                - link "QC Publish Schedule" [ref=f20e653] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-qc-publish-schedule
+                - emphasis [ref=f20e654]: (view only)
+              - listitem [ref=f20e655]:
+                - link "QC Review Log" [ref=f20e656] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-qc-review-log
+                - emphasis [ref=f20e657]: (view only)
+              - listitem [ref=f20e658]:
+                - link "Qatar Market Overview Section" [ref=f20e659] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-qmo-section
+              - listitem [ref=f20e660]:
+                - link "Qatar Market Overview Item" [ref=f20e661] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-qmo-section-item
+              - listitem [ref=f20e662]:
+                - link "QAFL Membership Submission" [ref=f20e663] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-qafl-membership-submission
+                - emphasis [ref=f20e664]: (view only)
+              - listitem [ref=f20e665]:
+                - link "QAFL Page Content" [ref=f20e666] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-qafl-page-content
+              - listitem [ref=f20e667]:
+                - link "Qatar Market Overview Page" [ref=f20e668] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-qatar-market-overview-page
+              - listitem [ref=f20e669]:
+                - link "Quick Facts Tile" [ref=f20e670] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-quick-facts-tile
+              - listitem [ref=f20e671]:
+                - link "Quick Link" [ref=f20e672] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-quick-link
+              - listitem [ref=f20e673]:
+                - link "Rate Card Feature Checklist Item" [ref=f20e674] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-rate-card-feature-checklist-item
+              - listitem [ref=f20e675]:
+                - link "Section Index Entry" [ref=f20e676] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-section-index-entry
+              - listitem [ref=f20e677]:
+                - link "Sectoral Committees Page" [ref=f20e678] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-sectoral-committees-page
+              - listitem [ref=f20e679]:
+                - link "Service Card" [ref=f20e680] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-service-card
+              - listitem [ref=f20e681]:
+                - link "Service Information - Information Group" [ref=f20e682] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-service-information-group
+              - listitem [ref=f20e683]:
+                - link "Group Item (bullet inside an Information Group)" [ref=f20e684] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-service-information-group-item
+              - listitem [ref=f20e685]:
+                - link "Social Media Icon" [ref=f20e686] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-social-media-icon
+              - listitem [ref=f20e687]:
+                - link "Strategic Partner" [ref=f20e688] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-strategic-partner
+              - listitem [ref=f20e689]:
+                - link "Strategic Pillar Card" [ref=f20e690] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-strategic-pillar-card
+              - listitem [ref=f20e691]:
+                - link "Suggestion or Complaint" [ref=f20e692] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-suggestion-complaint
+              - listitem [ref=f20e693]:
+                - link "TIR Benefit Card" [ref=f20e694] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tir-benefit-card
+              - listitem [ref=f20e695]:
+                - link "TIR Carnet Page" [ref=f20e696] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tir-carnet-page
+              - listitem [ref=f20e697]:
+                - link "TIR Eligibility Criteria" [ref=f20e698] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tir-criteria
+              - listitem [ref=f20e699]:
+                - link "TIR FAQ Item" [ref=f20e700] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tir-faq-item
+              - listitem [ref=f20e701]:
+                - link "TIR Prepare Item" [ref=f20e702] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tir-prepare-item
+              - listitem [ref=f20e703]:
+                - link "TIR Process Step" [ref=f20e704] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tir-process-step
+              - listitem [ref=f20e705]:
+                - link "TIR Quick Fact" [ref=f20e706] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tir-quick-fact
+              - listitem [ref=f20e707]:
+                - link "TIR Downloadable Resource" [ref=f20e708] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tir-resource
+              - listitem [ref=f20e709]:
+                - link "TIR Section" [ref=f20e710] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tir-section
+              - listitem [ref=f20e711]:
+                - link "TIR Statistic" [ref=f20e712] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tir-statistic
+              - listitem [ref=f20e713]:
+                - link "Tender" [ref=f20e714] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-tender
+              - listitem [ref=f20e715]:
+                - link "UKC Callout" [ref=f20e716] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ukc-callout
+              - listitem [ref=f20e717]:
+                - link "UKC Document Item" [ref=f20e718] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ukc-document-item
+              - listitem [ref=f20e719]:
+                - link "UKC Process Step" [ref=f20e720] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ukc-process-step
+              - listitem [ref=f20e721]:
+                - link "UKC Section" [ref=f20e722] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-ukc-section
+              - listitem [ref=f20e723]:
+                - link "Upcoming Event Pin" [ref=f20e724] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-upcoming-event-pin
+              - listitem [ref=f20e725]:
+                - link "Update Key Contact Page" [ref=f20e726] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-update-key-contact-page
+              - listitem [ref=f20e727]:
+                - link "Uploaded Photos Album" [ref=f20e728] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-uploaded-album
+              - listitem [ref=f20e729]:
+                - link "Useful Link" [ref=f20e730] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-useful-link
+              - listitem [ref=f20e731]:
+                - link "Useful Link Category" [ref=f20e732] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-useful-link-category
+              - listitem [ref=f20e733]:
+                - link "Useful Links Page" [ref=f20e734] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-useful-links-page
+              - listitem [ref=f20e735]:
+                - link "Video Category" [ref=f20e736] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-video-category
+              - listitem [ref=f20e737]:
+                - link "Video Record" [ref=f20e738] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-video-record
+              - listitem [ref=f20e739]:
+                - link "VMO Section" [ref=f20e740] [cursor=pointer]:
+                  - /url: /web/qatar-chamber/manage-vmo-section
+          - generic [ref=f20e741]:
+            - generic [ref=f20e743]:
+              - generic [ref=f20e744]:
+                - generic [ref=f20e745]:
+                  - heading "Media Center Feed Section entries" [level=2] [ref=f20e746]
+                  - generic [ref=f20e747]: 3 total
+                - generic [ref=f20e748]:
+                  - generic [ref=f20e749]:
+                    - generic [ref=f20e750]: Search
+                    - searchbox "Search" [ref=f20e751]
+                  - generic [ref=f20e752]:
+                    - generic [ref=f20e753]: Status
+                    - combobox "Status" [ref=f20e754]:
+                      - option "All statuses" [selected]
+                      - option "Published"
+                  - generic [ref=f20e755]:
+                    - generic [ref=f20e756]: Modified from
+                    - generic [ref=f20e757]:
+                      - generic [ref=f20e758]:
+                        - textbox "Modified from Open calendar" [ref=f20e759]:
+                          - /placeholder: dd/mm/yyyy
+                        - button "Open calendar" [ref=f20e760] [cursor=pointer]: 📅
+                      - textbox [aria-hidden]
+                  - generic [ref=f20e761]:
+                    - generic [ref=f20e762]: to
+                    - generic [ref=f20e763]:
+                      - generic [ref=f20e764]:
+                        - textbox "to Open calendar" [ref=f20e765]:
+                          - /placeholder: dd/mm/yyyy
+                        - button "Open calendar" [ref=f20e766] [cursor=pointer]: 📅
+                      - textbox [aria-hidden]
+                  - button "Reset" [ref=f20e767] [cursor=pointer]
+                - table [ref=f20e769]:
+                  - rowgroup [ref=f20e770]:
+                    - row [ref=f20e771]:
+                      - columnheader [ref=f20e772]:
+                        - button "Entry" [ref=f20e773] [cursor=pointer]
+                      - columnheader [ref=f20e774]:
+                        - button "Status" [ref=f20e775] [cursor=pointer]
+                      - columnheader [ref=f20e776]:
+                        - button "Last modified" [ref=f20e777] [cursor=pointer]
+                      - columnheader "Actions" [ref=f20e778]
+                  - rowgroup [ref=f20e780]:
+                    - row [ref=f20e781]:
+                      - cell "News & press releases" [ref=f20e782]
+                      - cell "Published" [ref=f20e783]:
+                        - generic "Approved. Whether visitors see it also depends on the publication field." [ref=f20e784]: Published
+                      - cell "9/23/2026, 6:17:17 PM" [ref=f20e785]
+                      - cell [ref=f20e786]:
+                        - link "Edit" [ref=f20e787] [cursor=pointer]:
+                          - /url: /web/qatar-chamber/manage-media-center-feed-section?editEntry=QCDEMO-130709-FEED-01
+                        - link "Preview" [ref=f20e788] [cursor=pointer]:
+                          - /url: /web/qatar-chamber/object-preview?qcPreview=mediacenterfeedsections%3A208544&qcTitle=Media%20Center%20Feed%20Section
+                        - link "Control panel" [ref=f20e789] [cursor=pointer]:
+                          - /url: /group/qatar-chamber/~/control_panel/manage?p_p_id=com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6&p_p_lifecycle=0&p_p_state=maximized&p_v_l_s_g_id=37246&_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6_objectDefinitionId=208184&_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6_mvcRenderCommandName=%2Fobject_entries%2Fedit_object_entry&_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6_externalReferenceCode=QCDEMO-130709-FEED-01
+                        - link "Unpublish" [ref=f20e790] [cursor=pointer]:
+                          - /url: "#"
+                        - link "History" [ref=f20e791] [cursor=pointer]:
+                          - /url: "#"
+                        - link "Delete" [ref=f20e792] [cursor=pointer]:
+                          - /url: "#"
+                    - row [ref=f20e793]:
+                      - cell "Photo Gallery" [ref=f20e794]
+                      - cell "Published" [ref=f20e795]:
+                        - generic "Approved. Whether visitors see it also depends on the publication field." [ref=f20e796]: Published
+                      - cell "9/23/2026, 6:17:18 PM" [ref=f20e797]
+                      - cell [ref=f20e798]:
+                        - link "Edit" [ref=f20e799] [cursor=pointer]:
+                          - /url: /web/qatar-chamber/manage-media-center-feed-section?editEntry=QCDEMO-130709-FEED-02
+                        - link "Preview" [ref=f20e800] [cursor=pointer]:
+                          - /url: /web/qatar-chamber/object-preview?qcPreview=mediacenterfeedsections%3A208552&qcTitle=Media%20Center%20Feed%20Section
+                        - link "Control panel" [ref=f20e801] [cursor=pointer]:
+                          - /url: /group/qatar-chamber/~/control_panel/manage?p_p_id=com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6&p_p_lifecycle=0&p_p_state=maximized&p_v_l_s_g_id=37246&_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6_objectDefinitionId=208184&_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6_mvcRenderCommandName=%2Fobject_entries%2Fedit_object_entry&_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6_externalReferenceCode=QCDEMO-130709-FEED-02
+                        - link "Unpublish" [ref=f20e802] [cursor=pointer]:
+                          - /url: "#"
+                        - link "History" [ref=f20e803] [cursor=pointer]:
+                          - /url: "#"
+                        - link "Delete" [ref=f20e804] [cursor=pointer]:
+                          - /url: "#"
+                    - row [ref=f20e805]:
+                      - cell "Video Gallery" [ref=f20e806]
+                      - cell "Published" [ref=f20e807]:
+                        - generic "Approved. Whether visitors see it also depends on the publication field." [ref=f20e808]: Published
+                      - cell "9/23/2026, 6:17:19 PM" [ref=f20e809]
+                      - cell [ref=f20e810]:
+                        - link "Edit" [ref=f20e811] [cursor=pointer]:
+                          - /url: /web/qatar-chamber/manage-media-center-feed-section?editEntry=QCDEMO-130709-FEED-03
+                        - link "Preview" [ref=f20e812] [cursor=pointer]:
+                          - /url: /web/qatar-chamber/object-preview?qcPreview=mediacenterfeedsections%3A208560&qcTitle=Media%20Center%20Feed%20Section
+                        - link "Control panel" [ref=f20e813] [cursor=pointer]:
+                          - /url: /group/qatar-chamber/~/control_panel/manage?p_p_id=com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6&p_p_lifecycle=0&p_p_state=maximized&p_v_l_s_g_id=37246&_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6_objectDefinitionId=208184&_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6_mvcRenderCommandName=%2Fobject_entries%2Fedit_object_entry&_com_liferay_object_web_internal_object_definitions_portlet_ObjectDefinitionsPortlet_U3H6_externalReferenceCode=QCDEMO-130709-FEED-03
+                        - link "Unpublish" [ref=f20e814] [cursor=pointer]:
+                          - /url: "#"
+                        - link "History" [ref=f20e815] [cursor=pointer]:
+                          - /url: "#"
+                        - link "Delete" [ref=f20e816] [cursor=pointer]:
+                          - /url: "#"
+              - generic [ref=f20e817]:
+                - generic [ref=f20e818]:
+                  - strong [ref=f20e819]: Preview — how this record renders on the site
+                  - button "Field view (no page renders this Object)" [ref=f20e820] [cursor=pointer]
+                  - button "EN" [ref=f20e821] [cursor=pointer]
+                  - button "AR" [ref=f20e822] [cursor=pointer]
+                  - generic [ref=f20e823] [cursor=pointer]:
+                    - checkbox "Show all drafts" [ref=f20e824]
+                    - text: Show all drafts
+                  - button "Refresh" [ref=f20e825] [cursor=pointer]
+                - paragraph [ref=f20e826]:
+                  - text: Previewing
+                  - strong [ref=f20e827]: Video Gallery
+                  - text: (Published) ·
+                  - link "open in a new tab" [ref=f20e828] [cursor=pointer]:
+                    - /url: /en/web/qatar-chamber/object-preview?qcPreview=mediacenterfeedsections%3A208560&qcTitle=Media%20Center%20Feed%20Section
+                - iframe [ref=f20e829]:
+                  - generic [ref=f22e2]:
+                    - navigation "Quick Links":
+                      - list:
+                        - listitem:
+                          - link "Skip to Main Content" [ref=f22e3] [cursor=pointer]:
+                            - /url: "#main-content"
+                        - listitem:
+                          - button "Open Accessibility Menu" [ref=f22e4] [cursor=pointer]
+                    - generic [ref=f22e5]:
+                      - navigation "Control Menu" [ref=f22e6]:
+                        - generic [ref=f22e7]:
+                          - generic [ref=f22e9]:
+                            - list [ref=f22e11]:
+                              - listitem [ref=f22e12]:
+                                - tablist [ref=f22e13]:
+                                  - tab "Open Product Menu" [ref=f22e14]
+                            - generic [ref=f22e20]:
+                              - heading "Object Entry Preview Draft Restricted Page" [level=1] [ref=f22e22]:
+                                - text: Object Entry Preview
+                                - generic [ref=f22e23]: Draft
+                                - generic [ref=f22e24]: Restricted Page
+                              - generic "Restricted Page" [ref=f22e25]
+                            - generic:
+                              - list
+                            - list [ref=f22e28]:
+                              - listitem [ref=f22e29]:
+                                - generic "Edit" [ref=f22e30]:
+                                  - link "Edit" [ref=f22e31] [cursor=pointer]:
+                                    - /url: https://qcdev.ihorizons.com/en/9dd30389-c45a-1182-f368-c3afa8ff3289?p_l_back_url=https%3A%2F%2Fqcdev.ihorizons.com%2Fen%2Fobject-preview&p_l_back_url_title=Object+Entry+Preview&p_l_mode=edit
+                              - listitem [ref=f22e36]:
+                                - link "Configure Page" [ref=f22e37] [cursor=pointer]:
+                                  - /url: https://qcdev.ihorizons.com:443/en/group/qatar-chamber/~/control_panel/manage?p_p_id=com_liferay_layout_admin_web_portlet_GroupPagesPortlet&p_p_lifecycle=0&p_p_state=maximized&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_mvcRenderCommandName=%2Flayout_admin%2Fedit_layout&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_redirect=%2Fen%2Fweb%2Fqatar-chamber%2Fobject-preview%3FqcPreview%3Dmediacenterfeedsections%253A208560%26qcTitle%3DMedia%2520Center%2520Feed%2520Section&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_backURL=%2Fen%2Fweb%2Fqatar-chamber%2Fobject-preview%3FqcPreview%3Dmediacenterfeedsections%253A208560%26qcTitle%3DMedia%2520Center%2520Feed%2520Section&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_groupId=37246&p_r_p_selPlid=574&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_backURLTitle=Object+Entry+Preview&_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_privateLayout=false&p_p_auth=HE1ur4kA
+                              - listitem [ref=f22e41]:
+                                - button "Simulation" [ref=f22e42] [cursor=pointer]
+                              - listitem [ref=f22e46]:
+                                - button "Content Performance" [ref=f22e47] [cursor=pointer]
+                              - listitem [ref=f22e49]:
+                                - button "A/B Test" [ref=f22e50] [cursor=pointer]
+                              - listitem [ref=f22e52]:
+                                - button "Page Audit" [ref=f22e53] [cursor=pointer]
+                              - listitem [ref=f22e55]:
+                                - button "Open Applications Menu Ctrl + Alt + A" [ref=f22e56] [cursor=pointer]
+                                - generic [ref=f22e58]:
+                                  - generic [ref=f22e59]: Open Applications Menu
+                                  - generic [ref=f22e60]:
+                                    - generic [ref=f22e61]: Ctrl
+                                    - text: +
+                                    - generic [ref=f22e62]: Alt
+                                    - text: +
+                                    - generic [ref=f22e63]: A
+                          - generic [ref=f22e66]:
+                            - alert [ref=f22e67]:
+                              - generic [ref=f22e74]:
+                                - text: Update your
+                                - link "activation key" [ref=f22e75] [cursor=pointer]:
+                                  - /url: /en/c/portal/license
+                                - text: because it will expire in 1 days.
+                            - button "Close" [ref=f22e76] [cursor=pointer]
+                      - generic [ref=f22e78]:
+                        - banner [ref=f22e79]:
+                          - generic [ref=f22e82]:
+                            - search [ref=f22e84]:
+                              - generic [ref=f22e86]:
+                                - generic [ref=f22e87]:
+                                  - generic [ref=f22e88]: Search Bar
+                                  - list [ref=f22e89]:
+                                    - button "Options" [ref=f22e92] [cursor=pointer]
+                                - generic [ref=f22e101]:
+                                  - status [ref=f22e102]
+                                  - generic [ref=f22e103]:
+                                    - textbox "Search" [ref=f22e104]:
+                                      - /placeholder: Search...
+                                    - button "Search" [ref=f22e106] [cursor=pointer]
+                            - generic [ref=f22e110]:
+                              - button "Alaa Medhat User Profile" [ref=f22e113] [cursor=pointer]
+                              - link "2200 New Notification" [ref=f22e114] [cursor=pointer]:
+                                - /url: https://qcdev.ihorizons.com:443/en/manage?p_p_id=com_liferay_notifications_web_portlet_NotificationsPortlet&p_p_lifecycle=0&_com_liferay_notifications_web_portlet_NotificationsPortlet_backURL=&p_p_auth=GOM1xGQO
+                                - generic [ref=f22e115]: "2200"
+                          - generic [ref=f22e118]:
+                            - link [ref=f22e119] [cursor=pointer]:
+                              - /url: https://qcdev.ihorizons.com/en
+                              - heading [level=2] [aria-hidden] [ref=f22e120]: Qatar Chamber
+                            - button "Toggle navigation" [ref=f22e121] [cursor=pointer]
+                        - main [ref=f22e124]:
+                          - generic [ref=f22e127]:
+                            - generic [ref=f22e128]: PREVIEW — published record, shown as stored.
+                            - generic [ref=f22e129]:
+                              - paragraph [ref=f22e130]: mediacenterfeedsections
+                              - heading "QCDEMO-130709-FEED-03" [level=1] [ref=f22e131]
+                              - paragraph [ref=f22e132]: "Status: Published · last modified 9/23/2026, 6:17:19 PM"
+                              - generic [ref=f22e133]:
+                                - paragraph [ref=f22e134]:
+                                  - button "← Back to all records" [ref=f22e135] [cursor=pointer]
+                                - generic [ref=f22e136]:
+                                  - generic [ref=f22e137]:
+                                    - term [ref=f22e138]: Active Status
+                                    - definition [ref=f22e139]: "Yes"
+                                  - generic [ref=f22e140]:
+                                    - term [ref=f22e141]: Cta Destination
+                                    - definition [ref=f22e142]: /web/qatar-chamber/video-library
+                                  - generic [ref=f22e143]:
+                                    - term [ref=f22e144]: Cta Label
+                                    - definition [ref=f22e145]: Watch now
+                                  - generic [ref=f22e146]:
+                                    - term [ref=f22e147]: Display Order
+                                    - definition [ref=f22e148]: "300"
+                                  - generic [ref=f22e149]:
+                                    - term [ref=f22e150]: Eyebrow
+                                    - definition [ref=f22e151]: Watch now
+                                  - generic [ref=f22e152]:
+                                    - term [ref=f22e153]: Section Heading
+                                    - definition [ref=f22e154]: Video Gallery
+                                  - generic [ref=f22e155]:
+                                    - term [ref=f22e156]: Section Type
+                                    - definition [ref=f22e157]: Video Gallery
+                              - paragraph [ref=f22e158]:
+                                - link "← Back to Object Authoring" [ref=f22e159] [cursor=pointer]:
+                                  - /url: /web/qatar-chamber/object-authoring
+                        - contentinfo [ref=f22e160]:
+                          - generic [ref=f22e163]:
+                            - text: Powered by
+                            - link "Liferay" [ref=f22e164] [cursor=pointer]:
+                              - /url: http://www.liferay.com
+            - generic [ref=f20e830]:
+              - generic [ref=f20e833]:
+                - generic [ref=f20e834]:
+                  - generic [ref=f20e835] [cursor=pointer]: Section Heading
+                  - textbox "Section Heading" [ref=f20e838]:
+                    - /placeholder: ""
+                  - generic [ref=f20e839]: 0 / 150
+                  - paragraph [ref=f20e840]:
+                    - alert
+                - generic [ref=f20e842]:
+                  - generic [ref=f20e843] [cursor=pointer]: Section Heading — العربية *
+                  - textbox "Section Heading — العربية *" [ref=f20e844]
+                  - generic [ref=f20e845]: 0 / 150
+              - generic [ref=f20e849]:
+                - generic [ref=f20e850]: Section Type
+                - generic [ref=f20e853]:
+                  - combobox "Section Type" [ref=f20e855]
+                  - button "Open Options Menu" [ref=f20e857] [cursor=pointer]
+              - generic [ref=f20e861]:
+                - generic [ref=f20e862]:
+                  - generic [ref=f20e863] [cursor=pointer]: Eyebrow
+                  - textbox "Eyebrow" [ref=f20e866]:
+                    - /placeholder: ""
+                  - generic [ref=f20e867]: 0 / 60
+                  - paragraph [ref=f20e868]:
+                    - alert
+                - generic [ref=f20e870]:
+                  - generic [ref=f20e871] [cursor=pointer]: Eyebrow — العربية *
+                  - textbox "Eyebrow — العربية *" [ref=f20e872]
+                  - generic [ref=f20e873]: 0 / 60
+              - generic [ref=f20e876]:
+                - generic [ref=f20e877]:
+                  - generic [ref=f20e878] [cursor=pointer]: CTA Label
+                  - textbox "CTA Label" [ref=f20e881]:
+                    - /placeholder: ""
+                  - generic [ref=f20e882]: 0 / 50
+                  - paragraph [ref=f20e883]:
+                    - alert
+                - generic [ref=f20e885]:
+                  - generic [ref=f20e886] [cursor=pointer]: CTA Label — العربية *
+                  - textbox "CTA Label — العربية *" [ref=f20e887]
+                  - generic [ref=f20e888]: 0 / 50
+              - generic [ref=f20e892]:
+                - generic [ref=f20e893] [cursor=pointer]: CTA Destination
+                - textbox "CTA Destination" [ref=f20e896]:
+                  - /placeholder: ""
+                - paragraph [ref=f20e897]:
+                  - alert
+              - generic [ref=f20e902]:
+                - generic [ref=f20e903] [cursor=pointer]: Display Order
+                - spinbutton "Display Order" [ref=f20e907]
+              - generic [ref=f20e911]:
+                - checkbox "Active Status" [ref=f20e912] [cursor=pointer]
+                - generic [ref=f20e913] [cursor=pointer]: Active Status
+              - paragraph [ref=f20e915]: Entries here are reviewed before they go live.
+              - button "Save as Draft" [ref=f20e919] [cursor=pointer]
+              - button "Submit for Review" [ref=f20e923] [cursor=pointer]
+      - contentinfo [ref=f20e924]:
+        - generic [ref=f20e927]:
+          - text: Powered by
+          - link "Liferay" [ref=f20e928] [cursor=pointer]:
+            - /url: http://www.liferay.com
