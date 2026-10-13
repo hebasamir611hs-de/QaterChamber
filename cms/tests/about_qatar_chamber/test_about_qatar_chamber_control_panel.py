@@ -48,6 +48,7 @@ from cms.pages.about_qatar_chamber.about_qatar_chamber_admin_page import (
 from web.pages.about_qatar_chamber.about_qatar_chamber_page import AboutQatarChamberPage
 from core.web.browser import new_context
 from core.utils.waits import wait_until
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 PBI = "129392"
 
@@ -126,9 +127,9 @@ def test_about_cp_134690_unpublishing_removes_the_page_from_the_website(page, br
             baseline_status = authoring.current_status()
 
         with allure.step("Ensure the record starts published (this case's own precondition)"):
-            if authoring.current_status() != "Approved":
+            if authoring.current_status() != STATUS_PUBLISHED:
                 authoring.submit_for_publishing()
-            assert authoring.current_status() == "Approved"
+            assert authoring.current_status() == STATUS_PUBLISHED
 
         with allure.step("Confirm an anonymous visitor can see the page content first"):
             about = AboutQatarChamberPage(anon_page)
@@ -188,7 +189,7 @@ def test_about_cp_134690_unpublishing_removes_the_page_from_the_website(page, br
         if baseline_status:
             with allure.step("TEST_OWNED reset -- restore the record's published state"):
                 authoring = admin.open_page_record()
-                if baseline_status == "Approved" and authoring.current_status() != "Approved":
+                if baseline_status == STATUS_PUBLISHED and authoring.current_status() != STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
 
 
@@ -227,7 +228,7 @@ def test_about_cp_134691_draft_content_is_visible_only_in_the_cms(page, browser)
             baseline_status = authoring.current_status()
 
         with allure.step(f"Add the paragraph '{marker}' to Page Content (EN) and Save as draft"):
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             authoring.fill_rich_text(
                 f"{baseline_content}\n{marker}", admin.PAGE_CONTENT_FIELD_NAME
@@ -260,10 +261,10 @@ def test_about_cp_134691_draft_content_is_visible_only_in_the_cms(page, browser)
         if baseline_content is not None:
             with allure.step("TEST_OWNED reset -- restore Page Content/Status to baseline"):
                 authoring = admin.open_page_record()
-                if authoring.current_status() == "Approved":
+                if authoring.current_status() == STATUS_PUBLISHED:
                     authoring.unpublish_to_edit_as_draft()
                 authoring.fill_rich_text(baseline_content, admin.PAGE_CONTENT_FIELD_NAME)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
                 else:
                     authoring.save_as_draft()
@@ -299,7 +300,7 @@ def test_about_cp_134692_preview_renders_unpublished_content(page, browser):
             baseline_status = authoring.current_status()
 
         with allure.step(f"Add '{marker}' to Page Content (EN), Save as draft, then Preview"):
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             authoring.fill_rich_text(
                 f"{baseline_content}\n{marker}", admin.PAGE_CONTENT_FIELD_NAME
@@ -345,10 +346,10 @@ def test_about_cp_134692_preview_renders_unpublished_content(page, browser):
         if baseline_content is not None:
             with allure.step("TEST_OWNED reset -- restore Page Content/Status to baseline"):
                 authoring = admin.open_page_record()
-                if authoring.current_status() == "Approved":
+                if authoring.current_status() == STATUS_PUBLISHED:
                     authoring.unpublish_to_edit_as_draft()
                 authoring.fill_rich_text(baseline_content, admin.PAGE_CONTENT_FIELD_NAME)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
                 else:
                     authoring.save_as_draft()
@@ -389,7 +390,7 @@ def test_about_cp_134694_configured_hyperlink_opens_its_destination(page, browse
             baseline_status = authoring.current_status()
 
         with allure.step(f"Configure the hyperlink as {target_label!r} -> {target_url} and publish"):
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             authoring.fill_text(admin.HYPERLINK_TITLE_LABEL, target_label)
             authoring.fill_text(admin.HYPERLINK_URL_LABEL, target_url)
@@ -423,11 +424,11 @@ def test_about_cp_134694_configured_hyperlink_opens_its_destination(page, browse
         if baseline_title is not None:
             with allure.step("TEST_OWNED reset -- restore Hyperlink Title/URL/Status"):
                 authoring = admin.open_page_record()
-                if authoring.current_status() == "Approved":
+                if authoring.current_status() == STATUS_PUBLISHED:
                     authoring.unpublish_to_edit_as_draft()
                 authoring.fill_text(admin.HYPERLINK_TITLE_LABEL, baseline_title)
                 authoring.fill_text(admin.HYPERLINK_URL_LABEL, baseline_url)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
                 else:
                     authoring.save_as_draft()
@@ -486,7 +487,7 @@ def test_about_cp_134697_replacing_the_hero_banner_updates_the_website(page, bro
             hero_before = about.hero_media_background_image()
 
         with allure.step("Replace the Banner Image and publish"):
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             authoring.select_existing_file(
                 admin.BANNER_IMAGE_UPLOAD_LABEL,
@@ -519,13 +520,13 @@ def test_about_cp_134697_replacing_the_hero_banner_updates_the_website(page, bro
             pass
         with allure.step("TEST_OWNED reset -- restore the original Banner Image/Status"):
             authoring = admin.open_hero_banner_record()
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             if original_saved:
                 authoring.upload_file(
                     admin.BANNER_IMAGE_UPLOAD_LABEL, original_download_path
                 )
-            if baseline_status == "Approved":
+            if baseline_status == STATUS_PUBLISHED:
                 authoring.submit_for_publishing()
             elif baseline_status is not None:
                 authoring.save_as_draft()
@@ -581,7 +582,7 @@ def test_about_cp_134698_uploading_a_hero_banner_first_time_publishes_it(page, b
                 )
 
         with allure.step("Remove the current banner and save (phase 1) to reach the empty-field precondition"):
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             if original_saved:
                 authoring.remove_current_file(admin.BANNER_IMAGE_UPLOAD_LABEL)
@@ -615,7 +616,7 @@ def test_about_cp_134698_uploading_a_hero_banner_first_time_publishes_it(page, b
             hero_after = about.hero_media_background_image()
             hero_visible = about.is_hero_visible()
 
-        assert authoring.current_status() == "Approved"
+        assert authoring.current_status() == STATUS_PUBLISHED
         assert new_file in authoring.current_file_name(admin.BANNER_IMAGE_UPLOAD_LABEL)
         assert authoring.field_value(admin.BANNER_IMAGE_ALT_TEXT_LABEL) == target_alt
         assert hero_visible, "expected the hero banner to render on the public page"
@@ -629,7 +630,7 @@ def test_about_cp_134698_uploading_a_hero_banner_first_time_publishes_it(page, b
             pass
         with allure.step("TEST_OWNED reset -- restore the original Banner Image bytes/Alt Text/Status"):
             authoring = admin.open_hero_banner_record()
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             if original_saved:
                 authoring.remove_current_file(admin.BANNER_IMAGE_UPLOAD_LABEL)
@@ -640,7 +641,7 @@ def test_about_cp_134698_uploading_a_hero_banner_first_time_publishes_it(page, b
                 )
             if baseline_alt is not None:
                 authoring.fill_text(admin.BANNER_IMAGE_ALT_TEXT_LABEL, baseline_alt)
-            if baseline_status == "Approved":
+            if baseline_status == STATUS_PUBLISHED:
                 authoring.submit_for_publishing()
             elif baseline_status is not None:
                 authoring.save_as_draft()

@@ -185,6 +185,7 @@ from cms.pages.home_publications.home_publications_admin_page import (
     HomePublicationsAdminPage,
 )
 from web.pages.home_publications.home_publications_page import HomePublicationsPage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 FIXTURES = os.path.join(os.path.dirname(__file__), "fixtures")
 # HEALED 2026-09-27 (triage of a live tc_134336 TimeoutError on
@@ -485,7 +486,7 @@ def test_admin_publish_workflow_results_in_publication_on_home_page(page, browse
             admin.submit_for_publishing()
 
         admin.open_entry_by_code(entry_code)
-        assert admin.current_status() == "Approved", (
+        assert admin.current_status() == STATUS_PUBLISHED, (
             "Publication did not reach the generic workflow's Approved/Published-equivalent status"
         )
 

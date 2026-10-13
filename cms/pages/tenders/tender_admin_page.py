@@ -52,7 +52,7 @@ does not reach a multi-step-authenticated Control_Panel surface):
 
 from cms.pages.components.object_authoring_page import ObjectAuthoringPage
 from cms.pages.control_panel.login_page import CmsLoginPage
-from config.settings import control_panel_url, settings
+from config.settings import control_panel_url
 
 TENDER_SLUG = "tender"
 
@@ -154,13 +154,12 @@ class TenderAdminPage(ObjectAuthoringPage):
     def _ensure_logged_in(self, email: str | None = None, password: str | None = None) -> None:
         """Mirrors ChamberEventsAdminPage's confirmed-live "re-login via
         /en/home before hitting manage-<slug> directly" pattern."""
-        login = CmsLoginPage(self.page)
-        self.open(control_panel_url(ADMIN_HOME_EN_URL_PATH))
-        if not (self.is_visible(CONTENT_DATA_MENU_ITEM) or self.is_visible(PRODUCT_MENU_TOGGLE)):
-            user = email or settings.test_user
-            pwd = password or settings.test_password
-            login.open_login().login(user, pwd)
-            self.open(control_panel_url(ADMIN_HOME_EN_URL_PATH))
+        # CORRECTED 2026-09-30 — used to log in only when the admin toolbar
+        # was missing, so role tests ran as the fixture's TEST_USER. See
+        # CmsLoginPage.ensure_signed_in_as().
+        CmsLoginPage(self.page).ensure_signed_in_as(
+            email, password, control_panel_url(ADMIN_HOME_EN_URL_PATH)
+        )
 
     def open_create_form(self, email: str | None = None, password: str | None = None) -> "TenderAdminPage":
         self._ensure_logged_in(email, password)

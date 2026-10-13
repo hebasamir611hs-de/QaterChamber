@@ -101,6 +101,7 @@ from web.pages.about_chairman_message.chairman_message_admin_page import (
 )
 from web.pages.about_chairman_message.chairman_message_page import ChairmanMessagePage
 from core.utils.waits import wait_until
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 PBI = "129393"
 
@@ -233,7 +234,7 @@ def test_admin_can_publish_chairman_message_page(page, browser):
             baseline["status"] = authoring.current_status()
 
         with allure.step("Set Page Title (EN), Message Content (EN), Chairman Name, and Designation, then publish"):
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             authoring.fill_text(admin.PAGE_TITLE_LABEL, target_title)
             authoring.fill_rich_text(target_message)
@@ -258,7 +259,7 @@ def test_admin_can_publish_chairman_message_page(page, browser):
 
         # Assert
         assert login.login_succeeded()
-        assert authoring.current_status() == "Approved"
+        assert authoring.current_status() == STATUS_PUBLISHED
         assert public_title == target_title
         assert public_salutation == target_salutation
         assert public_body_count > 0, "expected at least one body paragraph"
@@ -272,13 +273,13 @@ def test_admin_can_publish_chairman_message_page(page, browser):
         if baseline:
             with allure.step("TEST_OWNED reset — restore Page Title/Message Content/Name/Designation/Status to their pre-existing baseline"):
                 authoring = admin.open_object_authoring_form()
-                if authoring.current_status() == "Approved":
+                if authoring.current_status() == STATUS_PUBLISHED:
                     authoring.unpublish_to_edit_as_draft()
                 authoring.fill_text(admin.PAGE_TITLE_LABEL, baseline["title"])
                 authoring.fill_rich_text(baseline["message"])
                 authoring.fill_text(admin.CHAIRMAN_NAME_LABEL, baseline["name"])
                 authoring.fill_text(admin.CHAIRMAN_DESIGNATION_LABEL, baseline["designation"])
-                if baseline["status"] == "Approved":
+                if baseline["status"] == STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
                 else:
                     authoring.save_as_draft()
@@ -319,7 +320,7 @@ def test_admin_can_unpublish_chairman_message_page(page):
             baseline_status = authoring.current_status()
 
         with allure.step("Ensure the record starts Approved/published (this case's own precondition), then click Unpublish"):
-            if authoring.current_status() != "Approved":
+            if authoring.current_status() != STATUS_PUBLISHED:
                 authoring.submit_for_publishing()
                 # CONFIRMED LIVE 2026-09-10: a save navigates this surface to
                 # `manage-<slug>?previewEntry=<code>` (the PREVIEW view), which
@@ -335,7 +336,7 @@ def test_admin_can_unpublish_chairman_message_page(page):
     finally:
         with allure.step("TEST_OWNED reset — restore the record to its pre-existing baseline status"):
             authoring = admin.open_object_authoring_form()
-            if baseline_status == "Approved" and authoring.current_status() != "Approved":
+            if baseline_status == STATUS_PUBLISHED and authoring.current_status() != STATUS_PUBLISHED:
                 authoring.submit_for_publishing()
             elif baseline_status == "Draft" and authoring.current_status() != "Draft":
                 authoring.unpublish_to_edit_as_draft()
@@ -402,7 +403,7 @@ def test_draft_content_is_saved_but_not_published(page, browser):
             baseline_status = authoring.current_status()
 
         with allure.step("Add the paragraph 'DRAFT-ONLY-129393' to Message Content and Save as Draft"):
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             authoring.fill_rich_text(f"{baseline_message}\n\nDRAFT-ONLY-129393", admin.MESSAGE_CONTENT_FIELD_NAME)
             authoring.save_as_draft()
@@ -477,10 +478,10 @@ def test_draft_content_is_saved_but_not_published(page, browser):
         if baseline_message is not None:
             with allure.step("TEST_OWNED reset — restore Message Content/Status to their pre-existing baseline"):
                 authoring = admin.open_object_authoring_form()
-                if authoring.current_status() == "Approved":
+                if authoring.current_status() == STATUS_PUBLISHED:
                     authoring.unpublish_to_edit_as_draft()
                 authoring.fill_rich_text(baseline_message, admin.MESSAGE_CONTENT_FIELD_NAME)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
                 else:
                     authoring.save_as_draft()
@@ -531,7 +532,7 @@ def test_preview_renders_draft_content_without_publishing(page, browser):
             baseline_status = authoring.current_status()
 
         with allure.step("Add the paragraph 'PREVIEW-ONLY-129393', Save as Draft (do not publish), then Preview"):
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             authoring.fill_rich_text(f"{baseline_message}\n\nPREVIEW-ONLY-129393")
             authoring.save_as_draft()
@@ -579,10 +580,10 @@ def test_preview_renders_draft_content_without_publishing(page, browser):
         if baseline_message is not None:
             with allure.step("TEST_OWNED reset — restore Message Content/Status to their pre-existing baseline"):
                 authoring = admin.open_object_authoring_form()
-                if authoring.current_status() == "Approved":
+                if authoring.current_status() == STATUS_PUBLISHED:
                     authoring.unpublish_to_edit_as_draft()
                 authoring.fill_rich_text(baseline_message)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
                 else:
                     authoring.save_as_draft()
@@ -624,7 +625,7 @@ def test_admin_can_configure_message_hyperlink(page):
             baseline_status = authoring.current_status()
 
         with allure.step("Configure a hyperlink titled 'Qatar National Vision 2030' pointing to https://www.qatarchamber.com, then publish"):
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             authoring.fill_text(admin.HYPERLINK_TITLE_LABEL, "Qatar National Vision 2030")
             authoring.fill_text(admin.HYPERLINK_URL_LABEL, "https://www.qatarchamber.com")
@@ -644,18 +645,18 @@ def test_admin_can_configure_message_hyperlink(page):
 
         # Assert
         assert login.login_succeeded()
-        assert authoring.current_status() == "Approved"
+        assert authoring.current_status() == STATUS_PUBLISHED
         assert authoring.field_value(admin.HYPERLINK_TITLE_LABEL) == "Qatar National Vision 2030"
         assert authoring.field_value(admin.HYPERLINK_URL_LABEL) == "https://www.qatarchamber.com"
     finally:
         if baseline_title is not None:
             with allure.step("TEST_OWNED reset — restore Hyperlink Title/URL/Status to their pre-existing baseline"):
                 authoring = admin.open_object_authoring_form()
-                if authoring.current_status() == "Approved":
+                if authoring.current_status() == STATUS_PUBLISHED:
                     authoring.unpublish_to_edit_as_draft()
                 authoring.fill_text(admin.HYPERLINK_TITLE_LABEL, baseline_title)
                 authoring.fill_text(admin.HYPERLINK_URL_LABEL, baseline_url)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
                 else:
                     authoring.save_as_draft()
@@ -784,7 +785,7 @@ def test_name_and_designation_have_single_source_field(page):
             baseline_status = authoring.current_status()
 
         with allure.step("Change Chairman Name (EN) and Chairman Designation (EN), then publish"):
-            if authoring.current_status() == "Approved":
+            if authoring.current_status() == STATUS_PUBLISHED:
                 authoring.unpublish_to_edit_as_draft()
             authoring.fill_text(admin.CHAIRMAN_NAME_LABEL, new_name)
             authoring.fill_text(admin.CHAIRMAN_DESIGNATION_LABEL, new_designation)
@@ -808,18 +809,18 @@ def test_name_and_designation_have_single_source_field(page):
         assert designation_count_en == 1, f"expected exactly 1 Chairman Designation (EN) field, found {designation_count_en}"
         assert designation_count_ar == 1, f"expected exactly 1 Chairman Designation (AR) field, found {designation_count_ar}"
         assert login.login_succeeded()
-        assert authoring.current_status() == "Approved"
+        assert authoring.current_status() == STATUS_PUBLISHED
         assert authoring.field_value(admin.CHAIRMAN_NAME_LABEL) == new_name
         assert authoring.field_value(admin.CHAIRMAN_DESIGNATION_LABEL) == new_designation
     finally:
         if baseline_name is not None:
             with allure.step("TEST_OWNED reset — restore Chairman Name/Designation/Status to their pre-existing baseline"):
                 authoring = admin.open_object_authoring_form()
-                if authoring.current_status() == "Approved":
+                if authoring.current_status() == STATUS_PUBLISHED:
                     authoring.unpublish_to_edit_as_draft()
                 authoring.fill_text(admin.CHAIRMAN_NAME_LABEL, baseline_name)
                 authoring.fill_text(admin.CHAIRMAN_DESIGNATION_LABEL, baseline_designation)
-                if baseline_status == "Approved":
+                if baseline_status == STATUS_PUBLISHED:
                     authoring.submit_for_publishing()
                 else:
                     authoring.save_as_draft()

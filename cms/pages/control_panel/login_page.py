@@ -82,10 +82,16 @@ Page Object.
     entry point.
 """
 
+import weakref
 from urllib.parse import quote
 
 from core.web.base_page import BasePage
-from config.settings import control_panel_url
+from config.settings import control_panel_url, settings
+
+# Which account each browser page was last signed in as by
+# ensure_signed_in_as(). A page nobody has signed in on yet is assumed to
+# carry the `page` fixture's default TEST_USER storageState.
+_SESSION_OWNER: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
 
 
 class CmsLoginPage(BasePage):
@@ -99,7 +105,27 @@ class CmsLoginPage(BasePage):
     # present together right after a real login, but ORing guards against a
     # render-order race between the two nav elements rather than relying on
     # either alone. See STATUS UPDATE above.
-    LOGIN_SUCCESS_INDICATOR = 'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'
+    #
+    # SUPERSEDED 2026-09-30 — the Control Menu / Product Menu pair above is a
+    # PRIVILEGE signal, not a login signal. Liferay renders the staff toolbar
+    # only for admin-level users, so login() timed out after a perfectly good
+    # sign-in for every other role. Measured live 2026-09-28 (see
+    # web/pages/components/cms_login_page.py, which got this fix first):
+    #
+    #   role                   signedIn  body.signed-in  Control Menu
+    #   Site Content Editor    True      True            True
+    #   Site Content Author    True      True            FALSE
+    #   Site Member (no role)  True      True            FALSE
+    #
+    # Re-confirmed 2026-09-30 for TEST_USER: body.signed-in, Control Menu and
+    # Product Menu all present, so admin callers see no change.
+    # `body.signed-in` is the one signal true for every role.
+    LOGIN_SUCCESS_INDICATOR = "body.signed-in"
+
+    # Kept separately because it IS a real signal — of privilege. Use
+    # has_admin_toolbar() to assert a role does or does not get the staff
+    # toolbar; never to decide whether login worked.
+    ADMIN_TOOLBAR_INDICATOR = 'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'
 
     # HEALED 2026-09-15 (triage of 26 Functional-Low Control_Panel failures,
     # tc_133580 and siblings in test_board_of_directors_control_panel.py —
@@ -157,7 +183,7 @@ class CmsLoginPage(BasePage):
         # throws on a 2-element match, so it is called directly here rather
         # than through the generic wrapper (mirrors the same fix already
         # applied in core/web/session_guard.py's reauthenticate()).
-        self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="visible", timeout=10000)
+        self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="attached", timeout=15000)
         self._force_english_locale()
         return self
 
@@ -179,13 +205,52 @@ class CmsLoginPage(BasePage):
                 f"{self.UPDATE_LANGUAGE_PATH}?languageId={self.ENGLISH_LANGUAGE_ID}&redirect={redirect_url}"
             )
         )
-        self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="visible", timeout=10000)
+        self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="attached", timeout=15000)
 
     def login_succeeded(self) -> bool:
         try:
-            return self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.is_visible()
+            return self.page.locator(self.LOGIN_SUCCESS_INDICATOR).count() > 0
         except Exception:  # noqa: BLE001 — mirrors BasePage.is_visible's never-throws contract
             return False
+
+    def has_admin_toolbar(self) -> bool:
+        """True when this session renders Liferay's staff toolbar — a
+        PRIVILEGE check, not a login check. Confirmed live 2026-09-28: true
+        for Site Content Editor, false for Site Content Author and for a
+        site-member-only account. Never raises."""
+        try:
+            return self.page.locator(self.ADMIN_TOOLBAR_INDICATOR).count() > 0
+        except Exception:  # noqa: BLE001
+            return False
+
+    LOGOUT_PATH = "/c/portal/logout"
+
+    def ensure_signed_in_as(
+        self, email: str | None = None, password: str | None = None, landing_url: str | None = None
+    ) -> "CmsLoginPage":
+        """Make the session belong to `email` (TEST_USER when omitted), then
+        land on `landing_url`.
+
+        ADDED 2026-09-30. The Page Objects that call this used to log in only
+        when the admin toolbar was missing. The default `page` fixture
+        pre-loads TEST_USER's storageState, so the toolbar was always there
+        and a role test's explicit credentials were never used — its "Site
+        Content Author" steps ran as super-admin. This signs out and back in
+        whenever the requested account differs from the page's current one."""
+        user = email or settings.test_user
+        pwd = password or settings.test_password
+        if user != _SESSION_OWNER.get(self.page, settings.test_user):
+            self.open(control_panel_url(self.LOGOUT_PATH))
+            self.open_login().login(user, pwd)
+            _SESSION_OWNER[self.page] = user
+        if landing_url:
+            self.open(landing_url)
+        if not self.login_succeeded():
+            self.open_login().login(user, pwd)
+            _SESSION_OWNER[self.page] = user
+            if landing_url:
+                self.open(landing_url)
+        return self
 
     def login_form_visible(self) -> bool:
         """True if the real Liferay LoginPortlet username field is

@@ -68,6 +68,7 @@ from cms.pages.home_dynamic_widgets.home_dynamic_widgets_admin_page import (
 )
 from core.web.browser import new_context
 from web.pages.home_dynamic_widgets.home_dynamic_widgets_page import HomeDynamicWidgetsPage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 FIXTURES_DIR = "web/tests/home_dynamic_widgets/fixtures"
 
@@ -129,7 +130,7 @@ def test_marhaba_guide_widget_full_admin_journey_renders_on_home_135966(page, br
 
         # Assert — authoring surface: values persisted, entry stays Approved
         admin.open_marhaba_entry()
-        assert admin.current_status() == "Approved"
+        assert admin.current_status() == STATUS_PUBLISHED
         assert admin.redirect_url_value() == "https://marhabaguide.qa/qatar-chamber"
         assert admin.is_open_in_new_tab() is True
         assert admin.is_active() is True
@@ -194,7 +195,7 @@ def test_b2b_platform_widget_full_admin_journey_renders_on_home_135967(page, bro
 
         # Assert — authoring surface
         admin.open_b2b_entry()
-        assert admin.current_status() == "Approved"
+        assert admin.current_status() == STATUS_PUBLISHED
         assert admin.redirect_url_value() == "https://b2b.qatarchamber.com/platform"
         assert admin.is_open_in_new_tab() is True
         assert admin.is_active() is True
@@ -292,7 +293,7 @@ def test_generic_success_toast_displays_after_widget_save_135969(page):
             except Exception:
                 toast_text = ""
 
-        assert admin.current_status() == "Approved"
+        assert admin.current_status() == STATUS_PUBLISHED
         if not toast_text:
             allure.attach(
                 "No toast/status/alert element rendered after Submit for Publishing on "

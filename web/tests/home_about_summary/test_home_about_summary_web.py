@@ -50,6 +50,7 @@ from cms.pages.home_about_summary.home_about_summary_admin_page import (
 )
 from core.web.browser import new_context
 from web.pages.home_about_summary.home_about_summary_page import HomeAboutSummaryPage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 ABOUT_US_XDIST_GROUP = pytest.mark.xdist_group("about_us_section_52157")
 
@@ -316,7 +317,7 @@ def test_counters_display_in_configured_order_136095(page, browser):
                 counter.open_counter(code)
                 counter.set_display_order(order)
                 counter.submit_for_publishing()
-                assert counter.current_status() == "Approved"
+                assert counter.current_status() == STATUS_PUBLISHED
                 natural_labels.append(baseline["title_en"])
             # new_orders descends against COUNTER_ENTRY_CODES' natural 01..04
             # order (row 01 -> 400, ..., row 04 -> 100), so the expected
@@ -367,7 +368,7 @@ def test_inactive_counter_does_not_display_136096(page, browser):
             counter.open_counter(target_code)
             counter.set_active(False)
             counter.submit_for_publishing()
-            assert counter.current_status() == "Approved"
+            assert counter.current_status() == STATUS_PUBLISHED
 
         with allure.step("Load Home Page — inactive counter does not appear; other counters unaffected"):
             reflected = home.reload_until(lambda h: not h.is_counter_label_present(baseline["title_en"]))
@@ -549,7 +550,7 @@ def test_read_more_cta_does_not_navigate_to_invalid_page_when_target_unpublished
             admin.open_section_entry()
             admin.fill_text(FIELD_READ_MORE_URL, broken_url)
             admin.submit_for_publishing()
-            assert admin.current_status() == "Approved"
+            assert admin.current_status() == STATUS_PUBLISHED
 
         with allure.step("Load Home Page as a visitor — About Us section still visible"):
             reflected = home.reload_until(lambda h: h.read_more_href() == broken_url)
