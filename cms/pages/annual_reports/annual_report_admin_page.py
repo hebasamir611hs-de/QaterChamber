@@ -104,6 +104,7 @@ from time import monotonic
 from urllib.parse import parse_qs, urlparse
 
 from cms.pages.components.object_authoring_page import (
+    shows_message,
     ObjectAuthoringPage,
     normalize_status,
 )
@@ -1402,7 +1403,7 @@ class AnnualReportAdminPage(ObjectAuthoringPage):
     def success_banners(self, timeout: float = 15.0, expected: str | None = None) -> list[str]:
         def _done() -> bool:
             texts = self._non_refusal_banners()
-            return any(expected in t for t in texts) if expected else bool(texts)
+            return any(shows_message(t, expected) for t in texts) if expected else bool(texts)
         try:
             wait_until(_done, timeout=timeout, poll=0.5)
         except WaitTimeoutError:
@@ -1411,7 +1412,7 @@ class AnnualReportAdminPage(ObjectAuthoringPage):
 
     @staticmethod
     def has_message(banners: list[str], expected: str) -> bool:
-        return any(expected in text for text in banners)
+        return any(shows_message(text, expected) for text in banners)
 
     def field_errors(self) -> list[str]:
         return [t.strip() for t in self.page.locator(self.FIELD_ERROR).all_inner_texts() if t.strip()]

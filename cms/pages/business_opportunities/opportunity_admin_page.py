@@ -73,7 +73,7 @@ from dataclasses import dataclass as _dataclass
 from datetime import date as _date
 from datetime import timedelta as _timedelta
 
-from cms.pages.components.object_authoring_page import ObjectAuthoringPage, normalize_status
+from cms.pages.components.object_authoring_page import ObjectAuthoringPage, normalize_status, shows_message
 from cms.pages.tenders.tender_admin_page import TenderFieldsAdminPage
 from config.settings import PROJECT_ROOT as _PROJECT_ROOT
 from config.settings import control_panel_url, web_url
@@ -97,6 +97,8 @@ GALLERY_SLUG = "project-gallery-item"
 REAL_CODE_PREFIX = "QC-BIZOPP-130697-"
 LISTING_PAGE_CODE = "QC-BIZOPP-130697-PAGE"
 QCTEST_NAMESPACE = "QCTEST-130697-"
+# Retest runs (ready-bug retests) use their own namespace; both are QCTEST-only.
+QCTEST_NAMESPACES = (QCTEST_NAMESPACE, "QCTEST-R30-")
 
 # ---- accounts -----------------------------------------------------------------
 ROLE_EDITOR = "Site Content Editor"
@@ -223,7 +225,7 @@ class BizOppEntry:
     code: str
 
     def in_namespace(self) -> bool:
-        return (self.prefix.startswith(QCTEST_NAMESPACE) and self.title.strip().startswith(self.prefix)
+        return (self.prefix.startswith(QCTEST_NAMESPACES) and self.title.strip().startswith(self.prefix)
                 and bool(self.entry_id) and bool(self.code) and not self.code.startswith(REAL_CODE_PREFIX))
 
 
@@ -252,8 +254,8 @@ class BizOppObjectPage(TenderFieldsAdminPage):
     UPLOAD_LABELS: dict = {}
 
     def __init__(self, page, prefix: str, evidence_dir: str | None = None):
-        if not prefix.startswith(QCTEST_NAMESPACE):
-            raise ValueError(f"prefix {prefix!r} is not in the {QCTEST_NAMESPACE} namespace")
+        if not prefix.startswith(QCTEST_NAMESPACES):
+            raise ValueError(f"prefix {prefix!r} is not in the {QCTEST_NAMESPACES} namespaces")
         ObjectAuthoringPage.__init__(self, page, self.SLUG)  # not TenderAdminPage's slug
         self.prefix = prefix
         self.owned_entry_ids: set[str] = set()
@@ -282,6 +284,16 @@ class BizOppObjectPage(TenderFieldsAdminPage):
         except Exception as exc:  # noqa: BLE001 — evidence only
             _log.warning("evidence %s failed: %r", safe, exc)
         return path
+
+    def success_messages(self, expected: str, timeout: float = 15.0) -> list[str]:
+        """Edit-bar texts once `expected` shows; the publish message also
+        matches Liferay's standard success toast (shows_message)."""
+        try:
+            _wait_until(lambda: any(shows_message(t, expected) for t in self.editbar_texts()),
+                        timeout=timeout, poll=0.5)
+        except _WaitTimeoutError:
+            pass
+        return self.editbar_texts()
 
     # ---- navigation ---------------------------------------------------------------
     def open_create_form_en(self) -> "BizOppObjectPage":
@@ -621,6 +633,22 @@ class BizOppObjectPage(TenderFieldsAdminPage):
         fileEntryId; "" when nothing is attached)."""
         return self._form().locator(f'input[name="ObjectField_{key}"]').first.input_value()
 
+    def stored_file_id(self, key: str, code: str | None = None) -> str:
+        """The STORED fileEntryId of an attachment field, read-only via the
+        object's headless REST (live 2026-10-13: an edit form no longer
+        pre-fills ObjectField_<key>; it shows 'Current file: <name>' as a
+        placeholder, so file_field_value() reads "" on a saved record)."""
+        code = code or self._entry_code
+        rest = self.SLUG.replace("-", "") + "s"
+        return str(self.page.evaluate(
+            """async ([rest, code, key]) => {
+                const gid = Liferay.ThemeDisplay.getScopeGroupId();
+                const r = await fetch(`/o/c/${rest}/scopes/${gid}/by-external-reference-code/${encodeURIComponent(code)}?p_auth=${Liferay.authToken}`);
+                if (!r.ok) return "";
+                const v = (await r.json())[key];
+                return v && v.id ? String(v.id) : "";
+            }""", [rest, code, key]))
+
     def attempt_upload_settled(self, key: str, file_path: str, stem: str | None = None,
                                settle_s: float = 5.0) -> dict:
         """attempt_upload() whose `attached` is decided by the field's own value
@@ -661,6 +689,12 @@ class BizOppObjectPage(TenderFieldsAdminPage):
         self._open_picker(key)
         frame = self.page.frame_locator(self.UPLOAD_MODAL_IFRAME)
         target = frame.get_by_text(file_name, exact=True).first
+        try:
+            target.wait_for(state="visible", timeout=10000)
+        except Exception:  # noqa: BLE001 — not on the picker's first page (alphabetical, 20/page)
+            search = frame.locator('input[name$="_keywords"]').first
+            search.fill(file_name.rsplit(".", 1)[0])
+            search.press("Enter")
         target.wait_for(state="visible", timeout=30000)
         target.click()
         if not self._picker_closed(5000):

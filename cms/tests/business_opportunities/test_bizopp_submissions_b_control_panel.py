@@ -2,36 +2,25 @@
 cms/tests/business_opportunities/test_bizopp_submissions_b_control_panel.py —
 PBI 130697 (Business Opportunities), Azure suite 140361 in plan 137724:
 Opportunity Submissions review, Opportunity Inquiries review, roles.
-Re-run by Agent H on 2026-10-12 (data prefix QCTEST-130697-H-).
+Re-scripted 2026-10-13 by ready-bug retest agent C (data prefix QCTEST-R30-C-)
+after the fix for bug 149526 built the review actions.
 
-What exists live (2026-10-12, see opportunity_submissions_admin_page.py):
-  - The public intake WORKS again: POST /o/qc-business-opportunities-api/
-    submissions and /inquiries answer HTTP 200 with a reference number. A
-    submission lands in `manage-opportunity-submission`, an inquiry in
-    `manage-opportunity-inquiry`.
-  - Both lists are still "(view only)" Object Authoring lists. Columns are
-    ENTRY (ERC UUID) / STATUS (workflow, "PUBLISHED") / LAST MODIFIED / ACTIONS;
-    the business status ("Pending") shows only in the read-only View modal.
-  - The Form Manager (the cases' "QC Admin Reviewer", user decision) gets only
-    View (+ Preview on submissions). No Approve / Reject / Rejection Reason /
-    status control / History exists for any role; TEST_USER additionally gets
-    Unpublish + Delete, the Editor Unpublish.
+What exists live (2026-10-13, see opportunity_submissions_admin_page.py):
+  - Public intake works (HTTP 200 + reference). Records are created as
+    "Website Visitor" (bug 149529 fix).
+  - manage-opportunity-submission: columns Reference / Opportunity / Company /
+    Email / Status (Pending|Approved|Rejected) / Submission date; row actions
+    Approve (confirm) / Reject (prompt, reason required) / History.
+  - manage-opportunity-inquiry: columns Reference / Inquirer / Email / Company /
+    Opportunity / Status / Submission date; Mark In Progress -> Mark Completed /
+    Close; History.
+  - Reviewer role = Form Manager (user decision 2026-10-07).
 
-So:
-  - A module fixture creates ONE QCTEST-130697-H- submission and ONE inquiry
-    through the public forms (logged out), locates each by captured entry id
-    and verifies the exact name in its View modal; it deletes both at the end,
-    as TEST_USER, through `guarded_delete()` (exact name + id + ERC re-checked
-    immediately before the click, native confirm accepted only if it names
-    that ERC). Nothing else is ever deleted, and no real row is acted on.
-  - 143395 / 143391 / 143277 run live and assert the case as written.
-  - Every Approve / Reject / status-change case evaluates the live review
-    surface (lists + the View modal of our own QCTEST rows) as the Form
-    Manager: while no review control exists the case is skipped as BLOCKED
-    with the exact reason; if a review control ever appears the case FAILS
-    loudly asking to be scripted against it (never runs guessed steps).
-  - 143282 runs as TEST_USER (the "Administrator"); 143403 / 143404 are
-    email-content cases (no mailbox).
+Data: module fixtures create TWO QCTEST submissions (one to approve, one to
+reject) and FOUR QCTEST inquiries through the public forms (logged out). Every
+review click is guarded to OUR row (exact QCTEST name in the row, confirm must
+name the row's ERC). Nothing is deleted: records stay as QCTEST rows (RULES:
+prefer leaving over deleting). No real row is ever acted on.
 
 Duplicates share one test with a tc_ marker per ID (brief rule 12).
 """
@@ -39,7 +28,7 @@ Duplicates share one test with a tc_ marker per ID (brief rule 12).
 from __future__ import annotations
 
 import json
-import os
+import re as _re
 from datetime import datetime
 from pathlib import Path
 
@@ -50,8 +39,8 @@ from cms.pages.business_opportunities.opportunity_submissions_admin_page import 
     INQUIRY_SLUG,
     OBJECT_LABELS,
     QCTEST_PREFIX,
-    REVIEW_ROW_ATTRS,
     ROLE_ADMIN,
+    ROLE_AUTHOR,
     ROLE_EDITOR,
     ROLE_FORM_MANAGER,
     ROLE_USER_IDS,
@@ -59,7 +48,6 @@ from cms.pages.business_opportunities.opportunity_submissions_admin_page import 
     OpportunityReviewAdminPage,
     PublicOpportunityInquiryForm,
     PublicOpportunitySubmissionForm,
-    _evidence_dir,
 )
 from core.web.browser import new_context
 
@@ -67,7 +55,7 @@ STAMP = datetime.now().strftime("%m%d%H%M%S")
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 IMAGE = str(FIXTURES / "b_qctest_banner.jpg")
 PDF = str(FIXTURES / "b_qctest_document.pdf")
-QCTEST_EMAIL = "qctest.130697.h@example.com"
+QCTEST_EMAIL = "qctest-r30-c@example.com"
 # A real, Active opportunity used only as the target of the inquiry modal (never edited).
 INQUIRY_TARGET_CODE = "QC-BIZOPP-130697-04"
 
@@ -79,8 +67,6 @@ pytestmark = [*BASE_MARKS, pytest.mark.xdist_group("bizopp_cms_b")]
 NO_MAILBOX = ("BLOCKED — the email subject/body is the point of this case and there is no mailbox access. "
               "The intake step itself now works (HTTP 200 + reference number, see tc_143395 / tc_143391), "
               "but the admin notification email cannot be read.")
-# View-modal buttons that are not review controls (the close icon renders as one glyph).
-NON_REVIEW_BUTTONS = {"Close", "close", "×"}
 
 
 # ===========================================================================
@@ -101,7 +87,7 @@ def _signed_in(browser, role):
 @pytest.fixture(scope="module")
 def qctest_intake(browser):
     """ONE QCTEST submission + ONE QCTEST inquiry through the public forms, located
-    by captured entry id and exact name; guarded-deleted as TEST_USER at the end."""
+    by captured entry id and exact name; never deleted (RULES ready30)."""
     data: dict = {"submission": {}, "inquiry": {}, "cleanup": []}
     sub_name = f"{QCTEST_PREFIX}SUB-{STAMP}"
     inq_name = f"{QCTEST_PREFIX}INQ-{STAMP}"
@@ -120,7 +106,7 @@ def qctest_intake(browser):
         data["submission"] = {"name": sub_name, "outcome": sub,
                               "public_evidence": OpportunityReviewAdminPage(page).evidence("intake_public_submission")}
         inq = (PublicOpportunityInquiryForm(page).open_modal(INQUIRY_TARGET_CODE)
-               .fill_qctest(inq_name, QCTEST_EMAIL, inq_company, "QCTEST Agent H inquiry.").submit())
+               .fill_qctest(inq_name, QCTEST_EMAIL, inq_company, "QCTEST R30 agent C inquiry.").submit())
         data["inquiry"] = {"name": inq_name, "company": inq_company, "outcome": inq,
                            "public_evidence": OpportunityReviewAdminPage(page).evidence("intake_public_inquiry")}
     finally:
@@ -130,7 +116,10 @@ def qctest_intake(browser):
     try:
         for kind, slug in (("submission", SUBMISSION_SLUG), ("inquiry", INQUIRY_SLUG)):
             item = data[kind]
-            admin.open_manage(slug)
+            if item["outcome"].get("id"):
+                admin.wait_for_entry(slug, item["outcome"]["id"])
+            else:
+                admin.open_manage(slug)
             item["headers"] = admin.list_headers()
             ids = admin.entry_ids()
             candidates = ([item["outcome"]["id"]] if item["outcome"].get("id")
@@ -160,109 +149,72 @@ def qctest_intake(browser):
                   attachment_type=allure.attachment_type.JSON)
 
     yield data
-
-    ctx, admin, _ = _signed_in(browser, ROLE_ADMIN)
-    try:
-        for kind, slug in (("submission", SUBMISSION_SLUG), ("inquiry", INQUIRY_SLUG)):
-            item = data[kind]
-            if item.get("id"):
-                result = admin.guarded_delete(slug, item["id"], item["name"])
-                data["cleanup"].append({"kind": kind, "id": item["id"], "name": item["name"], "result": result})
-            elif item.get("outcome", {}).get("success"):
-                data["cleanup"].append({"kind": kind, "id": None, "name": item["name"],
-                                        "result": "NOT deleted: created but not located by id"})
-    finally:
-        ctx.close()
-    os.makedirs(_evidence_dir(), exist_ok=True)
-    with open(os.path.join(_evidence_dir(), f"cleanup_{STAMP}.json"), "w", encoding="utf-8") as fh:
-        json.dump(data["cleanup"], fh, indent=2, ensure_ascii=False)
-    allure.attach(json.dumps(data["cleanup"], indent=2), name="QCTEST cleanup", attachment_type=allure.attachment_type.JSON)
+    # No deletion (RULES ready30: leave QCTEST records rather than delete).
 
 
 @pytest.fixture(scope="module")
-def review_surface(browser, qctest_intake):
-    """Read-only live survey of the review surface as the Form Manager (the reviewer role)."""
-    survey = _survey(browser, ROLE_FORM_MANAGER, qctest_intake)
-    allure.attach(json.dumps(survey, indent=2, ensure_ascii=False), name="review surface (live)",
-                  attachment_type=allure.attachment_type.JSON)
-    return survey
-
-
-def _survey(browser, role: str, intake: dict) -> dict:
+def extra_intake(browser):
+    """One more QCTEST submission (to approve) and three QCTEST inquiries, created
+    logged out; ids come from the POST response (verified on the row by name)."""
+    out: dict = {}
     ctx, page = _auth_free_page(browser)
-    survey: dict = {"role": role, "intake": {k: {"http": intake[k]["outcome"].get("http"),
-                                                  "success": intake[k]["outcome"].get("success"),
-                                                  "reference": intake[k]["outcome"].get("reference"),
-                                                  "id": intake[k].get("id")} for k in ("submission", "inquiry")}}
     try:
-        admin = OpportunityReviewAdminPage(page)
-        survey["login"] = admin.login_as_role(role)
-        for slug, kind in ((SUBMISSION_SLUG, "submission"), (INQUIRY_SLUG, "inquiry")):
-            http = admin.open_manage(slug)
-            info = {
-                "http": http,
-                "user_id": admin.signed_in_user()[0],
-                "list_heading": admin.list_heading_visible(),
-                "total": admin.total_entries(),
-                "headers": admin.list_headers(),
-                "nav": admin.nav_entry(OBJECT_LABELS[slug]),
-                "controls": admin.review_controls(),
-                "evidence": admin.evidence(f"{role.split()[0]}_review_surface_{slug}"),
-            }
-            own_id = intake[kind].get("id")
-            if own_id:
-                info["own_row"] = admin.row_by_id(own_id)
-                view = admin.view_entry(own_id)
-                info["own_view_controls"] = view["controls"]
-                info["own_view_status"] = view["fields"].get("Submission Status" if kind == "submission" else "Inquiry Status")
-                info["own_view_evidence"] = admin.evidence(f"{role.split()[0]}_own_{kind}_{own_id}_view")
-            survey[slug] = info
-        for slug in (SUBMISSION_SLUG, INQUIRY_SLUG):
-            survey[slug]["native_content_data"] = admin.open_native_entries(slug)
-            admin.evidence(f"{role.split()[0]}_native_content_data_{slug}")
+        name = f"{QCTEST_PREFIX}SUBA-{STAMP}"
+        res = PublicOpportunitySubmissionForm(page).open_form().fill_qctest(name, IMAGE, PDF, QCTEST_EMAIL).submit()
+        out["sub_approve"] = {"name": name, "outcome": res, "id": res.get("id")}
+        for n in (1, 2, 3):
+            name = f"{QCTEST_PREFIX}INQ{n}-{STAMP}"
+            res = (PublicOpportunityInquiryForm(page).open_modal(INQUIRY_TARGET_CODE)
+                   .fill_qctest(name, QCTEST_EMAIL, f"{QCTEST_PREFIX}Company-{STAMP}", f"QCTEST R30 C inquiry {n}.")
+                   .submit())
+            out[f"inq{n}"] = {"name": name, "outcome": res, "id": res.get("id")}
     finally:
         ctx.close()
-    return survey
+    allure.attach(json.dumps(out, indent=2, ensure_ascii=False), name="QCTEST extra intake",
+                  attachment_type=allure.attachment_type.JSON)
+    for key, item in out.items():
+        assert item["outcome"]["success"] and item["id"], f"Precondition: public intake for {key} failed: {item}"
+    return out
 
 
-def _review_controls_found(info: dict) -> list[str]:
-    c = info["controls"]
-    found = [f"row action {a}" for a in c["row_actions"]] + [f"button {b}" for b in c["buttons"]]
-    found += [f"field {f}" for f in c["fields"]] + (["authoring form"] if c["authoring_forms"] else [])
-    row = info.get("own_row") or {}
-    found += [f"own-row action {a}" for a in row.get("actions", [])
-              if a.lower() not in ("view", "preview") and a.lower() in REVIEW_ROW_ATTRS + ("approve", "reject", "edit", "status")]
-    vc = info.get("own_view_controls") or {}
-    found += [f"View-modal button {b}" for b in vc.get("buttons", []) if b not in NON_REVIEW_BUTTONS]
-    found += [f"View-modal input {i}" for i in vc.get("inputs", [])]
-    return found
+@pytest.fixture(scope="module")
+def reviewer(browser):
+    """ONE signed-in Form Manager session (the reviewer role) for the module."""
+    ctx, admin, outcome = _signed_in(browser, ROLE_FORM_MANAGER)
+    assert outcome == "ok", f"Precondition: the Form Manager could not sign in ({outcome})"
+    admin.open_manage(SUBMISSION_SLUG)
+    user_id = admin.signed_in_user()[0]
+    assert user_id == ROLE_USER_IDS[ROLE_FORM_MANAGER], (
+        f"Precondition: signed in as user {user_id!r}, not the Form Manager ({ROLE_USER_IDS[ROLE_FORM_MANAGER]})")
+    yield admin
+    ctx.close()
 
 
-def _blocked_unless_review(survey: dict, slugs: tuple[str, ...], what: str) -> None:
-    """Skip BLOCKED with the exact live reason, or fail if review controls now exist."""
-    allure.attach(json.dumps({s: survey[s] for s in slugs}, indent=2, ensure_ascii=False),
-                  name="review surface for this case", attachment_type=allure.attachment_type.JSON)
-    appeared = {s: _review_controls_found(survey[s]) for s in slugs}
-    appeared = {s: v for s, v in appeared.items() if v}
-    if appeared:
-        pytest.fail(f"Review controls now exist ({appeared}) — this case must now be scripted against them; "
-                    f"it is not run on guessed steps.")
-    parts = []
-    for s in slugs:
-        info = survey[s]
-        row = info.get("own_row") or {}
-        parts.append(
-            f"manage-{s}: {'view only' if info['nav'].get('view_only') else 'list'}, {info['total']} entries, "
-            f"columns {info['headers']}, own QCTEST row actions {row.get('actions')}, own row View modal = read-only "
-            f"(status {info.get('own_view_status')!r}, buttons {info.get('own_view_controls', {}).get('buttons')}, "
-            f"no editable input); native Content & Data for the {survey['role']}: {info['native_content_data']}")
-    intake = "; ".join(f"public {k} intake HTTP {v['http']} ({'reference ' + repr(v['reference']) if v['success'] else 'failed'}"
-                       f", entry id {v['id']})" for k, v in survey["intake"].items())
-    pytest.skip(
-        f"BLOCKED — {what}. Live in this run as the {survey['role']}: {intake}. Review controls found = none "
-        f"({'; '.join(parts)}). Bug candidate: no Approve / Reject / Rejection Reason / status control on the "
-        f"review surface."
-    )
+@pytest.fixture(scope="module")
+def rejected_sub(reviewer, qctest_intake):
+    """Reject the intake submission: first with an EMPTY reason (must be refused), then with a reason."""
+    item = qctest_intake["submission"]
+    assert item.get("id"), "Precondition: the QCTEST submission was not located"
+    empty = reviewer.review_action(SUBMISSION_SLUG, item["id"], "Reject", item["name"], reason="")
+    empty_ev = reviewer.evidence("reject_empty_reason_result")
+    with_reason = reviewer.review_action(SUBMISSION_SLUG, item["id"], "Reject", item["name"], reason=REJECT_REASON)
+    reason_ev = reviewer.evidence("reject_with_reason_row")
+    data = {"item": {k: item[k] for k in ("name", "id")}, "empty": empty, "with_reason": with_reason,
+            "evidence": [empty_ev, reason_ev]}
+    allure.attach(json.dumps(data, indent=2, ensure_ascii=False, default=str), name="reject (live)",
+                  attachment_type=allure.attachment_type.JSON)
+    return data
+
+
+@pytest.fixture(scope="module")
+def approved_sub(reviewer, extra_intake):
+    item = extra_intake["sub_approve"]
+    res = reviewer.review_action(SUBMISSION_SLUG, item["id"], "Approve", item["name"])
+    ev = reviewer.evidence("approve_row")
+    data = {"item": item, "approve": res, "evidence": ev}
+    allure.attach(json.dumps(data, indent=2, ensure_ascii=False, default=str), name="approve (live)",
+                  attachment_type=allure.attachment_type.JSON)
+    return data
 
 
 # ===========================================================================
@@ -284,6 +236,10 @@ def test_new_public_submission_appears_pending(qctest_intake):
     assert not item["in_inquiry_list"], f"Step 2: the submission (id {item['id']}) also shows in manage-{INQUIRY_SLUG}"
     stored_status = item["view"]["fields"].get("Submission Status")
     assert stored_status == "Pending", f"Step 2: the stored Submission Status is {stored_status!r}, not Pending"
+    creator = item["view"]["fields"].get("Creator")
+    assert creator == "Website Visitor", (
+        f"Step 2: the logged-out visitor's submission is recorded with Creator {creator!r}, not the guest "
+        f"'Website Visitor' (bug 149529)")
     row = item["row"] or {}
     problems = []
     row_text = " ".join(row.get("cells", []))
@@ -298,60 +254,49 @@ def test_new_public_submission_appears_pending(qctest_intake):
 
 
 # ===========================================================================
-# Live: Editor denied Submission review (P1) — 143277
+# Live: Submission review permissions (P1) — 143277
+# User decision 2026-10-13 (bug 149527 closed Not a Bug): per the PBI 130697 Permissions
+# table the Site Content Editor MAY open and review opportunity submissions; the Site
+# Content Author must be denied.
 # ===========================================================================
 @allure.epic(EPIC)
 @allure.feature(FEATURE)
 @allure.story("Roles")
-@allure.title("A Site Content Editor without Submission review permission is denied the Submission review screen")
+@allure.title("The Site Content Editor can open and review submissions; the Site Content Author is denied")
 @pytest.mark.auth
 @pytest.mark.tc_143277
 def test_editor_denied_submission_review(browser, qctest_intake):
-    ctx, page = _auth_free_page(browser)
-    try:
-        admin = OpportunityReviewAdminPage(page)
-        assert admin.login_as_role(ROLE_EDITOR) == "ok", "Step 1: the Site Content Editor could not sign in"
-        http = admin.open_manage(SUBMISSION_SLUG)
-        user_id = admin.signed_in_user()[0]
-        assert user_id == ROLE_USER_IDS[ROLE_EDITOR], f"signed in as {user_id!r}, not the Editor"
-        own_id = qctest_intake["submission"].get("id")
-        observed = {
-            "object_authoring_nav_entry": admin.nav_entry(OBJECT_LABELS[SUBMISSION_SLUG]),
-            "direct_url_http": http,
-            "direct_url_list_heading": admin.list_heading_visible(),
-            "direct_url_total_entries": admin.total_entries(),
-            "rows_exposed": len(admin.list_rows()),
-            "own_qctest_row_actions": (admin.row_by_id(own_id) or {}).get("actions") if own_id else None,
-        }
-        evidence = admin.evidence("143277_editor_direct_url_manage_opportunity_submission")
-        if own_id:
-            view = admin.view_entry(own_id)
-            observed["own_qctest_view_shows_name"] = admin.entry_name(view) == qctest_intake["submission"]["name"]
-            admin.evidence("143277_editor_view_own_qctest_submission")
-        observed["liferay_product_menu_link"] = admin.has_product_menu_link("Opportunity Submissions")
-        observed["native_content_data_view"] = admin.open_native_entries(SUBMISSION_SLUG)
-        admin.evidence("143277_editor_native_content_data_view")
-    finally:
-        ctx.close()
-    allure.attach(json.dumps(observed, indent=2), name="Editor access (live)",
+    """Name kept for traceability; asserts the PBI permission table (user decision 2026-10-13).
+    Read-only: the Editor's review actions are checked as offered, nothing is clicked."""
+    own_id = qctest_intake["submission"].get("id")
+    assert own_id, "Precondition: the QCTEST submission was not located"
+    observed: dict = {}
+    for role in (ROLE_EDITOR, ROLE_AUTHOR):
+        ctx, page = _auth_free_page(browser)
+        try:
+            admin = OpportunityReviewAdminPage(page)
+            assert admin.login_as_role(role) == "ok", f"Step 1: the {role} could not sign in"
+            http = admin.open_manage(SUBMISSION_SLUG)
+            user_id = admin.signed_in_user()[0]
+            assert user_id == ROLE_USER_IDS[role], f"signed in as {user_id!r}, not the {role}"
+            body = admin.body_text()
+            observed[role] = {
+                "http": http,
+                "access_denied": "Access Denied" in body,
+                "rows": len(admin.entry_ids()),
+                "own_row_actions": ((admin.wait_for_entry(SUBMISSION_SLUG, own_id, tries=3) or {}).get("actions")
+                                    if role == ROLE_EDITOR else None),
+                "evidence": admin.evidence(f"143277_{role.replace(' ', '_')}_manage_opportunity_submission"),
+            }
+        finally:
+            ctx.close()
+    allure.attach(json.dumps(observed, indent=2), name="Submission access by role (live)",
                   attachment_type=allure.attachment_type.JSON)
-    problems = []
-    if observed["object_authoring_nav_entry"]["present"]:
-        problems.append("Step 2: the Object Authoring navigation shows the 'Opportunity Submission' entry "
-                        f"({'view only' if observed['object_authoring_nav_entry']['view_only'] else 'editable'})")
-    if observed["direct_url_list_heading"]:
-        problems.append(f"Step 3: direct URL /web/qatar-chamber/manage-{SUBMISSION_SLUG} returns HTTP "
-                        f"{observed['direct_url_http']} with the 'Opportunity Submission entries' list "
-                        f"({observed['direct_url_total_entries']} total) instead of an access-denied page")
-    if observed["liferay_product_menu_link"]:
-        problems.append("Step 2: the Liferay product menu lists 'Opportunity Submissions'")
-    if observed["native_content_data_view"] != "denied":
-        problems.append(f"Step 3: the native Content & Data view is {observed['native_content_data_view']!r}, not denied")
-    if observed["rows_exposed"]:
-        problems.append(f"Step 4: {observed['rows_exposed']} submission row(s) exposed (row actions on our QCTEST row: "
-                        f"{observed['own_qctest_row_actions']}; its View modal shows the full record: "
-                        f"{observed.get('own_qctest_view_shows_name')})")
-    assert not problems, "\n".join(problems) + f"\nEvidence: {evidence}"
+    ed, au = observed[ROLE_EDITOR], observed[ROLE_AUTHOR]
+    assert not ed["access_denied"] and ed["rows"], f"Step 2: the Editor cannot open the submission list: {ed}"
+    assert ed["own_row_actions"] and {"View", "Approve", "Reject"} <= set(ed["own_row_actions"]), (
+        f"Step 3: the Editor is not offered View / Approve / Reject on the Pending QCTEST row: {ed}")
+    assert au["access_denied"] and not au["rows"], f"Step 4: the Site Content Author is not denied: {au}"
 
 
 # ===========================================================================
@@ -371,8 +316,10 @@ def test_inquiry_list_columns(qctest_intake):
     assert item.get("id"), f"Step 2: {item['name']!r} was not found in manage-{INQUIRY_SLUG} (Form Manager)"
     assert not item["in_submission_list"], f"the inquiry (id {item['id']}) also shows in manage-{SUBMISSION_SLUG}"
     headers = item["headers"]
-    expected = ("Name", "Email", "Company", "Opportunity", "Status", "Date")
-    missing = [h for h in expected if not any(h.lower() in t.lower() for t in headers)]
+    # Healed 2026-10-13 (ready30 C): the fix for bug 149528 labels the Inquirer Name column "INQUIRER".
+    expected = {"Inquirer Name": ("name", "inquirer"), "Email": ("email",), "Company": ("company",),
+                "Opportunity": ("opportunity",), "Status": ("status",), "Date": ("date",)}
+    missing = [h for h, keys in expected.items() if not any(k in t.lower() for t in headers for k in keys)]
     row_text = " ".join((item["row"] or {}).get("cells", []))
     absent = [v for v in (item["name"], QCTEST_EMAIL, item["company"], INQUIRY_TARGET_CODE, "Pending")
               if v.lower() not in row_text.lower()]
@@ -383,10 +330,16 @@ def test_inquiry_list_columns(qctest_intake):
 
 
 # ===========================================================================
-# Submission review — blocked while no review control / no Pending submission
+# Submission review (live since the fix for bug 149526, 2026-10-13)
 # ===========================================================================
-def _submission_case(survey, what):
-    _blocked_unless_review(survey, (SUBMISSION_SLUG,), what)
+REJECT_REASON = "QCTEST R30 C Duplicate submission"
+MSG_REASON_REQUIRED = "A rejection reason is required."
+MSG_APPROVED = "The opportunity submission has been approved."
+MSG_REJECTED = "The opportunity submission has been rejected."
+
+
+def _notice_has(result: dict, text: str) -> bool:
+    return any(text in n for n in result.get("notices", [])) or any(text in d for d in result.get("dialogs", []))
 
 
 @allure.epic(EPIC)
@@ -397,9 +350,16 @@ def _submission_case(survey, what):
 @pytest.mark.regression
 @pytest.mark.tc_143226
 @pytest.mark.tc_143396
-def test_approve_pending_submission(review_surface):
-    """143226 (QC Admin Reviewer) and 143396 (Administrator) — run as the Form Manager; email part not verifiable."""
-    _submission_case(review_surface, "Approve a Pending submission")
+def test_approve_pending_submission(approved_sub):
+    """143226 (QC Admin Reviewer) and 143396 — run as the Form Manager.
+    NOTE: the submitter-notification email step (143226) is NOT verified — no mailbox access."""
+    res = approved_sub["approve"]
+    assert res["offered"], f"Step 2: no Approve action on the Pending QCTEST row (actions {res['actions']})"
+    assert any(d.startswith("confirm") for d in res["dialogs"]), f"Step 2: Approve asked no confirmation: {res['dialogs']}"
+    assert _notice_has(res, MSG_APPROVED), f"Step 3: no {MSG_APPROVED!r} message (seen {res['notices']} / {res['dialogs']})"
+    assert OpportunityReviewAdminPage.row_status(res["row"]) == "APPROVED", (
+        f"Step 3: the row status is {OpportunityReviewAdminPage.row_status(res['row'])!r}, not Approved. "
+        f"Evidence: {approved_sub['evidence']}")
 
 
 @allure.epic(EPIC)
@@ -411,9 +371,18 @@ def test_approve_pending_submission(review_surface):
 @pytest.mark.tc_143198
 @pytest.mark.tc_143227
 @pytest.mark.tc_143398
-def test_reject_submission_with_reason(review_surface):
-    """143198 / 143227 / 143398 — email part (143227, 143398) not verifiable."""
-    _submission_case(review_surface, "Reject a Pending submission with a Rejection Reason")
+def test_reject_submission_with_reason(rejected_sub, reviewer):
+    """143198 / 143227 / 143398.
+    NOTE: the rejection-email step (143227, 143398) is NOT verified — no mailbox access."""
+    res = rejected_sub["with_reason"]
+    assert res["offered"], f"Step 2: no Reject action on the Pending QCTEST row (actions {res['actions']})"
+    assert _notice_has(res, MSG_REJECTED), f"Step 3: no {MSG_REJECTED!r} message (seen {res['notices']} / {res['dialogs']})"
+    assert OpportunityReviewAdminPage.row_status(res["row"]) == "REJECTED", (
+        f"Step 3: the row status is {OpportunityReviewAdminPage.row_status(res['row'])!r}, not Rejected")
+    view = reviewer.view_entry(rejected_sub["item"]["id"])
+    reviewer.open_manage(SUBMISSION_SLUG)
+    assert any(REJECT_REASON in line for line in view["lines"]), (
+        f"Step 4: the View dialog does not show the Rejection Reason {REJECT_REASON!r}: {view['fields']}")
 
 
 @allure.epic(EPIC)
@@ -423,8 +392,14 @@ def test_reject_submission_with_reason(review_surface):
 @pytest.mark.functional_low
 @pytest.mark.tc_143199
 @pytest.mark.tc_143399
-def test_reject_without_reason_blocked(review_surface):
-    _submission_case(review_surface, "Reject with an empty Rejection Reason")
+def test_reject_without_reason_blocked(rejected_sub):
+    res = rejected_sub["empty"]
+    assert res["offered"], f"Step 2: no Reject action on the Pending QCTEST row (actions {res['actions']})"
+    assert _notice_has(res, MSG_REASON_REQUIRED), (
+        f"Step 3: an empty reason was not refused with {MSG_REASON_REQUIRED!r} (dialogs {res['dialogs']}, "
+        f"notices {res['notices']})")
+    assert OpportunityReviewAdminPage.row_status(res["row"]) == "PENDING", (
+        f"Step 4: after an empty-reason Reject the row is {OpportunityReviewAdminPage.row_status(res['row'])!r}, not Pending")
 
 
 @allure.epic(EPIC)
@@ -435,8 +410,19 @@ def test_reject_without_reason_blocked(review_surface):
 @pytest.mark.regression
 @pytest.mark.uat
 @pytest.mark.tc_143285
-def test_approve_publishes_business_opportunity(review_surface):
-    _submission_case(review_surface, "Approve (with confirmation) and publish as a Business Opportunity")
+def test_approve_publishes_business_opportunity(browser, approved_sub):
+    assert OpportunityReviewAdminPage.row_status(approved_sub["approve"]["row"]) == "APPROVED", "Precondition: not Approved"
+    name = approved_sub["item"]["name"]
+    ctx, admin, _ = _signed_in(browser, ROLE_ADMIN)  # read-only look at the records list
+    try:
+        records = admin.opportunity_record_titles()
+        ev = admin.evidence("143285_business_opportunity_records_after_approve")
+    finally:
+        ctx.close()
+    actions = approved_sub["approve"]["row"]["actions"]
+    assert name in records or "Publish as Opportunity" in actions, (
+        f"Step 4: after Approve, no Business Opportunity record named {name!r} exists in manage-business-opportunity "
+        f"and the Approved row offers no 'Publish as Opportunity' (row actions {actions}). Evidence: {ev}")
 
 
 @allure.epic(EPIC)
@@ -446,8 +432,11 @@ def test_approve_publishes_business_opportunity(review_surface):
 @pytest.mark.functional_high
 @pytest.mark.regression
 @pytest.mark.tc_143286
-def test_rejected_submission_kept(review_surface):
-    _submission_case(review_surface, "Reject with a reason, then confirm the record is still stored")
+def test_rejected_submission_kept(rejected_sub, reviewer):
+    reviewer.open_manage(SUBMISSION_SLUG)
+    row = reviewer.row_by_id(rejected_sub["item"]["id"])
+    assert row, f"Step 3: the rejected submission {rejected_sub['item']['id']} is no longer listed"
+    assert OpportunityReviewAdminPage.row_status(row) == "REJECTED", f"Step 3: row status {row['cells']}"
 
 
 @allure.epic(EPIC)
@@ -456,8 +445,21 @@ def test_rejected_submission_kept(review_surface):
 @allure.title("A rejected submission creates no Business Opportunity record and no public card")
 @pytest.mark.functional_low
 @pytest.mark.tc_143400
-def test_rejected_submission_creates_no_record(review_surface):
-    _submission_case(review_surface, "Reject with reason 'Duplicate submission', then search records / public listing")
+def test_rejected_submission_creates_no_record(browser, rejected_sub):
+    """NOTE: "no record after Reject" only means something if Approve DOES create one. Live,
+    Approve creates no Business Opportunity record either (see 143285), so absence after
+    Reject cannot be distinguished from "nothing ever creates a record": not provable."""
+    assert OpportunityReviewAdminPage.row_status(rejected_sub["with_reason"]["row"]) == "REJECTED", "Precondition"
+    ctx, admin, _ = _signed_in(browser, ROLE_ADMIN)
+    try:
+        records = admin.opportunity_record_titles()
+        admin.evidence("143400_records_after_reject")
+    finally:
+        ctx.close()
+    assert rejected_sub["item"]["name"] not in records, "Step 3: a Business Opportunity record exists for the rejected submission"
+    pytest.skip("NOT PROVABLE — no record exists for the rejected submission, but Approve creates no Business "
+                "Opportunity record either (tc_143285 fails), so this absence does not show that Reject is what "
+                "prevents one. Re-judge once Approve -> publish exists.")
 
 
 @allure.epic(EPIC)
@@ -466,8 +468,15 @@ def test_rejected_submission_creates_no_record(review_surface):
 @allure.title("Rejecting an already Approved submission is blocked as an invalid transition")
 @pytest.mark.edge
 @pytest.mark.tc_143243
-def test_reject_approved_submission_blocked(review_surface):
-    _submission_case(review_surface, "Reject a submission that is already Approved")
+def test_reject_approved_submission_blocked(approved_sub, reviewer):
+    """Read-only check: the Approved row must not offer Reject (nothing is clicked)."""
+    reviewer.open_manage(SUBMISSION_SLUG)
+    row = reviewer.row_by_id(approved_sub["item"]["id"])
+    assert OpportunityReviewAdminPage.row_status(row) == "APPROVED", f"Precondition: row {row}"
+    ev = reviewer.evidence("143243_approved_row_actions")
+    assert "Reject" not in row["actions"], (
+        f"Step 2: the Approved submission still offers Reject (row actions {row['actions']}) — Approved -> Rejected "
+        f"is not a transition in the PBI's Status Workflow (Pending -> Approved / Rejected). Evidence: {ev}")
 
 
 @allure.epic(EPIC)
@@ -477,8 +486,13 @@ def test_reject_approved_submission_blocked(review_surface):
 @pytest.mark.functional_low
 @pytest.mark.regression
 @pytest.mark.tc_143397
-def test_publish_approved_submission(review_surface):
-    _submission_case(review_surface, "Publish as Opportunity from an Approved submission")
+def test_publish_approved_submission(approved_sub, reviewer):
+    reviewer.open_manage(SUBMISSION_SLUG)
+    row = reviewer.row_by_id(approved_sub["item"]["id"])
+    ev = reviewer.evidence("143397_approved_row_actions")
+    assert "Publish as Opportunity" in row["actions"], (
+        f"Step 2: the Approved submission offers no 'Publish as Opportunity' action (row actions {row['actions']}). "
+        f"Evidence: {ev}")
 
 
 @allure.epic(EPIC)
@@ -487,8 +501,13 @@ def test_publish_approved_submission(review_surface):
 @allure.title("Approving a submission records actor, action and timestamp in the History / Audit Log")
 @pytest.mark.functional_low
 @pytest.mark.tc_143401
-def test_approve_recorded_in_history(review_surface):
-    _submission_case(review_surface, "Approve a submission and read its History")
+def test_approve_recorded_in_history(approved_sub, reviewer):
+    text = reviewer.history_text(SUBMISSION_SLUG, approved_sub["item"]["id"])
+    ev = reviewer.evidence("143401_history_approve")
+    assert "FormsManager" in text.replace(" ", "") and "approved" in text, (
+        f"Step 3: History does not show the Form Manager's approval: {text!r}. Evidence: {ev}")
+    assert _re.search(r"\d{1,4}[/.-]\d{1,2}[/.-]\d{2,4}\D{1,5}\d{1,2}:\d{2}|\d{4}-\d{2}-\d{2}T?\s*\d{1,2}:\d{2}", text), (
+        f"Step 3: no date + time in History: {text!r}")
 
 
 @allure.epic(EPIC)
@@ -497,8 +516,11 @@ def test_approve_recorded_in_history(review_surface):
 @allure.title("Rejecting a submission records the action and reason in the History / Audit Log")
 @pytest.mark.functional_low
 @pytest.mark.tc_143402
-def test_reject_recorded_in_history(review_surface):
-    _submission_case(review_surface, "Reject a submission with a reason and read its History")
+def test_reject_recorded_in_history(rejected_sub, reviewer):
+    text = reviewer.history_text(SUBMISSION_SLUG, rejected_sub["item"]["id"])
+    ev = reviewer.evidence("143402_history_reject")
+    assert "rejected" in text and REJECT_REASON in text, (
+        f"Step 3: History does not show the rejection and its reason: {text!r}. Evidence: {ev}")
 
 
 @allure.epic(EPIC)
@@ -508,17 +530,27 @@ def test_reject_recorded_in_history(review_surface):
 @pytest.mark.functional_low
 @pytest.mark.regression
 @pytest.mark.tc_143405
-def test_direct_publish_and_reapprove_blocked(review_surface):
-    """Steps 1-3 (direct create + publish of a record) are the record-form flow Agent A covers;
-    the case's own point (step 4, Approve again on an Approved submission) has no surface."""
-    _submission_case(review_surface, "Approve again on an already Approved submission (step 4)")
+def test_direct_publish_and_reapprove_blocked(approved_sub, reviewer):
+    """NOTE: judges STEP 4 ONLY (Approve not offered again on an Approved submission). Steps 1-3
+    (direct create + publish of a record) are NOT run here (record-form flow, Agent A's suite)."""
+    reviewer.open_manage(SUBMISSION_SLUG)
+    row = reviewer.row_by_id(approved_sub["item"]["id"])
+    assert OpportunityReviewAdminPage.row_status(row) == "APPROVED", f"Precondition: row {row}"
+    assert "Approve" not in row["actions"], f"Step 4: Approve is offered again on an Approved submission: {row['actions']}"
 
 
 # ===========================================================================
-# Inquiry review — blocked while no status control / no Pending inquiry
+# Inquiry review — run as the Form Manager (the reviewer role)
 # ===========================================================================
-def _inquiry_case(survey, what):
-    _blocked_unless_review(survey, (INQUIRY_SLUG,), what)
+def _inquiry_step(reviewer, item, title, expected_status, step):
+    res = reviewer.review_action(INQUIRY_SLUG, item["id"], title, item["name"])
+    ev = reviewer.evidence(f"inquiry_{item['id']}_{title.replace(' ', '_')}")
+    assert res["offered"], f"{step}: no {title!r} action on the QCTEST inquiry row (actions {res.get('actions')})"
+    status = OpportunityReviewAdminPage.row_status(res["row"])
+    assert status == expected_status, (
+        f"{step}: after {title!r} the row reads {status!r}, not {expected_status!r} (dialogs {res['dialogs']}, "
+        f"writes {res['writes']}). Evidence: {ev}")
+    return res
 
 
 @allure.epic(EPIC)
@@ -530,9 +562,13 @@ def _inquiry_case(survey, what):
 @pytest.mark.tc_143392
 @pytest.mark.tc_143224
 @pytest.mark.tc_143394
-def test_inquiry_pending_to_in_progress(review_surface):
+def test_inquiry_pending_to_in_progress(reviewer, extra_intake):
     """143392 / 143224 (P3 twin) and 143394 (P3, persists after a full reload)."""
-    _inquiry_case(review_surface, "Change a Pending inquiry's status to In-progress and reload")
+    item = extra_intake["inq1"]
+    _inquiry_step(reviewer, item, "Mark In Progress", "IN-PROGRESS", "Step 2")
+    reviewer.page.reload(wait_until="load")
+    reviewer.open_manage(INQUIRY_SLUG)
+    assert OpportunityReviewAdminPage.row_status(reviewer.row_by_id(item["id"])) == "IN-PROGRESS", "Step 3: not persisted"
 
 
 @allure.epic(EPIC)
@@ -542,8 +578,10 @@ def test_inquiry_pending_to_in_progress(review_surface):
 @pytest.mark.functional_low
 @pytest.mark.tc_143393
 @pytest.mark.tc_143225
-def test_inquiry_in_progress_to_completed(review_surface):
-    _inquiry_case(review_surface, "Change an In-progress inquiry's status to Completed/Closed")
+def test_inquiry_in_progress_to_completed(reviewer, extra_intake):
+    item = extra_intake["inq2"]
+    _inquiry_step(reviewer, item, "Mark In Progress", "IN-PROGRESS", "Precondition")
+    _inquiry_step(reviewer, item, "Mark Completed", "COMPLETED", "Step 2")
 
 
 @allure.epic(EPIC)
@@ -554,12 +592,16 @@ def test_inquiry_in_progress_to_completed(review_surface):
 @pytest.mark.regression
 @pytest.mark.workflow
 @pytest.mark.tc_143287
-def test_inquiry_full_status_workflow(review_surface):
-    _inquiry_case(review_surface, "Walk an inquiry through Pending -> In-progress -> Completed/Closed")
+def test_inquiry_full_status_workflow(reviewer, extra_intake):
+    item = extra_intake["inq3"]
+    reviewer.open_manage(INQUIRY_SLUG)
+    assert OpportunityReviewAdminPage.row_status(reviewer.row_by_id(item["id"])) == "PENDING", "Step 1: not Pending"
+    _inquiry_step(reviewer, item, "Mark In Progress", "IN-PROGRESS", "Step 2")
+    _inquiry_step(reviewer, item, "Close", "CLOSED", "Step 3")
 
 
 # ===========================================================================
-# Accounts / mailbox gaps
+# Roles
 # ===========================================================================
 @allure.epic(EPIC)
 @allure.feature(FEATURE)
@@ -567,16 +609,18 @@ def test_inquiry_full_status_workflow(review_surface):
 @allure.title("A QC Admin Reviewer (Form Manager) can review/update inquiries and approve/reject submissions")
 @pytest.mark.auth
 @pytest.mark.tc_143280
-def test_qc_admin_reviewer_access(review_surface):
-    """Azure TC 143280, run as the Form Manager (user decision 2026-10-07)."""
-    s = review_surface
-    assert s["login"] == "ok", f"Step 1: the Form Manager could not sign in ({s['login']})"
+def test_qc_admin_reviewer_access(reviewer, approved_sub, extra_intake):
+    """Azure TC 143280, run as the Form Manager (user decision 2026-10-07). Step 4 (Approve) is the
+    approve_sub fixture's live Approve; step 2 (update an inquiry status) is done here on a fresh inquiry."""
     for slug in (INQUIRY_SLUG, SUBMISSION_SLUG):
-        assert s[slug]["user_id"] == ROLE_USER_IDS[ROLE_FORM_MANAGER], f"signed in as {s[slug]['user_id']!r}"
-        assert s[slug]["list_heading"], f"Steps 2-3: the Form Manager cannot open manage-{slug} (HTTP {s[slug]['http']})"
-    _blocked_unless_review(s, (INQUIRY_SLUG, SUBMISSION_SLUG),
-                           "Judged: step 1 (sign-in), step 3 and the list part of step 2 (both lists open). Steps 2 (update "
-                           "an inquiry status) and 4 (Approve a submission) cannot be performed")
+        reviewer.open_manage(slug)
+        assert reviewer.signed_in_user()[0] == ROLE_USER_IDS[ROLE_FORM_MANAGER], "not signed in as the Form Manager"
+        assert reviewer.list_heading_visible(), f"Step 3: the Form Manager cannot open manage-{slug}"
+    assert OpportunityReviewAdminPage.row_status(approved_sub["approve"]["row"]) == "APPROVED", "Step 4: Approve failed"
+    item = extra_intake["inq1"]
+    reviewer.open_manage(INQUIRY_SLUG)
+    if OpportunityReviewAdminPage.row_status(reviewer.row_by_id(item["id"])) == "PENDING":
+        _inquiry_step(reviewer, item, "Mark In Progress", "IN-PROGRESS", "Step 2")
 
 
 @allure.epic(EPIC)
@@ -585,31 +629,33 @@ def test_qc_admin_reviewer_access(review_surface):
 @allure.title("An Administrator has full access across Opportunity Management, Inquiry and Submission review")
 @pytest.mark.auth
 @pytest.mark.tc_143282
-def test_administrator_full_access(browser, qctest_intake):
+def test_administrator_full_access(browser, qctest_intake, extra_intake):
     """Azure TC 143282, run as TEST_USER (the Administrator, user decision 2026-10-07).
-    Read-only: Publish availability is checked, nothing is published."""
-    survey = _survey(browser, ROLE_ADMIN, qctest_intake)
+    Read-only: Publish and the review actions are checked as offered; nothing is clicked."""
     ctx, page = _auth_free_page(browser)
     try:
         admin = OpportunityReviewAdminPage(page)
         assert admin.login_as_role(ROLE_ADMIN) != "auth_failed", "Step 1: TEST_USER could not sign in"
         authoring = admin.authoring_access()
         admin.evidence("Administrator_manage_business_opportunity")
+        admin.open_manage(INQUIRY_SLUG)
+        inq_row = admin.row_by_id(extra_intake["inq3"]["id"]) or {}
+        admin.evidence("Administrator_manage_opportunity_inquiry")
+        admin.open_manage(SUBMISSION_SLUG)
+        sub_ids = admin.entry_ids()
+        sub_actions = sorted({a for r in admin.list_rows() for a in r["actions"]})
+        admin.evidence("Administrator_manage_opportunity_submission")
     finally:
         ctx.close()
-    survey["opportunity_management"] = authoring
-    allure.attach(json.dumps(survey, indent=2), name="Administrator access (live)",
-                  attachment_type=allure.attachment_type.JSON)
-    assert survey["login"] == "ok", f"Step 1: login outcome {survey['login']!r}"
+    allure.attach(json.dumps({"authoring": authoring, "inq_row": inq_row, "sub_actions": sub_actions}, indent=2),
+                  name="Administrator access (live)", attachment_type=allure.attachment_type.JSON)
     assert "Publish" in authoring["form_buttons"] and {"publish", "unpublish"} & set(authoring["row_actions"]), (
         f"Step 2: Opportunity Management offers no Publish to the Administrator: {authoring}")
-    for slug in (INQUIRY_SLUG, SUBMISSION_SLUG):
-        assert survey[slug]["list_heading"], f"Steps 3-4: manage-{slug} does not open for the Administrator"
-    _blocked_unless_review(survey, (INQUIRY_SLUG, SUBMISSION_SLUG),
-                           "Steps 1-2 judged (Publish is offered in Opportunity Management; not performed). "
-                           "Steps 3 (update an inquiry status) and 4 (Approve/Reject) cannot be performed on the "
-                           "review surface; the native Liferay Content & Data view lists the rows for this account "
-                           "but is not used (user decision: no Content & Data workaround)")
+    assert inq_row, "Step 3: the Administrator does not see the QCTEST inquiry"
+    assert {"Mark In Progress", "Mark Completed", "Close"} & set(inq_row.get("actions", [])), (
+        f"Step 3: no inquiry status action for the Administrator: {inq_row.get('actions')}")
+    assert sub_ids and {"approve", "reject"} <= set(sub_actions), (
+        f"Step 4: no Approve/Reject for the Administrator on submissions (row action attrs {sub_actions})")
 
 
 @allure.epic(EPIC)

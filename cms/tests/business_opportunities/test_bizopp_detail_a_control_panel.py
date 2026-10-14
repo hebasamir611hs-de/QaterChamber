@@ -225,9 +225,11 @@ def test_hero_summary_required_and_bmp_rejected(page, disposable):
     assert "Hero Summary is required" in messages, f"Publish blocked, but no 'Hero Summary is required': {messages!r}"
     assert picker_errors or "valid extension" in upload_view.get("picker_text", ""), (
         f"the .bmp was not attached, but no rejection message was shown: {upload_view}")
-    # Rule 6: same behaviour, different wording -> recorded as a LOW wording finding, not failed.
+    # Bug 149520 (fixed 2026-10-13): the picker now shows the approved wording.
     expected_wording = "Unsupported file type, JPG/PNG/SVG only"
-    allure.attach(f"expected {expected_wording!r}\nshown    {picker_errors!r}", name="LOW wording finding (.bmp rejection)")
+    shown = picker_errors + " " + (upload_view.get("picker_text") or "")
+    allure.attach(f"expected {expected_wording!r}\nshown    {shown!r}", name=".bmp rejection wording")
+    assert expected_wording in shown, f"the .bmp refusal does not read {expected_wording!r}: {shown!r}"
 
 
 # ===========================================================================
@@ -419,6 +421,13 @@ def test_invalid_amount_and_percentage_rejected(page, disposable):
     accepted = {k: v["messages"] for k, v in results.items() if v.get("went_through") or v.get("created")}
     assert not accepted, (f"PRODUCT: invalid values were SAVED (expected 'Investment Amount must follow a valid range "
                           f"format' / 'Percentage cannot exceed 100'): {list(accepted)}")
+    wording = {"Investment Amount 'high value'": "Investment Amount must follow a valid range format",
+               "Co-Investment Percentage 130": "Percentage cannot exceed 100"}
+    shown = {k: v["messages"] + " " + " ".join(e.get("text", "") if isinstance(e, dict) else str(e)
+                                               for e in v.get("field_errors") or [])
+             for k, v in results.items()}
+    missing = {k: shown[k] for k, w in wording.items() if w not in shown[k]}
+    assert not missing, f"refused, but without the approved message: {missing}"
 
 
 # ===========================================================================
@@ -443,7 +452,7 @@ def test_gallery_and_resource_render_and_download(page, anon_pages, disposable):
                                         {"galleryImage": f"pick:{image}", "displayOrder": str(100 * i),
                                          "active_status": True}, identity)
         item_admin.open_entry_en(item.code)
-        upload_sequence.append((image, item_admin.file_field_value("galleryImage")))
+        upload_sequence.append((image, item_admin.stored_file_id("galleryImage", item.code)))
     allure.attach("\n".join(f"{n}. {img} -> fileEntryId {fid}" for n, (img, fid) in enumerate(upload_sequence, 1)),
                   name="gallery upload sequence (stored file ids)")
     expected_ids = [fid for _, fid in upload_sequence]
@@ -507,7 +516,7 @@ def test_resource_size_and_gallery_limit(page, anon_pages, disposable):
     # Review re-check: the 10-image cap is exercised with PUBLISH (not only Save as Draft):
     # 10 gallery items are published on a Draft parent, the parent is published, an 11th
     # item is published on the now-Published parent and the parent is published again.
-    # The 6 MB PDF is attempted exactly ONCE per run (a refused pick still lands in D&M).
+    # The 6 MB PDF is attempted exactly ONCE per run (since bug 149524's fix a refused pick is not stored).
     admin = login(page, ROLE_EDITOR)
     parent = create_opportunity(admin, disposable, OpportunityAdminPage.default_data(
         a_name("143383", "limits")), publish=False)
@@ -572,11 +581,14 @@ def test_resource_size_and_gallery_limit(page, anon_pages, disposable):
     problems = []
     if upload["attached"]:
         problems.append(f"the 6 MB PDF was ACCEPTED into the File field ({upload_view['field_text']!r})")
-    elif not any("5" in e and "MB" in e for e in (upload_view["errors"] or []) + (upload_view["field_errors"] or [])):
+    elif not any("File exceeds maximum size of 5MB" in e for e in (upload_view["errors"] or []) + (upload_view["field_errors"] or [])):
         problems.append(f"6 MB PDF not attached, but no 'File exceeds maximum size of 5MB' message: {upload_view}")
     if eleventh["created"]:
         problems.append(f"an 11th gallery image was PUBLISHED on a Published parent (no 'Maximum of 10 gallery "
                         f"images reached'): {eleventh}")
+    elif "Maximum of 10 gallery images reached." not in (eleventh["messages"] + " " + " ".join(
+            str(e) for e in eleventh["field_errors"] or [])):
+        problems.append(f"11th gallery image refused, but without 'Maximum of 10 gallery images reached.': {eleventh}")
     if parent_with_11["went_through"] and eleventh["created"]:
         problems.append(f"the parent re-published with 11 active gallery items ({parent_with_11['status']}); "
                         f"public gallery shows {public_count} images")

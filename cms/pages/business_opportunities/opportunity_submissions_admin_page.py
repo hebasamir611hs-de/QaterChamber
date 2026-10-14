@@ -77,18 +77,19 @@ from core.web.base_page import BasePage
 
 _PROJECT_ROOT = _Path(__file__).resolve().parents[3]
 
-QCTEST_PREFIX = "QCTEST-130697-H-"  # Agent H re-run (2026-10-12)
+QCTEST_PREFIX = "QCTEST-R30-C-"  # ready-bug retest agent C (2026-10-13)
 QCTEST_B_PREFIX = QCTEST_PREFIX  # backward-compatible alias
 SUBMISSION_SLUG = "opportunity-submission"
 INQUIRY_SLUG = "opportunity-inquiry"
 OBJECT_LABELS = {SUBMISSION_SLUG: "Opportunity Submission", INQUIRY_SLUG: "Opportunity Inquiry"}
 
 ROLE_EDITOR = "Site Content Editor"
+ROLE_AUTHOR = "Site Content Author"
 # User decision 2026-10-07: the Form Manager is the cases' "QC Admin Reviewer" (only role
 # meant to open/edit submissions); TEST_USER is the cases' "Administrator".
 ROLE_FORM_MANAGER = "Form Manager"
 ROLE_ADMIN = "Administrator (TEST_USER)"
-ROLE_USER_IDS = {ROLE_EDITOR: "156488", "Site Content Author": "156492", "Content Contributor": "156496",
+ROLE_USER_IDS = {ROLE_EDITOR: "156488", ROLE_AUTHOR: "156492", "Content Contributor": "156496",
                  ROLE_FORM_MANAGER: "156500", ROLE_ADMIN: "20132"}
 BIZOPP_RECORD_SLUG = "business-opportunity"
 
@@ -122,7 +123,7 @@ INTAKE_API = "/o/qc-business-opportunities-api/"
 
 
 def _evidence_dir() -> str:
-    return _os.path.join(str(_PROJECT_ROOT), "reports", "evidence", "130697_H")
+    return _os.path.join(str(_PROJECT_ROOT), "reports", "evidence", "ready30", "C")
 
 
 class OpportunityReviewAdminPage(ObjectAuthoringPage):
@@ -183,11 +184,29 @@ class OpportunityReviewAdminPage(ObjectAuthoringPage):
             self.page.get_by_text(f"{OBJECT_LABELS.get(self.slug, '')} entries").first.wait_for(timeout=30000)
         except Exception:  # noqa: BLE001 — a denied page has no list heading
             pass
+        self._wait_list_rendered()  # the page-size select is re-rendered with the configured list
         select = self.page.locator(self.PAGE_SIZE_SELECT)
         if select.count() and select.first.is_visible() and select.first.input_value() != "0":
             select.first.select_option("0")
-            self.page.wait_for_load_state("networkidle")
+            # Healed 2026-10-13 (ready30 C): the list page now keeps a request open, so
+            # "networkidle" can time out; fall back to the re-rendered table.
+            try:
+                self.page.wait_for_load_state("networkidle", timeout=15000)
+            except Exception:  # noqa: BLE001
+                pass
+        self._wait_list_rendered()
         return response.status if response else None
+
+    def _wait_list_rendered(self) -> None:
+        """Healed 2026-10-13 (ready30 C): the list first paints a generic table
+        (Entry / Status / Last modified / Actions, no rows) and then the configured
+        columns + rows; wait for the configured render (a row action or "0 total")."""
+        try:
+            self.page.wait_for_function(
+                "() => document.querySelector('table tbody tr [data-qc-oel-view]') || /\\b0 total/.test(document.body.innerText)",
+                timeout=30000)
+        except Exception:  # noqa: BLE001 — denied pages have neither
+            pass
 
     def list_heading_visible(self) -> bool:
         return self.page.get_by_text(f"{OBJECT_LABELS.get(self.slug, '')} entries").count() > 0
@@ -311,8 +330,18 @@ class OpportunityReviewAdminPage(ObjectAuthoringPage):
             nxt = lines[i + 1]
             if line in ("Submission Status", "Inquiry Status", "Rejection Reason", "Reference Number", "Id",
                         "External Reference Code", "Project Opportunity Name", "Your Name", "Company",
-                        "Opportunity Inquiries ERC"):
+                        "Opportunity Inquiries ERC", "Creator"):
                 fields.setdefault(line, nxt)
+        # Healed 2026-10-13 (ready30 C): the line diff above drops values that also appear
+        # elsewhere on the page (the new status filter lists "Pending"/"Approved"), so the
+        # modal's own <dt>/<dd> pairs win for the plain (single-value) fields.
+        pairs = self.page.evaluate(
+            """() => { const dl = document.querySelector('[data-qc-oel-viewer-body]'); if (!dl) return [];
+                return [...dl.querySelectorAll('dt')].map(dt => [dt.innerText.trim(),
+                    (dt.nextElementSibling ? dt.nextElementSibling.innerText.trim() : '')]); }""")
+        for label, value in pairs:
+            if label in ("Submission Status", "Inquiry Status", "Creator", "Id") and value and "\n" not in value:
+                fields[label] = value
         return {"lines": lines, "fields": fields, "controls": controls}
 
     def entry_name(self, view: dict) -> str:
@@ -363,6 +392,108 @@ class OpportunityReviewAdminPage(ObjectAuthoringPage):
                 return "deleted"
             self.page.wait_for_timeout(5000)
         return f"still listed after confirm {seen['message']!r}"
+
+    # ---- review actions (ready30 C, 2026-10-13: built by the fix for bug 149526) ----
+    # Read live 2026-10-13 on qcdev. Row actions carry data-qc-oel-<attr>="<entryId>":
+    #   submission  Pending  -> Approve (confirm 'Approve: "<ERC>"?'), Reject (prompt
+    #               'Reject "<ERC>". Enter the reason (required):'; empty -> alert
+    #               "A rejection reason is required."), History.
+    #               Approved -> Reject, History; Rejected -> Approve, History.
+    #   inquiry     Pending -> "Mark In Progress" (data-qc-oel-approve, confirm);
+    #               In-progress -> "Mark Completed" / "Close".
+    # Success shows "Success:The opportunity submission has been approved./rejected."
+    # History expands inline (.qc-oel__history) from GET /o/qc-object-status/review-history/<id>.
+    SUCCESS_NOTICE = "[role=alert], .alert, .qc-oel__msg, .qc-oel__notice, .qc-oel__toast"
+    HISTORY_CELL = ".qc-oel__history"
+
+    def row_action_link(self, entry_id: str, title: str):
+        """The row action <a> of `entry_id` whose visible label is exactly `title`."""
+        return self.page.locator(f"table tbody tr:has([data-qc-oel-view='{entry_id}']) td.qc-oel__cell-action a",
+                                 has_text=_re.compile(rf"^\s*{_re.escape(title)}\s*$"))
+
+    def review_action(self, slug: str, entry_id: str, title: str, expected_name: str,
+                      reason: str | None = None, settle_ms: int = 15000) -> dict:
+        """Clicks ONE review action on OUR QCTEST row (row must show `expected_name`,
+        which must carry QCTEST_PREFIX). Native confirm is accepted only if it names
+        the row's ERC; a prompt gets `reason` (or is dismissed when reason is None).
+        Returns dialogs, success notices, the PATCH status and the row after reload."""
+        if not expected_name.startswith(QCTEST_PREFIX):
+            raise ValueError(f"{expected_name!r} is not a {QCTEST_PREFIX} value")
+        row = self.wait_for_entry(slug, entry_id)
+        if not row or expected_name not in " ".join(row["cells"]):
+            raise AssertionError(f"refused: row {entry_id} does not show {expected_name!r}: {row}")
+        erc = row["cells"][0]
+        link = self.row_action_link(entry_id, title)
+        if link.count() != 1:
+            return {"offered": False, "actions": row["actions"], "dialogs": [], "notices": [], "row": row}
+        dialogs: list[str] = []
+        writes: list[dict] = []
+
+        def _on_dialog(dialog):
+            dialogs.append(f"{dialog.type}: {dialog.message}")
+            if dialog.type == "prompt":
+                dialog.accept(reason) if reason is not None else dialog.dismiss()
+            elif dialog.type == "confirm":
+                dialog.accept() if erc in dialog.message else dialog.dismiss()
+            else:
+                dialog.accept()
+
+        def _on_response(resp):
+            if resp.request.method in ("PATCH", "PUT", "POST") and str(entry_id) in resp.url:
+                writes.append({"method": resp.request.method, "url": resp.url, "status": resp.status})
+
+        self.page.on("dialog", _on_dialog)
+        self.page.on("response", _on_response)
+        try:
+            link.first.click()
+            notices: list[str] = []
+            for _ in range(settle_ms // 500):
+                self.page.wait_for_timeout(500)
+                notices = [t.strip() for t in self.page.locator(self.SUCCESS_NOTICE).all_inner_texts() if t.strip()]
+                if notices or any(d.startswith("alert") for d in dialogs):
+                    break
+        finally:
+            self.page.remove_listener("dialog", _on_dialog)
+            self.page.remove_listener("response", _on_response)
+        self.open_manage(slug)
+        return {"offered": True, "dialogs": dialogs, "notices": sorted(set(notices)), "writes": writes,
+                "row": self.row_by_id(entry_id)}
+
+    def wait_for_entry(self, slug: str, entry_id: str, tries: int = 8) -> dict | None:
+        """Re-opens the list until `entry_id` is listed (a fresh public submission can
+        take a few seconds to reach the list); returns its row or None."""
+        for _ in range(tries):
+            self.open_manage(slug)
+            row = self.row_by_id(entry_id)
+            if row:
+                return row
+            self.page.wait_for_timeout(5000)
+        return None
+
+    @staticmethod
+    def row_status(row: dict | None) -> str:
+        """Status cell of a review row (submission col 5, inquiry col 6 — found by value)."""
+        cells = (row or {}).get("cells", [])
+        for c in cells:
+            if c.upper() in ("PENDING", "APPROVED", "REJECTED", "IN-PROGRESS", "COMPLETED", "CLOSED"):
+                return c.upper()
+        return ""
+
+    def history_text(self, slug: str, entry_id: str) -> str:
+        """Opens the row's History (inline expansion) and returns its visible text."""
+        self.open_manage(slug)
+        self.page.locator(f"[data-qc-oel-history='{entry_id}']").first.click()
+        cell = self.page.locator(f"{self.HISTORY_CELL}:visible").first
+        try:
+            cell.locator(".qc-oel__history-who").first.wait_for(timeout=20000)
+        except Exception:  # noqa: BLE001 — empty history returned as ""
+            return ""
+        return cell.inner_text()
+
+    def opportunity_record_titles(self) -> str:
+        """Read-only: body text of manage-business-opportunity (all rows)."""
+        self.open_manage(BIZOPP_RECORD_SLUG)
+        return self.body_text()
 
     # ---- evidence --------------------------------------------------------------
     def evidence(self, name: str) -> str:

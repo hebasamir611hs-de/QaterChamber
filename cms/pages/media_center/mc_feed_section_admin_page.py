@@ -67,6 +67,11 @@ K_EYEBROW = "eyebrow"
 K_CTA_LABEL = "ctaLabel"
 K_CTA_DEST = "ctaDestination"
 K_ORDER = "displayOrder"
+# Added by the 149909 fix (2026-10-13): whole number 1..12 + Grid/Carousel picklist.
+K_ITEMS = "itemsPreviewed"
+K_MODE = "displayMode"
+MODE_GRID = "Grid"
+MODE_CAROUSEL = "Carousel"
 TEXT_KEYS = (K_HEADING, K_EYEBROW, K_CTA_LABEL, K_CTA_DEST)
 AR_KEYS = (K_HEADING, K_EYEBROW, K_CTA_LABEL)
 
@@ -309,7 +314,23 @@ class McFeedSectionAdminPage(TenderWorkflowAdminPage):
             self.fill_en(K_ORDER, str(data[K_ORDER]))
         if data.get("activeStatus") is not None:
             self.set_active_status(bool(data["activeStatus"]))
+        if data.get(K_ITEMS) is not None:
+            self.fill_en(K_ITEMS, str(data[K_ITEMS]))
+        if data.get(K_MODE):
+            self.pick(K_MODE, data[K_MODE])
         return self
+
+    # ---- list ---------------------------------------------------------------------------
+    ADD_NEW_CONTROL = 'button:visible, a:visible'
+    ADD_NEW_RE = _re.compile(r"^\s*\+?\s*Add New", _re.I)
+
+    def add_new_offered(self) -> list[str]:
+        """Visible '+ Add New' controls on the manage list (149911: must be none)."""
+        texts = [(t or "").strip() for t in self.page.locator(self.ADD_NEW_CONTROL).all_inner_texts()]
+        return [t for t in texts if self.ADD_NEW_RE.search(t)]
+
+    def list_row_codes(self) -> list[str]:
+        return [r.get("code", "") for r in self.list_rows()]
 
     def read_data(self) -> dict:
         values = {key: self.text_value(key) for key in TEXT_KEYS}
@@ -488,7 +509,8 @@ class MediaCenterPublicView(BasePage):
 REAL_IDS = {"QCDEMO-130709-FEED-01": "206621", "QCDEMO-130709-FEED-02": "206629",
             "QCDEMO-130709-FEED-03": "206637"}
 _PUT_KEYS = ("externalReferenceCode", "defaultLanguageId", "sectionHeading", "sectionHeading_i18n", "eyebrow",
-             "eyebrow_i18n", "ctaLabel", "ctaLabel_i18n", "ctaDestination", "displayOrder", "activeStatus")
+             "eyebrow_i18n", "ctaLabel", "ctaLabel_i18n", "ctaDestination", "displayOrder", "activeStatus",
+             "itemsPreviewed")
 _LOCK_DIR = _os.getenv(
     "QC_MC_FEED_SCRATCH_DIR",
     r"C:\Users\HP\AppData\Local\Temp\claude\d--Qatar-Chamber-QaterChamber-main"
@@ -507,6 +529,8 @@ def comparable(record: dict) -> dict:
         "displayOrder": record.get("displayOrder"),
         "sectionType": (record.get("sectionType") or {}).get("key"),
         "activeStatus": record.get("activeStatus"),
+        "itemsPreviewed": record.get("itemsPreviewed"),
+        "displayMode": (record.get("displayMode") or {}).get("key"),
         "status": (record.get("status") or {}).get("code"),
     }
 
@@ -633,6 +657,8 @@ class RealFeedSectionAdminPage(McFeedSectionAdminPage):
             raise AssertionError(f"snapshot is not {self.code}")
         body = {k: snapshot[k] for k in _PUT_KEYS if k in snapshot}
         body["sectionType"] = {"key": (snapshot.get("sectionType") or {}).get("key")}
+        if snapshot.get("displayMode"):
+            body["displayMode"] = {"key": (snapshot.get("displayMode") or {}).get("key")}
         status, text = self._fetch("PUT", body)
         self.last_restore_response = (status, text[:300])
         _logger.info("%s exact restore PUT -> %s", self.code, status)

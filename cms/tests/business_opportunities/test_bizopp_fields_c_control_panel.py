@@ -45,7 +45,7 @@ from cms.pages.business_opportunities.opportunity_fields_c_page import (
     BizOppFieldsCPage,
 )
 from cms.pages.business_opportunities.opportunity_sections_d_page import BizOppListingPublicD
-from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED, normalize_status
 from core.utils.waits import WaitTimeoutError, wait_until
 from core.web.browser import new_context
 
@@ -130,6 +130,48 @@ def anon_pages(browser):
 
 
 AUTH_FREE = pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+
+# Retest namespace (e.g. BIZOPP_C_PREFIX=QCTEST-R30-B-C-): the page module's guards (in_namespace,
+# identify_created, guarded delete) read this module global at call time, so both stay in step.
+if os.environ.get("BIZOPP_C_PREFIX"):
+    import cms.pages.business_opportunities.opportunity_fields_c_page as _ns_page  # noqa: E402
+    if not os.environ["BIZOPP_C_PREFIX"].startswith("QCTEST-"):
+        raise ValueError("BIZOPP_C_PREFIX must stay in the QCTEST- namespace")
+    _ns_page.C_QCTEST_PREFIX = C_QCTEST_PREFIX = os.environ["BIZOPP_C_PREFIX"]
+
+
+class _Listing(BizOppListingPublicD):
+    """The listing page object lost `click_load_more` in the web rework (e8021a4);
+    open_expanded() still calls it once the QCTEST cards push the grid past one page."""
+
+    def click_load_more(self) -> None:
+        self.click(self.LOAD_MORE_BUTTON)
+
+
+_LIST_COLUMNS_JS = """(key) => {
+    const heads = [...document.querySelectorAll('table thead th')].map(t => t.innerText.trim().toUpperCase());
+    const si = heads.indexOf('STATUS'), li = heads.indexOf('LIFECYCLE');
+    const out = {};
+    for (const r of document.querySelectorAll('table tbody tr')) {
+        const link = r.querySelector('a[href*="editEntry="]');
+        const ids = [...r.querySelectorAll('*')].flatMap(n => [...n.attributes]
+            .filter(a => a.name.startsWith('data-qc-oel-') && a.name !== 'data-qc-oel-label').map(a => a.value));
+        const m = link ? link.getAttribute('href').match(/editEntry=([^&#]+)/) : null;
+        const code = m ? decodeURIComponent(m[1]) : '';
+        if (key !== code && !ids.includes(key)) continue;
+        const tds = [...r.querySelectorAll('td')];
+        out.status = si >= 0 && tds[si] ? tds[si].innerText.trim() : '';
+        out.lifecycle = li >= 0 && tds[li] ? tds[li].innerText.trim() : '';
+    }
+    return out;
+}"""
+
+
+def _list_columns(admin, key: str) -> dict:
+    """Header-based read of the STATUS / LIFECYCLE cells of one row (by entry id or code).
+    The Business Opportunity list gained LIFECYCLE / ARCHIVE DATE / DISPLAY ORDER columns
+    (bug 149530 fix, 2026-10-13), so positional `tds[1]` no longer is the status."""
+    return admin.page.evaluate(_LIST_COLUMNS_JS, key)
 
 
 def _login(page, role: str = C_ROLE_EDITOR, user_id: str = C_EDITOR_USER_ID) -> BizOppFieldsCPage:
@@ -248,7 +290,7 @@ def _draft_probe(admin, disposable, data: dict, tc: str, what: str, role: str, c
         admin.open_entry_en(entry.code)
         result["stored_value_of_empty_field"] = admin.text_value(check_key)
         admin.open_list_all()
-        result["row_status"] = admin.row_status(entry)
+        result["row_status"] = normalize_status(_list_columns(admin, entry.code).get("status", ""))
     DRAFT_FINDINGS.append({"tc": tc, "what": what, **result})
     allure.attach(json.dumps(result, ensure_ascii=False, indent=1, default=str), name=f"Save as Draft ({role}, {what})")
     return result
@@ -364,7 +406,7 @@ def test_tc_143205_valid_sort_order_accepted(page, disposable, anon_pages):
     assert stored == "100", f"Sort Order not persisted: {stored!r}"
     assert active == "true", f"Active Status stored {active!r}; public step not run"
     admin.open_list_all()
-    assert admin.row_status(entry) == STATUS_PUBLISHED, "record is not Published"
+    assert normalize_status(_list_columns(admin, entry.code).get("status", "")) == STATUS_PUBLISHED, "record is not Published"
 
     other_title = f"{C_QCTEST_PREFIX}143205-B-{STAMP} Opportunity"
     other = _create(admin, disposable, _data("143205", displayOrder="200", opportunityTitle=other_title,
@@ -372,20 +414,21 @@ def test_tc_143205_valid_sort_order_accepted(page, disposable, anon_pages):
     admin.open_entry_en(other.code)
     assert (admin.text_value(K_SORT), admin.active_status_stored()) == ("200", "true"), "second record not stored as set"
     admin.open_list_all()
-    assert admin.row_status(other) == STATUS_PUBLISHED, "second record is not Published"
+    assert normalize_status(_list_columns(admin, other.code).get("status", "")) == STATUS_PUBLISHED, "second record is not Published"
 
     holder = {}
 
     def _both_listed() -> bool:
-        view = BizOppListingPublicD(anon_pages())   # fresh unauthenticated context each poll
+        view = _Listing(anon_pages())   # fresh unauthenticated context each poll
         view.open_expanded("en")
         holder["view"], holder["titles"] = view, view.card_titles()
         return entry.title in holder["titles"] and other_title in holder["titles"]
 
     try:
         wait_until(_both_listed, timeout=60.0, poll=2.0)
-    except WaitTimeoutError:
-        pass
+    except WaitTimeoutError as exc:
+        if "titles" not in holder:
+            pytest.fail(f"the public listing never loaded: {exc}")
     titles, view = holder["titles"], holder["view"]
     allure.attach("\n".join(f"{i + 1}. {t}" for i, t in enumerate(titles)), name="public listing order")
     try:

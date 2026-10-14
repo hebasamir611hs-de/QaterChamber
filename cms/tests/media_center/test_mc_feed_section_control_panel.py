@@ -42,7 +42,10 @@ from cms.pages.media_center.mc_feed_section_admin_page import (
     K_CTA_LABEL,
     K_EYEBROW,
     K_HEADING,
+    K_ITEMS,
+    K_MODE,
     K_ORDER,
+    MODE_CAROUSEL,
     K_TYPE,
     MSG_ARABIC_REQUIRED,
     PREFIX,
@@ -378,8 +381,10 @@ def test_section_type_options(editor):
 ])
 def test_workflow_setting_present(editor, tc, pattern, subject):
     """MEDIA-MCHUB-TC-188 / 189 — the Feed Section form offers the US-005
-    workflow's 'number of items previewed' / 'display mode' setting."""
-    editor.open_create_form_en()
+    workflow's 'number of items previewed' / 'display mode' setting.
+    HEALED 2026-10-13 (149909/149911 fixes): the list no longer offers a create
+    form, so the form is read on the real Video Gallery entry (read-only)."""
+    editor.open_entry_en(FEED_VIDEO)
     inventory = editor.form_field_inventory()
     text = editor.form_text()
     png = editor.evidence(f"{tc}_form_inventory")
@@ -420,30 +425,25 @@ def test_display_order_invalid_refused(editor, reg, anon, tc, values):
 # ===========================================================================
 # New section on the hub — TC-204
 # ===========================================================================
+# NOTE: TC-204 (149258) as written is obsolete after the 149911 fix (fixed set, no Add New); re-mark pending user decision.
 @marks(pytest.mark.functional_high, pytest.mark.uat, pytest.mark.tc_149258)
-def test_new_section_appears_on_hub(editor, reg, anon):
-    """MEDIA-MCHUB-TC-204 — a Feed Section created and published by the Editor
-    appears on the hub with its eyebrow, heading, cards and CTA, and the CTA
-    opens its destination."""
+def test_new_section_appears_on_hub(editor):
+    """MEDIA-MCHUB-TC-204 — HEALED 2026-10-13 (bug 149911 fix, QA-owner rule:
+    the hub draws a FIXED set of three feed sections, so a new record not
+    rendering is by design and 'Add New' existing is the defect). The manage
+    list offers no Add New, lists exactly the three real sections, and each
+    still offers Edit."""
     tc = "204"
-    entry = create_published(editor, reg, tc)
     editor.open_list_all()
-    row = editor.row_of(entry)
-    assert row.get("code") and row["code"] not in ("QCDEMO-130709-FEED-01",), "no unique system identifier"
-    view = anon()
-    ok, sections = view.poll_sections(lambda ss: any(s["heading"] == entry.heading for s in ss),
-                                      timeout=PUBLIC_WAIT_S)
-    png = view.evidence(shot(f"{tc}_public_en"))
-    record(tc, "public sections", rendered=ok, screenshot=png,
-           sections=[{k: s[k] for k in ("index", "key", "heading", "eyebrow", "cta_label", "cta_href")}
-                     for s in sections])
-    assert ok, (f"the published, Active QCTEST Feed Section {entry.heading!r} is not shown on the hub; the hub "
-                f"shows only {[s['heading'] for s in sections]}")
-    target = view.section_with("heading", entry.heading)
-    assert target["eyebrow"] == "QCTEST Watch" and target["cta_label"] == "QCTEST See videos"
-    assert target["index"] == len(sections) - 1 and target["cards"] > 0
-    landed = view.follow_cta(target["index"])
-    assert landed.rstrip("/").endswith(VIDEO_LIBRARY), f"CTA opened {landed}"
+    offered = editor.add_new_offered()
+    rows = editor.list_rows()
+    png = editor.evidence(f"{tc}_list_no_add_new")
+    record(tc, "manage list", add_new=offered, rows=rows, screenshot=png)
+    assert not offered, f"the fixed Feed Section list still offers {offered}; {png}"
+    real = sorted(r["code"] for r in rows if r.get("code") in REAL_IDS_LOCAL)
+    assert real == sorted(REAL_IDS_LOCAL), f"the three real feed sections are not all listed: {rows}"
+    editor.open_entry_en(FEED_VIDEO)
+    assert editor.text_value(K_HEADING), "the real Video Gallery section can no longer be opened for edit"
 
 
 # ===========================================================================
@@ -458,16 +458,84 @@ def test_new_section_appears_on_hub(editor, reg, anon):
     pytest.param("216", "   ", marks=[pytest.mark.tc_149270], id="tc216_whitespace"),
     pytest.param("217", "video library page", marks=[pytest.mark.tc_149271], id="tc217_malformed"),
 ])
-def test_cta_destination_invalid_refused(editor, reg, anon, tc, value):
+def test_cta_destination_invalid_refused(browser, anon, tc, value):
     """MEDIA-MCHUB-TC-215 / 216 / 217 — an empty / whitespace-only / malformed
-    CTA Destination is refused and the public CTA is unchanged."""
-    entry = create_published(editor, reg, tc)
-    before = open_for_edit(editor, entry)
-    result = edit_publish(editor, entry, {K_CTA_DEST: value}, tc)
-    assert_refused_and_unchanged(editor, entry, tc, result, K_CTA_DEST, "CTA Destination", before)
-    view, ok, sections, png = public_ok(anon, tc, lambda ss: bool(ss))
+    CTA Destination is refused and the public CTA is unchanged.
+    HEALED 2026-10-13: no create form any more (149911 fix) — runs on the real
+    Video Gallery section under lock + snapshot -> edit -> restore -> diff."""
+    with real_window(browser, tc, [FEED_VIDEO]) as w:
+        before = w.snaps[FEED_VIDEO].get("ctaDestination")
+        driver = w.drivers[FEED_VIDEO]
+        res = w.attempt(FEED_VIDEO, {K_CTA_DEST: value})
+        res["screenshot"] = driver.evidence(f"{tc}_real_after_publish")
+        after = w.written[FEED_VIDEO]
+        badge = w.row_status(FEED_VIDEO)
+        record(tc, "refusal check (real FEED-03)", went_through=res["went_through"], refused=res["refused"],
+               messages=res["messages"], evidence=res["evidence"], stored_before=before,
+               stored_after=after.get("ctaDestination"), status=badge, screenshot=res["screenshot"])
+        _, ok, sections, png = public_poll(anon, tc, lambda ss: bool(ss))
+        valid = {}
+        if tc == "217":  # dev retest step 3: a valid site path saves
+            valid = w.attempt(FEED_VIDEO, {K_CTA_DEST: VIDEO_LIBRARY})
+            record(tc, "valid destination saves", result=valid,
+                   stored=w.written[FEED_VIDEO].get("ctaDestination"))
+    assert not res["went_through"], (f"step 4: Publish with an invalid CTA Destination went through; "
+                                     f"stored ctaDestination now {after.get('ctaDestination')!r}")
+    assert after.get("ctaDestination") == before, f"ctaDestination changed {before!r} -> {after.get('ctaDestination')!r}"
+    assert badge == STATUS_PUBLISHED, f"row badge changed to {badge!r}"
+    assert _cta_destination_refusal(res), f"the refusal is not the CTA Destination link error: {res['evidence']}"
     bad = [s for s in sections if s["cta_href"] in (value, value.strip()) or "video library page" in s["cta_href"]]
     assert not bad, f"the invalid destination reached a public CTA: {bad}"
+    if tc == "217":
+        assert valid.get("went_through"), f"dev step 3: {VIDEO_LIBRARY} was not accepted: {valid}"
+
+
+MSG_INVALID_LINK = "Please enter a valid link: a page of this site starting with /"
+
+
+def _cta_destination_refusal(res: dict) -> bool:
+    """The refusal must belong to CTA Destination: either the form marks that
+    field, or (LIVE 2026-10-13: no per-field marker) the server refused the
+    PUT (4xx) with the CTA-link rule's own message — the only field edited."""
+    ev = res.get("evidence") or {}
+    owners = json.dumps(ev.get("field_error_owners", []) + ev.get("invalid_fields", []), ensure_ascii=False)
+    if K_CTA_DEST in owners:
+        return True
+    server_4xx = any(400 <= int(c) < 500 for c in ev.get("save_responses", []) if str(c).isdigit())
+    return server_4xx and any(MSG_INVALID_LINK in t for t in ev.get("editbar", []))
+
+
+# ---- 149909 dev retest: Items Previewed / Display Mode are applied ------------------
+@marks(pytest.mark.functional_low, pytest.mark.tc_149242)
+def test_items_previewed_display_mode_applied(browser, anon):
+    """MEDIA-MCHUB-TC-188/189 follow-up (bug 149909 retest steps): Video
+    Gallery set to 6 / Carousel shows 6 videos in ONE row on the hub; 0 and 13
+    are refused. Real FEED-03 under lock + snapshot -> edit -> restore -> diff."""
+    tc = "188b"
+    refusals = {}
+    with real_window(browser, tc, [FEED_VIDEO]) as w:
+        driver = w.drivers[FEED_VIDEO]
+        for bad in ("0", "13"):
+            r = w.attempt(FEED_VIDEO, {K_ITEMS: bad})
+            after = w.written[FEED_VIDEO]
+            refusals[bad] = {"went_through": r["went_through"], "stored": after.get(K_ITEMS),
+                             "messages": r["messages"]}
+        res = w.edit(FEED_VIDEO, {K_ITEMS: 6, K_MODE: MODE_CAROUSEL})
+        stored = (w.written[FEED_VIDEO].get(K_ITEMS),
+                  str((w.written[FEED_VIDEO].get(K_MODE) or {}).get("key") or "").casefold())
+        view, ok, sections, png = public_poll(
+            anon, tc, lambda ss: video_section(ss).get("cards") == 6)
+        cards = view.page.evaluate(
+            """() => { const s = document.querySelector('[data-qc-mcvf-section-object]'); if (!s) return [];
+                return [...s.querySelectorAll('a[class*="-card"], article[class*="-card"]')]
+                  .filter(c => c.getClientRects().length).map(c => Math.round(c.getBoundingClientRect().top)); }""")
+        record(tc, "items/mode", refusals=refusals, publish=res, stored=stored, card_tops=cards, screenshot=png)
+    for bad, r in refusals.items():
+        assert not r["went_through"] and str(r["stored"]) != bad, f"Items Previewed {bad} was accepted: {r}"
+    assert res["went_through"], f"6 / Carousel was not published: {res}"
+    assert stored == (6, "carousel"), f"stored Items Previewed / Display Mode {stored}"
+    assert len(cards) == 6, f"the hub video section renders {len(cards)} cards, expected 6; {png}"
+    assert len(set(cards)) == 1, f"the 6 cards are not in one row (tops {cards}); {png}"
 
 
 # ===========================================================================
@@ -544,11 +612,33 @@ class RealWindow:
         self.drivers: dict = {}
         self.snaps: dict = {}
         self.written: dict = {}
+        self.intended: dict = {}   # code -> comparable keys THIS test may have written
+
+    def mark_intent(self, code: str, data: dict) -> None:
+        """Recorded BEFORE the save, so a publish that lands and then raises is
+        still recognised as ours (restore must not skip it as 'foreign')."""
+        self.intended.setdefault(code, set()).update(_comparable_keys(data))
+        self.written.setdefault(code, self.snaps[code])
+
+    def attempt(self, code: str, data: dict) -> dict:
+        """Edit -> Publish that may be refused; `written` tracks what is stored."""
+        driver = self.drivers[code]
+        expected = self.written.get(code, self.snaps[code])
+        self.mark_intent(code, data)
+        try:
+            return driver.edit_via_form(data, expected)
+        finally:
+            self.written[code] = _settled_or_live(driver, expected)
 
     def edit(self, code: str, data: dict) -> dict:
         driver = self.drivers[code]
         expected = self.written.get(code, self.snaps[code])
-        result = driver.edit_via_form(data, expected)
+        self.mark_intent(code, data)
+        try:
+            result = driver.edit_via_form(data, expected)
+        except Exception:
+            self.written[code] = driver.api_get()
+            raise
         try:
             self.written[code] = _wait_committed(driver, expected)
         except Exception:  # noqa: BLE001 — written becomes whatever is stored now
@@ -563,6 +653,22 @@ class RealWindow:
         driver.open_list_all()
         rows = [r for r in driver.list_rows() if r["code"] == code]
         return normalize_status(rows[0]["status"]) if len(rows) == 1 else ""
+
+
+_KEY_MAP = {K_HEADING: "sectionHeading_i18n", K_EYEBROW: "eyebrow_i18n", K_CTA_LABEL: "ctaLabel_i18n",
+            K_CTA_DEST: "ctaDestination", K_ORDER: "displayOrder", K_TYPE: "sectionType",
+            "activeStatus": "activeStatus", K_ITEMS: "itemsPreviewed", K_MODE: "displayMode"}
+
+
+def _comparable_keys(data: dict) -> set:
+    return {_KEY_MAP[k.removesuffix("_ar")] for k in data if k.removesuffix("_ar") in _KEY_MAP} | {"status"}
+
+
+def _settled_or_live(driver, previous: dict) -> dict:
+    try:
+        return _wait_committed(driver, previous, timeout=20.0)
+    except Exception:  # noqa: BLE001 — refused save: nothing changed
+        return driver.api_get()
 
 
 def _wait_committed(driver, previous: dict, timeout: float = 90.0) -> dict:
@@ -591,7 +697,9 @@ def _restore_all(window: "RealWindow", page) -> list:
         expected = window.written.get(code, snap)
         try:
             live = driver.api_get()
-            foreign = record_diff(expected, live)
+            ours = window.intended.get(code, set())
+            # Only keys this test did NOT intend to write count as someone else's change.
+            foreign = [d for d in record_diff(expected, live) if d.split(":", 1)[0] not in ours]
             if foreign:
                 problems.append(f"{code}: changed by someone else during the window - NOT restored: {foreign}")
                 record(window.tc, "NEEDS-DECISION concurrent change before restore", code=code, diff=foreign)

@@ -25,6 +25,8 @@ from time import monotonic
 import allure
 import pytest
 
+from core.utils.waits import WaitTimeoutError, wait_until
+
 from cms.pages.components.object_authoring_page import (
     STATUS_DRAFT,
     STATUS_PENDING_REVIEW,
@@ -43,6 +45,7 @@ from cms.pages.media_center.mc_quick_access_card_admin_page import (
     QacEntry,
 )
 from cms.tests.media_center.qac_support import (  # noqa: F401 — fixtures
+    PUBLISH_CONFIRM_TIMEOUT,
     QAC01,
     VIDEO_LIBRARY,
     attach,
@@ -55,6 +58,9 @@ from cms.tests.media_center.qac_support import (  # noqa: F401 — fixtures
     public_until,
     qac,
     real_cards,
+    real_guard,
+    real_session,
+    guarded_edit,
     record_finding,
     require_active,
     require_role,
@@ -113,32 +119,38 @@ def _parts_loaded(admin) -> dict:
 @pytest.mark.workflow
 @pytest.mark.regression
 @pytest.mark.uat
-def test_editor_created_card_is_published_in_order_and_navigates(qac, real_cards):
-    """MEDIA-MCHUB-TC-198 — Editor create+publish: 7th card, arrow opens the destination."""
-    _labels("149252", "MEDIA-MCHUB-TC-198", "Editor-created card published in its Display Order slot")
-    sessions, registry = qac
-    admin = sessions.admin(ROLE_EDITOR)
-    parts = _parts_loaded(admin)
-    assert parts["list"] and parts["form"] and parts["preview"], f"manage page parts missing: {parts}"
-    entry, result = create(admin, registry, dict(QAC01), "149252")
-    assert result["went_through"] and entry is not None, f"create failed: {result}"
-    if not result.get("arabic_saved"):
-        record_finding("149252", "INFO", note="'Arabic content saved for this record.' not shown (guide 5)",
-                       editbar=result.get("editbar"))
-    started = monotonic()
+def test_editor_created_card_is_published_in_order_and_navigates(qac, real_cards, real_guard):
+    """MEDIA-MCHUB-TC-198 — Editor publishes a card: in its Display Order slot, arrow opens the destination.
+
+    Healed 2026-10-13 (bug 149913 fix): the six quick-access cards are a FIXED
+    set — the manage page no longer offers Add New (asserted), so the Editor's
+    publish is exercised on the real Video Library card under
+    snapshot -> edit -> restore -> diff (real_guard)."""
+    _labels("149252", "MEDIA-MCHUB-TC-198", "Editor-published card in its Display Order slot")
+    # NOTE: the Editor CREATE part of TC149252 is not reachable now (no Add New; Author has no Edit).
+    sessions, admin, ref = real_session(qac, real_guard, "QCDEMO-130709-CARD-02")
     admin.open_list_all()
-    row = admin.row_of(entry)
-    assert row["code"] and row["entry_id"], f"no system identifier on the row: {row}"
-    assert admin.row_status_of(entry) == STATUS_PUBLISHED
-    require_active(admin, entry)
-    values = stored(admin, entry)
-    assert values["cardTitle_ar"] == QAC01["cardTitle_ar"] and \
-        values["cardDescription_ar"] == QAC01["cardDescription_ar"], f"the Arabic content was not stored: {values}"
-    attach("public step adapted (user decision 2026-10-12)", "The six quick-access cards are FIXED by design (hub maxCards=6): a 7th card never renders publicly; QCTEST card visibility is not asserted.")
+    parts = _parts_loaded(admin)
+    offered = admin.add_new_offered()
+    admin.evidence("149252_manage_list")
+    attach("Add New controls", offered)
+    assert not offered, f"PRODUCT: Add New is still offered on a fixed-block object: {offered}"
+    assert parts["list"] and parts["preview"], f"manage page parts missing: {parts}"
+    order_before = real_guard.snapshots[ref.code]["displayOrder"]
+    title = "QCTEST-R30-D Video Library"
+    result = guarded_edit(real_guard, admin, ref, {"cardTitle": title}, "149252")
+    assert result["went_through"], f"the Editor's publish was refused: {result.get('evidence')}"
+    admin.open_list_all()
+    assert admin.wait_row_status(ref, (STATUS_PUBLISHED,), 120) == STATUS_PUBLISHED
+    require_active(admin, ref)
+    values = stored(admin, ref)
+    assert values["cardTitle"] == title and str(values["displayOrder"]) == str(order_before), \
+        f"stored values after publish: {values}"
     visitor = sessions.visitor()
-    public_until(visitor, lambda c: find(c, "QCDEMO-130709-CARD-02").get("href") == VIDEO_LIBRARY,
-                 "a card whose Destination Link is /web/qatar-chamber/video-library", "149252", budget=False)
-    landed = visitor.follow_card("QCDEMO-130709-CARD-02")  # read-only: real card with the same destination
+    cards = public_until(visitor, lambda c: find(c, ref.code).get("title") == title,
+        f"card title = {title!r}", "149252", budget=False)
+    assert find(cards, ref.code).get("href") == VIDEO_LIBRARY, f"card href: {find(cards, ref.code)}"
+    landed = visitor.follow_card(ref.code)
     attach("navigation", landed)
     assert landed["url"].split("?")[0].rstrip("/").endswith(VIDEO_LIBRARY), f"the arrow opened {landed['url']!r}"
 
@@ -149,99 +161,115 @@ def test_editor_created_card_is_published_in_order_and_navigates(qac, real_cards
 @pytest.mark.regression
 @pytest.mark.uat
 def test_author_card_waits_in_pending_review_until_editor_approves(qac, real_cards):
-    """MEDIA-MCHUB-TC-199 — Author submit -> Pending Review (hidden) -> Editor approve -> live."""
-    _labels("149253", "MEDIA-MCHUB-TC-199", "Author card: Pending Review until the Editor approves")
-    sessions, registry = qac
+    """MEDIA-MCHUB-TC-199 — Author has no create/edit/submit path on the fixed cards.
+
+    Converted 2026-10-13 (user decision: BY DESIGN, Add New removed)."""
+    _labels("149253", "MEDIA-MCHUB-TC-199", "Author has no Add New / Edit / Submit on the fixed cards")
+    # NOTE: Author submit -> Pending Review -> Editor approve is not reachable by design now (no Add New, no Author Edit).
+    sessions, _ = qac
     author = sessions.admin(ROLE_AUTHOR)
-    data = card_data("QCTEST Author Card", "QCTEST بطاقة المؤلف", "QCTEST Card submitted by the author.",
-                     "QCTEST بطاقة أرسلها المؤلف.", 800)
-    entry, result = create(author, registry, data, "149253", role=ROLE_AUTHOR)
-    assert result["went_through"] and entry is not None, f"the Author's submit failed: {result}"
-    shown = " | ".join(result.get("editbar", []))
-    if MSG_SUBMITTED_FOR_REVIEW not in shown:
-        record_finding("149253", "WORDING", expected=MSG_SUBMITTED_FOR_REVIEW, shown=shown)
-    status = author.wait_row_status(entry, (STATUS_PENDING_REVIEW,), 60)
-    assert status == STATUS_PENDING_REVIEW, f"the Author's submit landed on {status!r}"
-    visitor = sessions.visitor()
-    assert not _hidden(visitor, "QCTEST Author Card"), "a Pending Review card is visible to visitors"
-    editor = sessions.admin(ROLE_EDITOR)
-    editor.adopt(entry)
-    editor.open_list_all()
-    dialogs = editor.run_row_action(entry, "approve", "")
-    attach("approve dialogs", dialogs)
-    started = monotonic()
-    status = editor.wait_row_status(entry, (STATUS_PUBLISHED,), 120)
-    assert status == STATUS_PUBLISHED, f"after Approve the badge reads {status!r}"
-    trail = editor.history(entry)
-    attach("history", trail)
-    author_name = author.signed_in_user()[1]
-    editor_name = editor.signed_in_user()[1]
-    assert any(author_name in h["who"] and h["when"] for h in trail), f"History lacks the Author's submit: {trail}"
-    assert any(editor_name in h["who"] and h["when"] for h in trail), f"History lacks the Editor's publish: {trail}"
-    attach("public step adapted (user decision 2026-10-12)", "The six quick-access cards are FIXED by design (hub maxCards=6): a 7th card never renders publicly; QCTEST card visibility is not asserted.")
+    require_role(author, ROLE_AUTHOR)
+    author.open_list_all()
+    offered = author.add_new_offered()
+    rows = author.list_rows()
+    author.evidence("149253_author_list")
+    edit_links = author.page.locator('tbody tr a[href*="editEntry="]').count()
+    submit_actions = author.page.locator("tbody tr [data-qc-oel-submit], tbody tr [data-qc-oel-resubmit], "
+                                         "tbody tr [data-qc-oel-publish], tbody tr [data-qc-oel-approve]").count()
+    attach("Author list", {"add_new": offered, "rows": len(rows), "edit_links": edit_links, "submit": submit_actions})
+    assert rows, "PRECONDITION: the Author sees no card rows"
+    assert not offered, f"the Author is offered Add New: {offered}"
+    assert edit_links == 0, f"the Author is offered Edit on {edit_links} row(s)"
+    assert submit_actions == 0, f"the Author is offered {submit_actions} submit/publish/approve control(s)"
 
 
 @pytest.mark.tc_149255
 @pytest.mark.functional_high
 @pytest.mark.workflow
-def test_preview_renders_draft_card_en_ar_but_visitors_do_not_see_it(qac, real_cards):
-    """MEDIA-MCHUB-TC-201 — Preview panel renders the draft card in EN and AR."""
-    _labels("149255", "MEDIA-MCHUB-TC-201", "Preview renders a draft card in EN/AR, not public")
-    sessions, registry = qac
-    author = sessions.admin(ROLE_AUTHOR)
-    data = card_data("QCTEST Preview Card", "QCTEST بطاقة المعاينة", "QCTEST Preview card.", "QCTEST بطاقة معاينة.", 800)
-    entry = create_ok(author, registry, data, "149255", role=ROLE_AUTHOR, publish=False)
-    author.open_list_all()
-    assert author.row_status_of(entry) == STATUS_DRAFT
-    parts = _parts_loaded(author)
-    late = Late()
-    author.click_row_preview(entry)
-    en = author.preview_frame_text(("QCTEST Preview Card",))
-    author.evidence("149255_preview_en")
-    attach("preview EN", en)
-    banner_ok = "unpublished (draft)" in en.get("frame_text", "") or "draft" in en.get("frame_text", "").lower()
-    if not ("Explore the hub" in en.get("frame_text", "") and "QCTEST Preview Card" in en.get("frame_text", "")):
-        late.failures.append(f"the preview does not render the Media Center hub with the card (panel "
-                             f"{en.get('panel_text', '')[:120]!r}, frame {en.get('frame_url')!r})")
-    author.click_preview_locale("ar")
-    ar = author.preview_frame_text(("QCTEST بطاقة المعاينة",))
-    author.evidence("149255_preview_ar")
-    attach("preview AR", ar)
-    visitor = sessions.visitor()
-    assert not _hidden(visitor, "QCTEST Preview Card"), "the draft card is visible to a logged-out visitor"
-    assert banner_ok, f"no draft banner in the preview: {en.get('frame_text', '')[:300]!r}"
-    assert "QCTEST بطاقة المعاينة" in ar.get("frame_text", "") and ar.get("frame_dir") == "rtl", \
-        f"the AR preview does not show the Arabic title right-to-left: {ar.get('frame_text', '')[:200]!r}"
-    late.raise_if_any()
+def test_preview_renders_draft_card_en_ar_but_visitors_do_not_see_it(qac, real_cards, real_guard):
+    """MEDIA-MCHUB-TC-201 — Preview panel renders the card inside the Media Center hub in EN and AR.
 
+    Healed 2026-10-13 (bugs 149906 / 149913): Add New is gone and the Site
+    Content Author has no Edit on any of the six fixed cards, so no draft
+    card can be made without drafting (de facto unpublishing) a real card,
+    which is forbidden. The Preview is exercised READ-ONLY on the real
+    published Photo Gallery card as the Editor: the frame must be the hub
+    (not the field list) with the card, EN left-to-right and AR right-to-left."""
+    _labels("149255", "MEDIA-MCHUB-TC-201", "Preview renders the card in the Media Center hub (EN/AR)")
+    # NOTE: the draft + logged-out-visitor part of TC149255 is not reachable now (Author has no Edit, no Add New).
+    real_guard.take("QCDEMO-130709-CARD-01")  # read-only snapshot (restore is a no-op diff)
+    title_ar = real_guard.snapshots["QCDEMO-130709-CARD-01"].get("cardTitle_i18n", {}).get("ar_SA", "")
+    assert title_ar, "PRECONDITION: the snapshot has no Arabic card title"
+    sessions, _ = qac
+    editor = sessions.admin(ROLE_EDITOR)
+    editor.open_list_all()
+    real = [r for r in editor.list_rows() if r["code"] == "QCDEMO-130709-CARD-01"]
+    assert real, "PRECONDITION: the real Photo Gallery card is not listed"
+    entry = QacEntry(real[0]["title"].strip(), real[0]["entry_id"], real[0]["code"])
+    attach("draft step not runnable", "No Add New and no Author edit on the fixed cards; preview checked "
+           "on the published real card (read-only).")
+    editor.click_row_preview(entry)
+    en = editor.preview_frame_text((entry.title,), 45)
+    editor.evidence("149255_preview_en")
+    attach("preview EN", en)
+    assert "/media-center?" in en.get("frame_url", ""), f"the preview frame is not the hub: {en.get('frame_url')!r}"
+    assert "Explore the hub" in en.get("frame_text", "") and entry.title in en.get("frame_text", ""), \
+        f"the preview does not render the Media Center hub with the card (frame {en.get('frame_url')!r})"
+    editor.click_preview_locale("ar")
+    seen = {"ar": {}}
+
+    def _ar_loaded() -> bool:
+        seen["ar"] = editor.preview_frame_text((), 5)
+        return seen["ar"].get("frame_dir") == "rtl" and title_ar in seen["ar"].get("frame_text", "")
+
+    wait_until(_ar_loaded, timeout=45.0, poll=1.0)  # WaitTimeoutError fails the test with its reason
+    ar = seen["ar"]
+    editor.evidence("149255_preview_ar")
+    attach("preview AR", ar)
+    assert ar.get("frame_dir") == "rtl" and title_ar in ar.get("frame_text", ""), \
+        f"the AR preview lacks {title_ar!r} right-to-left: {ar.get('frame_url')!r} dir={ar.get('frame_dir')!r}"
 
 @pytest.mark.tc_149256
 @pytest.mark.functional_high
 @pytest.mark.workflow
 @pytest.mark.regression
-def test_unpublish_removes_card_and_grid_reflows(qac, real_cards):
-    """MEDIA-MCHUB-TC-202 — Unpublish -> UNPUBLISHED, card gone, six real cards fill the grid."""
+def test_unpublish_removes_card_and_grid_reflows(qac, real_cards, real_guard):
+    """MEDIA-MCHUB-TC-202 — Unpublish -> UNPUBLISHED, card gone, the other cards close the gap.
+
+    Healed 2026-10-13: no Add New, so a real card (CARD-02, guard-approved) is
+    unpublished for the shortest possible window, re-published through the row
+    action at once, and restored + diffed by real_guard."""
     _labels("149256", "MEDIA-MCHUB-TC-202", "Unpublish removes the card from the hub")
-    sessions, registry = qac
+    sessions, _ = qac
+    ref = real_guard.take("QCDEMO-130709-CARD-02")
     admin = sessions.admin(ROLE_EDITOR)
-    entry = create_ok(admin, registry, dict(QAC01), "149256")
-    require_active(admin, entry)
-    idx = expected_index(real_cards, 700)
     visitor = sessions.visitor()
-    late = Late()
-    attach("public step adapted (user decision 2026-10-12)", "The six quick-access cards are FIXED by design (hub maxCards=6): a 7th card never renders publicly; QCTEST card visibility is not asserted.")
+    before = public_until(visitor, lambda c: bool(find(c, ref.code)), "card shown", "149256", budget=False)
+    expected_rest = [c["erc"] for c in before if c["erc"] != ref.code]
     admin.open_list_all()
-    dialogs = admin.run_row_action(entry, "unpublish")
-    attach("unpublish dialogs", dialogs)
-    started = monotonic()
-    status = admin.wait_row_status(entry, (STATUS_UNPUBLISHED,), 60)
-    assert status == STATUS_UNPUBLISHED, f"after Unpublish the badge reads {status!r} (expected UNPUBLISHED)"
-    real = [c["code"] for c in real_cards["cards"] if c["active"] and c["status"] == "PUBLISHED"]
-    cards = public_until(visitor, lambda c: not find(c, entry.code), "QAC-01 gone", "149256", started=started)
-    assert [c["erc"] for c in cards] == sorted(real, key=lambda k: [x["order"] for x in real_cards["cards"]
-                                                                   if x["code"] == k][0]), \
-        f"the six configured cards do not fill the grid in order: {[c['erc'] for c in cards]}"
-    late.raise_if_any()
+    real_guard.check_before_edit(ref.code)
+    failure = None
+    try:
+        dialogs = admin.run_real_row_action(ref, "unpublish", real_guard)
+        attach("unpublish dialogs", dialogs)
+        started = monotonic()
+        status = admin.wait_row_status(ref, (STATUS_UNPUBLISHED,), 60)
+        try:
+            assert status == STATUS_UNPUBLISHED, f"after Unpublish the badge reads {status!r} (expected UNPUBLISHED)"
+            cards = public_until(visitor, lambda c: not find(c, ref.code), "card gone", "149256", started=started)
+            assert [c["erc"] for c in cards] == expected_rest,                 f"the remaining cards do not close the gap in order: {[c['erc'] for c in cards]}"
+        except AssertionError as exc:
+            failure = exc
+    finally:
+        admin.open_list_all()
+        if admin.row_status_of(ref) != STATUS_PUBLISHED:
+            attach("re-publish dialogs", admin.run_real_row_action(ref, "publish", real_guard))
+            admin.wait_row_status(ref, (STATUS_PUBLISHED,), PUBLISH_CONFIRM_TIMEOUT)
+        real_guard.record_written(ref.code)
+    assert admin.row_status_of(ref) == STATUS_PUBLISHED, "the real card was not re-published"
+    public_until(visitor, lambda c: bool(find(c, ref.code)), "card back", "149256", budget=False)
+    if failure:
+        raise failure
 
 
 @pytest.mark.tc_149257
@@ -353,29 +381,37 @@ def test_history_records_each_change_with_actor_and_time(qac, real_cards):
 @pytest.mark.auth
 @pytest.mark.workflow
 @pytest.mark.regression
-def test_author_cannot_approve_pending_card(qac, real_cards):
-    """MEDIA-MCHUB-TC-276 — no Approve for the Author; a forced approve is refused."""
-    _labels("149330", "MEDIA-MCHUB-TC-276", "Author cannot approve a Pending Review card")
-    sessions, registry = qac
+def test_author_cannot_approve_pending_card(qac, real_cards, real_guard):
+    """MEDIA-MCHUB-TC-276 — no Approve for the Author; a forced approve is refused with Access Denied.
+
+    Healed 2026-10-13 (bug 149913): the Author can no longer create (no Add New)
+    nor edit the six fixed cards, so no Pending Review card can be made. The
+    forced approve is POSTed from the Author's session against a real card
+    under snapshot -> restore -> diff; the role check must refuse it (403)."""
+    _labels("149330", "MEDIA-MCHUB-TC-276", "Author cannot approve a card (forced approve refused)")
+    # NOTE: the Author submit -> Pending Review part of TC149330 is not reachable now (Author has no Edit, no Add New).
+    sessions, _ = qac
+    ref = real_guard.take("QCDEMO-130709-CARD-01")
     author = sessions.admin(ROLE_AUTHOR)
-    data = card_data("QCTEST Author Card", "QCTEST بطاقة المؤلف", "QCTEST Card submitted by the author.",
-                     "QCTEST بطاقة أرسلها المؤلف.", 800)
-    entry, result = create(author, registry, data, "149330", role=ROLE_AUTHOR)
-    assert result["went_through"] and entry is not None, f"PRECONDITION: Author submit failed: {result}"
-    assert author.wait_row_status(entry, (STATUS_PENDING_REVIEW,), 60) == STATUS_PENDING_REVIEW
+    require_role(author, ROLE_AUTHOR)
+    author.open_list_all()
+    rows = [r for r in author.list_rows() if r["entry_id"] == ref.entry_id]
+    assert rows, "PRECONDITION: the Author does not see the card row"
+    entry = QacEntry(rows[0]["title"].strip(), ref.entry_id, rows[0]["code"])
     actions = author.row_actions(entry)
     attach("Author row actions", actions)
     assert not {"approve", "publish"} & set(actions), f"the Author is offered {actions}"
-    require_role(author, ROLE_AUTHOR)
-    forced = author.forced_transition("approve", entry.entry_id)
+    real_guard.check_before_edit(ref.code)
+    try:
+        forced = author.forced_transition("approve", ref.entry_id)
+    finally:
+        real_guard.record_written(ref.code)
     author.evidence("149330_after_forced")
     attach("forced approve", forced)
-    status = author.wait_row_status(entry, (STATUS_PENDING_REVIEW, STATUS_PUBLISHED), 20)
-    assert not _hidden(sessions.visitor(), "QCTEST Author Card"), "the Author's card is public"
-    assert status == STATUS_PENDING_REVIEW, f"PRODUCT: after the forced approve the badge reads {status!r}"
-    assert forced["status"] >= 400, f"PRODUCT: the forced approve answered {forced}"
-    if MSG_ACCESS_DENIED not in forced["body"]:
-        record_finding("149330", "WORDING", expected=MSG_ACCESS_DENIED, shown=forced)
+    assert forced["status"] == 403, f"PRODUCT: the forced approve answered {forced}"
+    assert MSG_ACCESS_DENIED in forced["body"], f"PRODUCT: no Access Denied message: {forced}"
+    assert real_guard.written[ref.code].get("dateModified") == real_guard.snapshots[ref.code].get("dateModified"), \
+        "PRODUCT: the forced approve modified the card"
 
 
 @pytest.mark.tc_149331
@@ -414,7 +450,7 @@ def test_author_cannot_edit_card_not_assigned_to_them(qac, real_cards):
     author.open_list_all()
     assert not author._row_a(real).first.locator('a[href*="editEntry="]').count(), "the Author has Edit on a real card"
     public_until(sessions.visitor(), lambda c: find(c, real.code).get("title") == "Photo Gallery",
-                 "real card title unchanged", "149331", budget=False)
+        "real card title unchanged", "149331", budget=False)
 
 
 @pytest.mark.tc_149333
@@ -433,7 +469,7 @@ def test_form_manager_cannot_create_hub_content(qac, real_cards):
     outcome = {"form_visible": form, "access_denied_shown": MSG_ACCESS_DENIED in body, "body": body[:600]}
     if form:
         data = card_data("QCTEST Form Manager Card", "QCTEST بطاقة مدير النماذج", "QCTEST form manager card.",
-                         "QCTEST بطاقة مدير النماذج.", 1000)
+        "QCTEST بطاقة مدير النماذج.", 1000)
         fm.fill_card(data)
         res = save(fm, ROLE_FORM_MANAGER, True)
         outcome.update({"went_through": res["went_through"], "messages": res["messages"]})
@@ -462,7 +498,7 @@ def test_access_denied_message_in_arabic_for_site_member(qac):
     shot = member.evidence("149337_member_ar")
     parts = member.manage_page_parts()
     attach("site member AR page", {"url": member.page.url, "title": member.page.title(), "body": body[:800],
-                                   "form": parts["form"], "rows": parts["rows"]})
+        "form": parts["form"], "rows": parts["rows"]})
     assert not parts["form"] and parts["rows"] == 0, "PRODUCT: the site member can see the authoring list/form"
     assert MSG_ACCESS_DENIED_AR in body, \
         f"the AR page does not show the Arabic Access Denied message (title {member.page.title()!r}; {shot})"

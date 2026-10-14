@@ -228,6 +228,21 @@ WORKFLOW_STATUSES = (
     STATUS_SCHEDULED,
 )
 
+# ── Publish success message ─────────────────────────────────────────────
+# The Editor's Publish now shows Liferay's standard toast instead of the
+# custom "Saved and published."; confirmed as the correct message by the
+# QA owner 2026-10-13. Either one proves the publish succeeded.
+MSG_SAVED_AND_PUBLISHED_CUSTOM = "Saved and published."
+MSG_LIFERAY_REQUEST_SUCCESS = "Your request completed successfully."
+
+
+def shows_message(text: str, expected: str) -> bool:
+    """`expected in text`, also accepting Liferay's standard toast where the
+    expected message is the publish success message."""
+    if expected in text:
+        return True
+    return expected == MSG_SAVED_AND_PUBLISHED_CUSTOM and MSG_LIFERAY_REQUEST_SUCCESS in text
+
 # Only this one is visible to an anonymous visitor, and only while the
 # record's own `Active Status` field is ticked — that checkbox is a second,
 # independent gate and it DEFAULTS TO UNCHECKED on a new entry (confirmed

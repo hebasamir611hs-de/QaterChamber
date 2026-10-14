@@ -349,8 +349,13 @@ def real_edit(window, tc: str, what: str, data: dict | None = None, typed: dict 
         drv.fill_widget(data)
     for key, text in (typed or {}).items():
         drv.type_text(key.removesuffix("_ar"), text, arabic=key.endswith("_ar"))
+    window.mark_intent({**(data or {}), **(typed or {})})
     result = {"filled": drv.read_widget()}
-    result.update(save(drv))
+    try:
+        result.update(save(drv))
+    except Exception:
+        window.after_edit()
+        raise
     result["screenshot"] = drv.evidence(f"{tc}_REAL_{what}_after_save")
     window.after_edit()
     result["stored_after"] = {k: window.last_ours.get(k) for k in (K_NAME, K_UNIT, K_ORDER, K_ACTIVE)}

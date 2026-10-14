@@ -402,6 +402,18 @@ class QacAdminPage(TenderWorkflowAdminPage):
             row = self.row_of(entry)
             if not row or row["title"].strip() != entry.title:
                 raise ValueError(f"run_row_action refuses {entry}: the row now reads {row}")
+        return self._click_row_action(entry, action, comment)
+
+    def run_real_row_action(self, ref, action: str, guard: "RealCardGuard") -> list[str]:
+        """Unpublish / publish on a REAL card only while `guard` holds its snapshot
+        (snapshot -> change -> restore -> diff). Nothing else is allowed."""
+        if action not in ("unpublish", "publish"):
+            raise ValueError(f"run_real_row_action refuses {action!r}")
+        if ref.code not in REAL_CODES or ref.code not in guard.snapshots:
+            raise ValueError(f"run_real_row_action refuses {ref}: not a snapshotted real card")
+        return self._click_row_action(ref, action, "")
+
+    def _click_row_action(self, entry, action: str, comment: str = "") -> list[str]:
         control = self._row_a(entry).first.locator(f"[data-qc-oel-{action}]")
         if control.count() == 0:
             raise AssertionError(f"row {entry.title!r} offers no {action!r}; offered {self.row_actions(entry)}")
@@ -482,6 +494,24 @@ class QacAdminPage(TenderWorkflowAdminPage):
     def click_preview_locale(self, locale: str) -> "QacAdminPage":
         self.page.get_by_role("button", name=locale.upper(), exact=True).first.click()
         return self
+
+    def form_labels_and_errors(self) -> dict:
+        """Visible field labels and field-level validation messages INSIDE the
+        authoring form (object/list headings excluded) + the edit-bar texts."""
+        form = self.page.locator(self.FORM).first
+        labels = [t.strip() for t in form.locator("label:visible").all_inner_texts() if t.strip()]
+        errors = [t.strip() for t in form.locator(
+            ".form-feedback-item:visible, .invalid-feedback:visible, .form-feedback-group:visible")
+            .all_inner_texts() if t.strip()]
+        return {"labels": labels, "field_errors": errors, "bar": self.editbar_texts()}
+
+    ADD_NEW_CONTROL = 'button:visible, a:visible'
+    ADD_NEW_RE = _re.compile(r"^\s*\+?\s*Add New", _re.I)
+
+    def add_new_offered(self) -> list[str]:
+        """Visible '+ Add New' controls on the manage list (149913: must be none)."""
+        texts = [(t or "").strip() for t in self.page.locator(self.ADD_NEW_CONTROL).all_inner_texts()]
+        return [t for t in texts if self.ADD_NEW_RE.search(t)]
 
     # ---- real cards (READ ONLY) -------------------------------------------------------------
     def real_cards(self) -> list[dict]:
@@ -598,6 +628,14 @@ class MediaCenterHubView(BasePage):
             self.page.locator(self.GRID).first.wait_for(state="attached", timeout=60000)
             _wait_until(lambda: self.page.locator(f"{self.GRID} {self.CARD}").count() > 0, timeout=30.0, poll=0.5)
         except Exception:  # noqa: BLE001 — an empty grid is reported by the caller
+            pass
+        try:  # the icon mask (which carries the card ERC) can be applied after the grid renders
+            self.page.locator(self.GRID).first.scroll_into_view_if_needed(timeout=5000)
+            _wait_until(lambda: self.page.evaluate(
+                "() => [...document.querySelectorAll('[data-qc-mcqa-grid] .qc-mc-qa-tile-img')].every("
+                "t => /objectEntryExternalReferenceCode=/.test(t.style.maskImage || t.style.webkitMaskImage || ''))"),
+                timeout=15.0, poll=0.5)
+        except Exception:  # noqa: BLE001 — callers report missing identities
             pass
         return self
 

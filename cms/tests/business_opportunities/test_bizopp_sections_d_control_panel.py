@@ -32,6 +32,7 @@ Substitutions disclosed (case wording -> what runs):
 from __future__ import annotations
 
 import json
+import os
 import re
 from datetime import date, datetime, timedelta
 from time import monotonic
@@ -53,8 +54,10 @@ from cms.pages.business_opportunities.opportunity_sections_d_page import (
     BizOppParentDPage,
     BizOppSectionDPage,
     DEntry,
+    REAL_OPP_CODE_PREFIX,
     ddmmyyyy,
 )
+from cms.pages.components.object_authoring_page import shows_message
 from config.settings import PROJECT_ROOT
 from core.utils.waits import WaitTimeoutError, wait_until
 from core.web.browser import new_context
@@ -66,6 +69,48 @@ EVIDENCE_DIR = PROJECT_ROOT / "reports" / "evidence" / "130697_d"
 EPIC = "Business Gateway"
 FEATURE = "Business Opportunities — Control Panel (sections, sort order)"
 MSG_PUBLISHED = "Saved and published."
+
+# Retest namespace (e.g. BIZOPP_D_PREFIX=QCTEST-R30-B-D-): the page module's guards (in_namespace,
+# identify_created, guarded delete) read this module global at call time, so both stay in step.
+if os.environ.get("BIZOPP_D_PREFIX"):
+    import cms.pages.business_opportunities.opportunity_sections_d_page as _ns_page  # noqa: E402
+    if not os.environ["BIZOPP_D_PREFIX"].startswith("QCTEST-"):
+        raise ValueError("BIZOPP_D_PREFIX must stay in the QCTEST- namespace")
+    _ns_page.D_QCTEST_PREFIX = D_QCTEST_PREFIX = os.environ["BIZOPP_D_PREFIX"]
+
+
+class _Listing(BizOppListingPublicD):
+    """The listing page object lost `click_load_more` in the web rework (e8021a4);
+    open_expanded() still calls it once the QCTEST cards push the grid past one page."""
+
+    def click_load_more(self) -> None:
+        self.click(self.LOAD_MORE_BUTTON)
+
+
+_LIST_COLUMNS_JS = """(key) => {
+    const heads = [...document.querySelectorAll('table thead th')].map(t => t.innerText.trim().toUpperCase());
+    const si = heads.indexOf('STATUS'), li = heads.indexOf('LIFECYCLE');
+    const out = {};
+    for (const r of document.querySelectorAll('table tbody tr')) {
+        const link = r.querySelector('a[href*="editEntry="]');
+        const ids = [...r.querySelectorAll('*')].flatMap(n => [...n.attributes]
+            .filter(a => a.name.startsWith('data-qc-oel-') && a.name !== 'data-qc-oel-label').map(a => a.value));
+        const m = link ? link.getAttribute('href').match(/editEntry=([^&#]+)/) : null;
+        const code = m ? decodeURIComponent(m[1]) : '';
+        if (key !== code && !ids.includes(key)) continue;
+        const tds = [...r.querySelectorAll('td')];
+        out.status = si >= 0 && tds[si] ? tds[si].innerText.trim() : '';
+        out.lifecycle = li >= 0 && tds[li] ? tds[li].innerText.trim() : '';
+    }
+    return out;
+}"""
+
+
+def _list_columns(admin, key: str) -> dict:
+    """Header-based read of the STATUS / LIFECYCLE cells of one row (by entry id or code).
+    The Business Opportunity list gained LIFECYCLE / ARCHIVE DATE / DISPLAY ORDER columns
+    (bug 149530 fix, 2026-10-13), so positional `tds[1]` no longer is the status."""
+    return admin.page.evaluate(_LIST_COLUMNS_JS, key)
 PUBLIC_REFLECT_TIMEOUT = 60.0
 DESKTOP = (1920, 1080)
 MOBILE = (390, 844)
@@ -130,7 +175,7 @@ def disposable(browser):
         parent_admin = BizOppParentDPage(pg)
         if parent_admin.login_as_role(D_ROLE_EDITOR) != "ok":
             raise AssertionError("teardown could not sign in as the Site Content Editor")
-        section_admin = BizOppSectionDPage(pg)
+        section_admin = _SectionPage(pg)
         for entry in reversed(reg.parents):
             label = f"parent {entry.title} (id {entry.entry_id}, code {entry.code})"
             try:
@@ -185,6 +230,39 @@ def anon_pages(browser):
 # ===========================================================================
 # Helpers
 # ===========================================================================
+class _SectionPage(BizOppSectionDPage):
+    """Live 2026-10-13: the Opportunity Sections relationship picker now SEARCHES by the parent's
+    TITLE (typing the record code returns no option); the option label is still the code.
+    Same guarded selection as the page's pick_parent, but the search text is the stored title."""
+
+    def pick_parent(self, parent: DEntry, parent_entry_id: str | None = None) -> "BizOppSectionDPage":
+        if not parent.in_namespace() or parent.code.startswith(REAL_OPP_CODE_PREFIX):
+            raise ValueError(f"refusing to link sections to {parent}: not a QCTEST-D parent")
+        pid = parent_entry_id or parent.entry_id
+        inp = self.page.locator(f'[id="{self._picklist_prefix(self.RELATION_KEY)}-select-from-list-input"]')
+        hidden = self._form().locator(f'input[type="hidden"][name="ObjectField_{self.RELATION_KEY}"]').first
+        option = self.page.locator(f'li[role="option"][data-option-value="{pid}"]')
+        for attempt in (1, 2, 3):
+            inp.click()
+            inp.fill(parent.title)
+            option.first.wait_for(state="visible", timeout=15000)
+            if (option.first.get_attribute("data-option-label") or "") != parent.code:
+                raise AssertionError("parent picker option does not carry the captured parent code")
+            option.first.click()
+            try:
+                # A clean selection shows the option LABEL (the code) in the visible input and the id in
+                # the hidden value; a click that races the search leaves the typed title behind, which
+                # the form rejects as "... is not an allowed Opportunity Sections".
+                wait_until(lambda: hidden.input_value() == pid and inp.input_value() == parent.code,
+                           timeout=8.0, poll=0.25)
+                return self
+            except WaitTimeoutError:
+                if attempt == 3:
+                    raise AssertionError(f"parent picker did not select cleanly: visible {inp.input_value()!r}, "
+                                         f"hidden {hidden.input_value()!r}, expected {parent.code!r}/{pid!r}")
+        return self
+
+
 def _login(page) -> tuple[BizOppParentDPage, BizOppSectionDPage]:
     admin = BizOppParentDPage(page)
     outcome = admin.login_as_role(D_ROLE_EDITOR)
@@ -195,7 +273,7 @@ def _login(page) -> tuple[BizOppParentDPage, BizOppSectionDPage]:
     user_id, _ = admin.signed_in_user()
     if user_id != D_EDITOR_USER_ID:
         pytest.skip(f"PRECONDITION: Editor credentials sign in as userId {user_id!r}, not {D_EDITOR_USER_ID}")
-    return admin, BizOppSectionDPage(page)
+    return admin, _SectionPage(page)
 
 
 def _wait_arabic_saved(admin) -> str:
@@ -240,7 +318,7 @@ def _create_parent(admin: BizOppParentDPage, disposable: Registry, title: str, s
             disposable.track_parent(entry)
     assert went_through, f"creating {title!r} did not go through: {diagnostics}"
     assert entry is not None, f"{title!r} went through but is not identifiable as exactly one NEW record"
-    assert any(MSG_PUBLISHED in b for b in banners), f"no {MSG_PUBLISHED!r} after publishing {title!r}: {banners}"
+    assert any(shows_message(b, MSG_PUBLISHED) for b in banners), f"no {MSG_PUBLISHED!r} after publishing {title!r}: {banners}"
     # Stored-value verification (brief rule 4): re-open and read back.
     admin.open_entry_en(entry.code)
     stored = {"active": admin.active_status_stored(), "order": admin.text_value(K_SORT),
@@ -278,7 +356,7 @@ def _create_section(sections: BizOppSectionDPage, disposable: Registry, parent: 
             disposable.track_section(entry)
     assert went_through, f"creating section {title[:60]!r} did not go through: {diagnostics}"
     assert entry is not None, f"section {title[:60]!r} went through but is not identifiable as exactly one NEW record"
-    assert any(MSG_PUBLISHED in b for b in banners), f"no {MSG_PUBLISHED!r} after publishing section: {banners}"
+    assert any(shows_message(b, MSG_PUBLISHED) for b in banners), f"no {MSG_PUBLISHED!r} after publishing section: {banners}"
     sections.open_entry_en(entry.code)
     stored = sections.read_section()
     allure.attach(repr(stored), name=f"stored values of section {title[:40]}")
@@ -466,6 +544,12 @@ def test_section_title_max_length_and_inactive_hidden(page, anon_pages, disposab
         limit_probe["typed length kept in the field"] = len(typed)
         assert typed == over, f"the field did not keep all 101 characters (kept {len(typed)})"
     with allure.step("Step 3a: attempt to publish Section A with 101 characters"):
+        _pinp = page.locator(f'[id="{sections._picklist_prefix(sections.RELATION_KEY)}-select-from-list-input"]')
+        _pinp.press("Tab")
+        page.wait_for_timeout(1500)   # let any late picker search response settle before the check
+        limit_probe["parent picker (visible, hidden) before publish"] = (
+            _pinp.input_value(),
+            sections._form().locator(f'input[type="hidden"][name="ObjectField_{sections.RELATION_KEY}"]').first.input_value())
         sections.click_publish()
         went_through = sections.save_went_through()
         evidence = sections.refusal_evidence()
@@ -484,9 +568,14 @@ def test_section_title_max_length_and_inactive_hidden(page, anon_pages, disposab
     else:
         messages = " | ".join(evidence.get("field_errors") or [])
         expected_msg = "Max 100 characters exceeded"
-        if expected_msg.lower() not in messages.lower():
-            allure.attach(f"expected: {expected_msg!r}\nactual: {messages!r}", name="WORDING DIFFERENCE (Low)")
-    # Wording difference is recorded, not failed (brief rule 6): the behaviour (block at 100) is the case's.
+        field_errors = evidence.get("field_errors") or []
+        allure.attach(f"expected: {expected_msg!r}\nactual: {messages!r}", name="143377 over-length message")
+        # bug 149521 (fixed 2026-10-13): the approved wording is asserted, and the refusal must come
+        # from the length rule ALONE (no picker / other field error mixed in).
+        assert any(expected_msg.lower() in e.lower() for e in field_errors), (
+            f"WORDING: the 101-character refusal shows {messages!r}, expected {expected_msg!r}")
+        others = [e for e in field_errors if expected_msg.lower() not in e.lower()]
+        assert not others, f"the refusal is not cleanly from the length rule; other field errors: {others}"
     assert not problems, "PRODUCT: " + "; ".join(problems)
 
     with allure.step("Step 3b: correct Section A to exactly 100 characters (EN and AR) and publish"):
@@ -548,7 +637,8 @@ def test_sort_order_controls_listing_position(page, anon_pages, disposable):
                 admin, disposable, _title("143390", suffix), order,
                 **{K_PUBLISH_DATE: ddmmyyyy(today + timedelta(days=offset)),
                    K_ARCHIVE_DATE: ddmmyyyy(today + timedelta(days=365))})
-        rows = {r["entry_id"]: r["status"] for r in admin.open_list_all().list_rows()}
+        admin.open_list_all()
+        rows = {e.entry_id: _list_columns(admin, e.code).get("status", "") for e in records.values()}
         allure.attach(repr({k: rows.get(v.entry_id) for k, v in records.items()}), name="row statuses")
         assert all(rows.get(e.entry_id) == "PUBLISHED" for e in records.values()), f"statuses: {rows}"
     titles = {k: v.title for k, v in records.items()}
@@ -558,15 +648,16 @@ def test_sort_order_controls_listing_position(page, anon_pages, disposable):
         holder = {}
 
         def _all_present() -> bool:
-            view = BizOppListingPublicD(anon_pages())
+            view = _Listing(anon_pages())
             view.open_expanded("en")
             holder["view"], holder["titles"] = view, view.card_titles()
             return all(t in holder["titles"] for t in titles.values())
 
         try:
             wait_until(_all_present, timeout=PUBLIC_REFLECT_TIMEOUT, poll=2.0)
-        except WaitTimeoutError:
-            pass
+        except WaitTimeoutError as exc:
+            if "titles" not in holder:
+                pytest.fail(f"the public listing never loaded: {exc}")
         view, cards = holder["view"], holder["titles"]
         allure.attach(f"{monotonic() - started:.1f}s", name="public listing latency")
         allure.attach("\n".join(f"{i + 1}. {t}" for i, t in enumerate(cards)), name="listing order (default sort)")

@@ -392,7 +392,8 @@ def test_inactive_card_is_hidden_and_grid_reflows(qac, real_cards, real_guard):
     started = monotonic()
     public_until(visitor, lambda c: find(c, ref.code).get("index") == 0, "card back in its slot", "149261",
                  started=started)
-    assert badge == STATUS_PUBLISHED, f"after unticking Active Status the badge reads {badge!r}, not PUBLISHED"
+    # User decision 2026-10-13: an unticked (inactive) published card shows the INACTIVE badge.
+    assert badge.strip().upper() == "INACTIVE", f"after unticking Active Status the badge reads {badge!r}, not INACTIVE"
 
 
 @pytest.mark.tc_149264
@@ -438,18 +439,23 @@ def test_new_card_without_icon_is_refused(qac, real_cards):
 @pytest.mark.tc_149265
 @pytest.mark.functional_low
 @pytest.mark.regression
-def test_new_card_without_destination_link_is_blocked(qac, real_cards):
-    """MEDIA-MCHUB-TC-211 — 'A destination link is required.'"""
-    _labels("149265", "MEDIA-MCHUB-TC-211", "New card without Destination Link is blocked")
-    sessions, registry = qac
-    admin = sessions.admin(ROLE_EDITOR)
-    data = card_data("QCTEST No Link", "QCTEST بلا رابط", "QCTEST card without link.", "QCTEST بطاقة بلا رابط.",
-                     1000, destinationLink="")
-    entry, result = create(admin, registry, data, "149265")
-    new_rows = [r for r in result.get("new_rows", []) if r["title"].strip() == "QCTEST No Link"]
-    assert not result["went_through"] and not new_rows, f"PRODUCT: a card without a link was created: {new_rows}"
-    message_check("149265", "A destination link is required.", result, "create without link")
-    assert not [c for c in sessions.visitor().open_hub().cards() if c["title"] == "QCTEST No Link"]
+def test_new_card_without_destination_link_is_blocked(qac, real_cards, real_guard):
+    """MEDIA-MCHUB-TC-211 — 'A destination link is required.'
+
+    Healed 2026-10-13 (bug 149913): Add New was removed from this fixed-block
+    Object, so a card can no longer be created. The same rule is exercised by
+    clearing Destination Link on a real card (snapshot -> edit -> restore)."""
+    _labels("149265", "MEDIA-MCHUB-TC-211", "Card without Destination Link is blocked")
+    sessions, admin, ref = real_session(qac, real_guard)
+    link = real_guard.snapshots[ref.code]["destinationLink"]
+    result = guarded_edit(real_guard, admin, ref, {"destinationLink": ""}, "149265")
+    assert result["filled"]["destinationLink"] == "", f"Destination Link was not cleared: {result['filled']}"
+    _refused(result, "an empty Destination Link")
+    assert stored(admin, ref)["destinationLink"] == link, "the stored Destination Link changed"
+    assert message_check("149265", "A destination link is required.", result, "edit without link"), \
+        f"PRODUCT: 'A destination link is required.' not shown: {result.get('messages')!r}"
+    public_until(_hub(sessions), lambda c: find(c, ref.code).get("href") == link,
+                 "href unchanged", "149265", budget=False)
 
 
 
@@ -489,19 +495,21 @@ def test_malformed_destination_link_is_rejected(qac, real_cards, real_guard):
 @pytest.mark.functional_low
 @pytest.mark.bilingual
 @pytest.mark.regression
-def test_card_without_arabic_is_blocked(qac, real_cards):
-    """MEDIA-MCHUB-TC-220 — 'Arabic content is required.'"""
+def test_card_without_arabic_is_blocked(qac, real_cards, real_guard):
+    """MEDIA-MCHUB-TC-220 — 'Arabic content is required.'
+
+    Healed 2026-10-13: Add New is removed (fixed set of six), so the rule is
+    exercised by clearing the Arabic title + description of a real card under
+    snapshot -> edit -> restore -> diff (real_guard)."""
     _labels("149274", "MEDIA-MCHUB-TC-220", "Card without Arabic content is blocked")
-    sessions, registry = qac
-    admin = sessions.admin(ROLE_EDITOR)
-    data = card_data("QCTEST EN only", "", "QCTEST English only card.", "", 1000)
-    entry, result = create(admin, registry, data, "149274")
-    new_rows = [r for r in result.get("new_rows", []) if r["title"].strip() == "QCTEST EN only"]
-    assert not result["went_through"] and not new_rows, f"PRODUCT: an English-only card was published: {new_rows}"
-    message_check("149274", "Arabic content is required.", result, "create without Arabic")
-    for locale in ("en", "ar"):
-        visitor = sessions.visitor().open_hub(locale)
-        assert not [c for c in visitor.cards() if "QCTEST EN only" in c["title"] or "English only" in c["desc"]]
+    sessions, admin, ref = real_session(qac, real_guard)
+    snap = real_guard.snapshots[ref.code]
+    result = guarded_edit(real_guard, admin, ref, {"cardTitle_ar": "", "cardDescription_ar": ""}, "149274")
+    assert result["filled"]["cardTitle_ar"] == "", f"the Arabic title was not cleared: {result['filled']}"
+    _refused(result, "a card without Arabic content")
+    values = stored(admin, ref)
+    assert values["cardTitle_ar"] == snap.get("cardTitle_i18n", {}).get("ar_SA", values["cardTitle_ar"])         and values["cardTitle_ar"], f"the stored Arabic title changed: {values}"
+    message_check("149274", "Arabic content is required.", result, "edit without Arabic")
 
 
 def _ar_ui_case(qac, tc: str, data: dict, expected: str, title: str):
@@ -540,13 +548,41 @@ def test_arabic_required_message_in_arabic_ui(qac, real_cards):
 @pytest.mark.tc_149278
 @pytest.mark.functional_low
 @pytest.mark.bilingual
-def test_destination_link_message_in_arabic_ui(qac, real_cards):
-    """MEDIA-MCHUB-TC-224 — 'رابط الوجهة مطلوب.' in the AR interface."""
+def test_destination_link_message_in_arabic_ui(qac, real_cards, real_guard):
+    """MEDIA-MCHUB-TC-224 — 'رابط الوجهة مطلوب.' in the AR interface.
+
+    Healed 2026-10-13 (bug 149913): no Add New any more; the real card is
+    opened in the AR interface, its link cleared and the submit refused
+    (snapshot -> edit -> restore)."""
     _labels("149278", "MEDIA-MCHUB-TC-224", "Destination-link message in the AR UI")
-    data = card_data("QCTEST No Link AR", "QCTEST بلا رابط ع", "QCTEST card without link.", "QCTEST بطاقة بلا رابط.",
-                     1000, destinationLink="")
-    result = _ar_ui_case(qac, "149278", data, "رابط الوجهة مطلوب.", "QCTEST No Link AR")
-    message_check("149278", "رابط الوجهة مطلوب.", result, "AR UI, link missing")
+    sessions, admin, ref = real_session(qac, real_guard)
+    link = real_guard.snapshots[ref.code]["destinationLink"]
+    real_guard.check_before_edit(ref.code)
+    try:
+        admin.open_entry(ref.code, "ar")
+        button = admin.submit_button_text_any()
+        assert button not in ("Publish", "Submit for Review"), f"the interface is not Arabic (button {button!r})"
+        admin.fill_card({"destinationLink": ""})
+        admin.click_submit_any_locale()
+        result = {"went_through": admin.save_went_through(), "evidence": admin.refusal_evidence(),
+                  "messages": admin.all_messages_text()}
+        result["page_text"] = admin.wait_body_contains(("رابط الوجهة مطلوب.",), 5.0)[:3000]
+        result["screenshot"] = admin.evidence("149278_ar_ui")
+        result["form"] = admin.form_labels_and_errors()
+        attach("AR UI attempt", result)
+        attach("AR red bar (verbatim)", " || ".join(result["form"]["bar"]))
+    finally:
+        real_guard.record_written(ref.code)
+    _refused(result, "an empty Destination Link (AR UI)")
+    placeholders = [t for t in result["form"]["labels"] + result["form"]["field_errors"] if "(AR)" in t]
+    assert not placeholders, f"PRODUCT: AR form labels/messages still carry '(AR)': {placeholders}"
+    bar = " || ".join(result["form"]["bar"])
+    if "رابط الوجهة مطلوب." not in bar:
+        record_finding("149278", "WORDING", context="AR red bar", expected="رابط الوجهة مطلوب.", shown=bar)
+    assert message_check("149278", "رابط الوجهة مطلوب.", result, "AR UI, link missing"), \
+        f"PRODUCT: 'رابط الوجهة مطلوب.' not shown: {result.get('messages')!r}"
+    admin.open_entry(ref.code)
+    assert stored(admin, ref)["destinationLink"] == link, "the stored Destination Link changed"
 
 
 @pytest.mark.tc_149283

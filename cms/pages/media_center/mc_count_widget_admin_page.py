@@ -263,6 +263,22 @@ class McCountWidgetAdminPage(TenderWorkflowAdminPage):
             self.set_active_status(bool(data[K_ACTIVE]))
         return self
 
+    ADD_NEW_CONTROL = 'button:visible, a:visible'
+    ADD_NEW_RE = _re.compile(r"^\s*\+?\s*Add New", _re.I)
+
+    def add_new_offered(self) -> list[str]:
+        """Visible '+ Add New' controls on the manage list (149912: must be none)."""
+        texts = [(t or "").strip() for t in self.page.locator(self.ADD_NEW_CONTROL).all_inner_texts()]
+        return [t for t in texts if self.ADD_NEW_RE.search(t)]
+
+    def tab_through_content_type(self, presses: int = 2) -> "McCountWidgetAdminPage":
+        """149914 retest: click in 'Display Name — العربية', press Tab `presses` times
+        (into and out of the Content Type picklist) — real keyboard focus moves."""
+        self._ar(K_NAME).click()
+        for _ in range(presses):
+            self.page.keyboard.press("Tab")
+        return self
+
     def read_widget(self) -> dict:
         return {K_NAME: self.text_value(K_NAME), f"{K_NAME}_ar": self.ar_value(K_NAME),
                 K_UNIT: self.text_value(K_UNIT), f"{K_UNIT}_ar": self.ar_value(K_UNIT),
@@ -725,6 +741,7 @@ class RealWidgetWindow:
         self.token = f"COUNT {tag} {_datetime.now().isoformat(timespec='seconds')} pid={_os.getpid()}"
         self.snapshot: dict = {}
         self.last_ours: dict = {}
+        self.intended: set = set()   # field names THIS test may have written (marked BEFORE the save)
         self.restore_response = None
         self.diff: list[str] | None = None
         self.files: dict = {}
@@ -792,10 +809,18 @@ class RealWidgetWindow:
     def check_untouched(self, when: str) -> None:
         """Re-reads the record; it must equal the last state THIS test produced."""
         current = real_widget_get(self.drv, self.code)
-        changed = record_diff(self.last_ours, current)
+        # A save of ours that landed before after_edit() could record it is
+        # not "someone else": diffs on fields we intended to write are ours.
+        changed = [d for d in record_diff(self.last_ours, current)
+                   if not any(d.startswith(f"{k}:") or d.startswith(f"{k}_") for k in self.intended)]
         if changed:
             self._save(f"concurrent_change_{when}", {"expected": self.last_ours, "found": current, "diff": changed})
             raise ConcurrentChangeError(f"{self.code} was changed by someone else before {when}: {changed}")
+
+    def mark_intent(self, data: dict | None) -> None:
+        """Call BEFORE clicking Publish with the keys about to be written."""
+        self.intended.update(k.removesuffix("_ar") for k in (data or {}))
+        self.intended.update({"status", "dateModified"})
 
     def before_edit(self) -> None:
         self._require()

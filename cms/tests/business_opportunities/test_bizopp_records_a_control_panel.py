@@ -138,8 +138,8 @@ def test_archive_date_after_publish_date_accepted(page, disposable):
 @pytest.mark.functional_low
 def test_archive_date_not_after_publish_date_rejected(page, disposable):
     # Azure TCs 143204 / 143240 / 143388 (duplicates) | Site Content Editor.
-    # Equal (today / today) and before (today / today-5); both via Save as Draft
-    # (the case's "Save") and, if a draft slips through, via Publish too.
+    # Equal (today / today) and before (today / today-5); each via Save as Draft
+    # (the case's "Save") AND via Publish.
     editor = login(page, ROLE_EDITOR)
     today = today_ddmmyyyy(0)
     results = {}
@@ -148,9 +148,9 @@ def test_archive_date_not_after_publish_date_rejected(page, disposable):
                                                  **{K_PUBLISH_DATE: today, K_ARCHIVE_DATE: archive})
         draft = _attempt_save(editor, disposable, data, draft=True)
         results[f"{label} / Save as Draft"] = draft
-        if draft["went_through"] or draft["created"]:
-            publish_data = dict(data, **{K_TITLE: a_name("143204", f"archive {label} publish")})
-            results[f"{label} / Publish"] = _attempt_save(editor, disposable, publish_data, draft=False)
+        # Bug 149513 fix: the rule runs on every save, so Publish is exercised on its own as well.
+        publish_data = dict(data, **{K_TITLE: a_name("143204", f"archive {label} publish")})
+        results[f"{label} / Publish"] = _attempt_save(editor, disposable, publish_data, draft=False)
     summary = {k: {"saved": bool(v["went_through"] or v["created"]), "messages": v["messages"]}
                for k, v in results.items()}
     allure.attach("\n".join(f"{k}: {v}" for k, v in summary.items()), name="archive-date rule outcomes")

@@ -180,25 +180,30 @@ def _finish(fails: list) -> None:
 @pytest.mark.functional_low
 @pytest.mark.bilingual
 @pytest.mark.tc_149191
-def test_149191_display_name_valid_reaches_public_en_ar(page, cw_disposable, anon_view):
-    """MEDIA-MCHUB-TC-137: valid Display Name EN/AR reaches the widget label on the EN and AR hub."""
+def test_149191_display_name_valid_reaches_public_en_ar(page, anon_view):
+    """MEDIA-MCHUB-TC-137: valid Display Name EN/AR reaches the widget label on the EN and AR hub.
+    HEALED 2026-10-13 (bug 149912 fix): the fixed widget list no longer offers
+    Add New, so every step runs on the real Videos widget inside the guarded
+    snapshot -> edit -> restore -> diff window; step 0 checks Add New is gone."""
     tc, fails = "149191", []
     drv = role_session(page)
-    entry = create_cw01(drv, cw_disposable, tc)
-    drv.open_entry_en(entry.code)
-    if not drv.editbar_names("QCTEST Clips", STATUS_PUBLISHED):
-        fails.append(f"blue bar does not name the entry + PUBLISHED: {drv.editing_bar_text()!r}")
-    if drv.field_dir(K_NAME, arabic=True) != "rtl":
-        fails.append("Display Name — العربية does not type right-to-left")
-    result = edit(drv, entry, tc, "name", data={K_NAME: "QCTEST Reels", f"{K_NAME}_ar": "QCTEST مقاطع قصيرة"})
-    _saved_ok(fails, result, "Publish")
-    _row_published_now(fails, result)
-    now = stored(drv, entry)
-    if (now[K_NAME], now[f"{K_NAME}_ar"]) != ("QCTEST Reels", "QCTEST مقاطع قصيرة"):
-        fails.append(f"stored values {now[K_NAME]!r}/{now[f'{K_NAME}_ar']!r}")
+    drv.open_list_all()
+    offered = drv.add_new_offered()
+    shot0 = drv.evidence(f"{tc}_list_no_add_new")
+    record_finding(tc, "manage list Add New", offered=offered, screenshot=shot0)
+    if offered:
+        fails.append(f"step 0: the fixed Count Widget list still offers {offered}; {shot0}")
     with real_widget_window(drv, REAL_VIDEOS, tc) as w:
+        w.open_for_edit()
+        bar = drv.editing_bar_text()
+        if STATUS_PUBLISHED.casefold() not in bar.casefold():
+            fails.append(f"blue bar does not read PUBLISHED: {bar!r}")
+        if drv.field_dir(K_NAME, arabic=True) != "rtl":
+            fails.append("Display Name — العربية does not type right-to-left")
         real = real_edit(w, tc, "name", data={K_NAME: "QCTEST Reels", f"{K_NAME}_ar": "QCTEST مقاطع قصيرة"})
         _saved_ok(fails, real, "REAL Publish")
+        if (real["stored_after"].get(K_NAME), _ar(w.last_ours, K_NAME)) != ("QCTEST Reels", "QCTEST مقاطع قصيرة"):
+            fails.append(f"stored values {real['stored_after'].get(K_NAME)!r}/{_ar(w.last_ours, K_NAME)!r}")
         _public_expect(fails, anon_view, tc, "QCTEST Reels", "en", what="step 5")
         pub = _public_expect(fails, anon_view, tc, "QCTEST مقاطع قصيرة", "ar", what="step 6")
         if pub["held"] and pub["card"]["label_box"].get("direction") != "rtl":
@@ -463,21 +468,48 @@ def test_149235_content_type_drives_public_total(page, cw_disposable, anon_view)
 @AUTH_FREE_PAGE
 @pytest.mark.functional_low
 @pytest.mark.tc_149236
-def test_149236_new_widget_without_content_type_refused(page, cw_disposable, anon_view):
-    """MEDIA-MCHUB-TC-182: a new Count Widget cannot be submitted without a Content Type."""
+# NOTE: TC-182 (149236) as written is obsolete after the 149911/149914 fixes (no Add New); re-mark pending user decision.
+def test_149236_new_widget_without_content_type_refused(page, anon_view):
+    """MEDIA-MCHUB-TC-182 / bug 149914. HEALED 2026-10-13: a NEW widget can no
+    longer be created (149912 fix: fixed set, no Add New), so the case's
+    create path is gone. What remains testable is the 149914 defect found on
+    this form: Tab from 'Display Name — العربية' must NOT clear Content Type,
+    and Publish goes through. Runs on the real Videos widget, guarded window."""
     tc, fails = "149236", []
     drv = role_session(page)
-    data = {K_NAME: "QCTEST None", f"{K_NAME}_ar": "QCTEST لا شيء", K_UNIT: "QCTEST items",
-            f"{K_UNIT}_ar": "QCTEST عنصر", "icon_file": ICON_1, K_ORDER: 800, K_ACTIVE: True}
-    entry, result = create(drv, cw_disposable, "QCTEST-130709-CW-03", data, tc)
-    if result.get("filled", {}).get(K_TYPE):
-        fails.append(f"step 2: Content Type shows {result['filled'][K_TYPE]!r}")
-    _refused(fails, tc, result, "contentType", "Content Type", "Publish without a Content Type")
-    if result.get("new_rows"):
-        fails.append(f"a new entry was created: {result['new_rows']}")
-    absent = public_absent(anon_view, tc, "QCTEST None")
-    if absent["shown"] or absent["guest_delivered"]:
-        fails.append(f"public strip / feed carries 'QCTEST None': {absent}")
+    drv.open_list_all()
+    if drv.add_new_offered():
+        fails.append(f"Add New is still offered: {drv.add_new_offered()}")
+    with real_widget_window(drv, REAL_VIDEOS, tc) as w:
+        w.open_for_edit()
+        before_label, before_text = drv.picklist_value(K_TYPE), drv.content_type_display_text()
+        drv.tab_through_content_type(1)
+        mid_label, mid_text = drv.picklist_value(K_TYPE), drv.content_type_display_text()
+        drv.tab_through_content_type(2)
+        after_label, after_text = drv.picklist_value(K_TYPE), drv.content_type_display_text()
+        shot = drv.evidence(f"{tc}_after_tab")
+        record_finding(tc, "content type across Tab", before=(before_label, before_text),
+                       mid=(mid_label, mid_text), after=(after_label, after_text), screenshot=shot)
+        if not before_label:
+            fails.append("PRECONDITION: the real widget shows no Content Type before Tab")
+        # While focus sits INSIDE the picklist its visible text box may read empty
+        # (combobox filter state); the stored value must hold. Once focus has
+        # LEFT the box (Tab twice = the dev's retest step) both must be back.
+        if mid_label != before_label:
+            fails.append(f"after one Tab the Content Type value reads {mid_label!r}, was {before_label!r}; {shot}")
+        if (after_label, after_text) != (before_label, before_text):
+            fails.append(f"after Tab twice Content Type reads {after_label!r}/{after_text!r}, was "
+                         f"{before_label!r}/{before_text!r}; {shot}")
+        w.mark_intent({K_TYPE: None})
+        try:
+            result = save(drv)
+            result["screenshot"] = drv.evidence(f"{tc}_after_publish")
+        finally:
+            w.after_edit()
+        if not result["went_through"]:
+            fails.append(f"Publish after Tab did not go through: {result['messages']} {result['evidence']}")
+        if (w.last_ours.get(K_TYPE) or {}).get("key") != (w.snapshot.get(K_TYPE) or {}).get("key"):
+            fails.append(f"stored Content Type changed: {w.last_ours.get(K_TYPE)}")
     _finish(fails)
 
 

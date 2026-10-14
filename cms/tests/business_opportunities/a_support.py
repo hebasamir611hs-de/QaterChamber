@@ -19,6 +19,7 @@ Pattern (Tenders PBI 130952 workflow tests, commit 1c88750):
 
 from __future__ import annotations
 
+import os as _os
 from datetime import datetime
 from time import monotonic
 
@@ -39,13 +40,15 @@ from cms.pages.business_opportunities.opportunity_admin_page import (
     OpportunityAdminPage,
     OpportunityChildAdminPage,
 )
+from cms.pages.components.object_authoring_page import shows_message
 from config.settings import PROJECT_ROOT
 from core.utils.waits import WaitTimeoutError, wait_until
 from core.web.browser import new_context
 
-A_PREFIX = "QCTEST-130697-G-"  # Agent G owns A's files (review-fix run)
+# Agent G owns A's files (review-fix run); a retest may override via env (e.g. QCTEST-R30-A-).
+A_PREFIX = _os.environ.get("BIZOPP_A_PREFIX", "QCTEST-130697-G-")
 STAMP = datetime.now().strftime("%m%d%H%M%S")
-EVIDENCE_DIR = str(PROJECT_ROOT / "reports" / "evidence" / "130697_G")
+EVIDENCE_DIR = _os.environ.get("BIZOPP_A_EVIDENCE_DIR", str(PROJECT_ROOT / "reports" / "evidence" / "130697_G"))
 AUTH_FREE_PAGE = pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 A_GROUP = pytest.mark.xdist_group("bizopp_cms_a")
 EPIC = "Business Gateway"
@@ -254,7 +257,7 @@ def pinned(admin: BizOppObjectPage, role: str) -> None:
 
 
 def has(banners: list[str], expected: str) -> bool:
-    return any(expected in b for b in banners)
+    return any(shows_message(b, expected) for b in banners)
 
 
 def expected_banner(publish: bool, role: str) -> str:
