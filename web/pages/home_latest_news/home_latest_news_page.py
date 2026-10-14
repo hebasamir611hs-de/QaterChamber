@@ -119,7 +119,8 @@ silently corrected):
     landscape, upcoming chamber initiatives, and official economic updates."
     AR — tag "آخر الأخبار", heading "ابقَ على تواصل واطلاع", description
     "ابقَ على اطلاع بآخر مستجدات بيئة الأعمال في قطر، ومبادرات الغرفة
-    القادمة، والتحديات الاقتصادية الرسمية." <html dir="rtl" lang="ar-SA"> and
+    القادمة، والتحديثات الاقتصادية الرسمية." (CORRECTED 2026-10-07:
+    read live again; the earlier "والتحديات" was a transcription typo) <html dir="rtl" lang="ar-SA"> and
     the section's own computed `direction: rtl` both confirmed live on AR;
     <html dir="ltr"> and computed `direction: ltr` confirmed live on EN.
 """
@@ -344,6 +345,183 @@ class HomeLatestNewsPage(BasePage):
         stated alignment."""
         box = self.page.locator(self.VIEW_ALL_TOP).bounding_box()
         return self._horizontal_half(box["x"] if box else None)
+
+    # ── Navigation / ordering (added 2026-10-07, Phase 3) ──────────────────
+    DETAIL_HEADING = ".qc-nd-heading"
+    VIEW_ALL_HREF = "/web/qatar-chamber/news"
+
+    def card_titles(self) -> list:
+        return [t.strip() for t in self.page.locator(f"{self.CARD} {self.CARD_TITLE}").all_inner_texts()]
+
+    def card_href(self, index: int = 0) -> str:
+        return self._card(index).get_attribute("href") or ""
+
+    def card_index_by_title(self, title: str) -> int:
+        titles = self.card_titles()
+        return titles.index(title) if title in titles else -1
+
+    def card_dates(self) -> list:
+        """Publication dates of every card, parsed from the EN meta text
+        (e.g. "Sep 15, 2026"). Unparseable entries come back as None."""
+        import datetime
+        out = []
+        for i in range(self.card_count()):
+            raw = self.card_date_text(i)
+            parsed = None
+            for fmt in ("%b %d, %Y", "%B %d, %Y", "%d %b %Y", "%Y-%m-%d"):
+                try:
+                    parsed = datetime.datetime.strptime(raw, fmt).date()
+                    break
+                except ValueError:
+                    continue
+            out.append(parsed)
+        return out
+
+    def click_card(self, index: int = 0) -> None:
+        card = self._card(index)
+        card.scroll_into_view_if_needed()
+        # force: the site-wide chatbot launcher can overlap the grid.
+        card.click(force=True)
+        self.page.wait_for_url("**news-article**", timeout=30000)
+        self.page.wait_for_load_state("domcontentloaded")
+
+    def detail_heading_text(self, timeout_ms: int = 20000) -> str:
+        loc = self.page.locator(self.DETAIL_HEADING).first
+        loc.wait_for(state="visible", timeout=timeout_ms)
+        return loc.inner_text().strip()
+
+    def detail_image_srcs(self) -> list:
+        return self.page.eval_on_selector_all("img", "els => els.map(e => e.currentSrc || e.src)")
+
+    def detail_body_text(self) -> str:
+        return self.page.locator("body").inner_text()
+
+    def click_view_all_top(self) -> None:
+        cta = self.page.locator(self.VIEW_ALL_TOP)
+        cta.scroll_into_view_if_needed()
+        cta.click(force=True)
+        # The click starts a navigation; wait for the URL to change rather
+        # than a load state the current page already satisfies (live
+        # 2026-10-07: page.url still read /home right after the click).
+        self.page.wait_for_url(f"**{self.VIEW_ALL_HREF}**", timeout=30000)
+        self.page.wait_for_load_state("domcontentloaded")
+
+    def view_all_count(self) -> int:
+        return self.page.locator(f"{self.VIEW_ALL_TOP}, {self.VIEW_ALL_BOTTOM}").count()
+
+    # Figma (REST, absoluteBoundingBox, read 2026-10-07): View All TEXT left
+    # x inside a 1920-wide frame — EN 849:15904 -> 1519, AR 1188:10142 -> 346.
+    FIGMA_VIEW_ALL_TEXT_X = {"en": 1519, "ar": 346}
+    # The View All BUTTON (instance "Buttons/Button") in the same frames:
+    # (left x, right x). EN 1499..1620, AR 300..435. This is the layout box
+    # Rule 1's ±2 px applies to; the glyph start inside it moves with font
+    # rasterisation (live EN text sits 3.3 px right of Figma's inside a
+    # button that matches to 0.3 px), so it is not asserted.
+    FIGMA_VIEW_ALL_BUTTON = {"en": (1499.0, 1620.0), "ar": (300.0, 435.0)}
+
+    def view_all_box(self) -> tuple:
+        box = self.page.locator(self.VIEW_ALL_TOP).bounding_box()
+        return (box["x"], box["x"] + box["width"])
+
+    def view_all_text_x(self) -> float:
+        """Left x (viewport px) of the top View All label's own text glyphs,
+        measured with a DOM Range so button padding is excluded."""
+        return self.page.locator(self.VIEW_ALL_TOP).evaluate(
+            """el => { const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+                let n; while ((n = w.nextNode())) { if (n.textContent.trim()) {
+                  const r = document.createRange(); r.selectNodeContents(n);
+                  const b = r.getBoundingClientRect(); if (b.width) return b.left; } }
+                return el.getBoundingClientRect().left; }"""
+        )
+
+    def view_count_texts(self) -> list:
+        return [self.card_view_count_text(i) for i in range(self.card_count())]
+
+    # ── API-response shaping (added 2026-10-07, user order "execute every case") ──
+    # The section is client-rendered from two guest headless-API calls (read
+    # live from the fragment script 2026-10-07):
+    #   /o/c/newsarticles/scopes/<gid>?filter=activeStatus eq true
+    #       &sort=publicationDate:desc&pageSize=<fragment articleCount=3>
+    #   /o/c/homelatestnewssections/scopes/<gid>?filter=activeStatus eq true&pageSize=1
+    # and AC-8 hides View All when the configured viewAllUrl answers 404.
+    # States that real shared data cannot be put in without touching real
+    # records (0 or 2 articles, a non-first section record, an unpublished
+    # listing page) are produced by reshaping THESE responses in the visitor's
+    # own browser context only — the real fragment code still does all of the
+    # rendering. Every test using this says so in its docstring/allure step.
+    NEWS_API_GLOB = "**/o/c/newsarticles/**"
+    SECTION_API_GLOB = "**/o/c/homelatestnewssections/**"
+
+    def shape_news_items(self, transform) -> None:
+        """Route the articles call: fetch the real response, then
+        `transform(items) -> items` before the fragment sees it."""
+        import json as _json
+
+        def handler(route):
+            resp = route.fetch()
+            data = resp.json()
+            data["items"] = transform(list(data.get("items", [])))
+            data["totalCount"] = len(data["items"])
+            route.fulfill(response=resp, json=data)
+
+        self.page.route(self.NEWS_API_GLOB, handler)
+
+    def _pick_by_marker(self, glob: str, marker: str, size_param: str) -> None:
+        import json as _json
+        import re as _re
+
+        def handler(route):
+            url = _re.sub(r"pageSize=\d+", "pageSize=100", route.request.url)
+            resp = route.fetch(url=url)
+            data = resp.json()
+            mine = [i for i in data.get("items", []) if marker in _json.dumps(i, ensure_ascii=False)]
+            data["items"] = mine[:1] if size_param == "1" else mine
+            data["totalCount"] = len(data["items"])
+            route.fulfill(response=resp, json=data)
+
+        self.page.route(glob, handler)
+
+    def pick_section_record(self, marker: str) -> None:
+        """Make the section call return the (real, stored, guest-visible)
+        section record whose JSON contains `marker`."""
+        self._pick_by_marker(self.SECTION_API_GLOB, marker, "1")
+
+    def put_article_first(self, marker: str) -> None:
+        """Real articles call, with the stored article containing `marker`
+        moved to position 0 (when it is older than the live top 3)."""
+        import json as _json
+
+        def handler(route):
+            import re as _re
+            url = _re.sub(r"pageSize=\d+", "pageSize=100", route.request.url)
+            resp = route.fetch(url=url)
+            data = resp.json()
+            items = data.get("items", [])
+            mine = [i for i in items if marker in _json.dumps(i, ensure_ascii=False)]
+            rest = [i for i in items if i not in mine]
+            data["items"] = (mine + rest)[:3]
+            route.fulfill(response=resp, json=data)
+
+        self.page.route(self.NEWS_API_GLOB, handler)
+
+    def make_listing_404(self) -> None:
+        """AC-8: the fragment probes the configured viewAllUrl; answer 404."""
+        self.page.route(
+            "**/web/qatar-chamber/news-archive**",
+            lambda route: route.fulfill(status=404, body="Not Found"),
+        )
+
+    def visible_text_contains_any(self, titles: list, timeout_ms: int = 20000) -> list:
+        """Titles (from `titles`) rendered visibly anywhere on the current
+        page, polled up to `timeout_ms` for client-side rendering."""
+        import time
+        deadline = time.monotonic() + timeout_ms / 1000
+        found = []
+        while True:
+            found = [t for t in titles if self.page.get_by_text(t, exact=False).first.is_visible()]
+            if found or time.monotonic() >= deadline:
+                return found
+            self.page.wait_for_timeout(1000)
 
     # ── CMS content-verification (Control_Panel-driven propagation checks) ──
     def is_section_visible(self) -> bool:

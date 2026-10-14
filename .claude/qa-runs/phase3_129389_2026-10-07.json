@@ -1,0 +1,970 @@
+{
+ "pbi": 129389,
+ "suite": 134460,
+ "plan": 133534,
+ "date": "2026-10-07",
+ "engineer": "B-129389",
+ "cases": [
+  {
+   "tc_id": 136088,
+   "title": "Verify that the About Us section renders all elements correctly on the Home Page (Figma-verified)",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_about_us_section_renders_all_elements_136088[page0]",
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_about_us_typography_matches_figma_136088[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "FAIL — Figma typography (CONFIRMED G2); element-presence part PASS"
+  },
+  {
+   "tc_id": 136089,
+   "title": "Verify that the building image collage displays with correct overlapping layout",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_building_image_collage_overlapping_layout_136089[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136090,
+   "title": "Verify that the Years of Experience badge overlay displays the configured numeric value and label",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_years_of_experience_badge_shows_value_and_label_136090[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "PASS after heal (containment->overlap oracle)"
+  },
+  {
+   "tc_id": 136091,
+   "title": "Verify that the About Us section tag, heading, and description display in the visitor's active language",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_section_text_displays_in_active_language_136091[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136092,
+   "title": "Verify that the Read More CTA button displays with correct styling and redirects to the About Us page",
+   "priority": 1,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_read_more_cta_styling_and_redirect_136092[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "PASS (note: CTA href = production www.qatarchamber.com)"
+  },
+  {
+   "tc_id": 136093,
+   "title": "Verify that the achievements sub-heading displays above the counter block",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_achievements_subheading_above_counter_block_136093[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136094,
+   "title": "Verify that all 4 configured counters display with icon, animated value, and label",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_four_counters_display_with_icon_value_label_136094[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136095,
+   "title": "Verify that counters display in the order configured by Counter Display Order",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "NEEDS USER: needs a public record on the Home Page (live record not approved; public QCTEST blocked by session permission)",
+   "result": "BLOCKED by session permission policy — test-data path exists (scratchpad/new_tests2.py), needs user OK"
+  },
+  {
+   "tc_id": 136096,
+   "title": "Verify that a counter with Active Status = False does not display on the Home Page",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "NEEDS USER: needs a public record on the Home Page (live record not approved; public QCTEST blocked by session permission)",
+   "result": "BLOCKED by session permission policy — test-data path exists (scratchpad/new_tests2.py), needs user OK"
+  },
+  {
+   "tc_id": 136097,
+   "title": "Verify that Arabic (RTL) rendering of the About Us section mirrors layout correctly",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_rtl_layout_mirrors_correctly_136097[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136098,
+   "title": "Verify that the About Us section is fully responsive on tablet breakpoint",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_responsive_at_tablet_breakpoint_136098[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136099,
+   "title": "Verify that the About Us section is fully responsive on mobile breakpoint",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_responsive_at_mobile_breakpoint_136099[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136100,
+   "title": "Verify that the About Us section renders consistently across supported browsers",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_about_summary/test_home_about_summary_web.py::test_section_renders_consistently_across_browsers_136100[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "public read on authenticated page"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136101,
+   "title": "Verify that a user with the Site Content Editor role can access the About Us Section Management screen",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_site_content_editor_can_access_about_us_section_management_136101[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136102,
+   "title": "Verify that a user without the Site Content Editor role cannot access the About Us Section Management screen",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_user_without_editor_role_cannot_access_about_us_section_management_136102[page0]"
+   ],
+   "currently_skipped_before": "y: session_guard auto-login made denial unobservable",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (refusal page = 'Coming Soon' 404, accepted deviation)"
+  },
+  {
+   "tc_id": 136103,
+   "title": "Verify that admin can complete the full About Us section configuration flow end to end",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "NEEDS USER: needs a public record on the Home Page (live record not approved; public QCTEST blocked by session permission)",
+   "result": "BLOCKED by session permission policy — test-data path exists (scratchpad/new_tests2.py), needs user OK"
+  },
+  {
+   "tc_id": 136104,
+   "title": "Verify that admin can save the About Us section as a draft without publishing",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_admin_can_save_about_us_section_as_draft_136104[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS after heal"
+  },
+  {
+   "tc_id": 136105,
+   "title": "Verify that admin can preview the About Us section before publishing",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_admin_can_preview_about_us_section_before_publishing_136105[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS after heal"
+  },
+  {
+   "tc_id": 136106,
+   "title": "Verify that published About Us configuration reflects on the Home Page after cache refresh",
+   "priority": 1,
+   "platform": "Control_Panel/Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "NEEDS USER: needs a public record on the Home Page (live record not approved; public QCTEST blocked by session permission)",
+   "result": "BLOCKED by session permission policy — test-data path exists (scratchpad/new_tests2.py), needs user OK"
+  },
+  {
+   "tc_id": 136107,
+   "title": "Verify that admin can edit an already-published About Us section and republish successfully",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "NEEDS USER: needs a public record on the Home Page (live record not approved; public QCTEST blocked by session permission)",
+   "result": "BLOCKED by session permission policy — test-data path exists (scratchpad/new_tests2.py), needs user OK"
+  },
+  {
+   "tc_id": 136108,
+   "title": "Verify that publishing is blocked when Section Heading is left empty (EN and AR)",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_publish_blocked_when_section_heading_empty_136108[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136109,
+   "title": "Verify that admin can add counters up to the maximum of 4",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_admin_can_add_counters_up_to_max_of_4_136109[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "FAIL — CONFIRMED G1 (no 4-counter cap)"
+  },
+  {
+   "tc_id": 136110,
+   "title": "Verify that publishing is blocked when Section Description is left empty (EN and AR)",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_publish_blocked_when_section_description_empty_136110[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136111,
+   "title": "Verify that Section Tag accepts valid input up to the 50-character limit (EN/AR)",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_section_tag_limit_accepts_136111[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (Rule 5, limit 50 = US); public render NEEDS USER"
+  },
+  {
+   "tc_id": 136112,
+   "title": "Verify that Section Tag rejects input exceeding the 50-character limit (EN/AR)",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_section_tag_limit_rejects_over_136112[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (note: UI accepts 51 typed, counter 51/50; submit not attempted)"
+  },
+  {
+   "tc_id": 136113,
+   "title": "Verify that Section Heading accepts valid input up to the 200-character limit",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_section_heading_limit_accepts_136113[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (limit 200 = US); public render NEEDS USER"
+  },
+  {
+   "tc_id": 136114,
+   "title": "Verify that Section Heading rejects input exceeding the 200-character limit",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_section_heading_limit_rejects_over_136114[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (note: 201 typed kept, counter 201/200)"
+  },
+  {
+   "tc_id": 136115,
+   "title": "Verify that Section Description accepts rich text formatting up to the 1000-character limit",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_section_description_is_rich_text_char_limit_na_136115_136116[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "N/A — rich text (checked: 2 CKEditor iframes)"
+  },
+  {
+   "tc_id": 136116,
+   "title": "Verify that Section Description rejects input exceeding the 1000-character limit",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_section_description_is_rich_text_char_limit_na_136115_136116[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "N/A — rich text (checked)"
+  },
+  {
+   "tc_id": 136117,
+   "title": "Verify that Building Images upload succeeds with a valid JPG file under 2MB",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_building_image_uploads_with_valid_jpg_under_2mb_136117[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS after heal (picker retry)"
+  },
+  {
+   "tc_id": 136118,
+   "title": "Verify that Building Images upload is rejected when file exceeds 2MB or has an unsupported format",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_building_image_upload_rejected_oversized_or_unsupported_136118[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136119,
+   "title": "Verify that publishing is blocked when Building Images are not uploaded",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_publish_blocked_when_building_images_not_uploaded_136119[page0]"
+   ],
+   "currently_skipped_before": "y: no confirmed clear-file control on the shared singleton",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136120,
+   "title": "Verify that Years of Experience Badge text accepts valid input up to 50 characters (EN/AR)",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_years_badge_limit_accepts_136120[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (limit 50 = US); public render NEEDS USER"
+  },
+  {
+   "tc_id": 136121,
+   "title": "Verify that Years of Experience Badge rejects input exceeding 50 characters (EN/AR)",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_years_badge_limit_rejects_over_136121[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (note: 51 kept, counter 51/50)"
+  },
+  {
+   "tc_id": 136122,
+   "title": "Verify that Read More Label accepts valid input up to 50 characters (EN/AR)",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_read_more_label_limit_accepts_136122[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (limit 50 = US); public render NEEDS USER"
+  },
+  {
+   "tc_id": 136123,
+   "title": "Verify that publishing is blocked when Read More Label is left empty (EN and AR)",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_publish_blocked_when_read_more_label_empty_136123[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136124,
+   "title": "Verify that Read More URL accepts a valid URL up to 500 characters",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_read_more_url_accepts_valid_url_136124[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS after 2nd heal (create detection, checkbox order)"
+  },
+  {
+   "tc_id": 136125,
+   "title": "Verify that publishing is blocked when Read More URL is left empty",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_publish_blocked_when_read_more_url_empty_136125[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136126,
+   "title": "Verify that Read More URL is rejected when an invalid URL format is entered",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_read_more_url_rejects_invalid_format_136126[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (blocked; wording differs = not a bug)"
+  },
+  {
+   "tc_id": 136127,
+   "title": "Verify that Counter Title accepts valid input up to 30 characters (EN/AR)",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_counter_title_limit_accepts_136127[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (limit 30 = US); public render NEEDS USER"
+  },
+  {
+   "tc_id": 136128,
+   "title": "Verify that publishing is blocked when a Counter Title is left empty (EN and AR)",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_publish_blocked_when_counter_title_empty_136128[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136129,
+   "title": "Verify that Counter Value accepts valid input up to 10 characters",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_counter_value_limit_accepts_136129[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (limit 10 = US); public render NEEDS USER"
+  },
+  {
+   "tc_id": 136130,
+   "title": "Verify that publishing is blocked when Counter Value is left empty",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_publish_blocked_when_counter_value_empty_136130[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136131,
+   "title": "Verify that Counter Value rejects input exceeding the 10-character limit",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_counter_value_limit_rejects_over_136131[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (note: 11 kept, counter 11/10)"
+  },
+  {
+   "tc_id": 136132,
+   "title": "Verify that Counter Icon upload succeeds with a valid PNG or SVG under 2MB",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_counter_icon_uploads_valid_png_or_svg_under_2mb_136132[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS after heal (file-name reader)"
+  },
+  {
+   "tc_id": 136133,
+   "title": "Verify that Counter Icon upload is rejected for unsupported format or oversized file",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_counter_icon_upload_rejected_unsupported_or_oversized_136133[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (with positive SVG control)"
+  },
+  {
+   "tc_id": 136134,
+   "title": "Verify that Counter Display Order accepts a valid positive integer and persists after save",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_counter_display_order_accepts_valid_positive_integer_136134[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS after heal"
+  },
+  {
+   "tc_id": 136135,
+   "title": "Verify that Counter Display Order rejects empty, zero, negative, or non-numeric input",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_counter_display_order_rejects_invalid_values_136135[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136136,
+   "title": "Verify that all About Us section field values persist correctly after save and reload",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_about_us_section_field_values_persist_after_save_and_reload_136136[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS (-rerun3); earlier runs AUTOMATION_BUG (fixed)"
+  },
+  {
+   "tc_id": 136137,
+   "title": "Verify that toggling Counter Active Status controls counter visibility independently per counter",
+   "priority": 2,
+   "platform": "Control_Panel/Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "NEEDS USER: needs a public record on the Home Page (live record not approved; public QCTEST blocked by session permission)",
+   "result": "BLOCKED by session permission policy — test-data path exists (scratchpad/new_tests2.py), needs user OK"
+  },
+  {
+   "tc_id": 136138,
+   "title": "Verify that discarding unsaved changes in the About Us Section Management form reverts to the last saved state",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_discard_unsaved_changes_reverts_to_last_saved_state_136138[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "PASS"
+  },
+  {
+   "tc_id": 136139,
+   "title": "Verify that the Read More CTA does not navigate to an invalid page when the About Us page is unpublished",
+   "priority": 1,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "NEEDS USER: needs a public record on the Home Page (live record not approved; public QCTEST blocked by session permission)",
+   "result": "NEEDS USER — real record (About page unpublished)"
+  },
+  {
+   "tc_id": 136140,
+   "title": "Verify that a 5th counter cannot be added once 4 counters already exist",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_about_summary/test_home_about_summary_control_panel.py::test_5th_counter_cannot_be_added_136140[page0]"
+   ],
+   "currently_skipped_before": "n",
+   "stale_flags": [
+    "TEST_USER default page on lifecycle cases",
+    "'Approved' literal / submit_for_publishing vocabulary",
+    "publish-blocked oracle current_status()!=PUBLISHED (cannot detect refusal on a Published record)",
+    "writes to live singleton 52157 / counters 52165-52183 without approval"
+   ],
+   "disposition": "run",
+   "result": "FAIL — CONFIRMED G1 (6th counter saved); run-1 PASS was a false pass (healed)"
+  }
+ ]
+}

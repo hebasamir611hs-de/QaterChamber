@@ -1,0 +1,629 @@
+{
+ "drafts": [
+  {
+   "id": 555085,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 559326,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 559408,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 559544,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 559582,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 559611,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 559663,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564387,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564393,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564454,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564472,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564536,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564662,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564680,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564723,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564745,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564768,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564800,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 564976,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 565001,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 565024,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 565048,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 565074,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 565099,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 565133,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 565198,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  },
+  {
+   "id": 565220,
+   "http": 404,
+   "erc": null,
+   "creator": null,
+   "creatorId": null,
+   "dateCreated": null,
+   "dateModified": null,
+   "status": null,
+   "title_i18n": null,
+   "desc": "",
+   "displayOrder": null,
+   "active": null,
+   "icon": false
+  }
+ ],
+ "objects": {
+  "vmo-section": {
+   "rows": [
+    [
+     "QCDEMO-129395-VMO-VISION",
+     "PUBLISHED",
+     "9/19/2026, 12:26:47 AM",
+     "Edit Preview Unpublish History Delete"
+    ],
+    [
+     "QCDEMO-129395-VMO-MISSION",
+     "PUBLISHED",
+     "7/25/2026, 5:55:15 PM",
+     "Edit Preview Unpublish History Delete"
+    ],
+    [
+     "QCDEMO-129395-VMO-OBJECTIVES",
+     "PUBLISHED",
+     "9/29/2026, 6:03:31 PM",
+     "Edit Preview Unpublish History Delete"
+    ],
+    [
+     "1518eb5a-322e-29a7-a612-ae55484eefd5",
+     "DRAFT",
+     "10/5/2026, 3:06:08 PM",
+     "Edit Preview History Delete"
+    ]
+   ],
+   "form_labels": [
+    "Filter objects",
+    "Search",
+    "Status\nAll statuses\nDraft\nPublished\nNot Published",
+    "Modified from",
+    "to",
+    "عدد السجلات بالصفحة\n\t\t\t\n\t\t\t\t10\n\t\t\t\t25\n\t\t\t\t50\n\t\t\t\t100\n\t\t\t\tالكل",
+    "Show all drafts",
+    "Section Label",
+    "Section Label — العربية *",
+    "Headline",
+    "Headline — العربية *",
+    "Subheading",
+    "Subheading — العربية",
+    "Body Content",
+    "Body Content — العربية",
+    "Section Image",
+    "Image Badge Label",
+    "Image Badge Label — العربية",
+    "Display Order",
+    "Active Status"
+   ],
+   "values": {
+    "QCDEMO-129395-VMO-VISION": [
+     [
+      "ObjectField_sectionLabel",
+      "Vision"
+     ],
+     [
+      "qc-ar-sectionLabel",
+      "الرؤية"
+     ],
+     [
+      "ObjectField_headline",
+      "INTERNATIONAL LEADERSHIP"
+     ],
+     [
+      "qc-ar-headline",
+      "ريادة دولية"
+     ],
+     [
+      "ObjectField_subheading",
+      "Aligned with Qatar National Vision 2030"
+     ],
+     [
+      "qc-ar-subheading",
+      "منسجمة مع رؤية قطر الوطنية 2030"
+     ],
+     [
+      "ObjectField_bodyContent",
+      "<ul>\n\t<li>Achieve international leadership among world chambers of commerce within the frame of Qatar National Vision 20"
+     ],
+     [
+      "qc-ar-bodyContent",
+      "<ul><li>تحقيق ريادة دولية بين غرف التجارة العالمية ضمن إطار رؤية قطر الوطنية 2030.</li><li>الإلمام الكامل بكافة قضايا مج"
+     ],
+     [
+      "ObjectField_imageBadgeLabel",
+      "Vision"
+     ],
+     [
+      "qc-ar-imageBadgeLabel",
+      "الرؤية"
+     ]
+    ],
+    "QCDEMO-129395-VMO-MISSION": [
+     [
+      "ObjectField_sectionLabel",
+      "Mission"
+     ],
+     [
+      "qc-ar-sectionLabel",
+      "المهام"
+     ],
+     [
+      "ObjectField_headline",
+      "REPRESENT. SUPPORT. ELEVATE."
+     ],
+     [
+      "qc-ar-headline",
+      "نُمثّل. ندعم. نرتقي."
+     ],
+     [
+      "ObjectField_subheading",
+      "Championing Qatar's business community"
+     ],
+     [
+      "qc-ar-subheading",
+      "الارتقاء بمجتمع الأعمال القطري"
+     ],
+     [
+      "ObjectField_bodyContent",
+      "<p>To better represent and support the Qatar business community and highlight the available business opportunities withi"
+     ],
+     [
+      "qc-ar-bodyContent",
+      "<p>نعمل على تمثيل مجتمع الأعمال القطري ودعمه بصورة أفضل، وإبراز الفرص التجارية المتاحة في مختلف القطاعات والصناعات في قط"
+     ],
+     [
+      "ObjectField_imageBadgeLabel",
+      "Mission"
+     ],
+     [
+      "qc-ar-imageBadgeLabel",
+      "المهام"
+     ]
+    ],
+    "QCDEMO-129395-VMO-OBJECTIVES": [
+     [
+      "ObjectField_sectionLabel",
+      "Objectives"
+     ],
+     [
+      "qc-ar-sectionLabel",
+      "الأهداف"
+     ],
+     [
+      "ObjectField_headline",
+      "FIVE PILLARS OF GROWTH"
+     ],
+     [
+      "qc-ar-headline",
+      "خمس ركائز للنمو"
+     ],
+     [
+      "ObjectField_subheading",
+      "Driving economic development and global investment"
+     ],
+     [
+      "qc-ar-subheading",
+      "دعم التنمية الاقتصادية وتعزيز الاستثمار العالمي"
+     ],
+     [
+      "ObjectField_bodyContent",
+      "<ul>\n\t<li>Regulate, represent, defend and promote commercial, industrial and agricultural interests.</li>\n\t<li>Support a"
+     ],
+     [
+      "qc-ar-bodyContent",
+      "<ul>\n\t<li>Regulate, represent, defend and promote commercial, industrial and agricultural interests.</li>\n\t<li>Support a"
+     ],
+     [
+      "ObjectField_imageBadgeLabel",
+      "Objectives"
+     ],
+     [
+      "qc-ar-imageBadgeLabel",
+      "الأهداف"
+     ]
+    ],
+    "1518eb5a-322e-29a7-a612-ae55484eefd5": []
+   }
+  },
+  "vision-mission-objectives-page": {
+   "rows": [
+    [
+     "Vision · Mission · Objectives",
+     "PUBLISHED",
+     "10/5/2026, 7:09:08 PM",
+     "Edit Preview Unpublish History"
+    ]
+   ],
+   "form_labels": [
+    "Filter objects",
+    "Search",
+    "Status\nAll statuses\nPublished",
+    "Modified from",
+    "to",
+    "عدد السجلات بالصفحة\n\t\t\t\n\t\t\t\t10\n\t\t\t\t25\n\t\t\t\t50\n\t\t\t\t100\n\t\t\t\tالكل",
+    "Show all drafts",
+    "Page Title",
+    "Page Title — العربية *",
+    "Hero Image",
+    "Intro Heading",
+    "Intro Heading — العربية *",
+    "Intro Description",
+    "Intro Description — العربية",
+    "Active Status"
+   ],
+   "values": {
+    "Vision · Mission · Objectives": []
+   }
+  }
+ },
+ "home_section_head": "<div class=\"qc-sd-text\"> <span class=\"qc-sd-tag\" data-qc-sd-tag=\"\">Strategic Pillars</span> <h2 class=\"qc-sd-heading\" data-qc-sd-heading=\"\">Our Strategic Direction</h2> <p class=\"qc-sd-desc\" data-qc-sd-desc=\"\">Discover the principles that guide Qatar Chamber’s role in supporting the business community, strengthening economic growth, and shaping a competitive future for Qatar.</p> </div>",
+ "home_section_ancestors": [
+  "qc-home-strategic-direction #",
+  " #fragment-cd080f96-a94a-d4f9-a53e-4ee409197c02",
+  "lfr-layout-structure-item-qc-home-strategic-direction lfr-layout-structure-item-9959f79e-fd59-cbfc-8129-2221e59a29ac  #",
+  "layout-content portlet-layout #main-content",
+  " #master-layout-wrapper",
+  " flex-fill #content"
+ ]
+}

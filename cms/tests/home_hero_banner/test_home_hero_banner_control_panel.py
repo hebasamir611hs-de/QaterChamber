@@ -268,7 +268,7 @@ def test_republishing_previously_unpublished_slide_restores_it(page, browser):
                 "an Unpublished (Draft) slide unexpectedly still appears on the Home Page"
             )
 
-        with allure.step("Click Publish again (Submit for Publishing)"):
+        with allure.step("Click Publish again (Submit for Review)"):
             admin.submit_for_publishing()
 
         admin.open_entry_by_code(HERO_SLIDE_02_ERC)
@@ -921,11 +921,11 @@ def test_delete_slide_removes_from_cms_and_public_site(page, browser):
         entry_code = admin.find_entry_code_by_field(BANNER_TITLE_EN_LABEL, title_en)
         assert entry_code, (
             f"could not resolve the just-created entry {title_en!r} by its own Banner Title (EN) value — "
-            "Submit for Publishing did not create a persisted, resolvable record"
+            "Submit for Review did not create a persisted, resolvable record"
         )
         admin.open_entry_by_code(entry_code)
         assert admin.current_status() == STATUS_PUBLISHED, (
-            f"expected {title_en!r} to show status Approved immediately after Submit for Publishing"
+            f"expected {title_en!r} to show status Approved immediately after Submit for Review"
         )
 
         with allure.step("Confirm the slide is live on the public Home Page before deleting"):
@@ -1380,7 +1380,7 @@ def test_publishing_slide_makes_it_visible_after_cache_refresh(page, browser):
         admin.open_entry_by_code(entry_code)
         assert admin.current_status() == "Draft", "arranged slide did not save as Draft"
 
-        with allure.step("Click Publish (Submit for Publishing) and poll for a success toast"):
+        with allure.step("Click Publish (Submit for Review) and poll for a success toast"):
             admin.click(admin.SUBMIT_FOR_PUBLISHING_BUTTON)
             toast_seen = _poll_for_toast_keyword(admin)
             admin._wait_for_settle()  # noqa: SLF001
@@ -1528,7 +1528,7 @@ def test_add_new_achievement_counter_item(page, browser):
             admin.set_counter_display_order("999")
             admin.set_counter_active(True)
 
-        with allure.step("Save slide (Submit for Publishing) and poll for a success toast"):
+        with allure.step("Save slide (Submit for Review) and poll for a success toast"):
             admin.click(admin.SUBMIT_FOR_PUBLISHING_BUTTON)
             toast_seen = _poll_for_toast_keyword(admin)
             admin._wait_for_settle()  # noqa: SLF001

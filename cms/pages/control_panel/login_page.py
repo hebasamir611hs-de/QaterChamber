@@ -82,16 +82,17 @@ Page Object.
     entry point.
 """
 
-import weakref
 from urllib.parse import quote
 
 from core.web.base_page import BasePage
+from core.web.session_guard import _SESSION_OWNER, session_owner, set_session_owner  # noqa: F401
 from config.settings import control_panel_url, settings
 
-# Which account each browser page was last signed in as by
-# ensure_signed_in_as(). A page nobody has signed in on yet is assumed to
-# carry the `page` fixture's default TEST_USER storageState.
-_SESSION_OWNER: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
+# `_SESSION_OWNER` (which account each browser page is signed in as) now lives
+# in core/web/session_guard.py so reauthenticate() re-logs in as the session's
+# owner. Re-exported above as the SAME object: `login_page._SESSION_OWNER[...]`
+# in existing callers keeps working. A page nobody signed in on resolves to
+# the account its context was built for (session_owner()).
 
 
 class CmsLoginPage(BasePage):
@@ -184,6 +185,9 @@ class CmsLoginPage(BasePage):
         # than through the generic wrapper (mirrors the same fix already
         # applied in core/web/session_guard.py's reauthenticate()).
         self.page.locator(self.LOGIN_SUCCESS_INDICATOR).first.wait_for(state="attached", timeout=15000)
+        # Recorded on every successful login (2026-10-13) so a mid-test
+        # session drop is repaired as THIS account, not TEST_USER.
+        set_session_owner(self.page, username)
         self._force_english_locale()
         return self
 
@@ -235,22 +239,65 @@ class CmsLoginPage(BasePage):
         when the admin toolbar was missing. The default `page` fixture
         pre-loads TEST_USER's storageState, so the toolbar was always there
         and a role test's explicit credentials were never used — its "Site
-        Content Author" steps ran as super-admin. This signs out and back in
-        whenever the requested account differs from the page's current one."""
+        Content Author" steps ran as super-admin. This switches accounts only
+        when the requested account differs from the page's current one.
+
+        CACHED (2026-10-13): the switch first tries this worker's cached
+        session for that account (core.web.browser.load_cached_session, a
+        cookie swap from a storageState file younger than 25 min) and only
+        logs in for real when there is none -- after which the new session is
+        cached for the next test. A cached session that turns out dead is
+        repaired by session_guard as the same account (the owner is recorded
+        before the first navigation)."""
+        from core.web.browser import load_cached_session, save_session_cache
+
         user = email or settings.test_user
         pwd = password or settings.test_password
-        if user != _SESSION_OWNER.get(self.page, settings.test_user):
-            self.open(control_panel_url(self.LOGOUT_PATH))
-            self.open_login().login(user, pwd)
-            _SESSION_OWNER[self.page] = user
-        if landing_url:
+        landed = False
+        if user != session_owner(self.page):
+            # Drop this context's cookies instead of a server-side sign-out
+            # (2026-10-12): the `page` fixture carries TEST_USER's SHARED
+            # storageState session, and a server-side logout invalidates that
+            # session for every other context, worker and tool using
+            # .auth/state.json — it signed out the module baselines mid-run and
+            # stranded the live GM record in Unpublished twice.
+            self.page.context.clear_cookies()
+            if load_cached_session(self.page.context, user):
+                set_session_owner(self.page, user)
+                self.open(landing_url or control_panel_url(self.POST_LOGIN_REDIRECT_PATH))
+                landed = bool(landing_url)
+                if not self.login_succeeded():
+                    self.page.context.clear_cookies()
+                    self.open_login().login(user, pwd)
+                    save_session_cache(self.page.context, user)
+                    landed = False
+            else:
+                self.open_login().login(user, pwd)
+                save_session_cache(self.page.context, user)
+            set_session_owner(self.page, user)
+        if landing_url and not landed:
             self.open(landing_url)
         if not self.login_succeeded():
-            self.open_login().login(user, pwd)
-            _SESSION_OWNER[self.page] = user
+            # Only type into a form that is really there (2026-10-12). On a
+            # fresh page with no landing_url, login_succeeded() reads
+            # about:blank and is always False; an already-signed-in session
+            # is then redirected AWAY from LOGIN_PATH (see the 2026-08-25
+            # note above), and typing into the missing username field was a
+            # 30 s fill/clear timeout (tools/restore_singleton.py --dry-run).
+            self.open_login()
+            if self._login_form_rendered():
+                self.login(user, pwd)
+                save_session_cache(self.page.context, user)
             if landing_url:
                 self.open(landing_url)
         return self
+
+    def _login_form_rendered(self, timeout_ms: int = 15000) -> bool:
+        try:
+            self.page.locator(self.USERNAME_INPUT).first.wait_for(state="visible", timeout=timeout_ms)
+            return True
+        except Exception:  # noqa: BLE001 -- redirected away: already signed in
+            return False
 
     def login_form_visible(self) -> bool:
         """True if the real Liferay LoginPortlet username field is

@@ -1,0 +1,2118 @@
+{
+ "pbi": 130718,
+ "cases": [
+  {
+   "tc_id": 146535,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Regression"
+   ],
+   "title": "Verify that a Public Visitor is denied when deep-linking to the Control Panel submissions listing",
+   "steps": [
+    {
+     "action": "In an anonymous context open the Control Panel QAFL submissions listing URL",
+     "expected": "No CMS session exists"
+    },
+    {
+     "action": "Observe the result",
+     "expected": "Redirected to the CMS login or access refused; no submission data is rendered"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Unauthenticated/site-member denial: no entry form or submission needed; scriptable with a fresh logged-out context or the site-member account."
+  },
+  {
+   "tc_id": 146536,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel"
+   ],
+   "title": "Verify that a Site Content Editor can open the page editor and manage the authorization letter template",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Editor",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open the QAFL Membership Registration page for editing",
+     "expected": "Editor exposes breadcrumb, hero, overview, card and visibility fields as editable"
+    },
+    {
+     "action": "Open the Required Template card and its Template File control",
+     "expected": "Template File can be replaced; Save Draft, Preview, Publish and Unpublish available"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146537,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor is denied access to the QAFL submissions listing",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Editor",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Navigate to the QAFL submissions listing (menu and direct URL)",
+     "expected": "Listing is not shown; access denied message displayed and no submission data exposed (wording per A-6)"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "automate: denial-direction Auth case; needs no entry form and no submission. Assert the refusal positively as the named role."
+  },
+  {
+   "tc_id": 146538,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Regression"
+   ],
+   "title": "Verify that a Form Manager can view submissions, open a record and change its status",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Form Manager",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open the QAFL submissions listing",
+     "expected": "Listing displays submissions with status"
+    },
+    {
+     "action": "Open a Pending submission and see the Request Status control",
+     "expected": "Full details visible and Request Status can be changed to Approved or Rejected"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146539,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel"
+   ],
+   "title": "Verify that a Form Manager is denied access to the page content editor",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Form Manager",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Attempt to open the QAFL Membership Registration page editor (menu and direct URL)",
+     "expected": "Editor not opened; access denied shown; page content unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "conditional: a Form Manager refusal on page content would look identical to the Editor missing-form bar, so a positive refusal cannot be told apart from the config gap."
+  },
+  {
+   "tc_id": 146540,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel"
+   ],
+   "title": "Verify that a Site Content Author can view and update assigned page content",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Author",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open the QAFL page and change the Hero Subtitle to 'QCTEST author edit'",
+     "expected": "Page opens for edit (where permitted, A-21)"
+    },
+    {
+     "action": "Save Draft",
+     "expected": "Draft saved; public page still shows the previously published subtitle"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146541,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Author cannot publish the page",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Author",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open the draft page and look for / attempt Publish",
+     "expected": "Publish action is unavailable or refused; page state stays Draft and public page unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146542,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel"
+   ],
+   "title": "Verify that a Site Content Author cannot access the QAFL submissions",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Author",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Navigate to the QAFL submissions listing via menu and direct URL",
+     "expected": "Access denied; no submission data exposed"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "automate: denial-direction Auth case; needs no entry form and no submission. Assert the refusal positively as the named role."
+  },
+  {
+   "tc_id": 146549,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Regression"
+   ],
+   "title": "Verify that new submissions appear in the admin listing with status Pending by default",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Form Manager and open the QAFL submissions listing",
+     "expected": "Listing loads"
+    },
+    {
+     "action": "Locate the record for 'Gulf Freight Logistics WLL'",
+     "expected": "Record present with Status 'Pending' and the submission date"
+    },
+    {
+     "action": "Open the record and read Request Status",
+     "expected": "Request Status dropdown shows 'Pending' with no action taken"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146552,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Web"
+   ],
+   "title": "Verify that a Draft page is not visible to an anonymous visitor",
+   "steps": [
+    {
+     "action": "As Site Content Editor set the page to Draft",
+     "expected": "Page state Draft saved"
+    },
+    {
+     "action": "Open a fresh anonymous browser context",
+     "expected": "Anonymous context has no CMS auth"
+    },
+    {
+     "action": "Open the public page URL in EN and AR",
+     "expected": "Public URL returns not-found/unavailable (no draft content, no CMS preview render)"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146553,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Web"
+   ],
+   "title": "Verify that a Published and Active page is visible to an anonymous visitor",
+   "steps": [
+    {
+     "action": "Confirm the page is Published and Active Status is Active",
+     "expected": "State confirmed"
+    },
+    {
+     "action": "Open a fresh anonymous context",
+     "expected": "Anonymous context"
+    },
+    {
+     "action": "Open the public page URL",
+     "expected": "Page renders with the published hero title, overview and form"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146554,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a Site Content Editor can Save Draft, Preview and Publish page content that then appears on the public page in EN and AR",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor and edit the page hero titles (EN and AR)",
+     "expected": "Fields updated"
+    },
+    {
+     "action": "Click Save Draft then Preview",
+     "expected": "Draft saved; Preview shows the new titles (preview is not proof of publish)"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish succeeds with Liferay toast and an audit entry"
+    },
+    {
+     "action": "Open the public page in EN and AR in an anonymous context",
+     "expected": "Public EN hero shows 'QAFL Membership Registration QCTEST' and AR hero shows 'تسجيل عضوية QAFL QCTEST' with formatting intact"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146555,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Web"
+   ],
+   "title": "Verify that unpublishing or deactivating the page removes it from the public site",
+   "steps": [
+    {
+     "action": "As Site Content Editor click Unpublish",
+     "expected": "Unpublish succeeds with toast"
+    },
+    {
+     "action": "Open the public URL in an anonymous context",
+     "expected": "Public URL returns not-found (not a stale cached 200)"
+    },
+    {
+     "action": "Republish, set Page Active Status to Inactive, save, and reload the public URL",
+     "expected": "After republish + Inactive the public page is hidden from visitors and from the menu"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146556,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High"
+   ],
+   "title": "Verify that the Form Manager listing shows all applications with their current status",
+   "steps": [
+    {
+     "action": "Log in as Form Manager",
+     "expected": "Listing opens"
+    },
+    {
+     "action": "Open the QAFL submissions listing",
+     "expected": "All submitted applications are listed"
+    },
+    {
+     "action": "Compare rows with known records",
+     "expected": "Each row shows Company name and status Pending / Approved / Rejected matching the actual record"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146557,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Webform"
+   ],
+   "title": "Verify that opening a submission shows full company, contact and document details",
+   "steps": [
+    {
+     "action": "Log in as Form Manager and open the record for 'Gulf Freight Logistics WLL'",
+     "expected": "Record opens"
+    },
+    {
+     "action": "Review company, Senior Executive, Responsible Manager, location and document sections",
+     "expected": "All Step 1-4 values match what was entered; authority MOCI with CR-1234567 and QCM-7654321; documents (CR copy, membership copy, letter, ID front, ID back) are listed and downloadable"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146558,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High"
+   ],
+   "title": "Verify that saving a status change shows the Liferay generic toast and writes an audit log entry",
+   "steps": [
+    {
+     "action": "Open a Pending record and set status Rejected with reason 'Incomplete documents'",
+     "expected": "Form accepts the values"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Liferay generic toast shown after the action"
+    },
+    {
+     "action": "Open the audit log",
+     "expected": "Audit log contains an entry with the acting user, record and Pending -&gt; Rejected change"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146559,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High"
+   ],
+   "title": "Verify that a Site Content Editor can view the audit log",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor and publish a hero title change",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the audit log",
+     "expected": "Audit log opens for the Editor"
+    },
+    {
+     "action": "Find the entry",
+     "expected": "Entry for the publish action with user and timestamp is listed"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146561,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Web",
+    "Webform"
+   ],
+   "title": "Verify that clean uploaded documents pass the scan and are stored and viewable on the record",
+   "steps": [
+    {
+     "action": "Submit a valid application including the three Step 5 documents",
+     "expected": "Submission accepted"
+    },
+    {
+     "action": "Open the record as Form Manager",
+     "expected": "Three documents listed on the record"
+    },
+    {
+     "action": "Download each document",
+     "expected": "Downloads open with the same file names, sizes and content as uploaded"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146565,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Web"
+   ],
+   "title": "Verify that Arabic page content authored in the CMS is delivered on the Arabic public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor set the Section Eyebrow AR to 'عن الجمعية QCTEST' and Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open /ar in an anonymous context",
+     "expected": "AR page shows eyebrow 'عن الجمعية QCTEST' RTL"
+    },
+    {
+     "action": "Open the EN page",
+     "expected": "EN page eyebrow unchanged 'About the association'"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146743,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "Web",
+    "Webform"
+   ],
+   "title": "Verify that the Submission Date is auto-generated on submission and is not user-editable",
+   "steps": [
+    {
+     "action": "Confirm no Submission Date field is editable on the form",
+     "expected": "No user input exists for Submission Date"
+    },
+    {
+     "action": "Submit a valid application and note the time",
+     "expected": "Submission accepted"
+    },
+    {
+     "action": "Open the record as Form Manager",
+     "expected": "Record Submission Date equals the submit timestamp (within 1 minute) and the same value appears in the emails"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146750,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "Web"
+   ],
+   "title": "Verify that the Breadcrumb label reflects the site menu structure in EN and AR",
+   "steps": [
+    {
+     "action": "Open the public page in EN",
+     "expected": "EN breadcrumb reads 'Home › Councils, Committees &amp; Partnerships › QAFL Membership Registration' (Figma shows the current-page crumb missing - A-11)"
+    },
+    {
+     "action": "Open the public page in AR",
+     "expected": "AR breadcrumb shows the Arabic menu names in RTL order"
+    },
+    {
+     "action": "Compare with the site menu",
+     "expected": "Labels match the menu names; no manual editing field is offered in CMS"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146751,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Hero Title accepts a valid value and shows on the public hero",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor and open the page editor",
+     "expected": "Editor opens"
+    },
+    {
+     "action": "Enter the EN and AR Hero Titles and click Publish",
+     "expected": "Publish succeeds with toast"
+    },
+    {
+     "action": "Open the public page in EN and AR",
+     "expected": "Public hero shows the EN and AR titles exactly as entered"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146752,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an empty Hero Title blocks saving/publishing",
+   "steps": [
+    {
+     "action": "Open the page editor and clear the EN Hero Title",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error shown; not saved"
+    },
+    {
+     "action": "Open the public page",
+     "expected": "Public page keeps the previous title"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146753,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Hero Title enforces the 100-character limit (100 accepted, 101 rejected)",
+   "steps": [
+    {
+     "action": "Enter 100 x 'A' in EN Hero Title and Publish; view the public hero",
+     "expected": "100 characters accepted and shown on the public hero without overflow"
+    },
+    {
+     "action": "Enter 101 x 'A' and Publish",
+     "expected": "Input capped at 100 or validation error; public hero not updated with 101 characters"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146754,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Hero Title is rejected as empty",
+   "steps": [
+    {
+     "action": "Enter '   ' in EN Hero Title",
+     "expected": "Spaces held"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public page unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146755,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Hero Subtitle accepts a valid value and shows on the public hero",
+   "steps": [
+    {
+     "action": "Open the page editor as Site Content Editor",
+     "expected": "Editor opens"
+    },
+    {
+     "action": "Enter the EN subtitle and its AR equivalent, Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page in EN and AR",
+     "expected": "Public hero shows the subtitle in both languages exactly as entered"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146756,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an empty Hero Subtitle blocks saving/publishing",
+   "steps": [
+    {
+     "action": "Clear the EN Hero Subtitle",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved"
+    },
+    {
+     "action": "Open the public page",
+     "expected": "Public subtitle unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146757,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Hero Subtitle enforces the 250-character limit (250 accepted, 251 rejected)",
+   "steps": [
+    {
+     "action": "Enter 250 x 'A' in EN Hero Subtitle and Publish; view public hero",
+     "expected": "250 accepted and displayed without breaking the hero layout"
+    },
+    {
+     "action": "Enter 251 x 'A' and Publish",
+     "expected": "Input capped at 250 or validation error; 251 never published"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146758,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Hero Subtitle is rejected as empty",
+   "steps": [
+    {
+     "action": "Enter '   ' in EN Hero Subtitle",
+     "expected": "Spaces held"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public page unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146759,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a valid Hero Background Image 'hero-bg.png' (1.5 MB) shows on the public hero",
+   "steps": [
+    {
+     "action": "Upload hero-bg.png (1.5 MB) as Hero Background Image",
+     "expected": "Upload accepted with preview"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page",
+     "expected": "Public hero renders hero-bg.png as the background/pattern"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146760,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Hero Background Image rejects 'hero.gif'",
+   "steps": [
+    {
+     "action": "Upload hero.gif",
+     "expected": "Upload attempted"
+    },
+    {
+     "action": "Try to save",
+     "expected": "File-type error; file not attached; public hero unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146761,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Hero Background Image enforces the 2 MB limit (1.99 MB accepted, 2.01 MB rejected)",
+   "steps": [
+    {
+     "action": "Upload hero-1_99mb.jpg (1.99 MB)",
+     "expected": "1.99 MB accepted"
+    },
+    {
+     "action": "Replace with hero-2_01mb.jpg (2.01 MB)",
+     "expected": "2.01 MB rejected with a size error; not attached"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146762,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that publishing without a Hero Background Image is allowed and the hero uses the default graphic",
+   "steps": [
+    {
+     "action": "Remove any hero image and Publish",
+     "expected": "Publish succeeds with no error"
+    },
+    {
+     "action": "Open the public page",
+     "expected": "Public hero shows the default pattern graphic with title and subtitle intact"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146763,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "Web"
+   ],
+   "title": "Verify that setting Page Active Status to Active makes the page visible on the public site",
+   "steps": [
+    {
+     "action": "Set Page Active Status to Active and save",
+     "expected": "Toggle saved as Active"
+    },
+    {
+     "action": "Open the public URL in an anonymous context",
+     "expected": "Public page loads"
+    },
+    {
+     "action": "Open the site menu",
+     "expected": "Menu contains the QAFL Membership Registration entry"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146764,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Section Eyebrow accepts a valid value and shows on the public page",
+   "steps": [
+    {
+     "action": "Open the editor and enter the EN and AR eyebrows",
+     "expected": "Editor accepts values"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page in EN and AR",
+     "expected": "Both eyebrows shown as entered"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146765,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an empty Section Eyebrow blocks saving/publishing",
+   "steps": [
+    {
+     "action": "Clear the EN Section Eyebrow",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public page unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146766,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Section Eyebrow enforces the 60-character limit (60 accepted, 61 rejected)",
+   "steps": [
+    {
+     "action": "Enter 60 x 'A' in EN eyebrow and Publish",
+     "expected": "60 accepted and displayed without overflow"
+    },
+    {
+     "action": "Enter 61 x 'A' and Publish",
+     "expected": "Input capped at 60 or validation error; 61 never published"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146767,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Section Eyebrow is rejected as empty",
+   "steps": [
+    {
+     "action": "Enter '   ' in EN eyebrow",
+     "expected": "Spaces held"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public page unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146768,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Section Heading accepts a valid value and shows on the public page",
+   "steps": [
+    {
+     "action": "Enter the EN and AR headings",
+     "expected": "Editor accepts values"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page in EN and AR",
+     "expected": "Both headings shown exactly as entered"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146769,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an empty Section Heading blocks saving/publishing",
+   "steps": [
+    {
+     "action": "Clear the EN Section Heading",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public page unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146770,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Section Heading enforces the 150-character limit (150 accepted, 151 rejected)",
+   "steps": [
+    {
+     "action": "Enter 150 x 'A' in EN heading and Publish",
+     "expected": "150 accepted and displayed wrapping cleanly"
+    },
+    {
+     "action": "Enter 151 x 'A' and Publish",
+     "expected": "Input capped at 150 or validation error; 151 never published"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146771,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Section Heading is rejected as empty",
+   "steps": [
+    {
+     "action": "Enter '   ' in EN heading",
+     "expected": "Spaces held"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public page unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146772,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Section Body accepts formatted rich text and renders it on the public page",
+   "steps": [
+    {
+     "action": "Enter the rich text in EN Section Body (bold + link) and the AR equivalent",
+     "expected": "Editor accepts formatting"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page in EN and AR",
+     "expected": "Public body shows bold text and a working link in both languages"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146773,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an empty Section Body blocks saving/publishing",
+   "steps": [
+    {
+     "action": "Clear the EN Section Body",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public page unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146774,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Section Body enforces the 2000-character limit (2000 accepted, 2001 rejected)",
+   "steps": [
+    {
+     "action": "Enter 2000 x 'A' in EN Section Body and Publish; view public page",
+     "expected": "2000 accepted and rendered without breaking the layout"
+    },
+    {
+     "action": "Enter 2001 x 'A' and Publish",
+     "expected": "Input capped at 2000 or validation error; 2001 never published"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "N/A: no character limit is applied to rich-text fields (team decision 2026-10-01)"
+  },
+  {
+   "tc_id": 146775,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Section Body is rejected as empty",
+   "steps": [
+    {
+     "action": "Enter only spaces and a blank line in EN Section Body",
+     "expected": "Blank content held"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public page unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146776,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an icon from the allowed set can be selected as Card Icon and shows on the public card",
+   "steps": [
+    {
+     "action": "Select the 'document' icon as Card Icon",
+     "expected": "Icon selected"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page",
+     "expected": "Public card icon tile (64x64) shows the document icon"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146777,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an icon outside the allowed set 'custom.gif' is rejected for Card Icon",
+   "steps": [
+    {
+     "action": "Attempt to upload custom.gif as Card Icon",
+     "expected": "Upload attempted"
+    },
+    {
+     "action": "Try to save",
+     "expected": "Validation error; icon not applied; public card unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146778,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an empty Card Icon blocks saving/publishing",
+   "steps": [
+    {
+     "action": "Clear Card Icon",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public card keeps the previous icon"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146779,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Card Eyebrow accepts a valid value and shows on the public card",
+   "steps": [
+    {
+     "action": "Enter EN and AR Card Eyebrow",
+     "expected": "Editor accepts values"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page in EN and AR",
+     "expected": "Card eyebrow shows as entered in both languages"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146780,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an empty Card Eyebrow blocks saving/publishing",
+   "steps": [
+    {
+     "action": "Clear the EN Card Eyebrow",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public card unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146781,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Card Eyebrow enforces the 100-character limit (100 accepted, 101 rejected)",
+   "steps": [
+    {
+     "action": "Enter 100 x 'A' and Publish",
+     "expected": "100 accepted and displayed without breaking the card"
+    },
+    {
+     "action": "Enter 101 x 'A' and Publish",
+     "expected": "Input capped at 100 or validation error; 101 never published"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146782,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Card Eyebrow is rejected as empty",
+   "steps": [
+    {
+     "action": "Enter '   ' in EN Card Eyebrow",
+     "expected": "Spaces held"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public card unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146783,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Card Title accepts a valid value and shows on the public card",
+   "steps": [
+    {
+     "action": "Enter EN and AR Card Title",
+     "expected": "Editor accepts values"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page in EN and AR",
+     "expected": "Card title shows as entered in both languages"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146784,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an empty Card Title blocks saving/publishing",
+   "steps": [
+    {
+     "action": "Clear the EN Card Title",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public card unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146785,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Card Title enforces the 150-character limit (150 accepted, 151 rejected)",
+   "steps": [
+    {
+     "action": "Enter 150 x 'A' and Publish",
+     "expected": "150 accepted and displayed wrapping cleanly"
+    },
+    {
+     "action": "Enter 151 x 'A' and Publish",
+     "expected": "Input capped at 150 or validation error; 151 never published"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146786,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Card Title is rejected as empty",
+   "steps": [
+    {
+     "action": "Enter '   ' in EN Card Title",
+     "expected": "Spaces held"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public card unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146787,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Card Description accepts a valid value and shows on the public card",
+   "steps": [
+    {
+     "action": "Enter EN and AR Card Description",
+     "expected": "Editor accepts values"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page in EN and AR",
+     "expected": "Card description shows as entered in both languages"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146788,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an empty Card Description blocks saving/publishing",
+   "steps": [
+    {
+     "action": "Clear the EN Card Description",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public card unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146789,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Card Description enforces the 300-character limit (300 accepted, 301 rejected)",
+   "steps": [
+    {
+     "action": "Enter 300 x 'A' and Publish",
+     "expected": "300 accepted and displayed inside the card without overflow"
+    },
+    {
+     "action": "Enter 301 x 'A' and Publish",
+     "expected": "Input capped at 300 or validation error; 301 never published"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146790,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Card Description is rejected as empty",
+   "steps": [
+    {
+     "action": "Enter '   ' in EN Card Description",
+     "expected": "Spaces held"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public card unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146791,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Download Button Label accepts a valid value and shows on the public button",
+   "steps": [
+    {
+     "action": "Enter EN and AR Download Button Label",
+     "expected": "Editor accepts values"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page in EN and AR",
+     "expected": "Button label shows as entered in both languages"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146792,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an empty Download Button Label blocks saving/publishing",
+   "steps": [
+    {
+     "action": "Clear the EN Download Button Label",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public button unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146793,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Download Button Label enforces the 60-character limit (60 accepted, 61 rejected)",
+   "steps": [
+    {
+     "action": "Enter 60 x 'A' and Publish",
+     "expected": "60 accepted and the button still fits its container"
+    },
+    {
+     "action": "Enter 61 x 'A' and Publish",
+     "expected": "Input capped at 60 or validation error; 61 never published"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146794,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Download Button Label is rejected as empty",
+   "steps": [
+    {
+     "action": "Enter '   ' in EN Download Button Label",
+     "expected": "Spaces held"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not saved; public button unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146795,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "Web"
+   ],
+   "title": "Verify that a valid Template File 'QAFL-Authorization-Letter-v2.docx' (3 MB) becomes the public download",
+   "steps": [
+    {
+     "action": "Upload QAFL-Authorization-Letter-v2.docx (3 MB) as Template File and Publish",
+     "expected": "Upload accepted"
+    },
+    {
+     "action": "Open the public page and click Download Authorization Letter",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the downloaded file",
+     "expected": "Downloaded file is QAFL-Authorization-Letter-v2.docx with the uploaded content (not the old v1)"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146796,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that publishing without a Template File is blocked",
+   "steps": [
+    {
+     "action": "Remove the Template File",
+     "expected": "Field empty"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Validation error; not published; public download continues to work with the previous file"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146797,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Template File rejects the unsupported type 'template.zip'",
+   "steps": [
+    {
+     "action": "Upload template.zip as Template File",
+     "expected": "Upload attempted"
+    },
+    {
+     "action": "Try to save",
+     "expected": "File-type error; file not attached; public download unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146798,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Template File enforces the 5 MB limit (4.99 MB accepted, 5.01 MB rejected)",
+   "steps": [
+    {
+     "action": "Upload template-4_99mb.pdf (4.99 MB)",
+     "expected": "4.99 MB accepted"
+    },
+    {
+     "action": "Replace with template-5_01mb.pdf (5.01 MB)",
+     "expected": "5.01 MB rejected with a size error; not attached"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146799,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a Form Manager can change Request Status from Pending to Approved and it persists",
+   "steps": [
+    {
+     "action": "Open a Pending record as Form Manager",
+     "expected": "Record opens with 'Pending'"
+    },
+    {
+     "action": "Choose 'Approved' in Request Status and save",
+     "expected": "Save succeeds"
+    },
+    {
+     "action": "Reload the record and the listing",
+     "expected": "Status shows 'Approved' on the record and in the listing"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146800,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Request Status offers exactly the options Pending, Approved and Rejected",
+   "steps": [
+    {
+     "action": "Open a record as Form Manager",
+     "expected": "Record opens"
+    },
+    {
+     "action": "Open the Request Status dropdown",
+     "expected": "Dropdown lists exactly Pending, Approved, Rejected; no blank or other option"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146801,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Rejection Reason 'Expired commercial registration copy' is stored and never exposed to the applicant",
+   "steps": [
+    {
+     "action": "Set status Rejected and enter 'Expired commercial registration copy'",
+     "expected": "Reason accepted"
+    },
+    {
+     "action": "Save and reopen the record",
+     "expected": "Reason persisted on the record"
+    },
+    {
+     "action": "Check any applicant-facing channel",
+     "expected": "Reason absent from every applicant-facing surface and email"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146802,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that saving Rejected with an empty Rejection Reason is blocked with a validation error",
+   "steps": [
+    {
+     "action": "Open a Pending record and set status Rejected leaving the reason empty",
+     "expected": "Status Rejected selected"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown (wording per A-6); save blocked"
+    },
+    {
+     "action": "Reload the record",
+     "expected": "Record still Pending; no email sent"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146803,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Rejection Reason enforces the 500-character limit (500 accepted, 501 rejected)",
+   "steps": [
+    {
+     "action": "Set status Rejected, enter 500 x 'A' and Save",
+     "expected": "500 accepted and stored"
+    },
+    {
+     "action": "Reopen, enter 501 x 'A' and Save",
+     "expected": "Input capped at 500 or validation error; 501 never stored"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146804,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Rejection Reason is rejected as empty",
+   "steps": [
+    {
+     "action": "Set status Rejected and enter '   ' in Rejection Reason",
+     "expected": "Spaces held"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error; save blocked; record stays Pending"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 146805,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that the 5-point overview bullet list authored in EN and AR renders on the public page",
+   "steps": [
+    {
+     "action": "Enter 5 bullets in EN and 5 in AR in the overview bullet list",
+     "expected": "Editor accepts bullets"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public page in EN and AR",
+     "expected": "Public page shows exactly 5 bullets per language in the authored order"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 146819,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Edge"
+   ],
+   "title": "Verify that a Rejected submission later changed to Approved behaves per the confirmed rule (allowed or blocked)",
+   "steps": [
+    {
+     "action": "Open the Rejected record as Form Manager",
+     "expected": "Record opens as Rejected"
+    },
+    {
+     "action": "Set status Approved and save",
+     "expected": "Result recorded for product confirmation: allowed or blocked"
+    },
+    {
+     "action": "Check the applicant mailbox and the audit log",
+     "expected": "If allowed: exactly one Approval email is sent and the audit log lists both changes; if blocked: status stays Rejected with a message"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  }
+ ]
+}

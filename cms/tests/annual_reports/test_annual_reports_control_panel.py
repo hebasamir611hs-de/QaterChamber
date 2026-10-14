@@ -313,7 +313,7 @@ _PAGE_SINGLETON_SKIP_REASON = (
     "The field under test lives on the real, singleton 'Annual Reports "
     "Page' record (QCDEMO-130712-PAGE-MAIN) — writing to it (even a "
     "boundary/negative probe) risks leaving live production hero/archive "
-    "content in a test/garbage state if teardown fails, and this Approved "
+    "content in a test/garbage state if teardown fails, and this Published "
     "singleton must first be Unpublished (taking the real page offline) "
     "before any edit is even possible. Not authorized without explicit "
     "ID-based confirmation per this project's destructive-ops rule."
@@ -582,7 +582,7 @@ def test_report_title_empty_rejected(page):
 def test_report_title_exceeds_200_chars_rejected(page):
     # Azure TC 143721 | PBI 130712 — KNOWN LIMITATION (not fixed here): this
     # calls the shared ObjectAuthoringPage.field_length_rejected(), whose
-    # submit-time branch checks `current_status() != "Approved"` — the
+    # submit-time branch checks `current_status() != STATUS_PUBLISHED` — the
     # exact predicate this module's own current_status()->status_for()/
     # submit_blocked() migration proved unreliable on THIS object (see
     # module docstring). The truncation branch (reading the field back

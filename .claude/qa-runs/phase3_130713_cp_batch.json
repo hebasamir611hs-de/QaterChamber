@@ -1,0 +1,2637 @@
+{
+ "pbi": 130713,
+ "plan_id": 137724,
+ "suite_id": 140372,
+ "module": "cms/tests/podcast/test_podcast_control_panel.py",
+ "object_name_source": "live Object Authoring sidebar (engineer brief 2026-10-01, 'Object-name source'); slugs pending live read",
+ "cases": [
+  {
+   "tc_id": 143523,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that Control Panel Podcast admin forms render correctly in Arabic (RTL)",
+   "steps": [
+    {
+     "action": "Open Podcast Episode admin form in AR UI locale.",
+     "expected": "AR field labels/inputs render RTL, EN fields remain LTR within the form."
+    },
+    {
+     "action": "Save a change.",
+     "expected": "Liferay generic success toast displays in Arabic, RTL."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor'), /ar/ admin locale for that request only"
+  },
+  {
+   "tc_id": 143535,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that Administrator can view, filter, export and manually unsubscribe Podcast subscribers",
+   "steps": [
+    {
+     "action": "Log in as Administrator, open Podcast Subscribers panel.",
+     "expected": "list loads with email/status/subscription date/unsubscription date columns."
+    },
+    {
+     "action": "Apply a status filter, then export CSV, then manually unsubscribe one record.",
+     "expected": "all three actions succeed, no permission error."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names Administrator; the eight provisioned roles have no Administrator and the brief bars TEST_USER for lifecycle/permission cases - needs a QA Manager ruling on the account; the unsubscribe step also needs a QCTEST subscriber",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143536,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that an unauthenticated request to the Podcast Subscribers admin panel is denied",
+   "steps": [
+    {
+     "action": "Without logging in, navigate directly to the Subscribers panel admin URL.",
+     "expected": "redirected to CMS login, panel content not rendered."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "none - fresh logged-out context (new_context(browser, use_auth_state=False))"
+  },
+  {
+   "tc_id": 143537,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that Site Content Editor can publish an episode directly",
+   "steps": [
+    {
+     "action": "Log in as `test1@xyz.com` (Site Content Editor); Create episode `QCTEST-EP-201`, fill all mandatory fields, click Publish.",
+     "expected": "episode status = Published immediately, no review step required."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing a QCTEST episode may fire the New Episode email to every Active subscriber on qcdev - automate only once the QA Manager confirms that list holds test addresses only",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143538,
+   "priority": 3,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that Site Content Editor can manage Platform Follow Links and the subscription band",
+   "steps": [
+    {
+     "action": "As Editor, edit an existing Platform Follow Link's Display Order and Active Status, save.",
+     "expected": "change applied without an \"Access Denied\" message."
+    },
+    {
+     "action": "Edit Subscription Band heading text, publish.",
+     "expected": "change applied."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated (subscription-band half); the platform-link half alone is safe",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143539,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that Site Content Author can create and edit an assigned episode with bilingual metadata but cannot publish it directly",
+   "steps": [
+    {
+     "action": "Log in as `Test2@xyz.com` (Site Content Author); Create episode `QCTEST-EP-202`, fill EN+AR Title/Description → saved as Draft successfully; Attempt to click Publish.",
+     "expected": "action blocked / routed to \"submit for review\" instead of direct publish, status remains not-Published."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 143540,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that Site Content Author cannot manage Podcast subscribers",
+   "steps": [
+    {
+     "action": "Log in as Site Content Author, attempt to open the Podcast Subscribers panel.",
+     "expected": "\"Access Denied. You do not have permission to perform this action.\" (MSG-10) shown, panel content not rendered."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 143541,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that Site Content Author cannot bypass the publish restriction via a direct workflow-transition request",
+   "steps": [
+    {
+     "action": "As Site Content Author, attempt to force the episode's status to Published via a direct workflow-transition action (not the disabled UI button).",
+     "expected": "transition rejected, status remains Draft/Pending Review, action logged as denied."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the direct workflow-transition endpoint is not documented - automate once located (read the request the UI sends)",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 143604,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "Subscription",
+    "UAT"
+   ],
+   "title": "Verify that publishing a new episode sends the New Episode notification email to all active subscribers",
+   "steps": [
+    {
+     "action": "With ≥2 Active subscribers seeded, publish a new episode \"Episode 25\" from the CMS.",
+     "expected": "Confirm both active subscribers receive the New Episode notification email containing `{{episode_title}}`, `{{episode_number}}`, `{{episode_description}}`, `{{published_date}}`, `{{duration}}`, `{{podcast_page_link}}` and a working `{{unsubscribe_link}}`, all resolved to real values (not raw placeholders)."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing a QCTEST episode may fire the New Episode email to every Active subscriber on qcdev - automate only once the QA Manager confirms that list holds test addresses only; the inbox check also needs a mailbox the suite can read",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143613,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that publishing the Podcast page (Draft → Published) makes content visible on the public site",
+   "steps": [
+    {
+     "action": "As Site Content Editor, edit Podcast page fields, click Publish; Open `/podcast` in a fresh logged-out browser context.",
+     "expected": "the newly published Show Title/Description/host/links are visible."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143615,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that re-publishing an edited Podcast page shows the new value, not a stale cached one",
+   "steps": [
+    {
+     "action": "Edit the already-published Show Description to a new value, Publish; Reload `/podcast` in a fresh logged-out context.",
+     "expected": "the new description text is shown, the old text is gone (no stale cache)."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143617,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that unpublishing the Podcast page removes it from public visibility",
+   "steps": [
+    {
+     "action": "As Site Content Editor, Unpublish the Podcast page; In a fresh logged-out browser context, navigate to `/podcast`.",
+     "expected": "page is not visible to the visitor (no stale 200 with old content)."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143618,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that publishing a new episode (Draft → Published) makes it visible on the public episode list",
+   "steps": [
+    {
+     "action": "Create+publish episode `QCTEST-EP-210`; Open `/podcast` in a fresh logged-out context.",
+     "expected": "episode appears in the Latest Episodes list with its artwork/title/description."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing a QCTEST episode may fire the New Episode email to every Active subscriber on qcdev - automate only once the QA Manager confirms that list holds test addresses only",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143619,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that re-publishing an edited episode shows the updated fields on the public listing, not stale ones",
+   "steps": [
+    {
+     "action": "Edit `QCTEST-EP-210`'s title, re-publish; Reload `/podcast` logged-out.",
+     "expected": "the updated title displays, old title is gone."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing a QCTEST episode may fire the New Episode email to every Active subscriber on qcdev - automate only once the QA Manager confirms that list holds test addresses only",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143620,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that unpublishing an episode removes it from the public listing",
+   "steps": [
+    {
+     "action": "Unpublish `QCTEST-EP-210`; Reload `/podcast` in a fresh logged-out context.",
+     "expected": "the episode row is gone from the Latest Episodes list."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing a QCTEST episode may fire the New Episode email to every Active subscriber on qcdev - automate only once the QA Manager confirms that list holds test addresses only",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143621,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that deleting an episode removes it from both the public listing and the admin list with no broken reference",
+   "steps": [
+    {
+     "action": "Delete `QCTEST-EP-210` from the admin episode list; Confirm it no longer appears in the admin grid; Reload `/podcast` logged-out.",
+     "expected": "episode is absent, no broken image/link/placeholder left in its place."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing a QCTEST episode may fire the New Episode email to every Active subscriber on qcdev - automate only once the QA Manager confirms that list holds test addresses only",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143629,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that an episode without a playable source cannot be published",
+   "steps": [
+    {
+     "action": "Create an episode with no Audio File and no Embed Link; Attempt to Publish.",
+     "expected": "publish is blocked, status remains Draft."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143630,
+   "priority": 2,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA"
+   ],
+   "title": "Verify that setting both an uploaded audio file and an embed link on the same episode is blocked",
+   "steps": [
+    {
+     "action": "On an episode, upload an audio file AND enter an embed link; Attempt to save.",
+     "expected": "save is rejected, the two options remain mutually exclusive, no episode record is created/updated with both set."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143631,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing without required Arabic content is blocked",
+   "steps": [
+    {
+     "action": "Create an episode with the English Title/Description filled but the Arabic fields left empty; Attempt to Publish.",
+     "expected": "\"Arabic content is required.\" / \"المحتوى بالعربية مطلوب.\" (MSG-7) shown, publish blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143632,
+   "priority": 2,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that toggling Featured on Home Page on one episode unsets any previously featured episode",
+   "steps": [
+    {
+     "action": "Confirm Episode A is currently Featured; Toggle Featured = true on Episode B, save → Episode B becomes Featured; Reopen Episode A's record.",
+     "expected": "its Featured toggle is now false; only one episode is Featured across the whole set."
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: setting Featured on a QCTEST record unsets the live featured record visitors see",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143634,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that a newly subscribed record appears in the admin subscriber list with status Active and its subscription date",
+   "steps": [
+    {
+     "action": "Subscribe `list.check@example.com` on the public page; Open the admin Podcast Subscribers panel.",
+     "expected": "the record appears with status Active and today's subscription date."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "none - fresh logged-out context (new_context(browser, use_auth_state=False)) then Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143635,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that filtering the subscriber list by status returns only matching subscribers",
+   "steps": [
+    {
+     "action": "Seed 2 Active and 1 Unsubscribed subscriber; Apply filter Status=Unsubscribed.",
+     "expected": "only the 1 Unsubscribed record is shown, the 2 Active records are excluded."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names Administrator; the eight provisioned roles have no Administrator and the brief bars TEST_USER for lifecycle/permission cases - needs a QA Manager ruling on the account",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143636,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that filtering the subscriber list by date range returns only matching subscribers",
+   "steps": [
+    {
+     "action": "Seed subscribers with different subscription dates; Apply a date-range filter covering only one subscriber's date.",
+     "expected": "only that subscriber displays."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names Administrator; the eight provisioned roles have no Administrator and the brief bars TEST_USER for lifecycle/permission cases - needs a QA Manager ruling on the account",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143637,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that searching the subscriber list by email address returns only the matching subscriber",
+   "steps": [
+    {
+     "action": "Search `list.check@example.com`.",
+     "expected": "Only that record is returned; other subscribers are excluded."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names Administrator; the eight provisioned roles have no Administrator and the brief bars TEST_USER for lifecycle/permission cases - needs a QA Manager ruling on the account",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143638,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that exporting the filtered subscriber list produces a CSV with all required columns",
+   "steps": [
+    {
+     "action": "Apply a status filter; Click Export.",
+     "expected": "a CSV file downloads containing exactly the filtered subscribers with columns email address, status, subscription date, unsubscription date."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names Administrator; the eight provisioned roles have no Administrator and the brief bars TEST_USER for lifecycle/permission cases - needs a QA Manager ruling on the account",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143639,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that an admin can manually set a subscriber to Unsubscribed",
+   "steps": [
+    {
+     "action": "In the admin panel, select an Active subscriber and choose \"Unsubscribe\".",
+     "expected": "Status is set to Unsubscribed, un-subscription date recorded, Unsubscribe Confirmation email sent to that address, and the address stops receiving future Podcast emails."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names Administrator; the eight provisioned roles have no Administrator and the brief bars TEST_USER for lifecycle/permission cases - needs a QA Manager ruling on the account; needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143640,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that any subscriber record change is audit-logged with a timestamp and the acting admin",
+   "steps": [
+    {
+     "action": "Perform a manual unsubscribe action as a named admin user; Open the audit log.",
+     "expected": "an entry exists recording the action, timestamp, and the acting user's identity."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the audit-log surface is not located yet - automate once it is found on the live CMS (read only)",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143671,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that Save as Draft on the Podcast page stores changes without publishing them",
+   "steps": [
+    {
+     "action": "Edit Show Description, click \"Save as Draft\"; Reload `/podcast` logged-out.",
+     "expected": "old published description still shows (draft not visible publicly); reopening the admin form shows the draft change retained."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143672,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that Preview on the Podcast page shows draft changes without affecting the live public page",
+   "steps": [
+    {
+     "action": "Save Show Description as Draft, click Preview → preview view shows the new draft text.",
+     "expected": "In a separate logged-out context, `/podcast` still shows the old published text."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143673,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that creating a new episode via Create Episode stores it as Draft by default",
+   "steps": [
+    {
+     "action": "Click \"Create Episode\", fill mandatory fields, click Save (not Publish).",
+     "expected": "Episode status = Draft; not visible on the public listing."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143675,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that adding a new active Platform Follow Link appears in the hero in its configured display order",
+   "steps": [
+    {
+     "action": "Add a new platform link (e.g. \"YouTube\"), Display Order = 1, Active = true, publish; Open `/podcast`.",
+     "expected": "the new button appears first among the platform buttons, per Display Order."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143676,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that setting a Platform Follow Link's Active Status to false removes it from the public hero",
+   "steps": [
+    {
+     "action": "Set an existing active platform link's Active Status = false, publish; Open `/podcast` logged-out.",
+     "expected": "that button no longer displays."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143677,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that re-activating a Platform Follow Link restores its button on the public hero",
+   "steps": [
+    {
+     "action": "Set the same link's Active Status back to true, publish; Reload `/podcast`.",
+     "expected": "the button reappears in its configured Display Order position."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143680,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that editing a published episode's Brief Description and re-publishing updates the value visitors see, confirmed on both EN and AR locales",
+   "steps": [
+    {
+     "action": "Edit the EN Brief Description of a published episode, re-publish; Reload `/podcast` (EN) logged-out → new EN text shows; Reload `/ar/podcast` logged-out.",
+     "expected": "AR text (previously unaffected by the EN-only edit) still renders correctly, no cross-locale corruption."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing a QCTEST episode may fire the New Episode email to every Active subscriber on qcdev - automate only once the QA Manager confirms that list holds test addresses only",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143681,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Show Title accepts a valid value within 150 characters",
+   "steps": [
+    {
+     "action": "Enter `\"Qatar Chamber Podcast\"` (22 chars) in Show Title.",
+     "expected": "Save → field accepts the value; saves successfully and displays on the public hero."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143682,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Show Title rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear the Show Title field.",
+     "expected": "Save → \"This field is required.\" (MSG-5) shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143683,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Show Title rejects a value exceeding 150 characters",
+   "steps": [
+    {
+     "action": "Enter a 151-character string in Show Title.",
+     "expected": "Save → validation error shown; save blocked; value not persisted."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143684,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Show Title rejects whitespace-only input",
+   "steps": [
+    {
+     "action": "Enter `\"     \"` (spaces only) in Show Title.",
+     "expected": "Save → treated as empty; MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143685,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Show Description accepts a valid rich-text value within 1000 characters",
+   "steps": [
+    {
+     "action": "Enter a valid rich-text value ≤1000 characters in Show Description.",
+     "expected": "Save → saved successfully; renders on the public hero."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143686,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Show Description rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear the Show Description field.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143687,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Show Description rejects a value exceeding 1000 characters",
+   "steps": [
+    {
+     "action": "Enter a 1001-character value in Show Description.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143688,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Show Description rejects whitespace-only input",
+   "steps": [
+    {
+     "action": "Enter whitespace-only content in Show Description.",
+     "expected": "Save → treated as empty; MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143689,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Background Image accepts a valid file within the size/type limit",
+   "steps": [
+    {
+     "action": "Upload a valid 1.5MB JPG as Hero Background Image.",
+     "expected": "Save → saved; renders as the hero background on the public page."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143690,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Background Image rejects an unsupported file type",
+   "steps": [
+    {
+     "action": "Upload a `.pdf` file as Hero Background Image.",
+     "expected": "Save → \"Unsupported file type or size.\" (MSG-9) shown; rejected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143691,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Background Image rejects a file exceeding the 2MB size limit",
+   "steps": [
+    {
+     "action": "Upload an oversized 2.5MB JPG as Hero Background Image.",
+     "expected": "Save → MSG-9 shown; rejected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143692,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Background Image is required before publish",
+   "steps": [
+    {
+     "action": "Leave Hero Background Image empty, attempt Save/Publish.",
+     "expected": "\"This field is required.\" shown; publish blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143693,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Illustration accepts a valid file within the size/type limit",
+   "steps": [
+    {
+     "action": "Upload a valid 1MB SVG as Hero Illustration.",
+     "expected": "Save → saved; renders in the hero."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143694,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Illustration rejects an unsupported file type",
+   "steps": [
+    {
+     "action": "Upload a `.gif` file as Hero Illustration.",
+     "expected": "Save → MSG-9 shown; rejected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143695,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Illustration rejects a file exceeding the 2MB size limit",
+   "steps": [
+    {
+     "action": "Upload an oversized 2.2MB PNG as Hero Illustration.",
+     "expected": "Save → MSG-9 shown; rejected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143696,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Illustration is required before publish",
+   "steps": [
+    {
+     "action": "Leave Hero Illustration empty, attempt Save/Publish.",
+     "expected": "required-field error shown; publish blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143697,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Cadence Badge Label accepts a valid value within 30 characters",
+   "steps": [
+    {
+     "action": "Enter `\"Weekly\"` in Cadence Badge Label.",
+     "expected": "Save → saved; badge shows \"Weekly\"."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143698,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Cadence Badge Label rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Cadence Badge Label.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143699,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Cadence Badge Label rejects a value exceeding 30 characters",
+   "steps": [
+    {
+     "action": "Enter a 31-character value in Cadence Badge Label.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143700,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Cadence Badge Label rejects whitespace-only input",
+   "steps": [
+    {
+     "action": "Enter whitespace-only content in Cadence Badge Label.",
+     "expected": "Save → treated as empty; MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143701,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Name accepts a valid value within 150 characters",
+   "steps": [
+    {
+     "action": "Enter `\"Ahmed Al-Kuwari\"` in Host Name.",
+     "expected": "Save → saved; shows in the host block."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143702,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Name rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Host Name.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143703,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Name rejects a value exceeding 150 characters",
+   "steps": [
+    {
+     "action": "Enter a 151-character value in Host Name.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143704,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Name rejects whitespace-only input",
+   "steps": [
+    {
+     "action": "Enter whitespace-only content in Host Name.",
+     "expected": "Save → treated as empty; MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143705,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Title accepts a valid value within 150 characters",
+   "steps": [
+    {
+     "action": "Enter `\"Director of Communications\"` in Host Title.",
+     "expected": "Save → saved; shows under the host name."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143706,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Title rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Host Title.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143707,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Title rejects a value exceeding 150 characters",
+   "steps": [
+    {
+     "action": "Enter a 151-character value in Host Title.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143708,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Title rejects whitespace-only input",
+   "steps": [
+    {
+     "action": "Enter whitespace-only content in Host Title.",
+     "expected": "Save → treated as empty; MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143709,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Image accepts a valid supported file type",
+   "steps": [
+    {
+     "action": "Upload a valid PNG as Host Image.",
+     "expected": "Save → saved; renders as the host photo."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143710,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Image rejects an unsupported file type",
+   "steps": [
+    {
+     "action": "Upload a `.bmp` file as Host Image.",
+     "expected": "Save → MSG-9 shown; rejected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143741,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Host Image is required before publish",
+   "steps": [
+    {
+     "action": "Leave Host Image empty, attempt Save/Publish.",
+     "expected": "required-field error shown; publish blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143742,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform Name accepts a valid value within 60 characters",
+   "steps": [
+    {
+     "action": "Enter `\"Apple Music\"` in Platform Name.",
+     "expected": "Save → saved; renders as the button label."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143743,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform Name rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Platform Name.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143744,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform Name rejects a value exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter a 61-character value in Platform Name.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143745,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform Name rejects whitespace-only input",
+   "steps": [
+    {
+     "action": "Enter whitespace-only content in Platform Name.",
+     "expected": "Save → treated as empty; MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143746,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform Icon accepts a valid file within the size/type limit",
+   "steps": [
+    {
+     "action": "Upload a valid 400KB SVG as Platform Icon.",
+     "expected": "Save → saved; renders on the button."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143747,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform Icon rejects an unsupported file type",
+   "steps": [
+    {
+     "action": "Upload a `.jpg` file as Platform Icon.",
+     "expected": "Save → MSG-9 shown; rejected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143748,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform Icon rejects a file exceeding the 1MB size limit",
+   "steps": [
+    {
+     "action": "Upload an oversized 1.2MB file as Platform Icon.",
+     "expected": "Save → MSG-9 shown; rejected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143749,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform Icon is required before publish",
+   "steps": [
+    {
+     "action": "Leave Platform Icon empty, attempt Save/Publish.",
+     "expected": "required-field error shown; publish blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143750,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform URL accepts a valid URL",
+   "steps": [
+    {
+     "action": "Enter `https://music.apple.com/qc-podcast` in Platform URL.",
+     "expected": "Save → saved; the button opens this URL."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143751,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform URL rejects an invalid URL format",
+   "steps": [
+    {
+     "action": "Enter `\"not a url\"` in Platform URL.",
+     "expected": "Save → \"A valid platform URL is required.\" (MSG-8) shown; rejected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143752,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Platform URL rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Platform URL.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143753,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order accepts a valid positive integer",
+   "steps": [
+    {
+     "action": "Enter `1` in Display Order.",
+     "expected": "Save → saved; link ordered first."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143754,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order rejects zero",
+   "steps": [
+    {
+     "action": "Enter `0` in Display Order.",
+     "expected": "Save → validation error shown (must be positive); save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143755,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order rejects non-numeric input",
+   "steps": [
+    {
+     "action": "Enter `\"abc\"` in Display Order.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143756,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Display Order.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143757,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Title accepts a valid value within 200 characters",
+   "steps": [
+    {
+     "action": "Enter `\"Trade Corridors of Tomorrow\"` in Episode Title.",
+     "expected": "Save → saved; shows on the episode row."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143758,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Title rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Episode Title.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143759,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Title rejects a value exceeding 200 characters",
+   "steps": [
+    {
+     "action": "Enter a 201-character value in Episode Title.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143760,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Title rejects whitespace-only input",
+   "steps": [
+    {
+     "action": "Enter whitespace-only content in Episode Title.",
+     "expected": "Save → treated as empty; MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143761,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Number accepts a valid unique value",
+   "steps": [
+    {
+     "action": "Enter a valid unique value `25` in Episode Number.",
+     "expected": "Save → saved successfully."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "case value 25 may already belong to a real episode; 9925 keeps the uniqueness rule out of a valid-value case",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143762,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Number rejects a value already in use by another episode",
+   "steps": [
+    {
+     "action": "Enter `24` (already in use by an existing episode) in Episode Number.",
+     "expected": "Save → \"This episode number is already in use.\" (MSG-11) shown; blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143763,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Number rejects zero or a negative value",
+   "steps": [
+    {
+     "action": "Enter `-1` in Episode Number.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143764,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Number rejects non-numeric input",
+   "steps": [
+    {
+     "action": "Enter `\"twenty-four\"` in Episode Number.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143765,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Artwork accepts a valid supported file type",
+   "steps": [
+    {
+     "action": "Upload a valid JPG as Episode Artwork.",
+     "expected": "Save → saved; renders as the episode thumbnail on the public row."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143766,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Artwork rejects an unsupported file type",
+   "steps": [
+    {
+     "action": "Upload a `.tiff` file as Episode Artwork.",
+     "expected": "Save → MSG-9 shown; rejected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143767,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Artwork is required before publish",
+   "steps": [
+    {
+     "action": "Leave Episode Artwork empty, attempt Publish.",
+     "expected": "\"Episode artwork is required.\" (MSG-12) shown; publish blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143768,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Brief Description accepts a valid value within 300 characters",
+   "steps": [
+    {
+     "action": "Enter a valid description ≤300 characters in Brief Description.",
+     "expected": "Save → saved; shows on the episode row."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143769,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Brief Description rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Brief Description.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143770,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Brief Description rejects a value exceeding 300 characters",
+   "steps": [
+    {
+     "action": "Enter a 301-character value in Brief Description.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143771,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Brief Description rejects whitespace-only input",
+   "steps": [
+    {
+     "action": "Enter whitespace-only content in Brief Description.",
+     "expected": "Save → treated as empty; MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143772,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Audio File accepts a valid supported format when Option A is selected",
+   "steps": [
+    {
+     "action": "Select Audio Source Type = Option A, upload a valid MP3 as Episode Audio File.",
+     "expected": "Save → saved; playable and downloadable on the public row."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143773,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Audio File rejects an unsupported audio format",
+   "steps": [
+    {
+     "action": "Upload a `.wma` file as Episode Audio File.",
+     "expected": "Save → \"Unsupported audio format. Accepted formats: MP3, WAV, M4A.\" (MSG-14) shown; rejected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143774,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Audio File is required before publish when Option A is selected and no file is uploaded",
+   "steps": [
+    {
+     "action": "Select Audio Source Type = Option A, leave Episode Audio File empty, attempt Publish.",
+     "expected": "\"An audio file or an embed link is required.\" (MSG-13) shown; publish blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143775,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Embed Link accepts a valid embed URL when Option B is selected",
+   "steps": [
+    {
+     "action": "Select Audio Source Type = Option B, enter a valid embed URL in Episode Embed Link.",
+     "expected": "Save → saved; the episode plays via the embed on the public page."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143776,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Episode Embed Link is required before publish when Option B is selected and left empty",
+   "steps": [
+    {
+     "action": "Select Audio Source Type = Option B, leave Episode Embed Link empty, attempt Publish.",
+     "expected": "MSG-13 shown; publish blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143777,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Published Date accepts a valid date",
+   "steps": [
+    {
+     "action": "Enter `2026-09-21` in Published Date.",
+     "expected": "Save → saved; episode sorts correctly by this date."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143778,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Published Date rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Published Date.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143779,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Duration accepts a valid HH:MM:SS value",
+   "steps": [
+    {
+     "action": "Enter `00:42:15` in Duration.",
+     "expected": "Save → saved; displays \"42 MIN\" on the public row."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143780,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Duration rejects an invalid format",
+   "steps": [
+    {
+     "action": "Enter `\"42 minutes\"` in Duration.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143799,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Duration rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Duration.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143804,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Subscription Heading accepts a valid value within 150 characters",
+   "steps": [
+    {
+     "action": "Enter `\"Never miss a new episode\"` in Subscription Heading.",
+     "expected": "Save → saved successfully."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143805,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Subscription Heading rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Subscription Heading.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143806,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Subscription Heading rejects a value exceeding 150 characters",
+   "steps": [
+    {
+     "action": "Enter a 151-character value in Subscription Heading.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143807,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Subscription Heading rejects whitespace-only input",
+   "steps": [
+    {
+     "action": "Enter whitespace-only content in Subscription Heading.",
+     "expected": "Save → treated as empty; MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143808,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Subscription Description accepts a valid value within 300 characters",
+   "steps": [
+    {
+     "action": "Enter a valid description ≤300 characters in Subscription Description.",
+     "expected": "Save → saved; shows under the heading."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143809,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Subscription Description rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Subscription Description.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143810,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Subscription Description rejects a value exceeding 300 characters",
+   "steps": [
+    {
+     "action": "Enter a 301-character value in Subscription Description.",
+     "expected": "Save → validation error shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143811,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Subscription Description rejects whitespace-only input",
+   "steps": [
+    {
+     "action": "Enter whitespace-only content in Subscription Description.",
+     "expected": "Save → treated as empty; MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143813,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Email Field Placeholder rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Email Field Placeholder.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143817,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Subscribe Button Label rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Subscribe Button Label.",
+     "expected": "Save → MSG-5 shown; save blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  }
+ ],
+ "out_of_scope": [
+  {
+   "tc_id": 143674,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that any admin change to the Podcast page/episode/host/link displays the Liferay generic success toast"
+  },
+  {
+   "tc_id": 143800,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Subscription Icon accepts a valid file within the size/type limit"
+  },
+  {
+   "tc_id": 143801,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Subscription Icon rejects an unsupported file type"
+  },
+  {
+   "tc_id": 143802,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Subscription Icon rejects a file exceeding the 1MB size limit"
+  },
+  {
+   "tc_id": 143803,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Subscription Icon is required before publish"
+  },
+  {
+   "tc_id": 143812,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Email Field Placeholder accepts a valid value within 60 characters"
+  },
+  {
+   "tc_id": 143814,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Email Field Placeholder rejects a value exceeding 60 characters"
+  },
+  {
+   "tc_id": 143815,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Email Field Placeholder rejects whitespace-only input"
+  },
+  {
+   "tc_id": 143816,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Subscribe Button Label accepts a valid value within 30 characters"
+  },
+  {
+   "tc_id": 143818,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Subscribe Button Label rejects a value exceeding 30 characters"
+  },
+  {
+   "tc_id": 143819,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Subscribe Button Label rejects whitespace-only input"
+  }
+ ]
+}

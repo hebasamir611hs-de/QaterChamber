@@ -1,5 +1,5 @@
 """
-web/tests/org_structure/test_org_structure_control_panel.py
+cms/tests/org_structure/test_org_structure_control_panel.py
 
 Control_Panel-tagged cases for ADO parent PBI 129399 (QC-ABOUT-007 —
 Organizational Structure). Source of truth: the approved, injected case
@@ -873,7 +873,7 @@ def test_valid_hero_banner_en_uploads(page):
             alt_text_ar="بانر صفحة الهيكل التنظيمي",
         )
         hero.upload_banner_image(os.path.join(FIXTURES, "banner_en.jpg"))
-    with allure.step("Submit for Publishing — the entry reaches Approved"):
+    with allure.step("Submit for Review — the entry reaches Approved"):
         hero.save()
         hero.open_entries_list()
         assert hero.row_status_text(page_key) == STATUS_PUBLISHED

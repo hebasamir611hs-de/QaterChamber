@@ -169,13 +169,13 @@ def test_published_event_appears_in_business_events_section(page, browser):
         with allure.step("Enter all mandatory fields for a Chamber Events / SME Development event"):
             _fill_mandatory_fields(admin, qctest_title, "SME Development")
 
-        with allure.step("Submit for Publishing"):
+        with allure.step("Submit for Review"):
             admin.publish()
 
 
         assert admin.wait_for_workflow_status(qctest_title, STATUS_PUBLISHED) == STATUS_PUBLISHED, (
-            f"Expected {qctest_title!r} to show workflow Status 'Approved' "
-            f"in the entries list immediately after Submit for Publishing."
+            f"Expected {qctest_title!r} to show workflow Status 'Published' "
+            f"in the entries list immediately after Submit for Review."
         )
 
         with allure.step("Open the public Home Page Business Events section and poll for the new card"):
@@ -243,8 +243,8 @@ def test_unpublished_event_removed_from_business_events_section(page, browser):
             admin.publish()
 
         assert admin.wait_for_workflow_status(qctest_title, STATUS_PUBLISHED) == STATUS_PUBLISHED, (
-            f"Expected {qctest_title!r} to show workflow Status 'Approved' "
-            f"in the entries list immediately after Submit for Publishing."
+            f"Expected {qctest_title!r} to show workflow Status 'Published' "
+            f"in the entries list immediately after Submit for Review."
         )
 
         with allure.step("Confirm the event is visible in the Business Events section before unpublishing"):

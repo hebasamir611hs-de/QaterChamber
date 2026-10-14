@@ -1,0 +1,646 @@
+{
+ "pbi": 131055,
+ "cases": [
+  {
+   "tc_id": 141846,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "GLOBAL"
+   ],
+   "title": "Verify that a Site Content Author is denied access to search configuration (EN)",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Author (EN locale)",
+     "expected": "Login succeeds as Site Content Author"
+    },
+    {
+     "action": "Navigate/attempt to navigate to the Global Search configuration screen",
+     "expected": "Access is blocked with message 'Access Denied.'; configuration screen is not opened or fields are not editable"
+    },
+    {
+     "action": "Attempt to change a configuration value and save",
+     "expected": "Save action is not available/executed; no configuration is changed"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141853,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "GLOBAL",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that saving search configuration displays the EN success toast",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Administrator (EN locale)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Navigate to the Global Search configuration screen",
+     "expected": "Configuration screen loads with current values"
+    },
+    {
+     "action": "Set Results Per Page to 15",
+     "expected": "Value 15 entered in Results Per Page"
+    },
+    {
+     "action": "Click Save/Publish",
+     "expected": "Toast 'Your request completed successfully.' is displayed; configuration is persisted (value 15 shown on reload)"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141854,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "GLOBAL"
+   ],
+   "title": "Verify that all search configuration changes are recorded in the audit log",
+   "steps": [
+    {
+     "action": "Log in as Administrator",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Change Results Per Page from 10 to 20 and save",
+     "expected": "Configuration saved, toast shown"
+    },
+    {
+     "action": "Navigate to the Audit Log module",
+     "expected": "Audit Log module loads"
+    },
+    {
+     "action": "Locate the most recent entry for this configuration change",
+     "expected": "A new entry is present showing the acting Administrator, 'Results Per Page' changed from 10 to 20, and a timestamp matching the save action"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141862,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that a valid Results Per Page value is accepted and saved",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration as Administrator",
+     "expected": "Configuration screen visible with current value"
+    },
+    {
+     "action": "Enter 20 in Results Per Page",
+     "expected": "Value 20 entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save succeeds; toast shown; value 20 is persisted"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141863,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that an empty Results Per Page value is rejected",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen visible with current value"
+    },
+    {
+     "action": "Clear the Results Per Page field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown ('Results Per Page is required'); save is blocked; previous value is retained"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141864,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that a Results Per Page value of zero is rejected",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen visible with current value"
+    },
+    {
+     "action": "Enter 0 in Results Per Page",
+     "expected": "Value 0 entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown ('must be a positive integer'); save is blocked; previous value is retained"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141865,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that a negative Results Per Page value is rejected",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen visible with current value"
+    },
+    {
+     "action": "Enter -5 in Results Per Page",
+     "expected": "Value -5 entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown ('must be a positive integer'); save is blocked; previous value is retained"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141866,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that a non-numeric Results Per Page value is rejected",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen visible with current value"
+    },
+    {
+     "action": "Enter 'abc' in Results Per Page",
+     "expected": "Value 'abc' entered (or field rejects non-numeric input on keystroke)"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown ('must be a numeric value'); save is blocked; previous value is retained"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141867,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that a saved Results Per Page value persists after reload",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen loads"
+    },
+    {
+     "action": "Enter 25 in Results Per Page and click Save",
+     "expected": "Save succeeds; toast shown"
+    },
+    {
+     "action": "Reload/re-navigate to the configuration screen",
+     "expected": "Results Per Page still shows 25 after reload"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141868,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that the administrator can define Indexed Content Types and they take effect",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen loads"
+    },
+    {
+     "action": "Select Pages, Events, Publications, and Services in Indexed Content Types",
+     "expected": "All four values selected"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save succeeds; selection persisted"
+    },
+    {
+     "action": "Search a keyword known to match each of the four types",
+     "expected": "Public search continues to return matches for all four content types"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141869,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that Indexed Content Types cannot be saved empty",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen loads with current selections"
+    },
+    {
+     "action": "Deselect all values in Indexed Content Types",
+     "expected": "All values deselected"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown ('at least one content type is required'); save is blocked; previous selection retained"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141870,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that the administrator can define Available Filters and they take effect on the results page",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen loads"
+    },
+    {
+     "action": "Select Type, Category, and Date Range in Available Filters",
+     "expected": "All three values selected"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save succeeds; selection persisted"
+    },
+    {
+     "action": "Search a keyword on the public site and inspect the filters panel",
+     "expected": "Results page shows Type, Category, and Date Range filter controls"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141871,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that Available Filters cannot be saved empty",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen loads with current selections"
+    },
+    {
+     "action": "Deselect all values in Available Filters",
+     "expected": "All values deselected"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown ('at least one filter is required'); save is blocked; previous selection retained"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141872,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that a valid Re-index Schedule is accepted and saved",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen loads"
+    },
+    {
+     "action": "Set Re-index Schedule to 'Daily at 02:00'",
+     "expected": "Schedule value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save succeeds; toast shown; schedule value persisted"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141873,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that an invalid Re-index Schedule value is rejected",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration",
+     "expected": "Configuration screen loads"
+    },
+    {
+     "action": "Enter 'every blueday' in Re-index Schedule",
+     "expected": "Invalid value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown ('invalid schedule format'); save is blocked; previous schedule value retained"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141883,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that the administrator can manually trigger a re-index",
+   "steps": [
+    {
+     "action": "Navigate to Global Search configuration as Administrator",
+     "expected": "Configuration screen loads"
+    },
+    {
+     "action": "Click 'Trigger Re-index'",
+     "expected": "Re-index job starts; a running/in-progress indicator is shown"
+    },
+    {
+     "action": "Wait for the job to complete",
+     "expected": "Job completes; a completion indicator/timestamp is shown"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141888,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Control_Panel",
+    "Edge",
+    "GLOBAL",
+    "Manual",
+    "Web"
+   ],
+   "title": "Verify that re-indexing a large dataset does not block the public search experience",
+   "steps": [
+    {
+     "action": "As Administrator, trigger a full re-index (large dataset)",
+     "expected": "Re-index job starts and shows an in-progress indicator"
+    },
+    {
+     "action": "While re-indexing is in progress, as a Public Visitor in a separate browser context search keyword 'events'",
+     "expected": "Public search returns results normally within the standard response time, with no error, timeout, or maintenance/blocking message shown, while the re-index job is still running"
+    }
+   ],
+   "disposition": "manual-not-scripted"
+  },
+  {
+   "tc_id": 141889,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "GLOBAL"
+   ],
+   "title": "Verify that adding a new content type becomes filterable once indexed",
+   "steps": [
+    {
+     "action": "Confirm 'Circulars' is not currently a selectable Content Type filter value on the public results page",
+     "expected": "'Circulars' is absent from the filter option list"
+    },
+    {
+     "action": "As Administrator, add 'Circulars' to Indexed Content Types and save",
+     "expected": "New content type is added and saved in configuration"
+    },
+    {
+     "action": "Trigger/await re-indexing to complete",
+     "expected": "Re-index job completes"
+    },
+    {
+     "action": "Search a keyword and inspect the Content Type filter options",
+     "expected": "'Circulars' now appears as a selectable Content Type filter value, and selecting it returns Circulars-type results"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141890,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "GLOBAL"
+   ],
+   "title": "Verify that a Site Content Editor is denied access to search configuration (EN)",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Editor (EN locale)",
+     "expected": "Login succeeds as Site Content Editor"
+    },
+    {
+     "action": "Navigate/attempt to navigate to the Global Search configuration screen",
+     "expected": "Access is blocked with message 'Access Denied.'; configuration screen is not opened or fields are not editable"
+    },
+    {
+     "action": "Attempt to change a configuration value and save",
+     "expected": "Save action is not available/executed; no configuration is changed"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141892,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "GLOBAL"
+   ],
+   "title": "التحقق من أنه يُرفض وصول Site Content Author إلى إعدادات البحث (AR)",
+   "steps": [
+    {
+     "action": "تسجيل الدخول إلى نظام Liferay CMS بحساب Site Content Author (واجهة عربية)",
+     "expected": "تسجيل الدخول ينجح كـSite Content Author"
+    },
+    {
+     "action": "محاولة الانتقال إلى شاشة إعدادات البحث العام",
+     "expected": "يُرفض الوصول برسالة 'تم رفض الوصول.'؛ لا تُفتح شاشة الإعدادات أو تكون الحقول غير قابلة للتعديل"
+    },
+    {
+     "action": "محاولة تغيير قيمة إعداد وحفظها",
+     "expected": "لا يتوفر/ينفَّذ إجراء الحفظ؛ لا يتغير أي إعداد"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141893,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "GLOBAL",
+    "Regression",
+    "UAT"
+   ],
+   "title": "التحقق من أنه تظهر رسالة نجاح الحفظ باللغة العربية عند حفظ إعدادات البحث",
+   "steps": [
+    {
+     "action": "تسجيل الدخول إلى Liferay CMS كمسؤول (واجهة عربية)",
+     "expected": "تسجيل الدخول ينجح"
+    },
+    {
+     "action": "الانتقال إلى شاشة إعدادات البحث العام",
+     "expected": "تُحمَّل شاشة الإعدادات بالقيم الحالية"
+    },
+    {
+     "action": "تعيين عدد النتائج لكل صفحة إلى 15",
+     "expected": "إدخال القيمة 15 في حقل عدد النتائج لكل صفحة"
+    },
+    {
+     "action": "الضغط على حفظ/نشر",
+     "expected": "تظهر رسالة 'تمت معالجة طلبك بنجاح.'؛ يتم حفظ الإعداد (تظهر القيمة 15 بعد إعادة التحميل)"
+    }
+   ],
+   "disposition": "automate"
+  },
+  {
+   "tc_id": 141894,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "GLOBAL"
+   ],
+   "title": "التحقق من أنه يُرفض وصول Site Content Editor إلى إعدادات البحث (AR)",
+   "steps": [
+    {
+     "action": "تسجيل الدخول إلى نظام Liferay CMS بحساب Site Content Editor (واجهة عربية)",
+     "expected": "تسجيل الدخول ينجح كـSite Content Editor"
+    },
+    {
+     "action": "محاولة الانتقال إلى شاشة إعدادات البحث العام",
+     "expected": "يُرفض الوصول برسالة 'تم رفض الوصول.'؛ لا تُفتح شاشة الإعدادات أو تكون الحقول غير قابلة للتعديل"
+    },
+    {
+     "action": "محاولة تغيير قيمة إعداد وحفظها",
+     "expected": "لا يتوفر/ينفَّذ إجراء الحفظ؛ لا يتغير أي إعداد"
+    }
+   ],
+   "disposition": "automate"
+  }
+ ]
+}

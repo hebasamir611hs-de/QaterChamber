@@ -4,7 +4,8 @@ cms/pages/publications/publication_admin_page.py — PublicationAdminPage.
 Control_Panel Page Object for the per-record **Publication** Object
 Authoring surface (PBI 130711, "QC - Insights & Media - 003 -
 Publications"). Composes `ObjectAuthoringPage` (cms/pages/components/) for
-the generic Draft/Preview/Submit-for-Review/Delete state machine, per this
+the shared 7-state workflow (Draft/Pending Review/Rejected/Published/
+Unpublished/Archived/Scheduled), per this
 project's "Object Authoring Is the Only Path for Content Operations" rule —
 field-level locators/quirks specific to THIS object live here.
 
@@ -81,54 +82,36 @@ mounted create-new form:
     textbox    "Cover Image Select File" / "Cover Image" (filename readout)
     textbox    "File Attachment Select File" / "File Attachment"
     spinbutton "Page Count "
-    combobox   "Publication Status "  (Draft/Published/Unpublished/Rejected
-                                      — CONFIRMED LIVE this object's own
-                                      business-status field, a SEPARATE
-                                      concept from the workflow Draft/
-                                      Approved state driven by Save as
-                                      Draft/Submit for Review — mirrors the
-                                      identical distinction already
-                                      documented on Annual Report/Export
-                                      Report.)
+    combobox   "Publication Status "  (present on the live form but NOT listed
+                                      for `Publication` in
+                                      cms/Content-Admin-Guide.docx §12 — no
+                                      test drives it; see "Guide-listed
+                                      fields only" below.)
 
-**CONFIRMED PRODUCT DEFECT (live, reproduced twice, 2026-09-22) — "Submit for
-Review" silently clears both the Publication Type AND Publication Status
-field values.** Sequence that reproduces it: fill all fields including
-selecting a real Publication Type (e.g. "Research Paper") and setting
-Publication Status="Published" -> Save as Draft -> reopen the entry
-(confirmed BOTH fields correctly persisted at this point — read back via
-`.input_value()`, not just the workflow banner) -> Submit for Review ->
-reopen the entry again -> BOTH the Publication Type and Publication Status
-comboboxes now read back **empty** (`''`), even though the entries-list row
-itself still shows "PUBLISHED...ON THE WEBSITE" (the WORKFLOW state, which
-is unaffected). Because the Type/Status business fields are gone, the
-record never renders on the public Publications page — its own card
-requires a Type badge and a Published business status neither of which
-still exists after this transition. This was reproduced end-to-end twice
-(`QCTEST-DIAG6 Publication`: Type "Research Paper"/Status "Published"
-confirmed present before Submit for Review, confirmed **both empty**
-immediately after; a second disposable entry showed the identical pattern)
-and is NOT a scripting artifact of this Page Object — the same
-`select_publication_type()`/`set_publication_status()` methods were
-independently verified, in isolation, to set and persist their values
-correctly through a plain Save-as-Draft-and-reopen cycle; the value loss is
-specific to the Submit-for-Review transition itself. **Every test in this
-batch that publishes a disposable entry and then checks the PUBLIC
-Publications page for it is scripted correctly and will legitimately,
-honestly FAIL against this real defect** — not fixed or routed around here,
-per Result Integrity; flagged plainly to the QA Manager/human for bug
-filing (Phase 3b), not filed by this agent.
-    checkbox   "Active Status"       (present on the form; no case in this
-                                     batch exercises it directly, not
-                                     modelled as a FIELD_* constant)
+**Guide-listed fields only (migration 2026-10-01).** Content-Admin-Guide.docx
+§12 lists exactly: publicationTitle / publicationDescription (bilingual),
+publicationType, publicationDate, coverImage, fileAttachment, activeStatus,
+downloadCount / viewCount (auto). `Page Count` and `Publication Status` are
+NOT in the guide, so no test sets them; the Page Count cases are BLOCKED in
+the test module. If the live form refuses a save without Page Count, that
+is a guide-vs-implementation conflict to escalate, not something to fill in.
+
+**Previously reported "Submit clears Type/Status" defect — UNVERIFIED under
+the 7-state flow.** A 2026-09-22 note here claimed Submit for Review cleared
+Publication Type/Status and kept the record off the public page. It was
+observed through the super-admin TEST_USER, and the publish sequence it
+used never ticked `Active Status` (which defaults to UNTICKED) — the second
+visibility gate alone produces exactly that public-invisibility symptom.
+Treat it as unverified; do not cite it as evidence.
+    checkbox   "Active Status"       (guide `activeStatus` — the SECOND public
+                                     visibility gate; defaults to UNTICKED.
+                                     FIELD_ACTIVE_STATUS below.)
     spinbutton "Download Count"      (read-only counters, present on the
     spinbutton "View Count"          form; used as read-back only)
     button     "Save as Draft"
-    button     "Submit for Review"   (CONFIRMED LIVE this object's own
-                                     submit wording, same as Annual
-                                     Report/Export Report — NOT
-                                     ObjectAuthoringPage's default "Submit
-                                     for Publishing")
+    button     "Submit for Review"   (shared ObjectAuthoringPage
+                                     SUBMIT_FOR_REVIEW_BUTTON; the landing
+                                     state depends on the signed-in role)
 
 Entry-column check (explicitly required by this batch's task): CONFIRMED
 LIVE the entries-list Entry column renders the REAL Publication Title text
@@ -162,10 +145,10 @@ FIELD_PUBLICATION_TYPE = "Publication Type "
 FIELD_COVER_IMAGE = "Cover Image"
 FIELD_FILE_ATTACHMENT = "File Attachment"
 FIELD_PAGE_COUNT = "Page Count "
-FIELD_PUBLICATION_STATUS = "Publication Status "
+FIELD_PUBLICATION_STATUS = "Publication Status "  # NOT in Content-Admin-Guide §12 — unused by tests
+FIELD_ACTIVE_STATUS = "Active Status"  # guide §12 `activeStatus`
 
 PUBLICATION_DATE_PLACEHOLDER = "dd/mm/yyyy"
-SUBMIT_FOR_REVIEW_BUTTON = 'button:has-text("Submit for Review")'
 OPEN_OPTIONS_MENU_BUTTON = "Open Options Menu"
 
 # CONFIRMED LIVE 2026-09-22 — the Publication Type combobox's real option
@@ -286,12 +269,19 @@ class PublicationAdminPage(BasePage):
         return self
 
     def submit_for_review(self) -> "PublicationAdminPage":
-        """This object's own confirmed-live wording — "Submit for
-        Review" — matches Annual Report/Export Report, not
-        ObjectAuthoringPage's default "Submit for Publishing"."""
-        self.click(SUBMIT_FOR_REVIEW_BUTTON)
-        self.authoring._wait_for_settle()
+        """Delegates to the shared ObjectAuthoringPage.submit_for_review()
+        (shared SUBMIT_FOR_REVIEW_BUTTON). Asserts no resulting state: as
+        Editor it lands on Published, as Author on Pending Review — the
+        caller names the account and asserts accordingly."""
+        self.authoring.submit_for_review()
         return self
+
+    def set_active_status(self, checked: bool = True) -> "PublicationAdminPage":
+        self.authoring.set_checkbox(FIELD_ACTIVE_STATUS, checked)
+        return self
+
+    def active_status_checked(self) -> bool:
+        return self.authoring.is_checked(FIELD_ACTIVE_STATUS)
 
     BLOCKED_MESSAGE = "Please complete the required fields"
 
@@ -329,6 +319,21 @@ class PublicationAdminPage(BasePage):
     def row_entry_id(self, title: str) -> str:
         return self.authoring.row_entry_id(title)
 
+    def row_last_modified(self, title: str) -> str:
+        """Entries-list "Last modified" cell (Entry/Status/Last modified/
+        Actions — column order per ObjectAuthoringPage's notes)."""
+        row = self.page.locator(f'{self.authoring.ENTRIES_TABLE_ROW}:has-text("{title}")')
+        if row.count() == 0:
+            return ""
+        return row.first.locator("td").nth(2).inner_text().strip()
+
+    def history_entries(self, title: str) -> list:
+        return self.authoring.history_entries(title)
+
+    def unpublish_entry(self, title: str, comment: str = "") -> "PublicationAdminPage":
+        self.authoring.unpublish_entry(title, comment)
+        return self
+
     def row_preview_url(self, title: str) -> str:
         return self.authoring.row_preview_url(title)
 
@@ -351,12 +356,11 @@ class PublicationAdminPage(BasePage):
     def create_disposable_entry(self, prefix: str, **overrides) -> dict:
         """Creates a brand-new `QCTEST-<prefix>`-titled Publication entry
         with every mandatory field filled to a safe default (Save as Draft
-        only — callers that need it published call
-        `set_publication_status("Published")` + `submit_for_review()`
-        themselves, or use `publish_disposable_entry()` below). `overrides`
+        only — callers that need it published submit it
+        themselves as a named role, or use `publish_disposable_entry()` below). `overrides`
         keys are the literal FIELD_* string values, or the bare keywords
         `publication_type`, `publication_date`, `page_count`, `skip_cover`,
-        `skip_file`, `status` for the non-textbox fields — mirrors
+        `skip_file`, `active_status` for the non-textbox fields — mirrors
         export_report_admin_page.py's own convention."""
         values = {
             FIELD_PUBLICATION_TITLE_EN: f"QCTEST-{prefix} Publication",
@@ -380,24 +384,16 @@ class PublicationAdminPage(BasePage):
             self.upload_file(FIELD_FILE_ATTACHMENT, values.get("file_path", "cms/tests/publications/fixtures/valid_pdf_4mb.pdf"))
         if values.get("page_count"):
             self.fill_number(FIELD_PAGE_COUNT, values["page_count"])
-        if values.get("status"):
-            self.set_publication_status(values["status"])
+        if values.get("active_status") is not None:
+            self.set_active_status(bool(values["active_status"]))
         return values
 
     def publish_disposable_entry(self, prefix: str, **overrides) -> dict:
-        """create_disposable_entry() + Publication Status=Published + Save
-        as Draft + reopen + Submit for Review — this is the documented,
-        intended publish sequence for this object (and the one every sibling
-        object on this project uses successfully). **CONFIRMED LIVE this
-        session it does NOT reliably make the record visible on the PUBLIC
-        Publications page** — see the module docstring's "CONFIRMED PRODUCT
-        DEFECT" note: Submit for Review clears the Publication Type/Status
-        fields this same sequence just set, so the resulting record has no
-        Type badge and no Published business status by the time it would
-        render publicly. The CMS-side workflow status (row_status_text) IS
-        reliably "Published" afterward — only the public-page-visibility
-        half of this method's name is affected by the defect."""
-        overrides.setdefault("status", "Published")
+        """create_disposable_entry() with Active Status ticked + Save as Draft
+        + reopen + Submit for Review. Lands on Published ONLY when the signed-in
+        account is a Site Content Editor (privileged bypass); as Author it
+        lands on Pending Review. The caller pins the account."""
+        overrides.setdefault("active_status", True)
         values = self.create_disposable_entry(prefix, **overrides)
         self.save_as_draft()
         title = values[FIELD_PUBLICATION_TITLE_EN]

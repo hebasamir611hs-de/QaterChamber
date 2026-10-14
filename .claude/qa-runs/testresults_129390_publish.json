@@ -1,0 +1,350 @@
+{
+ "plan_id": 133534,
+ "suite_id": 134461,
+ "run_name": "Phase 3 2026-10-07/08 - PBI 129390",
+ "automated": true,
+ "results": [
+  {
+   "test_case_id": 136472,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149493: Home section typography differs from Figma 849:15904 (Contact Us tag, heading, description, form title). Manual-exec.",
+   "error_message": "Typography differs from Figma"
+  },
+  {
+   "test_case_id": 136474,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136475,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136477,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136478,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136479,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136480,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136483,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149488: Site Content Editor cannot open the Contact Us Section article 53012 (no-role message).",
+   "error_message": "You do not have the roles required to access this portlet"
+  },
+  {
+   "test_case_id": 136484,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136485,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136486,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136487,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136488,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136489,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136490,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136491,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136493,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136494,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136495,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136500,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136501,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136502,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136503,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136504,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136505,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136506,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149490: CAPTCHA not enforced (config enabled:false, empty token accepted). Manual-exec.",
+   "error_message": "Submission accepted with empty CAPTCHA token"
+  },
+  {
+   "test_case_id": 136507,
+   "outcome": "Failed",
+   "comment": "Not executed this run (no CAPTCHA widget to solve); Failed by coverage of Bug #149490 (CAPTCHA not enforced/rendered).",
+   "error_message": "Not executed; covered by Bug #149490"
+  },
+  {
+   "test_case_id": 136509,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136511,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136513,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136515,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136519,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136520,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136522,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136524,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136526,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136528,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136530,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136532,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136534,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. Pager locator matched a hidden date-picker button.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136535,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. Pager locator matched a hidden date-picker button.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136536,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. Pager locator matched a hidden date-picker button.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136537,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. Pager locator matched a hidden date-picker button.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136538,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. Pager locator matched a hidden date-picker button.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136539,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. Pager locator matched a hidden date-picker button.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136540,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136542,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136543,
+   "outcome": "Passed",
+   "comment": "Executed in batch 1: malformed recipient list accepted by the form; user ruled this Passed (2026-10-08)."
+  },
+  {
+   "test_case_id": 136545,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136547,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136549,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136550,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. AR form fill / locator defect.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136552,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136556,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. AR form fill / locator defect.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136558,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. AR form fill / locator defect.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136560,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. AR form fill / locator defect.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136562,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. AR form fill / locator defect.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136566,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. AR form fill / locator defect.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136568,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. AR form fill / locator defect.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136569,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. Pager locator matched a hidden date-picker button.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136570,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. Pager locator matched a hidden date-picker button.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136571,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. Pager locator matched a hidden date-picker button.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136573,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. AR form fill / locator defect.",
+   "error_message": "AUTOMATION_BUG"
+  },
+  {
+   "test_case_id": 136575,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG (locator defect, healed in code but not re-run). No product verdict. AR form fill / locator defect.",
+   "error_message": "AUTOMATION_BUG"
+  }
+ ]
+}

@@ -264,6 +264,7 @@ location.
 
 from cms.pages.components.object_authoring_page import ObjectAuthoringPage
 from config.settings import control_panel_url, settings
+from core.web.session_guard import sign_out_locally
 
 SLUG = "social-media-icon"
 
@@ -534,19 +535,22 @@ class SocialMediaIconAdminPage(ObjectAuthoringPage):
         self.open_new_entry_form()
         return self
 
-    # ---- Real cross-session logout/login — mirrors
-    # HomeAboutSummaryAdminPage's own identical-shaped methods (same
-    # established project convention: `GET /c/portal/logout` ends the
-    # session; a subsequent login() drives the real form again) — added for
+    # ---- Sign-out / login — mirrors HomeAboutSummaryAdminPage's own
+    # identical-shaped methods. Sign-out is a cookie drop (2026-10-13), never
+    # the server logout used before; a subsequent login() drives the real
+    # form again — added for
     # the 2026-09-17 PBI-129373 batch-2 (CMS Workflow/RBAC/Publish
     # Lifecycle) cases that must authenticate as a SPECIFIC named CMS role
     # (Site Content Editor/Author/Content Contributor via
     # config.settings.cms_role_credentials()) rather than the shared
     # TEST_USER super-admin account every other test in this module uses. --
-    LOGOUT_PATH = "/c/portal/logout"
-
     def logout_and_return(self) -> "SocialMediaIconAdminPage":
-        self.open(control_panel_url(self.LOGOUT_PATH))
+        """Signs this context out by dropping its cookies (2026-10-13) --
+        never a server-side logout, which also ended the SHARED storageState
+        session every other context/worker/tool was using. The page is left
+        with no session owner, so a later navigation is not silently signed
+        back in; call login_as() for the next account."""
+        sign_out_locally(self.page)
         return self
 
     def login_as(self, username: str, password: str) -> "SocialMediaIconAdminPage":

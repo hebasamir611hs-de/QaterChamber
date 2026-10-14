@@ -1,0 +1,105 @@
+[
+ {
+  "id": 134616,
+  "title": "Verify that an Administrator can schedule an approved newsletter for a future date and it sends automatically at that time",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Manual",
+   "Newsletter",
+   "Regression"
+  ],
+  "description": "Functional-High: manual — depends on a real scheduled/cron send firing.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an Approved newsletter",
+    "expected": "Approved newsletter opens"
+   },
+   {
+    "action": "Click Schedule",
+    "expected": "Schedule dialog opens"
+   },
+   {
+    "action": "Enter a valid future date/time",
+    "expected": "Future date/time entered"
+   },
+   {
+    "action": "Confirm scheduling",
+    "expected": "Status changes to Scheduled; success toast shown (EN+AR)"
+   },
+   {
+    "action": "Wait until (or simulate) the scheduled time elapses",
+    "expected": "At the scheduled time, newsletter automatically sends to all active subscribers; status changes to Published"
+   }
+  ]
+ },
+ {
+  "id": 134617,
+  "title": "Verify that a Newsletter Issue Email auto-pulls content only from currently enabled and published modules",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Manual",
+   "Newsletter",
+   "Regression"
+  ],
+  "description": "Functional-High: manual — requires inspecting real sent email content, no email infra.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an Approved newsletter's Send/Schedule step",
+    "expected": "Send/Schedule step opens"
+   },
+   {
+    "action": "Disable the Circulars & Announcements toggle; leave Latest News, Upcoming Events, Publications & Research enabled",
+    "expected": "Circulars & Announcements toggle set to Disabled"
+   },
+   {
+    "action": "Click Publish Immediately",
+    "expected": "Newsletter publishes and sends; success toast shown"
+   },
+   {
+    "action": "Open the sent newsletter email",
+    "expected": "Sent email contains Latest News, Upcoming Events, and Publications & Research content, and does NOT contain a Circulars & Announcements section"
+   }
+  ]
+ },
+ {
+  "id": 134620,
+  "title": "Verify that archiving a newsletter while it is in Scheduled status cancels the pending send",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Control_Panel",
+   "Edge",
+   "GLOBAL",
+   "Manual",
+   "Newsletter"
+  ],
+  "description": "Edge: manual — depends on a genuinely pending scheduled send, no cron/email infra to verify cancellation deterministically.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Schedule a newsletter for a future date",
+    "expected": "Newsletter status = Scheduled"
+   },
+   {
+    "action": "Before the scheduled time elapses, open the newsletter and click Archive",
+    "expected": "Status changes to Archived; the pending scheduled send is cancelled and no email is sent at the original scheduled time"
+   }
+  ]
+ }
+]

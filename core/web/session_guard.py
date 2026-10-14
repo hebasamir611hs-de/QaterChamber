@@ -91,10 +91,72 @@ pattern) directly in this module rather than importing CmsLoginPage, to
 preserve the existing no-circular-import discipline documented below.
 """
 
+import weakref
+
 from core.utils.logger import get_logger
-from config.settings import control_panel_url, settings
+from config.settings import CMS_ROLE_CREDENTIALS, control_panel_url, settings
 
 logger = get_logger("session_guard")
+
+# Which account each browser page is signed in as. Moved here from
+# cms/pages/control_panel/login_page.py (2026-10-13) so reauthenticate() can
+# re-login as the session's OWNER; login_page re-exports this same object, so
+# `login_page._SESSION_OWNER[...]` keeps working for existing callers.
+_SESSION_OWNER: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
+
+_UNSET = object()
+
+
+def set_session_owner(page, email: str | None) -> None:
+    """Record that `page` is now signed in as `email` (None: signed out)."""
+    if email:
+        _SESSION_OWNER[page] = email
+    else:
+        _SESSION_OWNER.pop(page, None)
+
+
+def sign_out_locally(page) -> None:
+    """Sign `page`'s context out WITHOUT a server-side logout: drop its
+    cookies and record it as having no owner, so reauthenticate() does not
+    quietly sign it back in as anyone. The shared storageState session other
+    contexts/workers/tools carry stays alive (2026-10-12 incident)."""
+    from core.web.browser import track_context_session  # local import: keep module load light
+
+    page.context.clear_cookies()
+    _SESSION_OWNER.pop(page, None)
+    track_context_session(page.context, None, None)
+
+
+def session_owner(page, default=_UNSET):
+    """The account `page` is signed in as: the last recorded sign-in on the
+    page, else the account its context was built for (core.web.browser),
+    else TEST_USER for a context that factory did not build. A context built
+    logged-out on purpose has no owner (None) until someone signs in on it."""
+    owner = _SESSION_OWNER.get(page)
+    if owner:
+        return owner
+    from core.web.browser import context_session  # local import: keep module load light
+
+    try:
+        info = context_session(page.context)
+    except Exception:  # noqa: BLE001
+        info = None
+    if info is not None:
+        return info.get("account")
+    return settings.test_user if default is _UNSET else default
+
+
+def credentials_for(email: str | None) -> tuple[str, str] | None:
+    """(email, password) for TEST_USER or a configured CMS role account;
+    None for anything else -- never a fallback to TEST_USER."""
+    if not email:
+        return None
+    if email == settings.test_user and settings.test_password:
+        return settings.test_user, settings.test_password
+    for role_email, password in CMS_ROLE_CREDENTIALS.values():
+        if role_email and role_email == email and password:
+            return role_email, password
+    return None
 
 # Liferay's login portlet — same selectors as
 # cms/pages/control_panel/login_page.py's CmsLoginPage, verified live
@@ -171,6 +233,28 @@ def _force_english_locale(page) -> None:
     page.locator(LOGIN_SUCCESS_INDICATOR).first.wait_for(state="attached", timeout=10000)
 
 
+# How long a CMS page that READS signed out gets to show the signed-in marker
+# before it is treated as a dead session (2026-10-12, PBI 129397). A page
+# sampled mid-navigation -- e.g. the GM singleton's bare manage URL, which goes
+# on to `?editEntry=<code>` after BasePage.open() has already returned at
+# `domcontentloaded` -- has no `body` yet, so the zero-wait is_dead_session()
+# read it as dead. Only the dead-looking path pays this wait.
+DEAD_SESSION_CONFIRM_MS = 5000
+# Same budget as base_page.NAV_TIMEOUT_MS (not imported: base_page imports
+# this module). Heavy manage pages outgrow Playwright's 30 s default late in
+# a run.
+_NAV_TIMEOUT_MS = 90000
+
+
+def _signed_in_marker_appears(page, timeout_ms: int = DEAD_SESSION_CONFIRM_MS) -> bool:
+    """True once `body.signed-in` is attached (bounded wait). Never raises."""
+    try:
+        page.locator(LOGIN_SUCCESS_INDICATOR).first.wait_for(state="attached", timeout=timeout_ms)
+        return True
+    except Exception:  # noqa: BLE001 — detection must never mask a real failure
+        return False
+
+
 def is_login_form_showing(page) -> bool:
     """Cheap, non-blocking detection — mirrors license_gate.is_gate_showing's
     zero-wait contract."""
@@ -200,31 +284,77 @@ def is_dead_session(page) -> bool:
         return False
 
 
+def _refresh_cached_state(page, account: str) -> None:
+    """Write the recovered session back to the storageState file the context
+    came from -- only when that file belongs to `account`, so a role login can
+    never overwrite TEST_USER's file. Never raises."""
+    try:
+        from core.web.browser import context_session, refresh_auth_state
+
+        info = context_session(page.context) or {}
+        if info.get("path") and info.get("account") == account:
+            refresh_auth_state(page.context, info["path"])
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("cached auth-state refresh after re-authentication failed: %s", exc)
+
+
 def reauthenticate(page, target_url: str = None, max_attempts: int = 3) -> bool:
-    """Log back in with the project's admin test account if the session has
-    dropped, then return to `target_url`. No-op (returns False) if neither
+    """Log back in AS THE SESSION'S OWNER (session_owner(); 2026-10-13 --
+    previously always TEST_USER, so a dropped role session silently came back
+    as super-admin) if the session has dropped, then return to `target_url`. No-op (returns False) if neither
     the login form nor a dead Control-Panel session (see is_dead_session's
     docstring) is detected — mirrors clear_license_gate's contract so
     callers can chain both guards unconditionally.
 
-    ONLY uses the shared admin account (settings.test_user/test_password).
+    An owner that cannot be resolved to credentials (a logged-out-on-purpose
+    context, or an unknown account) is NOT re-logged in -- returns False.
+    On success the context's cached storageState file is refreshed when that
+    file belongs to the same account (core.web.browser.refresh_auth_state).
     Never call this from a test whose subject IS the login/permission flow
     itself (RBAC denial cases use `use_auth_state=False` contexts and drive
     CmsLoginPage directly instead — this guard would defeat that test's
     purpose).
+
+    Returns True when the page was RECOVERED: re-authenticated, or (dead-
+    session branch) found to be alive after all and sent back to the target.
+
+    FIXED 2026-10-12 (tools/restore_singleton.py --pbi 129397 timing out on
+    `open_entries_list()`, and the gate failures in allure-129397-20261012-
+    2120, each preceded by "session re-authentication failed after 3
+    attempts" with NO per-attempt line):
+      1. A dead-looking page is CONFIRMED first (bounded wait for the
+         signed-in marker). The zero-wait read misfired on a page caught
+         mid-navigation.
+      2. If LOGIN_PATH then renders no form but the page is signed in, the
+         session was alive: Liferay redirects an authenticated session away
+         from LOGIN_PATH (login_page.py, 2026-08-25). The old loop `break`
+         left the page on that redirect target ("Coming Soon", not a CMS
+         URL), so the caller's next wait burned its whole budget and
+         BasePage.wait_for()'s recovery could not recognise the page. It now
+         goes back to the target. Nothing is typed in that case.
+    Never navigates to /c/portal/logout. It fills the form only when LOGIN_PATH
+    actually renders one, i.e. for an anonymous session -- a signed-in shared
+    session is redirected away first -- so a login here cannot replace a
+    live shared storageState session.
     """
     dead_session = False
     if not is_login_form_showing(page):
         dead_session = is_dead_session(page)
         if not dead_session:
             return False
+        if _signed_in_marker_appears(page):
+            logger.info("signed-in marker appeared on %s after a settle — not a dead session", page.url)
+            return False
 
-    if not settings.test_user or not settings.test_password:
+    owner = session_owner(page)
+    creds = credentials_for(owner)
+    if not creds:
         logger.warning(
-            "session dropped but TEST_USER/TEST_PASSWORD are not set — "
-            "cannot auto-reauthenticate"
+            "session dropped but its owner %r has no configured credentials "
+            "(logged-out context or unknown account) -- not re-authenticating", owner
         )
         return False
+    login_user, login_password = creds
 
     from core.web.license_gate import clear_license_gate, is_gate_showing  # local import: avoid a cycle at module load
 
@@ -248,12 +378,14 @@ def reauthenticate(page, target_url: str = None, max_attempts: int = 3) -> bool:
         page.wait_for_load_state("domcontentloaded")
 
     reauthenticated = False
+    attempted = False
     for attempt in range(1, max_attempts + 1):
         if not is_login_form_showing(page):
             break
+        attempted = True
         try:
-            page.locator(USERNAME_INPUT).fill(settings.test_user)
-            page.locator(PASSWORD_INPUT).fill(settings.test_password)
+            page.locator(USERNAME_INPUT).fill(login_user)
+            page.locator(PASSWORD_INPUT).fill(login_password)
             page.locator(SUBMIT_BUTTON).click()
             # Submitting the login form can itself re-trip the connection
             # limit (confirmed live, see module docstring) — clear that
@@ -282,7 +414,9 @@ def reauthenticate(page, target_url: str = None, max_attempts: int = 3) -> bool:
             except Exception as exc:  # noqa: BLE001
                 logger.warning("post-reauthentication English-locale re-assert failed: %s", exc)
             reauthenticated = True
-            logger.info("session re-authenticated (attempt %s)", attempt)
+            set_session_owner(page, login_user)
+            logger.info("session re-authenticated as %s (attempt %s)", login_user, attempt)
+            _refresh_cached_state(page, login_user)
         except Exception as exc:  # noqa: BLE001
             logger.warning("re-authentication attempt %s failed: %s", attempt, exc)
             continue
@@ -299,6 +433,19 @@ def reauthenticate(page, target_url: str = None, max_attempts: int = 3) -> bool:
             page.wait_for_load_state("domcontentloaded")
         break
 
+    if not reauthenticated and not attempted:
+        if dead_session and target_url and _signed_in_marker_appears(page, timeout_ms=3000):
+            # No form at LOGIN_PATH and the page is signed in: the session was
+            # alive (see the docstring). Back to the caller's page, never left
+            # on Liferay's post-login landing page.
+            logger.warning(
+                "no login form at %s and the page is signed in — the session is alive; "
+                "returning to %s", page.url, target_url)
+            page.goto(target_url, wait_until="domcontentloaded", timeout=_NAV_TIMEOUT_MS)
+            return True
+        logger.warning("session re-authentication skipped: no login form rendered at %s — nothing typed",
+                       page.url)
+        return False
     if not reauthenticated:
         logger.warning("session re-authentication failed after %s attempts", max_attempts)
     return reauthenticated

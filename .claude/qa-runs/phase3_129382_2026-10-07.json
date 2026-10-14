@@ -1,0 +1,1151 @@
+{
+ "pbi": 129382,
+ "suite": 134453,
+ "stale_flags_fixed": {
+  "cms": [
+   "Content & Data navigation",
+   "TEST_USER login fallback",
+   "@pytest.mark.skip on 135669",
+   "fixed wait_for_timeout(1500) in save()",
+   "no named account in lifecycle docstrings"
+  ],
+  "web": [
+   "public reads on authenticated page fixture",
+   "@pytest.mark.skip on 135645",
+   "no tc_ markers",
+   "exact-equality geometry (Rule 1)"
+  ]
+ },
+ "cases": [
+  {
+   "tc_id": 135634,
+   "title": "Verify that the \"Upcoming Events\" badge renders with the Figma-specified colors",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_badge_renders_with_figma_colors"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135635,
+   "title": "Verify that the section heading \"What's Coming Up\" renders with the Figma-specified typography and color",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_heading_renders_with_figma_typography"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135636,
+   "title": "Verify that the section description renders with the exact copy and Figma-specified typography",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_description_copy_and_typography"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135637,
+   "title": "Verify that the \"View All\" CTA button renders per the Figma pill-button spec",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_view_all_cta_pill_button_spec"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135638,
+   "title": "Verify that the event category badges render with the Figma-specified pill style",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_category_badges_pill_style"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135639,
+   "title": "Verify that the pinned event title renders with the Figma-specified typography",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_event_title_typography"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135640,
+   "title": "Verify that the Date, Time, and Location icon-buttons render as maroon 48px circles per Figma",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_meta_icon_buttons_are_maroon_48px_circles"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135641,
+   "title": "Verify that the Date/Time/Location labels and values render with the Figma-specified colors and fonts",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_meta_label_and_value_typography"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135642,
+   "title": "Verify that the section layout matches the Figma two-column spacing spec",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_section_two_column_layout_spacing"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135643,
+   "title": "Verify that the event image renders at the Figma-specified height within a 16px-rounded container",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_event_image_container_spec"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135644,
+   "title": "Verify that the divider line between event detail rows renders with the Figma-specified color and thickness",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_divider_color_and_thickness"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135645,
+   "title": "Verify that the Upcoming Event section does not render on the Home Page when no event is pinned",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_section_absent_when_no_event_pinned"
+   ],
+   "currently_skipped_before": "y (no CMS creds)",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1",
+    "@skip (no CMS creds)"
+   ]
+  },
+  {
+   "tc_id": 135646,
+   "title": "Verify that the Upcoming Event section renders correctly in Arabic (RTL) layout",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_section_renders_correctly_in_arabic_rtl"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135647,
+   "title": "Verify that the Upcoming Event section renders correctly in English (LTR) layout",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_section_renders_correctly_in_english_ltr"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135648,
+   "title": "Verify that the Upcoming Event section is fully responsive at a 375px mobile viewport",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_responsive_at_mobile_375"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135649,
+   "title": "Verify that the Upcoming Event section is fully responsive at a 768px tablet viewport",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_responsive_at_tablet_768"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135650,
+   "title": "Verify that a loading placeholder displays while the pinned event data is being fetched",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_loading_placeholder_while_fetching"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135651,
+   "title": "Verify that a fallback state displays gracefully if the pinned event's image fails to load",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Manual",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135652,
+   "title": "Verify that the pagination indicator below the pinned event shows a single active state when only one event is pinned",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_pagination_single_active_state"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "exact geometry vs Rule 1"
+   ]
+  },
+  {
+   "tc_id": 135653,
+   "title": "Verify that the Upcoming Event Pin Configuration screen is accessible from Home Page management in the Liferay CMS",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_pin_configuration_reachable_from_authoring"
+   ],
+   "currently_skipped_before": "n",
+   "result": "PASS",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135654,
+   "title": "Verify that the Event Selector displays a list of all published events",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_event_selector_lists_published_events"
+   ],
+   "currently_skipped_before": "n",
+   "result": "FAIL CONFIRMED G2",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135655,
+   "title": "Verify that a Liferay generic success toast displays in English after saving the Pin Configuration",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135656,
+   "title": "Verify that a Liferay generic success toast displays in Arabic after saving the Pin Configuration",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135657,
+   "title": "Verify that the Pin Configuration screen renders correctly in RTL when the CMS language is Arabic",
+   "priority": 4,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135658,
+   "title": "Verify that the Upcoming Event section renders consistently across Chrome, Firefox, and Edge",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135659,
+   "title": "Verify that the Upcoming Event section maintains layout integrity at 150% browser zoom",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135660,
+   "title": "Verify that the section maintains the two-column layout at 1920x1080 and collapses to single-column at mobile widths",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135661,
+   "title": "Verify that a Site Content Editor with Home Page permission can access the Pin Configuration screen",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_editor_has_read_write_access"
+   ],
+   "currently_skipped_before": "n",
+   "result": "PASS",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135662,
+   "title": "Verify that a user without Home Page permission is denied access when attempting to pin an event",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_site_member_denied_pin_configuration"
+   ],
+   "currently_skipped_before": "n",
+   "result": "PASS",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135663,
+   "title": "Verify that a logged-out admin directly accessing the Pin Configuration URL is redirected to the Liferay login page",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_logged_out_direct_url_redirects_to_login"
+   ],
+   "currently_skipped_before": "n",
+   "result": "FAIL (rerun) INCONCLUSIVE",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135664,
+   "title": "Verify that a Site Content Author without publish rights on Home Page sees the Access Denied message when attempting to save",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_author_cannot_change_live_pin"
+   ],
+   "currently_skipped_before": "n",
+   "result": "PASS (partial: row actions only)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135665,
+   "title": "Verify that a visitor can view the pinned event details and navigate to its detail page by clicking the event image",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_visitor_views_pinned_event_and_opens_detail"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135666,
+   "title": "Verify that the Upcoming Event section does not appear anywhere on the Home Page when no event is pinned",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135667,
+   "title": "Verify that the Upcoming Event section stops appearing when the pinned event is unpublished from the Events module",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135668,
+   "title": "Verify that the pinned event continues to display after its date has passed until the admin unpins it",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135669,
+   "title": "Verify that an admin can pin a published event, enable Active Status, save, and see it appear on the Home Page after cache refresh",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_pin_published_event_shows_on_home"
+   ],
+   "currently_skipped_before": "y (product-defect skip)",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": [
+    "Content & Data navigation",
+    "TEST_USER login (fallback)",
+    "fixed wait_for_timeout(1500)",
+    "no named account",
+    "@skip product-defect"
+   ]
+  },
+  {
+   "tc_id": 135670,
+   "title": "Verify that unpinning the currently featured event hides the Upcoming Events section on the Home Page",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_unpin_hides_section"
+   ],
+   "currently_skipped_before": "n",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": [
+    "Content & Data navigation",
+    "TEST_USER login (fallback)",
+    "fixed wait_for_timeout(1500)",
+    "no named account"
+   ]
+  },
+  {
+   "tc_id": 135671,
+   "title": "Verify that pinning a different event replaces the previously featured event without a duplicate section appearing",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_repin_replaces_without_duplicate"
+   ],
+   "currently_skipped_before": "n",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": [
+    "Content & Data navigation",
+    "TEST_USER login (fallback)",
+    "fixed wait_for_timeout(1500)",
+    "no named account"
+   ]
+  },
+  {
+   "tc_id": 135672,
+   "title": "Verify that the pinned event's displayed details are sourced automatically from the Events module record, not re-entered in Pin Configuration",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_pin_configuration_has_no_manual_event_detail_fields",
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_pinned_event_details_sourced_from_events_module"
+   ],
+   "currently_skipped_before": "n",
+   "result": "PASS (step 2 only)",
+   "stale_flags": [
+    "Content & Data navigation",
+    "TEST_USER login (fallback)",
+    "fixed wait_for_timeout(1500)",
+    "no named account"
+   ]
+  },
+  {
+   "tc_id": 135673,
+   "title": "Verify that setting Active Status to disabled hides the section even while an event remains pinned",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_active_status_off_hides_section"
+   ],
+   "currently_skipped_before": "n",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": [
+    "Content & Data navigation",
+    "TEST_USER login (fallback)",
+    "fixed wait_for_timeout(1500)",
+    "no named account"
+   ]
+  },
+  {
+   "tc_id": 135674,
+   "title": "Verify that the pinned event's title displays correctly in English",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_pinned_event_title_en_matches_events_module"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135675,
+   "title": "Verify that the pinned event's title displays correctly in Arabic",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_pinned_event_title_ar_matches_events_module"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135676,
+   "title": "Verify that the pinned event's date displays as sourced from the Events module",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_pinned_event_date_en_matches_events_module"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135677,
+   "title": "Verify that the pinned event's time displays as sourced from the Events module",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_pinned_event_time_en_matches_events_module"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135678,
+   "title": "Verify that the pinned event's location displays correctly in English",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_pinned_event_location_en_matches_events_module"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135679,
+   "title": "Verify that the pinned event's location displays correctly in Arabic",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_pinned_event_location_ar_matches_events_module"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135680,
+   "title": "Verify that the pinned event's short description displays correctly in English",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135681,
+   "title": "Verify that the pinned event's short description displays correctly in Arabic",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135682,
+   "title": "Verify that only the event image is the clickable navigation target to the event detail page",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135683,
+   "title": "Verify that the Section Tag field saves successfully with a valid value within 50 characters in both languages",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135684,
+   "title": "Verify that the Section Tag field can be saved empty since it is not mandatory",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135685,
+   "title": "Verify that the Section Tag field rejects input exceeding the 50-character limit",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135686,
+   "title": "Verify that entering special/script characters in the Section Tag field is stored as plain text and not executed",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135687,
+   "title": "Verify that a Section Tag change is discarded when the admin clicks Cancel without saving",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135688,
+   "title": "Verify that a saved Section Tag value persists after reloading the Pin Configuration screen",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135689,
+   "title": "Verify that the Section Heading field saves successfully with a valid value within 200 characters in both languages",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135690,
+   "title": "Verify that the Section Heading field displays a mandatory validation error when left empty on save",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135691,
+   "title": "Verify that the Section Heading field rejects input exceeding the 200-character limit",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135692,
+   "title": "Verify that entering special characters in the Section Heading field is stored and rendered safely",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135693,
+   "title": "Verify that a saved Section Heading value persists after reloading the Pin Configuration screen",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135694,
+   "title": "Verify that the Section Description field saves successfully with a valid rich-text value within 1000 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135695,
+   "title": "Verify that the Section Description field displays a mandatory validation error when left empty on save",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135696,
+   "title": "Verify that the Section Description field rejects input exceeding the 1000-character limit",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135697,
+   "title": "Verify that a saved Section Description value persists after reloading the Pin Configuration screen",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135698,
+   "title": "Verify that selecting a published event and saving stores the Pinned Event reference successfully",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_active_status_on_stores_pin_and_shows_section"
+   ],
+   "currently_skipped_before": "n",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135699,
+   "title": "Verify that selecting an unpublished event in the Pinned Event field displays the exact bilingual validation message",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135700,
+   "title": "Verify that the Pinned Event selector list excludes events that are not Published",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135701,
+   "title": "Verify that leaving the Pinned Event field unselected while Active Status is enabled displays a conditional-mandatory validation message",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_active_without_pinned_event_refused"
+   ],
+   "currently_skipped_before": "n",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135702,
+   "title": "Verify that a change to the Pinned Event selection is discarded when the admin clicks Cancel without saving",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135703,
+   "title": "Verify that the previously saved Pinned Event selection persists after reloading the Pin Configuration screen",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135704,
+   "title": "Verify that setting Active Status to True and saving enables the Upcoming Events section on the Home Page",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_active_status_on_stores_pin_and_shows_section"
+   ],
+   "currently_skipped_before": "n",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135705,
+   "title": "Verify that setting Active Status to False and saving disables the Upcoming Events section on the Home Page",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_active_status_off_hides_section"
+   ],
+   "currently_skipped_before": "n",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135706,
+   "title": "Verify that the Active Status field displays a mandatory validation error if left unset on save",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Manual",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135707,
+   "title": "Verify that the saved Active Status value persists after reloading the Pin Configuration screen",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135708,
+   "title": "Verify that toggling Active Status without changing the Pinned Event selection still triggers a successful save",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135709,
+   "title": "Verify that selecting an event whose date has passed displays the exact bilingual warning/confirmation message",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135710,
+   "title": "Verify that confirming the passed-date warning proceeds to pin the event successfully",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135711,
+   "title": "Verify that cancelling the passed-date warning aborts the pin action and retains the previous configuration",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135712,
+   "title": "Verify that the Home Page shows the previously pinned event immediately after a Pin Configuration save, before cache refresh completes",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135713,
+   "title": "Verify that a pinned event with a date equal to today is still treated as upcoming and displays normally",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135714,
+   "title": "Verify that two admins saving different Pin Configurations in quick succession results in a single consistent final state",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Manual",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135715,
+   "title": "Verify that unpinning an event while a visitor already has the Home Page open does not break their current page view",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135716,
+   "title": "Verify that a user lacking permission cannot bypass the Access Denied restriction via a direct configuration save request",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": [
+    "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_direct_save_request_rejected"
+   ],
+   "currently_skipped_before": "n",
+   "result": "NOT RUN - NEEDS USER (writes 49205)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135717,
+   "title": "Verify that a visitor can view the pinned event details and navigate to its detail page by clicking the event image",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": [
+    "web/tests/home_featured_event/test_home_featured_event_web.py::test_visitor_views_pinned_event_and_opens_detail_twin"
+   ],
+   "currently_skipped_before": "n",
+   "result": "BLOCKED precondition G1 (ENVIRONMENT_ERROR)",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135718,
+   "title": "Verify that the Upcoming Events section stops rendering when the pinned event is deleted entirely from the Events module",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  },
+  {
+   "tc_id": 135719,
+   "title": "Verify that re-publishing a previously unpublished pinned event causes the section to reappear without re-pinning",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped_before": "n",
+   "result": "not scripted",
+   "stale_flags": []
+  }
+ ]
+}

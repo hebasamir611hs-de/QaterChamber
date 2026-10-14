@@ -90,7 +90,9 @@ a locator timeout.
 from urllib.parse import quote
 
 from config.settings import web_url
-from core.web.base_page import BasePage
+from core.web.base_page import NAV_TIMEOUT_MS, BasePage
+from core.web.license_gate import clear_license_gate
+from core.web.overlays import MOUNT_GRACE_MS, dismiss_overlays
 from web.pages.components.header_component import HeaderComponent
 
 # ── Viewports the Compatibility cases name, verbatim ──────────────────────
@@ -229,6 +231,27 @@ class GlobalSearchPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
         self.header = HeaderComponent(page)
+
+    def open_anonymous(self, url: str) -> None:
+        """Logged-out navigation: goto, then the license-gate guard and the
+        overlay sweep. It never re-authenticates, so an anonymous read stays
+        anonymous.
+
+        LOCAL SHIM 2026-10-03. Every navigation in this Page Object calls
+        `open_anonymous()`. The current working tree's core/web/base_page.py
+        no longer defines it: the method exists in commit 69fd5bd but was lost
+        in a later merge. Without it every search test errors with
+        AttributeError. A framework repair in core/ is pending the user's
+        decision and core/ is off-limits, so this restores the same behaviour
+        for this class only. Delete it once BasePage has the method again.
+        If BasePage already provides it, BasePage's version wins."""
+        base = getattr(BasePage, "open_anonymous", None)
+        if base is not None:
+            base(self, url)
+            return
+        self.page.goto(url, wait_until="domcontentloaded", timeout=NAV_TIMEOUT_MS)
+        clear_license_gate(self.page, url)
+        dismiss_overlays(self.page, grace_ms=MOUNT_GRACE_MS)
 
     # ══════════════════════════════════════════════════════════════════
     # Navigation

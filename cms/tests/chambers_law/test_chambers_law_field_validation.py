@@ -16,6 +16,13 @@ coverage is complete with batch 7.
                                        134987
   Batch 7 -- Active Status + Entry ID  134976 134977 134978
 
+UPDATE 2026-10-13 (P3/P4 batch): 134974 now runs on a DISPOSABLE
+`QCTEST-134974-LAW-<uid>` Law Entry it creates (Draft, Active Status
+unticked) -- never on a real QCDEMO-129394-law-* row. Per the user decision
+of 2026-10-13 nothing is deleted: the creation is logged to
+reports/live-writes-20261013.jsonl for manual cleanup. The notes below that
+describe 134974 on Law 11/1990 are history.
+
 SCOPE -- every case here is on the **Law Entry** object
 (`manage-law-entry`), the per-CARD record. NOTHING here touches
 `manage-chamber-laws-page` (the page-level singleton); that object is the
@@ -778,7 +785,8 @@ import sys
 import zlib
 from pathlib import Path
 from typing import NamedTuple
-from urllib.parse import urlsplit
+import uuid
+from urllib.parse import parse_qs, urlsplit
 
 import allure
 import pytest
@@ -801,7 +809,17 @@ from web.pages.chambers_law.chambers_law_page import ChambersLawPage
 from core.web.browser import new_context
 from core.utils.logger import get_logger
 from core.utils.waits import wait_until
-from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
+from cms.pages.components.object_authoring_page import (
+    STATUS_INACTIVE,
+    STATUS_PUBLISHED,
+    STATUS_UNPUBLISHED,
+    ObjectAuthoringPage,
+)
+from cms.tests.singleton_baseline import drive_to_published
+from cms.tests.live_write_guard import LiveRecord, log_live_write
+
+# P3/P4 batch 2026-10-13 (tc_134974): icon for the disposable QCTEST Law Entry.
+QCTEST_LAW_ICON = Path(__file__).resolve().parent / "fixtures" / "law_icon_qctest.svg"
 
 logger = get_logger("test_chambers_law_field_validation")
 
@@ -812,28 +830,15 @@ CHAMBERS_LAW_XDIST_GROUP = pytest.mark.xdist_group("chambers_law_129394")
 # ---- Wait budgets (see module docstring's measured timings) --------------
 UNPUBLISH_CONFIRM_TIMEOUT = 30.0
 PUBLISH_CONFIRM_TIMEOUT = 120.0
-# A refusal is rendered by client-side JS right after the click; the form's
-# own settle already spends ~2.5s, so this is a short, real poll on top.
-REFUSAL_RENDER_TIMEOUT = 20.0
-# The CREATE path is slower than an edit BY DESIGN and needs its own budget
-# (read off the page's own `submitWithoutFollowingRedirect()`, 2026-09-16 --
-# see `_LawEntryForm.submit_new_entry_outcome()`): the native multipart POST
-# is retargeted into a hidden iframe, the page then asks the Object for its
-# entry count a second time to decide whether anything was written, and it
-# arms an 8000ms belt timer for the case where the iframe never reports a
-# `load` at all. 8s belt + the count round-trip + the landing page's own
-# render is comfortably inside this; `REFUSAL_RENDER_TIMEOUT`'s 20s is not.
-CREATE_OUTCOME_TIMEOUT = 60.0
-# ...and once the create landing HAS rendered, its bars are put there by the
-# entries-list fetch that follows the navigation, not by the navigation
-# itself. Sampling the instant the blank form appears samples too early, so
-# the reader waits for a bar on its own terms -- bounded, and it stops the
-# moment one renders. Expiring is not an error: no bar at all is precisely
-# the observation 134978 needs to report.
-CREATE_LANDING_BAR_TIMEOUT = 20.0
-# The picker's own upload round-trip (set_input_files -> server upload ->
-# either the "1 of 1" count or a rejection message).
-PICKER_RESULT_TIMEOUT_MS = 25000
+from cms.tests.chambers_law.law_entry_form import (  # moved 2026-10-12, see that module
+    CREATE_LANDING_BAR_TIMEOUT,
+    CREATE_OUTCOME_TIMEOUT,
+    PICKER_RESULT_TIMEOUT_MS,
+    REFUSAL_RENDER_TIMEOUT,
+    SIZE_REJECTION_RE,
+    _LawEntryForm,
+    _PickerOutcome,
+)
 RESTORE_ATTEMPTS = 3
 
 
@@ -1033,837 +1038,6 @@ def _outcome_shape(refusal: str, success: str, attempted: str, stored: str) -> s
     return UNCLEAR_OUTCOME
 
 
-# =========================================================================
-# Upload-rejection detection -- the contract the pickers are read against
-# =========================================================================
-# EXACTLY TWO things count as "this upload was rejected":
-#
-#   1. rendered text matching the SIZE-FEEDBACK FAMILY below -- the live
-#      literal is "Please enter a file with a valid file size no larger
-#      than 1 MB." (read off `data-file-size-feedback` on this form); or
-#   2. rendered text repeating one of the strings the upload markup ITSELF
-#      declares as user feedback, in a `data-*-feedback` attribute.
-#
-# It is deliberately NOT "any text rendered inside the picker". That older,
-# far broader reading is what the 2026-09-15 run actually captured, four
-# times over, and reported as a size rejection:
-#
-#   "Info: / <Arabic> / Set English (United States) as your preferred
-#    language."
-#
-# -- this account's LANGUAGE-PREFERENCE notice, nothing to do with uploads.
-# 134942 therefore failed at step 2 and the size boundary was never
-# exercised at all. Neither rule above can match that notice: it contains
-# no "valid file size no larger than <N> MB", and it is not the value of
-# any `*-feedback` attribute. Rule 2 is also what keeps detection
-# LANGUAGE-INDEPENDENT (this account leaks Arabic into an English UI)
-# without widening it -- the product's own declared string is matched
-# whatever language it ships in, while the ASSERTION still checks the
-# English literal the case demands.
-#
-# The field's visible help line, "Upload a .jpg,.png,.svg no larger than
-# 1 MB.", must NOT be read as a rejection -- it is always on screen. It
-# does not match: the family below requires the words "valid file size",
-# which the help line does not contain.
-SIZE_REJECTION_RE = re.compile(
-    r"valid\s+file\s+size\s+no\s+larger\s+than\s*[0-9]+(?:[.,][0-9]+)?\s*MB",
-    re.IGNORECASE,
-)
-
-
-class _PickerOutcome(NamedTuple):
-    """What the Documents & Media picker reported about one upload."""
-
-    rejection: str   # the SPECIFIC feedback message, "" when none rendered
-    accepted: bool   # the picker positively reported the file as uploaded
-    picker_text: str # whole picker text, captured BEFORE the picker closes
-                     # -- for the FAILURE REPORT only, never asserted on
-
-
-# =========================================================================
-# Form probe -- the ONLY place in this module that touches raw Playwright
-# =========================================================================
-class _LawEntryForm:
-    """CONSOLIDATE: every method here is GENERIC Object-Authoring behaviour
-    and belongs on `cms/pages/components/object_authoring_page.py`
-    (suggested names in each docstring). It lives here only because that
-    file was owned by another engineer while this batch was written. No
-    test body below touches `self.page` / `playwright` directly -- raw
-    Playwright stays inside this class, which is the same contract
-    `BasePage` / `ObjectAuthoringPage` hold."""
-
-    # Confirmed live 2026-09-15: the page's own `banner()` helper creates
-    # `<div data-qc-oel-editbar>` for BOTH the editing banner and every save
-    # message, so these must be matched on TEXT, not on the attribute.
-    EDIT_BAR = "[data-qc-oel-editbar]"
-    # ---- THE THREE PLACES A REFUSAL IS ACTUALLY RENDERED -----------------
-    # (read off the page's own shipped JS, 2026-09-15 -- see the
-    # "WHERE A REFUSAL IS RENDERED" block in the module docstring)
-    #
-    # 1. UNDER THE BOX. `fieldError(control, message)` builds
-    #    `document.createElement('div')`, sets `data-qc-oel-field-error`
-    #    (its own `FIELD_ERROR_ATTR`) and `role="alert"`, gives it NO class,
-    #    and inserts it after the control. `reportComplaints()` sends EVERY
-    #    message it can tie to a field there -- both the page's own local
-    #    complaints AND a plain-text named-rule message from `/validate`,
-    #    which `controlForMessage()` matches to a control by the longest
-    #    field label (either language) or field name occurring in it.
-    #    The page's own comment: "ADO 141960 - each message under the box it
-    #    is about; the bar is kept for whatever cannot be tied to a field".
-    # 2. THE RED BAR. Only what `controlForMessage()` could NOT place --
-    #    "a rule that names none, the server's bare refusal".
-    # 3. LIFERAY'S OWN FRAGMENT ERROR. The INPUTS-text/textarea fragment
-    #    calls `showInputError({errorType:'length', ...})`, which un-hides
-    #    `<p id="...-error" class="... text-danger sr-only">` by dropping
-    #    `sr-only`. Independent of the page's own machinery entirely.
-    FIELD_ERROR_NOTE = "[data-qc-oel-field-error]"
-    FRAGMENT_ERROR_NOTE = 'p[id$="-error"].text-danger:not(.sr-only)'
-    # Both shipped languages of every bar literal. `t(en, ar)` picks by
-    # `document.documentElement.lang`, and on qcdev the shared authoring
-    # account renders `ar-SA` unless the URL pins `/en` -- so an
-    # English-only prefix match is blind half the time.
-    SAVE_REFUSED_PREFIXES = (
-        "This record was not saved:",
-        "لم يتم حفظ هذا السجل:",
-    )
-    # Kept as the single-string form the pre-2026-09-15 reader used, because
-    # a few call sites still read it for reporting.
-    SAVE_REFUSED_PREFIX = SAVE_REFUSED_PREFIXES[0]
-    PUBLISHED_MESSAGES = (
-        "Saved and submitted for publishing.",
-        "تم الحفظ وإرساله للنشر.",
-    )
-    DRAFT_SAVED_MESSAGES = ("Draft saved.", "تم حفظ المسودة.")
-    PUBLISHED_MESSAGE = PUBLISHED_MESSAGES[0]
-    DRAFT_SAVED_MESSAGE = DRAFT_SAVED_MESSAGES[0]
-    # Same picker iframe ObjectAuthoringPage.upload_file() drives.
-    PICKER_IFRAME = 'iframe[src*="selectFileEntry"]'
-    PICKER_UPLOADED_COUNT_TEXT = "1 of 1"
-    # An upload-feedback string the product declares about ITSELF lives in a
-    # `data-*-feedback` attribute -- `data-file-size-feedback` is the one
-    # read live on this form. Harvested by attribute-name SUFFIX, so no
-    # attribute name is guessed: whatever the fragment declares is found.
-    FEEDBACK_ATTR_SUFFIX = "-feedback"
-    # ...and the size one is identified by its attribute NAME, not by its
-    # wording, so an Arabic-rendered message is still classified correctly.
-    SIZE_FEEDBACK_ATTR_TOKEN = "size"
-    _COLLECT_FEEDBACK_JS = """
-    (root) => {
-      const doc = root.ownerDocument || root;
-      const out = [];
-      for (const el of doc.querySelectorAll('*')) {
-        for (const attr of el.attributes) {
-          if (!attr.name.endsWith('-feedback')) continue;
-          const value = (attr.value || '').trim();
-          if (value.length > 10) out.push([attr.name, value]);
-        }
-      }
-      return out;
-    }
-    """
-
-    def __init__(self, authoring):
-        self._authoring = authoring
-        self._page = authoring.page
-
-    # ---- Save messages ---------------------------------------------------
-    def _visible_texts(self, selector: str) -> list:
-        """Every VISIBLE, non-empty rendered text matching `selector`.
-
-        Visibility is checked per element, because these renderers leave
-        their container in the DOM when there is nothing to say (Liferay's
-        fragment note is `sr-only` until it fires; the page's own notes are
-        removed on the next `input` event). Reading text out of a hidden
-        element would invent a refusal that is not on screen."""
-        found = self._page.locator(selector)
-        out = []
-        for index in range(found.count()):
-            element = found.nth(index)
-            try:
-                if not element.is_visible():
-                    continue
-                text = (element.inner_text() or "").strip()
-            except Exception:  # noqa: BLE001 -- a node that vanished mid-read
-                continue
-            if text:
-                out.append(text)
-        return out
-
-    def _bar_texts(self) -> list:
-        bars = self._page.locator(self.EDIT_BAR)
-        return [bars.nth(i).inner_text() for i in range(bars.count())]
-
-    def field_error_texts(self) -> tuple:
-        """The per-field notes the page renders UNDER the box they are about
-        -- `<div data-qc-oel-field-error role="alert">`.
-
-        THIS IS THE READ THE OLD REFUSAL READER DID NOT HAVE, and its
-        absence produced a false "refused silently, no message" verdict that
-        a product bug (#141989) was filed on. That bug is now closed as Not
-        a Bug: the message WAS on screen, in one of these notes -- outside
-        any editbar, in a class-less `<div>`, with no
-        "This record was not saved:" prefix to match on.
-
-        Everything `reportComplaints()` can tie to a field lands here, which
-        is nearly everything: the Object's named-rule messages relayed from
-        `/validate` (matched to their control by field label), the page's own
-        URL complaints, its max-length backstop and its required-attachment
-        check. Only a message naming no field falls through to the bar."""
-        return tuple(self._visible_texts(self.FIELD_ERROR_NOTE))
-
-    def fragment_error_texts(self) -> tuple:
-        """Liferay's OWN INPUTS-* fragment error (`showInputError`), which
-        un-hides `<p id="...-error" class="text-danger sr-only">` by dropping
-        `sr-only`. A third, entirely independent renderer -- it is what
-        reports the fragment's own declared `maxLength` on a text input."""
-        return tuple(self._visible_texts(self.FRAGMENT_ERROR_NOTE))
-
-    def refusal_bar_text(self) -> str:
-        """Text of the RED refusal BAR only, or "".
-
-        This is the pre-2026-09-15 reader, kept as its own named read --
-        deliberately narrowed to the bar -- so a caller can still tell a
-        bar-level refusal (a rule naming no field, or the server's bare
-        refusal) from an under-the-box one. BOTH shipped languages of the
-        prefix are matched now: `t()` picks by
-        `document.documentElement.lang`, which is `ar-SA` for the shared
-        qcdev authoring account unless the URL pins `/en`, so an
-        English-only match was blind half the time on its own terms."""
-        for text in self._bar_texts():
-            if any(prefix in text for prefix in self.SAVE_REFUSED_PREFIXES):
-                return text
-        return ""
-
-    def save_refusal_text(self) -> str:
-        """CONSOLIDATE -> `ObjectAuthoringPage.save_refusal_text()`.
-        EVERYTHING the page is currently saying about why the save did not go
-        through, from ALL THREE renderers, joined with " | ", or "" when it
-        is saying nothing.
-
-        WIDENED 2026-09-15. It used to read `[data-qc-oel-editbar]` only, and
-        only match the English prefix "This record was not saved:", so it
-        returned "" for every message rendered under a box -- which is where
-        the page puts almost all of them. Verified by hand against this very
-        form: 201 characters in Law Title (EN) and 501 in Law Description
-        (EN) each render a visible message ("Law Title must not exceed 200
-        characters" / "Law Description must not exceed 500 characters"),
-        still on screen at 0.5s / 2s / 5s, with the value correctly NOT
-        stored -- and the old reader saw NONE of it and reported "refused
-        silently".
-
-        Field notes come first and the bar last on purpose: the note is the
-        specific, field-named message; the bar is the fallback."""
-        parts = list(self.field_error_texts()) + list(self.fragment_error_texts())
-        bar = self.refusal_bar_text()
-        if bar:
-            parts.append(bar)
-        return " | ".join(parts)
-
-    def success_message_text(self) -> str:
-        """CONSOLIDATE -> `ObjectAuthoringPage.success_message_text()`. The
-        confirmation the page carries across its own post-save redirect
-        ("Saved and submitted for publishing." / "Draft saved.", or either
-        one's Arabic twin), or ""."""
-        wanted = self.PUBLISHED_MESSAGES + self.DRAFT_SAVED_MESSAGES
-        for text in self._bar_texts():
-            if any(message in text for message in wanted):
-                return text
-        return ""
-
-    def bar_texts(self) -> tuple:
-        """EVERY `[data-qc-oel-editbar]` on the page right now, verbatim and
-        UNFILTERED -- no prefix match, no message whitelist.
-
-        The four named readers above each answer "is MY message here?", and
-        when all four answer no they cannot tell "the page said nothing"
-        apart from "the page said something none of us recognises". On the
-        CREATE landing that distinction is the whole finding, so the raw
-        read exists as its own named method and is printed by
-        `create_message_report()`. Reporting only -- never asserted on."""
-        return tuple(
-            text.strip() for text in self._bar_texts() if text and text.strip()
-        )
-
-    def save_message_report(self) -> str:
-        """A one-string, attach-to-Allure breakdown of WHICH renderer said
-        WHAT -- so a failure report never again leaves a reader guessing
-        whether "no message" meant "the page said nothing" or "the reader
-        was not looking there"."""
-        return (
-            f"under-the-box notes={self.field_error_texts()!r}; "
-            f"fragment notes={self.fragment_error_texts()!r}; "
-            f"refusal bar={self.refusal_bar_text()!r}; "
-            f"success bar={self.success_message_text()!r}"
-        )
-
-    def create_message_report(self) -> str:
-        """`save_message_report()` plus the UNFILTERED bar read.
-
-        Used by the create flow only. The 2026-09-15 run of 134978 reported
-        four empty renderers for a save that demonstrably landed, which left
-        no way to tell whether the create landing renders nothing at all or
-        renders something the named readers do not match -- so the raw bars
-        are now part of the create report."""
-        return (
-            f"{self.save_message_report()}; "
-            f"EVERY bar rendered={self.bar_texts()!r}"
-        )
-
-    def wait_for_save_outcome(self, timeout: float = REFUSAL_RENDER_TIMEOUT) -> str:
-        """Polls until the page reports EITHER outcome, and returns
-        "refused" / "saved" / "none". "none" is a real, reportable result
-        (it is what a natively-blocked submit looks like -- stage 2a in the
-        module docstring), never an error.
-
-        Now that `save_refusal_text()` reads all three renderers, "refused"
-        fires on an under-the-box note too, so a message-carrying refusal can
-        no longer be misreported as "none"/silent."""
-        outcome = {"value": "none"}
-
-        def _settled() -> bool:
-            if self.save_refusal_text():
-                outcome["value"] = "refused"
-                return True
-            if self.success_message_text():
-                outcome["value"] = "saved"
-                return True
-            return False
-
-        try:
-            wait_until(_settled, timeout=timeout, poll=1.0)
-        except Exception:  # noqa: BLE001 -- "neither appeared" is itself a result
-            pass
-        return outcome["value"]
-
-    # ---- Native (browser) constraint state -------------------------------
-    def _control(self, field_label: str, role: str = "textbox"):
-        return self._page.get_by_role(
-            role, name=self._authoring.label_pattern(field_label)
-        )
-
-    def native_validation_message(self, field_label: str, role: str = "textbox") -> str:
-        """CONSOLIDATE -> `ObjectAuthoringPage.native_validation_message()`.
-        The BROWSER's own constraint message for a control
-        (`el.validationMessage`), "" when the control is currently valid.
-        This is the only readable trace of stage 2a: `reportValidity()`
-        paints a native bubble that is not in the DOM, so a test can only
-        observe the constraint state on the element itself."""
-        return self._control(field_label, role).evaluate(
-            "el => el.validity && !el.validity.valid "
-            "? (el.validationMessage || 'invalid') : ''"
-        )
-
-    def is_value_missing(self, field_label: str, role: str = "textbox") -> bool:
-        """True when the control fails the browser's `required` check."""
-        return bool(
-            self._control(field_label, role).evaluate(
-                "el => !!(el.validity && el.validity.valueMissing)"
-            )
-        )
-
-    def attachment_validation_message(self, field_label: str) -> str:
-        """Same as native_validation_message(), for an ATTACHMENT field --
-        whose real control is the `sr-only`
-        `<input name="ObjectField_...">` addressed as
-        "<Field Label> Select File" (confirmed live: exactly one match)."""
-        return self._page.get_by_role(
-            "textbox", name=f"{field_label} Select File"
-        ).evaluate(
-            "el => el.validity && !el.validity.valid "
-            "? (el.validationMessage || 'invalid') : ''"
-        )
-
-    def max_length_attribute(self, field_label: str) -> str:
-        """CONSOLIDATE -> `ObjectAuthoringPage.max_length_attribute()`. The
-        control's own `maxlength`, or "" -- the signal that decides which
-        half of 134946/134950's either/or expected result applies (a field
-        that caps typing vs one that refuses on save)."""
-        return self._control(field_label).get_attribute("maxlength") or ""
-
-    def live_value(self, field_label: str) -> str:
-        """Value currently IN the box, without re-navigating -- used to see
-        whether an over-long fill was truncated by the control itself."""
-        return self._control(field_label).input_value()
-
-    def text_direction(self, field_label: str) -> str:
-        """CONSOLIDATE -> `ObjectAuthoringPage.text_direction()`. The
-        direction the control RENDERS in -- the browser's own computed
-        `direction`, falling back to the element's `dir` attribute when a
-        computed value is unavailable.
-
-        Added for 134964, the one case in this module whose expected result
-        names rendering and not just storage ("the Arabic text intact and
-        rendered right-to-left in the text area"). Read live 2026-09-15:
-        `#qc-ar-lawDescription` carries `dir="rtl"` and `lang="ar"` while
-        its English twin carries `dir="ltr"`, so this is an observable
-        product property, not an inferred one."""
-        return self._control(field_label).evaluate(
-            "el => (getComputedStyle(el).direction || el.getAttribute('dir') "
-            "|| '').toLowerCase()"
-        )
-
-    def tag_name(self, field_label: str) -> str:
-        """CONSOLIDATE -> `ObjectAuthoringPage.tag_name()`. The control's own
-        tag, lower-cased -- how batch 4 PROVES, at runtime, that Law
-        Description is a plain `<textarea>` and not a rich-text editor
-        (confirmed live 2026-09-15; see finding (f) in the module
-        docstring). A rich-text field on this surface is a CKEditor
-        `iframe`, never a textarea, so this single read distinguishes them
-        and stops a silently-changed field shape from being mistaken for a
-        product bug."""
-        return self._control(field_label).evaluate("el => el.tagName.toLowerCase()")
-
-    # ---- Numeric control state (batch 6) ---------------------------------
-    # CONSOLIDATE -> `ObjectAuthoringPage`. Display Order is the object's one
-    # `<input type="number">`, and it behaves differently enough from a text
-    # box that the text-shaped helpers above cannot serve it: `fill()`
-    # REFUSES a non-numeric string outright, and the browser's own constraint
-    # set (`stepMismatch`, `rangeUnderflow`, `valueMissing`) is where three of
-    # batch 6's four refusals actually happen. See finding (s).
-
-    def number_validity(self, field_label: str) -> dict:
-        """The BROWSER's full constraint verdict on a numeric control -- the
-        only observable trace of stage 2a, which paints a native bubble that
-        is not in the DOM.
-
-        Returned as a dict rather than a bare message because batch 6 has to
-        tell the three native refusals APART: `stepMismatch` (2.5 -- a
-        malformed integer), `rangeUnderflow` (a value below `min`, which on
-        this control CANNOT fire -- `min` is INT_MIN, see finding (s)), and
-        `valueMissing` (an empty box, or a box the control refused to let
-        anything be typed into).
-
-        `readonly`/`disabled` ride along because 134972 step 1's expected
-        result is "the record opens with Display Order EDITABLE", and that
-        is a property of the control, not of the value. Resolving at all is
-        the other half of the same check: this read goes through
-        `get_by_role("spinbutton", name=label_pattern(...))`, which is
-        STRICT -- zero matches raise, and so do two -- so a dict coming back
-        already proves exactly one Display Order control exists."""
-        return self._control(field_label, role="spinbutton").evaluate(
-            "el => ({value: el.value, valid: !!(el.validity && el.validity.valid),"
-            " readonly: el.readOnly === true, disabled: el.disabled === true,"
-            " badInput: !!(el.validity && el.validity.badInput),"
-            " stepMismatch: !!(el.validity && el.validity.stepMismatch),"
-            " rangeUnderflow: !!(el.validity && el.validity.rangeUnderflow),"
-            " valueMissing: !!(el.validity && el.validity.valueMissing),"
-            " message: el.validationMessage || '',"
-            " min: el.getAttribute('min') || '', max: el.getAttribute('max') || '',"
-            " step: el.getAttribute('step') || ''})"
-        )
-
-    def type_into_number(self, field_label: str, text: str) -> str:
-        """Types `text` into a numeric control THE WAY A PERSON WOULD --
-        click, select-all, keystrokes -- and returns what the box actually
-        holds afterwards.
-
-        REQUIRED, not a stylistic choice: `ObjectAuthoringPage.fill_number()`
-        goes through Playwright's `fill()`, which raises
-        `Error: Cannot type text into input[type=number]` for a value like
-        "two" and so can never reach the product's own behaviour at all.
-        Typed instead, the control silently DISCARDS every non-numeric
-        keystroke and the box stays empty (measured live -- finding (s)).
-        "The box would not accept it" and "the save was refused" are two
-        different product outcomes, and 134974 has to be able to report
-        WHICH one happened."""
-        control = self._control(field_label, role="spinbutton")
-        control.click()
-        self._page.keyboard.press("Control+a")
-        self._page.keyboard.type(text, delay=30)
-        return control.input_value()
-
-    def live_number_value(self, field_label: str) -> str:
-        """Value currently IN the numeric box, without re-navigating -- the
-        spinbutton twin of `live_value()`, used to see whether the control
-        itself mangled or dropped what was entered."""
-        return self._control(field_label, role="spinbutton").input_value()
-
-    # ---- "Is there an ID control on this form at all?" (batch 7) ----------
-    ID_LABEL_RE = r"(^|[^A-Za-z])(ID|IDs|Identifier)([^A-Za-z]|$)"
-
-    def identifier_controls(self) -> tuple:
-        """Every non-hidden form control whose own label, `name` or `id`
-        mentions an identifier, as `(label, name, readonly, disabled)`
-        tuples -- empty when the form renders none.
-
-        134978 asks whether the Law Entry ID is "read-only or absent from
-        the edit form". Those are two different answers and this read
-        returns whichever is true, POSITIVELY: an empty tuple is the
-        evidence that the field is absent, where a `get_by_role(...)` lookup
-        for a control that does not exist could only ever produce a timeout
-        and no information. Confirmed live 2026-09-16: this returns EMPTY on
-        `manage-law-entry` -- finding (y)."""
-        return tuple(
-            tuple(row)
-            for row in self._page.evaluate(
-                """(pattern) => {
-                  const re = new RegExp(pattern);
-                  const out = [];
-                  for (const el of document.querySelectorAll('form input, form select, form textarea')) {
-                    if (el.type === 'hidden') continue;
-                    let label = '';
-                    if (el.id) {
-                      const l = document.querySelector('label[for="' + CSS.escape(el.id) + '"]');
-                      if (l) label = (l.innerText || '').trim();
-                    }
-                    if (!label && el.closest('label')) label = (el.closest('label').innerText || '').trim();
-                    const haystack = [label, el.name || '', el.id || ''].join(' ');
-                    if (!re.test(haystack)) continue;
-                    out.push([label, el.name || el.id || '', el.readOnly === true, el.disabled === true]);
-                  }
-                  return out;
-                }""",
-                self.ID_LABEL_RE,
-            )
-        )
-
-    def visible_control_labels(self) -> tuple:
-        """Every non-hidden form control's rendered label, in DOM order --
-        the FULL field inventory of whatever record is open.
-
-        Attached to 134978's report so "there is no Law Entry ID control"
-        is backed by the list of controls there ARE, rather than by an
-        absence nobody can check."""
-        return tuple(
-            self._page.evaluate(
-                """() => {
-                  const out = [];
-                  for (const el of document.querySelectorAll('form input, form select, form textarea')) {
-                    if (el.type === 'hidden' || el.type === 'search') continue;
-                    let label = '';
-                    if (el.id) {
-                      const l = document.querySelector('label[for="' + CSS.escape(el.id) + '"]');
-                      if (l) label = (l.innerText || '').trim();
-                    }
-                    if (!label && el.closest('label')) label = (el.closest('label').innerText || '').trim();
-                    if (label) out.push(label);
-                  }
-                  return out;
-                }"""
-            )
-        )
-
-    # ---- Lifecycle without a success assumption --------------------------
-    def submit_expecting_refusal(self) -> str:
-        """CONSOLIDATE -> `ObjectAuthoringPage.submit_for_publishing(
-        expect_success=False)`. Clicks Submit for Publishing and settles,
-        WITHOUT waiting for an Approved status -- a refused save never
-        reaches one, and `wait_for_status()` would burn its whole budget
-        before failing for the wrong reason."""
-        self._authoring.submit_for_publishing()
-        return self.wait_for_save_outcome()
-
-    # ---- CREATE-path outcome (this module's ONE create flow) -------------
-    # CONFIRMED LIVE 2026-09-16 -- read off the manage page's own shipped
-    # JavaScript (`submitWithoutFollowingRedirect()`, `rememberSaved()`,
-    # `announceSaved()`) plus a live, non-destructive read of the create
-    # form itself on `/en/web/qatar-chamber/manage-law-entry`. A CREATE does
-    # NOT save the way an EDIT does, and `wait_for_save_outcome()` -- which
-    # is correct for the other 39 tests here, every one of which edits an
-    # existing record -- cannot see a create succeed:
-    #
-    #   EDIT (`?editEntry=<erc>` in the URL) is intercepted by the entry-list
-    #   fragment and written through `PUT <rest>/<id>`. On a 200 that branch
-    #   calls `rememberSaved(...)`, parking "Saved and submitted for
-    #   publishing." / "Draft saved." in `sessionStorage['qc-oel-saved']`,
-    #   and the landing replays it via `announceSaved()` -> `banner(...)`.
-    #   THAT bar is the one `success_message_text()` reads.
-    #
-    #   CREATE (no `editEntry`) never reaches that code at all. Liferay's own
-    #   form -- confirmed live, `action=".../c/portal/edit_info_item"`,
-    #   `backURL="/en/web/qatar-chamber/manage-law-entry"` -- is retargeted at
-    #   a hidden iframe so the portal's 302 to `https://localhost/...` cannot
-    #   strand the editor, and the page then decides the outcome ITSELF by
-    #   asking the Object for its entry count a second time:
-    #     * count GREW  -> `go()` -> `window.location.href = backURL`, i.e. it
-    #       navigates back to the SAME manage URL and re-renders a BLANK
-    #       create form. The page's own comment: "the only reliable signal is
-    #       whether the Object gained an entry".
-    #     * count SAME  -> `explainRejection()` -> `reportComplaints()`, and
-    #       THE FILLED FORM STAYS PUT with the messages on it.
-    #   `rememberSaved()` is called on NEITHER branch, so
-    #   `sessionStorage['qc-oel-saved']` is never set and NO save-confirmation
-    #   bar is ever rendered for a create. That is a product fact, not a
-    #   reader gap -- see the note on 134978's step-1 assert.
-    #
-    # So the create path's success signal is the product's own winning
-    # branch: THE FORM IS RE-RENDERED EMPTY. This reader samples exactly
-    # that, keeps the three refusal renderers as the losing branch, and is
-    # deliberately given its own name rather than folded into
-    # `submit_expecting_refusal()` -- 134943 also submits from the create
-    # form and asserts `outcome != "saved"` against a NATIVELY blocked
-    # submit, and its reader must not be changed underneath it.
-
-    def _create_form_was_reset(self, sentinel_label: str, sentinel_value: str) -> bool:
-        """True once the create form no longer holds `sentinel_value` in
-        `sentinel_label` -- i.e. `go()` fired and a blank form re-rendered.
-
-        Every failure mode answers False and keeps the caller polling: the
-        control is absent mid-navigation, and a read against a destroyed
-        execution context raises. Neither is evidence of a save."""
-        try:
-            control = self._control(sentinel_label)
-            if control.count() < 1:
-                return False
-            return control.first.input_value() != sentinel_value
-        except Exception:  # noqa: BLE001 -- mid-navigation, not an outcome
-            return False
-
-    def submit_new_entry_outcome(
-        self,
-        sentinel_label: str,
-        sentinel_value: str,
-        timeout: float = CREATE_OUTCOME_TIMEOUT,
-    ) -> str:
-        """Clicks Submit for Publishing on the CREATE form and returns
-        "refused" / "saved" / "none", reading the signals the create path
-        actually emits (see the block above).
-
-        `sentinel_label`/`sentinel_value` are a field the caller just filled
-        and the value it filled it with; they are how "the form was
-        re-rendered blank" is told from "the form is still sitting there".
-        Refusal is checked FIRST on every poll, so a create that was refused
-        can never be read as a save just because a control went unreadable.
-
-        "none" stays a real, reportable result -- it is what a natively
-        blocked submit looks like (stage 2a) -- never an error."""
-        self._authoring.submit_for_publishing()
-        outcome = {"value": "none", "by": "nothing"}
-
-        def _settled() -> bool:
-            if self.save_refusal_text():
-                outcome["value"], outcome["by"] = "refused", "complaint"
-                return True
-            if self.success_message_text():
-                outcome["value"], outcome["by"] = "saved", "message"
-                return True
-            if self._create_form_was_reset(sentinel_label, sentinel_value):
-                outcome["value"], outcome["by"] = "saved", "landing"
-                return True
-            return False
-
-        try:
-            wait_until(_settled, timeout=timeout, poll=1.0)
-        except Exception:  # noqa: BLE001 -- "neither appeared" is itself a result
-            pass
-
-        if outcome["by"] == "landing":
-            # Hold here until the landing has actually SAID something, so the
-            # caller's own `success_message_text()` / `create_message_report()`
-            # reads happen after the last point at which the product could
-            # still emit a message -- not in the gap between the navigation
-            # and the entries-list fetch that renders the bars.
-            try:
-                wait_until(
-                    lambda: bool(self.bar_texts()),
-                    timeout=CREATE_LANDING_BAR_TIMEOUT,
-                    poll=0.5,
-                )
-            except Exception:  # noqa: BLE001 -- no bar at all IS the observation
-                pass
-        return outcome["value"]
-
-    # ---- Attachment picker ----------------------------------------------
-    def _picker_closed(self, timeout: int) -> bool:
-        try:
-            self._page.locator(self.PICKER_IFRAME).wait_for(
-                state="detached", timeout=timeout
-            )
-            return True
-        except Exception:  # noqa: BLE001 -- caller decides what to do next
-            return False
-
-    def upload_expecting_rejection(
-        self,
-        field_label: str,
-        file_path: str,
-        rejection_reader=None,
-        timeout_ms: int = PICKER_RESULT_TIMEOUT_MS,
-    ) -> _PickerOutcome:
-        """CONSOLIDATE -> `ObjectAuthoringPage.upload_file_expecting_
-        rejection()`. Drives the Documents & Media picker exactly as
-        `ObjectAuthoringPage.upload_file()` does up to `set_input_files()`,
-        then reports what the picker said about the file -- a SPECIFIC
-        rejection message, or nothing (which, for 134941/134942, is itself
-        the finding).
-
-        `rejection_reader` is the detector, and it is deliberately a
-        parameter: 134942 passes `size_rejection_text`, so ONLY a
-        size-feedback message counts as a rejection, while the default,
-        `declared_rejection_text`, accepts any string the upload markup
-        declares about itself. Neither can match this account's
-        language-preference notice -- see the SIZE_REJECTION_RE block above
-        for what the older, broader reading cost on 2026-09-15.
-
-        It deliberately never clicks `Add`, so a rejected upload cannot
-        half-attach anything, and it always closes the picker before
-        returning: a still-open modal silently overlays the form's
-        Save/Publish buttons and turns the next click into an unexplained
-        30s timeout (already documented on
-        `ObjectAuthoringPage.select_existing_file()`)."""
-        reader = rejection_reader or self.declared_rejection_text
-        hidden_textbox = self._page.get_by_role(
-            "textbox", name=f"{field_label} Select File"
-        )
-        hidden_textbox.locator("xpath=..").get_by_role(
-            "button", name="Select File"
-        ).click()
-        frame = self._page.frame_locator(self.PICKER_IFRAME)
-        frame.locator('input[type="file"]').set_input_files(file_path)
-
-        captured = {"rejection": "", "accepted": False}
-
-        def _resolved() -> bool:
-            rejection = reader(frame)
-            if rejection:
-                captured["rejection"] = rejection
-                return True
-            if frame.get_by_text(self.PICKER_UPLOADED_COUNT_TEXT).count():
-                captured["accepted"] = True
-                return True
-            return False
-
-        try:
-            wait_until(_resolved, timeout=timeout_ms / 1000.0, poll=1.0)
-        except Exception:  # noqa: BLE001 -- "neither" is a reportable result
-            pass
-
-        # Read the picker BEFORE closing it -- afterwards the iframe is
-        # detached and the failure report would carry an empty string.
-        picker_text = self.picker_body_text()
-        self.close_picker()
-        return _PickerOutcome(
-            rejection=captured["rejection"],
-            accepted=captured["accepted"],
-            picker_text=picker_text,
-        )
-
-    # ---- Rejection detectors --------------------------------------------
-    def _scopes(self, frame=None):
-        """Where a rejection can be rendered: inside the picker iframe, and
-        on the form page itself (the upload fragment validates there too)."""
-        return [scope for scope in (frame, self._page) if scope is not None]
-
-    def _declared_feedback(self, frame=None):
-        """Every `(attribute_name, value)` pair the live markup declares as
-        upload feedback -- each attribute whose name ends in `-feedback`.
-
-        This is the product describing its OWN rejection vocabulary, which
-        is what makes matching against it both narrow and
-        language-independent: whatever wording ships, English or Arabic, it
-        is one of these strings -- and the account's language-preference
-        notice is not one of them."""
-        pairs = []
-        for scope in self._scopes(frame):
-            try:
-                pairs.extend(
-                    scope.locator("body").evaluate(self._COLLECT_FEEDBACK_JS)
-                )
-            except Exception:  # noqa: BLE001 -- a detached frame reads as none
-                continue
-        return [(str(name), str(value)) for name, value in pairs]
-
-    def declared_size_feedback(self, frame=None) -> str:
-        """The product's own SIZE-rejection string, identified by its
-        ATTRIBUTE NAME (`data-file-size-feedback`), never by its wording --
-        so an Arabic-rendered message is still classified correctly."""
-        for name, value in self._declared_feedback(frame):
-            if self.SIZE_FEEDBACK_ATTR_TOKEN in name:
-                return value
-        return ""
-
-    def _visible_text(self, scope, needle) -> str:
-        """The first VISIBLE element in `scope` whose text matches `needle`
-        (a literal substring or a compiled regex), whitespace-normalised, or
-        "".
-
-        Visibility is required on purpose: a feedback string the fragment
-        ships in a hidden node is not a rejection until the product actually
-        renders it."""
-        try:
-            nodes = scope.get_by_text(needle)
-            count = min(nodes.count(), 10)
-        except Exception:  # noqa: BLE001 -- the iframe can detach mid-read
-            return ""
-        for index in range(count):
-            node = nodes.nth(index)
-            try:
-                if node.is_visible():
-                    return " ".join(node.inner_text().split())
-            except Exception:  # noqa: BLE001 -- try the next candidate
-                continue
-        return ""
-
-    def size_rejection_text(self, frame=None) -> str:
-        """134942's detector: the SIZE rejection the product rendered, or "".
-
-        Two narrow rules, in order -- the size-feedback wording family
-        (SIZE_REJECTION_RE), then the exact string the markup declares for
-        the size rule. Nothing else is read, so "there is text in the
-        picker" can never again be mistaken for a size rejection."""
-        for scope in self._scopes(frame):
-            text = self._visible_text(scope, SIZE_REJECTION_RE)
-            if text:
-                return text
-        declared = self.declared_size_feedback(frame)
-        if declared:
-            for scope in self._scopes(frame):
-                text = self._visible_text(scope, declared)
-                if text:
-                    return text
-        return ""
-
-    def declared_rejection_text(self, frame=None) -> str:
-        """The general detector (134941's): the first of the product's OWN
-        declared feedback strings that is currently rendered, or ""."""
-        for _name, value in self._declared_feedback(frame):
-            for scope in self._scopes(frame):
-                text = self._visible_text(scope, value)
-                if text:
-                    return text
-        return ""
-
-    def picker_body_text(self) -> str:
-        """Whole rendered text of the picker -- REPORT ONLY. It is attached
-        to a failure message so a reader sees what the picker actually said;
-        it is never a rejection signal, because reading it as one is exactly
-        what captured the language-preference notice on 2026-09-15."""
-        try:
-            return (
-                self._page.frame_locator(self.PICKER_IFRAME)
-                .locator("body")
-                .inner_text()
-            )
-        except Exception:  # noqa: BLE001
-            return ""
-
-    def close_picker(self) -> None:
-        """Closes the picker if it is still open, and refuses to pretend it
-        did when it did not."""
-        if self._picker_closed(1500):
-            return
-        try:
-            self._page.keyboard.press("Escape")
-        except Exception:  # noqa: BLE001
-            pass
-        if self._picker_closed(4000):
-            return
-        for name in ("Cancel", "Close"):
-            try:
-                button = self._page.get_by_role("button", name=name)
-                if button.count():
-                    button.first.click(timeout=5000)
-                    break
-            except Exception:  # noqa: BLE001 -- try the next candidate label
-                continue
-        if not self._picker_closed(6000):
-            raise AssertionError(
-                "the Documents & Media picker would not close -- refusing to "
-                "continue, because a still-open modal overlays the form's "
-                "Save/Publish buttons and turns the next click into an "
-                "unexplained 30s timeout"
-            )
-
 
 # =========================================================================
 # Lifecycle + TEST_OWNED restore helpers
@@ -1873,19 +1047,62 @@ class _LawEntryForm:
 # module's. One copy should survive the merge -- ideally promoted out of
 # both test modules into a shared CMS test-support module.
 
+def _law_rec(authoring) -> LiveRecord:
+    """The Law Entry an ObjectAuthoringPage is on, for the live-write log
+    (user decision 2026-10-13: writes to the REAL 1990/1996 entries are
+    allowed, logged first, never deleted)."""
+    code = getattr(authoring, "_entry_code", None) or "<new entry>"
+    return LiveRecord("law-entry", code, f"Law Entry {code}")
+
+
+# Live 2026-10-13: a record PUBLISHED with Active Status unticked reads
+# `Inactive` (the real 1990 entry does, since 22:40 that day). It is
+# workflow-published: its form's Publish saves in place ("the record stays
+# Inactive") and it offers no Unpublish. Both count as published here.
+_PUBLISHED_STATES = (STATUS_PUBLISHED, STATUS_INACTIVE)
+
+
 def _unpublish_and_confirm(authoring):
-    """Takes the record off the live site and PROVES it landed in Draft.
-    Idempotent: a record already in Draft is left alone."""
-    if authoring.current_status() == STATUS_PUBLISHED:
-        authoring.unpublish_to_edit_as_draft()
-    authoring.wait_for_status("Draft", timeout=UNPUBLISH_CONFIRM_TIMEOUT)
+    """Takes a PUBLISHED record off the live site and PROVES it landed in
+    UNPUBLISHED (FIX 2026-10-13: Unpublish lands on `Unpublished`, not
+    Draft). Every other state is left alone -- Draft / Unpublished are
+    already editable, and an Inactive record is edited in place. Logged
+    first."""
+    if authoring.current_status() != STATUS_PUBLISHED:
+        return authoring
+    log_live_write(_law_rec(authoring), "<workflow>", STATUS_UNPUBLISHED, None, action="unpublish",
+                   note="the form's Unpublish (lands on Unpublished)")
+    authoring.unpublish_to_edit_as_draft()
+    authoring.wait_for_status(STATUS_UNPUBLISHED, timeout=UNPUBLISH_CONFIRM_TIMEOUT)
     return authoring
 
 
 def _publish_and_confirm(authoring):
-    """Submits for publishing and PROVES the record reached Approved."""
-    authoring.submit_for_publishing()
-    authoring.wait_for_status(STATUS_PUBLISHED, timeout=PUBLISH_CONFIRM_TIMEOUT)
+    """Saves the form's current values through its value=0 control
+    (`Publish` for this account; label-independent) and PROVES the record
+    reads Published / Inactive on a fresh read. On an UNPUBLISHED record
+    that control reads `Save Changes` and keeps it Unpublished, so the row
+    action `[data-qc-oel-publish]` publishes it afterwards (keyed by the
+    Law Title the Entry column renders). Logged first."""
+    status = authoring.current_status()
+    title = authoring.field_value(ChambersLawAdminPage.LAW_TITLE_LABEL) \
+        if status == STATUS_UNPUBLISHED else ""
+    log_live_write(_law_rec(authoring), "<form submit>", STATUS_PUBLISHED, None, action="publish",
+                   note=f"the form's value=0 control from {status!r} (the form's current values)")
+    authoring.submit_via(ChambersLawAdminPage.PUBLISH_SUBMIT)
+    if status == STATUS_UNPUBLISHED:
+        log_live_write(_law_rec(authoring), "<workflow>", STATUS_PUBLISHED, None, action="publish",
+                       note="row action [data-qc-oel-publish] from Unpublished")
+        drive_to_published(
+            lambda: ObjectAuthoringPage(authoring.page, slug=authoring.slug).open_entries_list(
+                locale=CMS_LOCALE_EN),
+            title,
+            lambda: authoring.reopen().submit_via(ChambersLawAdminPage.PUBLISH_SUBMIT),
+            budget=PUBLISH_CONFIRM_TIMEOUT,
+        )
+    wait_until(lambda: authoring.reopen().current_status() in _PUBLISHED_STATES,
+               timeout=PUBLISH_CONFIRM_TIMEOUT, poll=3.0,
+               message=f"{authoring._entry_code!r} never read Published/Inactive after the publish")
     return authoring
 
 
@@ -1980,6 +1197,15 @@ def _test_owned_reset(restore_fn, label: str, attempts: int = RESTORE_ATTEMPTS) 
         raise AssertionError(detail)
 
 
+def _law_1990_last_modified(admin) -> str:
+    """The real 1990 row's Last Modified stamp off a fresh entries-list read
+    (second resolution). Used where the case's literal is ALREADY the stored
+    value: there the read-back alone cannot prove a save happened, and the
+    success toast that used to prove it is no longer asserted (user decision
+    2026-10-13), so a moved stamp is the proof."""
+    return admin.open_law_entries_list(locale=CMS_LOCALE_EN).row_last_modified(LAW_1990_TITLE)
+
+
 def _restore_law_entry_text(
     admin, entry_code, field_label, baseline_value, baseline_status
 ):
@@ -1990,15 +1216,17 @@ def _restore_law_entry_text(
     def _restore():
         authoring = admin.open_law_entry(entry_code)
         if authoring.field_value(field_label) != baseline_value:
-            if authoring.current_status() == STATUS_PUBLISHED:
+            if authoring.current_status() in _PUBLISHED_STATES:
                 authoring.fill_text(field_label, baseline_value)
                 _publish_and_confirm(authoring)
             else:
                 _unpublish_and_confirm(authoring)
                 authoring.fill_text(field_label, baseline_value)
-                if baseline_status == STATUS_PUBLISHED:
+                if baseline_status in _PUBLISHED_STATES:
                     _publish_and_confirm(authoring)
                 else:
+                    log_live_write(_law_rec(authoring), "<form submit>", "the values entered above", None,
+                                   action="save-draft", note="_restore_law_entry_text (save_as_draft)")
                     authoring.save_as_draft()
 
         # PROVE it -- fresh navigation, never a post-save-reflowed DOM.
@@ -2021,6 +1249,17 @@ def _restore_law_entry_text(
     return _restore
 
 
+def _dedupe_stem(file_name: str) -> str:
+    """'icon-0_5mb (3).png' -> 'icon-0_5mb': the stem WITHOUT Liferay's
+    " (<n>)" de-duplication suffix (FIX 2026-10-13: the restore verifier kept
+    the suffix, so a byte-identical re-upload stored as "(4)" never matched
+    "(3)" and every restore "failed")."""
+    import re as _re_stem
+
+    stem = (file_name or "").rsplit(".", 1)[0]
+    return _re_stem.sub(r" \(\d+\)$", "", stem)
+
+
 def _restore_law_icon(
     admin, entry_code, baseline_bytes_path, baseline_file_name, baseline_status
 ):
@@ -2041,11 +1280,18 @@ def _restore_law_icon(
         authoring = admin.open_law_entry(entry_code)
         if baseline_bytes_path:
             current = authoring.current_file_name(admin.LAW_ICON_UPLOAD_LABEL)
-            stem = baseline_file_name.rsplit(".", 1)[0] if baseline_file_name else ""
+            stem = _dedupe_stem(baseline_file_name)
             if not stem or stem not in current:
-                if authoring.current_status() != STATUS_PUBLISHED:
+                if authoring.current_status() not in _PUBLISHED_STATES:
                     _unpublish_and_confirm(authoring)
-                authoring.upload_file(admin.LAW_ICON_UPLOAD_LABEL, baseline_bytes_path)
+                # The picker refuses any extension but .jpg/.png/.svg (live
+                # 2026-10-13: the `.bin` restore copy was refused), so the bytes
+                # go up under the baseline's own stem + extension.
+                upload_copy = Path(baseline_bytes_path).with_name(
+                    re.sub(r" \(\d+\)(?=\.[^.]+$)", "", baseline_file_name) if baseline_file_name
+                    else Path(baseline_bytes_path).name)
+                upload_copy.write_bytes(Path(baseline_bytes_path).read_bytes())
+                authoring.upload_file(admin.LAW_ICON_UPLOAD_LABEL, str(upload_copy))
                 _publish_and_confirm(authoring)
 
         authoring = admin.open_law_entry(entry_code)
@@ -2056,7 +1302,7 @@ def _restore_law_icon(
                 f"{actual_status!r}, expected {baseline_status!r}"
             )
         if baseline_file_name:
-            stem = baseline_file_name.rsplit(".", 1)[0]
+            stem = _dedupe_stem(baseline_file_name)
             restored = authoring.current_file_name(admin.LAW_ICON_UPLOAD_LABEL)
             if stem not in restored:
                 raise AssertionError(
@@ -2188,9 +1434,10 @@ def test_chambers_law_cp_134940_a_valid_svg_law_entry_icon_under_2_mb_is_accepte
             )
             baseline_bytes_path = downloaded or None
             form = _LawEntryForm(authoring)
-            icon_field_available = not form.attachment_validation_message(
-                admin.LAW_ICON_UPLOAD_LABEL
-            )
+            # 2026-10-13: "available" = the Law Icon upload control renders
+            # (exactly one). Its hidden input's native validity is NOT that:
+            # it reads invalid even while a current file is set.
+            icon_field_available = form.attachment_control_count(admin.LAW_ICON_UPLOAD_LABEL) == 1
 
         with allure.step(
             f"Upload {ICON_SVG_NAME} (SVG, 40 KB) to the Law Entry Icon field and click Save"
@@ -2219,16 +1466,16 @@ def test_chambers_law_cp_134940_a_valid_svg_law_entry_icon_under_2_mb_is_accepte
 
         # Assert
         assert icon_field_available, (
-            "expected the law entry record to open with the Law Entry Icon field "
-            "available and satisfied"
+            "expected the law entry record to open with the Law Entry Icon "
+            "upload control available"
         )
         assert not refusal, (
             f"the SVG upload was rejected with a validation error: {refusal!r}"
         )
-        assert outcome == "saved" and success, (
-            "expected the success toast after saving a valid SVG Law Entry Icon; "
-            f"the page reported {outcome!r} instead"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
         assert stored_name.startswith("law-icon") and stored_name.endswith(".svg"), (
             f"expected the Law Entry Icon field to show {ICON_SVG_NAME} (or a "
             "Liferay-deduplicated variant of it) as the stored image; it reads "
@@ -2286,8 +1533,12 @@ def test_chambers_law_cp_134941_a_law_entry_icon_in_an_unsupported_format_is_rej
         # ITSELF in a `data-*-feedback` attribute. Narrow by construction,
         # so the account's language-preference notice cannot be read as a
         # rejection here either (see SIZE_REJECTION_RE's block).
+        # 2026-10-13: read live, the GIF is refused AT THE PICKER with "Please
+        # enter a file with a valid extension (.jpg,.png,.svg)." -- not a
+        # declared `*-feedback` string, so the format reader matches it.
         outcome = form.upload_expecting_rejection(
-            admin.LAW_ICON_UPLOAD_LABEL, gif_path
+            admin.LAW_ICON_UPLOAD_LABEL, gif_path,
+            rejection_reader=form.format_rejection_text,
         )
         rejection = outcome.rejection
         reported = rejection or outcome.picker_text
@@ -2374,12 +1625,13 @@ def test_chambers_law_cp_134942_a_law_entry_icon_above_1_mb_is_rejected_at_the_s
             )
             baseline_bytes_path = downloaded or None
             form = _LawEntryForm(authoring)
-            icon_field_available = not form.attachment_validation_message(icon_label)
+            # 2026-10-13: presence of the upload control (see 134940).
+            icon_field_available = form.attachment_control_count(icon_label) == 1
 
         # ---- Step 2 -- exactly 1 MB is accepted and saved ----------------
         with allure.step(
             f"Upload {ICON_1MB_NAME} (PNG, exactly 1 MB / {ICON_1MB_SIZE} bytes) "
-            "to the Law Entry Icon field and click Submit for Publishing"
+            "to the Law Entry Icon field and click Submit for Review"
         ):
             exact_probe = form.upload_expecting_rejection(
                 icon_label, exact_1mb, form.size_rejection_text
@@ -2463,10 +1715,10 @@ def test_chambers_law_cp_134942_a_law_entry_icon_above_1_mb_is_rejected_at_the_s
             "the exactly-1 MB icon was refused on save with: "
             f"{exact_refusal!r}"
         )
-        assert exact_outcome == "saved" and exact_success, (
-            "expected the success message after submitting the exactly-1 MB "
-            f"Law Entry Icon for publishing; the page reported {exact_outcome!r}"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={exact_outcome!r} success bar={exact_success!r}",
+                      name="save message (context, not asserted)")
         assert ICON_1MB_STEM in exact_stored, (
             f"expected the record to store {ICON_1MB_NAME} (or a "
             "Liferay-deduplicated variant of it) after the exactly-1 MB "
@@ -2482,10 +1734,13 @@ def test_chambers_law_cp_134942_a_law_entry_icon_above_1_mb_is_rejected_at_the_s
             "message itself. Picker text was: "
             f"{oversize_probe.picker_text!r}"
         )
-        assert ICON_SIZE_ERROR_MESSAGE in oversize_rejection, (
-            f"expected the rejection to read {ICON_SIZE_ERROR_MESSAGE!r}; the "
-            f"field rendered {oversize_rejection!r}"
-        )
+        # 2026-10-13 (user decision): wording differences are not bugs. Live the
+        # picker now says '"icon-oversize.png" is 1.1 MB. Law Icon accepts files
+        # up to 1 MB - choose a smaller file.' -- the refusal + the unchanged
+        # stored icon below are the behaviour; the text is context.
+        allure.attach(f"expected wording (case): {ICON_SIZE_ERROR_MESSAGE!r} | "
+                      f"rendered: {oversize_rejection!r}",
+                      name="size refusal wording (context, not asserted)")
         assert icon_after_oversize == icon_before_oversize, (
             "expected the stored icon to be unchanged after the 1.1 MB "
             f"rejection; it went from {icon_before_oversize!r} to "
@@ -2502,10 +1757,10 @@ def test_chambers_law_cp_134942_a_law_entry_icon_above_1_mb_is_rejected_at_the_s
         assert not half_refusal, (
             f"the 0.5 MB icon was refused on save with: {half_refusal!r}"
         )
-        assert half_outcome == "saved" and half_success, (
-            "expected the success message after submitting the 0.5 MB Law "
-            f"Entry Icon for publishing; the page reported {half_outcome!r}"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={half_outcome!r} success bar={half_success!r}",
+                      name="save message (context, not asserted)")
         assert ICON_0_5MB_STEM in half_stored, (
             f"expected the record to store {ICON_0_5MB_NAME} (or a "
             "Liferay-deduplicated variant of it) after the 0.5 MB upload was "
@@ -2566,9 +1821,10 @@ def test_chambers_law_cp_134943_saving_a_law_entry_without_an_icon_is_blocked(pa
 
     admin = ChambersLawAdminPage(page)
     run_id = _time.strftime("%m%d-%H%M%S")
-    qc_number = f"QCTEST-129394 Law No. 98 of 2026 ({run_id})"
-    qc_title = f"QCTEST No-Icon Law Entry {run_id} - save expected to be blocked"
-    qc_desc = f"QCTEST-129394 created by automated test tc_134943 run {run_id}."
+    # QCTEST-<tc_id>-* naming (CLAUDE.md #8), unique per run.
+    qc_number = f"QCTEST-134943 Law No. 98 of 2026 ({run_id})"
+    qc_title = f"QCTEST-134943-LAW-{run_id} No-Icon Law Entry - save expected to be blocked"
+    qc_desc = f"QCTEST-134943 created by automated test tc_134943 run {run_id}."
 
     with allure.step("Confirm the Law Entry list before the attempt"):
         entries = admin.open_law_entries_list()
@@ -2595,6 +1851,10 @@ def test_chambers_law_cp_134943_saving_a_law_entry_without_an_icon_is_blocked(pa
         icon_empty = authoring.current_file_name(admin.LAW_ICON_UPLOAD_LABEL) == ""
 
     with allure.step("Click Save"):
+        log_live_write(LiveRecord("law-entry", qc_title, "disposable QCTEST Law Entry"), "<create>", qc_title,
+                       "134943", action="attempt",
+                       note="create WITHOUT a Law Icon (inactive); expected REFUSED -- if it is saved the "
+                            "row is left in place, never deleted")
         outcome = form.submit_expecting_refusal()
         refusal = form.save_refusal_text()
         success = form.success_message_text()
@@ -2657,6 +1917,10 @@ def test_chambers_law_cp_134944_a_valid_english_law_number_is_accepted_and_saved
     baseline_value = None
     baseline_status = None
 
+    # 2026-10-13: the literal may already be stored on 1990, so the save is
+    # proved by the row's Last Modified stamp moving (the toast is not asserted).
+    modified_before = _law_1990_last_modified(admin)
+
     try:
         with allure.step("Open a law entry record with Law Number (EN) editable"):
             authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE)
@@ -2679,12 +1943,18 @@ def test_chambers_law_cp_134944_a_valid_english_law_number_is_accepted_and_saved
             )
             stored = admin.open_law_entry(LAW_1990_ENTRY_CODE).field_value(label)
 
+        modified_after = _law_1990_last_modified(admin)
+        allure.attach(f"{modified_before!r} -> {modified_after!r}", name="1990 Last Modified (save proof)")
+
         # Assert
+        assert modified_after and modified_after != modified_before, (
+            f"no save was recorded: the 1990 row's Last Modified stayed {modified_before!r}")
         assert editable, "expected exactly one editable Law Number (EN) field"
         assert not refusal, f"unexpected validation error: {refusal!r}"
-        assert outcome == "saved" and success, (
-            f"expected the success toast; the page reported {outcome!r}"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
         assert stored == LAW_NUMBER_EN_VALID, (
             f"expected Law Number (EN) to read {LAW_NUMBER_EN_VALID!r} with its "
             f"punctuation preserved; it reads {stored!r}"
@@ -2999,6 +2269,10 @@ def test_chambers_law_cp_134948_a_valid_arabic_law_number_is_accepted_and_saved(
     baseline_value = None
     baseline_status = None
 
+    # 2026-10-13: the literal may already be stored on 1990, so the save is
+    # proved by the row's Last Modified stamp moving (the toast is not asserted).
+    modified_before = _law_1990_last_modified(admin)
+
     try:
         with allure.step("Open a law entry record with Law Number (AR) editable"):
             authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE)
@@ -3021,12 +2295,18 @@ def test_chambers_law_cp_134948_a_valid_arabic_law_number_is_accepted_and_saved(
             )
             stored = admin.open_law_entry(LAW_1990_ENTRY_CODE).field_value(label)
 
+        modified_after = _law_1990_last_modified(admin)
+        allure.attach(f"{modified_before!r} -> {modified_after!r}", name="1990 Last Modified (save proof)")
+
         # Assert
+        assert modified_after and modified_after != modified_before, (
+            f"no save was recorded: the 1990 row's Last Modified stayed {modified_before!r}")
         assert editable, "expected exactly one editable Law Number (AR) field"
         assert not refusal, f"unexpected validation error: {refusal!r}"
-        assert outcome == "saved" and success, (
-            f"expected the success toast; the page reported {outcome!r}"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
         assert stored == LAW_NUMBER_AR_VALID, (
             f"expected Law Number (AR) to read {LAW_NUMBER_AR_VALID!r}; it reads "
             f"{stored!r}"
@@ -3342,6 +2622,10 @@ def test_chambers_law_cp_134952_a_valid_english_law_title_is_accepted_and_saved(
     baseline_value = None
     baseline_status = None
 
+    # 2026-10-13: the literal may already be stored on 1990, so the save is
+    # proved by the row's Last Modified stamp moving (the toast is not asserted).
+    modified_before = _law_1990_last_modified(admin)
+
     try:
         with allure.step("Open a law entry record with Law Title (EN) editable"):
             authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE)
@@ -3351,8 +2635,7 @@ def test_chambers_law_cp_134952_a_valid_english_law_title_is_accepted_and_saved(
             editable = authoring.field_count(label) == 1
 
         with allure.step(
-            f"Enter {LAW_TITLE_EN_VALID!r} in Law Title (EN) and click Submit for "
-            "Publishing (the case's 'Save' -- there is no Save button)"
+            f"Enter {LAW_TITLE_EN_VALID!r} in Law Title (EN) and click Submit for Review (the case's 'Save' -- there is no Save button)"
         ):
             authoring.fill_text(label, LAW_TITLE_EN_VALID)
             outcome = form.submit_expecting_refusal()
@@ -3365,12 +2648,18 @@ def test_chambers_law_cp_134952_a_valid_english_law_title_is_accepted_and_saved(
             )
             stored = admin.open_law_entry(LAW_1990_ENTRY_CODE).field_value(label)
 
+        modified_after = _law_1990_last_modified(admin)
+        allure.attach(f"{modified_before!r} -> {modified_after!r}", name="1990 Last Modified (save proof)")
+
         # Assert
+        assert modified_after and modified_after != modified_before, (
+            f"no save was recorded: the 1990 row's Last Modified stayed {modified_before!r}")
         assert editable, "expected exactly one editable Law Title (EN) field"
         assert not refusal, f"unexpected validation error: {refusal!r}"
-        assert outcome == "saved" and success, (
-            f"expected the success toast; the page reported {outcome!r}"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
         assert stored == LAW_TITLE_EN_VALID, (
             f"expected Law Title (EN) to read {LAW_TITLE_EN_VALID!r}; it reads "
             f"{stored!r}"
@@ -3424,7 +2713,7 @@ def test_chambers_law_cp_134953_an_empty_english_law_title_is_rejected_on_save(p
             baseline_status = authoring.current_status()
 
         with allure.step(
-            "Clear Law Title (EN) completely and click Submit for Publishing"
+            "Clear Law Title (EN) completely and click Submit for Review"
         ):
             authoring.fill_text(label, "")
             outcome = form.submit_expecting_refusal()
@@ -3530,8 +2819,7 @@ def test_chambers_law_cp_134954_the_english_law_title_accepts_exactly_200_charac
             baseline_status = authoring.current_status()
 
         with allure.step(
-            "Enter a 200-character string in Law Title (EN) and click Submit for "
-            "Publishing"
+            "Enter a 200-character string in Law Title (EN) and click Submit for Review"
         ):
             authoring.fill_text(label, LAW_TITLE_EN_200)
             outcome_200 = form.submit_expecting_refusal()
@@ -3543,8 +2831,7 @@ def test_chambers_law_cp_134954_the_english_law_title_accepts_exactly_200_charac
             stored_200 = admin.open_law_entry(LAW_1990_ENTRY_CODE).field_value(label)
 
         with allure.step(
-            "Enter a 201-character string in Law Title (EN) and click Submit for "
-            "Publishing"
+            "Enter a 201-character string in Law Title (EN) and click Submit for Review"
         ):
             authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE)
             form = _LawEntryForm(authoring)
@@ -3656,8 +2943,7 @@ def test_chambers_law_cp_134955_a_whitespace_only_english_law_title_is_rejected_
             baseline_status = authoring.current_status()
 
         with allure.step(
-            "Enter four space characters in Law Title (EN) and click Submit for "
-            "Publishing"
+            "Enter four space characters in Law Title (EN) and click Submit for Review"
         ):
             authoring.fill_text(label, FOUR_SPACES)
             outcome = form.submit_expecting_refusal()
@@ -3732,6 +3018,10 @@ def test_chambers_law_cp_134956_a_valid_arabic_law_title_is_accepted_and_saved(p
     baseline_value = None
     baseline_status = None
 
+    # 2026-10-13: the literal may already be stored on 1990, so the save is
+    # proved by the row's Last Modified stamp moving (the toast is not asserted).
+    modified_before = _law_1990_last_modified(admin)
+
     try:
         with allure.step("Open a law entry record with Law Title (AR) editable"):
             authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE)
@@ -3741,8 +3031,7 @@ def test_chambers_law_cp_134956_a_valid_arabic_law_title_is_accepted_and_saved(p
             editable = authoring.field_count(label) == 1
 
         with allure.step(
-            f"Enter {LAW_TITLE_AR_VALID!r} in Law Title (AR) and click Submit for "
-            "Publishing"
+            f"Enter {LAW_TITLE_AR_VALID!r} in Law Title (AR) and click Submit for Review"
         ):
             authoring.fill_text(label, LAW_TITLE_AR_VALID)
             outcome = form.submit_expecting_refusal()
@@ -3755,12 +3044,18 @@ def test_chambers_law_cp_134956_a_valid_arabic_law_title_is_accepted_and_saved(p
             )
             stored = admin.open_law_entry(LAW_1990_ENTRY_CODE).field_value(label)
 
+        modified_after = _law_1990_last_modified(admin)
+        allure.attach(f"{modified_before!r} -> {modified_after!r}", name="1990 Last Modified (save proof)")
+
         # Assert
+        assert modified_after and modified_after != modified_before, (
+            f"no save was recorded: the 1990 row's Last Modified stayed {modified_before!r}")
         assert editable, "expected exactly one editable Law Title (AR) field"
         assert not refusal, f"unexpected validation error: {refusal!r}"
-        assert outcome == "saved" and success, (
-            f"expected the success toast; the page reported {outcome!r}"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
         assert stored == LAW_TITLE_AR_VALID, (
             f"expected Law Title (AR) to read {LAW_TITLE_AR_VALID!r}; it reads "
             f"{stored!r}"
@@ -3824,7 +3119,7 @@ def test_chambers_law_cp_134957_an_empty_arabic_law_title_is_rejected_on_save(pa
             baseline_status = authoring.current_status()
 
         with allure.step(
-            "Clear Law Title (AR) completely and click Submit for Publishing"
+            "Clear Law Title (AR) completely and click Submit for Review"
         ):
             authoring.fill_text(label, "")
             outcome = form.submit_expecting_refusal()
@@ -4022,8 +3317,7 @@ def test_chambers_law_cp_134959_a_whitespace_only_arabic_law_title_is_rejected_o
             baseline_status = authoring.current_status()
 
         with allure.step(
-            "Enter four space characters in Law Title (AR) and click Submit for "
-            "Publishing"
+            "Enter four space characters in Law Title (AR) and click Submit for Review"
         ):
             authoring.fill_text(label, FOUR_SPACES)
             outcome = form.submit_expecting_refusal()
@@ -4158,7 +3452,7 @@ def test_chambers_law_cp_134960_a_valid_english_law_description_is_accepted_and_
 
         with allure.step(
             "Enter a 300-character description in Law Description (EN) and click "
-            "Submit for Publishing (the case's 'Save' -- there is no Save button)"
+            "Submit for Review (the case's 'Save' -- there is no Save button)"
         ):
             authoring.fill_text(label, LAW_DESCRIPTION_EN_300)
             outcome = form.submit_expecting_refusal()
@@ -4182,9 +3476,10 @@ def test_chambers_law_cp_134960_a_valid_english_law_description_is_accepted_and_
         )
         assert len(LAW_DESCRIPTION_EN_300) == 300
         assert not refusal, f"unexpected validation error: {refusal!r}"
-        assert outcome == "saved" and success, (
-            f"expected the success toast; the page reported {outcome!r}"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
         assert stored == LAW_DESCRIPTION_EN_300, (
             "expected Law Description (EN) to be returned with the full "
             f"300-character text preserved; it reads {len(stored)} characters: "
@@ -4243,7 +3538,7 @@ def test_chambers_law_cp_134961_an_empty_english_law_description_is_rejected_on_
             baseline_status = authoring.current_status()
 
         with allure.step(
-            "Clear Law Description (EN) completely and click Submit for Publishing"
+            "Clear Law Description (EN) completely and click Submit for Review"
         ):
             authoring.fill_text(label, "")
             outcome = form.submit_expecting_refusal()
@@ -4370,7 +3665,7 @@ def test_chambers_law_cp_134962_the_english_law_description_accepts_exactly_500_
             stored_500 = admin.open_law_entry(LAW_1990_ENTRY_CODE).field_value(label)
 
         with allure.step(
-            "Add one more character to make 501 and click Submit for Publishing"
+            "Add one more character to make 501 and click Submit for Review"
         ):
             authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE)
             form = _LawEntryForm(authoring)
@@ -4600,7 +3895,7 @@ def test_chambers_law_cp_134964_a_valid_arabic_law_description_is_accepted_and_s
 
         with allure.step(
             "Enter a 300-character Arabic description in Law Description (AR) and "
-            "click Submit for Publishing"
+            "click Submit for Review"
         ):
             authoring.fill_text(label, LAW_DESCRIPTION_AR_300)
             outcome = form.submit_expecting_refusal()
@@ -4625,9 +3920,10 @@ def test_chambers_law_cp_134964_a_valid_arabic_law_description_is_accepted_and_s
         )
         assert len(LAW_DESCRIPTION_AR_300) == 300
         assert not refusal, f"unexpected validation error: {refusal!r}"
-        assert outcome == "saved" and success, (
-            f"expected the success toast; the page reported {outcome!r}"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
         assert stored == LAW_DESCRIPTION_AR_300, (
             "expected Law Description (AR) to read the 300-character Arabic value; "
             f"it reads {len(stored)} characters: {stored!r}"
@@ -4701,7 +3997,7 @@ def test_chambers_law_cp_134965_an_empty_arabic_law_description_is_rejected_on_s
             baseline_status = authoring.current_status()
 
         with allure.step(
-            "Clear Law Description (AR) completely and click Submit for Publishing"
+            "Clear Law Description (AR) completely and click Submit for Review"
         ):
             authoring.fill_text(label, "")
             outcome = form.submit_expecting_refusal()
@@ -4796,7 +4092,7 @@ def test_chambers_law_cp_134966_the_arabic_law_description_accepts_exactly_500_c
 
         with allure.step(
             "Enter exactly 500 Arabic characters in Law Description (AR) and click "
-            "Submit for Publishing"
+            "Submit for Review"
         ):
             authoring.fill_text(label, LAW_DESCRIPTION_AR_500)
             outcome_500 = form.submit_expecting_refusal()
@@ -4808,8 +4104,7 @@ def test_chambers_law_cp_134966_the_arabic_law_description_accepts_exactly_500_c
             stored_500 = admin.open_law_entry(LAW_1990_ENTRY_CODE).field_value(label)
 
         with allure.step(
-            "Add one more Arabic character to make 501 and click Submit for "
-            "Publishing"
+            "Add one more Arabic character to make 501 and click Submit for Review"
         ):
             authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE)
             form = _LawEntryForm(authoring)
@@ -5095,15 +4390,17 @@ def _restore_external_link_url(
     def _restore():
         authoring = admin.open_law_entry(entry_code, locale=locale)
         if authoring.field_value(label) != baseline_value:
-            if authoring.current_status() == STATUS_PUBLISHED:
+            if authoring.current_status() in _PUBLISHED_STATES:
                 authoring.fill_text(label, baseline_value)
                 _publish_and_confirm(authoring)
             else:
                 _unpublish_and_confirm(authoring)
                 authoring.fill_text(label, baseline_value)
-                if baseline_status == STATUS_PUBLISHED:
+                if baseline_status in _PUBLISHED_STATES:
                     _publish_and_confirm(authoring)
                 else:
+                    log_live_write(_law_rec(authoring), "<form submit>", "the values entered above", None,
+                                   action="save-draft", note="_restore_external_link_url (save_as_draft)")
                     authoring.save_as_draft()
 
         # PROVE it -- fresh navigation, never a post-save-reflowed DOM.
@@ -5180,7 +4477,7 @@ def test_chambers_law_cp_134968_a_valid_external_link_url_is_accepted_and_saved(
 
         with allure.step(
             f"Enter {EXTERNAL_LINK_URL_VALID!r} as the External Link URL and click "
-            "Submit for Publishing"
+            "Submit for Review"
         ):
             authoring.fill_text(label, EXTERNAL_LINK_URL_VALID)
             outcome = form.submit_expecting_refusal()
@@ -5213,10 +4510,10 @@ def test_chambers_law_cp_134968_a_valid_external_link_url_is_accepted_and_saved(
             f"the valid External Link URL was rejected: {refusal!r} "
             f"({renderer_report})"
         )
-        assert outcome == "saved" and success, (
-            "expected the success toast after saving a valid External Link URL; "
-            f"the page reported {outcome!r} ({renderer_report})"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
 
         # Assert -- step 3
         assert stored == EXTERNAL_LINK_URL_VALID, (
@@ -5301,7 +4598,7 @@ def test_chambers_law_cp_134969_an_invalid_external_link_url_is_rejected_with_th
 
         with allure.step(
             f"Enter {EXTERNAL_LINK_URL_INVALID!r} as the External Link URL and click "
-            "Submit for Publishing"
+            "Submit for Review"
         ):
             authoring.fill_text(label_en, EXTERNAL_LINK_URL_INVALID)
             outcome_en = form.submit_expecting_refusal()
@@ -5365,16 +4662,10 @@ def test_chambers_law_cp_134969_an_invalid_external_link_url_is_rejected_with_th
             f"External Link URL. WHICH SHAPE: {shape_en}. WHAT EACH RENDERER SAID: "
             f"{report_en}"
         )
-        assert EXTERNAL_LINK_URL_INVALID_MESSAGE_EN in refusal_en, (
-            "expected the English validation message "
-            f"{EXTERNAL_LINK_URL_INVALID_MESSAGE_EN!r} against External Link URL; "
-            f"the page said {refusal_en!r}. For the reader: this field can "
-            "refuse through TWO mechanisms -- the page's own client-side "
-            "`urlComplaint()` sentence, or the Object's named rule "
-            f"({EXTERNAL_LINK_URL_FORMAT_MESSAGES[0]!r} / "
-            f"{EXTERNAL_LINK_URL_FORMAT_MESSAGES[1]!r}); the string above "
-            "identifies which one fired, and the case's literal matches neither"
-        )
+        # 2026-10-13 (user decision): wording differences are NOT bugs -- the
+        # refusal (with a message) + nothing stored above is the behaviour.
+        allure.attach(f"case literal: {EXTERNAL_LINK_URL_INVALID_MESSAGE_EN!r} | rendered: {refusal_en!r}",
+                      name="EN refusal wording (context, not asserted)")
 
         # Assert -- step 3, Arabic interface
         assert arabic_ui_field_count == 1, (
@@ -5394,11 +4685,8 @@ def test_chambers_law_cp_134969_an_invalid_external_link_url_is_rejected_with_th
             "expected the same validation to be shown on the Arabic interface. "
             f"WHICH SHAPE: {shape_ar}. WHAT EACH RENDERER SAID: {report_ar}"
         )
-        assert EXTERNAL_LINK_URL_INVALID_MESSAGE_AR in refusal_ar, (
-            "expected the same validation in Arabic as "
-            f"{EXTERNAL_LINK_URL_INVALID_MESSAGE_AR!r}; the page said "
-            f"{refusal_ar!r}"
-        )
+        allure.attach(f"case literal: {EXTERNAL_LINK_URL_INVALID_MESSAGE_AR!r} | rendered: {refusal_ar!r}",
+                      name="AR refusal wording (context, not asserted)")
     finally:
         if baseline_value is not None:
             with allure.step("TEST_OWNED reset -- restore External Link URL"):
@@ -5474,7 +4762,7 @@ def test_chambers_law_cp_134970_the_external_link_url_accepts_exactly_500_charac
 
         with allure.step(
             "Enter a valid URL exactly 500 characters long as the External Link URL "
-            "and click Submit for Publishing"
+            "and click Submit for Review"
         ):
             authoring.fill_text(label, EXTERNAL_LINK_URL_500)
             typed_500 = form.live_value(label)
@@ -5499,7 +4787,7 @@ def test_chambers_law_cp_134970_the_external_link_url_accepts_exactly_500_charac
             )
 
         with allure.step(
-            "Extend the same URL to 501 characters and click Submit for Publishing"
+            "Extend the same URL to 501 characters and click Submit for Review"
         ):
             authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN)
             form = _LawEntryForm(authoring)
@@ -5645,7 +4933,7 @@ def test_chambers_law_cp_134971_an_empty_external_link_url_is_allowed_because_th
 
         with allure.step(
             "Leave the External Link URL field empty, complete all mandatory law "
-            "entry fields, and click Submit for Publishing"
+            "entry fields, and click Submit for Review"
         ):
             # The mandatory fields (Law Number EN+AR, Law Title EN+AR, Law
             # Description EN+AR, Law Icon, Display Order) are ALREADY filled
@@ -5744,15 +5032,15 @@ def test_chambers_law_cp_134971_an_empty_external_link_url_is_allowed_because_th
             "expected no validation error against an empty External Link URL; the "
             f"page said {refusal!r} ({renderer_report})"
         )
-        assert outcome == "saved" and success, (
-            "expected the success toast after saving with an empty External Link "
-            f"URL; the page reported {outcome!r} ({renderer_report})"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
         assert stored == "", (
             f"expected External Link URL to be stored empty; it reads {stored!r}"
         )
         assert status_after_publish == STATUS_PUBLISHED, (
-            "expected the law entry to be published after Submit for Publishing; "
+            "expected the law entry to be published after Submit for Review; "
             f"its status is {status_after_publish!r}"
         )
 
@@ -5949,6 +5237,8 @@ def _establish_display_order(
     if authoring.spinbutton_value(field_label) == value:
         return value
     authoring.fill_number(field_label, value)
+    log_live_write(_law_rec(authoring), "<form submit>", "the values entered above", None,
+                   action="publish", note="_establish_display_order (submit_for_publishing)")
     authoring.submit_for_publishing()
     return _observed_stored_number(
         admin, entry_code, field_label, value, locale=locale
@@ -5973,15 +5263,17 @@ def _restore_display_order(
     def _restore():
         authoring = admin.open_law_entry(entry_code, locale=locale)
         if authoring.spinbutton_value(label) != baseline_value:
-            if authoring.current_status() == STATUS_PUBLISHED:
+            if authoring.current_status() in _PUBLISHED_STATES:
                 authoring.fill_number(label, baseline_value)
                 _publish_and_confirm(authoring)
             else:
                 _unpublish_and_confirm(authoring)
                 authoring.fill_number(label, baseline_value)
-                if baseline_status == STATUS_PUBLISHED:
+                if baseline_status in _PUBLISHED_STATES:
                     _publish_and_confirm(authoring)
                 else:
+                    log_live_write(_law_rec(authoring), "<form submit>", "the values entered above", None,
+                                   action="save-draft", note="_restore_display_order (save_as_draft)")
                     authoring.save_as_draft()
 
         # PROVE it -- fresh navigation, never a post-save-reflowed DOM.
@@ -6077,6 +5369,11 @@ def test_chambers_law_cp_134972_a_valid_positive_display_order_is_accepted_and_s
     # baseline in the same test -- so the case's own literal is mirrored
     # exactly rather than substituted. tc_134886, whose reorder is
     # PERMANENT, does the opposite and was escalated over it.
+    # RETARGETED 2026-10-13: the real 1990 / 1996 rows' Display Orders are not
+    # touched (user instruction); the case runs on a DISPOSABLE
+    # `QCTEST-134972-LAW-<uid>` row created here as a Draft with Active Status
+    # unticked (never public, never in the card order), Display Order 9900.
+    # It is never deleted -- the create is logged for manual cleanup.
     admin = ChambersLawAdminPage(page)
     label = admin.DISPLAY_ORDER_LABEL
     baseline_value = None
@@ -6086,7 +5383,9 @@ def test_chambers_law_cp_134972_a_valid_positive_display_order_is_accepted_and_s
         with allure.step(
             "Open a law entry record under the Chamber's Law page in Liferay CMS"
         ):
-            authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN)
+            target_code = _create_disposable_law_draft(
+                admin, f"QCTEST-134972-LAW-{uuid.uuid4().hex[:8]}", "9900", "134972")
+            authoring = admin.open_law_entry(target_code, locale=CMS_LOCALE_EN)
             form = _LawEntryForm(authoring)
             baseline_value = authoring.spinbutton_value(label)
             baseline_status = authoring.current_status()
@@ -6096,8 +5395,7 @@ def test_chambers_law_cp_134972_a_valid_positive_display_order_is_accepted_and_s
             control_state = form.number_validity(label)
 
         with allure.step(
-            f"Enter {DISPLAY_ORDER_VALID} in Display Order and click Submit for "
-            "Publishing"
+            f"Enter {DISPLAY_ORDER_VALID} in Display Order and click Submit for Review"
         ):
             authoring.fill_number(label, DISPLAY_ORDER_VALID)
             typed = form.live_number_value(label)
@@ -6108,7 +5406,7 @@ def test_chambers_law_cp_134972_a_valid_positive_display_order_is_accepted_and_s
 
         with allure.step("Reload the law entry record"):
             stored = _observed_stored_number(
-                admin, LAW_1990_ENTRY_CODE, label, DISPLAY_ORDER_VALID
+                admin, target_code, label, DISPLAY_ORDER_VALID
             )
             shape = _outcome_shape(refusal, success, DISPLAY_ORDER_VALID, stored)
             allure.attach(
@@ -6132,11 +5430,10 @@ def test_chambers_law_cp_134972_a_valid_positive_display_order_is_accepted_and_s
             f"a valid positive Display Order was rejected: {refusal!r}. WHICH "
             f"SHAPE: {shape}. WHAT EACH RENDERER SAID: {renderer_report}"
         )
-        assert outcome == "saved" and success, (
-            "expected the success toast after saving a valid positive Display "
-            f"Order; the page reported {outcome!r}. WHAT EACH RENDERER SAID: "
-            f"{renderer_report}"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
 
         # Assert -- step 3
         assert stored == DISPLAY_ORDER_VALID, (
@@ -6144,17 +5441,8 @@ def test_chambers_law_cp_134972_a_valid_positive_display_order_is_accepted_and_s
             f"reload; it reads {stored!r}"
         )
     finally:
-        if baseline_value is not None:
-            with allure.step("TEST_OWNED reset -- restore Display Order"):
-                _test_owned_reset(
-                    _restore_display_order(
-                        admin,
-                        LAW_1990_ENTRY_CODE,
-                        baseline_value,
-                        baseline_status,
-                    ),
-                    label="tc_134972 Law 1990 Display Order",
-                )
+        # No restore: the row is disposable and kept (logged at create).
+        pass
 
 
 @allure.epic("About Us")
@@ -6209,18 +5497,24 @@ def test_chambers_law_cp_134973_a_zero_or_negative_display_order_is_rejected_on_
             "Open a law entry record under the Chamber's Law page in Liferay CMS "
             "with Display Order currently 2"
         ):
-            authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN)
+            # RETARGETED 2026-10-13: a DISPOSABLE Draft, Inactive
+            # `QCTEST-134973-LAW-<uid>` row created WITH Display Order 2 (the
+            # case's precondition) -- the real 1990 / 1996 Display Orders are
+            # not touched. Never deleted; the create is logged.
+            target_code = _create_disposable_law_draft(
+                admin, f"QCTEST-134973-LAW-{uuid.uuid4().hex[:8]}",
+                DISPLAY_ORDER_PRECONDITION, "134973")
+            authoring = admin.open_law_entry(target_code, locale=CMS_LOCALE_EN)
             baseline_value = authoring.spinbutton_value(label)
             baseline_status = authoring.current_status()
             opened_with = _establish_display_order(
-                admin, LAW_1990_ENTRY_CODE, label, DISPLAY_ORDER_PRECONDITION
+                admin, target_code, label, DISPLAY_ORDER_PRECONDITION
             )
 
         with allure.step(
-            f"Enter {DISPLAY_ORDER_ZERO} in Display Order and click Submit for "
-            "Publishing"
+            f"Enter {DISPLAY_ORDER_ZERO} in Display Order and click Submit for Review"
         ):
-            authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN)
+            authoring = admin.open_law_entry(target_code, locale=CMS_LOCALE_EN)
             form = _LawEntryForm(authoring)
             authoring.fill_number(label, DISPLAY_ORDER_ZERO)
             native_zero = form.number_validity(label)
@@ -6230,7 +5524,7 @@ def test_chambers_law_cp_134973_a_zero_or_negative_display_order_is_rejected_on_
             report_zero = form.save_message_report()
             stored_zero = _observed_stored_number(
                 admin,
-                LAW_1990_ENTRY_CODE,
+                target_code,
                 label,
                 DISPLAY_ORDER_ZERO,
                 timeout=REFUSAL_RENDER_TIMEOUT,
@@ -6244,10 +5538,9 @@ def test_chambers_law_cp_134973_a_zero_or_negative_display_order_is_rejected_on_
             )
 
         with allure.step(
-            f"Enter {DISPLAY_ORDER_NEGATIVE} in Display Order and click Submit for "
-            "Publishing"
+            f"Enter {DISPLAY_ORDER_NEGATIVE} in Display Order and click Submit for Review"
         ):
-            authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN)
+            authoring = admin.open_law_entry(target_code, locale=CMS_LOCALE_EN)
             form = _LawEntryForm(authoring)
             authoring.fill_number(label, DISPLAY_ORDER_NEGATIVE)
             native_negative = form.number_validity(label)
@@ -6257,7 +5550,7 @@ def test_chambers_law_cp_134973_a_zero_or_negative_display_order_is_rejected_on_
             report_negative = form.save_message_report()
             stored_negative = _observed_stored_number(
                 admin,
-                LAW_1990_ENTRY_CODE,
+                target_code,
                 label,
                 DISPLAY_ORDER_NEGATIVE,
                 timeout=REFUSAL_RENDER_TIMEOUT,
@@ -6276,7 +5569,7 @@ def test_chambers_law_cp_134973_a_zero_or_negative_display_order_is_rejected_on_
 
         with allure.step("Reload the law entry record"):
             reloaded = admin.open_law_entry(
-                LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN
+                target_code, locale=CMS_LOCALE_EN
             ).spinbutton_value(label)
 
         # Assert -- step 1
@@ -6293,7 +5586,7 @@ def test_chambers_law_cp_134973_a_zero_or_negative_display_order_is_rejected_on_
         )
         assert stored_zero != DISPLAY_ORDER_ZERO, (
             f"Display Order {DISPLAY_ORDER_ZERO!r} WAS stored on "
-            f"{LAW_1990_ENTRY_CODE}"
+            f"{target_code}"
         )
         assert outcome_zero == "refused" and refusal_zero, (
             "expected the save to be blocked with a validation error against "
@@ -6302,14 +5595,10 @@ def test_chambers_law_cp_134973_a_zero_or_negative_display_order_is_rejected_on_
             "on this control, so the browser passes 0 and only the Object's "
             f"named rule can refuse it). WHAT EACH RENDERER SAID: {report_zero}"
         )
-        assert any(m in refusal_zero for m in DISPLAY_ORDER_MINIMUM_MESSAGES), (
-            "expected the validation error to state the Display Order minimum "
-            f"rule, in either shipped language {DISPLAY_ORDER_MINIMUM_MESSAGES!r}; "
-            f"the page said {refusal_zero!r}. (The case words this rule as "
-            "'Display Order must be a positive integer'; the product's own rule "
-            "label is 'Display Order must be 1 or greater' -- the same "
-            "constraint, different words, and the case quotes no literal.)"
-        )
+        # 2026-10-13 (user decision): the WORDING is not asserted -- the rule is
+        # proved by behaviour (refused with a message + nothing stored).
+        allure.attach(f"0 -> {refusal_zero!r} | -1 -> {refusal_negative!r}",
+                      name="Display Order minimum-rule messages (context, not asserted)")
 
         # Assert -- step 3 (-1)
         assert not success_negative, (
@@ -6318,18 +5607,13 @@ def test_chambers_law_cp_134973_a_zero_or_negative_display_order_is_rejected_on_
         )
         assert stored_negative != DISPLAY_ORDER_NEGATIVE, (
             f"Display Order {DISPLAY_ORDER_NEGATIVE!r} WAS stored on "
-            f"{LAW_1990_ENTRY_CODE}"
+            f"{target_code}"
         )
         assert outcome_negative == "refused" and refusal_negative, (
             "expected the save to be blocked AGAIN for Display Order "
             f"{DISPLAY_ORDER_NEGATIVE!r}. WHICH SHAPE: {shape_negative}. THE "
             f"BROWSER'S OWN VERDICT: {native_negative!r}. WHAT EACH RENDERER "
             f"SAID: {report_negative}"
-        )
-        assert any(m in refusal_negative for m in DISPLAY_ORDER_MINIMUM_MESSAGES), (
-            "expected the SAME Display Order minimum rule to be stated for -1, in "
-            f"either shipped language {DISPLAY_ORDER_MINIMUM_MESSAGES!r}; the page "
-            f"said {refusal_negative!r}"
         )
 
         # Assert -- step 4
@@ -6339,17 +5623,54 @@ def test_chambers_law_cp_134973_a_zero_or_negative_display_order_is_rejected_on_
             f"stored; it reads {reloaded!r}"
         )
     finally:
-        if baseline_value is not None:
-            with allure.step("TEST_OWNED reset -- restore Display Order"):
-                _test_owned_reset(
-                    _restore_display_order(
-                        admin,
-                        LAW_1990_ENTRY_CODE,
-                        baseline_value,
-                        baseline_status,
-                    ),
-                    label="tc_134973 Law 1990 Display Order",
-                )
+        # No restore: the row is disposable and kept (logged at create).
+        pass
+
+
+def _create_disposable_law_draft(admin, title: str, display_order: str, tc: str) -> str:
+    """P3/P4 batch 2026-10-13: a DISPOSABLE `QCTEST-<tc>-LAW-<uid>` Law Entry,
+    saved as a DRAFT with Active Status UNTICKED (never public, never in the
+    card order), every required field filled -- Law Number / Title /
+    Description EN+AR and a Law Icon -- so a later refusal can only be about
+    the field under test. Returns its entry code (read off the edit URL).
+
+    NEVER DELETED (user decision 2026-10-13: nothing is deleted in this
+    batch). The creation is logged to reports/live-writes-20261013.jsonl
+    BEFORE the save so the user can remove the row by hand. It is not added
+    to the sibling module's `_QCTEST_CREATED` sweep (that sweep deletes)."""
+    if not title.startswith("QCTEST-"):
+        raise AssertionError(f"refusing to create a non-disposable law entry {title!r}")
+    ar = admin.ARABIC_SUFFIX
+    number, description = f"{title} No.", f"{title} created by automation (tc_{tc})."
+    authoring = admin.open_new_law_entry_form(locale=CMS_LOCALE_EN)
+    for label, value in (
+        (admin.LAW_NUMBER_LABEL, number),
+        (admin.LAW_TITLE_LABEL, title),
+        (admin.LAW_DESCRIPTION_LABEL, description),
+    ):
+        authoring.fill_text(label, value)
+        authoring.fill_text(label + ar, value)
+    authoring.upload_file(admin.LAW_ICON_UPLOAD_LABEL, str(QCTEST_LAW_ICON))
+    authoring.fill_number(admin.DISPLAY_ORDER_LABEL, display_order)
+    authoring.set_checkbox(admin.ACTIVE_STATUS_LABEL, False)
+    log_live_write(LiveRecord("law-entry", title, title), "<create>",
+                   {"Law Number": number, "Law Title": title, "Display Order": display_order,
+                    "Active Status": False, "status": "Draft"},
+                   tc, action="create",
+                   note="disposable QCTEST Law Entry (draft, inactive) -- never deleted by automation; "
+                        "delete by hand by exact title")
+    authoring.save_as_draft()
+
+    def _listed() -> bool:
+        return admin.open_law_entries_list(locale=CMS_LOCALE_EN).row_visible(title)
+
+    wait_until(_listed, timeout=PUBLISH_CONFIRM_TIMEOUT, poll=5.0,
+               message=f"the disposable law entry {title!r} never appeared in the list")
+    opened = admin.open_law_entries_list(locale=CMS_LOCALE_EN).open_entry_by_edit_link(title)
+    code = (parse_qs(urlsplit(opened.page.url).query).get("editEntry") or [""])[0]
+    if not code:
+        raise AssertionError(f"precondition: no entry code for {title!r} on {opened.page.url!r}")
+    return code
 
 
 @allure.epic("About Us")
@@ -6366,216 +5687,140 @@ def test_chambers_law_cp_134973_a_zero_or_negative_display_order_is_rejected_on_
 @allure.label("pbi", "129394")
 @allure.label("testcase", "134974")
 @CHAMBERS_LAW_XDIST_GROUP
+@pytest.mark.timeout(480)
 def test_chambers_law_cp_134974_a_non_integer_display_order_is_rejected_on_save(page):
-    # THE TWO STEPS ARE REFUSED BY TWO DIFFERENT MECHANISMS, and neither is
-    # the `/validate` rule that refuses 134973's 0 and -1:
+    # REWRITTEN 2026-10-13 (P3/P4 batch, scripted OFFLINE, NOT executed): the
+    # case now runs on a DISPOSABLE QCTEST Law Entry created by this test --
+    # never on a real QCDEMO-129394-law-* row (the previous version wrote the
+    # real Law 11/1990 and restored it). The record is a Draft with Active
+    # Status unticked, so its Display Order 2 (the case's own precondition;
+    # it would break the multiples-of-100 convention on a REAL row) never
+    # touches the public card order. Nothing is deleted (user decision
+    # 2026-10-13); the creation and both refused attempts are logged to
+    # reports/live-writes-20261013.jsonl for manual cleanup.
     #
-    #   2.5   `fill()` puts it in the box, the control reports
-    #         `stepMismatch` (a number input's implicit step is 1), and
-    #         `reportValidity()` cancels the submit NATIVELY. The value never
-    #         reaches the server, and the native bubble is NOT in the DOM --
-    #         `el.validationMessage` is the only observable trace, which is
-    #         why `number_validity()` is read and asserted on rather than the
-    #         page's own renderers.
-    #   'two' the box REFUSES THE KEYSTROKES ENTIRELY and stays empty
-    #         (measured live, finding (s)), so the save is then blocked as a
-    #         MISSING value, not as a malformed one. Playwright's own
-    #         `fill()` cannot even attempt it ("Cannot type text into
-    #         input[type=number]"), which is why `type_into_number()` exists.
-    #
-    # [!] STEP 3 IS PART-EXPECTED TO FAIL, and is scripted to the case anyway
-    # (Result Integrity -- an assertion is never loosened to match observed
-    # behaviour). No integer-FORMAT message can ever be produced for 'two',
-    # because the characters never enter the field. "The save was blocked"
-    # and "the box would not accept it" are two different product outcomes,
-    # so the assertions below separate them, assert on the OBSERVED OUTCOME
-    # SHAPE rather than on a specific error string, and record WHAT ACTUALLY
-    # HAPPENED -- letting the report distinguish a product defect from a
-    # case-wording defect.
-    #
-    # [!] "NOT SILENTLY ROUNDED TO 2 OR 3" IS ONLY HALF-CHECKABLE, and the
-    # case's own precondition is why: with Display Order already 2, a value
-    # rounded DOWN to 2 is indistinguishable from the value being retained.
-    # Rounding UP to 3 is fully checkable and is asserted. The ambiguity is
-    # reported in the assertion message, not resolved by changing the case.
+    # THE TWO STEPS ARE REFUSED BY TWO DIFFERENT MECHANISMS (findings (s)/(t)):
+    #   2.5   the number box reports `stepMismatch` (implicit step 1) and
+    #         `reportValidity()` cancels the submit NATIVELY; only
+    #         `el.validationMessage` / `number_validity()` show it.
+    #   'two' the box REFUSES THE KEYSTROKES and stays empty, so the save is
+    #         blocked as a MISSING value -- the case's own step 3 says so.
+    # "Not silently rounded to 2 or 3": rounding DOWN to 2 is
+    # indistinguishable from "retained" (precondition 2); rounding UP to 3 is
+    # asserted separately.
+    tc = "134974"
     admin = ChambersLawAdminPage(page)
     label = admin.DISPLAY_ORDER_LABEL
-    baseline_value = None
-    baseline_status = None
+    title = f"QCTEST-{tc}-LAW-{uuid.uuid4().hex[:8]}"
+    law = LiveRecord("law-entry", title, title)
 
-    try:
-        with allure.step(
-            "Open a law entry record under the Chamber's Law page in Liferay CMS "
-            "with Display Order currently 2"
-        ):
-            authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN)
-            baseline_value = authoring.spinbutton_value(label)
-            baseline_status = authoring.current_status()
-            opened_with = _establish_display_order(
-                admin, LAW_1990_ENTRY_CODE, label, DISPLAY_ORDER_PRECONDITION
-            )
+    with allure.step(
+        "Precondition: create a disposable QCTEST law entry (Draft, Active Status "
+        f"unticked) with Display Order {DISPLAY_ORDER_PRECONDITION}; open it"
+    ):
+        code = _create_disposable_law_draft(admin, title, DISPLAY_ORDER_PRECONDITION, tc)
+        opened_with = admin.open_law_entry(code, locale=CMS_LOCALE_EN).spinbutton_value(label)
+        allure.attach(f"{title} -> {code}", name="tc_134974 disposable law entry")
+    assert opened_with == DISPLAY_ORDER_PRECONDITION, (
+        f"precondition: the disposable law entry {title!r} opened with Display Order "
+        f"{opened_with!r}, not {DISPLAY_ORDER_PRECONDITION!r}"
+    )
 
-        with allure.step(
-            f"Enter {DISPLAY_ORDER_NON_INTEGER} in Display Order and click Submit "
-            "for Publishing"
-        ):
-            authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN)
-            form = _LawEntryForm(authoring)
-            authoring.fill_number(label, DISPLAY_ORDER_NON_INTEGER)
-            typed_fraction = form.live_number_value(label)
-            native_fraction = form.number_validity(label)
-            outcome_fraction = form.submit_expecting_refusal()
-            refusal_fraction = form.save_refusal_text()
-            success_fraction = form.success_message_text()
-            report_fraction = form.save_message_report()
-            stored_fraction = _observed_stored_number(
-                admin,
-                LAW_1990_ENTRY_CODE,
-                label,
-                DISPLAY_ORDER_NON_INTEGER,
-                timeout=REFUSAL_RENDER_TIMEOUT,
-            )
-            shape_fraction = _outcome_shape(
-                refusal_fraction,
-                success_fraction,
-                DISPLAY_ORDER_NON_INTEGER,
-                stored_fraction,
-            )
-            allure.attach(
-                f"{shape_fraction}\nbox held={typed_fraction!r}\n"
-                f"native validity={native_fraction!r}\n{report_fraction}",
-                name="tc_134974 step 2 (2.5) -- outcome and renderers",
-            )
-
-        with allure.step(
-            f"Enter the text {DISPLAY_ORDER_TEXT!r} in Display Order and click "
-            "Submit for Publishing"
-        ):
-            authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN)
-            form = _LawEntryForm(authoring)
-            # TYPED, not filled: `fill()` raises "Cannot type text into
-            # input[type=number]" and would never reach the product at all.
-            typed_text = form.type_into_number(label, DISPLAY_ORDER_TEXT)
-            native_text = form.number_validity(label)
-            outcome_text = form.submit_expecting_refusal()
-            refusal_text = form.save_refusal_text()
-            success_text = form.success_message_text()
-            report_text = form.save_message_report()
-            stored_text = _observed_stored_number(
-                admin,
-                LAW_1990_ENTRY_CODE,
-                label,
-                DISPLAY_ORDER_TEXT,
-                timeout=REFUSAL_RENDER_TIMEOUT,
-            )
-            shape_text = _outcome_shape(
-                refusal_text, success_text, DISPLAY_ORDER_TEXT, stored_text
-            )
-            allure.attach(
-                f"{shape_text}\nbox held={typed_text!r}\n"
-                f"native validity={native_text!r}\n{report_text}",
-                name="tc_134974 step 3 ('two') -- outcome and renderers",
-            )
-
-        with allure.step("Reload the law entry record"):
-            reloaded = admin.open_law_entry(
-                LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN
-            ).spinbutton_value(label)
-
-        # Assert -- step 1
-        assert opened_with == DISPLAY_ORDER_PRECONDITION, (
-            "precondition: expected the law entry record to open with Display "
-            f"Order {DISPLAY_ORDER_PRECONDITION!r}; it holds {opened_with!r} "
-            f"(its captured baseline was {baseline_value!r})"
+    with allure.step(f"Enter {DISPLAY_ORDER_NON_INTEGER} in Display Order and click Save (Submit for Review)"):
+        authoring = admin.open_law_entry(code, locale=CMS_LOCALE_EN)
+        form = _LawEntryForm(authoring)
+        authoring.fill_number(label, DISPLAY_ORDER_NON_INTEGER)
+        typed_fraction = form.live_number_value(label)
+        native_fraction = form.number_validity(label)
+        log_live_write(law, "Display Order", DISPLAY_ORDER_NON_INTEGER, tc, action="attempt",
+                       note="case step 2: expected to be REFUSED")
+        outcome_fraction = form.submit_expecting_refusal()
+        refusal_fraction = form.save_refusal_text()
+        success_fraction = form.success_message_text()
+        report_fraction = form.save_message_report()
+        stored_fraction = _observed_stored_number(
+            admin, code, label, DISPLAY_ORDER_NON_INTEGER, timeout=REFUSAL_RENDER_TIMEOUT,
+        )
+        shape_fraction = _outcome_shape(
+            refusal_fraction, success_fraction, DISPLAY_ORDER_NON_INTEGER, stored_fraction,
+        )
+        allure.attach(
+            f"{shape_fraction}\nbox held={typed_fraction!r}\n"
+            f"native validity={native_fraction!r}\n{report_fraction}",
+            name="tc_134974 step 2 (2.5) -- outcome and renderers",
         )
 
-        # Assert -- step 2 (2.5)
-        assert not success_fraction, (
-            "expected NO success toast for Display Order "
-            f"{DISPLAY_ORDER_NON_INTEGER!r}; the page showed {success_fraction!r}"
+    with allure.step(f"Enter the text {DISPLAY_ORDER_TEXT!r} in Display Order and click Save (Submit for Review)"):
+        authoring = admin.open_law_entry(code, locale=CMS_LOCALE_EN)
+        form = _LawEntryForm(authoring)
+        # TYPED, not filled: `fill()` raises "Cannot type text into
+        # input[type=number]" and would never reach the product at all.
+        typed_text = form.type_into_number(label, DISPLAY_ORDER_TEXT)
+        native_text = form.number_validity(label)
+        log_live_write(law, "Display Order", DISPLAY_ORDER_TEXT, tc, action="attempt",
+                       note="case step 3: expected to be REFUSED")
+        outcome_text = form.submit_expecting_refusal()
+        refusal_text = form.save_refusal_text()
+        success_text = form.success_message_text()
+        report_text = form.save_message_report()
+        stored_text = _observed_stored_number(
+            admin, code, label, DISPLAY_ORDER_TEXT, timeout=REFUSAL_RENDER_TIMEOUT,
         )
-        assert stored_fraction != DISPLAY_ORDER_NON_INTEGER, (
-            f"Display Order {DISPLAY_ORDER_NON_INTEGER!r} WAS stored on "
-            f"{LAW_1990_ENTRY_CODE}"
-        )
-        assert native_fraction["stepMismatch"] or refusal_fraction, (
-            "expected the save to be blocked with an integer-format validation "
-            f"error for {DISPLAY_ORDER_NON_INTEGER!r}. WHICH SHAPE: "
-            f"{shape_fraction}. THE BROWSER'S OWN VERDICT: {native_fraction!r} "
-            f"(the box held {typed_fraction!r}, and the page reported "
-            f"{outcome_fraction!r}). WHAT EACH RENDERER SAID: {report_fraction}"
-        )
-        assert stored_fraction != DISPLAY_ORDER_ROUNDED_UP, (
-            f"{DISPLAY_ORDER_NON_INTEGER!r} was SILENTLY ROUNDED UP -- Display "
-            f"Order now reads {stored_fraction!r}"
-        )
-        assert stored_fraction == DISPLAY_ORDER_PRECONDITION, (
-            f"expected Display Order to retain {DISPLAY_ORDER_PRECONDITION!r} "
-            f"after the refused {DISPLAY_ORDER_NON_INTEGER!r}; it reads "
-            f"{stored_fraction!r}. (Read this one carefully: because the case's "
-            "own precondition is 2, a value rounded DOWN to 2 is "
-            "indistinguishable from the value being retained -- only the "
-            "round-UP half is decidable, and it is asserted separately above.)"
+        shape_text = _outcome_shape(refusal_text, success_text, DISPLAY_ORDER_TEXT, stored_text)
+        allure.attach(
+            f"{shape_text}\nbox held={typed_text!r}\n"
+            f"native validity={native_text!r}\n{report_text}",
+            name="tc_134974 step 3 ('two') -- outcome and renderers",
         )
 
-        # Assert -- step 3 ('two')
-        assert not success_text, (
-            f"expected NO success toast for the text {DISPLAY_ORDER_TEXT!r}; the "
-            f"page showed {success_text!r}"
-        )
-        assert stored_text != DISPLAY_ORDER_TEXT, (
-            f"the text {DISPLAY_ORDER_TEXT!r} WAS stored as the Display Order on "
-            f"{LAW_1990_ENTRY_CODE}"
-        )
-        rejected_somehow = (
-            typed_text != DISPLAY_ORDER_TEXT
-            or bool(refusal_text)
-            or not native_text["valid"]
-        )
-        assert rejected_somehow, (
-            f"expected the text {DISPLAY_ORDER_TEXT!r} to be rejected. WHAT "
-            f"ACTUALLY HAPPENED: the box held {typed_text!r} after typing (empty "
-            "means the numeric control discarded every keystroke, which is a "
-            "rejection BY THE CONTROL rather than by the save), the browser's "
-            f"verdict was {native_text!r}, the page reported {outcome_text!r}, "
-            f"WHICH SHAPE: {shape_text}, and WHAT EACH RENDERER SAID: "
-            f"{report_text}"
-        )
-        integer_format_error = (
-            any(m in refusal_text for m in DISPLAY_ORDER_MINIMUM_MESSAGES)
-            or "integer" in refusal_text.lower()
-            or native_text["stepMismatch"]
-            or native_text["badInput"]
-        )
-        assert integer_format_error, (
-            "expected an integer-FORMAT validation error for the text "
-            f"{DISPLAY_ORDER_TEXT!r}. WHAT ACTUALLY HAPPENED: the box held "
-            f"{typed_text!r}, the browser's verdict was {native_text!r} and the "
-            f"page said {refusal_text!r}. If the box is empty and the verdict is "
-            "`valueMissing`, the letters never entered the field at all and the "
-            "save was blocked as a MISSING value -- which IS a rejection, but "
-            "not the integer-format error this step's expected result names; "
-            "that is a case-wording defect, not a product defect. WHICH SHAPE: "
-            f"{shape_text}. WHAT EACH RENDERER SAID: {report_text}"
-        )
+    with allure.step("Reload the law entry record"):
+        reloaded = admin.open_law_entry(code, locale=CMS_LOCALE_EN).spinbutton_value(label)
 
-        # Assert -- step 4
-        assert reloaded == DISPLAY_ORDER_PRECONDITION, (
-            f"expected Display Order to still read {DISPLAY_ORDER_PRECONDITION!r}; "
-            f"it reads {reloaded!r}"
-        )
-    finally:
-        if baseline_value is not None:
-            with allure.step("TEST_OWNED reset -- restore Display Order"):
-                _test_owned_reset(
-                    _restore_display_order(
-                        admin,
-                        LAW_1990_ENTRY_CODE,
-                        baseline_value,
-                        baseline_status,
-                    ),
-                    label="tc_134974 Law 1990 Display Order",
-                )
+    # Assert -- step 2 (2.5)
+    assert not success_fraction, (
+        f"expected NO success toast for Display Order {DISPLAY_ORDER_NON_INTEGER!r}; "
+        f"the page showed {success_fraction!r}"
+    )
+    assert stored_fraction != DISPLAY_ORDER_NON_INTEGER, (
+        f"Display Order {DISPLAY_ORDER_NON_INTEGER!r} WAS stored on {title}"
+    )
+    assert native_fraction["stepMismatch"] or refusal_fraction, (
+        "expected the save to be blocked with an integer-format validation error for "
+        f"{DISPLAY_ORDER_NON_INTEGER!r}. WHICH SHAPE: {shape_fraction}. THE BROWSER'S OWN "
+        f"VERDICT: {native_fraction!r} (the box held {typed_fraction!r}, the page reported "
+        f"{outcome_fraction!r}). WHAT EACH RENDERER SAID: {report_fraction}"
+    )
+    assert stored_fraction != DISPLAY_ORDER_ROUNDED_UP, (
+        f"{DISPLAY_ORDER_NON_INTEGER!r} was SILENTLY ROUNDED UP -- Display Order now reads "
+        f"{stored_fraction!r}"
+    )
+    assert stored_fraction == DISPLAY_ORDER_PRECONDITION, (
+        f"expected Display Order to retain {DISPLAY_ORDER_PRECONDITION!r} after the refused "
+        f"{DISPLAY_ORDER_NON_INTEGER!r}; it reads {stored_fraction!r} (a value rounded DOWN to 2 "
+        "is indistinguishable from the value being retained)"
+    )
+
+    # Assert -- step 3 ('two'): blocked and not stored. Per the case's own
+    # step 3, the letters never enter the number box, so the block is a
+    # MISSING-value one -- any of: the box discarded the keystrokes, a
+    # refusal was rendered, or the browser reports the control invalid.
+    assert not success_text, (
+        f"expected NO success toast for the text {DISPLAY_ORDER_TEXT!r}; the page showed {success_text!r}"
+    )
+    assert stored_text != DISPLAY_ORDER_TEXT, (
+        f"the text {DISPLAY_ORDER_TEXT!r} WAS stored as the Display Order on {title}"
+    )
+    rejected_somehow = typed_text != DISPLAY_ORDER_TEXT or bool(refusal_text) or not native_text["valid"]
+    assert rejected_somehow, (
+        f"expected the text {DISPLAY_ORDER_TEXT!r} to be blocked. The box held {typed_text!r}, the "
+        f"browser's verdict was {native_text!r}, the page reported {outcome_text!r}, WHICH SHAPE: "
+        f"{shape_text}, WHAT EACH RENDERER SAID: {report_text}"
+    )
+
+    # Assert -- step 4
+    assert reloaded == DISPLAY_ORDER_PRECONDITION, (
+        f"expected Display Order to still read {DISPLAY_ORDER_PRECONDITION!r}; it reads {reloaded!r}"
+    )
 
 
 @allure.epic("About Us")
@@ -6625,7 +5870,7 @@ def test_chambers_law_cp_134975_an_empty_display_order_is_rejected_on_save(page)
             baseline_status = authoring.current_status()
 
         with allure.step(
-            "Clear Display Order completely and click Submit for Publishing"
+            "Clear Display Order completely and click Submit for Review"
         ):
             authoring.fill_number(label, DISPLAY_ORDER_EMPTY)
             cleared_to = form.live_number_value(label)
@@ -6777,7 +6022,7 @@ def test_chambers_law_cp_134987_saving_a_law_entry_with_a_display_order_already_
 
         with allure.step(
             f"Open a second law entry, enter Display Order {DISPLAY_ORDER_DUPLICATE} "
-            "and click Submit for Publishing"
+            "and click Submit for Review"
         ):
             authoring = admin.open_law_entry(LAW_1996_ENTRY_CODE, locale=CMS_LOCALE_EN)
             form = _LawEntryForm(authoring)
@@ -6817,7 +6062,7 @@ def test_chambers_law_cp_134987_saving_a_law_entry_with_a_display_order_already_
 
         with allure.step(
             f"Change the second entry's Display Order to {DISPLAY_ORDER_VALID} and "
-            "click Submit for Publishing"
+            "click Submit for Review"
         ):
             authoring = admin.open_law_entry(LAW_1996_ENTRY_CODE, locale=CMS_LOCALE_EN)
             form = _LawEntryForm(authoring)
@@ -7113,6 +6358,8 @@ def _establish_active_status(
     if authoring.is_checked(field_label) == value:
         return value
     authoring.set_checkbox(field_label, value)
+    log_live_write(_law_rec(authoring), "<form submit>", "the values entered above", None,
+                   action="publish", note="_establish_active_status (submit_for_publishing)")
     authoring.submit_for_publishing()
     return _observed_stored_checkbox(
         admin, entry_code, field_label, value, locale=locale
@@ -7142,15 +6389,17 @@ def _restore_active_status(
     def _restore():
         authoring = admin.open_law_entry(entry_code, locale=locale)
         if authoring.is_checked(label) != baseline_checked:
-            if authoring.current_status() == STATUS_PUBLISHED:
+            if authoring.current_status() in _PUBLISHED_STATES:
                 authoring.set_checkbox(label, baseline_checked)
                 _publish_and_confirm(authoring)
             else:
                 _unpublish_and_confirm(authoring)
                 authoring.set_checkbox(label, baseline_checked)
-                if baseline_status == STATUS_PUBLISHED:
+                if baseline_status in _PUBLISHED_STATES:
                     _publish_and_confirm(authoring)
                 else:
+                    log_live_write(_law_rec(authoring), "<form submit>", "the values entered above", None,
+                                   action="save-draft", note="_restore_active_status (save_as_draft)")
                     authoring.save_as_draft()
 
         # PROVE it -- fresh navigation, never a post-save-reflowed DOM.
@@ -7272,7 +6521,7 @@ def test_chambers_law_cp_134976_active_status_stores_the_value_true(browser, pag
                 admin, LAW_1990_ENTRY_CODE, label, ACTIVE_STATUS_FALSE
             )
 
-        with allure.step("Set Active Status to True and click Submit for Publishing"):
+        with allure.step("Set Active Status to True and click Submit for Review"):
             authoring = admin.open_law_entry(LAW_1990_ENTRY_CODE, locale=CMS_LOCALE_EN)
             form = _LawEntryForm(authoring)
             authoring.set_checkbox(label, ACTIVE_STATUS_TRUE)
@@ -7312,11 +6561,10 @@ def test_chambers_law_cp_134976_active_status_stores_the_value_true(browser, pag
             f"{refusal!r}. WHICH SHAPE: {shape}. WHAT EACH RENDERER SAID: "
             f"{renderer_report}"
         )
-        assert outcome == "saved" and success, (
-            "expected the success toast after saving Active Status "
-            f"{ACTIVE_STATUS_TRUE!r}; the page reported {outcome!r}. WHAT EACH "
-            f"RENDERER SAID: {renderer_report}"
-        )
+        # 2026-10-13 (user decision): a missing success toast is NOT a bug --
+        # the stored value read back from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
 
         # Assert -- step 3
         assert stored == ACTIVE_STATUS_TRUE, (
@@ -7408,7 +6656,7 @@ def test_chambers_law_cp_134977_active_status_stores_the_value_false(browser, pa
             baseline_status = authoring.current_status()
             opened_with = baseline_checked
 
-        with allure.step("Set Active Status to False and click Submit for Publishing"):
+        with allure.step("Set Active Status to False and click Submit for Review"):
             authoring.set_checkbox(label, ACTIVE_STATUS_FALSE)
             unticked_to = authoring.is_checked(label)
             outcome = form.submit_expecting_refusal()
@@ -7445,11 +6693,11 @@ def test_chambers_law_cp_134977_active_status_stores_the_value_false(browser, pa
             f"{refusal!r}. WHICH SHAPE: {shape}. WHAT EACH RENDERER SAID: "
             f"{renderer_report}"
         )
-        assert outcome == "saved" and success, (
-            "expected the success toast after saving Active Status "
-            f"{ACTIVE_STATUS_FALSE!r}; the page reported {outcome!r}. WHAT EACH "
-            f"RENDERER SAID: {renderer_report}"
-        )
+        # 2026-10-14 (fix pass 5, user decision 2026-10-13 as in 134976): a
+        # missing success toast is NOT a bug -- the stored value read back
+        # from a fresh navigation is the proof.
+        allure.attach(f"outcome={outcome!r} success bar={success!r}",
+                      name="save message (context, not asserted)")
 
         # Assert -- step 3
         assert stored == ACTIVE_STATUS_FALSE, (

@@ -1,0 +1,20 @@
+{
+ "en": {
+  "exists": true,
+  "display": "none",
+  "hidden_attr": false,
+  "dots": 3,
+  "slides": 3,
+  "errors": [],
+  "user": "anonymous"
+ },
+ "ar": {
+  "exists": true,
+  "display": "none",
+  "hidden_attr": false,
+  "dots": 3,
+  "slides": 3,
+  "errors": [],
+  "user": "anonymous"
+ }
+}

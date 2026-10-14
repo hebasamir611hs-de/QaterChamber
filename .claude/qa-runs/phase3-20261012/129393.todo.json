@@ -1,0 +1,1267 @@
+[
+ {
+  "id": 134759,
+  "title": "Verify that the message rich text renders headings, paragraphs, bullets, and inline links",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Message Content is configured with one heading, two paragraphs, a 3-item bullet list, and one inline link. Verifies every rich-text element type stated in the PBI renders on the public page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In Liferay CMS, set Message Content (EN) to contain a heading, two paragraphs, a 3-item bullet list, and one inline link to https://www.qatarchamber.com, then publish",
+    "expected": "Content saved and published; the Liferay success toast is shown"
+   },
+   {
+    "action": "Open the Chairman's Message page in English",
+    "expected": "Page loads with the message block visible"
+   },
+   {
+    "action": "Inspect the rendered message block",
+    "expected": "The heading, both paragraphs, all three bulleted items, and the inline link render as authored, with the inline link rendered as a clickable anchor pointing to https://www.qatarchamber.com"
+   }
+  ]
+ },
+ {
+  "id": 134760,
+  "title": "Verify that both the Hero Banner and the Chairman Portrait expose their configured alt text",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Hero Banner Alt Text (EN) is 'Qatar Chamber board room' and Chairman Portrait Alt Text (EN) is 'Chairman Sheikh Khalifa bin Jassim Al Thani'. Verifies each image renders its own configured alt value.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In Liferay CMS, set Hero Banner Alt Text (EN) to 'Qatar Chamber board room' and Chairman Portrait Alt Text (EN) to 'Chairman Sheikh Khalifa bin Jassim Al Thani', then publish",
+    "expected": "Both alt values saved and published; the success toast is shown"
+   },
+   {
+    "action": "Open the Chairman's Message page in English",
+    "expected": "Page loads with both images visible"
+   },
+   {
+    "action": "Inspect the alt attribute of the Hero Banner image",
+    "expected": "Hero Banner alt attribute is exactly 'Qatar Chamber board room'"
+   },
+   {
+    "action": "Inspect the alt attribute of the Chairman Portrait image",
+    "expected": "Chairman Portrait alt attribute is exactly 'Chairman Sheikh Khalifa bin Jassim Al Thani' — the two images do not share one alt value"
+   }
+  ]
+ },
+ {
+  "id": 134770,
+  "title": "Verify that a Site Content Editor can create, edit, preview, publish, and unpublish the Chairman's Message page",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "Regression",
+   "Workflow"
+  ],
+  "description": "Signed in as Site Content Editor. Verifies every lifecycle action in the permissions table is available and succeeds.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in to Liferay CMS as a user with the Site Content Editor role",
+    "expected": "Sign-in succeeds and the CMS dashboard loads"
+   },
+   {
+    "action": "Open the Chairman's Message page record",
+    "expected": "Page record opens with Edit, Preview, Publish, and Unpublish controls all enabled"
+   },
+   {
+    "action": "Edit the Page Title (EN) to 'Chairman's Message', then use Preview, Publish, and Unpublish in turn",
+    "expected": "Each action completes and shows the Liferay success toast; no Access Denied message appears at any step"
+   }
+  ]
+ },
+ {
+  "id": 134771,
+  "title": "Verify that a Site Content Author can view and update assigned Chairman's Message content",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "Regression"
+  ],
+  "description": "Signed in as Site Content Author with this page assigned. Verifies view and update are permitted.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in to Liferay CMS as a user with the Site Content Author role and the Chairman's Message page assigned",
+    "expected": "Sign-in succeeds"
+   },
+   {
+    "action": "Open the Chairman's Message page record",
+    "expected": "Page record opens in editable mode"
+   },
+   {
+    "action": "Update Message Content (EN) and save",
+    "expected": "The change is saved and the Liferay success toast is shown; no Access Denied message appears"
+   }
+  ]
+ },
+ {
+  "id": 134772,
+  "title": "Verify that a Site Content Author cannot publish the Chairman's Message page",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "Workflow"
+  ],
+  "description": "The Author's stated permissions cover view and update only. Verifies publish is unavailable and cannot be forced.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in to Liferay CMS as a user with the Site Content Author role",
+    "expected": "Sign-in succeeds"
+   },
+   {
+    "action": "Open the Chairman's Message page record and locate the publish control",
+    "expected": "The Publish control is absent or disabled for this role"
+   },
+   {
+    "action": "Attempt to publish the page",
+    "expected": "Publish does not occur, the page publication state is unchanged, and 'Access Denied. You do not have permission to perform this action.' is shown"
+   }
+  ]
+ },
+ {
+  "id": 134773,
+  "title": "Verify that a user without the required permission is denied access to the Chairman's Message page record",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Bilingual",
+   "Control_Panel"
+  ],
+  "description": "Signed in as a CMS user holding neither content role on this page. Verifies the exact bilingual Access Denied message and that no change is possible.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in to Liferay CMS as a user with no content role on the Chairman's Message page",
+    "expected": "Sign-in succeeds"
+   },
+   {
+    "action": "Attempt to open the Chairman's Message page record for editing",
+    "expected": "Access is refused with 'Access Denied. You do not have permission to perform this action.' and the record does not open in editable mode"
+   },
+   {
+    "action": "Switch the CMS interface language to Arabic and repeat the attempt",
+    "expected": "The same refusal is shown in Arabic as 'تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.'"
+   }
+  ]
+ },
+ {
+  "id": 134774,
+  "title": "Verify that publishing the Chairman's Message page makes the content visible on the website",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "UAT",
+   "Web",
+   "Workflow"
+  ],
+  "description": "Editor publishes the page with Page Title (EN) 'Chairman's Message', a salutation, body, name, and designation. Verifies the success toast fires and the content appears publicly after cache refresh.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in to Liferay CMS as Site Content Editor and open the Chairman's Message page record",
+    "expected": "Page record opens with current values shown"
+   },
+   {
+    "action": "Set Page Title (EN) to 'Chairman's Message', Message Content (EN) to a salutation 'Dear members and visitors' plus one body paragraph, Chairman Name to 'H.E. Sheikh Khalifa bin Jassim bin Mohammed Al Thani', Designation to 'Chairman of The Board', then click Publish",
+    "expected": "Page status changes to Published and the Liferay generic success toast is displayed"
+   },
+   {
+    "action": "Wait for the standard cache refresh and open the Chairman's Message page on the public site in English",
+    "expected": "The public page loads showing the title 'Chairman's Message', the salutation 'Dear members and visitors', the body paragraph, and the Chairman Name and Designation exactly as authored"
+   }
+  ]
+ },
+ {
+  "id": 134776,
+  "title": "Verify that unpublishing the Chairman's Message page removes it from the website",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "Web",
+   "Workflow"
+  ],
+  "description": "Page is currently published. Verifies unpublishing removes public access while the record stays in the CMS.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open the published Chairman's Message page record",
+    "expected": "Record opens with status Published"
+   },
+   {
+    "action": "Click Unpublish and wait for the standard cache refresh",
+    "expected": "Status changes to Unpublished and the success toast is shown"
+   },
+   {
+    "action": "Open the Chairman's Message page URL in a browser session with no CMS login",
+    "expected": "The public URL no longer serves the message content — the standard not-available page is shown instead"
+   },
+   {
+    "action": "Re-open the record in the CMS",
+    "expected": "The record with its portrait, name, designation, and message content is still present and editable in the CMS"
+   }
+  ]
+ },
+ {
+  "id": 134777,
+  "title": "Verify that draft Chairman's Message content is visible only in the CMS and not on the website",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "Web",
+   "Workflow"
+  ],
+  "description": "Editor saves a new paragraph as draft without publishing. Verifies the draft text is in the CMS but absent from the public page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open the Chairman's Message page record",
+    "expected": "Record opens with current published content"
+   },
+   {
+    "action": "Add the paragraph 'DRAFT-ONLY-129393' to Message Content (EN) and click Save as draft",
+    "expected": "Content is saved with status Draft and the success toast is shown"
+   },
+   {
+    "action": "Open the Chairman's Message page on the public site in English and search the page text for 'DRAFT-ONLY-129393'",
+    "expected": "The public page does not contain 'DRAFT-ONLY-129393' anywhere and still shows the previously published message"
+   },
+   {
+    "action": "Re-open the record in the CMS",
+    "expected": "The CMS record shows the draft paragraph 'DRAFT-ONLY-129393'"
+   }
+  ]
+ },
+ {
+  "id": 134778,
+  "title": "Verify that Preview renders unpublished Chairman's Message content without publishing it",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "Workflow"
+  ],
+  "description": "Editor previews a draft change. Verifies preview shows the draft while the public page and record status stay unchanged.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open the Chairman's Message page record",
+    "expected": "Record opens with current content"
+   },
+   {
+    "action": "Add the paragraph 'PREVIEW-ONLY-129393' to Message Content (EN), save as draft, and click Preview",
+    "expected": "Preview opens and renders the page including the paragraph 'PREVIEW-ONLY-129393'"
+   },
+   {
+    "action": "Check the record status, then open the public Chairman's Message page in English",
+    "expected": "Record status is still Draft and the public page does not contain 'PREVIEW-ONLY-129393'"
+   }
+  ]
+ },
+ {
+  "id": 134779,
+  "title": "Verify that publishing the Chairman's Message page updates the page cache and writes an audit log entry",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Web",
+   "Workflow"
+  ],
+  "description": "Editor publishes a change to Message Content (EN). Verifies the new content is served after cache refresh and the change is recorded in the audit log with the acting user.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and note the current time",
+    "expected": "CMS session active and current published content noted"
+   },
+   {
+    "action": "Change Message Content (EN) to include the paragraph 'CACHE-CHECK-129393' and click Publish",
+    "expected": "Publish succeeds and the success toast is shown"
+   },
+   {
+    "action": "Open the public Chairman's Message page in English after the standard cache refresh",
+    "expected": "The public page serves the updated content including 'CACHE-CHECK-129393' rather than the previously cached version"
+   },
+   {
+    "action": "Open the Liferay audit log and filter to the Chairman's Message page record",
+    "expected": "The audit log contains an entry for this publish action showing the Chairman's Message page, the acting Site Content Editor user, and a timestamp at or after the noted time"
+   }
+  ]
+ },
+ {
+  "id": 134780,
+  "title": "Verify that a hyperlink configured in the message content opens its destination from the public page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Redirect",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Hyperlink Title (EN) 'Qatar National Vision 2030' and Hyperlink URL (EN) https://www.qatarchamber.com are configured inside the message rich text. Verifies the link renders and navigates.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In Liferay CMS, configure a hyperlink inside Message Content (EN) with title 'Qatar National Vision 2030' and URL https://www.qatarchamber.com, then publish",
+    "expected": "Hyperlink saved and published; the success toast is shown"
+   },
+   {
+    "action": "Open the Chairman's Message page in English and locate the link",
+    "expected": "The link renders inside the message with the label 'Qatar National Vision 2030' as a clickable anchor"
+   },
+   {
+    "action": "Click 'Qatar National Vision 2030'",
+    "expected": "The browser navigates to https://www.qatarchamber.com"
+   }
+  ]
+ },
+ {
+  "id": 134783,
+  "title": "Verify that replacing the Chairman Portrait updates the image shown on the website",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "Web"
+  ],
+  "description": "A portrait is already configured. Verifies uploading a replacement (chairman-new.jpg, JPG, 900 KB) swaps the served image after publish and cache refresh.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open the Chairman's Message page record with an existing Chairman Portrait",
+    "expected": "Record opens showing the currently configured portrait"
+   },
+   {
+    "action": "Replace the Chairman Portrait with chairman-new.jpg (JPG, 900 KB), update its alt text, and publish",
+    "expected": "The new image is accepted, saved, and published with the success toast shown"
+   },
+   {
+    "action": "Open the public Chairman's Message page in English after the standard cache refresh",
+    "expected": "The portrait column renders chairman-new.jpg with its decorative maroon backing element intact and no longer serves the previous image"
+   }
+  ]
+ },
+ {
+  "id": 134784,
+  "title": "Verify that uploading a Chairman Portrait for the first time publishes it to the website",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "Web"
+  ],
+  "description": "Chairman Portrait is empty on the record. Verifies the first upload (chairman.png, PNG, 1.4 MB) is accepted and rendered.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open a Chairman's Message page record with no Chairman Portrait set",
+    "expected": "Record opens with the Chairman Portrait field empty"
+   },
+   {
+    "action": "Upload chairman.png (PNG, 1.4 MB) as the Chairman Portrait, set its alt text to 'Chairman Sheikh Khalifa bin Jassim Al Thani', and publish",
+    "expected": "Upload is accepted and published; the success toast is shown"
+   },
+   {
+    "action": "Open the public Chairman's Message page in English after the standard cache refresh",
+    "expected": "The portrait column renders chairman.png at a 16px corner radius over the maroon decorative rectangle, with the alt text 'Chairman Sheikh Khalifa bin Jassim Al Thani'"
+   }
+  ]
+ },
+ {
+  "id": 134787,
+  "title": "Verify that Chairman Name and Designation are entered once and populate both the Name Card and the Signature block",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "The PBI states these fields are single-source with no duplicate data entry. Changes the Name and Designation once and verifies **both** frontend locations update from that single entry.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open the Chairman's Message page record",
+    "expected": "Record opens with the Name and Designation fields visible"
+   },
+   {
+    "action": "Confirm the CMS form offers exactly one Chairman Name field and one Chairman Designation field per language, with no separate signature-block name or designation fields",
+    "expected": "Exactly one Name field and one Designation field exist per language — the signature block has no separate input"
+   },
+   {
+    "action": "Change Chairman Name (EN) to 'H.E. Sheikh Khalifa bin Jassim bin Mohammed Al Thani' and Chairman Designation (EN) to 'Chairman of The Board', then publish",
+    "expected": "Publish succeeds and the success toast is shown"
+   },
+   {
+    "action": "Open the public Chairman's Message page in English and read the Name Card below the portrait",
+    "expected": "The Name Card shows 'H.E. Sheikh Khalifa bin Jassim bin Mohammed Al Thani' and 'Chairman of The Board'"
+   },
+   {
+    "action": "Read the Signature block at the bottom of the message",
+    "expected": "The Signature block shows 'Best Regards,' followed by the identical name and designation values — both locations reflect the single entry with no mismatch"
+   }
+  ]
+ },
+ {
+  "id": 134788,
+  "title": "Verify that a valid English Page Title is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters &quot;Chairman's Message&quot; (18 chars) in Page Title (EN). Verifies it saves and is returned on reload.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with Page Title (EN) editable"
+   },
+   {
+    "action": "Enter \"Chairman's Message\" in Page Title (EN) and click Save",
+    "expected": "Value is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Page Title (EN) reads \"Chairman's Message\" with the apostrophe preserved"
+   }
+  ]
+ },
+ {
+  "id": 134789,
+  "title": "Verify that an empty English Page Title is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Clears the mandatory Page Title (EN) and saves. Verifies save is blocked and the stored value is preserved.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record with Page Title (EN) currently \"Chairman's Message\"",
+    "expected": "Record opens with the current title shown"
+   },
+   {
+    "action": "Clear Page Title (EN) completely and click Save",
+    "expected": "Save is blocked with a required-field validation error against Page Title (EN) and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Page Title (EN) still reads \"Chairman's Message\""
+   }
+  ]
+ },
+ {
+  "id": 134792,
+  "title": "Verify that a valid Arabic Page Title is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters 'رسالة رئيس مجلس الإدارة' in Page Title (AR). Verifies it saves with Arabic characters intact.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with Page Title (AR) editable"
+   },
+   {
+    "action": "Enter 'رسالة رئيس مجلس الإدارة' in Page Title (AR) and click Save",
+    "expected": "Value is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Page Title (AR) reads 'رسالة رئيس مجلس الإدارة' with the Arabic characters intact and not transliterated or mangled"
+   }
+  ]
+ },
+ {
+  "id": 134793,
+  "title": "Verify that a missing Arabic Page Title is rejected with the Arabic-title-required message",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Arabic is enabled and Page Title (AR) is cleared. Verifies the exact bilingual validation message and that publish is blocked.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record with the Arabic language enabled",
+    "expected": "Record opens with Arabic enabled and Page Title (AR) populated"
+   },
+   {
+    "action": "Clear Page Title (AR) and click Publish",
+    "expected": "Publish is blocked and 'Arabic title is required.' is shown against Page Title (AR)"
+   },
+   {
+    "action": "Switch the CMS interface language to Arabic and repeat",
+    "expected": "The same validation is shown in Arabic as 'العنوان العربي مطلوب.' and the page is still not published"
+   }
+  ]
+ },
+ {
+  "id": 134796,
+  "title": "Verify that a valid JPG Hero Banner under 2 MB is accepted",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads hero.jpg (JPG, 900 KB) as the Hero Banner. Verifies it is accepted and retained.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Hero Banner field available"
+   },
+   {
+    "action": "Upload hero.jpg (JPG, 900 KB) to the Hero Banner field and click Save",
+    "expected": "Upload is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "The Hero Banner field shows hero.jpg as the stored image"
+   }
+  ]
+ },
+ {
+  "id": 134797,
+  "title": "Verify that a Hero Banner in an unsupported format is rejected with the JPG-or-PNG message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads hero.svg (SVG, 300 KB). SVG is **not** permitted on this PBI, unlike 129392. Verifies the exact bilingual format message and that nothing is stored.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Hero Banner field available"
+   },
+   {
+    "action": "Upload hero.svg (SVG, 300 KB) to the Hero Banner field",
+    "expected": "Upload is rejected with the message 'Image must be JPG or PNG.' and the previously stored Hero Banner is unchanged"
+   },
+   {
+    "action": "Switch the CMS interface language to Arabic and repeat the upload",
+    "expected": "The same rejection is shown in Arabic as 'يجب أن تكون الصورة بتنسيق JPG أو PNG.'"
+   }
+  ]
+ },
+ {
+  "id": 134798,
+  "title": "Verify that a Hero Banner above 2 MB is rejected at the size boundary",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads a 2 MB file (accepted at the boundary) then a 2.1 MB file (rejected). Verifies the exact bilingual size message.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Hero Banner field available"
+   },
+   {
+    "action": "Upload hero-2mb.jpg (JPG, exactly 2 MB) to the Hero Banner field and click Save",
+    "expected": "The exactly-2 MB file is accepted and saved with the success toast shown"
+   },
+   {
+    "action": "Upload hero-oversize.jpg (JPG, 2.1 MB) to the same field",
+    "expected": "The 2.1 MB file is rejected with 'Image size must not exceed 2 MB.' and the stored image is unchanged"
+   },
+   {
+    "action": "Switch the CMS interface language to Arabic and repeat the oversize upload",
+    "expected": "The same rejection is shown in Arabic as 'يجب ألا يتجاوز حجم الصورة 2 ميغابايت.'"
+   }
+  ]
+ },
+ {
+  "id": 134799,
+  "title": "Verify that publishing without a Hero Banner is blocked",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Hero Banner is mandatory. Attempts to publish with the field empty.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open a Chairman's Message page record with the Hero Banner field empty",
+    "expected": "Record opens with no Hero Banner set"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish is blocked with a required-field validation error against Hero Banner and no success toast appears"
+   },
+   {
+    "action": "Check the record status",
+    "expected": "Record status is unchanged and the page is not published"
+   }
+  ]
+ },
+ {
+  "id": 134800,
+  "title": "Verify that valid Hero Banner Alt Text is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters 'Qatar Chamber board room' (24 chars) as Hero Banner Alt Text. Verifies it saves and is returned on reload.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with Hero Banner Alt Text editable"
+   },
+   {
+    "action": "Enter 'Qatar Chamber board room' in Hero Banner Alt Text and click Save",
+    "expected": "Value is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Hero Banner Alt Text reads 'Qatar Chamber board room'"
+   }
+  ]
+ },
+ {
+  "id": 134801,
+  "title": "Verify that empty Hero Banner Alt Text is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Alt text is mandatory for accessibility. Clears it and saves.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record with Hero Banner Alt Text populated",
+    "expected": "Record opens with Hero Banner Alt Text populated"
+   },
+   {
+    "action": "Clear Hero Banner Alt Text completely and click Save",
+    "expected": "Save is blocked with a required-field validation error against Hero Banner Alt Text and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Hero Banner Alt Text retains its previous value"
+   }
+  ]
+ },
+ {
+  "id": 134804,
+  "title": "Verify that a valid PNG Chairman Portrait under 2 MB is accepted",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads chairman.png (PNG, 1.4 MB) as the Chairman Portrait. Verifies it is accepted and retained.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Chairman Portrait field available"
+   },
+   {
+    "action": "Upload chairman.png (PNG, 1.4 MB) to the Chairman Portrait field and click Save",
+    "expected": "Upload is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "The Chairman Portrait field shows chairman.png as the stored image"
+   }
+  ]
+ },
+ {
+  "id": 134805,
+  "title": "Verify that a Chairman Portrait in an unsupported format is rejected with the JPG-or-PNG message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads chairman.gif (GIF, 600 KB), outside the stated JPG/PNG set. Verifies the format message and that nothing is stored.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Chairman Portrait field available"
+   },
+   {
+    "action": "Upload chairman.gif (GIF, 600 KB) to the Chairman Portrait field",
+    "expected": "Upload is rejected with the message 'Image must be JPG or PNG.' and the previously stored portrait is unchanged"
+   }
+  ]
+ },
+ {
+  "id": 134806,
+  "title": "Verify that a Chairman Portrait above 2 MB is rejected at the size boundary",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads a 2 MB portrait (accepted) then a 2.1 MB one (rejected). Verifies the 2 MB cap applies to the portrait field too.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Chairman Portrait field available"
+   },
+   {
+    "action": "Upload chairman-2mb.png (PNG, exactly 2 MB) to the Chairman Portrait field and click Save",
+    "expected": "The exactly-2 MB file is accepted and saved with the success toast shown"
+   },
+   {
+    "action": "Upload chairman-oversize.png (PNG, 2.1 MB) to the same field",
+    "expected": "The 2.1 MB file is rejected with 'Image size must not exceed 2 MB.' and the stored portrait is unchanged"
+   }
+  ]
+ },
+ {
+  "id": 134807,
+  "title": "Verify that publishing without a Chairman Portrait is blocked",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Chairman Portrait is mandatory. Attempts to publish with the field empty.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open a Chairman's Message page record with the Chairman Portrait field empty",
+    "expected": "Record opens with no Chairman Portrait set"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish is blocked with a required-field validation error against Chairman Portrait and no success toast appears"
+   },
+   {
+    "action": "Check the record status",
+    "expected": "Record status is unchanged and the page is not published"
+   }
+  ]
+ },
+ {
+  "id": 134808,
+  "title": "Verify that valid Chairman Portrait Alt Text is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters 'Chairman Sheikh Khalifa bin Jassim Al Thani' (43 chars) as Chairman Portrait Alt Text.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with Chairman Portrait Alt Text editable"
+   },
+   {
+    "action": "Enter 'Chairman Sheikh Khalifa bin Jassim Al Thani' in Chairman Portrait Alt Text and click Save",
+    "expected": "Value is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Chairman Portrait Alt Text reads 'Chairman Sheikh Khalifa bin Jassim Al Thani'"
+   }
+  ]
+ },
+ {
+  "id": 134809,
+  "title": "Verify that empty Chairman Portrait Alt Text is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Portrait alt text is mandatory. Clears it and saves.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record with Chairman Portrait Alt Text populated",
+    "expected": "Record opens with Chairman Portrait Alt Text populated"
+   },
+   {
+    "action": "Clear Chairman Portrait Alt Text completely and click Save",
+    "expected": "Save is blocked with a required-field validation error against Chairman Portrait Alt Text and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Chairman Portrait Alt Text retains its previous value"
+   }
+  ]
+ },
+ {
+  "id": 134812,
+  "title": "Verify that a valid Chairman Name is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters 'H.E. Sheikh Khalifa bin Jassim bin Mohammed Al Thani' (52 chars) as Chairman Name.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with Chairman Name (EN) editable"
+   },
+   {
+    "action": "Enter 'H.E. Sheikh Khalifa bin Jassim bin Mohammed Al Thani' in Chairman Name (EN) and click Save",
+    "expected": "Value is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Chairman Name (EN) reads 'H.E. Sheikh Khalifa bin Jassim bin Mohammed Al Thani' with the honorific punctuation preserved"
+   }
+  ]
+ },
+ {
+  "id": 134813,
+  "title": "Verify that an empty Chairman Name is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Chairman Name is mandatory and feeds two frontend locations. Clears it and saves.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record with Chairman Name (EN) populated",
+    "expected": "Record opens with Chairman Name (EN) populated"
+   },
+   {
+    "action": "Clear Chairman Name (EN) completely and click Save",
+    "expected": "Save is blocked with a required-field validation error against Chairman Name and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Chairman Name (EN) retains its previous value"
+   }
+  ]
+ },
+ {
+  "id": 134816,
+  "title": "Verify that a valid Chairman Designation is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters 'Chairman of The Board' (21 chars) as Chairman Designation.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with Chairman Designation (EN) editable"
+   },
+   {
+    "action": "Enter 'Chairman of The Board' in Chairman Designation (EN) and click Save",
+    "expected": "Value is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Chairman Designation (EN) reads 'Chairman of The Board'"
+   }
+  ]
+ },
+ {
+  "id": 134817,
+  "title": "Verify that an empty Chairman Designation is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Chairman Designation is mandatory and feeds two frontend locations. Clears it and saves.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record with Chairman Designation (EN) populated",
+    "expected": "Record opens with Chairman Designation (EN) populated"
+   },
+   {
+    "action": "Clear Chairman Designation (EN) completely and click Save",
+    "expected": "Save is blocked with a required-field validation error against Chairman Designation and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Chairman Designation (EN) retains its previous value"
+   }
+  ]
+ },
+ {
+  "id": 134820,
+  "title": "Verify that valid English Message Content is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters a 600-character rich-text message with a salutation heading and two paragraphs in Message Content (EN).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Message Content (EN) editor available"
+   },
+   {
+    "action": "Enter a 600-character body in Message Content (EN) containing the salutation heading 'Dear members and visitors' and two paragraphs, then click Save",
+    "expected": "Content is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Message Content (EN) is returned with the salutation heading and both paragraphs preserved"
+   }
+  ]
+ },
+ {
+  "id": 134821,
+  "title": "Verify that empty English Message Content is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Message Content (EN) is mandatory. Clears it and saves.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record with Message Content (EN) populated",
+    "expected": "Record opens with Message Content (EN) populated"
+   },
+   {
+    "action": "Clear the Message Content (EN) editor completely and click Save",
+    "expected": "Save is blocked with a required-field validation error against Message Content (EN) and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Message Content (EN) retains its previous content"
+   }
+  ]
+ },
+ {
+  "id": 134824,
+  "title": "Verify that valid Arabic Message Content is accepted and saved with RTL text preserved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters a 600-character Arabic message including the salutation 'السادة الأعضاء والزوار' in Message Content (AR).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Message Content (AR) editor available"
+   },
+   {
+    "action": "Enter a 600-character Arabic body in Message Content (AR) including the salutation 'السادة الأعضاء والزوار' and click Save",
+    "expected": "Content is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Message Content (AR) is returned with the Arabic text intact including 'السادة الأعضاء والزوار' and rendered right-to-left in the editor"
+   }
+  ]
+ },
+ {
+  "id": 134825,
+  "title": "Verify that empty Arabic Message Content is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Message Content (AR) is mandatory when Arabic is enabled. Clears it and saves.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record with Arabic enabled and Message Content (AR) populated",
+    "expected": "Record opens with Message Content (AR) populated"
+   },
+   {
+    "action": "Clear the Message Content (AR) editor completely and click Save",
+    "expected": "Save is blocked with a required-field validation error against Message Content (AR) and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Message Content (AR) retains its previous content"
+   }
+  ]
+ },
+ {
+  "id": 134832,
+  "title": "Verify that an invalid Hyperlink URL is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "Redirect"
+  ],
+  "description": "Enters 'www,qatarchamber,com' as the Hyperlink URL. Verifies URL-format validation blocks the save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Hyperlink URL field available"
+   },
+   {
+    "action": "Enter 'www,qatarchamber,com' as the Hyperlink URL and click Save",
+    "expected": "Save is blocked with a URL-format validation error against Hyperlink URL and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Hyperlink URL retains its previous value and the invalid string is not stored"
+   }
+  ]
+ }
+]

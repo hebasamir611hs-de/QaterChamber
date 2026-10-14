@@ -366,6 +366,54 @@ Overview' at 1920px, '01نظرة عامة' at 390px in
         self.wait_for(self.HERO_TITLE)
         return self
 
+    # -- Main-menu journey (2026-10-07, TC 141364) ------------------------------------------
+    # The header nav is client-rendered from /o/c/navitems (anonymous GET 2026-10-07,
+    # reports/locators/proposal_for_research/navitems_anon_20261007.json): top item
+    # "Our Services" (/web/qatar-chamber/our-services) with child "Proposal for
+    # Research" (/web/qatar-chamber/our-services/proposal-for-research). Hover opens
+    # the dropdown (the top item is a link), same idiom as B2bMatchmakingPage.
+    NAV_SERVICES_ITEM = ("header.qc-global-site-header nav.qc-nav ul.qc-nav-list > "
+                         "li.qc-has-children:has(> a.qc-nav-link[href$='/our-services'])")  # UNVERIFIED
+    NAV_SUBMENU = ".qc-nav-sub"
+    NAV_PFR_LINK = "a.qc-nav-link[href*='proposal-for-research']"  # UNVERIFIED
+    HOME_PATH = "/home"
+
+    def start_console_capture(self) -> "ProposalForResearchPage":
+        """Call BEFORE navigation: collects console errors and uncaught page errors."""
+        self._console_errors = []
+        self.page.on("console", lambda m: self._console_errors.append(m.text) if m.type == "error" else None)
+        self.page.on("pageerror", lambda e: self._console_errors.append(f"pageerror: {e}"))
+        return self
+
+    def console_errors(self) -> list:
+        return list(getattr(self, "_console_errors", []))
+
+    def open_home(self) -> "ProposalForResearchPage":
+        self.open(web_url(self.HOME_PATH))
+        self.wait_for("header.qc-global-site-header nav.qc-nav a.qc-nav-link", first=True, timeout=30000)
+        return self
+
+    def services_menu_label(self) -> str:
+        return self.page.locator(self.NAV_SERVICES_ITEM).first.locator("> a.qc-nav-link").inner_text().strip()
+
+    def open_services_menu(self) -> list:
+        """Hovers the Services top item and returns its visible submenu labels."""
+        item = self.page.locator(self.NAV_SERVICES_ITEM).first
+        item.hover()
+        sub = item.locator(self.NAV_SUBMENU).first
+        sub.wait_for(state="visible")
+        return [" ".join(t.split()) for t in sub.locator("a.qc-nav-link").all_inner_texts()]
+
+    def click_services_menu_item(self) -> "ProposalForResearchPage":
+        item = self.page.locator(self.NAV_SERVICES_ITEM).first
+        item.locator(self.NAV_SUBMENU).first.locator(self.NAV_PFR_LINK).first.click()
+        self.wait_for_url(lambda u: "proposal-for-research" in u, timeout=30000)
+        self.wait_for_hero()
+        return self
+
+    def http_status(self, url: str) -> int:
+        return self.page.request.get(url).status
+
     def click_index_entry(self, index: int) -> "ProposalForResearchPage":
         self.page.locator(self.INDEX_ITEM).nth(index).click()
         return self

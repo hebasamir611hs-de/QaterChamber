@@ -1,0 +1,1176 @@
+{
+ "pbi": 130720,
+ "cases": [
+  {
+   "tc_id": 144363,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a Site Content Editor can perform the full CRUD lifecycle on a Partner Offer",
+   "steps": [
+    {
+     "action": "Log in to Control_Panel as Site Content Editor",
+     "expected": "Login succeeds; Partner Offer management area is accessible"
+    },
+    {
+     "action": "Open Object Authoring for Partner Offer and create/edit/preview/publish/unpublish/delete a QCTEST- offer",
+     "expected": "Every lifecycle action (create as Draft, edit, preview, publish, unpublish, delete) completes successfully with the Liferay success toast"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144364,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel"
+   ],
+   "title": "Verify that a Site Content Author can view and update only assigned Partner Offer records, without direct publish rights",
+   "steps": [
+    {
+     "action": "Log in to Control_Panel as Site Content Author",
+     "expected": "Login succeeds; assigned offer is accessible and editable"
+    },
+    {
+     "action": "Open an assigned QCTEST- offer and edit a field",
+     "expected": "Field edit is accepted and saved"
+    },
+    {
+     "action": "Attempt to publish directly",
+     "expected": "Direct Publish action is not available/blocked — the record can only be submitted for review, per the role's rights"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144365,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Regression"
+   ],
+   "title": "Verify that a Public Visitor cannot access the Control Panel offer/category management area",
+   "steps": [
+    {
+     "action": "While logged out, navigate directly to the Control_Panel Partner Offer management URL",
+     "expected": "Access is denied / visitor is redirected to login — no offer management UI is exposed to an unauthenticated user"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Anonymous-denial case: needs no authoring form, so it is not blocked. Asserted on the live-read manage-partner-offer URL in a fresh logged-out context."
+  },
+  {
+   "tc_id": 144366,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Regression"
+   ],
+   "title": "Verify that a role without Partner Offer permission sees 'Access Denied' when attempting to publish an offer",
+   "steps": [
+    {
+     "action": "Log in to Control_Panel as Content Contributor",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Attempt to publish a QCTEST- offer via Object Authoring",
+     "expected": "Action is blocked with 'Access Denied. You do not have permission to perform this action.' (EN) / 'تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء' (AR) shown per active language"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144368,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Regression"
+   ],
+   "title": "Verify that deep-linking to the admin offer-edit URL while logged out redirects to login rather than exposing content",
+   "steps": [
+    {
+     "action": "While logged out, paste the direct Control_Panel edit URL for a known offer entry ID into the browser",
+     "expected": "Request is redirected to the Control_Panel login page; no offer edit form or field data is exposed"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Anonymous-denial case: needs no authoring form, so it is not blocked. Asserted on the live-read manage-partner-offer URL in a fresh logged-out context."
+  },
+  {
+   "tc_id": 144404,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a Site Content Editor can create a full Partner Offer record end-to-end and it becomes visible on the public listing",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor and open Object Authoring for Partner Offer",
+     "expected": "Form loads with all required fields"
+    },
+    {
+     "action": "Fill Partner Name EN/AR, Category, Location, Description EN/AR, Terms EN/AR, Validity Start=2026-09-21/End=2026-12-31, Tier=General, Logo",
+     "expected": "All fields accept the entered values"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Offer is published; Liferay success toast shown in the active language"
+    },
+    {
+     "action": "Open the public Partners & Offers page (fresh, logged-out browser context)",
+     "expected": "'QCTEST-Al Waha Spa' appears as a card with all entered details, under 'Beauty and Fitness'"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144405,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Regression"
+   ],
+   "title": "Verify that a newly-added active Partner Category auto-appears in the public filter dropdown without redevelopment",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor and open the Partner Category lookup management screen",
+     "expected": "Category creation form accepts the new entry"
+    },
+    {
+     "action": "Add category 'QCTEST-Wellness Centers', set Active = true, save",
+     "expected": "Category saves; Liferay success toast shown"
+    },
+    {
+     "action": "Open the public Partners & Offers page and open the category dropdown",
+     "expected": "'QCTEST-Wellness Centers' appears in the dropdown's option list with no code deployment needed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144406,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High"
+   ],
+   "title": "Verify that deactivating a Category with published offers still assigned is blocked with a reassignment warning",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor and open the Partner Category lookup for 'Medical Centers'",
+     "expected": "Lookup form loads current Active=true state"
+    },
+    {
+     "action": "Attempt to set Active Status = false and save",
+     "expected": "Save is blocked with a warning that published offers must be reassigned first; category remains Active"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144408,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Regression"
+   ],
+   "title": "Verify that unpublishing a Partner Offer removes it from the public listing and its modal",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor and unpublish a QCTEST- offer",
+     "expected": "Offer status changes to Unpublished; success toast shown"
+    },
+    {
+     "action": "Load the public Partners & Offers page (fresh logged-out context)",
+     "expected": "Offer no longer appears in the grid"
+    },
+    {
+     "action": "Attempt to reach the offer's details via a previously-bookmarked deep interaction (re-click the category it was under)",
+     "expected": "No 'Offer details' entry point exists for it anywhere on the public page"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144409,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High"
+   ],
+   "title": "Verify that deleting a Partner Offer removes it from the listing and the modal never opens for it",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor and delete a QCTEST- offer via Object Authoring",
+     "expected": "Offer is removed from Object Authoring; success toast shown"
+    },
+    {
+     "action": "Load the public Partners & Offers page (fresh logged-out context)",
+     "expected": "Offer no longer appears anywhere on the public listing; no residual card or modal entry point remains"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144410,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that the hero and Offers-section content fields save and render correctly with valid bilingual EN/AR values",
+   "steps": [
+    {
+     "action": "Open the Offers page/hero content editor",
+     "expected": "Editor form loads all 7 fields"
+    },
+    {
+     "action": "Enter valid EN and AR text in all 7 content fields and save",
+     "expected": "Save succeeds with a success toast"
+    },
+    {
+     "action": "Load the public page in both languages",
+     "expected": "Each field renders the correct language's text on the corresponding locale"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144411,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that publishing hero content with a missing Arabic Hero Title is blocked",
+   "steps": [
+    {
+     "action": "Enter an English value for Hero Title, leave the Arabic field empty",
+     "expected": "English value is entered; Arabic field remains empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Publish is blocked with 'Arabic content is required.' / 'المحتوى بالعربية مطلوب'"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144412,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a valid Hero Illustration image uploads and displays on the public hero",
+   "steps": [
+    {
+     "action": "Upload a valid hero illustration image and save",
+     "expected": "Upload succeeds; save toast shown"
+    },
+    {
+     "action": "Load the public Offers page",
+     "expected": "Illustration displays correctly in the hero background area"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144413,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that publishing the hero with no illustration selected is blocked",
+   "steps": [
+    {
+     "action": "Leave Hero Illustration empty",
+     "expected": "Hero Illustration field remains empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Publish is blocked; validation indicates Hero Illustration is required"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144414,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a Partner Category saves successfully with valid EN/AR names",
+   "steps": [
+    {
+     "action": "Open Partner Category lookup management, add a new entry",
+     "expected": "Add form loads"
+    },
+    {
+     "action": "Enter valid EN and AR names and save",
+     "expected": "Category saves; appears in the lookup list with both names correct"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144415,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that saving a Partner Category with missing Arabic name is blocked",
+   "steps": [
+    {
+     "action": "Enter English name 'QCTEST-Shops' only, leave Arabic blank",
+     "expected": "English name is entered; Arabic name remains empty"
+    },
+    {
+     "action": "Save",
+     "expected": "Save is blocked with 'Arabic content is required.' / 'المحتوى بالعربية مطلوب'"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144418,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a Membership Tier saves successfully with valid EN/AR names",
+   "steps": [
+    {
+     "action": "Open Membership Tier lookup management, add a new entry",
+     "expected": "Add form loads"
+    },
+    {
+     "action": "Enter valid EN and AR names and save",
+     "expected": "Tier saves; appears in the lookup list with both names correct"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144419,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that saving a Membership Tier with missing Arabic name is blocked",
+   "steps": [
+    {
+     "action": "Enter English name 'QCTEST-Platinum' only, leave Arabic blank",
+     "expected": "English name is entered; Arabic name remains empty"
+    },
+    {
+     "action": "Save",
+     "expected": "Save is blocked with 'Arabic content is required.' / 'المحتوى بالعربية مطلوب'"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144422,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Partner Name EN/AR saves and displays correctly on the card",
+   "steps": [
+    {
+     "action": "Enter valid EN/AR partner name on a new offer",
+     "expected": "Fields accept the values"
+    },
+    {
+     "action": "Save/publish",
+     "expected": "Offer saves"
+    },
+    {
+     "action": "Load the public listing in both languages",
+     "expected": "Card shows 'QCTEST-Al Waha Spa' on EN, 'QCTEST-واحة سبا' on AR"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144423,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that publishing an offer with a missing Partner Name in Arabic is blocked",
+   "steps": [
+    {
+     "action": "Fill Partner Name EN only, leave AR blank",
+     "expected": "English name is entered; Arabic name remains empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Publish is blocked with 'Arabic content is required.' / 'المحتوى بالعربية مطلوب'"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144424,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a valid PNG/JPG Partner Logo uploads successfully",
+   "steps": [
+    {
+     "action": "Upload a valid PNG logo (300x300px, 120KB) to the Partner Logo field",
+     "expected": "Upload completes without error"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds and the logo renders in the tile on the public card"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144425,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an unsupported Partner Logo file type is rejected",
+   "steps": [
+    {
+     "action": "Attempt to upload a non-image file as the Partner Logo",
+     "expected": "Upload attempt is made with the invalid file"
+    },
+    {
+     "action": "Save",
+     "expected": "Upload/save is blocked with 'Unsupported file type or size.' / 'نوع الملف أو حجمه غير مدعوم'"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144426,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an oversized Partner Logo file is rejected",
+   "steps": [
+    {
+     "action": "Attempt to upload a 15MB PNG as the Partner Logo",
+     "expected": "Upload attempt is made with the oversized file"
+    },
+    {
+     "action": "Save",
+     "expected": "Upload/save is blocked with 'Unsupported file type or size.' / 'نوع الملف أو حجمه غير مدعوم'"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144427,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that assigning a valid active Partner Category to an offer saves and the offer files correctly under it",
+   "steps": [
+    {
+     "action": "Select 'Restaurants' in the Partner Category field",
+     "expected": "Selection saves"
+    },
+    {
+     "action": "Save/publish",
+     "expected": "Offer publishes"
+    },
+    {
+     "action": "Filter the public listing by 'Restaurants'",
+     "expected": "Offer appears under the 'Restaurants' filter"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144428,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that publishing an offer with no Partner Category selected is blocked",
+   "steps": [
+    {
+     "action": "Leave Partner Category unselected",
+     "expected": "Category field remains unselected"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Publish is blocked; validation indicates Category is required"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144429,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Partner Location EN/AR saves and displays correctly on the card",
+   "steps": [
+    {
+     "action": "Enter valid EN/AR location text",
+     "expected": "Field accepts the values"
+    },
+    {
+     "action": "Save/publish",
+     "expected": "Offer saves"
+    },
+    {
+     "action": "Load the public card",
+     "expected": "Card shows the location text with the marker icon in the active language"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144430,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an offer publishes successfully when Partner Location is left empty (optional field)",
+   "steps": [
+    {
+     "action": "Leave Partner Location EN/AR blank on an otherwise-complete offer",
+     "expected": "Location fields remain blank"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds; the offer card renders without a location line rather than an error or empty placeholder"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144431,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Offer Description EN/AR saves and displays correctly within the 1000-char limit",
+   "steps": [
+    {
+     "action": "Enter a valid 250-character description EN/AR",
+     "expected": "Field accepts the text"
+    },
+    {
+     "action": "Save/publish",
+     "expected": "Offer saves"
+    },
+    {
+     "action": "Load the public card and modal",
+     "expected": "Description renders identically in the card's description panel and the modal"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144432,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that publishing an offer with an empty Offer Description is blocked",
+   "steps": [
+    {
+     "action": "Leave Offer Description EN blank",
+     "expected": "Description field remains empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Publish is blocked; validation indicates Offer Description is required"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144433,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an Offer Description of exactly 1000 characters is accepted",
+   "steps": [
+    {
+     "action": "Enter exactly 1000 characters in Offer Description EN",
+     "expected": "Full 1000-character value is entered in the field"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds; the full text is stored and renders without truncation on the card panel/modal"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144604,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an Offer Description exceeding 1000 characters is rejected",
+   "steps": [
+    {
+     "action": "Enter 1001 characters in Offer Description EN",
+     "expected": "1001-character value is entered in the field"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Save is blocked with a max-length validation error; the value is not stored"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144605,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a whitespace-only Offer Description is rejected as effectively empty",
+   "steps": [
+    {
+     "action": "Enter ' ' (spaces only) in Offer Description EN",
+     "expected": "Whitespace-only value is entered in the field"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Publish is blocked; the field is treated as empty, same as the blank-field validation"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144606,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Offer Terms EN/AR saves and displays correctly in the modal within the 2000-char limit",
+   "steps": [
+    {
+     "action": "Enter a valid 500-character Offer Terms EN/AR",
+     "expected": "Field accepts the text"
+    },
+    {
+     "action": "Save/publish",
+     "expected": "Offer saves"
+    },
+    {
+     "action": "Open the public card, then the modal",
+     "expected": "Card does NOT show terms text; the modal's 'Offer terms' section shows the full text correctly"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144607,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that publishing an offer with empty Offer Terms is blocked",
+   "steps": [
+    {
+     "action": "Leave Offer Terms EN blank",
+     "expected": "Terms field remains empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Publish is blocked; validation indicates Offer Terms is required"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144608,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Offer Terms of exactly 2000 characters is accepted",
+   "steps": [
+    {
+     "action": "Enter exactly 2000 characters in Offer Terms EN",
+     "expected": "Full 2000-character value is entered in the field"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds; the full text is stored and renders in full in the modal's 'Offer terms' section"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144609,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that Offer Terms exceeding 2000 characters is rejected",
+   "steps": [
+    {
+     "action": "Enter 2001 characters in Offer Terms EN",
+     "expected": "2001-character value is entered in the field"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Save is blocked with a max-length validation error; the value is not stored"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144610,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that whitespace-only Offer Terms is rejected as effectively empty",
+   "steps": [
+    {
+     "action": "Enter spaces only in Offer Terms EN",
+     "expected": "Whitespace-only value is entered in the field"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Publish is blocked; the field is treated as empty"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144611,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that a Validity Start Date before a later End Date saves successfully",
+   "steps": [
+    {
+     "action": "Enter Start=2026-10-01 and End=2026-12-31",
+     "expected": "Both dates are entered in their fields"
+    },
+    {
+     "action": "Save/publish",
+     "expected": "Save succeeds and the offer's validity window is stored as entered"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144612,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that an End Date before the Start Date is blocked",
+   "steps": [
+    {
+     "action": "Enter Start=2026-12-31 and End=2026-10-01",
+     "expected": "Both dates are entered in their fields"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Save is blocked with 'The end date must be after the start date.' / 'يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء'"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144613,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that publishing an offer with empty validity dates is blocked",
+   "steps": [
+    {
+     "action": "Leave Validity Start and End Date blank",
+     "expected": "Both date fields remain empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Publish is blocked; validation indicates both validity dates are required"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144614,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that assigning a valid Membership Tier to an offer saves and the correct badge renders",
+   "steps": [
+    {
+     "action": "Select 'Elite' in the Membership Tier field",
+     "expected": "Selection saves"
+    },
+    {
+     "action": "Save/publish",
+     "expected": "Offer publishes"
+    },
+    {
+     "action": "Load the public card",
+     "expected": "Card shows the 'Elite' tier badge"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144615,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that publishing an offer with no Membership Tier selected is blocked",
+   "steps": [
+    {
+     "action": "Leave Membership Tier unselected",
+     "expected": "Tier field remains unselected"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Publish is blocked; validation indicates Membership Tier is required"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144616,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that a valid PDF Contract Document uploads and opens correctly from both the card and the modal",
+   "steps": [
+    {
+     "action": "Upload a valid PDF (2MB) as the Contract Document",
+     "expected": "Upload succeeds"
+    },
+    {
+     "action": "Save/publish",
+     "expected": "Offer publishes"
+    },
+    {
+     "action": "Click 'Contract' on the public card, then 'Open contract' in the modal",
+     "expected": "Both actions open the same PDF in a new browser tab"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144617,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a valid contract URL saves and opens correctly instead of an uploaded PDF",
+   "steps": [
+    {
+     "action": "Enter a valid contract URL (e.g. https://qcdev.ihorizons.com/documents/QCTEST-contract.pdf)",
+     "expected": "URL field accepts a valid link"
+    },
+    {
+     "action": "Save/publish",
+     "expected": "Offer publishes"
+    },
+    {
+     "action": "Click 'Contract' on the public card",
+     "expected": "Clicking 'Contract' opens the linked document in a new tab"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144618,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that uploading a non-PDF file as the Contract Document is rejected",
+   "steps": [
+    {
+     "action": "Attempt to upload a .docx file as the Contract Document",
+     "expected": "Upload attempt is made with the .docx file"
+    },
+    {
+     "action": "Save",
+     "expected": "Upload/save is blocked with 'Unsupported file type. Only PDF is accepted.' / 'نوع الملف غير مدعوم. يُقبل ملف PDF فقط'"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  },
+  {
+   "tc_id": 144627,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Edge"
+   ],
+   "title": "Verify that attempting to deactivate a Category that still has Published offers assigned is blocked with a reassignment warning",
+   "steps": [
+    {
+     "action": "Open the Partner Category lookup for 'Medical Centers' (3 published offers assigned)",
+     "expected": "Lookup opens showing Active=true and the 3 assigned published offers"
+    },
+    {
+     "action": "Set Active Status = false and attempt to save",
+     "expected": "A warning is shown that offers must be reassigned to another category before deactivation; save is blocked and the category remains Active"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01"
+  }
+ ]
+}

@@ -68,7 +68,7 @@ every other Object Authoring surface):
     textbox  "PDF Attachment"
     combobox "Status"                        (the entry's own "Active
                                                Status" business field — NOT
-                                               the workflow Draft/Approved
+                                               the workflow Draft/Published
                                                state, which this surface
                                                drives via Save-as-Draft/
                                                Submit-for-Review instead.
@@ -215,7 +215,7 @@ class AnnualReportAdminPage(BasePage):
 
     def submit_for_review(self) -> "AnnualReportAdminPage":
         """This object's own confirmed-live wording — "Submit for Review",
-        not ObjectAuthoringPage's default "Submit for Publishing" (see
+        not ObjectAuthoringPage's default "Submit for Review" (see
         module docstring)."""
         self.click(SUBMIT_FOR_REVIEW_BUTTON)
         self.authoring._wait_for_settle()

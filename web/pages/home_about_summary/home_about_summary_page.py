@@ -314,3 +314,35 @@ class HomeAboutSummaryPage(BasePage):
             self.page.wait_for_timeout(interval_ms)
             elapsed += interval_ms
         return False
+
+    # ---- 2026-10-07 (Phase 3): Figma typography + overflow reads -------------
+    def typography(self, selector: str) -> dict:
+        """fontFamily/size/weight/lineHeight/color of the first match."""
+        return self.page.locator(f"{self.SECTION} {selector}").first.evaluate(
+            "el => { const s = getComputedStyle(el); return {family: s.fontFamily, size: s.fontSize, "
+            "weight: s.fontWeight, lineHeight: s.lineHeight, color: s.color}; }")
+
+    def overflowing_elements(self) -> list:
+        """Text elements inside the section whose content is clipped or spills
+        horizontally (scrollWidth > clientWidth + 2 px, Rule 1 layout tolerance)."""
+        return self.page.locator(self.SECTION).evaluate(
+            "s => [...s.querySelectorAll('.qc-about-tag,.qc-about-heading,.qc-about-badge-num,.qc-about-badge-label,"
+            ".qc-about-readmore,.qc-about-counter-value,.qc-about-counter-label')]"
+            ".filter(e => e.scrollWidth > e.clientWidth + 2).map(e => e.className + ': ' + e.innerText.slice(0,40))")
+
+    def section_box_vs_viewport(self) -> dict:
+        return self.page.evaluate(
+            "() => ({doc: document.documentElement.scrollWidth, vw: window.innerWidth})")
+
+    def badge_overlaps_collage(self) -> dict:
+        """HEALED 2026-10-07: the PBI asks for the badge "overlaid" on the
+        image composition, i.e. the two boxes intersect. The old containment
+        check failed live because the badge deliberately sticks out past the
+        collage edge (as in Figma). Returns both boxes and the overlap area."""
+        b = self.page.locator(self.BADGE).bounding_box()
+        c = self.page.locator(self.COLLAGE).bounding_box()
+        if not (b and c):
+            return {"badge": b, "collage": c, "overlap": 0}
+        w = min(b["x"] + b["width"], c["x"] + c["width"]) - max(b["x"], c["x"])
+        h = min(b["y"] + b["height"], c["y"] + c["height"]) - max(b["y"], c["y"])
+        return {"badge": b, "collage": c, "overlap": max(0, w) * max(0, h)}

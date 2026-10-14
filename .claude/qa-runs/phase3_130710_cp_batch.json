@@ -1,0 +1,1949 @@
+{
+ "pbi": 130710,
+ "plan_id": 137724,
+ "suite_id": 140369,
+ "module": "cms/tests/al_moltaqa_magazine",
+ "cases": [
+  {
+   "tc_id": 144101,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author can view and update an assigned magazine issue and save it as Draft",
+   "steps": [
+    {
+     "action": "Log in to Object Authoring at qcdev.ihorizons.com/object-authoring as Site Content Author (Test2@xyz.com / Test@123)",
+     "expected": "Login succeeds; Author lands on the Object Authoring home"
+    },
+    {
+     "action": "Open the Al-Moltaqa Magazine management area and select an existing assigned issue, e.g. \"QCTEST-MAG-101\"",
+     "expected": "Issue \"QCTEST-MAG-101\" opens in edit mode with all fields populated"
+    },
+    {
+     "action": "Update the Issue Description EN field to \"Updated by Author QCTEST-MAG-101\"",
+     "expected": "Field value is updated in the form"
+    },
+    {
+     "action": "Click Save as Draft",
+     "expected": "Issue saves with status Draft; Liferay generic success toast is displayed; Publish action is not available to this role"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144102,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Author cannot publish a magazine issue",
+   "steps": [
+    {
+     "action": "Log in to Object Authoring as Site Content Author (Test2@xyz.com / Test@123)",
+     "expected": "Login succeeds as Site Content Author"
+    },
+    {
+     "action": "Open magazine issue \"QCTEST-MAG-101\" in Draft status",
+     "expected": "Issue opens in edit mode"
+    },
+    {
+     "action": "Attempt to locate and trigger the Publish action for the issue",
+     "expected": "Publish control is either not rendered or the action is rejected with a permission error; issue status remains Draft; the issue does not appear on the public Al-Moltaqa Magazine page"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144104,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT",
+    "Workflow"
+   ],
+   "title": "Verify that a Site Content Editor can create a new magazine issue in Object Authoring",
+   "steps": [
+    {
+     "action": "Log in to Object Authoring as Site Content Editor (test1@xyz.com / Test@1234)",
+     "expected": "Login succeeds; Editor lands on Object Authoring home"
+    },
+    {
+     "action": "Open Al-Moltaqa Magazine management in Liferay CMS (Object Authoring) and click Create New",
+     "expected": "Create New form opens with all Magazine Issue fields empty and mandatory markers visible"
+    },
+    {
+     "action": "Enter Issue Number \"QCTEST-MAG-201\", Title EN \"Autumn Trade Digest\", Title AR \"ملخص التجارة الخريفي\", Description EN/AR, Issue Date 01/09/2026, Page Count 32, Article Count 8, Cover Image cover_201.jpg, PDF file 201.pdf",
+     "expected": "All entered values populate the corresponding fields without truncation"
+    },
+    {
+     "action": "Click Save as Draft",
+     "expected": "Issue \"QCTEST-MAG-201\" is created with status Draft; Liferay generic success toast is displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144105,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Workflow"
+   ],
+   "title": "Verify that a Site Content Editor can edit an existing magazine issue",
+   "steps": [
+    {
+     "action": "Log in to Object Authoring as Site Content Editor (test1@xyz.com / Test@1234)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open Al-Moltaqa Magazine management and select issue \"QCTEST-MAG-201\"",
+     "expected": "Issue \"QCTEST-MAG-201\" opens in edit mode with current values shown"
+    },
+    {
+     "action": "Change Page Count from 32 to 36",
+     "expected": "Page Count field shows 36"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Issue saves with Page Count = 36; Liferay generic success toast is displayed; record persists on reopening the issue"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144106,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Workflow"
+   ],
+   "title": "Verify that a magazine issue saved as Draft does not appear on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open issue \"QCTEST-MAG-201\" (currently Draft)",
+     "expected": "Issue opens in edit mode"
+    },
+    {
+     "action": "Click Save as Draft without publishing",
+     "expected": "Issue status remains Draft; Liferay generic success toast is displayed"
+    },
+    {
+     "action": "In a fresh logged-out browser context, load the Al-Moltaqa Magazine public page",
+     "expected": "Issue \"QCTEST-MAG-201\" is absent from both the Latest Issue card and the Archive grid on the public page"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144107,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Workflow"
+   ],
+   "title": "Verify that Preview shows draft content without affecting the live public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open Published issue \"QCTEST-MAG-201\" and change Title EN to \"Autumn Trade Digest (Preview Edit)\" without saving/publishing",
+     "expected": "Unsaved title change is present in the edit form"
+    },
+    {
+     "action": "Click Preview",
+     "expected": "Preview opens showing the title as \"Autumn Trade Digest (Preview Edit)\""
+    },
+    {
+     "action": "In a separate fresh logged-out browser context, load the live public Al-Moltaqa Magazine page",
+     "expected": "The live public page still shows the previously published title (unchanged), confirming Preview reads draft state and does not affect delivery"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144108,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT",
+    "Web",
+    "Workflow"
+   ],
+   "title": "Verify that publishing a magazine issue makes it visible as the Latest Issue on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open Draft issue \"QCTEST-MAG-201\" dated 05/09/2026 (later than the current Latest Issue)",
+     "expected": "Issue form opens for \"QCTEST-MAG-201\""
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Issue status changes to Published; Liferay generic success toast is displayed"
+    },
+    {
+     "action": "In a fresh logged-out browser context, poll the public Al-Moltaqa Magazine page (5s timeout, 0.5s interval per the propagation budget) for the Latest Issue card",
+     "expected": "Within the polling budget, the Latest Issue card shows \"QCTEST-MAG-201\" with its badge, title, description, meta and both action buttons"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144109,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "Web",
+    "Workflow"
+   ],
+   "title": "Verify that unpublishing a magazine issue removes it from the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open Published issue \"QCTEST-MAG-201\"",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Click Unpublish",
+     "expected": "Issue status changes to Unpublished; Liferay generic success toast is displayed"
+    },
+    {
+     "action": "In a fresh logged-out browser context, poll the public Al-Moltaqa Magazine page (5s timeout, 0.5s interval) for the issue's continued presence",
+     "expected": "Within the polling budget, \"QCTEST-MAG-201\" no longer appears in the Latest Issue card or the Archive grid"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144110,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Workflow"
+   ],
+   "title": "Verify that a Site Content Editor can delete a magazine issue",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open Al-Moltaqa Magazine management and locate disposable issue \"QCTEST-MAG-201\" by its exact ID (never by row position)",
+     "expected": "Target issue is located and its identity confirmed via ID/title match, not list position"
+    },
+    {
+     "action": "Confirm the entry title/ID matches the QCTEST- disposable pattern before deleting",
+     "expected": "Confirmation shows the disposable QCTEST- pattern"
+    },
+    {
+     "action": "Click Delete and confirm",
+     "expected": "Issue is removed; Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Re-open the Object Authoring listing and search for \"QCTEST-MAG-201\"",
+     "expected": "Listing search returns zero matches for \"QCTEST-MAG-201\""
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144111,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that discarding changes while creating a new magazine issue does not save the record",
+   "steps": [
+    {
+     "action": "As Site Content Editor, click Create New in Al-Moltaqa Magazine management",
+     "expected": "Create New form opens empty"
+    },
+    {
+     "action": "Enter Issue Number \"QCTEST-MAG-202\" and a Title EN value",
+     "expected": "Values are entered in the form"
+    },
+    {
+     "action": "Click Discard/Cancel",
+     "expected": "Form closes without a save confirmation toast"
+    },
+    {
+     "action": "Search the Object Authoring listing for \"QCTEST-MAG-202\"",
+     "expected": "No record \"QCTEST-MAG-202\" exists in the listing"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144115,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a published magazine issue persists after a page reload",
+   "steps": [
+    {
+     "action": "Publish issue \"QCTEST-MAG-204\"",
+     "expected": "Issue is Published with the Liferay generic success toast"
+    },
+    {
+     "action": "Navigate to the public Al-Moltaqa Magazine page and confirm the issue is visible",
+     "expected": "Issue \"QCTEST-MAG-204\" is visible in the Latest Issue card or Archive grid"
+    },
+    {
+     "action": "Reload the browser page",
+     "expected": "After reload, the same issue and values are still displayed identically"
+    },
+    {
+     "action": "Re-open Object Authoring and confirm the record's saved values",
+     "expected": "Object Authoring record shows the same field values as originally saved"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144116,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that publishing a newer issue re-designates it as Latest Issue and moves the previous Latest Issue into the Archive",
+   "steps": [
+    {
+     "action": "Confirm issue A (dated 01/04/2026) is currently the Latest Issue on the public page",
+     "expected": "Issue A is confirmed as the current Latest Issue"
+    },
+    {
+     "action": "As Site Content Editor, publish issue C dated 01/07/2026",
+     "expected": "Issue C is Published with the Liferay generic success toast"
+    },
+    {
+     "action": "Poll the public Al-Moltaqa Magazine page (5s timeout, 0.5s interval) and observe the Latest Issue card and Archive grid",
+     "expected": "Latest Issue card now shows issue C; issue A now appears as the first (newest) card in the Archive grid"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144117,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "Web"
+   ],
+   "title": "Verify that a draft magazine issue does not appear anywhere on the public Al-Moltaqa Magazine page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, save issue \"QCTEST-MAG-205\" as Draft (do not publish)",
+     "expected": "Issue is saved with status Draft"
+    },
+    {
+     "action": "In a fresh logged-out browser context, load the public Al-Moltaqa Magazine page",
+     "expected": "Public page loads normally with only Published issues"
+    },
+    {
+     "action": "Search the page's Latest Issue card and Archive grid for \"QCTEST-MAG-205\"",
+     "expected": "\"QCTEST-MAG-205\" is not present in the Latest Issue card or the Archive grid"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144118,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that the Al-Moltaqa Magazine page itself is not publicly reachable when unpublished",
+   "steps": [
+    {
+     "action": "As Site Content Editor, set the Al-Moltaqa Magazine page's Active Status to Unpublished",
+     "expected": "Page status changes to Unpublished; Liferay generic success toast is displayed"
+    },
+    {
+     "action": "In a fresh logged-out browser context, navigate directly to the Al-Moltaqa Magazine page URL",
+     "expected": "The fresh logged-out context receives a 404/410 or is redirected away — the page's content is not rendered"
+    },
+    {
+     "action": "Restore the page's Active Status to Published (teardown)",
+     "expected": "Page status is restored to Published"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144119,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a valid Page Title EN is saved and displayed on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open the Al-Moltaqa Magazine page settings",
+     "expected": "Page settings form opens with the current title shown"
+    },
+    {
+     "action": "Enter Page Title EN = \"Al-Moltaqa Magazine\"",
+     "expected": "Value \"Al-Moltaqa Magazine\" is entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save succeeds with the Liferay generic success toast"
+    },
+    {
+     "action": "Load the public Al-Moltaqa Magazine page (EN)",
+     "expected": "Public hero title displays \"Al-Moltaqa Magazine\""
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144120,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Title EN rejects an empty value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open the Al-Moltaqa Magazine page settings",
+     "expected": "Page settings form opens with the current title populated"
+    },
+    {
+     "action": "Clear the Page Title EN field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked; a required-field validation error is displayed; the previous title value remains stored"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144121,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Title EN rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open the Al-Moltaqa Magazine page settings",
+     "expected": "Page settings form opens"
+    },
+    {
+     "action": "Enter \"   \" (three spaces) into Page Title EN",
+     "expected": "Field shows the whitespace-only value"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked with a required-field validation error; the previous title value remains stored"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144122,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a valid Issue Number is saved and displayed as the badge on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open issue \"QCTEST-MAG-206\"",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter Issue Number = \"Issue #69\"",
+     "expected": "Value \"Issue #69\" is entered"
+    },
+    {
+     "action": "Publish the issue",
+     "expected": "Issue publishes with the Liferay generic success toast"
+    },
+    {
+     "action": "Load the public Al-Moltaqa Magazine page",
+     "expected": "The badge \"Issue #69\" is displayed on the issue's card"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144123,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Issue Number rejects an empty value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Leave Issue Number empty and fill all other mandatory fields",
+     "expected": "Only Issue Number is left blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a required-field validation error; issue remains unpublished"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144124,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Issue Number rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter \"   \" into Issue Number and fill all other mandatory fields",
+     "expected": "Issue Number shows whitespace only"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a required-field validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144125,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a valid Issue Title EN is saved and displayed on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open issue \"QCTEST-MAG-207\"",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter Issue Title EN = \"Economic Magazine\"",
+     "expected": "Value \"Economic Magazine\" is entered"
+    },
+    {
+     "action": "Publish the issue",
+     "expected": "Issue publishes with the Liferay generic success toast"
+    },
+    {
+     "action": "Load the public page and locate the issue's card",
+     "expected": "Card title displays exactly \"Economic Magazine\""
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144126,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Issue Title EN rejects an empty value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Leave Issue Title EN empty and fill all other mandatory fields",
+     "expected": "Only Issue Title EN is left blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a required bilingual-content validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144127,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Issue Title EN rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter \"   \" into Issue Title EN and fill all other mandatory fields",
+     "expected": "Issue Title EN shows whitespace only"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144128,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Issue Title EN accepts exactly 200 characters and rejects 201 characters",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a draft issue form and enter a 200-character string into Issue Title EN",
+     "expected": "Field accepts the 200-character input without truncation"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save succeeds with the Liferay generic success toast; the full 200-character value is stored"
+    },
+    {
+     "action": "Edit the same field to a 201-character string",
+     "expected": "Field shows the 201-character input"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked with a max-length validation error; the value is not persisted beyond 200 characters"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144129,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a valid Issue Description EN is saved and displayed on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open issue \"QCTEST-MAG-207\"",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter Issue Description EN = \"Al-Moltaqa Magazine Issue 68 covers Qatar's Q1 2026 economic outlook, trade statistics, and member spotlights.\"",
+     "expected": "Description value is entered"
+    },
+    {
+     "action": "Publish the issue",
+     "expected": "Issue publishes with the Liferay generic success toast"
+    },
+    {
+     "action": "Load the public page and view the issue's card",
+     "expected": "Card displays the description text exactly as entered"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144130,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Issue Description EN rejects an empty value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Leave Issue Description EN empty and fill all other mandatory fields",
+     "expected": "Only Issue Description EN is left blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a required bilingual-content validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144131,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Issue Description EN rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter \"   \" into Issue Description EN and fill all other mandatory fields",
+     "expected": "Description shows whitespace only"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144132,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Issue Description EN accepts exactly 1000 characters and rejects 1001 characters",
+   "steps": [
+    {
+     "action": "As Site Content Editor, enter a 1000-character string into Issue Description EN",
+     "expected": "Field accepts the 1000-character input without truncation"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save succeeds; the full 1000-character value is stored"
+    },
+    {
+     "action": "Edit the field to a 1001-character string",
+     "expected": "Field shows the 1001-character input"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked with a max-length validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144133,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a valid JPG Cover Image is saved and displayed on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open issue \"QCTEST-MAG-208\"",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Upload cover_208.jpg as the Cover Image",
+     "expected": "Upload completes; thumbnail preview shows cover_208.jpg"
+    },
+    {
+     "action": "Publish the issue",
+     "expected": "Issue publishes with the Liferay generic success toast"
+    },
+    {
+     "action": "Load the public page and inspect the issue's card image",
+     "expected": "Card renders cover_208.jpg as the cover image with a resolvable src"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144134,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a magazine issue cannot be published without a Cover Image",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Leave Cover Image empty and fill all other mandatory fields",
+     "expected": "Only Cover Image is left blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a required-field validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144135,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Cover Image rejects a non-image file format",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Attempt to upload notes.txt as the Cover Image",
+     "expected": "Upload is attempted with an unsupported file type"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Upload is rejected with a format validation error (JPG/PNG/JPEG only); no file is attached"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144136,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a valid Issue Date is saved and reflected in the issue's meta on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open issue \"QCTEST-MAG-209\"",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter Issue Date = 01/05/2026",
+     "expected": "Date is entered and accepted by the date picker"
+    },
+    {
+     "action": "Publish the issue",
+     "expected": "Issue publishes with the Liferay generic success toast"
+    },
+    {
+     "action": "Load the public page and read the issue's meta row",
+     "expected": "Meta row displays \"May 2026\""
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144137,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a magazine issue cannot be published without an Issue Date",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Leave Issue Date empty and fill all other mandatory fields",
+     "expected": "Only Issue Date is left blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a required-field validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144138,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Issue Date rejects an invalid date format",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Type \"32/13/2026\" directly into the Issue Date field",
+     "expected": "Invalid date string is entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked with an invalid-date validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144139,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a valid Page Count is saved and displayed on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open issue \"QCTEST-MAG-210\"",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter Page Count = 48",
+     "expected": "Value 48 is entered"
+    },
+    {
+     "action": "Publish the issue",
+     "expected": "Issue publishes with the Liferay generic success toast"
+    },
+    {
+     "action": "Load the public page and read the meta row",
+     "expected": "Meta row shows \"48 pages\""
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144140,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Count rejects an empty value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Leave Page Count empty and fill all other mandatory fields",
+     "expected": "Only Page Count is left blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a required-field validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144141,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Count rejects a value of zero",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter Page Count = 0",
+     "expected": "Value 0 is entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked with a positive-integer validation error; value not persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144142,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Count rejects a negative value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter Page Count = -5",
+     "expected": "Value -5 is entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked with a positive-integer validation error; value not persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144143,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Count rejects a non-numeric value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter \"abc\" into Page Count",
+     "expected": "Value \"abc\" is entered (or rejected at keystroke level if the field is numeric-only)"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked with a number-format validation error; value not persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144144,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a valid Article Count is saved and displayed on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open issue \"QCTEST-MAG-210\"",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter Article Count = 12",
+     "expected": "Value 12 is entered"
+    },
+    {
+     "action": "Publish the issue",
+     "expected": "Issue publishes with the Liferay generic success toast"
+    },
+    {
+     "action": "Load the public page and read the meta row",
+     "expected": "Meta row shows \"12 Articles\""
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144145,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Article Count rejects an empty value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Leave Article Count empty and fill all other mandatory fields",
+     "expected": "Only Article Count is left blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a required-field validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144146,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Article Count rejects a value of zero",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter Article Count = 0",
+     "expected": "Value 0 is entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked with a positive-integer validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144147,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Article Count rejects a negative value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter Article Count = -3",
+     "expected": "Value -3 is entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked with a positive-integer validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144148,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Article Count rejects a non-numeric value",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Enter \"xyz\" into Article Count",
+     "expected": "Value \"xyz\" is entered (or rejected at keystroke level if numeric-only)"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save is blocked with a number-format validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144149,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a valid PDF attachment is saved and usable via Read Online and Download PDF on the public page",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open issue \"QCTEST-MAG-211\"",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Upload issue211.pdf as the PDF Attachment",
+     "expected": "Upload completes; file name issue211.pdf shown as attached"
+    },
+    {
+     "action": "Publish the issue",
+     "expected": "Issue publishes with the Liferay generic success toast"
+    },
+    {
+     "action": "On the public page, click Read Online then Download PDF for the issue",
+     "expected": "Read Online opens issue211.pdf in a new browser tab; Download PDF saves issue211.pdf to the downloads folder"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144150,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a magazine issue cannot be published without a PDF attachment",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new/draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Leave the PDF Attachment empty and fill all other mandatory fields",
+     "expected": "Only the PDF Attachment is left blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a validation error stating the PDF attachment is required; issue status remains Draft"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144151,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing is blocked when the PDF Attachment is an invalid (non-PDF) file",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a draft issue form with all other mandatory fields completed",
+     "expected": "Issue form opens with valid data in every other field"
+    },
+    {
+     "action": "Attempt to upload issue211.docx as the PDF Attachment",
+     "expected": "Upload is rejected or the field flags the file as an invalid format"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with a format validation error (PDF only); issue status remains Draft"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144152,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that Open in New Tab defaults to True and Read Online opens the PDF in a new browser tab",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open a new draft issue form",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Observe the Open in New Tab control without changing it",
+     "expected": "Open in New Tab shows True by default"
+    },
+    {
+     "action": "Publish the issue and click Read Online on the public page",
+     "expected": "Read Online opens the PDF in a new browser tab, leaving the magazine page open in the original tab"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144153,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that setting Open in New Tab to False persists and is honored by Read Online",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open issue \"QCTEST-MAG-212\"",
+     "expected": "Issue form opens"
+    },
+    {
+     "action": "Set Open in New Tab = False and Save",
+     "expected": "Value saves as False; Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the issue and click Read Online on the public page",
+     "expected": "Read Online opens the PDF in the same browser tab, not a new tab"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144199,
+   "priority": 2,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that replacing the Cover Image on a published magazine issue updates the public page without breaking display",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open Published issue \"QCTEST-MAG-208\"",
+     "expected": "Issue form opens for the Published issue"
+    },
+    {
+     "action": "Replace Cover Image with cover_208_v2.jpg and Save",
+     "expected": "New image saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Poll the public Al-Moltaqa Magazine page (5s timeout, 0.5s interval) and inspect the issue's card image",
+     "expected": "Within the polling budget, the card displays cover_208_v2.jpg with a resolvable src and no broken-image icon"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144200,
+   "priority": 2,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that replacing the PDF attachment on a published magazine issue propagates the new file to Read Online and Download PDF",
+   "steps": [
+    {
+     "action": "As Site Content Editor, open Published issue \"QCTEST-MAG-211\"",
+     "expected": "Issue form opens for the Published issue"
+    },
+    {
+     "action": "Replace the PDF Attachment with issue211_v2.pdf and Save",
+     "expected": "New file saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Poll the public Al-Moltaqa Magazine page (5s timeout, 0.5s interval), then click Read Online and Download PDF for the issue",
+     "expected": "Within the polling budget, Read Online opens issue211_v2.pdf (not the old file) and Download PDF saves issue211_v2.pdf"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144206,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "التحقق من أنه يتم حفظ عنوان الصفحة بالعربية بشكل صحيح وعرضه في الصفحة العامة",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، افتح إعدادات صفحة مجلة الملتقى",
+     "expected": "تفتح نموذج الإعدادات مع العنوان الحالي"
+    },
+    {
+     "action": "أدخل عنوان الصفحة بالعربية = \"مجلة الملتقى\"",
+     "expected": "تم إدخال القيمة \"مجلة الملتقى\""
+    },
+    {
+     "action": "اضغط حفظ",
+     "expected": "يتم الحفظ بنجاح مع ظهور رسالة النجاح القياسية من Liferay"
+    },
+    {
+     "action": "افتح صفحة مجلة الملتقى العامة (/ar)",
+     "expected": "يظهر عنوان البانر الرئيسي \"مجلة الملتقى\" باتجاه RTL"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144207,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يتم رفض حقل عنوان الصفحة بالعربية عند تركه فارغًا",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، افتح إعدادات صفحة مجلة الملتقى",
+     "expected": "تفتح نموذج الإعدادات مع العنوان الحالي معبأ"
+    },
+    {
+     "action": "امسح حقل عنوان الصفحة بالعربية",
+     "expected": "الحقل أصبح فارغًا"
+    },
+    {
+     "action": "اضغط حفظ",
+     "expected": "يتم رفض الحفظ مع ظهور رسالة تحقق من الحقل الإلزامي؛ تبقى القيمة السابقة محفوظة"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144208,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يتم رفض حقل عنوان الصفحة بالعربية عند إدخال مسافات فقط",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، افتح إعدادات صفحة مجلة الملتقى",
+     "expected": "تفتح نموذج الإعدادات"
+    },
+    {
+     "action": "أدخل \"   \" (ثلاث مسافات) في حقل عنوان الصفحة بالعربية",
+     "expected": "يظهر الحقل بالمسافات فقط"
+    },
+    {
+     "action": "اضغط حفظ",
+     "expected": "يتم رفض الحفظ مع ظهور رسالة تحقق من الحقل الإلزامي؛ تبقى القيمة السابقة محفوظة"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144209,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "التحقق من أنه يتم حفظ عنوان العدد بالعربية بشكل صحيح وعرضه في الصفحة العامة",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، افتح العدد \"QCTEST-MAG-207\"",
+     "expected": "تفتح نموذج العدد"
+    },
+    {
+     "action": "أدخل عنوان العدد بالعربية = \"المجلة الاقتصادية\"",
+     "expected": "تم إدخال القيمة \"المجلة الاقتصادية\""
+    },
+    {
+     "action": "انشر العدد",
+     "expected": "يتم النشر بنجاح مع ظهور رسالة النجاح القياسية"
+    },
+    {
+     "action": "افتح الصفحة العامة وابحث عن بطاقة العدد",
+     "expected": "يظهر عنوان البطاقة \"المجلة الاقتصادية\" بدقة"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144210,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يتم رفض حقل عنوان العدد بالعربية عند تركه فارغًا",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، افتح نموذج عدد جديد",
+     "expected": "تفتح نموذج العدد"
+    },
+    {
+     "action": "اترك عنوان العدد بالعربية فارغًا واملأ باقي الحقول الإلزامية",
+     "expected": "عنوان العدد بالعربية فقط فارغ"
+    },
+    {
+     "action": "اضغط نشر",
+     "expected": "يتم رفض النشر مع ظهور رسالة تحقق من المحتوى ثنائي اللغة الإلزامي"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144211,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يتم رفض حقل عنوان العدد بالعربية عند إدخال مسافات فقط",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، افتح نموذج عدد جديد",
+     "expected": "تفتح نموذج العدد"
+    },
+    {
+     "action": "أدخل \"   \" في حقل عنوان العدد بالعربية واملأ باقي الحقول الإلزامية",
+     "expected": "يظهر الحقل بمسافات فقط"
+    },
+    {
+     "action": "اضغط نشر",
+     "expected": "يتم رفض النشر مع ظهور رسالة تحقق"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144212,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يقبل عنوان العدد بالعربية 200 حرف بالضبط ويرفض 201 حرف",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، أدخل نصًا من 200 حرف في عنوان العدد بالعربية",
+     "expected": "يقبل الحقل الإدخال المكون من 200 حرف دون اقتصاص"
+    },
+    {
+     "action": "اضغط حفظ",
+     "expected": "يتم الحفظ بنجاح وتُحفظ القيمة كاملة"
+    },
+    {
+     "action": "عدّل الحقل ليصبح 201 حرفًا",
+     "expected": "يظهر الحقل بالإدخال المكون من 201 حرف"
+    },
+    {
+     "action": "اضغط حفظ",
+     "expected": "يتم رفض الحفظ مع رسالة تجاوز الحد الأقصى للطول"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144213,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "التحقق من أنه يتم حفظ وصف العدد بالعربية بشكل صحيح وعرضه في الصفحة العامة",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، افتح العدد \"QCTEST-MAG-207\"",
+     "expected": "تفتح نموذج العدد"
+    },
+    {
+     "action": "أدخل وصف العدد بالعربية",
+     "expected": "تم إدخال قيمة الوصف"
+    },
+    {
+     "action": "انشر العدد",
+     "expected": "يتم النشر بنجاح مع ظهور رسالة النجاح"
+    },
+    {
+     "action": "افتح الصفحة العامة وشاهد بطاقة العدد",
+     "expected": "تظهر البطاقة نص الوصف كما تم إدخاله بالضبط"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144214,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يتم رفض حقل وصف العدد بالعربية عند تركه فارغًا",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، افتح نموذج عدد جديد",
+     "expected": "تفتح نموذج العدد"
+    },
+    {
+     "action": "اترك وصف العدد بالعربية فارغًا واملأ باقي الحقول الإلزامية",
+     "expected": "وصف العدد بالعربية فقط فارغ"
+    },
+    {
+     "action": "اضغط نشر",
+     "expected": "يتم رفض النشر مع ظهور رسالة تحقق من المحتوى الإلزامي"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144215,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يتم رفض حقل وصف العدد بالعربية عند إدخال مسافات فقط",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، افتح نموذج عدد جديد",
+     "expected": "تفتح نموذج العدد"
+    },
+    {
+     "action": "أدخل \"   \" في حقل وصف العدد بالعربية واملأ باقي الحقول الإلزامية",
+     "expected": "يظهر الحقل بمسافات فقط"
+    },
+    {
+     "action": "اضغط نشر",
+     "expected": "يتم رفض النشر مع ظهور رسالة تحقق"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144216,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يقبل وصف العدد بالعربية 1000 حرف بالضبط ويرفض 1001 حرف",
+   "steps": [
+    {
+     "action": "بصفتك محرر محتوى الموقع، أدخل نصًا من 1000 حرف في وصف العدد بالعربية",
+     "expected": "يقبل الحقل الإدخال المكون من 1000 حرف دون اقتصاص"
+    },
+    {
+     "action": "اضغط حفظ",
+     "expected": "يتم الحفظ بنجاح وتُحفظ القيمة كاملة"
+    },
+    {
+     "action": "عدّل الحقل ليصبح 1001 حرفًا",
+     "expected": "يظهر الحقل بالإدخال المكون من 1001 حرف"
+    },
+    {
+     "action": "اضغط حفظ",
+     "expected": "يتم رفض الحفظ مع رسالة تجاوز الحد الأقصى للطول"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Al-Moltaqa Magazine' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Al-Moltaqa Magazine entry). The existing Page Object slug(s) (magazine-issue) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  }
+ ],
+ "out_of_scope": [
+  {
+   "tc_id": 144112,
+   "priority": 2,
+   "reason": "Manual"
+  }
+ ],
+ "blocked_note": "Disposition `skip` with reason prefix BLOCKED: — object not in Content-Admin-Guide.docx (brief has no BLOCKED disposition)."
+}

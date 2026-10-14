@@ -1,0 +1,1012 @@
+{
+ "pbi": 130714,
+ "plan_id": 137724,
+ "suite_id": 140373,
+ "module": "cms/tests/photo_albums/test_photo_albums_control_panel.py",
+ "object_name_source": "live Object Authoring sidebar (engineer brief 2026-10-01, 'Object-name source'); slugs pending live read",
+ "cases": [
+  {
+   "tc_id": 143110,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the admin Event Category creation form renders Name, Display Order, and Publish Status fields",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS as Site Content Editor.",
+     "expected": "Login succeeds and the Photo Albums management area is reachable."
+    },
+    {
+     "action": "Navigate to Photo Albums management, then Event Categories, then Create New.",
+     "expected": "The Event Category creation form displays Name EN, Name AR, Display Order, and Publish Status fields."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143111,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the admin Album creation form renders Title, Event Category, Cover Image, Published Date, and Photos fields",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS as Site Content Editor.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Navigate to Photo Albums management, then Albums, then Create New.",
+     "expected": "The Album creation form displays Title EN, Title AR, Event Category selector, Album Cover Image upload, Published Date, and a Photos panel."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143112,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the admin photo-add panel offers both selecting from Documents & Media and uploading from device",
+   "steps": [
+    {
+     "action": "Open an Album's Photos panel in Liferay CMS.",
+     "expected": "Photos panel is visible with existing photos, if any, listed."
+    },
+    {
+     "action": "Click Add Photo.",
+     "expected": "An option to select from Documents & Media and a separate option to upload a new file from device are both presented."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143115,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the CMS Album creation form renders correctly for bilingual field entry in Arabic",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS as Site Content Editor.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Open the Album creation form.",
+     "expected": "Album creation form is visible."
+    },
+    {
+     "action": "Switch the Title field's active locale to Arabic (ar_SA).",
+     "expected": "The Title AR input accepts and correctly renders right-to-left Arabic text without corrupting the parallel Title EN field."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor'), /ar/ admin locale"
+  },
+  {
+   "tc_id": 143116,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that each photo row in the admin Photos panel displays its current Publish Status accurately",
+   "steps": [
+    {
+     "action": "Open an album's Photos panel containing one Published photo and one Unpublished photo.",
+     "expected": "Photos panel lists both photos."
+    },
+    {
+     "action": "Observe each row's status control.",
+     "expected": "The Published photo's row shows a Published status control and the Unpublished photo's row shows an Unpublished status control, matching each photo's actual state."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Photos panel inside Photo Album (rows, per-photo status control) is read live first",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143123,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that an Administrator can access and trigger the Flickr integration manual import",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS with the Administrator account.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Navigate to the Flickr integration settings area.",
+     "expected": "Flickr integration settings page is reachable and its controls are enabled."
+    },
+    {
+     "action": "Trigger a manual import.",
+     "expected": "The manual import runs immediately using the current configuration and an import log entry is created."
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: a Flickr import/config change writes real albums/videos into shared qcdev and cannot be scoped to a QCTEST record",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143124,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor can perform the full album lifecycle",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS with the Site Content Editor role (test1@xyz.com).",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Create, edit, preview, publish, unpublish, and delete a test album named \"QCTEST-Auth Album\".",
+     "expected": "Every one of create, edit, preview, publish, unpublish, and delete completes successfully for the Site Content Editor with no permission error at any step."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143125,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Editor is denied access to Flickr integration settings",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS with the Site Content Editor role.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Attempt to navigate directly to the Flickr integration settings URL.",
+     "expected": "Access is refused with \"Access Denied. You do not have permission to perform this action.\" / \"تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.\" and the settings page content is not rendered."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Flickr integration settings surface is not an Object Authoring object and is not located yet",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143126,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author can create and edit an album and submit it for review",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS with the Site Content Author role (Test2@xyz.com).",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Create a test album named \"QCTEST-Author Album\" with all mandatory fields populated.",
+     "expected": "The album saves as Draft with no permission error."
+    },
+    {
+     "action": "Submit it for review.",
+     "expected": "The album's status moves to Pending Review."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 143127,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author cannot publish an album directly",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS with the Site Content Author role.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Open a Draft album owned by this user.",
+     "expected": "Album opens in Draft status."
+    },
+    {
+     "action": "Attempt to invoke the Publish transition directly against the album, bypassing the review-submission UI path.",
+     "expected": "The Publish transition is refused with \"Access Denied. You do not have permission to perform this action.\" and the album's status remains unchanged."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 143143,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT",
+    "Workflow"
+   ],
+   "title": "Verify that a Site Content Editor can create an Event Category and Album, add photos, and publish so the album appears correctly on the public site",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS as Site Content Editor and create Event Category \"Community Outreach\" EN/AR, Display Order 4, Publish Status Published.",
+     "expected": "Category saves with an auto-generated Event Category ID and appears Published."
+    },
+    {
+     "action": "Create Album \"QCTEST-Community Day 2026\" EN/AR under \"Community Outreach\", set Published Date 2026-09-15, upload a JPG Album Cover Image, and enter both Title fields.",
+     "expected": "Album saves with an auto-generated Album ID, audit-logged Created date, and all entered field values retained."
+    },
+    {
+     "action": "Add one photo selected from Documents & Media and one photo uploaded from device, entering Photo Title EN/AR for each, setting Thumbnail Framing, and Display Order values 1 and 2.",
+     "expected": "Both photos save under the album with their respective metadata and order values, and the album's Parent Album reference for both is this album."
+    },
+    {
+     "action": "Save as Draft, then Preview, then Publish.",
+     "expected": "Draft state is reachable, Preview renders the entered content, and Publish succeeds with a success toast and an audit log entry."
+    },
+    {
+     "action": "Open the public Photo Albums listing and this album's Details page.",
+     "expected": "The album appears on the public listing under the \"Community Outreach\" chip with the correct cover image and photo count, and the Details page shows both photos with the Display-Order-1 photo as the full-width lead photo."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143144,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that unpublishing an album removes it from the public listing and details page",
+   "steps": [
+    {
+     "action": "Confirm \"QCTEST-Community Day 2026\" is visible on the public Photo Albums listing.",
+     "expected": "Album card is visible."
+    },
+    {
+     "action": "In Liferay CMS, unpublish the album.",
+     "expected": "Album status changes to Unpublished with a success toast and audit log entry."
+    },
+    {
+     "action": "Reload the public listing in a fresh logged-out browser context.",
+     "expected": "The album no longer appears anywhere on the public listing."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143145,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that deleting an album removes it from the public site and its Documents & Media references",
+   "steps": [
+    {
+     "action": "In Liferay CMS, delete \"QCTEST-Community Day 2026\".",
+     "expected": "Album is removed from the CMS Albums listing with an audit log entry."
+    },
+    {
+     "action": "Reload the public Photo Albums listing in a fresh logged-out browser context.",
+     "expected": "The album no longer appears on the public listing."
+    },
+    {
+     "action": "Attempt to open the deleted album's previously known Details URL.",
+     "expected": "The Details URL returns a standard not-found page rather than stale album content."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "the Documents & Media half is asserted as 'album no longer public'; D&M files are never deleted by this suite",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143147,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving the Page Title AR field empty is blocked with the bilingual-required message",
+   "steps": [
+    {
+     "action": "In Liferay CMS, open the Photo Albums page's Hero settings.",
+     "expected": "Hero settings form opens."
+    },
+    {
+     "action": "Enter \"Photo Albums\" in the Title EN field and leave Title AR empty.",
+     "expected": "EN field accepts the value; AR field remains empty."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with \"Arabic content is required.\" / \"المحتوى بالعربية مطلوب.\" and the page title is not updated."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143148,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Title EN field rejects input exceeding 100 characters",
+   "steps": [
+    {
+     "action": "In the Hero settings Title EN field, enter a string of 101 characters.",
+     "expected": "Field accepts keystrokes up to its input limit."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked (or the value is truncated to 100 characters, whichever the implementation enforces) and no value over 100 characters is persisted."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143149,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving the Hero Background Image empty blocks save",
+   "steps": [
+    {
+     "action": "In Hero settings, remove any existing Hero Background Image.",
+     "expected": "Image field shows no file selected."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked; a required-field validation message is shown and the previous background image, if any, remains in effect."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143150,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a Hero Background Image upload larger than 2 MB is rejected",
+   "steps": [
+    {
+     "action": "In Hero settings, upload a JPG file sized 3 MB as the Hero Background Image.",
+     "expected": "Upload is rejected with a file-size validation message and the field remains unset or retains the prior valid image."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143151,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving the Event Category Name AR field empty is blocked with the bilingual-required message",
+   "steps": [
+    {
+     "action": "Open the Create Event Category form.",
+     "expected": "Form opens."
+    },
+    {
+     "action": "Enter \"Institutional\" in Name EN and leave Name AR empty.",
+     "expected": "EN field accepts the value; AR field remains empty."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with \"Arabic content is required.\" / \"المحتوى بالعربية مطلوب.\" and the category is not created."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143152,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Event Category Name EN field rejects input exceeding 200 characters",
+   "steps": [
+    {
+     "action": "In the Event Category Name EN field, enter a string of 201 characters.",
+     "expected": "Field accepts keystrokes."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked and no value over 200 characters is persisted for the category name."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143153,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Event Category Display Order rejects a negative value",
+   "steps": [
+    {
+     "action": "In the Event Category form, enter -1 in the Display Order field.",
+     "expected": "Field accepts the keystrokes."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a validation message requiring a positive integer, and the category is not created with a negative order."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143157,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving the Album Title AR field empty is blocked with the bilingual-required message",
+   "steps": [
+    {
+     "action": "In the Album creation form, enter \"Trade Summit 2026\" in Title EN and leave Title AR empty.",
+     "expected": "EN field accepts the value; AR field remains empty."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with \"Arabic content is required.\" / \"المحتوى بالعربية مطلوب.\" and the album is not created."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143158,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Album Title EN field rejects input exceeding 200 characters",
+   "steps": [
+    {
+     "action": "In the Album Title EN field, enter a string of 201 characters.",
+     "expected": "Field accepts keystrokes."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked and no value over 200 characters is persisted for the album title."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143159,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that saving an album with no Event Category selected is blocked",
+   "steps": [
+    {
+     "action": "In the Album creation form, complete every field except the Event Category selector.",
+     "expected": "All other fields hold valid values."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation message and the album is not created."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143160,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that an album with no Cover Image is blocked from publishing",
+   "steps": [
+    {
+     "action": "Create an album with all mandatory fields completed except Album Cover Image.",
+     "expected": "Album saves as Draft with no cover image."
+    },
+    {
+     "action": "Attempt to publish.",
+     "expected": "Publishing is blocked with \"An album cover image is required.\" / \"صورة غلاف الألبوم مطلوبة.\" and the album remains unpublished."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143161,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that uploading an unsupported file format as the Album Cover Image is rejected",
+   "steps": [
+    {
+     "action": "In the Album creation form, upload a .gif file as the Album Cover Image.",
+     "expected": "Upload is rejected with \"Unsupported file type. Accepted formats: JPG, JPEG, PNG.\" / \"نوع الملف غير مدعوم. الصيغ المقبولة: JPG، JPEG، PNG.\" and no cover image is set."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143162,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving Album Published Date empty blocks save",
+   "steps": [
+    {
+     "action": "In the Album creation form, leave the Published Date field empty.",
+     "expected": "Other fields hold valid values."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation message and the album is not created."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143163,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that an album with zero published photos is blocked from publishing",
+   "steps": [
+    {
+     "action": "Create an album with all mandatory fields completed and one photo added but left Unpublished.",
+     "expected": "Album saves as Draft with zero published photos."
+    },
+    {
+     "action": "Attempt to publish the album.",
+     "expected": "Publishing is blocked with \"An album must contain at least one published photo.\" / \"يجب أن يحتوي الألبوم على صورة منشورة واحدة على الأقل.\" and the album remains unpublished."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143164,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving the Photo File empty blocks saving a photo",
+   "steps": [
+    {
+     "action": "In an album's Add Photo panel, leave the Photo File unset.",
+     "expected": "No file is selected."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation message and no photo entry is created."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143165,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that uploading an unsupported file format as a Photo File is rejected",
+   "steps": [
+    {
+     "action": "In an album's Add Photo panel, upload a .bmp file as the Photo File.",
+     "expected": "Upload is rejected with \"Unsupported file type. Accepted formats: JPG, JPEG, PNG.\" / \"نوع الملف غير مدعوم. الصيغ المقبولة: JPG، JPEG، PNG.\" and no photo entry is created."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143166,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a photo can be saved with the Photo Title EN/AR fields left blank",
+   "steps": [
+    {
+     "action": "In the Add Photo panel, upload a valid JPG Photo File and leave both Photo Title EN and Photo Title AR empty.",
+     "expected": "File is accepted."
+    },
+    {
+     "action": "Save.",
+     "expected": "Photo saves successfully with both title fields empty, since Photo Title is not a required field."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143167,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Photo Title EN field rejects input exceeding 200 characters",
+   "steps": [
+    {
+     "action": "In the Photo Title EN field, enter a string of 201 characters.",
+     "expected": "Field accepts keystrokes."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked and no value over 200 characters is persisted for the photo title."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143168,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that saving a photo with Thumbnail Framing left unset is blocked",
+   "steps": [
+    {
+     "action": "In the Add Photo panel, upload a valid Photo File and leave the Thumbnail Framing configuration unset.",
+     "expected": "File is accepted."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation message since Thumbnail Framing must be configured."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143169,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Photo Display Order rejects a negative value",
+   "steps": [
+    {
+     "action": "In the Add Photo panel, enter -2 in the Display Order field.",
+     "expected": "Field accepts keystrokes."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a validation message requiring a positive integer, and the photo is not saved with a negative order."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143170,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the photo with the lowest Display Order value renders as the full-width lead photo",
+   "steps": [
+    {
+     "action": "In a published album, set photo A's Display Order to 3, photo B's to 1, and photo C's to 2.",
+     "expected": "Order values save as entered."
+    },
+    {
+     "action": "Open the album's public Details page.",
+     "expected": "Photo B renders as the full-width lead photo, with photo C and then photo A following in the grid below, in that order."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Photos panel inside Photo Album (per-photo Display Order) is read live first",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143176,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the photo count automatically decreases when a published photo is unpublished",
+   "steps": [
+    {
+     "action": "Note an album's current photo count of 6 on its card and Details page.",
+     "expected": "Card badge and Details page both read 6."
+    },
+    {
+     "action": "In Liferay CMS, unpublish one photo in that album.",
+     "expected": "Photo status changes to Unpublished."
+    },
+    {
+     "action": "Reload the public listing card and the Details page.",
+     "expected": "Card badge now reads \"5 photos\" and Details page now reads \"5 images\", both updated automatically with no manual recalculation step."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Photos panel inside Photo Album (per-photo unpublish) is read live first",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143178,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that deleting an Event Category linked to published albums is blocked until those albums are reassigned",
+   "steps": [
+    {
+     "action": "Attempt to delete Event Category \"Institutional\" while it has one or more Published albums linked to it.",
+     "expected": "Deletion is blocked with a validation message indicating the category is in use, and \"Institutional\" remains in the CMS category list and in the public All Events dropdown."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  }
+ ],
+ "out_of_scope": [
+  {
+   "tc_id": 143146,
+   "priority": 1,
+   "reason": "Manual",
+   "title": "Verify that an Administrator's manual Flickr import lands assets in Documents & Media without making them public"
+  },
+  {
+   "tc_id": 143177,
+   "priority": 3,
+   "reason": "Manual",
+   "title": "Verify that Arabic metadata is never populated or overwritten by a Flickr import"
+  },
+  {
+   "tc_id": 143185,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that an album where every photo is unpublished is not publishable and does not appear on the listing"
+  },
+  {
+   "tc_id": 143186,
+   "priority": 4,
+   "reason": "Manual",
+   "title": "Verify that re-running a Flickr import for an already-imported asset applies the configured duplicate-handling rule without creating a duplicate"
+  }
+ ]
+}

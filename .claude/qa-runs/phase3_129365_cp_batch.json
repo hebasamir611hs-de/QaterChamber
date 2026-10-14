@@ -1,0 +1,35 @@
+{
+ "pbi": 129365,
+ "cases": [
+  {
+   "tc_id": 134429,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "GLOBAL",
+    "Web"
+   ],
+   "title": "Verify that the language switcher does not appear in the header when disabled in the CMS",
+   "steps": [
+    {
+     "action": "In CMS Control Panel, navigate to Header Configuration",
+     "expected": "Header Configuration form accepts the Disabled setting and saves it"
+    },
+    {
+     "action": "Set Language Switcher = Disabled and save",
+     "expected": "Setting persists as Disabled"
+    },
+    {
+     "action": "Load any published page on the public website",
+     "expected": "Header top-right cluster renders without the AR/EN language switcher; the Accessibility and Search icons remain unaffected"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: HeaderConfiguration field table has no language-switcher enable/disable field; the EN/AR buttons in Object Authoring's Preview panel are a staff preview control, not this setting (confirmed with user 2026-09-30) — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "_note": "Phase 3 2026-10-14. Outcomes decided by the PBI running rules, no test run.",
+ "NotApplicable_char_limit (rule 2 + char-limit decision 2026-10-03)": {
+  "129390": [136510, 136514, 136517, 136521, 136525, 136529, 136533, 136536, 136544, 136548, 136557, 136561, 136564, 136567, 136571, 136574],
+  "129395": [136192, 136196, 136204, 136208, 136212, 136274, 136283, 136290, 136295, 136301, 136308, 136314, 136317, 136327, 136331, 136335],
+  "129363": [134275, 134279, 134283, 134287, 134291, 134295]
+ },
+ "Passed_rule17_not_a_bug": {
+  "129395": {"136209": "invalid hyperlink in Intro Description: no link validation is not a bug",
+             "136303": "invalid hyperlink in Vision Section Content: no link validation is not a bug",
+             "136319": "duplicate Display Order is not a bug",
+             "136336": "duplicate Display Order (Objectives = Vision) is not a bug"},
+  "129366": {"130982": "invalid Quick Link URL accepted: no URL validation is not a bug"}
+ },
+ "Passed_earlier_run": {"129390": {"136551": "ran PASSED 2026-10-07 batch 1 (rule 7: keep Passed)"}},
+ "Not_run_low_importance (rule 2)": {"129363": {"134248": "P4: reorder-control presence in the CMS list, cosmetic"}},
+ "Nothing_left_on_CMS": {"129364": "all Control_Panel cases already Passed", "129365": "only CP case 134429 already Not Applicable"}
+}

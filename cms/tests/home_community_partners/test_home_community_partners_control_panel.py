@@ -175,13 +175,13 @@ def test_publishing_without_logo_is_blocked(page, browser):
             admin.set_display_order("998")
             admin.upload_partner_logo(LOGO_FIXTURE)
 
-        with allure.step("Attempt to publish (Submit for Publishing)"):
+        with allure.step("Attempt to publish (Submit for Review)"):
             admin.submit_for_publishing()
 
         with allure.step("Observe: no entry was created/published"):
             admin.open_entries_list()
             assert not admin.row_visible(TC_135830_PARTNER_NAME_AR), (
-                "Submit for Publishing unexpectedly created an entry while "
+                "Submit for Review unexpectedly created an entry while "
                 "Partner Name (EN) was omitted"
             )
 

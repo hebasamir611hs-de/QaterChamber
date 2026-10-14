@@ -1,0 +1,2322 @@
+{
+ "pbi": 131313,
+ "plan_id": 137724,
+ "suite_id": 140399,
+ "module": "cms/tests/export_reports",
+ "cases": [
+  {
+   "tc_id": 143856,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that an Administrator can perform the full report lifecycle (create, edit, preview, publish, replace, unpublish, delete)",
+   "steps": [
+    {
+     "action": "Log in as Administrator",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open Object Authoring for Export Report",
+     "expected": "Object Authoring opens"
+    },
+    {
+     "action": "Create, then publish, then unpublish, then delete a QCTEST- report record",
+     "expected": "Every action completes without a permission error at each step"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143857,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor can perform the full content lifecycle on a report record",
+   "steps": [
+    {
+     "action": "Log in as test1@xyz.com (Site Content Editor)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open Object Authoring for Export Report",
+     "expected": "Object Authoring opens"
+    },
+    {
+     "action": "Create, edit, preview, and publish a QCTEST- report record",
+     "expected": "Every action completes; report appears Published on the live page"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143858,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author can create and submit a report record for review",
+   "steps": [
+    {
+     "action": "Log in as Test2@xyz.com (Site Content Author)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open Object Authoring for Export Report",
+     "expected": "Object Authoring opens"
+    },
+    {
+     "action": "Create a QCTEST- report record and Save as Draft/submit for review",
+     "expected": "Record is created with status Draft/Pending Review; no error shown"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143859,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author is blocked from directly publishing a report record",
+   "steps": [
+    {
+     "action": "Log in as Test2@xyz.com (Site Content Author)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open the QCTEST- draft record",
+     "expected": "Record opens"
+    },
+    {
+     "action": "Attempt to trigger Publish directly",
+     "expected": "Action is blocked; message \"Access Denied. You do not have permission to perform this action.\" is shown; record remains in its prior non-Published status"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143861,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Public Visitor cannot access the Control_Panel Object Authoring area for Export Reports",
+   "steps": [
+    {
+     "action": "As an unauthenticated visitor, navigate directly to the Object Authoring Export Report management URL",
+     "expected": "Access is denied/redirected to login; the report management grid and its data are never rendered to the unauthenticated request"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143863,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that Quarter and Reporting Year derive the correct group badge, name and covering period",
+   "steps": [
+    {
+     "action": "Publish the report with Quarter=Q4, Reporting Year=2024",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the page",
+     "expected": "Page loads"
+    },
+    {
+     "action": "Inspect the group header for that report",
+     "expected": "Group shows badge \"Q4\", name \"Fourth quarter\", covering period \"October–December 2024\", all system-derived"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143865,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that File Type and File Size are derived automatically from the uploaded PDF, not manually entered",
+   "steps": [
+    {
+     "action": "In Object Authoring, upload PSER-Q4-2024.pdf (2.4MB) to Report File PDF",
+     "expected": "Upload accepted; no File Type/File Size input fields presented to the admin"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds"
+    },
+    {
+     "action": "Publish and inspect the card meta line",
+     "expected": "Card meta line shows \"PDF • 2.4 MB\" automatically, matching the uploaded file's real properties"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143866,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that report record changes are recorded in the audit log with created/modified by and timestamp",
+   "steps": [
+    {
+     "action": "Create a QCTEST- report as Administrator",
+     "expected": "Record created; \"Created By\"/\"Created Date\" recorded"
+    },
+    {
+     "action": "Edit the Report Title",
+     "expected": "Edit saved"
+    },
+    {
+     "action": "Open the record's audit/history info",
+     "expected": "\"Modified By\" and \"Modified Date\" reflect the editing user and current timestamp; the Liferay generic success toast appeared on both actions"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143867,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that saving a report as Draft does not publish it to the frontend",
+   "steps": [
+    {
+     "action": "Create a QCTEST- report with all mandatory fields",
+     "expected": "Fields accepted"
+    },
+    {
+     "action": "Click Save as Draft",
+     "expected": "Record saved with status Draft; success toast shown"
+    },
+    {
+     "action": "Open the public page in a fresh logged-out context",
+     "expected": "The report does not appear anywhere on the public page"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143869,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that Publish makes the report visible and correct on the live public page",
+   "steps": [
+    {
+     "action": "From a Draft QCTEST- report with all fields set, click Publish",
+     "expected": "Success toast confirms publish; status becomes Published"
+    },
+    {
+     "action": "Open the public page in a fresh logged-out context",
+     "expected": "Page loads"
+    },
+    {
+     "action": "Locate the report card",
+     "expected": "The card is present with the exact authored values (title, description, thumbnail, meta, label), asserted on the delivery surface"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143870,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that replacing a report's PDF makes the new file live and supersedes the old one",
+   "steps": [
+    {
+     "action": "On a Published QCTEST- report, replace Report File PDF with PSER-Q4-2024-v2.pdf (1.8MB)",
+     "expected": "Replace accepted"
+    },
+    {
+     "action": "Republish",
+     "expected": "Republish succeeds; meta line updates to \"PDF • 1.8 MB\""
+    },
+    {
+     "action": "On the public page, click View Details/Download",
+     "expected": "Viewing/downloading returns the new file's content, not the original"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143871,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "Web"
+   ],
+   "title": "Verify that Unpublish removes a report from the public page",
+   "steps": [
+    {
+     "action": "On a Published QCTEST- report, click Unpublish",
+     "expected": "Success toast shown; status becomes Unpublished"
+    },
+    {
+     "action": "Open the public page in a fresh logged-out context",
+     "expected": "The report no longer appears anywhere on the page or in search"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143872,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that republishing an Unpublished report restores its visibility on the public page",
+   "steps": [
+    {
+     "action": "On the Unpublished report from the prior case, click Publish again",
+     "expected": "Status returns to Published"
+    },
+    {
+     "action": "Open the public page in a fresh logged-out context",
+     "expected": "The report reappears in its correct quarter group with unchanged field values"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143873,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that deleting a report removes it from both the admin grid and the public page",
+   "steps": [
+    {
+     "action": "On a Published QCTEST- report, click Delete and confirm",
+     "expected": "Success toast confirms deletion"
+    },
+    {
+     "action": "Refresh the admin grid",
+     "expected": "Record no longer present in the grid"
+    },
+    {
+     "action": "Open the public page in a fresh logged-out context",
+     "expected": "Report is no longer present anywhere on the public page"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143880,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that an Export Report record's field values persist after save and reload",
+   "steps": [
+    {
+     "action": "Create a QCTEST- report with all mandatory fields populated",
+     "expected": "Fields entered"
+    },
+    {
+     "action": "Save as Draft",
+     "expected": "Save succeeds"
+    },
+    {
+     "action": "Reload the Object Authoring record",
+     "expected": "Every field (title, description, quarter, years, month, file, page count) reloads with the exact values entered, none reverted to default/blank"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143881,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero content persists after save and reload",
+   "steps": [
+    {
+     "action": "Edit hero Eyebrow/Title/Description/Illustration in Object Authoring",
+     "expected": "Fields entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds"
+    },
+    {
+     "action": "Reload the hero content record",
+     "expected": "Reload shows the exact saved values in both EN and AR"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143882,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that Quarterly Archive Section content persists after save and reload",
+   "steps": [
+    {
+     "action": "Edit Section Eyebrow/Heading/Description/Search Placeholder",
+     "expected": "Fields entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds"
+    },
+    {
+     "action": "Reload the section content record",
+     "expected": "Reload shows the exact saved values in both EN and AR"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143883,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that an Administrator can publish a report and a Visitor can find, view and download it end-to-end",
+   "steps": [
+    {
+     "action": "As Administrator, create and publish a report (Quarter=Q4, Reporting Year=2024, Publication Month=February, Publication Year=2025, title \"Private Sector Exports — Fourth Quarter 2024 Report\", PSER-Q4-2024.pdf)",
+     "expected": "Report Published"
+    },
+    {
+     "action": "As an unauthenticated visitor, open the page and search \"Fourth Quarter 2024\"",
+     "expected": "Matching card appears under \"October–December 2024\" with label \"Q4 · February 2025\""
+    },
+    {
+     "action": "Click View Details",
+     "expected": "PDF opens for online viewing"
+    },
+    {
+     "action": "Return and click Download",
+     "expected": "PDF downloads to the visitor's device"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143884,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Eyebrow Label saves with a valid value",
+   "steps": [
+    {
+     "action": "Enter Eyebrow Label EN \"Insights & Media\" and AR \"الرؤى والإعلام\"",
+     "expected": "Values accepted in both fields"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Values are saved and displayed on the hero"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143885,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Eyebrow Label is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the Eyebrow Label field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143886,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Eyebrow Label rejects input exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter a 61-character string into Eyebrow Label",
+     "expected": "61 characters entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown, or input is truncated to 60 characters; a value longer than 60 is not persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143887,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Eyebrow Label rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter \"   \" (spaces only) into Eyebrow Label",
+     "expected": "Spaces-only value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; value treated as empty, save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143888,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Title saves with a valid value",
+   "steps": [
+    {
+     "action": "Enter Page Title EN \"Private Sector Export Reports\" and AR equivalent",
+     "expected": "Values accepted"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Values saved and displayed as the page title"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143889,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Title is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the Page Title field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143890,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Title rejects input exceeding 250 characters",
+   "steps": [
+    {
+     "action": "Enter a 251-character string into Page Title",
+     "expected": "251 characters entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown or input truncated to 250; value >250 not persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143891,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Title rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces only into Page Title",
+     "expected": "Spaces-only value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; treated as empty, save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143892,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Description saves with valid HTML content",
+   "steps": [
+    {
+     "action": "Enter Page Description \"<p>Browse quarterly export performance reports for Qatar's private sector.</p>\"",
+     "expected": "Content accepted"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Content renders correctly (as formatted text) on the hero"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143893,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Description is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the Page Description field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143894,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Description rejects content exceeding 300 characters",
+   "steps": [
+    {
+     "action": "Enter a 301-character string into Page Description",
+     "expected": "301 characters entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown or input truncated to 300; value >300 not persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143895,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Description rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces only into Page Description",
+     "expected": "Spaces-only value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; treated as empty, save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143896,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that the Page Description sanitizes or rejects a script-injection payload",
+   "steps": [
+    {
+     "action": "Enter \"\" into Page Description",
+     "expected": "Payload entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save either blocks the invalid HTML or strips the script tag"
+    },
+    {
+     "action": "View the hero on the public page",
+     "expected": "No script executes on the public page; no raw "
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143897,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a valid Hero Illustration uploads and displays",
+   "steps": [
+    {
+     "action": "Upload hero-illustration.svg (850KB) as Hero Illustration",
+     "expected": "Upload accepted"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds"
+    },
+    {
+     "action": "View the hero on the public page",
+     "expected": "Illustration renders correctly on the hero"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143898,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing is blocked when Hero Illustration is missing",
+   "steps": [
+    {
+     "action": "Leave Hero Illustration empty",
+     "expected": "Field left empty"
+    },
+    {
+     "action": "Attempt to publish the page",
+     "expected": "Validation error shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143899,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a Hero Illustration exceeding 2MB is rejected on upload",
+   "steps": [
+    {
+     "action": "Select a 2.3MB PNG file",
+     "expected": "File selected"
+    },
+    {
+     "action": "Attempt to upload it as Hero Illustration",
+     "expected": "Upload rejected with a file-size error; oversized file not persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143900,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that an unsupported image format is rejected for Hero Illustration",
+   "steps": [
+    {
+     "action": "Select a .gif file",
+     "expected": "File selected"
+    },
+    {
+     "action": "Attempt to upload it as Hero Illustration",
+     "expected": "Upload rejected as an unsupported format; only JPG/PNG/SVG accepted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143901,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Eyebrow saves with a valid value",
+   "steps": [
+    {
+     "action": "Enter Section Eyebrow EN \"Quarterly archive\" and AR \"الأرشيف الفصلي\"",
+     "expected": "Values accepted"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Values saved and displayed in the archive section"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143902,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Eyebrow is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the Section Eyebrow field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143903,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Eyebrow rejects input exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter a 61-character string into Section Eyebrow",
+     "expected": "61 characters entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown or input truncated to 60"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143904,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Eyebrow rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces only into Section Eyebrow",
+     "expected": "Spaces-only value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; treated as empty, save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143905,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Heading saves with a valid value",
+   "steps": [
+    {
+     "action": "Enter Section Heading EN \"Find an export report\" and AR equivalent",
+     "expected": "Values accepted"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Values saved and displayed as the section heading"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143906,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Heading is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the Section Heading field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143907,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Heading rejects input exceeding 150 characters",
+   "steps": [
+    {
+     "action": "Enter a 151-character string into Section Heading",
+     "expected": "151 characters entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown or input truncated to 150"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143908,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Heading rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces only into Section Heading",
+     "expected": "Spaces-only value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; treated as empty, save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143909,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Description saves with a valid value",
+   "steps": [
+    {
+     "action": "Enter Section Description EN \"Search our archive of quarterly private sector export reports.\" and AR equivalent",
+     "expected": "Values accepted"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Values saved and displayed in the archive section"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143910,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Description is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the Section Description field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143911,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Description rejects content exceeding 300 characters",
+   "steps": [
+    {
+     "action": "Enter a 301-character string into Section Description",
+     "expected": "301 characters entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown or input truncated to 300"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143912,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Section Description rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces only into Section Description",
+     "expected": "Spaces-only value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; treated as empty, save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143913,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Search Placeholder saves with a valid value",
+   "steps": [
+    {
+     "action": "Enter Search Placeholder EN \"Search.\" and AR \"بحث.\"",
+     "expected": "Values accepted"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Values saved and displayed in the search box"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143914,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Search Placeholder is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the Search Placeholder field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143915,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Search Placeholder rejects input exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter a 61-character string into Search Placeholder",
+     "expected": "61 characters entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown or input truncated to 60"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143916,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Search Placeholder rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces only into Search Placeholder",
+     "expected": "Spaces-only value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; treated as empty, save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143917,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Report Title saves with a valid value",
+   "steps": [
+    {
+     "action": "Enter Report Title EN \"Private Sector Exports — Fourth Quarter 2024 Report\" and AR equivalent",
+     "expected": "Values accepted"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Values saved and displayed on the report card"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143918,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Report Title is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the Report Title field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Validation error shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143919,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Report Title rejects input exceeding 250 characters",
+   "steps": [
+    {
+     "action": "Enter a 251-character string into Report Title",
+     "expected": "251 characters entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown or input truncated to 250"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143920,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Report Title rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces only into Report Title",
+     "expected": "Spaces-only value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; treated as empty, save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143921,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Report Description saves with a valid value",
+   "steps": [
+    {
+     "action": "Enter Report Description EN \"Export performance summary for Qatar's private sector during Q4 2024.\" and AR equivalent",
+     "expected": "Values accepted"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Values saved and displayed on the report card"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143922,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Report Description is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the Report Description field",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143923,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Report Description rejects content exceeding 500 characters",
+   "steps": [
+    {
+     "action": "Enter a 501-character string into Report Description",
+     "expected": "501 characters entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown or input truncated to 500"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143924,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Report Description rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces only into Report Description",
+     "expected": "Spaces-only value entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; treated as empty, save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143925,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a valid Cover Thumbnail uploads and displays",
+   "steps": [
+    {
+     "action": "Upload report-cover-q4-2024.jpg as Cover Thumbnail",
+     "expected": "Upload accepted"
+    },
+    {
+     "action": "Save",
+     "expected": "Thumbnail saved and displayed on the report card"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143926,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing is blocked when Cover Thumbnail is missing",
+   "steps": [
+    {
+     "action": "Leave Cover Thumbnail empty",
+     "expected": "Field left empty"
+    },
+    {
+     "action": "Attempt to publish the report",
+     "expected": "Validation error shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143927,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that an unsupported image format is rejected for Cover Thumbnail",
+   "steps": [
+    {
+     "action": "Select a .bmp file",
+     "expected": "File selected"
+    },
+    {
+     "action": "Attempt to upload it as Cover Thumbnail",
+     "expected": "Upload rejected as unsupported; only JPG/JPEG/PNG accepted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143928,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Quarter dropdown saves with a valid selection",
+   "steps": [
+    {
+     "action": "Select Quarter = Q4",
+     "expected": "Q4 selected"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Value saved and used for group placement"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143929,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing is blocked when no Quarter is selected",
+   "steps": [
+    {
+     "action": "Leave Quarter unselected",
+     "expected": "Field left unselected"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Validation error shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143930,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Reporting Year saves with a valid 4-digit year",
+   "steps": [
+    {
+     "action": "Enter Reporting Year = 2024",
+     "expected": "2024 entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Value saved and used for the group's covering period"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143931,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Reporting Year is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear Reporting Year",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Validation error shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143932,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Reporting Year rejects a value with an invalid digit count",
+   "steps": [
+    {
+     "action": "Enter \"202\" into Reporting Year",
+     "expected": "\"202\" entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; value not accepted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143933,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Reporting Year rejects a non-numeric value",
+   "steps": [
+    {
+     "action": "Enter \"abcd\" into Reporting Year",
+     "expected": "\"abcd\" entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; value not accepted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143934,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Publication Month saves with a valid selection",
+   "steps": [
+    {
+     "action": "Select Publication Month = February",
+     "expected": "February selected"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Value saved and used for the card label"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143935,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing is blocked when no Publication Month is selected",
+   "steps": [
+    {
+     "action": "Leave Publication Month unselected",
+     "expected": "Field left unselected"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Validation error shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143936,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Publication Year saves with a valid 4-digit year",
+   "steps": [
+    {
+     "action": "Enter Publication Year = 2025",
+     "expected": "2025 entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Value saved and used for the card label"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143937,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Publication Year is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear Publication Year",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Validation error shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143938,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Publication Year rejects a value with an invalid digit count",
+   "steps": [
+    {
+     "action": "Enter \"20255\" into Publication Year",
+     "expected": "\"20255\" entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; value not accepted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143939,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Publication Year rejects a non-numeric value",
+   "steps": [
+    {
+     "action": "Enter \"twenty25\" into Publication Year",
+     "expected": "\"twenty25\" entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; value not accepted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143940,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a valid PDF uploads successfully as the Report File",
+   "steps": [
+    {
+     "action": "Upload PSER-Q4-2024.pdf (2.4MB) as Report File PDF",
+     "expected": "Upload accepted"
+    },
+    {
+     "action": "Save",
+     "expected": "File saved and available for View Details/Download once published"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143941,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing is blocked when the Report File PDF is missing",
+   "steps": [
+    {
+     "action": "Leave Report File PDF empty",
+     "expected": "Field left empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Validation error shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143942,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a non-PDF file is rejected for the Report File field",
+   "steps": [
+    {
+     "action": "Select a .docx file",
+     "expected": "File selected"
+    },
+    {
+     "action": "Attempt to upload it as Report File PDF",
+     "expected": "Upload rejected as unsupported; only PDF accepted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143943,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a Report File PDF exceeding the configured size limit is rejected",
+   "steps": [
+    {
+     "action": "Select a PDF file exceeding the configured size limit",
+     "expected": "File selected"
+    },
+    {
+     "action": "Attempt to upload it as Report File PDF",
+     "expected": "Upload rejected with a file-size error; oversized file not persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143944,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Count saves with a valid positive integer",
+   "steps": [
+    {
+     "action": "Enter Page Count = 20",
+     "expected": "20 entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Value saved and displayed in the card meta line"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143945,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Count is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear Page Count",
+     "expected": "Field is empty"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Validation error shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143946,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Count rejects a value of zero",
+   "steps": [
+    {
+     "action": "Enter Page Count = 0",
+     "expected": "0 entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; value not accepted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143947,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Count rejects a negative value",
+   "steps": [
+    {
+     "action": "Enter Page Count = -5",
+     "expected": "-5 entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; value not accepted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143948,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Count rejects a non-numeric value",
+   "steps": [
+    {
+     "action": "Enter \"twenty\" into Page Count",
+     "expected": "\"twenty\" entered"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Validation error shown; value not accepted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143960,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing is blocked when a mandatory Arabic field is missing",
+   "steps": [
+    {
+     "action": "Fill all fields except Report Title AR, leaving Report Title EN filled",
+     "expected": "Fields entered as described"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Message \"Arabic content is required.\" is shown; publish blocked; record remains unpublished"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143961,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing is blocked for an unsupported or oversized file",
+   "steps": [
+    {
+     "action": "Attempt to upload report.exe as the Report File PDF",
+     "expected": "Upload rejected or flagged invalid"
+    },
+    {
+     "action": "Attempt to publish",
+     "expected": "Message \"Unsupported file type or size.\" is shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143969,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يُحظر نشر التقرير مع ظهور رسالة \"المحتوى بالعربية مطلوب.\" عند غياب حقل عربي إلزامي",
+   "steps": [
+    {
+     "action": "تعبئة جميع الحقول الإنجليزية مع ترك عنوان التقرير بالعربية فارغاً",
+     "expected": "الحقول تُعبأ كما وُصف"
+    },
+    {
+     "action": "محاولة النشر على واجهة إدارة عربية",
+     "expected": "تظهر رسالة \"المحتوى بالعربية مطلوب.\" ويُحظر النشر"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143970,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يُحظر نشر التقرير مع ظهور رسالة \"نوع الملف أو حجمه غير مدعوم.\" عند رفع ملف غير مدعوم",
+   "steps": [
+    {
+     "action": "محاولة رفع ملف report.exe كملف PDF للتقرير",
+     "expected": "الرفع يُرفض أو يُعلَّم كغير صالح"
+    },
+    {
+     "action": "محاولة النشر على واجهة إدارة عربية",
+     "expected": "تظهر رسالة \"نوع الملف أو حجمه غير مدعوم.\" ويُحظر النشر"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 143971,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يتم حظر ناشر المحتوى من نشر التقرير مباشرة مع ظهور رسالة الرفض بالعربية",
+   "steps": [
+    {
+     "action": "تسجيل الدخول باسم Test2@xyz.com (منشئ محتوى) على واجهة عربية",
+     "expected": "تسجيل الدخول ناجح"
+    },
+    {
+     "action": "فتح سجل التقرير المسودة",
+     "expected": "يفتح السجل"
+    },
+    {
+     "action": "محاولة تنفيذ إجراء نشر مباشرة",
+     "expected": "يُحظر الإجراء وتظهر الرسالة \"تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.\" حرفياً، ويبقى السجل بحالته السابقة"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Export Reports' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Export Reports entry). The existing Page Object slug(s) (export-report / export-reports-page) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  }
+ ],
+ "out_of_scope": [
+  {
+   "tc_id": 143868,
+   "priority": 3,
+   "reason": "Manual"
+  },
+  {
+   "tc_id": 143962,
+   "priority": 2,
+   "reason": "Manual"
+  },
+  {
+   "tc_id": 143963,
+   "priority": 2,
+   "reason": "Manual"
+  },
+  {
+   "tc_id": 143966,
+   "priority": 3,
+   "reason": "Manual"
+  }
+ ],
+ "blocked_note": "Disposition `skip` with reason prefix BLOCKED: — object not in Content-Admin-Guide.docx (brief has no BLOCKED disposition)."
+}

@@ -1,0 +1,329 @@
+{
+ "plan_id": 133534,
+ "suite_id": 134452,
+ "run_name": "Phase 3 2026-10-07/08 - PBI 129381",
+ "automated": true,
+ "results": [
+  {
+   "test_case_id": 135515,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135516,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149493: Home section typography/colour tokens differ from Figma 849:15904 (Strategic Direction).",
+   "error_message": "Typography/colour differ from Figma"
+  },
+  {
+   "test_case_id": 135517,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149493: Home section typography/colour tokens differ from Figma 849:15904 (Strategic Direction).",
+   "error_message": "Typography/colour differ from Figma"
+  },
+  {
+   "test_case_id": 135518,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149493: Home section typography/colour tokens differ from Figma 849:15904 (Strategic Direction).",
+   "error_message": "Typography/colour differ from Figma"
+  },
+  {
+   "test_case_id": 135520,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149493: Home section typography/colour tokens differ from Figma 849:15904 (Strategic Direction).",
+   "error_message": "Typography/colour differ from Figma"
+  },
+  {
+   "test_case_id": 135521,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149493: Home section typography/colour tokens differ from Figma 849:15904 (Strategic Direction).",
+   "error_message": "Typography/colour differ from Figma"
+  },
+  {
+   "test_case_id": 135524,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135525,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135528,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135529,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135530,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135531,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135533,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135534,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135535,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135536,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135537,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135539,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG/ENVIRONMENT: editor iframe counted before mount (locator timing). No product verdict.",
+   "error_message": "editor iframe counted before mount (locator timing)"
+  },
+  {
+   "test_case_id": 135542,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135543,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (passed in the 2026-10-08 cms-rerun-fix)"
+  },
+  {
+   "test_case_id": 135544,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135545,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG/ENVIRONMENT: carousel autoplay moved before hover in WebKit; both arrows worked. No product verdict.",
+   "error_message": "carousel autoplay moved before hover in WebKit; both arrows worked"
+  },
+  {
+   "test_case_id": 135546,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135548,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135549,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135550,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135551,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG/ENVIRONMENT: upload-picker timeout under load. No product verdict.",
+   "error_message": "upload-picker timeout under load"
+  },
+  {
+   "test_case_id": 135552,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135553,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135554,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135557,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (executed on a QCTEST stand-in card; real cards 49056/49082/49108 not written, per policy)"
+  },
+  {
+   "test_case_id": 135558,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (executed on a QCTEST stand-in card; real cards 49056/49082/49108 not written, per policy)"
+  },
+  {
+   "test_case_id": 135559,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135562,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135563,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135593,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135594,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135595,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135598,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135599,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135602,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135603,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135605,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (passed in the 2026-10-08 cms-rerun-fix)"
+  },
+  {
+   "test_case_id": 135607,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135609,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG/ENVIRONMENT: upload-picker timeout under load. No product verdict.",
+   "error_message": "upload-picker timeout under load"
+  },
+  {
+   "test_case_id": 135610,
+   "outcome": "Blocked",
+   "comment": "Executed, AUTOMATION_BUG/ENVIRONMENT: upload-picker timeout under load. No product verdict.",
+   "error_message": "upload-picker timeout under load"
+  },
+  {
+   "test_case_id": 135611,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135613,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (passed in the 2026-10-08 cms-rerun-fix)"
+  },
+  {
+   "test_case_id": 135614,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135615,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135616,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135617,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135620,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (executed on a QCTEST stand-in card; real cards 49056/49082/49108 not written, per policy)"
+  },
+  {
+   "test_case_id": 135621,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (executed on a QCTEST stand-in card; real cards 49056/49082/49108 not written, per policy)"
+  },
+  {
+   "test_case_id": 135622,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (executed on a QCTEST stand-in card; real cards 49056/49082/49108 not written, per policy) (passed in the 2026-10-08 cms-rerun-fix)"
+  },
+  {
+   "test_case_id": 135625,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (edit visible immediately on publish; TC wording on cache timing noted)"
+  },
+  {
+   "test_case_id": 135627,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (executed on a QCTEST stand-in card; real cards 49056/49082/49108 not written, per policy) (passed in the 2026-10-08 cms-rerun-fix)"
+  },
+  {
+   "test_case_id": 135628,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (executed on a QCTEST stand-in card; real cards 49056/49082/49108 not written, per policy) (passed in the 2026-10-08 cms-rerun-fix)"
+  },
+  {
+   "test_case_id": 135629,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149486: Arabic carousel arrows not mirrored; left arrow moves backwards.",
+   "error_message": "dir=rtl: prev arrow at x=300 pointing left; moves Vision->Objectives"
+  },
+  {
+   "test_case_id": 135631,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135632,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135633,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (executed on a QCTEST stand-in card; real cards 49056/49082/49108 not written, per policy)"
+  }
+ ]
+}

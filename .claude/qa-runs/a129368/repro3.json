@@ -1,0 +1,45 @@
+{
+ "big_bytes": 2305134,
+ "en-big": {
+  "picker_rejected": false,
+  "field_after_pick": "QCTEST-m3-en-big-8aaeca51fa.jpg",
+  "refusal": true,
+  "refusal_text": "\"QCTEST-m3-en-big-8aaeca51fa.jpg\" is 2.2 MB. Banner Image (EN) accepts files up to 2 MB - choose a smaller file. Nothing was saved: choose a file within the limit, or reload the form to keep the current file.       ",
+  "status": "",
+  "status_raw": "",
+  "deleted": false
+ },
+ "en-gif": {
+  "picker_rejected": true,
+  "field_after_pick": "",
+  "error": "Timeout 30000ms exceeded.",
+  "deleted": false
+ },
+ "ar-bmp": {
+  "picker_rejected": true,
+  "field_after_pick": "",
+  "error": "Timeout 30000ms exceeded.",
+  "deleted": false
+ },
+ "inactive": {
+  "list_badge": "INACTIVE",
+  "edit_state": "Inactive",
+  "active_ticked": false,
+  "unpublish_btn": 0,
+  "anon_home_counts": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "after_activate_badge": "Published",
+  "after_activate_edit_state": "Published",
+  "deleted": true
+ },
+ "swept": {},
+ "rows_final": [
+  "Verified by Qatar Chamber — stand out with trusted verification",
+  "Qatar Chamber Commercial & Industrial Directory — register your business",
+  "Get Verified by Qatar Chamber"
+ ]
+}

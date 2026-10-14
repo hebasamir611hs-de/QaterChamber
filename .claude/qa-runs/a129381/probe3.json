@@ -1,0 +1,99 @@
+{
+ "url": "https://qcdev.ihorizons.com/en/web/qatar-chamber/manage-strategic-pillar-card?editEntry=d3a2a34e-fa5f-a15f-960f-cc234158ab89",
+ "inputs": [
+  [
+   "ObjectField_pillarTitle",
+   ""
+  ],
+  [
+   "qc-ar-pillarTitle",
+   ""
+  ],
+  [
+   "ObjectField_pillarDescription",
+   "<p>QCTEST disposable pillar card description.</p>"
+  ],
+  [
+   "ObjectField_pillarDescription_en_US",
+   "<p>QCTEST disposable pillar card description.</p>\n"
+  ],
+  [
+   "qc-ar-pillarDescription",
+   ""
+  ],
+  [
+   "ObjectField_pillarIcon",
+   ""
+  ],
+  [
+   "ObjectField_displayOrder",
+   "9900"
+  ],
+  [
+   "ObjectField_activeStatus",
+   "on"
+  ]
+ ],
+ "textbox_title": [
+  [
+   "ObjectField_pillarTitle",
+   ""
+  ]
+ ],
+ "banner": [
+  "Editing d3a2a34e-fa5f-a15f-960f-cc234158ab89 (Draft). Created 07/10/2026, 20:44, last modified 07/10/2026, 20:44. Save as Draft or Publish updates this record. Cancel and add a new entry instead"
+ ],
+ "history": "AssertionError(\"no entry with Pillar Title 'd3a2a34e-fa5f-a15f-960f-cc234158ab89'\")",
+ "autoplay_hover": [
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision"
+ ],
+ "autoplay_reduce": [
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision",
+  "Vision"
+ ]
+}

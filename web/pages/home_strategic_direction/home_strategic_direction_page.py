@@ -308,11 +308,27 @@ class HomeStrategicDirectionPage(BasePage):
     def open_home(self) -> "HomeStrategicDirectionPage":
         self.open(web_url("/home"))
         self.wait_for(self.SECTION)
+        self.pause_autoplay()
         return self
 
     def open_home_arabic(self) -> "HomeStrategicDirectionPage":
         self.open(web_url("/home", locale="ar"))
         self.wait_for(self.SECTION)
+        self.pause_autoplay()
+        return self
+
+    def pause_autoplay(self) -> "HomeStrategicDirectionPage":
+        """CONFIRMED LIVE 2026-10-07 (.claude/qa-runs/a129381/probe2/3.json):
+        the carousel AUTO-ADVANCES about 6 s after load (Vision -> Mission,
+        EN and AR), and stays put while the pointer is over `.qc-sd-stage`
+        (24 samples over 18 s, all Vision). Tests that read "the card shown
+        on load" or step with the arrows hover the stage first so autoplay
+        cannot move the carousel under them."""
+        try:
+            self.page.locator(self.STAGE).scroll_into_view_if_needed()
+            self.page.locator(self.STAGE).hover()
+        except Exception:  # noqa: BLE001 — best effort; assertions stay strict
+            pass
         return self
 
     def wait_for_carousel(self) -> "HomeStrategicDirectionPage":
@@ -444,9 +460,13 @@ class HomeStrategicDirectionPage(BasePage):
         is_visible() — the inactive cards are `display:grid;visibility:
         visible;opacity:0` (see docstring), which a bare visibility check
         would misreport as visible."""
-        return self.page.locator(self.CARD).evaluate_all(
-            "els => els.filter(el => parseFloat(getComputedStyle(el).opacity) > 0)"
-            ".map(el => el.querySelector('.qc-sd-card-title')?.textContent || null)"
+        # HEALED 2026-10-07: all 3 cards now compute opacity 1 and are
+        # STACKED (probe2.json + manual-repro-129381-carousel-en-t0.png show
+        # one card in front, two "peek" edges behind), so opacity no longer
+        # separates the shown card. The shown card is the one carrying
+        # `.is-active`; that is what a visitor sees in front.
+        return self.page.locator(f"{self.CARD}.is-active").evaluate_all(
+            "els => els.map(el => el.querySelector('.qc-sd-card-title')?.textContent || null)"
         )
 
     def card_transition_duration_seconds(self) -> float:
@@ -530,6 +550,34 @@ class HomeStrategicDirectionPage(BasePage):
             "(old) => { const t = document.querySelector('.qc-sd-card.is-active .qc-sd-card-title'); "
             "return t && t.textContent !== old; }",
             arg=old_title,
+        )
+        self.pause_autoplay()  # pointer left the stage for the arrow click
+
+    # ── Stacked-deck strips (re-scoped G-PROG, 2026-10-08) ───────────────
+    # Figma 849:15904 draws two 18-px strips under the card (476 / 436 wide,
+    # fill #D7BEAA, stroke #B3845F) — a stacked-deck hint, NOT a "1 of 3"
+    # counter. Live renders the next two cards behind the active one
+    # (`data-qc-sd-depth` 1 and 2, scaled). The `.qc-sd-peek--*` nodes no
+    # longer exist. This reads what a visitor sees of depth 1 / 2: the
+    # rendered width and the band that shows below the card in front.
+    def stack_strips(self) -> list:
+        return self.page.evaluate(
+            """() => {
+              const cards = Array.from(document.querySelectorAll('.qc-sd-card'));
+              const byDepth = d => cards.find(c => c.getAttribute('data-qc-sd-depth') === String(d));
+              const out = [];
+              let front = byDepth(0);
+              for (const d of [1, 2]) {
+                const c = byDepth(d);
+                if (!c || !front) { out.push(null); continue; }
+                const r = c.getBoundingClientRect(), f = front.getBoundingClientRect(), cs = getComputedStyle(c);
+                out.push({depth: d, width: Math.round(r.width * 10) / 10,
+                          band: Math.round((r.bottom - f.bottom) * 10) / 10,
+                          bg: cs.backgroundColor, border: cs.borderTopColor});
+                front = c;
+              }
+              return out;
+            }"""
         )
 
     # ── Progress / "peek" stacked-card indicator ─────────────────────────

@@ -1,0 +1,437 @@
+[
+ {
+  "id": 134543,
+  "title": "Verify that an Administrator can complete the full newsletter lifecycle from Draft through Publish and receive a Liferay success toast at each step",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Newsletter",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Functional-High: full admin lifecycle E2E. Covers AC-7, AC-8, AC-9, AC-10.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Administrator, navigate to Newsletter Management",
+    "expected": "Admin logged in, module open"
+   },
+   {
+    "action": "Create newsletter with Title EN/AR, fill mandatory fields, click Save as Draft",
+    "expected": "Draft saved; status = Draft; Liferay generic success toast shown (EN+AR)"
+   },
+   {
+    "action": "Click Submit for Review",
+    "expected": "Status changes to Pending Review; success toast shown (EN+AR)"
+   },
+   {
+    "action": "Click Approve",
+    "expected": "Status changes to Approved; success toast shown (EN+AR)"
+   },
+   {
+    "action": "Click Publish Immediately",
+    "expected": "Status changes to Published; newsletter sent by email to all currently Active subscribers only; every sent email includes a clear Unsubscribe link at the bottom; success toast shown (EN+AR)"
+   }
+  ]
+ },
+ {
+  "id": 134572,
+  "title": "Verify that Content (EN) accepts valid rich-text/HTML content",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Functional-Low field check for FLD-8.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter formatted rich text (heading + paragraph + bullet list) into Content (EN)",
+    "expected": "Content entered with formatting applied"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Draft saved successfully; formatting preserved on reload"
+   }
+  ]
+ },
+ {
+  "id": 134573,
+  "title": "Verify that saving a newsletter with empty Content (EN) is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Functional-Low mandatory-field check for FLD-8.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave Content (EN) empty; fill remaining mandatory fields",
+    "expected": "Field left empty"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Validation error \"Content (EN) is required.\" displayed; draft not saved"
+   }
+  ]
+ },
+ {
+  "id": 134575,
+  "title": "Verify that malformed/invalid HTML in Content (EN) is rejected or sanitized",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Functional-Low validity check for FLD-8 (Valid HTML constraint).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Paste unclosed div and script tag markup into the Content (EN) source view",
+    "expected": "Raw markup entered"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "System either rejects the save with an invalid-HTML validation error, or sanitizes the input by stripping the unclosed tag and script element before storing; stored content contains no executable script tag"
+   }
+  ]
+ },
+ {
+  "id": 134576,
+  "title": "Verify that Content (AR) accepts valid rich-text/HTML content",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Functional-Low field check for FLD-9.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter formatted Arabic rich text (heading + paragraph) into Content (AR)",
+    "expected": "Content entered, right-to-left rendered"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Draft saved successfully; formatting preserved on reload"
+   }
+  ]
+ },
+ {
+  "id": 134577,
+  "title": "Verify that saving a newsletter with empty Content (AR) is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Functional-Low mandatory-field check for FLD-9.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave Content (AR) empty; fill remaining mandatory fields",
+    "expected": "Field left empty"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Validation error \"Content (AR) is required.\" displayed; draft not saved"
+   }
+  ]
+ },
+ {
+  "id": 134590,
+  "title": "Verify that scheduling with a Publish Date in the past is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Functional-Low invalid check for FLD-14.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter yesterday's date at 09:00 in Publish Date",
+    "expected": "Past date entered"
+   },
+   {
+    "action": "Click Schedule",
+    "expected": "Validation error \"Scheduled send date must be a future date and time.\" displayed; schedule action blocked"
+   }
+  ]
+ },
+ {
+  "id": 134595,
+  "title": "Verify that clicking Approve on a Pending Review newsletter moves it to Approved status",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Functional-Low approve-branch check for CTL-5.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open a newsletter with status Pending Review",
+    "expected": "Newsletter opens"
+   },
+   {
+    "action": "Click Approve",
+    "expected": "Status changes to Approved; success toast shown (EN+AR)"
+   }
+  ]
+ },
+ {
+  "id": 134596,
+  "title": "Verify that clicking Reject on a Pending Review newsletter returns it to Draft/Rejected without sending",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Functional-Low reject-branch check for CTL-5.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open a newsletter with status Pending Review",
+    "expected": "Newsletter opens"
+   },
+   {
+    "action": "Click Reject",
+    "expected": "Status changes to Rejected/Draft (per workflow config); no email is sent to subscribers; success toast confirming the rejection action shown (EN+AR)"
+   }
+  ]
+ },
+ {
+  "id": 134599,
+  "title": "Verify that an Administrator can access and perform all Newsletter Management actions",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Auth/RBAC check for ROL-1 (permitted access).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Administrator",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Navigate to Newsletter Management",
+    "expected": "Module accessible"
+   },
+   {
+    "action": "Attempt Create, Approve, Publish, Schedule, Archive actions",
+    "expected": "All actions available: Create, Approve, Publish, Schedule, Archive complete successfully"
+   }
+  ]
+ },
+ {
+  "id": 134600,
+  "title": "Verify that a Site Content Editor can view and manage newsletters where permitted, but cannot access Administrator-only actions",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Auth/RBAC check for ROL-2 (scoped access).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Navigate to Newsletter Management",
+    "expected": "Module accessible"
+   },
+   {
+    "action": "Attempt to view/edit a newsletter within permitted scope",
+    "expected": "View/edit succeeds for permitted newsletters"
+   },
+   {
+    "action": "Attempt an Administrator-only action outside permitted scope",
+    "expected": "Access Denied message \"Access Denied. You do not have permission to perform this action.\" displayed"
+   }
+  ]
+ },
+ {
+  "id": 134601,
+  "title": "Verify that a Site Content Author can view and update newsletter content but cannot publish directly",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Auth/RBAC check for ROL-3 (scoped access).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Author",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Open a Draft newsletter and edit content",
+    "expected": "Content edit saved successfully"
+   },
+   {
+    "action": "Attempt to click Publish Immediately",
+    "expected": "Access Denied message displayed; newsletter remains unpublished"
+   }
+  ]
+ },
+ {
+  "id": 134602,
+  "title": "Verify that a Public Visitor cannot access the Newsletter Management CMS module",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Auth/RBAC check for ROL-4 (denied access).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "As an unauthenticated Public Visitor, attempt to navigate directly to the Newsletter Management CMS URL",
+    "expected": "Access is denied; visitor is redirected to login or shown \"Access Denied. You do not have permission to perform this action.\""
+   }
+  ]
+ },
+ {
+  "id": 134604,
+  "title": "Verify that a Site Content Editor is denied access to Administrator-only subscriber-list management",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Auth/RBAC check for ROL-2 (denied access).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Attempt to navigate to the subscriber list management screen",
+    "expected": "Access Denied message \"Access Denied. You do not have permission to perform this action.\" displayed"
+   }
+  ]
+ },
+ {
+  "id": 134605,
+  "title": "Verify that a Site Content Author is denied access to the Approve/Reject action",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "Newsletter"
+  ],
+  "description": "Auth/RBAC check for ROL-3 (denied access).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Author",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Open a Pending Review newsletter",
+    "expected": "Newsletter opens read/edit-limited"
+   },
+   {
+    "action": "Attempt to click Approve",
+    "expected": "Approve control is not available or returns Access Denied message"
+   }
+  ]
+ }
+]

@@ -1,0 +1,102 @@
+{
+  "143576": {
+    "full_name": "web.tests.annual_reports.test_annual_reports_web#test_search_input_states",
+    "png": "9bfd54ad-7342-490b-b5e1-8d39adce4c2e-attachment.png",
+    "status": "failed"
+  },
+  "143571": {
+    "full_name": "web.tests.annual_reports.test_annual_reports_web#test_hero_figma_tokens_en_light_desktop",
+    "png": "a887f133-e36f-4de9-8b8c-cb2b76603807-attachment.png",
+    "status": "failed"
+  },
+  "143574": {
+    "full_name": "web.tests.annual_reports.test_annual_reports_web#test_report_card_figma_tokens",
+    "png": "9af5b291-d841-4dd9-a208-3ee0f9bad198-attachment.png",
+    "status": "failed"
+  },
+  "143846": {
+    "full_name": "web.tests.export_reports.test_export_reports_web#test_report_card_description",
+    "png": "503d2451-ae07-4e70-9b20-b7e904c4145e-attachment.png",
+    "status": "failed"
+  },
+  "143580": {
+    "full_name": "web.tests.annual_reports.test_annual_reports_web#test_no_search_results_empty_state_en",
+    "png": "2fed30ad-48cc-42eb-953b-d9fde5cfe520-attachment.png",
+    "status": "failed"
+  },
+  "143981": {
+    "full_name": "web.tests.publications.test_publications_web#test_initial_load_renders_all_controls",
+    "png": "1626ecbf-6ae4-44b1-b5e5-9bea7b4c4d32-attachment.png",
+    "status": "failed"
+  },
+  "144092": {
+    "full_name": "web.tests.al_moltaqa_magazine.test_al_moltaqa_magazine_web#test_hero_and_breadcrumb_en",
+    "png": "c1190de0-cedb-4d9c-b056-a01819d58a24-attachment.png",
+    "status": "failed"
+  },
+  "143959": {
+    "full_name": "web.tests.export_reports.test_export_reports_web#test_no_match_search_message",
+    "png": "ce4db752-bf68-48a0-8a2b-2a4108152a43-attachment.png",
+    "status": "failed"
+  },
+  "143831": {
+    "full_name": "web.tests.annual_reports.test_annual_reports_web#test_zero_match_search_message_ar",
+    "png": "eab37ddb-fb21-44a3-96aa-e8cdd368ce84-attachment.png",
+    "status": "failed"
+  },
+  "144250": {
+    "full_name": "web.tests.made_in_china_expo.test_made_in_china_expo_web#test_hero_cta_new_tab_redirect",
+    "png": "534d37ed-3ab7-4ea6-a692-93837d481f5f-attachment.png",
+    "status": "failed"
+  },
+  "143605": {
+    "full_name": "web.tests.annual_reports.test_annual_reports_web#test_zero_match_search_message_en",
+    "png": "192972a2-0024-459a-b58d-da3913928837-attachment.png",
+    "status": "failed"
+  },
+  "144259": {
+    "full_name": "web.tests.made_in_china_expo.test_made_in_china_expo_web#test_public_visitor_hero_cta_redirects_to_expo_site",
+    "png": "ce50bbc8-5bae-414c-886d-c0d319426eac-attachment.png",
+    "status": "failed"
+  },
+  "143842": {
+    "full_name": "web.tests.export_reports.test_export_reports_web#test_hero_and_archive_render_en_ltr",
+    "png": "c29c6bdb-4e54-43e7-b593-0d6dbdb59a8b-attachment.png",
+    "status": "failed"
+  },
+  "143852": {
+    "full_name": "web.tests.export_reports.test_export_reports_web#test_tablet_viewport",
+    "png": "d3196a61-8354-4290-ac60-9f297f2f8165-attachment.png",
+    "status": "failed"
+  },
+  "143573": {
+    "full_name": "web.tests.annual_reports.test_annual_reports_web#test_archive_section_figma_tokens",
+    "png": "f97c4611-84b2-4726-ab53-e9563d08ef2e-attachment.png",
+    "status": "failed"
+  },
+  "143983": {
+    "full_name": "web.tests.publications.test_publications_web#test_breadcrumb_typography_and_links",
+    "png": "3b75e745-1a30-4918-9a18-2dd41a007a64-attachment.png",
+    "status": "failed"
+  },
+  "143586": {
+    "full_name": "web.tests.annual_reports.test_annual_reports_web#test_mobile_viewport",
+    "png": "8d74f4ee-20fe-4e3b-9a7e-9eaef10719c0-attachment.png",
+    "status": "failed"
+  },
+  "143845": {
+    "full_name": "web.tests.export_reports.test_export_reports_web#test_report_card_title",
+    "png": "99b6959c-b83c-455d-a985-35097d46a30d-attachment.png",
+    "status": "failed"
+  },
+  "144260": {
+    "full_name": "web.tests.made_in_china_expo.test_made_in_china_expo_web#test_public_visitor_card_cta_redirects_to_expo_site",
+    "png": "12d418dc-814f-40f2-b7b1-8ce2ede86a92-attachment.png",
+    "status": "failed"
+  },
+  "143967": {
+    "full_name": "web.tests.export_reports.test_export_reports_web#test_no_match_search_message_ar",
+    "png": "b4036a15-2b76-4df3-ba70-552511d02a8a-attachment.png",
+    "status": "failed"
+  }
+}

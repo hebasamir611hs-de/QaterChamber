@@ -527,3 +527,35 @@ class HomeFeaturedEventPage(BasePage):
     # ── Pagination indicator (TC 135652) ─────────────────────────────────
     def pagination_indicator_present(self) -> bool:
         return self.page.locator(self.PAGINATION_ANY).count() > 0
+
+    # ── Card content vs. the Events module record (TC 135665/717, 135674-681) ──
+    # Added 2026-10-07 (phase 3). The card's media link is the event's own
+    # detail URL (`/web/qatar-chamber/events/event?id=<N>` per the 2026-08-31
+    # recon); the detail page is the Events module's own rendering of the
+    # BusinessEvent record, so card text is compared against it.
+    def summary_text(self) -> str:
+        return self._text(self.SUMMARY)
+
+    def media_href(self) -> str:
+        return self.page.locator(self.MEDIA).first.get_attribute("href") or ""
+
+    def card_snapshot(self) -> dict:
+        return {
+            "title": self.title_text(),
+            "date": self.date_value_text(),
+            "time": self.time_value_text(),
+            "location": self.location_value_text(),
+            "summary": self.summary_text(),
+            "href": self.media_href(),
+        }
+
+    def click_media_and_wait(self) -> str:
+        """Click the event image and wait for the navigation to land."""
+        start = self.page.url
+        self.page.locator(self.MEDIA).first.click()
+        self.page.wait_for_url(lambda u: u != start, timeout=30000)
+        self.page.wait_for_load_state("domcontentloaded")
+        return self.page.url
+
+    def body_text(self) -> str:
+        return " ".join(self.page.locator("body").inner_text().split())

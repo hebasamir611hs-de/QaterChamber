@@ -834,27 +834,28 @@ def test_join_committee_whitespace_only_rejected(page, field_key, tc_id):
 # ===========================================================================
 # Field-level: length-boundary (N accepted, N+1 rejected) family
 # ===========================================================================
+# Character-limit cases are N/A (team decision 2026-10-03, relayed 2026-10-07):
+# the params stay so `pytest -m tc_<id>` still selects them, but every one is
+# skipped and will be set Not Applicable, never Failed.
+_NO_CHAR_LIMIT = pytest.mark.skip(reason="N/A: no character limit (team decision 2026-10-03)")
+
 LENGTH_BOUNDARY_CASES = [
     pytest.param("applicant_name", 200, 143447, id="143447-applicant-name-200-201",
-                 marks=_tc(143447, pytest.mark.functional_low)),
+                 marks=_tc(143447, pytest.mark.functional_low, _NO_CHAR_LIMIT)),
     pytest.param("company_name", 200, 143451, id="143451-company-name-200-201",
-                 marks=_tc(143451, pytest.mark.functional_low)),
+                 marks=_tc(143451, pytest.mark.functional_low, _NO_CHAR_LIMIT)),
     pytest.param("cr_number", 20, 143455, id="143455-cr-number-20-21",
-                 marks=_tc(143455, pytest.mark.functional_low)),
+                 marks=_tc(143455, pytest.mark.functional_low, _NO_CHAR_LIMIT)),
     pytest.param("owner_name", 200, 143461, id="143461-owner-name-200-201",
-                 marks=_tc(143461, pytest.mark.functional_low)),
+                 marks=_tc(143461, pytest.mark.functional_low, _NO_CHAR_LIMIT)),
     pytest.param("gm_ceo", 200, 143465, id="143465-gm-ceo-200-201",
-                 marks=_tc(143465, pytest.mark.functional_low)),
+                 marks=_tc(143465, pytest.mark.functional_low, _NO_CHAR_LIMIT)),
     pytest.param("activity", 300, 143468, id="143468-activity-300-301",
-                 marks=_tc(143468, pytest.mark.functional_low)),
+                 marks=_tc(143468, pytest.mark.functional_low, _NO_CHAR_LIMIT)),
     pytest.param("email", 150, 143472, id="143472-email-150-151",
-                 marks=_tc(143472, pytest.mark.functional_low, pytest.mark.xfail(
-                     reason="150/151-char boundary on an email-format field is not independently "
-                     "verifiable without a confirmed valid-format template long enough to hit the "
-                     "boundary — flagged to the QA Manager per this case's own ambiguity, not silently "
-                     "narrowed.", strict=False))),
+                 marks=_tc(143472, pytest.mark.functional_low, _NO_CHAR_LIMIT)),
     pytest.param("mobile_number", 20, 143477, id="143477-mobile-number-20-21",
-                 marks=_tc(143477, pytest.mark.functional_low)),
+                 marks=_tc(143477, pytest.mark.functional_low, _NO_CHAR_LIMIT)),
 ]
 
 

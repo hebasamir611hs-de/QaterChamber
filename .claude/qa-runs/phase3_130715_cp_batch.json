@@ -1,0 +1,2111 @@
+{
+ "pbi": 130715,
+ "plan_id": 137724,
+ "suite_id": 140374,
+ "module": "cms/tests/video_library/test_video_library_control_panel.py",
+ "object_name_source": "live Object Authoring sidebar (engineer brief 2026-10-01, 'Object-name source'); slugs pending live read",
+ "cases": [
+  {
+   "tc_id": 142968,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that Administrator can access and configure Flickr integration settings",
+   "steps": [
+    {
+     "action": "Log in as Administrator.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Navigate to the Flickr integration settings area.",
+     "expected": "Settings page is accessible, all fields editable."
+    },
+    {
+     "action": "Update the import scope and save.",
+     "expected": "Save succeeds with a confirmation toast; new value persists on reload."
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: a Flickr import/config change writes real albums/videos into shared qcdev and cannot be scoped to a QCTEST record; the case names Administrator; the eight provisioned roles have no Administrator and the brief bars TEST_USER for lifecycle/permission cases - needs a QA Manager ruling on the account",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 142969,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that Site Content Editor can publish a video record",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor (test1@xyz.com).",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Open a complete draft video record.",
+     "expected": "Record opens with Publish action enabled."
+    },
+    {
+     "action": "Click Publish.",
+     "expected": "Record status changes to Published; video appears on the public Video Library."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142970,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that Site Content Editor is denied access to Flickr integration settings",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Attempt to navigate directly to the Flickr integration settings URL.",
+     "expected": "Access is refused with message \"Access Denied. You do not have permission to perform this action.\" / تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.; settings are not shown or editable."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Flickr integration settings surface is not an Object Authoring object and is not located yet",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142971,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that Site Content Author can create and submit a video record for review",
+   "steps": [
+    {
+     "action": "Log in as Site Content Author (Test2@xyz.com).",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Create a new video record with valid data.",
+     "expected": "Record saves as Draft."
+    },
+    {
+     "action": "Submit for review.",
+     "expected": "Record is submitted for review; no Publish action is available to this role."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 142972,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that Site Content Author is denied direct publish action",
+   "steps": [
+    {
+     "action": "Log in as Site Content Author.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Open own draft video record.",
+     "expected": "Record opens; Publish control is not available/disabled."
+    },
+    {
+     "action": "Attempt to trigger Publish directly (via UI control or deep-link to the publish action URL).",
+     "expected": "Direct deep-link attempt is refused with \"Access Denied. You do not have permission to perform this action.\" / تم رفض الوصول...; record remains in Draft/Pending Review, not Published."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 143001,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that creating a new video record and publishing it makes it visible on the public Video Library",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Create a video record: Title EN=\"Chamber Awards Night\" / AR=\"حفل جوائز الغرفة\", Category=Events, Source=External URL (`https://vimeo.com/123456789`), Thumbnail=valid PNG, Duration=05:12, Published Date=today.",
+     "expected": "Fields accepted."
+    },
+    {
+     "action": "Save as Draft, then Publish.",
+     "expected": "Record status becomes Published."
+    },
+    {
+     "action": "In a fresh browser session, open the public Video Library.",
+     "expected": "\"Chamber Awards Night\" card is visible on the public Video Library with the entered data."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143002,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that editing a published video and republishing shows the new value on the public page, not the stale one",
+   "steps": [
+    {
+     "action": "Open the published \"Chamber Awards Night\" record.",
+     "expected": "Record opens."
+    },
+    {
+     "action": "Change the title to \"Chamber Awards Night 2026\" and republish.",
+     "expected": "Save/republish succeeds."
+    },
+    {
+     "action": "Reload the public Video Library.",
+     "expected": "Public card shows \"Chamber Awards Night 2026\", not the old title."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143003,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that previewing a draft video record shows draft content without exposing it publicly",
+   "steps": [
+    {
+     "action": "Create a draft video record, do not publish.",
+     "expected": "Draft record saved."
+    },
+    {
+     "action": "Click Preview.",
+     "expected": "Preview shows the entered content correctly within the CMS preview surface."
+    },
+    {
+     "action": "In a fresh, logged-out browser context, attempt to reach the same video's public URL.",
+     "expected": "The public URL does not show the video (not found) — draft content is never publicly visible."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143004,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that publish is blocked when the video record has no thumbnail",
+   "steps": [
+    {
+     "action": "Create a video record with all required fields filled except Thumbnail.",
+     "expected": "Record saves as Draft."
+    },
+    {
+     "action": "Attempt to Publish.",
+     "expected": "Publish is blocked with message \"A video thumbnail is required.\" / الصورة المصغّرة للفيديو مطلوبة.; record remains unpublished."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143005,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that publish is blocked when the video record has no playable source",
+   "steps": [
+    {
+     "action": "Create a video record with Thumbnail and metadata filled but no Source Type value/source field set.",
+     "expected": "Record saves as Draft."
+    },
+    {
+     "action": "Attempt to Publish.",
+     "expected": "Publish is blocked with message \"A video source is required.\" / مصدر الفيديو مطلوب.; record remains unpublished."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143006,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that unpublishing a published video removes it from both the public listing and its Details URL",
+   "steps": [
+    {
+     "action": "Confirm \"Chamber Awards Night 2026\" is live on the public Video Library.",
+     "expected": "Card confirmed visible."
+    },
+    {
+     "action": "In the Control Panel, Unpublish the record.",
+     "expected": "Record status becomes Unpublished."
+    },
+    {
+     "action": "In a fresh, logged-out browser context, reload the Video Library and the video's direct URL.",
+     "expected": "Video no longer appears on the listing; direct URL returns the standard not-found page, not a stale 200."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143007,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that deleting a video record removes it permanently",
+   "steps": [
+    {
+     "action": "Create a disposable `QCTEST-` video record.",
+     "expected": "Record created."
+    },
+    {
+     "action": "Delete it from the admin listing.",
+     "expected": "Delete succeeds."
+    },
+    {
+     "action": "Confirm it no longer appears in the admin listing or (if it had been published) the public site.",
+     "expected": "Record is absent from both the admin listing and the public site."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143008,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that creating and publishing a Video Category makes it appear in the frontend dropdown and chip row, in configured order",
+   "steps": [
+    {
+     "action": "Create a Video Category \"Sustainability\" EN / \"الاستدامة\" AR, Display Order=7.",
+     "expected": "Category saves as Draft."
+    },
+    {
+     "action": "Publish it.",
+     "expected": "Status becomes Published."
+    },
+    {
+     "action": "Reload the public Video Library.",
+     "expected": "\"Sustainability\" appears both in the \"All Categories\" dropdown and as the 7th chip in the quick-filter row, with no redevelopment required."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143009,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that unpublishing a Video Category removes it from the frontend dropdown and chip row",
+   "steps": [
+    {
+     "action": "Confirm \"Sustainability\" is visible on the public dropdown/chips.",
+     "expected": "Confirmed visible."
+    },
+    {
+     "action": "Unpublish the category.",
+     "expected": "Status becomes Unpublished."
+    },
+    {
+     "action": "Reload the public Video Library.",
+     "expected": "\"Sustainability\" no longer appears in the dropdown or chip row."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143010,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that deleting an unlinked Video Category succeeds",
+   "steps": [
+    {
+     "action": "Create a `QCTEST-` category with zero linked videos.",
+     "expected": "Category created."
+    },
+    {
+     "action": "Delete it.",
+     "expected": "Delete succeeds; category no longer appears in the admin listing or frontend."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143011,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that deleting a Video Category linked to published videos is blocked until reassigned",
+   "steps": [
+    {
+     "action": "Attempt to delete the \"Events\" category, which has published videos assigned.",
+     "expected": "Delete action is attempted."
+    },
+    {
+     "action": "Observe the result.",
+     "expected": "Deletion is blocked with a message indicating the category is in use; \"Events\" and its published videos remain intact and unaffected."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143012,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that triggering a manual Flickr import creates one folder per Flickr album and imports videos without publishing them",
+   "steps": [
+    {
+     "action": "Log in as Administrator.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Configure import scope to include video media type.",
+     "expected": "Scope saved."
+    },
+    {
+     "action": "Trigger a manual import run.",
+     "expected": "Run completes; a folder named after the English Flickr album name is created under Documents & Media / Video Library, containing the imported videos, with Flickr Video ID and duration stored on each record."
+    },
+    {
+     "action": "Inspect Documents & Media and the public Video Library.",
+     "expected": "None of the newly imported videos appear on the public Video Library (not yet published)."
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: a Flickr import/config change writes real albums/videos into shared qcdev and cannot be scoped to a QCTEST record",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143013,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that an imported video's duration exceeding 10 minutes is flagged, requiring External URL before publish",
+   "steps": [
+    {
+     "action": "Import a Flickr video with a source duration of 14:20.",
+     "expected": "Import completes, duration 14:20 stored."
+    },
+    {
+     "action": "Open the imported record and attempt to Publish without changing the source.",
+     "expected": "Publish attempt shows a warning that Flickr playback truncates at 10 minutes and requires either explicit confirmation or switching Source Type to External URL before the record can be published."
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: a Flickr import/config change writes real albums/videos into shared qcdev and cannot be scoped to a QCTEST record",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143014,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that an individual video import failure is logged and the run continues with remaining assets",
+   "steps": [
+    {
+     "action": "Trigger an import run where one video asset is corrupted/unreadable on the Flickr side while others are valid.",
+     "expected": "Run executes."
+    },
+    {
+     "action": "Inspect the import log after the run.",
+     "expected": "Log shows the one asset recorded as an error while all other valid videos in the same run were successfully created — the run did not abort."
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: a Flickr import/config change writes real albums/videos into shared qcdev and cannot be scoped to a QCTEST record",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143015,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that re-running import against already-imported assets applies the configured duplicate-handling rule",
+   "steps": [
+    {
+     "action": "Run import once, note a video asset \"Board Meeting Q3\" is created.",
+     "expected": "Asset created."
+    },
+    {
+     "action": "Configure duplicate handling = \"skip existing\".",
+     "expected": "Setting saved."
+    },
+    {
+     "action": "Run import again against the same Flickr album.",
+     "expected": "Second run does not create a duplicate \"Board Meeting Q3\" record; the existing one is left unchanged (skipped), per the configured rule."
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: a Flickr import/config change writes real albums/videos into shared qcdev and cannot be scoped to a QCTEST record",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143016,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that the Administrator can view the import log per run showing albums fetched, videos created, skipped, and errors",
+   "steps": [
+    {
+     "action": "Run a manual import.",
+     "expected": "Run completes."
+    },
+    {
+     "action": "Open the import log for that run.",
+     "expected": "Log entry displays albums fetched, videos created, videos skipped, and any errors for that specific run."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Flickr integration settings surface is not an Object Authoring object and is not located yet; the case names Administrator; the eight provisioned roles have no Administrator and the brief bars TEST_USER for lifecycle/permission cases - needs a QA Manager ruling on the account",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143017,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that every admin publish/unpublish/delete action shows the Liferay generic success toast and records an audit log entry",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor.",
+     "expected": "Login succeeds."
+    },
+    {
+     "action": "Publish a draft video record.",
+     "expected": "Action completes; a Liferay generic success toast displays (EN/AR per active locale)."
+    },
+    {
+     "action": "Check the audit log for the same action.",
+     "expected": "Audit log shows a new entry recording the publish action, the acting user, and timestamp."
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the audit-log surface is not located yet - automate once it is found on the live CMS (read only)",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143018,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Title field accepts a valid value within 100 characters",
+   "steps": [
+    {
+     "action": "Open the Video Library page content settings.",
+     "expected": "Settings open."
+    },
+    {
+     "action": "Enter Page Title = \"Video Library\" (14 chars).",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; title persists and displays on the public hero."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143019,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Title field rejects an empty value",
+   "steps": [
+    {
+     "action": "Open the page content settings.",
+     "expected": "Settings open."
+    },
+    {
+     "action": "Clear the Page Title field.",
+     "expected": "Field is empty."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error; previous title is retained."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143020,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Title field enforces the 100-character maximum",
+   "steps": [
+    {
+     "action": "Enter exactly 100 characters as the Page Title; save.",
+     "expected": "100-char value is accepted and persists."
+    },
+    {
+     "action": "Enter 101 characters; attempt to save.",
+     "expected": "Save is blocked (or input truncated to 100) with a max-length validation indication."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143021,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Title field rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces (\"   \") as the Page Title.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked as equivalent to empty; previous title is retained."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143022,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Background Image field accepts a valid JPG/PNG under 2 MB",
+   "steps": [
+    {
+     "action": "Open the page content settings.",
+     "expected": "Settings open."
+    },
+    {
+     "action": "Upload a 500 KB PNG file.",
+     "expected": "Upload succeeds."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; image displays as the hero background on the public page."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143023,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Background Image field is blocked when left empty",
+   "steps": [
+    {
+     "action": "Open the page content settings with no image uploaded.",
+     "expected": "Settings open."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143024,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Background Image field rejects a file exceeding 2 MB",
+   "steps": [
+    {
+     "action": "Attempt to upload a 3.5 MB JPG as the Hero Background Image.",
+     "expected": "Upload is rejected or flagged oversize."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked; previous image (if any) is retained."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143025,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Background Image field rejects an unsupported format",
+   "steps": [
+    {
+     "action": "Attempt to upload a GIF file as the Hero Background Image.",
+     "expected": "Upload is rejected as an unsupported format."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked; previous image (if any) is retained."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143028,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page Status dropdown persists each selectable value",
+   "steps": [
+    {
+     "action": "Open page content settings.",
+     "expected": "Settings open."
+    },
+    {
+     "action": "Set Status = Draft, save; then Published, save; then Unpublished, save.",
+     "expected": "Each value persists and is reflected on reload after saving."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143029,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the page's Created/Last Modified Date auto-populates and updates on edit",
+   "steps": [
+    {
+     "action": "Note the page's Last Modified timestamp.",
+     "expected": "Timestamp noted."
+    },
+    {
+     "action": "Edit and save any field on the page.",
+     "expected": "Save succeeds."
+    },
+    {
+     "action": "Re-check the timestamp.",
+     "expected": "Last Modified timestamp updates to the time of the edit."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143030,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a new Video Category's Category ID auto-generates a unique value",
+   "steps": [
+    {
+     "action": "Create two new Video Category records.",
+     "expected": "Both records save."
+    },
+    {
+     "action": "Inspect their Category IDs.",
+     "expected": "Each has a distinct, system-generated unique ID."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143031,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Category Name field accepts a valid value within 200 characters",
+   "steps": [
+    {
+     "action": "Create a Video Category.",
+     "expected": "Form opens."
+    },
+    {
+     "action": "Enter Name EN = \"Community Outreach\" (19 chars) / AR = \"التواصل المجتمعي\".",
+     "expected": "Values entered."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; name persists and displays in the frontend dropdown/chip."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143032,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Category Name field rejects an empty value",
+   "steps": [
+    {
+     "action": "Create a Video Category, leaving Name EN blank.",
+     "expected": "Form opens."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143033,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Category Name field enforces the 200-character maximum",
+   "steps": [
+    {
+     "action": "Enter exactly 200 characters as Category Name; save.",
+     "expected": "200-char value accepted and persists."
+    },
+    {
+     "action": "Enter 201 characters; attempt to save.",
+     "expected": "Save is blocked (or truncated) with a max-length validation indication."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143034,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Category Name field rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces as Category Name.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked as equivalent to empty."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143035,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order accepts a valid positive integer",
+   "steps": [
+    {
+     "action": "Create a Video Category.",
+     "expected": "Form opens."
+    },
+    {
+     "action": "Enter Display Order = 3.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; category appears at position 3 in the dropdown/chip row."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143036,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave Display Order blank.",
+     "expected": "Field empty."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143037,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order rejects zero",
+   "steps": [
+    {
+     "action": "Enter Display Order = 0.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked — 0 is not a positive integer."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143038,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order rejects a negative value",
+   "steps": [
+    {
+     "action": "Enter Display Order = -2.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked — negative values are not permitted."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143039,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order rejects a non-numeric value",
+   "steps": [
+    {
+     "action": "Enter Display Order = \"abc\".",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a numeric-format validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143040,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Category Publish Status dropdown persists each selectable value",
+   "steps": [
+    {
+     "action": "Open a category record.",
+     "expected": "Record opens."
+    },
+    {
+     "action": "Set Publish Status = Draft, save; then Published, save.",
+     "expected": "Each value persists on reload."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143041,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a new Video Record's Video ID auto-generates a unique value",
+   "steps": [
+    {
+     "action": "Create two new video records.",
+     "expected": "Both save."
+    },
+    {
+     "action": "Inspect their Video IDs.",
+     "expected": "Each has a distinct, system-generated unique ID."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143042,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Video Title field accepts a valid value within 200 characters",
+   "steps": [
+    {
+     "action": "Create a video record.",
+     "expected": "Form opens."
+    },
+    {
+     "action": "Enter Title EN/AR within limit.",
+     "expected": "Values entered."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; title displays on card and Details page."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143043,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Video Title field rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave Video Title EN blank.",
+     "expected": "Field empty."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143044,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Video Title field enforces the 200-character maximum",
+   "steps": [
+    {
+     "action": "Enter exactly 200 characters as Video Title; save.",
+     "expected": "200-char value accepted."
+    },
+    {
+     "action": "Enter 201 characters; attempt to save.",
+     "expected": "Save is blocked (or truncated) with a max-length indication."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143045,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Video Title field rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces as Video Title.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked as equivalent to empty."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143046,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video Category accepts a valid selection from published categories",
+   "steps": [
+    {
+     "action": "Open a video record.",
+     "expected": "Record opens."
+    },
+    {
+     "action": "Select Category = \"Institutional\" from the dropdown (only published categories listed).",
+     "expected": "Only published categories are selectable; \"Institutional\" selected."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; card shows \"Institutional\" chip."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143047,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video Category is blocked when not selected",
+   "steps": [
+    {
+     "action": "Leave Video Category unselected.",
+     "expected": "Field unset."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143048,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video Source Type accepts exactly one valid selection and reveals its conditional field",
+   "steps": [
+    {
+     "action": "Open a video record.",
+     "expected": "Record opens."
+    },
+    {
+     "action": "Select Source Type = \"External URL\".",
+     "expected": "The Video URL field appears/becomes required; Flickr Video ID and Video File fields are hidden/disabled."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143049,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video Source Type is blocked when not selected",
+   "steps": [
+    {
+     "action": "Leave Source Type unselected.",
+     "expected": "Field unset."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143050,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Flickr Video ID auto-populates and is stored on the record after import",
+   "steps": [
+    {
+     "action": "Import a video from Flickr.",
+     "expected": "Import completes."
+    },
+    {
+     "action": "Inspect the resulting record's Flickr Video ID field.",
+     "expected": "Field is populated with the correct Flickr video ID, read-only in the UI."
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: a Flickr import/config change writes real albums/videos into shared qcdev and cannot be scoped to a QCTEST record",
+   "account": "Administrator (named by the case; no provisioned role - TEST_USER is barred by the brief)"
+  },
+  {
+   "tc_id": 143051,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video URL accepts a valid YouTube/Vimeo URL when Source=External URL",
+   "steps": [
+    {
+     "action": "Set Source Type=External URL.",
+     "expected": "Field appears."
+    },
+    {
+     "action": "Enter Video URL = `https://www.youtube.com/watch?v=abc123`.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; URL is stored as the playback source."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143052,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video URL rejects a non-YouTube/Vimeo URL",
+   "steps": [
+    {
+     "action": "Set Source Type=External URL.",
+     "expected": "Field appears."
+    },
+    {
+     "action": "Enter Video URL = `https://example.com/video.mp4`.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a format validation error (must be a valid YouTube or Vimeo URL)."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143053,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video URL is blocked when left empty while Source=External URL",
+   "steps": [
+    {
+     "action": "Set Source Type=External URL.",
+     "expected": "Field appears, required."
+    },
+    {
+     "action": "Leave Video URL blank.",
+     "expected": "Field empty."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143054,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video File accepts a valid MP4/MOV upload when Source=Direct Upload",
+   "steps": [
+    {
+     "action": "Set Source Type=Direct Upload.",
+     "expected": "Field appears."
+    },
+    {
+     "action": "Upload a valid MP4 file.",
+     "expected": "Upload succeeds."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; file stored in Documents & Media as the playback source."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143055,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video File rejects an unsupported format",
+   "steps": [
+    {
+     "action": "Set Source Type=Direct Upload.",
+     "expected": "Field appears."
+    },
+    {
+     "action": "Attempt to upload an AVI file.",
+     "expected": "Upload is rejected as unsupported format."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143056,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video File is blocked when left empty while Source=Direct Upload",
+   "steps": [
+    {
+     "action": "Set Source Type=Direct Upload.",
+     "expected": "Field appears, required."
+    },
+    {
+     "action": "Leave Video File empty.",
+     "expected": "Field empty."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143057,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video Thumbnail accepts a valid JPG/JPEG/PNG upload",
+   "steps": [
+    {
+     "action": "Open a video record.",
+     "expected": "Record opens."
+    },
+    {
+     "action": "Upload a valid PNG as Thumbnail EN/AR.",
+     "expected": "Upload succeeds."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; thumbnail is used as the card image and player poster frame."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143058,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video Thumbnail rejects an unsupported file format",
+   "steps": [
+    {
+     "action": "Attempt to upload a BMP file as the Video Thumbnail.",
+     "expected": "Upload is attempted."
+    },
+    {
+     "action": "Observe the result.",
+     "expected": "Rejected with message \"Unsupported file type. Accepted formats: JPG, JPEG, PNG.\" / نوع الملف غير مدعوم. الصيغ المقبولة: JPG، JPEG، PNG."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143059,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Duration accepts a valid mm:ss value and displays as a badge",
+   "steps": [
+    {
+     "action": "Open a video record with Duration auto-populated as 08:31.",
+     "expected": "Field shows 08:31."
+    },
+    {
+     "action": "Edit it to 12:45.",
+     "expected": "Field accepts 12:45."
+    },
+    {
+     "action": "Save and view the video card.",
+     "expected": "Save succeeds; card and player show duration badge \"12:45\"."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "public half asserted as the QCTEST record being visible; the exact rendered format/position is not asserted",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143060,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Duration rejects an invalid mm:ss format",
+   "steps": [
+    {
+     "action": "Enter Duration = \"8:99\".",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a format validation error (seconds must be 00–59)."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143061,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Duration is blocked when left empty",
+   "steps": [
+    {
+     "action": "Clear the Duration field.",
+     "expected": "Field empty."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143062,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video Description accepts valid rich text within 2000 characters",
+   "steps": [
+    {
+     "action": "Open a video record.",
+     "expected": "Record opens."
+    },
+    {
+     "action": "Enter a 300-character multi-paragraph description.",
+     "expected": "Text entered with paragraph breaks."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; description renders with formatting preserved on Details page."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143063,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video Description accepts exactly 2000 characters",
+   "steps": [
+    {
+     "action": "Enter exactly 2000 characters as the description.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; full 2000-character text persists."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143064,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video Description rejects content exceeding 2000 characters",
+   "steps": [
+    {
+     "action": "Enter 2001 characters as the description.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked (or input truncated) with a max-length validation indication."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143065,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Video Description can be left empty since it is not a required field",
+   "steps": [
+    {
+     "action": "Leave the Description field blank on an otherwise-complete video record.",
+     "expected": "Field left empty."
+    },
+    {
+     "action": "Save and publish.",
+     "expected": "Save and publish succeed with no validation error for the missing description."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143066,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Published Date accepts a valid date",
+   "steps": [
+    {
+     "action": "Open a video record.",
+     "expected": "Record opens."
+    },
+    {
+     "action": "Enter Published Date = 2026-09-15.",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Save.",
+     "expected": "Save succeeds; date is used to drive \"Most Recent\" sort and displays on the card/Details page."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143067,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Published Date is blocked when left empty",
+   "steps": [
+    {
+     "action": "Leave Published Date blank.",
+     "expected": "Field empty."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a required-field validation error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143068,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Published Date rejects an invalid date format",
+   "steps": [
+    {
+     "action": "Enter Published Date = \"31/02/2026\" (invalid calendar date).",
+     "expected": "Value entered."
+    },
+    {
+     "action": "Attempt to save.",
+     "expected": "Save is blocked with a date-format/validity error."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143070,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Flickr Source Folder reference populates for Flickr-sourced videos and remains blank otherwise",
+   "steps": [
+    {
+     "action": "Inspect a Flickr-imported video record's Flickr Source Folder field.",
+     "expected": "Field shows the correct Documents & Media folder path."
+    },
+    {
+     "action": "Inspect a Direct-Upload video record's same field.",
+     "expected": "Field is blank/not applicable for the non-Flickr record."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor') (reads a QCTEST record only)"
+  },
+  {
+   "tc_id": 143071,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Video Status dropdown persists each selectable value",
+   "steps": [
+    {
+     "action": "Open a video record.",
+     "expected": "Record opens."
+    },
+    {
+     "action": "Set Status=Draft, save; then Published, save; then Unpublished, save.",
+     "expected": "Each value persists on reload."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143072,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the video record's Created/Last Modified Date auto-populates and updates on edit",
+   "steps": [
+    {
+     "action": "Note a video record's Last Modified timestamp.",
+     "expected": "Timestamp noted."
+    },
+    {
+     "action": "Edit and save any field.",
+     "expected": "Save succeeds."
+    },
+    {
+     "action": "Re-check the timestamp.",
+     "expected": "Timestamp updates to the edit time."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 143073,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that publishing is blocked when Arabic content is missing while English content is filled",
+   "steps": [
+    {
+     "action": "Create a video record with Title EN, Thumbnail, and Source filled but Title AR left blank.",
+     "expected": "Record saves as Draft."
+    },
+    {
+     "action": "Attempt to Publish.",
+     "expected": "Publish is blocked with message \"Arabic content is required.\" / المحتوى بالعربية مطلوب.; record remains unpublished."
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  }
+ ],
+ "out_of_scope": []
+}

@@ -1,5 +1,5 @@
 """
-web/tests/board_of_directors/test_board_of_directors_control_panel.py —
+cms/tests/board_of_directors/test_board_of_directors_control_panel.py —
 Control_Panel-tagged cases for PBI 129398 (QC-ABOUT-006 — Board of Directors
 & General Director), scoped to the PAGE-LEVEL admin surface: Liferay's Page
 Design / Fragment Configuration panel (Site Builder > Page Tree > About Us >
@@ -7,11 +7,40 @@ Design / Fragment Configuration panel (Site Builder > Page Tree > About Us >
 See web/pages/board_of_directors/board_of_directors_admin_page.py's module
 docstring for the full live-verified field inventory this batch is built on.
 
-⚠ NOT PARALLEL-SAFE: every test in this module edits the SAME shared Liferay
-page draft (there is one fragment/widget for the whole public page). Run this
-module with `-n 0` (or `--dist loadfile` restricted to this file) — the
-default `-n 2` in pytest.ini would let two workers race on one draft and one
-worker's Discard Draft could wipe the other's in-flight edit.
+⚠ PARALLEL SAFETY — read before running this module under xdist.
+
+This module now covers TWO different shared surfaces, and only one of them is
+protected. (The original warning here said "every test in this module edits the
+SAME shared Liferay page draft" and told you to use `-n 0` against a "default
+`-n 2`"; both statements were stale — `pytest.ini` carries `-n 3
+--dist loadgroup`, and the module has since grown a second surface.)
+
+1. PAGE-DRAFT tests (fixture `board_directory_field_edit`, 21 tests) edit the
+   ONE shared Liferay page draft for the whole public page. These DO carry
+   `@pytest.mark.xdist_group("board_directory_page_main")`, so `--dist
+   loadgroup` keeps them on a single worker — no Discard-Draft race.
+
+2. BOARD-MEMBER tests (fixtures `board_member_field_edit`, `short_bio_edit`,
+   `role_badge_label_edit`, `display_order_edit`,
+   `board_member_rich_text_edit` — 39 tests) each open the FIRST row matching
+   category "Board Member" (`member_row_by_category` ->
+   `find_row_index_by_category`, which is deterministic), capture the field's
+   original value, edit it, and revert in teardown.
+
+   Because the row is selected deterministically, all 39 target the SAME REAL
+   Board Member record. Under `-n 3` two of them could interleave
+   capture/edit/revert on that record, and a revert could write back a value
+   another test had just set — a lost update that permanently corrupts real CMS
+   content, not just a flaky failure.
+
+   ✅ FIXED 2026-10-01: all 39 now carry
+   `@pytest.mark.xdist_group("board_member_shared_row")`, so `--dist loadgroup`
+   keeps them on one worker. If you add a test that uses any of those five
+   fixtures, it MUST carry the same group — the fixtures resolve to one shared
+   row, whatever the test is named.
+
+Tests using the `disposable_member` fixture create and delete their own record
+and are not affected by either constraint.
 
 SOURCE BATCH — 15 cases were handed in for this surface (133517-133529,
 133538, 133618). A live pass against the real config panel (2026-08-25,
@@ -199,6 +228,7 @@ def display_order_edit(page, board_member_row):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_short_bio_en_accepts_valid_value_and_propagates(short_bio_edit, page):
     # QA-133580 — a valid Short Bio (EN) save must persist in the CMS and
     # propagate to the public Board of Directors grid card within the
@@ -240,6 +270,7 @@ def test_short_bio_en_accepts_valid_value_and_propagates(short_bio_edit, page):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_short_bio_en_rejects_empty_value(short_bio_edit):
     # QA-133581 — clearing Short Bio (EN) and attempting to Save must be
     # blocked with a validation error, not silently accepted.
@@ -262,6 +293,7 @@ def test_short_bio_en_rejects_empty_value(short_bio_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_short_bio_en_accepts_400_char_boundary(short_bio_edit):
     # QA-133582 — exactly 400 characters is the documented upper boundary
     # and must be accepted, not off-by-one rejected.
@@ -288,6 +320,7 @@ def test_short_bio_en_accepts_400_char_boundary(short_bio_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_short_bio_en_rejects_over_400_chars(short_bio_edit):
     # QA-133583 — 401 characters (one past the documented boundary) must be
     # rejected with a validation error.
@@ -313,6 +346,7 @@ def test_short_bio_en_rejects_over_400_chars(short_bio_edit):
 @pytest.mark.control_panel
 @pytest.mark.ui
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_display_order_accepts_valid_positive_integer(display_order_edit):
     # QA-133604 — a valid, section-unique positive integer must save
     # cleanly. Uses a high value (999) deliberately unlikely to collide
@@ -340,6 +374,7 @@ def test_display_order_accepts_valid_positive_integer(display_order_edit):
 @pytest.mark.control_panel
 @pytest.mark.ui
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_display_order_rejects_zero(display_order_edit):
     # QA-133605 — Display Order = 0 must be rejected. The case also
     # requires an EXACT bilingual error message; that exact copy was not
@@ -367,6 +402,7 @@ def test_display_order_rejects_zero(display_order_edit):
 @pytest.mark.control_panel
 @pytest.mark.ui
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_display_order_rejects_negative_value(display_order_edit):
     # QA-133606 — same message-text caveat as 133605 above: behavior-only
     # assertion, exact bilingual copy not captured live this session.
@@ -390,6 +426,7 @@ def test_display_order_rejects_negative_value(display_order_edit):
 @pytest.mark.control_panel
 @pytest.mark.ui
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_display_order_rejects_empty_value(display_order_edit):
     # QA-133607 — clearing Display Order and attempting Save must be
     # blocked.
@@ -542,6 +579,7 @@ def board_member_field_edit(page, member_row_by_category):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_full_name_accepts_valid_value(board_member_field_edit):
     # QA-133551 — a valid Full Name save must persist without a validation error.
     admin, field_locator, original_value = board_member_field_edit("FULL_NAME")
@@ -564,6 +602,7 @@ def test_full_name_accepts_valid_value(board_member_field_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_full_name_rejects_empty_value(board_member_field_edit):
     # QA-133552 — clearing Full Name and saving must be blocked with the
     # exact inline message confirmed live: "This field is required."
@@ -587,6 +626,7 @@ def test_full_name_rejects_empty_value(board_member_field_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_full_name_rejects_over_150_chars(board_member_field_edit):
     # QA-133553 — a 151-character Full Name must be rejected.
     admin, field_locator, _original_value = board_member_field_edit("FULL_NAME")
@@ -608,6 +648,7 @@ def test_full_name_rejects_over_150_chars(board_member_field_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_position_label_accepts_valid_value(board_member_field_edit):
     # QA-133557 — a valid Position Label save must persist without error.
     admin, field_locator, original_value = board_member_field_edit("POSITION_LABEL")
@@ -630,6 +671,7 @@ def test_position_label_accepts_valid_value(board_member_field_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_position_label_rejects_empty_value(board_member_field_edit):
     # QA-133558 — clearing Position Label and saving must be blocked.
     admin, field_locator, _original_value = board_member_field_edit("POSITION_LABEL")
@@ -649,6 +691,7 @@ def test_position_label_rejects_empty_value(board_member_field_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_position_label_rejects_over_100_chars(board_member_field_edit):
     # QA-133559 — a 101-character Position Label must be rejected.
     admin, field_locator, _original_value = board_member_field_edit("POSITION_LABEL")
@@ -670,6 +713,7 @@ def test_position_label_rejects_over_100_chars(board_member_field_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_photo_alt_text_accepts_valid_value(board_member_field_edit):
     # QA-133575 — a valid Photo Alt Text save must persist without error.
     admin, field_locator, original_value = board_member_field_edit("PHOTO_ALT_TEXT")
@@ -692,6 +736,7 @@ def test_photo_alt_text_accepts_valid_value(board_member_field_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_photo_alt_text_rejects_empty_value(board_member_field_edit):
     # QA-133576 — clearing Photo Alt Text and saving must be blocked.
     admin, field_locator, _original_value = board_member_field_edit("PHOTO_ALT_TEXT")
@@ -711,6 +756,7 @@ def test_photo_alt_text_rejects_empty_value(board_member_field_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_photo_alt_text_rejects_over_150_chars(board_member_field_edit):
     # QA-133577 — a 151-character Photo Alt Text must be rejected.
     admin, field_locator, _original_value = board_member_field_edit("PHOTO_ALT_TEXT")
@@ -732,6 +778,7 @@ def test_photo_alt_text_rejects_over_150_chars(board_member_field_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_professional_experience_single_entry_saves(board_member_field_edit):
     # QA-133590 — scoped to the field's REAL confirmed shape (one textarea
     # holding a raw JSON array string), not the repeater-UI premise the
@@ -778,6 +825,7 @@ def _revert_role_badge_label(admin, idx, original_value):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_role_badge_label_accepted_for_chairman(role_badge_label_edit):
     admin, idx, original_value = role_badge_label_edit("Chairman", exclude=("Vice Chairman", "General Manager"))
     try:
@@ -800,6 +848,7 @@ def test_role_badge_label_accepted_for_chairman(role_badge_label_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_role_badge_label_mandatory_for_chairman(role_badge_label_edit):
     admin, idx, original_value = role_badge_label_edit("Chairman", exclude=("Vice Chairman", "General Manager"))
     try:
@@ -819,6 +868,7 @@ def test_role_badge_label_mandatory_for_chairman(role_badge_label_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_role_badge_label_accepted_for_general_manager(role_badge_label_edit):
     admin, idx, original_value = role_badge_label_edit("General Manager")
     try:
@@ -841,6 +891,7 @@ def test_role_badge_label_accepted_for_general_manager(role_badge_label_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_role_badge_label_mandatory_for_general_manager(role_badge_label_edit):
     admin, idx, original_value = role_badge_label_edit("General Manager")
     try:
@@ -860,6 +911,7 @@ def test_role_badge_label_mandatory_for_general_manager(role_badge_label_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_role_badge_label_optional_for_vice_chairman(role_badge_label_edit):
     admin, idx, original_value = role_badge_label_edit("Vice Chairman")
     try:
@@ -881,6 +933,7 @@ def test_role_badge_label_optional_for_vice_chairman(role_badge_label_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_role_badge_label_optional_for_board_member(role_badge_label_edit):
     admin, idx, original_value = role_badge_label_edit("Board Member", exclude=("Chairman", "General Manager"))
     try:
@@ -902,6 +955,7 @@ def test_role_badge_label_optional_for_board_member(role_badge_label_edit):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_role_badge_label_rejects_over_100_chars(role_badge_label_edit):
     admin, idx, original_value = role_badge_label_edit("Board Member", exclude=("Chairman", "General Manager"))
     try:
@@ -924,6 +978,7 @@ def test_role_badge_label_rejects_over_100_chars(role_badge_label_edit):
 @pytest.mark.control_panel
 @pytest.mark.ui
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_display_order_rejects_non_numeric_input(display_order_edit):
     # QA-133608 — a non-numeric Display Order must be blocked, not
     # silently coerced.
@@ -1173,14 +1228,14 @@ def test_create_board_member_end_to_end_draft_through_publish(page, browser):
             f"list immediately after Save as Draft"
         )
 
-        with allure.step("Submit for Publishing"):
+        with allure.step("Submit for Review"):
             admin.open_entry_by_edit_link(qctest_name)
             admin.submit_for_publishing()
 
         admin.open_entries_list()
         assert admin.row_status_text(qctest_name) == STATUS_PUBLISHED, (
-            f"expected {qctest_name!r} to show Status 'Approved' in the "
-            f"entries list immediately after Submit for Publishing"
+            f"expected {qctest_name!r} to show Status 'Published' in the "
+            f"entries list immediately after Submit for Review"
         )
 
         with allure.step("Assert the member appears on the public Board Members grid"):
@@ -1357,7 +1412,7 @@ def test_unpublish_removes_from_public_retains_in_cms(page, browser):
             f"public delivery surface at all on this environment."
         )
     finally:
-        with allure.step("Restore: Submit for Publishing to return the record to its Approved baseline"):
+        with allure.step("Restore: Submit for Review to return the record to its Approved baseline"):
             try:
                 admin.open_board_members_list()
                 admin.open_member_edit_form_by_name(member_name)
@@ -1415,8 +1470,8 @@ def test_delete_board_member_removes_from_cms_and_public_site(page, browser):
         # comment for the confirmed-live reason.
         admin.open_entries_list()
         assert admin.row_status_text(qctest_name) == STATUS_PUBLISHED, (
-            f"expected {qctest_name!r} to show Status 'Approved' immediately "
-            f"after Submit for Publishing"
+            f"expected {qctest_name!r} to show Status 'Published' immediately "
+            f"after Submit for Review"
         )
 
         with allure.step("Confirm the member is live on the public site before deleting"):
@@ -1706,7 +1761,7 @@ def test_preview_draft_member_accurate_and_not_public(page, browser):
             f"slow-propagation false alarm."
         )
     finally:
-        with allure.step("Restore: Submit for Publishing to republish the member"):
+        with allure.step("Restore: Submit for Review to republish the member"):
             try:
                 admin.open_board_members_list()
                 admin.open_member_edit_form_by_name(member_name)
@@ -1756,7 +1811,7 @@ def test_bilingual_toast_shown_after_publish(page):
             admin.open_new_member_form()
             _fill_disposable_member(admin, qctest_name, category="Board Member", active=True, display_order="974")
 
-        with allure.step("Click Submit for Publishing and poll for a success toast (EN or AR)"):
+        with allure.step("Click Submit for Review and poll for a success toast (EN or AR)"):
             admin.click(admin.SUBMIT_FOR_PUBLISHING_BUTTON)
             deadline = time.monotonic() + 6
             toast_seen = False
@@ -1777,7 +1832,7 @@ def test_bilingual_toast_shown_after_publish(page):
 
         assert toast_seen, (
             "no bilingual (EN/AR) success toast was observed within 6 "
-            "seconds of Submit for Publishing — CONFIRMED LIVE 2026-09-07: "
+            "seconds of Submit for Review — CONFIRMED LIVE 2026-09-07: "
             "no visible role=alert/role=status/toast-class element ever "
             "carried success/published wording in either language; the only "
             "role=alert/status elements present are pre-existing, empty, "
@@ -3177,7 +3232,7 @@ def test_page_status_draft_blocks_then_published_restores_public_access(page, br
             restored_status = admin.row_status_text_by_code(MAIN_ENTRY_CODE)
             assert restored_status == STATUS_PUBLISHED, (
                 f"CRITICAL — RESTORE FAILED: expected MAIN entry Status "
-                f"'Approved' after Submit for Publishing, got "
+                f"'Approved' after Submit for Review, got "
                 f"{restored_status!r}. The real production Board of "
                 f"Directors page may still be OFFLINE. STOP — do not "
                 f"retry — a human must check "
@@ -3423,6 +3478,7 @@ def disposable_member(page):
 @pytest.mark.control_panel
 @pytest.mark.bilingual
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_full_name_ar_accepts_valid_value(board_member_field_edit):
     # QA-133554 — Full Name (AR) = "الشيخ خليفة بن جاسم آل ثاني" must save
     # without a validation error. FULL_NAME_AR resolves via a stable CSS id
@@ -3448,6 +3504,7 @@ def test_full_name_ar_accepts_valid_value(board_member_field_edit):
 @pytest.mark.control_panel
 @pytest.mark.bilingual
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_full_name_ar_rejects_empty_value(board_member_field_edit):
     # QA-133555 — clearing Full Name (AR) and saving must be blocked.
     # CONFIRMED LIVE this field's real rejection is mechanism (1) — native
@@ -3475,6 +3532,7 @@ def test_full_name_ar_rejects_empty_value(board_member_field_edit):
 @pytest.mark.control_panel
 @pytest.mark.bilingual
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_full_name_ar_rejects_over_150_chars(board_member_field_edit):
     # QA-133556 — CONFIRMED LIVE (native `maxlength="150"` on
     # `#qc-ar-fullName`) this field silently TRUNCATES to exactly 150
@@ -3507,6 +3565,7 @@ def test_full_name_ar_rejects_over_150_chars(board_member_field_edit):
 @pytest.mark.control_panel
 @pytest.mark.bilingual
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_position_label_ar_accepts_valid_value(board_member_field_edit):
     # QA-133560 — Position Label (AR) = "النائب الأول لرئيس مجلس الإدارة"
     # must save without a validation error.
@@ -3531,6 +3590,7 @@ def test_position_label_ar_accepts_valid_value(board_member_field_edit):
 @pytest.mark.control_panel
 @pytest.mark.bilingual
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_position_label_ar_rejects_empty_value(board_member_field_edit):
     # QA-133561 — CONFIRMED LIVE required (`#qc-ar-positionLabel`,
     # `required=""`) — clearing and saving must be blocked.
@@ -3557,6 +3617,7 @@ def test_position_label_ar_rejects_empty_value(board_member_field_edit):
 @pytest.mark.control_panel
 @pytest.mark.bilingual
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_photo_alt_text_ar_accepts_valid_value(board_member_field_edit):
     # QA-133578 — Photo Alt Text (AR) = "صورة رئيس مجلس الإدارة" must save
     # without a validation error.
@@ -3581,6 +3642,7 @@ def test_photo_alt_text_ar_accepts_valid_value(board_member_field_edit):
 @pytest.mark.control_panel
 @pytest.mark.bilingual
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_photo_alt_text_ar_rejects_empty_value(board_member_field_edit):
     # QA-133579 — CONFIRMED LIVE this field is NEITHER natively required
     # (`#qc-ar-photoAltText` carries no `required` attribute) NOR
@@ -3616,6 +3678,7 @@ def test_photo_alt_text_ar_rejects_empty_value(board_member_field_edit):
 @pytest.mark.control_panel
 @pytest.mark.bilingual
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_short_bio_ar_accepts_valid_value(board_member_field_edit):
     # QA-133584 — a valid Short Bio (AR) save must persist without error.
     admin, field_locator, _original_value = board_member_field_edit("SHORT_BIO_AR")
@@ -3639,6 +3702,7 @@ def test_short_bio_ar_accepts_valid_value(board_member_field_edit):
 @pytest.mark.control_panel
 @pytest.mark.bilingual
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_short_bio_ar_rejects_empty_value(board_member_field_edit):
     # QA-133585 — CONFIRMED LIVE required (`#qc-ar-shortBio`, `required=""`)
     # — clearing and saving must be blocked.
@@ -3690,6 +3754,7 @@ def board_member_rich_text_edit(page, member_row_by_category):
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_detailed_biography_en_accepts_rich_text(board_member_rich_text_edit, page):
     # QA-133586 — CONFIRMED LIVE this field is a real CKEditor rich-text
     # instance (`iframe[title="editor"]`, nth=0 = EN), not a plain textarea
@@ -3743,6 +3808,7 @@ def test_detailed_biography_en_accepts_rich_text(board_member_rich_text_edit, pa
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_detailed_biography_en_accepts_5000_char_boundary(board_member_rich_text_edit):
     # QA-133587 — exactly 5000 characters must save without error.
     admin, _original = board_member_rich_text_edit("en")
@@ -3766,6 +3832,7 @@ def test_detailed_biography_en_accepts_5000_char_boundary(board_member_rich_text
 @pytest.mark.about
 @pytest.mark.control_panel
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_detailed_biography_en_rejects_over_5000_chars(board_member_rich_text_edit):
     # QA-133588 — CONFIRMED LIVE this field has NO length enforcement of
     # ANY kind (no native maxlength, no app-level rejection, no
@@ -3799,6 +3866,7 @@ def test_detailed_biography_en_rejects_over_5000_chars(board_member_rich_text_ed
 @pytest.mark.control_panel
 @pytest.mark.bilingual
 @pytest.mark.functional_low
+@pytest.mark.xdist_group("board_member_shared_row")
 def test_detailed_biography_ar_accepts_rich_text(board_member_rich_text_edit):
     # QA-133589 — CONFIRMED LIVE a SECOND CKEditor instance
     # (`iframe[title="editor"] >> nth=1`) backs the AR Detailed Biography
@@ -4440,7 +4508,7 @@ def test_member_photo_over_2mb_rejected(page):
 
     admin.submit_for_publishing()
     assert admin.is_save_error_shown(), (
-        "a >2MB Member Photo was never attached, yet Submit for Publishing "
+        "a >2MB Member Photo was never attached, yet Submit for Review "
         "succeeded — expected the still-mandatory, still-empty Member Photo "
         "field to block save"
     )
@@ -4485,7 +4553,7 @@ def test_member_photo_unsupported_format_rejected(page):
 
     admin.submit_for_publishing()
     assert admin.is_save_error_shown(), (
-        "a .gif Member Photo was never attached, yet Submit for Publishing "
+        "a .gif Member Photo was never attached, yet Submit for Review "
         "succeeded — expected the still-mandatory, still-empty Member Photo "
         "field to block save"
     )

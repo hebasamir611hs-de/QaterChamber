@@ -1,0 +1,4237 @@
+{
+ "pbi": 130949,
+ "cases": [
+  {
+   "tc_id": 141193,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "SVC",
+    "UI",
+    "Web"
+   ],
+   "title": "Verify that an Inactive section leaves no visible layout gap and drops its sticky index entry",
+   "steps": [
+    {
+     "action": "In Control_Panel via Object Authoring, open the Proposal for Research page record, set the Service information section Active Status to Inactive and publish",
+     "expected": "The change saves and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research at 1920px in a FRESH logged-out browser context and inspect the page body and the sticky index",
+     "expected": "The Service information section does not render; the sticky index lists only '01 Overview' and '02 Downloadable resources'; the Overview info cards are followed directly by the Downloadable resources badge with no blank vertical gap between them"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141204,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "Regression",
+    "SVC"
+   ],
+   "title": "Verify that an unauthenticated user cannot reach the Object Authoring record for the Proposal for Research page",
+   "steps": [
+    {
+     "action": "Open a fresh browser context with no authentication state and dismiss the announcement popup if it appears",
+     "expected": "The browser context carries no CMS session cookie"
+    },
+    {
+     "action": "Navigate directly to the Object Authoring URL for the Proposal for Research page record",
+     "expected": "The Liferay sign-in screen or an Access Denied message is returned; no authoring form, no field values and no Publish control are rendered"
+    },
+    {
+     "action": "Attempt to submit an edit to the hero Page Title field by any means available on the returned page",
+     "expected": "No edit is accepted and the published public page at /en/our-services/information/proposal-for-research still shows the hero title 'Proposal for Research' unchanged"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141205,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "Regression",
+    "SVC",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that a Site Content Editor can publish the Proposal for Research page",
+   "steps": [
+    {
+     "action": "Log in to the Control Panel as the Site Content Editor and dismiss the announcement popup",
+     "expected": "Login succeeds and the Control Panel loads for the Site Content Editor account"
+    },
+    {
+     "action": "Open the QCTEST-130949-ProposalForResearch record in Object Authoring",
+     "expected": "The record opens in edit mode with the Publish control enabled"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "The record status changes to Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context",
+     "expected": "The public page returns HTTP 200 and renders the hero title 'Proposal for Research' with all three sections"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated"
+  },
+  {
+   "tc_id": 141206,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "SVC"
+   ],
+   "title": "Verify that a Site Content Editor is denied access to Control Panel user and role administration",
+   "steps": [
+    {
+     "action": "Log in to the Control Panel as the Site Content Editor",
+     "expected": "Login succeeds and content authoring surfaces are reachable"
+    },
+    {
+     "action": "Navigate directly to the Control Panel Users and Organizations administration URL",
+     "expected": "An Access Denied message is returned and no user list is rendered"
+    },
+    {
+     "action": "Attempt to open the role assignment screen for any user",
+     "expected": "No role assignment form is reachable and no permission change is committed"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141207,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "SVC",
+    "Workflow"
+   ],
+   "title": "Verify that a Site Content Author can edit and save the Proposal for Research page as a draft",
+   "steps": [
+    {
+     "action": "Log in to the Control Panel as the Site Content Author and dismiss the announcement popup",
+     "expected": "Login succeeds and the record is editable for the Author account"
+    },
+    {
+     "action": "Open the QCTEST-130949-ProposalForResearch record in Object Authoring and change the first Overview info card title to 'QCTEST-130949 Clear research focus'",
+     "expected": "The field accepts the new value"
+    },
+    {
+     "action": "Save as Draft",
+     "expected": "The record is saved in Draft state and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Re-open the record and read the info card title field",
+     "expected": "The info card title field reads 'QCTEST-130949 Clear research focus' after re-opening the record"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "The case value 'Clear research focus' is appended to the QCTEST record's own title (Card Title is the object's title field; the shared check finds and deletes the record by that title)."
+  },
+  {
+   "tc_id": 141208,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "Regression",
+    "SVC",
+    "Web",
+    "Workflow"
+   ],
+   "title": "Verify that a Site Content Author cannot publish the Proposal for Research page directly",
+   "steps": [
+    {
+     "action": "Log in to the Control Panel as the Site Content Author and open the QCTEST-130949-ProposalForResearch record in Object Authoring",
+     "expected": "The record opens in edit mode"
+    },
+    {
+     "action": "Inspect the available lifecycle controls on the record",
+     "expected": "No enabled Publish control is offered to the Author; only Save as Draft and Submit for Review are available"
+    },
+    {
+     "action": "Attempt to publish the record directly (including by posting the publish action URL if the control is not rendered)",
+     "expected": "The publish attempt is rejected with an Access Denied message and the record status stays Draft"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context",
+     "expected": "The public page still shows the previously published content; the Author's unpublished change is not visible to an anonymous visitor"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "The 7-state workflow routes an Author's submit to Pending Review - asserted positively (Pending Review, no approve/publish action)."
+  },
+  {
+   "tc_id": 141209,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "Regression",
+    "SVC",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that publishing the fully authored page renders every active component in configured order to an anonymous visitor",
+   "steps": [
+    {
+     "action": "Log in to the Control Panel as the Site Content Editor and open the QCTEST-130949-ProposalForResearch record in Object Authoring",
+     "expected": "The record opens with page status Draft and all components Active"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "The record status changes to Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a FRESH logged-out browser context",
+     "expected": "The public page returns HTTP 200 for an anonymous visitor with no login prompt"
+    },
+    {
+     "action": "Read the page top to bottom and record the order of the quick facts, sections, info cards, information groups and resource items",
+     "expected": "The content renders in configured display order: quick facts 'Proposal Type', 'Research Focus', 'Primary Audience', 'Responsible Department'; sections '01 Overview', '02 Service information', '03 Downloadable resources'; info cards 'Clear research focus', 'Business guidance', 'Contact our experts'; groups 'Preparing your proposal' (6 bullets) then 'Supporting information' (4 bullets); resources 'Research Proposal Template' then 'Research Proposal Guidelines'"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated"
+  },
+  {
+   "tc_id": 141211,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "Regression",
+    "SVC",
+    "Web",
+    "Workflow"
+   ],
+   "title": "Verify that a page saved as Draft is not reachable by an anonymous visitor",
+   "steps": [
+    {
+     "action": "Log in to the Control Panel as the Site Content Editor, open the record in Object Authoring, set the page status to Draft and Save as Draft",
+     "expected": "The record is saved with status Draft and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a FRESH logged-out browser context with no CMS session",
+     "expected": "The anonymous request does not render the page content: no hero title 'Proposal for Research', no quick facts and no resource cards are returned; the visitor gets the site's not-found or unauthorised response instead"
+    },
+    {
+     "action": "Search the site for the phrase 'Proposal for Research' as an anonymous visitor",
+     "expected": "The draft page does not appear in the anonymous search results"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141212,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "Regression",
+    "SVC",
+    "Web",
+    "Workflow"
+   ],
+   "title": "Verify that unpublishing the page removes it from public view while the content is retained in the CMS",
+   "steps": [
+    {
+     "action": "Log in to the Control Panel as the Site Content Editor, open the record in Object Authoring and click Unpublish",
+     "expected": "The record status changes to Unpublished and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a FRESH logged-out browser context",
+     "expected": "The anonymous request does not render the page: no hero title, no sections and no Download buttons are returned"
+    },
+    {
+     "action": "Re-open the record in Object Authoring and inspect the hero, quick facts, sections, groups and resource items",
+     "expected": "All authored content is retained: the hero still reads 'Proposal for Research' / 'اقتراح بحث أو دراسة', all 4 quick facts, 3 sections, 3 info cards, 2 groups with 10 bullets and 2 resource items with their attached PDFs are still present in the record"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated"
+  },
+  {
+   "tc_id": 141213,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "Regression",
+    "SVC",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that a downloadable document can be replaced without unpublishing the page and its file type and size are re-captured",
+   "steps": [
+    {
+     "action": "Log in to the Control Panel as the Site Content Editor and open the QCTEST-130949-ProposalForResearch record in Object Authoring WITHOUT unpublishing the page",
+     "expected": "The record opens for editing while its status remains Published; no unpublish step is required to reach the file field"
+    },
+    {
+     "action": "Replace the file on the 'Research Proposal Template' resource item with QCTEST-130949-template-v2.pdf and save",
+     "expected": "The file is accepted and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Read the record's page status",
+     "expected": "The page status is still Published — it was never set to Draft or Unpublished during the replacement"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a FRESH logged-out browser context, read the first resource card's metadata and click its 'Download' button",
+     "expected": "The card still reads title 'Research Proposal Template' with file type 'PDF' and now shows the re-captured size '1.2 MB' instead of '200 KB', and the download returns QCTEST-130949-template-v2.pdf"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case expects File Type / File Size to be re-captured on a live document swap, but both are free-text required fields on the live Resource Item form (read 2026-10-01) - needs a BA ruling, and the held-open-visitor half needs a second session across a publish"
+  },
+  {
+   "tc_id": 141214,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "Regression",
+    "SVC",
+    "Web",
+    "Workflow"
+   ],
+   "title": "Verify that unpublished changes are visible in Preview only and never on the live public page",
+   "steps": [
+    {
+     "action": "Log in to the Control Panel as the Site Content Editor, open the record in Object Authoring and change the Overview section title to 'QCTEST-130949 Overview Preview'",
+     "expected": "The field accepts the new section title"
+    },
+    {
+     "action": "Click Save as Draft, then click Preview and read the Overview section heading in the preview",
+     "expected": "The preview renders the Overview section heading as 'QCTEST-130949 Overview Preview'"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a FRESH logged-out browser context and read the Overview section heading and the sticky index",
+     "expected": "The live public page still renders the heading 'Overview' and the sticky index entry '01 Overview'; the preview-only value 'QCTEST-130949 Overview Preview' appears nowhere in the anonymous response"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141215,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Hero Eyebrow is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'Economic Research Service' in the Hero Eyebrow EN field and 'خدمة البحوث الاقتصادية' in the Hero Eyebrow AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research and then /ar/our-services/information/proposal-for-research in a fresh logged-out browser context",
+     "expected": "The English hero eyebrow reads 'Economic Research Service' and the Arabic hero eyebrow reads 'خدمة البحوث الاقتصادية', each above its hero title"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Admin half only: SINGLETON publish"
+  },
+  {
+   "tc_id": 141216,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Hero Eyebrow blocks the save",
+   "steps": [
+    {
+     "action": "Clear the Hero Eyebrow EN field so it contains no characters",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked, the Hero Eyebrow EN field is flagged as required, and the previously published eyebrow value is unchanged on the live page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141217,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Hero Eyebrow blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the Hero Eyebrow EN field so it contains only whitespace",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Hero Eyebrow EN field is flagged as required — whitespace is not accepted as a value"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141218,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a Hero Eyebrow of exactly 60 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter the character 'A' repeated exactly 60 times in the Hero Eyebrow EN field",
+     "expected": "The 60-character value is accepted with no validation error and the record saves"
+    },
+    {
+     "action": "Publish the record and open the English page in a fresh logged-out browser context",
+     "expected": "The hero eyebrow renders all 60 'A' characters with none truncated"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141219,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a Hero Eyebrow longer than 60 characters is not accepted",
+   "steps": [
+    {
+     "action": "Attempt to enter the character 'A' repeated 61 times in the Hero Eyebrow EN field",
+     "expected": "The field does not hold 61 characters — input either stops at 60 characters or the value is flagged as exceeding the limit"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "No value longer than 60 characters is persisted to the record"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141220,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Page Title is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'Proposal for Research' in the Page Title EN field and 'اقتراح بحث أو دراسة' in the Page Title AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context",
+     "expected": "The English hero title reads 'Proposal for Research' and the Arabic hero title reads 'اقتراح بحث أو دراسة'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Admin half only: SINGLETON publish. The case's own value is carried inside the QCTEST-<tc_id>- title (forced: Page Title is the object's title field, and only QCTEST-titled records may be created and deleted)."
+  },
+  {
+   "tc_id": 141221,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Page Title blocks the save",
+   "steps": [
+    {
+     "action": "Clear the Page Title EN field so it contains no characters",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Page Title EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141222,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Page Title blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the Page Title EN field so it contains only whitespace",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Page Title EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141223,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a Page Title of exactly 100 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter the character 'A' repeated exactly 100 times in the Page Title EN field",
+     "expected": "The 100-character value is accepted with no validation error and the record saves"
+    },
+    {
+     "action": "Publish the record and open the English page in a fresh logged-out browser context",
+     "expected": "The hero title renders all 100 'A' characters with none truncated and without overflowing the hero padding box"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141224,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a Page Title longer than 100 characters is not accepted",
+   "steps": [
+    {
+     "action": "Attempt to enter the character 'A' repeated 101 times in the Page Title EN field",
+     "expected": "The field does not hold 101 characters — input either stops at 100 characters or the value is flagged as exceeding the limit"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "No value longer than 100 characters is persisted to the record"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141225,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid quick-fact Label is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'Proposal Type' in the quick-fact 1 Label EN field and 'نوع المقترح' in the Label AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the first quick-fact tile",
+     "expected": "The first quick-fact label reads 'Proposal Type' in English and 'نوع المقترح' in Arabic, above its value"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141226,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty quick-fact Label blocks the save",
+   "steps": [
+    {
+     "action": "Clear the quick-fact 1 Label EN field so it contains no characters",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the quick-fact Label EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141227,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only quick-fact Label blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the quick-fact 1 Label EN field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the quick-fact Label EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141228,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a quick-fact Label of exactly 60 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter the character 'B' repeated exactly 60 times in the quick-fact 1 Label EN field",
+     "expected": "The 60-character value is accepted with no validation error and the record saves"
+    },
+    {
+     "action": "Publish the record and read the first quick-fact tile on the English page in a fresh logged-out browser context",
+     "expected": "The first quick-fact label renders all 60 'B' characters with none truncated"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141229,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a quick-fact Label longer than 60 characters is not accepted",
+   "steps": [
+    {
+     "action": "Attempt to enter the character 'B' repeated 61 times in the quick-fact 1 Label EN field",
+     "expected": "The field does not hold 61 characters — input either stops at 60 characters or the value is flagged as exceeding the limit"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "No value longer than 60 characters is persisted to the record"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141230,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid quick-fact Value is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'Research or Study' in the quick-fact 1 Value EN field and 'بحث أو دراسة' in the Value AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the first quick-fact tile",
+     "expected": "The first quick-fact value reads 'Research or Study' in English and 'بحث أو دراسة' in Arabic, below its label"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141231,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty quick-fact Value blocks the save",
+   "steps": [
+    {
+     "action": "Clear the quick-fact 1 Value EN field so it contains no characters",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the quick-fact Value EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141232,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only quick-fact Value blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the quick-fact 1 Value EN field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the quick-fact Value EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141233,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a quick-fact Value of exactly 120 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter the character 'C' repeated exactly 120 times in the quick-fact 1 Value EN field",
+     "expected": "The 120-character value is accepted with no validation error and the record saves"
+    },
+    {
+     "action": "Publish the record and read the first quick-fact tile on the English page in a fresh logged-out browser context",
+     "expected": "The first quick-fact value renders all 120 'C' characters with none truncated and the tile wraps within the quick-facts container"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141234,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a quick-fact Value longer than 120 characters is not accepted",
+   "steps": [
+    {
+     "action": "Attempt to enter the character 'C' repeated 121 times in the quick-fact 1 Value EN field",
+     "expected": "The field does not hold 121 characters — input either stops at 120 characters or the value is flagged as exceeding the limit"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "No value longer than 120 characters is persisted to the record"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141235,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Section Title is saved in both languages and drives both the heading and the index entry",
+   "steps": [
+    {
+     "action": "Enter 'Service information' in the Section 2 Title EN field and 'معلومات الخدمة' in the Title AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read both the section heading and the sticky index entry",
+     "expected": "The English page shows the section heading 'Service information' and the index entry '02 Service information'; the Arabic page shows 'معلومات الخدمة' in both places"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141236,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Section Title blocks the save",
+   "steps": [
+    {
+     "action": "Clear the Section 2 Title EN field so it contains no characters",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Section Title EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141237,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Section Title blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the Section 2 Title EN field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Section Title EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141238,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a Section Title of exactly 100 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter the character 'D' repeated exactly 100 times in the Section 2 Title EN field",
+     "expected": "The 100-character value is accepted with no validation error and the record saves"
+    },
+    {
+     "action": "Publish the record and read the section heading and the sticky index entry on the English page in a fresh logged-out browser context",
+     "expected": "Both the section heading and the '02' index entry render all 100 'D' characters with none truncated"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141239,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a Section Title longer than 100 characters is not accepted",
+   "steps": [
+    {
+     "action": "Attempt to enter the character 'D' repeated 101 times in the Section 2 Title EN field",
+     "expected": "The field does not hold 101 characters — input either stops at 100 characters or the value is flagged as exceeding the limit"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "No value longer than 100 characters is persisted to the record"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141240,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Info Card Title is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'Clear research focus' in the info card 1 Title EN field and 'موضوع بحثي واضح' in the Title AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the first Overview info card",
+     "expected": "The first info card title reads 'Clear research focus' in English and 'موضوع بحثي واضح' in Arabic"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141241,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Info Card Title blocks the save",
+   "steps": [
+    {
+     "action": "Clear the info card 1 Title EN field so it contains no characters",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Info Card Title EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141242,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Info Card Title blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the info card 1 Title EN field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Info Card Title EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141243,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Info Card Title of exactly 100 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter the character 'E' repeated exactly 100 times in the info card 1 Title EN field",
+     "expected": "The 100-character value is accepted with no validation error and the record saves"
+    },
+    {
+     "action": "Publish the record and read the first info card on the English page in a fresh logged-out browser context",
+     "expected": "The first info card title renders all 100 'E' characters wrapped inside the 256px card with none truncated"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141244,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an Info Card Title longer than 100 characters is not accepted",
+   "steps": [
+    {
+     "action": "Attempt to enter the character 'E' repeated 101 times in the info card 1 Title EN field",
+     "expected": "The field does not hold 101 characters — input either stops at 100 characters or the value is flagged as exceeding the limit"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "No value longer than 100 characters is persisted to the record"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141245,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Information Group Label is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'Preparing your proposal' in the group 1 Label EN field and 'إعداد المقترح البحثي' in the Label AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the first information group label in section 02",
+     "expected": "The first group label reads 'Preparing your proposal' in English and 'إعداد المقترح البحثي' in Arabic, rendered in Cairo 700 14px/22px #A66F43"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141246,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Information Group Label blocks the save",
+   "steps": [
+    {
+     "action": "Clear the group 1 Label EN field so it contains no characters",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Information Group Label EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141247,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Information Group Label blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the group 1 Label EN field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Information Group Label EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141248,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Information Group Label of exactly 120 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter the character 'F' repeated exactly 120 times in the group 1 Label EN field",
+     "expected": "The 120-character value is accepted with no validation error and the record saves"
+    },
+    {
+     "action": "Publish the record and read the first group label on the English page in a fresh logged-out browser context",
+     "expected": "The group label renders all 120 'F' characters in Cairo 700 14px/22px #A66F43 with none truncated"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141249,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an Information Group Label longer than 120 characters is not accepted",
+   "steps": [
+    {
+     "action": "Attempt to enter the character 'F' repeated 121 times in the group 1 Label EN field",
+     "expected": "The field does not hold 121 characters — input either stops at 120 characters or the value is flagged as exceeding the limit"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "No value longer than 120 characters is persisted to the record"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141250,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Group Item bullet label is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'The proposed research title or topic.' in the group 1 bullet 1 Label EN rich-text field and 'عنوان البحث أو الموضوع المقترح.' in the Label AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the first bullet of the first information group",
+     "expected": "The first bullet reads 'The proposed research title or topic.' in English and 'عنوان البحث أو الموضوع المقترح.' in Arabic, in Cairo 400 14px/22px #343432"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)"
+  },
+  {
+   "tc_id": 141251,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Group Item bullet label blocks the save",
+   "steps": [
+    {
+     "action": "Clear the group 1 bullet 1 Label EN rich-text field so it contains no content",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Group Item Label EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141252,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Group Item bullet label blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the group 1 bullet 1 Label EN rich-text field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Group Item Label EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141253,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a Group Item bullet label of exactly 300 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter the character 'G' repeated exactly 300 times in the group 1 bullet 1 Label EN field",
+     "expected": "The 300-character value is accepted with no validation error and the record saves"
+    },
+    {
+     "action": "Publish the record and read the first bullet on the English page in a fresh logged-out browser context",
+     "expected": "The bullet renders all 300 'G' characters wrapped inside the 884px content width with none truncated"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "N/A: no character limit is applied to rich-text fields (team decision 2026-10-01)"
+  },
+  {
+   "tc_id": 141254,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a Group Item bullet label longer than 300 characters is not accepted",
+   "steps": [
+    {
+     "action": "Attempt to enter the character 'G' repeated 301 times in the group 1 bullet 1 Label EN field",
+     "expected": "The field does not hold 301 characters — input either stops at 300 characters or the value is flagged as exceeding the limit"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "No value longer than 300 characters is persisted to the record"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "N/A: no character limit is applied to rich-text fields (team decision 2026-10-01)"
+  },
+  {
+   "tc_id": 141255,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Resource Title is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'Research Proposal Template' in the resource 1 Title EN field and 'نموذج المقترح البحثي' in the Title AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the first resource card",
+     "expected": "The first resource card title reads 'Research Proposal Template' in English and 'نموذج المقترح البحثي' in Arabic, in Cairo 600 16px/24px #343432"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141256,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Resource Title blocks the save",
+   "steps": [
+    {
+     "action": "Clear the resource 1 Title EN field so it contains no characters",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Resource Title EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141257,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Resource Title blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the resource 1 Title EN field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Resource Title EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141258,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a Resource Title of exactly 200 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter the character 'H' repeated exactly 200 times in the resource 1 Title EN field",
+     "expected": "The 200-character value is accepted with no validation error and the record saves"
+    },
+    {
+     "action": "Publish the record and read the first resource card on the English page in a fresh logged-out browser context",
+     "expected": "The resource card title renders all 200 'H' characters wrapped inside the 740px card title area with none truncated, and the 'Download' button stays visible"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141259,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a Resource Title longer than 200 characters is not accepted",
+   "steps": [
+    {
+     "action": "Attempt to enter the character 'H' repeated 201 times in the resource 1 Title EN field",
+     "expected": "The field does not hold 201 characters — input either stops at 200 characters or the value is flagged as exceeding the limit"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "No value longer than 200 characters is persisted to the record"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141260,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid resource Download Label is saved in both languages and rendered on the button",
+   "steps": [
+    {
+     "action": "Enter 'Download' in the resource 1 Download Label EN field and 'تحميل' in the Download Label AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the first resource card's button label",
+     "expected": "The button on the first resource card reads 'Download' in English and 'تحميل' in Arabic, in Cairo 600 14px/22px #4A4A49 centre-aligned"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141261,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty resource Download Label blocks the save",
+   "steps": [
+    {
+     "action": "Clear the resource 1 Download Label EN field so it contains no characters",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Download Label EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141262,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only resource Download Label blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the resource 1 Download Label EN field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Download Label EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141263,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a resource Download Label of exactly 40 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter the character 'J' repeated exactly 40 times in the resource 1 Download Label EN field",
+     "expected": "The 40-character value is accepted with no validation error and the record saves"
+    },
+    {
+     "action": "Publish the record and read the first resource card's button on the English page in a fresh logged-out browser context",
+     "expected": "The button label renders all 40 'J' characters with none truncated and the button remains clickable"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141264,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a resource Download Label longer than 40 characters is not accepted",
+   "steps": [
+    {
+     "action": "Attempt to enter the character 'J' repeated 41 times in the resource 1 Download Label EN field",
+     "expected": "The field does not hold 41 characters — input either stops at 40 characters or the value is flagged as exceeding the limit"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "No value longer than 40 characters is persisted to the record"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141265,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Hero Description is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'Propose an economic or business-related research topic for consideration by Qatar Chamber's Research & Studies Department and access supporting templates and guidance.' in the Hero Description EN rich-text field and 'اقترح موضوعًا بحثيًا اقتصاديًا أو تجاريًا للنظر فيه من قِبل إدارة البحوث والدراسات في غرفة قطر، واستفد من النماذج والإرشادات المتاحة.' in the AR field",
+     "expected": "Both rich-text values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the hero description",
+     "expected": "The English hero description renders the full authored sentence in Cairo 400 16px/24px #FFFFFF at 70% opacity and the Arabic hero description renders the full Arabic sentence right-aligned"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Admin half only: SINGLETON publish"
+  },
+  {
+   "tc_id": 141266,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Hero Description blocks the save",
+   "steps": [
+    {
+     "action": "Clear the Hero Description EN rich-text field so it contains no content",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Hero Description EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141267,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Hero Description blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the Hero Description EN rich-text field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Hero Description EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141268,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Section Body is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter the authored Overview body text in the Section 1 Body EN rich-text field and 'تمكّن خدمة مقترح بحث في غرفة قطر الشركات والباحثين والجهات المهتمة من تقديم مقترحات لموضوعات بحثية اقتصادية وتجارية ليتم دراستها من قبل إدارة البحوث والدراسات.' in the AR field",
+     "expected": "Both rich-text values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the Overview body",
+     "expected": "The English Overview body opens with 'Qatar Chamber's Proposal for Research service enables businesses, researchers, and interested stakeholders to propose economic and business-related topics for c' in Cairo 400 16px/24px #4A4A49, and the Arabic body renders the Arabic text right-aligned"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141269,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Section Body blocks the save",
+   "steps": [
+    {
+     "action": "Clear the Section 1 Body EN rich-text field so it contains no content",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Section Body EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141270,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Section Body blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the Section 1 Body EN rich-text field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Section Body EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141271,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Info Card Description is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'Define the proposed topic and the issue or opportunity the research should examine.' in the info card 1 Description EN field and 'حدّد الموضوع المقترح والقضية أو الفرصة التي ينبغي أن يتناولها البحث.' in the AR field",
+     "expected": "Both rich-text values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the first info card description",
+     "expected": "The first info card description reads 'Define the proposed topic and the issue or opportunity the research should examine.' in Cairo 400 14px/22px #7C7B7B in English and the Arabic sentence right-aligned in Arabic"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141272,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Info Card Description blocks the save",
+   "steps": [
+    {
+     "action": "Clear the info card 1 Description EN rich-text field so it contains no content",
+     "expected": "The field is left empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Info Card Description EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141273,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Info Card Description blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the info card 1 Description EN rich-text field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Info Card Description EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141274,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Information Group Intro is saved in both languages and rendered on the published page",
+   "steps": [
+    {
+     "action": "Enter 'A clear and well-supported proposal helps communicate the importance and intended purpose of the suggested research topic. The proposal should include:' in the group 1 Intro EN field and 'يساعد المقترح الواضح والمدعوم بالمعلومات على توضيح أهمية الموضوع والغرض من دراسته. ويُفضّل أن يتضمن المقترح:' in the AR field",
+     "expected": "Both rich-text values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the first group intro",
+     "expected": "The English group intro renders the full sentence in Cairo 400 14px/22px #343432 above the six bullets, and the Arabic intro renders right-aligned above its bullets"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141275,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid hero banner image under 2 MB is accepted and rendered on the published page",
+   "steps": [
+    {
+     "action": "Upload QCTEST-130949-hero.jpg (850 KB JPG) into the Hero Banner Image field",
+     "expected": "The file is accepted with no validation error and a thumbnail of QCTEST-130949-hero.jpg is shown in the field"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context and inspect the hero background",
+     "expected": "The hero renders QCTEST-130949-hero.jpg behind the gradient overlay, the image request returns HTTP 200, and the hero eyebrow, title and description stay legible over it"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Admin half only: SINGLETON publish"
+  },
+  {
+   "tc_id": 141276,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a hero banner image of a disallowed file type is rejected",
+   "steps": [
+    {
+     "action": "Attempt to upload QCTEST-130949-hero.bmp (400 KB BMP) into the Hero Banner Image field",
+     "expected": "The upload is rejected with a file-type validation error and no thumbnail is attached"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The Hero Banner Image field still holds the previously attached image and no BMP is persisted"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context",
+     "expected": "The live hero still renders the previously published banner image"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141277,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a hero banner image of 2 MB or more is rejected",
+   "steps": [
+    {
+     "action": "Attempt to upload QCTEST-130949-hero-large.jpg (3 MB JPG) into the Hero Banner Image field",
+     "expected": "The upload is rejected with a file-size validation error and no thumbnail is attached"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The Hero Banner Image field still holds the previously attached image and no 3 MB file is persisted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141278,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid PDF of 5 MB or less is accepted on a resource item and served from the published page",
+   "steps": [
+    {
+     "action": "Upload QCTEST-130949-template.pdf (200 KB PDF) into the resource 1 File field",
+     "expected": "The file is accepted with no validation error and QCTEST-130949-template.pdf is attached to the resource item"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and click the first resource card's 'Download' button",
+     "expected": "The download returns QCTEST-130949-template.pdf with HTTP 200 and the file opens as a valid PDF"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Admin half: the PDF is attached and persists."
+  },
+  {
+   "tc_id": 141279,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a resource file of a disallowed type is rejected",
+   "steps": [
+    {
+     "action": "Attempt to upload QCTEST-130949-template.docx (150 KB DOCX) into the resource 1 File field",
+     "expected": "The upload is rejected with a file-type validation error stating that only PDF files are allowed, and the DOCX is not attached"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The resource item still holds its previously attached PDF and no DOCX is persisted"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and click the first resource card's 'Download' button",
+     "expected": "The download still returns the previously published PDF, not a DOCX"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141280,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a resource file larger than 5 MB is rejected",
+   "steps": [
+    {
+     "action": "Attempt to upload QCTEST-130949-template-6mb.pdf (6 MB PDF) into the resource 1 File field",
+     "expected": "The upload is rejected with a file-size validation error and the 6 MB file is not attached"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The resource item still holds its previously attached 200 KB PDF and the card metadata still reads '200 KB'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141281,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that the resource File Type is auto-captured from the uploaded file and is not editable",
+   "steps": [
+    {
+     "action": "Upload QCTEST-130949-template.pdf into the resource 1 File field and read the File Type field without typing into it",
+     "expected": "The File Type field is populated automatically with 'PDF' without any manual entry"
+    },
+    {
+     "action": "Attempt to type the value 'DOCX' into the File Type field",
+     "expected": "The field does not accept keyboard input — it stays 'PDF'"
+    },
+    {
+     "action": "Publish the record and read the first resource card on the published English page in a fresh logged-out browser context",
+     "expected": "The resource card renders the file type 'PDF' in Cairo 400 14px/22px #A8A8A7"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141282,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that the resource File Size is auto-captured from the uploaded file and is not editable",
+   "steps": [
+    {
+     "action": "Upload QCTEST-130949-template.pdf (200 KB) into the resource 1 File field and read the File Size field without typing into it",
+     "expected": "The File Size field is populated automatically with '200 KB' without any manual entry"
+    },
+    {
+     "action": "Attempt to type the value '10 MB' into the File Size field",
+     "expected": "The field does not accept keyboard input — it stays '200 KB'"
+    },
+    {
+     "action": "Publish the record and read the first resource card on the published English page in a fresh logged-out browser context",
+     "expected": "The resource card renders the file size '200 KB' in Cairo 400 14px/22px #A8A8A7, matching the size of the actual downloaded file"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141283,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that setting the Page Status to Published makes the page publicly reachable",
+   "steps": [
+    {
+     "action": "Open the Page Status dropdown on the record and select 'Published'",
+     "expected": "The dropdown offers Draft, Published and Unpublished and accepts the 'Published' selection"
+    },
+    {
+     "action": "Save the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context",
+     "expected": "The anonymous request returns HTTP 200 and renders the hero title 'Proposal for Research'"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated"
+  },
+  {
+   "tc_id": 141284,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that setting the Page Status back to Draft removes the page from public view",
+   "steps": [
+    {
+     "action": "Open the Page Status dropdown on the record and select 'Draft'",
+     "expected": "The dropdown accepts the 'Draft' selection"
+    },
+    {
+     "action": "Save the record",
+     "expected": "The record is saved with status Draft and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context",
+     "expected": "The anonymous request no longer renders the page content — no hero title, sections or resource cards are returned"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated"
+  },
+  {
+   "tc_id": 141285,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Active quick-fact tile renders on the published page",
+   "steps": [
+    {
+     "action": "Set the Active Status of quick-fact tile 3 to Active and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the quick-facts strip",
+     "expected": "Four quick-fact tiles render and the third reads 'Primary Audience' / 'Qatar Private Sector' in its configured order position"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141286,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Inactive quick-fact tile is hidden on the published page",
+   "steps": [
+    {
+     "action": "Set the Active Status of quick-fact tile 3 to Inactive and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the quick-facts strip",
+     "expected": "Only three quick-fact tiles render — 'Proposal Type', 'Research Focus' and 'Responsible Department' — with no 'Primary Audience' tile and no empty slot left in the strip"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141287,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Active section renders on the published page with its index entry",
+   "steps": [
+    {
+     "action": "Set the Active Status of section 3 to Active and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the page body and the sticky index",
+     "expected": "The Downloadable resources section renders with its badge, heading, intro and both resource cards, and the sticky index shows the entry '03 Downloadable resources'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141288,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Inactive section is hidden on the published page together with its index entry",
+   "steps": [
+    {
+     "action": "Set the Active Status of section 3 to Inactive and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the page body and the sticky index",
+     "expected": "The Downloadable resources section does not render and no resource card or 'Download' button is present; the sticky index lists only '01 Overview' and '02 Service information'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141289,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Active Overview info card renders on the published page",
+   "steps": [
+    {
+     "action": "Set the Active Status of info card 2 to Active and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the Overview info cards",
+     "expected": "Three info cards render and the second reads 'Business guidance' with the description 'Identify the economic sector or business area connected to the proposed study.'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141290,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Inactive Overview info card is hidden on the published page",
+   "steps": [
+    {
+     "action": "Set the Active Status of info card 2 to Inactive and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the Overview info cards",
+     "expected": "Only two info cards render — 'Clear research focus' and 'Contact our experts' — side by side with no gap where the 'Business guidance' card used to be"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141291,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Active information group renders on the published page",
+   "steps": [
+    {
+     "action": "Set the Active Status of information group 2 to Active and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read section 02",
+     "expected": "Both groups render: 'Preparing your proposal' with its six bullets, followed by 'Supporting information' with its intro and four bullets"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141292,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Inactive information group is hidden on the published page",
+   "steps": [
+    {
+     "action": "Set the Active Status of information group 2 to Inactive and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read section 02",
+     "expected": "Only 'Preparing your proposal' and its six bullets render; the label 'Supporting information' and its four bullets are absent, and the Downloadable resources section follows the last bullet with no blank gap"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141293,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Active information group item renders as a bullet on the published page",
+   "steps": [
+    {
+     "action": "Set the Active Status of group 1 bullet 5 to Active and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the bullets of 'Preparing your proposal'",
+     "expected": "Six bullets render and the fifth reads 'The expected value or potential benefit of the study.' in Cairo 400 14px/22px #343432"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)"
+  },
+  {
+   "tc_id": 141294,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Inactive information group item is hidden on the published page",
+   "steps": [
+    {
+     "action": "Set the Active Status of group 1 bullet 5 to Inactive and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the bullets of 'Preparing your proposal'",
+     "expected": "Five bullets render, the text 'The expected value or potential benefit of the study.' is absent from the group, and the remaining bullets stay in their configured order with no empty list row"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)"
+  },
+  {
+   "tc_id": 141295,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Active downloadable resource item renders with a working Download button",
+   "steps": [
+    {
+     "action": "Set the Active Status of resource item 2 to Active and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read section 03",
+     "expected": "Two resource cards render and the second reads 'Research Proposal Guidelines' with 'PDF' and '200 KB'"
+    },
+    {
+     "action": "Click the 'Download' button on the 'Research Proposal Guidelines' card",
+     "expected": "The download returns QCTEST-130949-guidelines.pdf with HTTP 200"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141296,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Inactive downloadable resource item is hidden on the published page",
+   "steps": [
+    {
+     "action": "Set the Active Status of resource item 2 to Inactive and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read section 03",
+     "expected": "Only the 'Research Proposal Template' card renders; no card titled 'Research Proposal Guidelines' and no second 'Download' button is present, and the section closes directly after the first card"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141297,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that quick-fact tiles render in the order set by their Display Order values",
+   "steps": [
+    {
+     "action": "Set the quick-fact Display Order values to 1, 2, 3 and 4 as listed and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the quick-facts strip left to right",
+     "expected": "The tiles render in the order 'Proposal Type', 'Research Focus', 'Primary Audience', 'Responsible Department', matching the configured display order exactly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141298,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a zero or negative quick-fact Display Order is rejected",
+   "steps": [
+    {
+     "action": "Enter 0 in the quick-fact 1 Display Order field and attempt to save the record",
+     "expected": "The save is blocked and the Display Order field is flagged as requiring a positive integer; 0 is not persisted"
+    },
+    {
+     "action": "Enter -1 in the same field and attempt to save the record",
+     "expected": "The save is blocked again and -1 is not persisted; the field retains its previous valid value"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141299,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that sections render in the order set by their Display Order values",
+   "steps": [
+    {
+     "action": "Set the section Display Order values to 1, 2 and 3 as listed and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the sticky index and the section order down the page",
+     "expected": "The sections render top to bottom as Overview, Service information, Downloadable resources and the sticky index numerals read 01, 02, 03 against those same titles"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141300,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a zero or negative section Display Order is rejected",
+   "steps": [
+    {
+     "action": "Enter 0 in the section 2 Display Order field and attempt to save the record",
+     "expected": "The save is blocked and the Display Order field is flagged as requiring a positive integer; 0 is not persisted"
+    },
+    {
+     "action": "Enter -2 in the same field and attempt to save the record",
+     "expected": "The save is blocked again and -2 is not persisted; the section keeps its previous order value"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141301,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that Overview info cards render in the order set by their Display Order values",
+   "steps": [
+    {
+     "action": "Set the info card Display Order values to 1, 2 and 3 as listed and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the three info cards left to right",
+     "expected": "The cards render in the order 'Clear research focus', 'Business guidance', 'Contact our experts', matching the configured display order exactly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141302,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a zero or negative info card Display Order is rejected",
+   "steps": [
+    {
+     "action": "Enter 0 in the info card 1 Display Order field and attempt to save the record",
+     "expected": "The save is blocked and the Display Order field is flagged as requiring a positive integer; 0 is not persisted"
+    },
+    {
+     "action": "Enter -3 in the same field and attempt to save the record",
+     "expected": "The save is blocked again and -3 is not persisted; the card keeps its previous order value"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141303,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that information groups render in the order set by their Display Order values",
+   "steps": [
+    {
+     "action": "Set the information group Display Order values to 1 and 2 as listed and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read section 02 top to bottom",
+     "expected": "'Preparing your proposal' renders first with its six bullets and 'Supporting information' renders second with its four bullets, matching the configured display order"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141304,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a zero or negative information group Display Order is rejected",
+   "steps": [
+    {
+     "action": "Enter 0 in the information group 2 Display Order field and attempt to save the record",
+     "expected": "The save is blocked and the Display Order field is flagged as requiring a positive integer; 0 is not persisted"
+    },
+    {
+     "action": "Enter -1 in the same field and attempt to save the record",
+     "expected": "The save is blocked again and -1 is not persisted; the group keeps its previous order value"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141305,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that information group items render as bullets in the order set by their Display Order values",
+   "steps": [
+    {
+     "action": "Set the group 1 bullet Display Order values to 1, 2, 3, 4, 5 and 6 in the authored sequence and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the bullets of 'Preparing your proposal' top to bottom",
+     "expected": "The bullets render in the order 'The proposed research title or topic.', 'A brief description of the issue or opportunity.', 'The purpose and main objectives of the research.', 'The relevant economic sector or business area.', 'The expected value or potential benefit of the study.', 'Available data, references, or supporting information.'"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)"
+  },
+  {
+   "tc_id": 141306,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a zero or negative group item Display Order is rejected",
+   "steps": [
+    {
+     "action": "Enter 0 in the group 1 bullet 2 Display Order field and attempt to save the record",
+     "expected": "The save is blocked and the Display Order field is flagged as requiring a positive integer; 0 is not persisted"
+    },
+    {
+     "action": "Enter -4 in the same field and attempt to save the record",
+     "expected": "The save is blocked again and -4 is not persisted; the bullet keeps its previous order value"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141307,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that downloadable resource items render in the order set by their Display Order values",
+   "steps": [
+    {
+     "action": "Set the resource Display Order values to 1 and 2 as listed and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the resource cards top to bottom",
+     "expected": "The 'Research Proposal Template' card renders first and the 'Research Proposal Guidelines' card second, matching the configured display order"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141308,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a zero or negative resource Display Order is rejected",
+   "steps": [
+    {
+     "action": "Enter 0 in the resource 2 Display Order field and attempt to save the record",
+     "expected": "The save is blocked and the Display Order field is flagged as requiring a positive integer; 0 is not persisted"
+    },
+    {
+     "action": "Enter -1 in the same field and attempt to save the record",
+     "expected": "The save is blocked again and -1 is not persisted; the resource item keeps its previous order value"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141310,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that the hero banner image can be replaced on a published page and the new image is served",
+   "steps": [
+    {
+     "action": "Open the record in Object Authoring while its status is Published and replace the Hero Banner Image with QCTEST-130949-hero-v2.png",
+     "expected": "The PNG is accepted with no validation error and the field thumbnail updates to QCTEST-130949-hero-v2.png"
+    },
+    {
+     "action": "Save the record and read its page status",
+     "expected": "The record is saved, the Liferay generic success toast is displayed, and the page status is still Published"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context and inspect the hero background image request",
+     "expected": "The hero background request resolves to QCTEST-130949-hero-v2.png with HTTP 200 and the previous QCTEST-130949-hero.jpg is no longer requested"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated"
+  },
+  {
+   "tc_id": 141315,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a new quick-fact tile can be added and appears on the published page",
+   "steps": [
+    {
+     "action": "Add a new quick-fact tile with label 'QCTEST Turnaround' / 'مدة الإنجاز', value '10 working days' / '10 أيام عمل', display order 5 and Active status",
+     "expected": "The new tile is created and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the quick-facts strip",
+     "expected": "Five quick-fact tiles render and the fifth reads 'QCTEST Turnaround' / '10 working days' after 'Responsible Department'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141316,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an existing quick-fact tile can be edited and the change appears on the published page",
+   "steps": [
+    {
+     "action": "Open quick-fact tile 2 and change its Value EN from 'Economy & Business' to 'QCTEST Economy and Trade'",
+     "expected": "The edit is accepted and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the second quick-fact tile",
+     "expected": "The second quick-fact tile reads label 'Research Focus' with value 'QCTEST Economy and Trade' and the old value 'Economy & Business' is no longer present"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141317,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a quick-fact tile can be deleted and disappears from the published page",
+   "steps": [
+    {
+     "action": "Locate the quick-fact tile whose Label EN is exactly 'QCTEST Turnaround' and confirm its label before deleting",
+     "expected": "The tile with label 'QCTEST Turnaround' is positively identified by title, not by row position"
+    },
+    {
+     "action": "Delete that tile and publish the record",
+     "expected": "The tile is removed and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the quick-facts strip",
+     "expected": "Four quick-fact tiles render — 'Proposal Type', 'Research Focus', 'Primary Audience', 'Responsible Department' — and no tile labelled 'QCTEST Turnaround' remains"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141318,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that reordering quick-fact tiles changes their order on the published page",
+   "steps": [
+    {
+     "action": "Set the Display Order of 'Responsible Department' to 1 and of 'Proposal Type' to 4 and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the quick-facts strip left to right",
+     "expected": "The tiles render in the order 'Responsible Department', 'Research Focus', 'Primary Audience', 'Proposal Type' — reflecting the swapped display order"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141319,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a new section can be added and appears with its own sticky index entry",
+   "steps": [
+    {
+     "action": "Add a new section titled 'QCTEST Additional guidance' / 'إرشادات إضافية' with body 'QCTEST body copy for the additional guidance section.', display order 4 and Active status",
+     "expected": "The new section is created and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the sticky index and the page body",
+     "expected": "The sticky index lists four entries ending with '04 QCTEST Additional guidance' and the new section renders after Downloadable resources with the body 'QCTEST body copy for the additional guidance section.'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141320,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an existing section can be edited and the change appears in both the heading and the index",
+   "steps": [
+    {
+     "action": "Open section 1 and change its Title EN from 'Overview' to 'QCTEST Overview'",
+     "expected": "The edit is accepted and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the section heading and the sticky index",
+     "expected": "The section heading reads 'QCTEST Overview' and the index entry reads '01 QCTEST Overview'; the old label 'Overview' appears in neither place"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141321,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a section can be deleted and disappears with its sticky index entry",
+   "steps": [
+    {
+     "action": "Locate the section whose Title EN is exactly 'QCTEST Additional guidance' and confirm its title before deleting",
+     "expected": "The section is positively identified by title, not by row position"
+    },
+    {
+     "action": "Delete that section and publish the record",
+     "expected": "The section is removed and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the sticky index and the page body",
+     "expected": "The sticky index lists exactly three entries again and no section titled 'QCTEST Additional guidance' renders anywhere on the page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141322,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that reordering sections changes the rendered section sequence while each section keeps its authored numbering",
+   "steps": [
+    {
+     "action": "Set the Display Order of 'Downloadable resources' to 1 and of 'Overview' to 3 and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the sticky index and the section order down the page",
+     "expected": "The sticky index lists 'Downloadable resources' first, 'Service information' second and 'Overview' third and the sections render down the page in that same sequence; each entry still displays its own authored Section Numbering value rather than a numeral recomputed from the new Display Order"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141323,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a new Overview info card can be added and appears on the published page",
+   "steps": [
+    {
+     "action": "Add a new Overview info card titled 'QCTEST Submission channel' / 'قناة التقديم' with the description 'QCTEST description for the submission channel card.', display order 4 and Active status",
+     "expected": "The new card is created and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the Overview info cards",
+     "expected": "Four info cards render and the fourth reads 'QCTEST Submission channel' with the description 'QCTEST description for the submission channel card.'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141324,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an existing Overview info card can be edited and the change appears on the published page",
+   "steps": [
+    {
+     "action": "Open info card 3 and change its Title EN from 'Contact our experts' to 'QCTEST Contact our experts'",
+     "expected": "The edit is accepted and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the third Overview info card",
+     "expected": "The third info card title reads 'QCTEST Contact our experts' and the old title 'Contact our experts' is no longer rendered"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141325,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Overview info card can be deleted and disappears from the published page",
+   "steps": [
+    {
+     "action": "Locate the info card whose Title EN is exactly 'QCTEST Submission channel' and confirm its title before deleting",
+     "expected": "The card is positively identified by title, not by row position"
+    },
+    {
+     "action": "Delete that card and publish the record",
+     "expected": "The card is removed and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the Overview info cards",
+     "expected": "Three info cards render — 'Clear research focus', 'Business guidance', 'Contact our experts' — and no card titled 'QCTEST Submission channel' remains"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141326,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that reordering Overview info cards changes their order on the published page",
+   "steps": [
+    {
+     "action": "Set the Display Order of 'Contact our experts' to 1 and of 'Clear research focus' to 3 and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the three info cards left to right",
+     "expected": "The cards render in the order 'Contact our experts', 'Business guidance', 'Clear research focus'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141327,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a new information group can be added and appears in the Service information section",
+   "steps": [
+    {
+     "action": "Add a new information group labelled 'QCTEST Review process' / 'آلية المراجعة' with the intro 'QCTEST intro copy for the review process group.', display order 3 and Active status",
+     "expected": "The new group is created and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read section 02",
+     "expected": "Three groups render and the third label reads 'QCTEST Review process' in Cairo 700 14px/22px #A66F43 with the intro 'QCTEST intro copy for the review process group.' beneath it"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141328,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an existing information group can be edited and the change appears on the published page",
+   "steps": [
+    {
+     "action": "Open information group 2 and change its Label EN from 'Supporting information' to 'QCTEST Supporting information'",
+     "expected": "The edit is accepted and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the second group label in section 02",
+     "expected": "The second group label reads 'QCTEST Supporting information' and the old label 'Supporting information' is no longer rendered"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141329,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an information group can be deleted and disappears with all of its bullets",
+   "steps": [
+    {
+     "action": "Locate the information group whose Label EN is exactly 'QCTEST Review process' and confirm its label before deleting",
+     "expected": "The group is positively identified by label, not by row position"
+    },
+    {
+     "action": "Delete that group and publish the record",
+     "expected": "The group is removed and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read section 02",
+     "expected": "Two groups render — 'Preparing your proposal' and 'Supporting information' — and neither the label 'QCTEST Review process' nor its intro appears anywhere in the section"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141330,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that reordering information groups changes their order on the published page",
+   "steps": [
+    {
+     "action": "Set the Display Order of 'Supporting information' to 1 and of 'Preparing your proposal' to 2 and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read section 02 top to bottom",
+     "expected": "'Supporting information' renders first with its four bullets and 'Preparing your proposal' renders second with its six bullets"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141331,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a new bullet can be added to an information group and appears on the published page",
+   "steps": [
+    {
+     "action": "Add a new bullet to the 'Preparing your proposal' group with the label 'QCTEST The proposed timeline for the study.' / 'الجدول الزمني المقترح للدراسة.', display order 7 and Active status",
+     "expected": "The new bullet is created and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the bullets of 'Preparing your proposal'",
+     "expected": "Seven bullets render and the seventh reads 'QCTEST The proposed timeline for the study.' in Cairo 400 14px/22px #343432"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)"
+  },
+  {
+   "tc_id": 141332,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an existing bullet can be edited and the change appears on the published page",
+   "steps": [
+    {
+     "action": "Open bullet 1 of the 'Supporting information' group and change its Label EN to 'QCTEST Existing reports or studies.'",
+     "expected": "The edit is accepted and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the bullets of 'Supporting information'",
+     "expected": "The first bullet of the group reads 'QCTEST Existing reports or studies.' and the old text 'Existing reports or studies.' is no longer rendered"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)"
+  },
+  {
+   "tc_id": 141333,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a bullet can be deleted and disappears from the published page",
+   "steps": [
+    {
+     "action": "Locate the bullet whose Label EN is exactly 'QCTEST The proposed timeline for the study.' and confirm its text before deleting",
+     "expected": "The bullet is positively identified by its text, not by row position"
+    },
+    {
+     "action": "Delete that bullet and publish the record",
+     "expected": "The bullet is removed and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the bullets of 'Preparing your proposal'",
+     "expected": "Six bullets render and the text 'QCTEST The proposed timeline for the study.' appears nowhere on the page"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)"
+  },
+  {
+   "tc_id": 141334,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that reordering bullets within an information group changes their order on the published page",
+   "steps": [
+    {
+     "action": "Set the Display Order of 'Available data, references, or supporting information.' to 1 and of 'The proposed research title or topic.' to 6 and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the bullets of 'Preparing your proposal' top to bottom",
+     "expected": "The first bullet reads 'Available data, references, or supporting information.' and the sixth reads 'The proposed research title or topic.', with the middle four bullets unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)"
+  },
+  {
+   "tc_id": 141335,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a new downloadable resource item can be added and appears with a working Download button",
+   "steps": [
+    {
+     "action": "Add a new resource item titled 'QCTEST Research Proposal Checklist' / 'قائمة تحقق المقترح البحثي' with QCTEST-130949-checklist.pdf attached, download label 'Download' / 'تحميل', display order 3 and Active status",
+     "expected": "The new resource item is created with the PDF attached and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context, read section 03 and click the new card's 'Download' button",
+     "expected": "Three resource cards render, the third reads 'QCTEST Research Proposal Checklist' with 'PDF' and '300 KB', and its download returns QCTEST-130949-checklist.pdf with HTTP 200"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141336,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an existing downloadable resource item can be edited and the change appears on the published page",
+   "steps": [
+    {
+     "action": "Open resource item 2 and change its Title EN to 'QCTEST Research Proposal Guidelines'",
+     "expected": "The edit is accepted and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record saves with status Published"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the second resource card",
+     "expected": "The second resource card title reads 'QCTEST Research Proposal Guidelines', its metadata still reads 'PDF' and '200 KB', and the old title is no longer rendered"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141337,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a downloadable resource item can be deleted and disappears from the published page",
+   "steps": [
+    {
+     "action": "Locate the resource item whose Title EN is exactly 'QCTEST Research Proposal Checklist' and confirm its title before deleting",
+     "expected": "The resource item is positively identified by title, not by row position"
+    },
+    {
+     "action": "Delete that resource item and publish the record",
+     "expected": "The item is removed and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read section 03",
+     "expected": "Two resource cards render and no card titled 'QCTEST Research Proposal Checklist' and no third 'Download' button is present"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141338,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that reordering downloadable resource items changes their order on the published page",
+   "steps": [
+    {
+     "action": "Set the Display Order of 'Research Proposal Guidelines' to 1 and of 'Research Proposal Template' to 2 and publish the record",
+     "expected": "The record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read the resource cards top to bottom",
+     "expected": "The 'Research Proposal Guidelines' card renders first and the 'Research Proposal Template' card second, each still showing its own 'PDF' and '200 KB' metadata and its own file on download"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141339,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a missing Arabic translation on a non-mandatory field falls back to the default language",
+   "steps": [
+    {
+     "action": "Leave the Arabic description of Overview info card 3 empty while its English description reads 'Include available data, references, or other information that helps explain the topic and its expected value.' and publish the record",
+     "expected": "The record is published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /ar/our-services/information/proposal-for-research in a fresh logged-out browser context",
+     "expected": "The Arabic page renders with dir=\"rtl\" and all other Arabic content intact"
+    },
+    {
+     "action": "Read the third Overview info card",
+     "expected": "The third info card renders the English description 'Include available data, references, or other information that helps explain the topic and its expected value.' as the fallback value; the card is not blank and no raw placeholder or error text is shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141340,
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "Regression",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that publishing is blocked when a mandatory Arabic value is missing while Arabic is enabled",
+   "steps": [
+    {
+     "action": "Clear the Page Title AR field so it contains no characters, leaving the Page Title EN as 'Proposal for Research'",
+     "expected": "The Arabic field is empty while the English field still holds its value"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "The publish is blocked with a validation message identifying the missing mandatory Arabic value, and the record status does not change to Published"
+    },
+    {
+     "action": "Open /ar/our-services/information/proposal-for-research in a fresh logged-out browser context",
+     "expected": "The Arabic page still shows the previously published title 'اقتراح بحث أو دراسة'; no page with a blank Arabic title is served"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141341,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Workflow"
+   ],
+   "title": "Verify that an audit-log record is written for a content change on the Proposal for Research page",
+   "steps": [
+    {
+     "action": "Log in as the Site Content Editor, change the Overview section Body EN to 'QCTEST-130949 audit trail check.' and publish the record, noting the local time of the publish",
+     "expected": "The change is saved, the record is published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the Control Panel audit log and filter for the Proposal for Research page record",
+     "expected": "The audit log returns entries for the Proposal for Research page record"
+    },
+    {
+     "action": "Read the most recent audit entry",
+     "expected": "The most recent entry records the publish action against the Proposal for Research record, attributed to the Site Content Editor account, with a timestamp matching the publish time"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the audit-log surface is not located yet - automate once it is found on the live CMS (read only)"
+  },
+  {
+   "tc_id": 141342,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that the rendered resource order stays deterministic when two downloadable resource items share the same Display Order value",
+   "steps": [
+    {
+     "action": "Set the Display Order of both 'Research Proposal Template' and 'Research Proposal Guidelines' to 1 and attempt to save the record",
+     "expected": "The system behaves deterministically: either the duplicate value is rejected with a validation message identifying the conflict, or both items are accepted"
+    },
+    {
+     "action": "If the save is accepted, publish the record and open the published English page in a fresh logged-out browser context",
+     "expected": "If accepted and published, both cards render — neither item is silently dropped and no card renders twice"
+    },
+    {
+     "action": "Reload the page three times and record the order of the two resource cards on each load",
+     "expected": "The two cards appear in the same relative order on all three reloads; the order does not vary between renders"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  },
+  {
+   "tc_id": 141343,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an Active information group renders without an empty bullet list when every one of its bullets is Inactive",
+   "steps": [
+    {
+     "action": "Set the Active Status of all four bullets in the 'Supporting information' group to Inactive while leaving the group itself Active, and publish the record",
+     "expected": "The record saves and publishes with the Liferay generic success toast"
+    },
+    {
+     "action": "Open the published English page in a fresh logged-out browser context and read section 02",
+     "expected": "The group label 'Supporting information' and its intro 'Relevant supporting materials may be included to provide additional context for the proposed research topic.' render with no bullet list beneath them"
+    },
+    {
+     "action": "Inspect the vertical space between the group intro and the start of the Downloadable resources section",
+     "expected": "No empty bullet markers, placeholder rows or blank vertical gap are left where the four bullets used to be; the Downloadable resources section follows the group intro directly"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)"
+  },
+  {
+   "tc_id": 141344,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that the published page reports a broken download when a resource PDF is deleted from Documents and Media after publishing",
+   "steps": [
+    {
+     "action": "Publish the page with the 'Research Proposal Template' card pointing at QCTEST-130949-template.pdf and confirm the download works in a logged-out context",
+     "expected": "The download returns QCTEST-130949-template.pdf with HTTP 200 before the deletion"
+    },
+    {
+     "action": "Delete QCTEST-130949-template.pdf from Liferay Documents & Media, confirming the target by its exact file name before deleting",
+     "expected": "The file is positively identified by name and removed from Documents & Media"
+    },
+    {
+     "action": "Reload the published English page in a fresh logged-out browser context and click the 'Download' button on the 'Research Proposal Template' card",
+     "expected": "The visitor is not left with a silent failure: either the card no longer offers a download, or the click returns a handled not-found response rather than an unhandled server error; the rest of the page, including the second resource card, still renders and its download still works"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: the case deletes a file from Documents & Media, and Documents & Media deletion is off-limits to automation (engineer brief Step 2)"
+  },
+  {
+   "tc_id": 141345,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a visitor holding the page open receives the replacement document and its updated size after a live document swap",
+   "steps": [
+    {
+     "action": "In a logged-out browser context, load the published English page and leave it open on section 03 without reloading",
+     "expected": "The visitor context shows the first resource card with 'PDF' and '200 KB'"
+    },
+    {
+     "action": "In a separate Control Panel session, replace the file on the 'Research Proposal Template' item with QCTEST-130949-template-v2.pdf and save, keeping the page status Published",
+     "expected": "The replacement saves with the Liferay generic success toast and the page status remains Published throughout"
+    },
+    {
+     "action": "Without reloading, click the 'Download' button in the still-open visitor context",
+     "expected": "The click from the stale page does not produce an unhandled error — it returns either the new QCTEST-130949-template-v2.pdf or a handled not-found response, never a broken or truncated file"
+    },
+    {
+     "action": "Reload the visitor page and read the first resource card's metadata, then click 'Download' again",
+     "expected": "After reload the card reads 'PDF' and '1.2 MB' and the download returns QCTEST-130949-template-v2.pdf; the file type and file size shown match the file actually served"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case expects File Type / File Size to be re-captured on a live document swap, but both are free-text required fields on the live Resource Item form (read 2026-10-01) - needs a BA ruling, and the held-open-visitor half needs a second session across a publish"
+  },
+  {
+   "tc_id": 141346,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid quick-fact tile Icon is saved and rendered on the published page",
+   "steps": [
+    {
+     "action": "Log into https://qcdev.ihorizons.com/object-authoring as the Site Content Editor and open the QCTEST-130949-ProposalForResearch record, then open quick-fact tile 1 'Research Focus'",
+     "expected": "Quick-fact tile 1 opens with the Icon field visible and marked as required"
+    },
+    {
+     "action": "Open the Icon picker, select the allowed-set icon 'search' and save the record",
+     "expected": "The icon 'search' is accepted with no validation error and the record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Publish the record and open /en/our-services/information/proposal-for-research in a fresh logged-out browser context",
+     "expected": "The 'Research Focus' quick-fact tile renders the 'search' icon above its label, and the icon element is present in the DOM with a non-empty source"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141347,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a quick-fact tile with no Icon selected blocks the save",
+   "steps": [
+    {
+     "action": "Open quick-fact tile 1 'Research Focus' in the QCTEST-130949-ProposalForResearch record and clear the selected Icon so the field is empty",
+     "expected": "The Icon field shows no selected icon"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Icon field is flagged as required; no success toast is shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141348,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a quick-fact tile Icon outside the allowed icon set is rejected",
+   "steps": [
+    {
+     "action": "Open quick-fact tile 1 'Research Focus' and attempt to supply the icon by uploading the file QCTEST-130949-icon.bmp instead of choosing from the allowed icon set",
+     "expected": "The upload is rejected with a validation error stating the icon is not an allowed type, or the picker offers no way to supply a file outside the allowed icon set"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The tile retains its previously saved allowed-set icon and QCTEST-130949-icon.bmp is never stored against the tile"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "'Outside the allowed icon set' is an upload of a type the Icon attachment does not accept (jpg/jpeg/png/svg, read live)."
+  },
+  {
+   "tc_id": 141349,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Overview info card Icon is saved and rendered on the published page",
+   "steps": [
+    {
+     "action": "Open the QCTEST-130949-ProposalForResearch record in Object Authoring as the Site Content Editor and open Overview info card 1 'Clear research focus'",
+     "expected": "Info card 1 opens with the Card Icon field visible and marked as required"
+    },
+    {
+     "action": "Open the Card Icon picker, select the allowed-set icon 'target' and save the record",
+     "expected": "The icon 'target' is accepted with no validation error and the record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Publish the record and open /en/our-services/information/proposal-for-research in a fresh logged-out browser context, then scroll to the Overview info cards",
+     "expected": "The 'Clear research focus' card renders the 'target' icon above its title, followed by the title and the description, in that order"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141350,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an Overview info card with no Card Icon selected blocks the save",
+   "steps": [
+    {
+     "action": "Open Overview info card 1 'Clear research focus' in the QCTEST-130949-ProposalForResearch record and clear the selected Card Icon",
+     "expected": "The Card Icon field shows no selected icon"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Card Icon field is flagged as required; no success toast is shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141351,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an Overview info card Icon outside the allowed icon set is rejected",
+   "steps": [
+    {
+     "action": "Open Overview info card 1 'Clear research focus' and attempt to supply the Card Icon by uploading QCTEST-130949-icon.bmp instead of choosing from the allowed icon set",
+     "expected": "The upload is rejected with a validation error stating the icon is not an allowed type, or the picker offers no way to supply a file outside the allowed icon set"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The card retains its previously saved allowed-set icon and QCTEST-130949-icon.bmp is never stored against the card"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "'Outside the allowed icon set' is an upload of a type the Card Icon attachment does not accept (jpg/jpeg/png/svg, read live)."
+  },
+  {
+   "tc_id": 141352,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Section Badge is saved in both languages and rendered above the section heading",
+   "steps": [
+    {
+     "action": "Enter 'About the service' in the Overview Section Badge EN field and 'عن الخدمة' in the Section Badge AR field",
+     "expected": "Both values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English and Arabic published pages in a fresh logged-out browser context and read the badge above the Overview heading",
+     "expected": "The English page renders 'About the service' in Cairo 400 12px/18px #911731 directly above the 'Overview' heading, and the Arabic page renders 'عن الخدمة' right-aligned above 'نظرة عامة'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141353,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Section Badge blocks the save",
+   "steps": [
+    {
+     "action": "Clear the Overview Section Badge EN field so it contains no characters",
+     "expected": "The field is empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Section Badge EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141354,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a whitespace-only Section Badge blocks the save",
+   "steps": [
+    {
+     "action": "Type three space characters into the Overview Section Badge EN field",
+     "expected": "The field contains only whitespace"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Section Badge EN field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141355,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a Section Badge of exactly 100 characters is accepted and rendered in full",
+   "steps": [
+    {
+     "action": "Enter a string of exactly 100 'B' characters in the Overview Section Badge EN field and save the record",
+     "expected": "The field accepts all 100 characters and the record saves with the Liferay generic success toast"
+    },
+    {
+     "action": "Publish the record and read the badge above the Overview heading on the English page in a fresh logged-out browser context",
+     "expected": "The badge renders all 100 'B' characters above the Overview heading with none truncated"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141356,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that a Section Badge longer than 100 characters is not accepted",
+   "steps": [
+    {
+     "action": "Paste a string of 101 'B' characters into the Overview Section Badge EN field",
+     "expected": "Either the field stops accepting input at 100 characters or the 101-character value is held pending validation"
+    },
+    {
+     "action": "Attempt to save the record and re-read the stored value",
+     "expected": "The field does not accept a value longer than 100 characters: the save is blocked with the Section Badge EN field flagged as over the limit, or the stored value is exactly 100 characters"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141357,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that a valid Section Numbering value is saved and rendered as the sticky index numeral",
+   "steps": [
+    {
+     "action": "Open section 2 'Service information' in the QCTEST-130949-ProposalForResearch record and enter '02' in the Section Numbering field",
+     "expected": "The value '02' is accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context and read the sticky index entry for Service information",
+     "expected": "The sticky index entry reads '02 Service information', with the numeral matching the authored Section Numbering value exactly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141358,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that an empty Section Numbering blocks the save",
+   "steps": [
+    {
+     "action": "Clear the Section Numbering field of section 2 'Service information' so it contains no characters",
+     "expected": "The field is empty"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Section Numbering field is flagged as required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141359,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that the authored Section Numbering is preserved when sections are reordered",
+   "steps": [
+    {
+     "action": "Open the QCTEST-130949-ProposalForResearch record and change the Display Order of 'Downloadable resources' to 2 and of 'Service information' to 3, leaving both Section Numbering values as authored ('03' and '02')",
+     "expected": "Both Display Order values are accepted with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English published page in a fresh logged-out browser context and read the sticky index entries top to bottom together with their numerals",
+     "expected": "The sections and index entries now render in the sequence Overview, Downloadable resources, Service information, and each entry still carries its AUTHORED numeral: '01 Overview', '03 Downloadable resources', '02 Service information' — the numerals are not renumbered by the reorder"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object. Each QCTEST section keeps its authored Section Numbering while the order changes."
+  },
+  {
+   "tc_id": 141360,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that the page Created Date is auto-captured at creation and is not editable",
+   "steps": [
+    {
+     "action": "Log into Object Authoring as the Site Content Editor, create the record QCTEST-130949-CreatedDate and note the wall-clock time at the moment of the first save",
+     "expected": "The record is created and saved with the Liferay generic success toast; no Created Date was entered by the author"
+    },
+    {
+     "action": "Reopen the saved record and inspect the Created Date field",
+     "expected": "The Created Date is populated automatically and matches the wall-clock time of the first save to the minute"
+    },
+    {
+     "action": "Attempt to type a different date into the Created Date field, then edit the Page Title to 'QCTEST-130949-CreatedDate v2', save, and re-read the Created Date",
+     "expected": "The Created Date field is read-only and rejects the typed value, and after the title edit is saved the Created Date still shows the original creation timestamp unchanged"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141361,
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that the page Last Modified Date is auto-updated on every save and is not editable",
+   "steps": [
+    {
+     "action": "Open the QCTEST-130949-ProposalForResearch record in Object Authoring as the Site Content Editor and record the current Last Modified Date value",
+     "expected": "The current Last Modified Date is displayed on the record"
+    },
+    {
+     "action": "Attempt to type a different date into the Last Modified Date field",
+     "expected": "The Last Modified Date field is read-only and rejects the typed value"
+    },
+    {
+     "action": "Change the Hero Eyebrow EN to 'QCTEST Economic Research Service', save the record and re-read the Last Modified Date",
+     "expected": "The save succeeds with the Liferay generic success toast and the Last Modified Date has advanced to the time of this save, matching the wall-clock time to the minute and no longer equal to the previously recorded value"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141362,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that the Hero Description rich text supports headings, bullets and inline hyperlinks on the published page",
+   "steps": [
+    {
+     "action": "In the Hero Description EN rich-text field, author a heading 'QCTEST Research scope', a bullet list with the items 'Economic topics' and 'Business topics', and a paragraph containing the inline hyperlink 'Research & Studies' targeting https://qcdev.ihorizons.com/en/about",
+     "expected": "The editor accepts the heading, the bullet list and the hyperlink with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context and inspect the hero description markup",
+     "expected": "The hero description renders 'QCTEST Research scope' as a heading element, 'Economic topics' and 'Business topics' as two list items of a bullet list, and 'Research & Studies' as an anchor element whose href is https://qcdev.ihorizons.com/en/about"
+    },
+    {
+     "action": "Click the 'Research & Studies' link in the hero description",
+     "expected": "The browser navigates to https://qcdev.ihorizons.com/en/about"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "headings / bullets / inline hyperlinks are entered through the CKEditor toolbar, which this suite does not drive yet - automate once the toolbar path is scripted"
+  },
+  {
+   "tc_id": 141363,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that the Overview Body rich text supports headings, paragraphs, bullets and inline hyperlinks on the published page",
+   "steps": [
+    {
+     "action": "In the Section 1 Body EN rich-text field, author a heading 'QCTEST How proposals are reviewed', two paragraphs, a bullet list with the items 'Submission', 'Review' and 'Feedback', and a paragraph containing the inline hyperlink 'contact the department' targeting https://qcdev.ihorizons.com/en/contact-us",
+     "expected": "The editor accepts the heading, both paragraphs, the bullet list and the hyperlink with no validation error"
+    },
+    {
+     "action": "Publish the record",
+     "expected": "The record is saved with status Published and the Liferay generic success toast is displayed"
+    },
+    {
+     "action": "Open the English published page in a fresh logged-out browser context and inspect the Overview body markup",
+     "expected": "The Overview body renders 'QCTEST How proposals are reviewed' as a heading element, the two paragraphs as separate paragraph elements, 'Submission', 'Review' and 'Feedback' as three list items of a bullet list, and 'contact the department' as an anchor element whose href is https://qcdev.ihorizons.com/en/contact-us"
+    },
+    {
+     "action": "Click the 'contact the department' link inside the Overview body",
+     "expected": "The browser navigates to https://qcdev.ihorizons.com/en/contact-us"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "headings / bullets / inline hyperlinks are entered through the CKEditor toolbar, which this suite does not drive yet - automate once the toolbar path is scripted"
+  },
+  {
+   "tc_id": 141365,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that saving the page with no Hero Banner attached is blocked",
+   "steps": [
+    {
+     "action": "Open the QCTEST-130949-ProposalForResearch record in Object Authoring as the Site Content Editor and remove the attached hero banner image so the Hero Banner field is empty",
+     "expected": "The Hero Banner field shows no attached image"
+    },
+    {
+     "action": "Attempt to save and publish the record",
+     "expected": "The save/publish is blocked and the Hero Banner field is flagged as required; no success toast is shown and the previously published page continues to serve its existing hero banner"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141366,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC"
+   ],
+   "title": "Verify that saving a downloadable resource item with no file attached is blocked",
+   "steps": [
+    {
+     "action": "Add a new downloadable resource item to the QCTEST-130949-ProposalForResearch record, set Resource Title EN to 'QCTEST-130949-NoFile', set Display Order 3 and Active Status Active, and leave the Resource File field empty",
+     "expected": "The item is created in the editor with no file attached"
+    },
+    {
+     "action": "Attempt to save the record",
+     "expected": "The save is blocked and the Resource File field is flagged as required; no resource card titled 'QCTEST-130949-NoFile' is created and none appears on the published page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring."
+  },
+  {
+   "tc_id": 141367,
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "SVC",
+    "Web"
+   ],
+   "title": "Verify that an information group with no Group Intro is saved and rendered with its label and bullets only",
+   "steps": [
+    {
+     "action": "Open information group 2 'Supporting information' in the QCTEST-130949-ProposalForResearch record and clear both the Group Intro EN and the Group Intro AR rich-text fields",
+     "expected": "Both Group Intro fields are empty and neither is flagged as required"
+    },
+    {
+     "action": "Save and publish the record",
+     "expected": "The record saves and publishes successfully with the Liferay generic success toast"
+    },
+    {
+     "action": "Open /en/our-services/information/proposal-for-research in a fresh logged-out browser context and read the second information group in section 02",
+     "expected": "The group renders its label 'Supporting information' followed directly by its four bullets, with no intro paragraph and no empty intro block or extra vertical gap between the label and the first bullet"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Re-expressed on disposable QCTEST records: the case's named live entries are QCDEMO content, which may only be read; the same behaviour is asserted on a QCTEST entry of the same object."
+  }
+ ]
+}

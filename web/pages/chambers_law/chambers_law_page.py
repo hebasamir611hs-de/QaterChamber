@@ -82,7 +82,10 @@ class ChambersLawPage(BasePage):
     INTRO_HEADING = ".qc-cl-intro-heading"
     INTRO_TEXT = ".qc-cl-intro-body"
     INTRO_FIGURE = ".qc-cl-intro-figure"
-    INTRO_IMG = ".qc-cl-intro-img"
+    # Live 2026-10-12: the intro now ships a dark-mode twin that shares the
+    # class (`data-qc-cl-content-img-dark-el`, alt=""); the bare class matched
+    # 2 elements and every strict lookup failed. Scoped to the primary image.
+    INTRO_IMG = ".qc-cl-intro-img:not([data-qc-cl-content-img-dark-el])"
 
     # ---- Official Legal References section ---------------------------------
     REFS_HEADING = ".qc-cl-refs-heading"
@@ -93,8 +96,15 @@ class ChambersLawPage(BasePage):
     ANNOUNCEMENT_CLOSE = '[aria-label="Close"]'
 
     # ---- Navigation ----------------------------------------------------------
-    def open_chambers_law(self, locale: str = "en") -> "ChambersLawPage":
-        self.open(web_url(CHAMBERS_LAW_PATH, locale=locale))
+    def open_chambers_law(self, locale: str = "en", cache_bust: bool = False) -> "ChambersLawPage":
+        """`cache_bust=True` appends a unique `?cb=<ns>` query so a CDN /
+        portal cache cannot serve a copy older than a just-published change."""
+        url = web_url(CHAMBERS_LAW_PATH, locale=locale)
+        if cache_bust:
+            import time
+
+            url += f"?cb={time.time_ns()}"
+        self.open(url)
         self._dismiss_announcement_if_present()
         return self
 
@@ -232,6 +242,29 @@ class ChambersLawPage(BasePage):
 
     def refs_heading_text(self) -> str:
         return self.text(self.REFS_HEADING)
+
+    def intro_body_text(self) -> str:
+        """Rendered text of the intro body (Intro Content), "" when absent."""
+        body = self.page.locator(self.INTRO_TEXT)
+        return body.first.inner_text() if body.count() else ""
+
+    def section_counts(self) -> dict:
+        """How many times each page-level block renders -- the "rendered
+        once, no repeated block" check (2026-10-14, tc 134850/134851)."""
+        return {name: self.page.locator(sel).count() for name, sel in (
+            ("intro_heading", self.INTRO_HEADING), ("intro_body", self.INTRO_TEXT),
+            ("refs_heading", self.REFS_HEADING), ("cards", self.CARD))}
+
+    def section_tops(self) -> dict:
+        """Page-y of the top edge of each page-level block (None if absent),
+        for "X renders above / below Y" assertions."""
+        out = {}
+        for name, sel in (("intro_heading", self.INTRO_HEADING), ("intro_body", self.INTRO_TEXT),
+                          ("refs_heading", self.REFS_HEADING), ("first_card", self.CARD)):
+            loc = self.page.locator(sel)
+            out[name] = (loc.first.evaluate("el => el.getBoundingClientRect().top + window.scrollY")
+                         if loc.count() else None)
+        return out
 
     def card_count(self) -> int:
         return self.page.locator(self.CARD).count()

@@ -39,7 +39,7 @@ edit form:
     textbox "Section Badge"              / "Section Badge — العربية"
     textbox "Section Title"              / "Section Title — العربية"
     textbox "Section Description"        / "Section Description — العربية"
-    button  "Submit for Publishing" (this object's own confirmed-live
+    button  "Submit for Review" (this object's own confirmed-live
             submit wording DOES match ObjectAuthoringPage's default,
             unlike the per-record "Export Report" object's "Submit for
             Review" — same split as annual_reports_page_admin_page.py vs.

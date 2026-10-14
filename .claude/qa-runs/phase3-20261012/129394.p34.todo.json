@@ -1,0 +1,72 @@
+[
+ {
+  "id": 134937,
+  "title": "Verify that the page Status dropdown offers and stores the Draft value",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Open the Chamber's Law page record in Liferay CMS",
+    "expected": "Record opens with the Status dropdown available"
+   },
+   {
+    "action": "Open the Status dropdown and select Draft, then click Save",
+    "expected": "The dropdown lists exactly Draft and Published; Draft is selected and saved with the success toast shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Status reads Draft"
+   }
+  ]
+ },
+ {
+  "id": 134938,
+  "title": "Verify that the page Status dropdown offers and stores the Published value",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Open the Chamber's Law page record in Liferay CMS with Status currently Draft",
+    "expected": "Record opens with Status Draft"
+   },
+   {
+    "action": "Open the Status dropdown and select Published, then click Save",
+    "expected": "Published is selected and saved with the success toast shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Status reads Published"
+   }
+  ]
+ },
+ {
+  "id": 134974,
+  "title": "Verify that a non-integer Display Order is rejected on save",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": true,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open a law entry record under the Chamber's Law page in Liferay CMS with Display Order currently 2",
+    "expected": "Law entry record opens with Display Order 2"
+   },
+   {
+    "action": "Enter 2.5 in Display Order and click Save",
+    "expected": "Save is blocked with an integer-format validation error and no success toast appears — the value is not silently rounded to 2 or 3"
+   },
+   {
+    "action": "Enter 'two' in Display Order and click Save",
+    "expected": "Save is blocked and the value is not stored. The Display Order control is a number field, so the letters never enter it and the box is left empty; the save is therefore blocked as a MISSING value, not as a malformed one, and no integer-format message is possible. Verified live 2026-09-16: the field held an empty string, the browser reported valueMissing, and the value was not stored."
+   },
+   {
+    "action": "Reload the law entry record",
+    "expected": "Display Order still reads 2"
+   }
+  ]
+ }
+]

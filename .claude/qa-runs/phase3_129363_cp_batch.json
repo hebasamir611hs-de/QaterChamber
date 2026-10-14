@@ -1,0 +1,698 @@
+{
+ "pbi": 129363,
+ "cases": [
+  {
+   "tc_id": 134254,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor with header-management permission can access and publish header changes",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as a user with Site Content Editor role",
+     "expected": "Editor gains access to Header Management"
+    },
+    {
+     "action": "Navigate to Global Components -> Header Management",
+     "expected": "Publish action succeeds; Liferay generic success toast displays"
+    },
+    {
+     "action": "Modify a nav item and click Publish",
+     "expected": "Publish action succeeds; Liferay generic success toast displays"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134255,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a CMS user without header-management permission is denied access to publish",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as a user without header-management permission",
+     "expected": "Action is blocked; message: 'Access Denied. You do not have permission to perform this action.' displays"
+    },
+    {
+     "action": "Attempt to navigate to Header Management or publish a change",
+     "expected": "Action is blocked; message: 'Access Denied. You do not have permission to perform this action.' displays"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Non-mutating: assert the denial / absence of the publish control; never click Save/Submit on the live HeaderConfiguration"
+  },
+  {
+   "tc_id": 134266,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "GLOBAL",
+    "Workflow"
+   ],
+   "title": "Verify that an admin can save a header configuration as Draft",
+   "steps": [
+    {
+     "action": "Log into CMS as Site Content Editor",
+     "expected": "Configuration saves with status Draft; Liferay generic success toast displays"
+    },
+    {
+     "action": "Navigate to Header Management",
+     "expected": "Configuration saves with status Draft; Liferay generic success toast displays"
+    },
+    {
+     "action": "Make a nav item edit",
+     "expected": "Configuration saves with status Draft; Liferay generic success toast displays"
+    },
+    {
+     "action": "Click Save as Draft",
+     "expected": "Configuration saves with status Draft; Liferay generic success toast displays"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134267,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "GLOBAL",
+    "Workflow"
+   ],
+   "title": "Verify that an admin can preview a header configuration before publishing",
+   "steps": [
+    {
+     "action": "From a Draft header configuration, click Preview",
+     "expected": "Preview renders the configured header as it will appear live, without publishing it"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "Automate ONLY if the preview can be exercised without clicking Save/Submit on the live HeaderConfiguration; otherwise skip with SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134268,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "GLOBAL",
+    "Workflow"
+   ],
+   "title": "Verify that an admin can submit a header configuration for review",
+   "steps": [
+    {
+     "action": "From a Draft configuration, click Submit for Review",
+     "expected": "Configuration status changes to Submitted/Pending Review; Liferay generic success toast displays"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134270,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a valid Logo Image (PNG, 500KB) uploads successfully",
+   "steps": [
+    {
+     "action": "Open Header Management",
+     "expected": "File selected shows preview"
+    },
+    {
+     "action": "Click Logo Image upload",
+     "expected": "Upload succeeds; no validation error; Liferay success toast displays"
+    },
+    {
+     "action": "Select a valid 500KB PNG file",
+     "expected": "Upload succeeds; no validation error; Liferay success toast displays"
+    },
+    {
+     "action": "Save",
+     "expected": "Upload succeeds; no validation error; Liferay success toast displays"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134272,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that a Logo Image exceeding 2MB or in an unsupported format is rejected",
+   "steps": [
+    {
+     "action": "Open Header Management",
+     "expected": "Upload rejected; validation error indicating unsupported format or file exceeding 2MB limit displays"
+    },
+    {
+     "action": "Attempt to upload a 3MB .jpg file",
+     "expected": "Upload rejected; validation error indicating unsupported format or file exceeding 2MB limit displays"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "Automate ONLY if the size/format rejection fires at upload time, before any Save; never click Save on the live HeaderConfiguration; otherwise skip with SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134273,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a valid Logo Alt Text (EN) of 50 characters saves correctly",
+   "steps": [
+    {
+     "action": "Open Header Management",
+     "expected": "Text entered"
+    },
+    {
+     "action": "Enter a 50-char string in Logo Alt Text EN",
+     "expected": "Save succeeds; value persisted"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds; value persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134277,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a valid Logo Alt Text (AR) saves correctly and renders RTL in the CMS field",
+   "steps": [
+    {
+     "action": "Open Header Management",
+     "expected": "Text entered, rendered RTL"
+    },
+    {
+     "action": "Enter Arabic text in Logo Alt Text AR",
+     "expected": "Save succeeds; value persisted"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds; value persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134281,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a valid Logo Redirect URL saves correctly",
+   "steps": [
+    {
+     "action": "Open Header Management",
+     "expected": "URL entered"
+    },
+    {
+     "action": "Enter a valid URL in Logo Redirect URL",
+     "expected": "Save succeeds; value persisted"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds; value persisted"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134282,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that an invalid Logo Redirect URL is rejected",
+   "steps": [
+    {
+     "action": "Enter 'not a url' in Logo Redirect URL",
+     "expected": "Save blocked; message: 'Please enter a valid URL.' displays"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save blocked; message: 'Please enter a valid URL.' displays"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134285,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a valid Nav Item Label (EN) of 20 characters saves correctly",
+   "steps": [
+    {
+     "action": "Open Header Management -> Add Nav Item",
+     "expected": "Text entered"
+    },
+    {
+     "action": "Enter a 20-char label in Nav Item Label EN",
+     "expected": "Save succeeds; label persisted"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds; label persisted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id>-* NavItem(s), torn down every run"
+  },
+  {
+   "tc_id": 134289,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a valid Nav Item Label (AR) saves correctly",
+   "steps": [
+    {
+     "action": "Enter Arabic text in Nav Item Label AR",
+     "expected": "Text entered RTL"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds; label persisted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id>-* NavItem(s), torn down every run"
+  },
+  {
+   "tc_id": 134290,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a nav item with a missing Arabic label is blocked before publish",
+   "steps": [
+    {
+     "action": "Add a nav item with a valid EN label but empty AR label",
+     "expected": "Publish blocked; message: 'Arabic label is required before publishing.' displays"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish blocked; message: 'Arabic label is required before publishing.' displays"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id>-* NavItem(s), torn down every run"
+  },
+  {
+   "tc_id": 134293,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a valid Nav Item URL saves correctly",
+   "steps": [
+    {
+     "action": "Enter a valid URL in Nav Item URL",
+     "expected": "URL entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds; URL persisted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id>-* NavItem(s), torn down every run"
+  },
+  {
+   "tc_id": 134294,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that an invalid Nav Item URL is rejected",
+   "steps": [
+    {
+     "action": "Enter an invalid URL string in Nav Item URL",
+     "expected": "Save blocked; 'Please enter a valid URL.' displays"
+    },
+    {
+     "action": "Click Save",
+     "expected": "Save blocked; 'Please enter a valid URL.' displays"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id>-* NavItem(s), torn down every run"
+  },
+  {
+   "tc_id": 134297,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Navigation"
+   ],
+   "title": "Verify that configuring a 4th navigation depth level is blocked",
+   "steps": [
+    {
+     "action": "Attempt to add a child item beneath an existing Level 3 item",
+     "expected": "Action blocked; message: 'Maximum navigation depth of 3 levels reached.' displays"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 says NavItem depth is derived from Parent Item, 'no level to set' — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134299,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that a Level 2 item without a Parent Menu is blocked before publish",
+   "steps": [
+    {
+     "action": "Set Nav Item Level = 2, leave Parent Menu empty",
+     "expected": "Publish blocked; message: 'Parent Menu is required for Level 2 and Level 3 items.' displays"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish blocked; message: 'Parent Menu is required for Level 2 and Level 3 items.' displays"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 has no Level field; an item with no Parent Item is by definition top-level — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134300,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a valid positive Display Order value saves and reorders the nav item",
+   "steps": [
+    {
+     "action": "Set Display Order = 5 on a nav item",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Nav item repositions to the 5th display slot on the frontend after publish"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id>-* NavItem(s), torn down every run"
+  },
+  {
+   "tc_id": 134301,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that Display Order rejects non-numeric, negative, and zero values",
+   "steps": [
+    {
+     "action": "Enter 'abc' in Display Order, Save",
+     "expected": "Save blocked; validation error for non-numeric input"
+    },
+    {
+     "action": "Enter -1 in Display Order, Save",
+     "expected": "Save blocked; positive-number validation error displays"
+    },
+    {
+     "action": "Enter 0 in Display Order, Save",
+     "expected": "Save blocked; same positive-number validation error displays"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id>-* NavItem(s), torn down every run"
+  },
+  {
+   "tc_id": 134302,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a nav item with Active Status = True displays on the frontend",
+   "steps": [
+    {
+     "action": "Set Active Status = True on a nav item",
+     "expected": "Toggle set to True"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public site",
+     "expected": "Nav item is visible in the frontend header"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id>-* NavItem(s), torn down every run"
+  },
+  {
+   "tc_id": 134303,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Navigation",
+    "Regression"
+   ],
+   "title": "Verify that a nav item with Active Status = False does not appear on the frontend while other items remain visible",
+   "steps": [
+    {
+     "action": "Set Active Status = False on one nav item, leaving all others Active = True",
+     "expected": "Toggle set to False"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds"
+    },
+    {
+     "action": "Open the public site header",
+     "expected": "The disabled nav item is absent from the frontend header; all other nav items remain visible"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id>-* NavItem(s), torn down every run"
+  },
+  {
+   "tc_id": 134304,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Workflow"
+   ],
+   "title": "Verify that an admin can update a previously published header configuration",
+   "steps": [
+    {
+     "action": "Open an already-Published header configuration",
+     "expected": "Update succeeds; Liferay generic success toast displays; new order reflected after cache refresh"
+    },
+    {
+     "action": "Edit a nav item's Display Order",
+     "expected": "Update succeeds; Liferay generic success toast displays; new order reflected after cache refresh"
+    },
+    {
+     "action": "Click Update",
+     "expected": "Update succeeds; Liferay generic success toast displays; new order reflected after cache refresh"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134305,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Workflow"
+   ],
+   "title": "Verify that an admin can unpublish a header configuration",
+   "steps": [
+    {
+     "action": "Open a Published header configuration",
+     "expected": "Configuration status changes to Unpublished; Liferay generic success toast displays; header reverts on frontend after cache refresh"
+    },
+    {
+     "action": "Click Unpublish",
+     "expected": "Configuration status changes to Unpublished; Liferay generic success toast displays; header reverts on frontend after cache refresh"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live HeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134308,
+   "priority": 2,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "GLOBAL",
+    "Navigation"
+   ],
+   "title": "Verify that a nav item whose parent is disabled does not render an orphaned child on the frontend",
+   "steps": [
+    {
+     "action": "Set a Level 1 parent item's Active Status = False while its Level 2 child remains Active = True",
+     "expected": "Neither the disabled parent nor its orphaned child renders on the frontend"
+    },
+    {
+     "action": "Publish",
+     "expected": "Neither the disabled parent nor its orphaned child renders on the frontend"
+    },
+    {
+     "action": "Open the public site header and check the parent's former position",
+     "expected": "Neither the disabled parent nor its orphaned child renders on the frontend"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id>-* NavItem(s), torn down every run"
+  }
+ ]
+}

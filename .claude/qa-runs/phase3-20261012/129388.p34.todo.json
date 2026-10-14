@@ -1,0 +1,178 @@
+[
+ {
+  "id": 133669,
+  "title": "Verify that a valid JPG thumbnail under 2MB uploads and saves successfully",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Upload a 1MB JPG file as Thumbnail Image",
+    "expected": "JPG file uploads and preview displays"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Item saves successfully with the JPG thumbnail stored"
+   }
+  ]
+ },
+ {
+  "id": 133670,
+  "title": "Verify that a valid PNG thumbnail under 2MB uploads and saves successfully",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Create Album screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Upload a 1MB PNG file as Thumbnail Image",
+    "expected": "PNG file uploads and preview displays"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Item saves successfully with the PNG thumbnail stored"
+   }
+  ]
+ },
+ {
+  "id": 133675,
+  "title": "Verify that the Thumbnail Image persists after save and reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save a video with a valid JPG thumbnail",
+    "expected": "Item saves successfully"
+   },
+   {
+    "action": "Navigate away from the edit screen",
+    "expected": "Navigation away succeeds"
+   },
+   {
+    "action": "Re-open the video's Edit screen",
+    "expected": "The same thumbnail image still displays in the Edit screen and on the Home Page card"
+   }
+  ]
+ },
+ {
+  "id": 133679,
+  "title": "Verify that the system's handling when both Video File and Embed URL are provided together",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Upload a valid Video File AND enter a valid Embed URL",
+    "expected": "Both a file and a URL are provided"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "One deterministic outcome occurs: either the save is blocked with a clear 'provide only one' validation message, or the save succeeds using one clearly defined source (documented behavior, not silent/undefined) — no crash, no corrupted record"
+   }
+  ]
+ },
+ {
+  "id": 133681,
+  "title": "Verify that an invalid Embed URL format is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Enter `notaurl` in the Embed URL field",
+    "expected": "'notaurl' entered in Embed URL"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Save is blocked with a validation error indicating the Embed URL must be a valid URL; item is not saved"
+   }
+  ]
+ },
+ {
+  "id": 133682,
+  "title": "Verify that the Video File/Embed URL value persists after save and reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save a video with a valid Embed URL",
+    "expected": "Item saves successfully"
+   },
+   {
+    "action": "Navigate away from the edit screen",
+    "expected": "Navigation away succeeds"
+   },
+   {
+    "action": "Re-open the video's Edit screen",
+    "expected": "The same Embed URL still displays in the Edit screen"
+   }
+  ]
+ },
+ {
+  "id": 133683,
+  "title": "Verify that a valid Publication Date is accepted and saved",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Enter Publication Date = 18/04/2026",
+    "expected": "Date entered"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Item saves successfully with Publication Date stored as 18 Apr 2026"
+   }
+  ]
+ },
+ {
+  "id": 133685,
+  "title": "Verify that an invalid Publication Date format is rejected",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Enter Publication Date = 32/13/2026",
+    "expected": "Invalid date value entered"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Save is blocked with a validation error indicating the date is invalid; item is not saved"
+   }
+  ]
+ }
+]

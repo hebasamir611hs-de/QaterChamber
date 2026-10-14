@@ -1,0 +1,1106 @@
+[
+ {
+  "id": 134675,
+  "title": "Verify that the page rich text renders headings, paragraphs, bullet lists, numbered lists, and inline links",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Page Content is configured with one heading, one paragraph, a 3-item bullet list, a 3-item numbered sub-list, and one inline link. Verifies every rich-text element type renders on the public page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In Liferay CMS, set Page Content (EN) to contain a heading, a paragraph, a 3-item bullet list, a 3-item numbered sub-list, and one inline link to https://www.qatarchamber.com, then publish",
+    "expected": "Content saved and published; success toast shown"
+   },
+   {
+    "action": "Open the About Qatar Chamber page in English on the public site",
+    "expected": "Page loads with the content block visible"
+   },
+   {
+    "action": "Inspect the rendered content block",
+    "expected": "Heading, paragraph, 3 bulleted items, 3 numbered items, and the inline link all render as authored; the inline link is rendered as a clickable anchor pointing to https://www.qatarchamber.com"
+   }
+  ]
+ },
+ {
+  "id": 134676,
+  "title": "Verify that the Content Image exposes the alt text configured in the CMS",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Content Image alt text (EN) is set to &quot;Qatar Chamber headquarters building&quot;. Verifies the public page renders that exact value as the image alt attribute.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In Liferay CMS, set the Content Image Alt Text (EN) to 'Qatar Chamber headquarters building' and publish",
+    "expected": "Alt text saved and published; success toast shown"
+   },
+   {
+    "action": "Open the About Qatar Chamber page in English",
+    "expected": "Page loads with the Content Image visible"
+   },
+   {
+    "action": "Inspect the Content Image accessible name / alt attribute",
+    "expected": "Content Image alt attribute is exactly 'Qatar Chamber headquarters building'"
+   }
+  ]
+ },
+ {
+  "id": 134679,
+  "title": "Verify that all published content sections appear on the page in the configured order",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Page Content is configured with three sections in the order Intro, Chamber's Competences, Chamber Constituents. Verifies all three render on the public page in that order with no section omitted.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In Liferay CMS, configure Page Content (EN) with three sections in the order 'The Voice of Qatar's Private Sector', 'The Chamber's competences', 'Chamber Constituents:' and publish",
+    "expected": "Content published; success toast shown"
+   },
+   {
+    "action": "Open the About Qatar Chamber page in English",
+    "expected": "Page loads with the first section visible"
+   },
+   {
+    "action": "Scroll from the top of the content block to the bottom and record the section order",
+    "expected": "All three sections render in the configured order — 'The Voice of Qatar's Private Sector', then 'The Chamber's competences', then 'Chamber Constituents:' — with no section missing or reordered"
+   }
+  ]
+ },
+ {
+  "id": 134684,
+  "title": "Verify that a Site Content Editor can create, edit, preview, publish, and unpublish the About Qatar Chamber page",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "Regression",
+   "Workflow"
+  ],
+  "description": "Signed in as Site Content Editor. Verifies every lifecycle action stated in the permissions table is available and succeeds for this role.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in to Liferay CMS as a user with the Site Content Editor role",
+    "expected": "Sign-in succeeds and the CMS dashboard loads"
+   },
+   {
+    "action": "Open the About Qatar Chamber page record",
+    "expected": "Page record opens with Edit, Preview, Publish, and Unpublish controls all enabled"
+   },
+   {
+    "action": "Edit the Page Title (EN) to 'About Qatar Chamber', then use Preview, Publish, and Unpublish in turn",
+    "expected": "Each action completes and shows the Liferay success toast; no Access Denied message appears at any step"
+   }
+  ]
+ },
+ {
+  "id": 134685,
+  "title": "Verify that a Site Content Author can view and update assigned About Qatar Chamber page content",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "Regression"
+  ],
+  "description": "Signed in as Site Content Author with the About Qatar Chamber page assigned. Verifies view and update are permitted for this role.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in to Liferay CMS as a user with the Site Content Author role and the About Qatar Chamber page assigned",
+    "expected": "Sign-in succeeds"
+   },
+   {
+    "action": "Open the About Qatar Chamber page record",
+    "expected": "Page record opens in editable mode"
+   },
+   {
+    "action": "Update Page Content (EN) and save",
+    "expected": "Change is saved and the Liferay success toast is shown; no Access Denied message appears"
+   }
+  ]
+ },
+ {
+  "id": 134686,
+  "title": "Verify that a Site Content Author cannot publish the About Qatar Chamber page",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "Workflow"
+  ],
+  "description": "Signed in as Site Content Author, whose permissions cover view and update only. Verifies the publish action is not available to this role and cannot be forced.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in to Liferay CMS as a user with the Site Content Author role",
+    "expected": "Sign-in succeeds"
+   },
+   {
+    "action": "Open the About Qatar Chamber page record and locate the publish control",
+    "expected": "The Publish control is absent or disabled for this role"
+   },
+   {
+    "action": "Attempt to publish the page",
+    "expected": "Publish does not occur; the page publication state is unchanged and 'Access Denied. You do not have permission to perform this action.' is shown (Arabic: تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.)"
+   }
+  ]
+ },
+ {
+  "id": 134687,
+  "title": "Verify that a user without the required permission is denied access to the About Qatar Chamber page record",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Bilingual",
+   "Control_Panel"
+  ],
+  "description": "Signed in as a CMS user holding neither Site Content Editor nor Site Content Author on this page. Verifies the exact bilingual Access Denied message and that no change is possible.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in to Liferay CMS as a user with no content role on the About Qatar Chamber page",
+    "expected": "Sign-in succeeds"
+   },
+   {
+    "action": "Attempt to open the About Qatar Chamber page record for editing",
+    "expected": "Access is refused and the message 'Access Denied. You do not have permission to perform this action.' is shown; the record does not open in editable mode"
+   },
+   {
+    "action": "Switch the CMS interface language to Arabic and repeat the attempt",
+    "expected": "The same refusal is shown in Arabic as 'تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.'"
+   }
+  ]
+ },
+ {
+  "id": 134688,
+  "title": "Verify that publishing the About Qatar Chamber page makes the content visible on the website",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "UAT",
+   "Web",
+   "Workflow"
+  ],
+  "description": "Editor publishes the page with Page Title (EN) 'About Qatar Chamber' and one content section. Verifies the success toast fires and the content appears on the public site after cache refresh.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in to Liferay CMS as Site Content Editor and open the About Qatar Chamber page record",
+    "expected": "Page record opens with current values shown"
+   },
+   {
+    "action": "Set Page Title (EN) to 'About Qatar Chamber', Page Content (EN) to a section headed 'The Voice of Qatar's Private Sector', and click Publish",
+    "expected": "Page status changes to Published and the Liferay generic success toast is displayed"
+   },
+   {
+    "action": "Wait for the standard cache refresh and open the About Qatar Chamber page on the public site in English",
+    "expected": "Public page loads showing the title 'About Qatar Chamber' and the section 'The Voice of Qatar's Private Sector' exactly as authored"
+   }
+  ]
+ },
+ {
+  "id": 134690,
+  "title": "Verify that unpublishing the About Qatar Chamber page removes it from the website",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "Web",
+   "Workflow"
+  ],
+  "description": "Page is currently published. Verifies unpublishing removes public access while the record remains available in the CMS.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open the published About Qatar Chamber page record",
+    "expected": "Record opens with status Published"
+   },
+   {
+    "action": "Click Unpublish and wait for the standard cache refresh",
+    "expected": "Status changes to Unpublished and the success toast is shown"
+   },
+   {
+    "action": "Open the About Qatar Chamber page URL in a browser session with no CMS login",
+    "expected": "The public URL no longer serves the page content — the standard not-available/error page is shown instead of the About Qatar Chamber content"
+   },
+   {
+    "action": "Re-open the record in the CMS",
+    "expected": "The record and all its content are still present and editable in the CMS"
+   }
+  ]
+ },
+ {
+  "id": 134691,
+  "title": "Verify that draft About Qatar Chamber content is visible only in the CMS and not on the website",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "Web",
+   "Workflow"
+  ],
+  "description": "Editor saves a new paragraph as draft without publishing. Verifies the draft text is retrievable in the CMS but absent from the public page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open the About Qatar Chamber page record",
+    "expected": "Record opens with current published content"
+   },
+   {
+    "action": "Add the paragraph 'DRAFT-ONLY-129392' to Page Content (EN) and click Save as draft",
+    "expected": "Content is saved with status Draft and the success toast is shown"
+   },
+   {
+    "action": "Open the About Qatar Chamber page on the public site in English and search the page text for 'DRAFT-ONLY-129392'",
+    "expected": "The public page does not contain the text 'DRAFT-ONLY-129392' anywhere and still shows the previously published content"
+   },
+   {
+    "action": "Re-open the record in the CMS",
+    "expected": "The CMS record shows the draft paragraph 'DRAFT-ONLY-129392'"
+   }
+  ]
+ },
+ {
+  "id": 134692,
+  "title": "Verify that Preview renders unpublished About Qatar Chamber content without publishing it",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "Workflow"
+  ],
+  "description": "Editor previews a draft change. Verifies the preview shows the draft content while the public page and the record status stay unchanged.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open the About Qatar Chamber page record",
+    "expected": "Record opens with current content"
+   },
+   {
+    "action": "Add the paragraph 'PREVIEW-ONLY-129392' to Page Content (EN), save as draft, and click Preview",
+    "expected": "Preview opens and renders the page including the paragraph 'PREVIEW-ONLY-129392'"
+   },
+   {
+    "action": "Check the record status, then open the public About Qatar Chamber page in English",
+    "expected": "Record status is still Draft and the public page does not contain 'PREVIEW-ONLY-129392'"
+   }
+  ]
+ },
+ {
+  "id": 134693,
+  "title": "Verify that publishing the About Qatar Chamber page updates the page cache and writes an audit log entry",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Web",
+   "Workflow"
+  ],
+  "description": "Editor publishes a change to Page Content (EN). Verifies the new content is served after cache refresh and the change is recorded in the audit log with the acting user.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and note the current time",
+    "expected": "CMS session active and current published content noted"
+   },
+   {
+    "action": "Change Page Content (EN) to include the paragraph 'CACHE-CHECK-129392' and click Publish",
+    "expected": "Publish succeeds and the success toast is shown"
+   },
+   {
+    "action": "Open the public About Qatar Chamber page in English after the standard cache refresh",
+    "expected": "The public page serves the updated content including 'CACHE-CHECK-129392' rather than the previously cached version"
+   },
+   {
+    "action": "Open the Liferay audit log and filter to the About Qatar Chamber page record",
+    "expected": "The audit log contains an entry for this publish action showing the About Qatar Chamber page, the acting Site Content Editor user, and a timestamp at or after the noted time"
+   }
+  ]
+ },
+ {
+  "id": 134694,
+  "title": "Verify that a hyperlink configured in the CMS opens its destination from the public page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Redirect",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Hyperlink Title (EN) 'Qatar Chamber Services' and Hyperlink URL (EN) https://www.qatarchamber.com are configured inside the rich text. Verifies the link renders and navigates to that URL.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In Liferay CMS, configure a hyperlink inside Page Content (EN) with title 'Qatar Chamber Services' and URL https://www.qatarchamber.com, then publish",
+    "expected": "Hyperlink saved and published; success toast shown"
+   },
+   {
+    "action": "Open the About Qatar Chamber page in English and locate the link",
+    "expected": "The link renders inside the content with the label 'Qatar Chamber Services' as a clickable anchor"
+   },
+   {
+    "action": "Click 'Qatar Chamber Services'",
+    "expected": "The browser navigates to https://www.qatarchamber.com"
+   }
+  ]
+ },
+ {
+  "id": 134697,
+  "title": "Verify that replacing the Hero Banner image updates the image shown on the website",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "Web"
+  ],
+  "description": "A Hero Banner image is already configured. Verifies uploading a replacement (hero-new.jpg, 800 KB, JPG) swaps the served image after publish and cache refresh.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open the About Qatar Chamber page record with an existing Hero Banner image",
+    "expected": "Record opens showing the currently configured Hero Banner image"
+   },
+   {
+    "action": "Replace the Hero Banner image with hero-new.jpg (JPG, 800 KB) and publish",
+    "expected": "The new image is accepted, saved, and published with the success toast shown"
+   },
+   {
+    "action": "Open the public About Qatar Chamber page in English after the standard cache refresh",
+    "expected": "The Hero Banner on the public page renders hero-new.jpg and no longer serves the previous image"
+   }
+  ]
+ },
+ {
+  "id": 134698,
+  "title": "Verify that uploading a Hero Banner image for the first time publishes it to the website",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "Web"
+  ],
+  "description": "Hero Banner is empty on the record. Verifies the first upload (hero.png, PNG, 1.2 MB) is accepted and rendered in the banner after publish.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open an About Qatar Chamber page record with no Hero Banner image set",
+    "expected": "Record opens with the Hero Banner field empty"
+   },
+   {
+    "action": "Upload hero.png (PNG, 1.2 MB) as the Hero Banner image, set its alt text to 'Qatar Chamber headquarters', and publish",
+    "expected": "Upload is accepted and published; the success toast is shown"
+   },
+   {
+    "action": "Open the public About Qatar Chamber page in English after the standard cache refresh",
+    "expected": "The Hero Banner renders hero.png as the background with the maroon gradient overlay and the alt text 'Qatar Chamber headquarters'"
+   }
+  ]
+ },
+ {
+  "id": 134701,
+  "title": "Verify that editing and republishing the About Qatar Chamber page replaces the previously published content",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Web",
+   "Workflow"
+  ],
+  "description": "Page is already published with a known paragraph. Verifies a republish replaces rather than duplicates the previous content.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Sign in as Site Content Editor and open the published About Qatar Chamber page record containing the paragraph 'VERSION-1-129392'",
+    "expected": "Record opens showing 'VERSION-1-129392'"
+   },
+   {
+    "action": "Replace that paragraph with 'VERSION-2-129392' and publish",
+    "expected": "Publish succeeds and the success toast is shown"
+   },
+   {
+    "action": "Open the public About Qatar Chamber page in English after the standard cache refresh",
+    "expected": "The public page shows 'VERSION-2-129392' only — 'VERSION-1-129392' no longer appears anywhere on the page"
+   }
+  ]
+ },
+ {
+  "id": 134702,
+  "title": "Verify that a valid English Page Title is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters 'About Qatar Chamber' (19 chars) in Page Title (EN). Verifies it saves and is returned on reload.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with Page Title (EN) editable"
+   },
+   {
+    "action": "Enter 'About Qatar Chamber' in Page Title (EN) and click Save",
+    "expected": "Value is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Page Title (EN) reads 'About Qatar Chamber'"
+   }
+  ]
+ },
+ {
+  "id": 134703,
+  "title": "Verify that an empty English Page Title is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Clears the mandatory Page Title (EN) and saves. Verifies save is blocked and the stored value is preserved.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record with Page Title (EN) currently 'About Qatar Chamber'",
+    "expected": "Record opens with the current title shown"
+   },
+   {
+    "action": "Clear Page Title (EN) completely and click Save",
+    "expected": "Save is blocked, a required-field validation error is shown against Page Title (EN), and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Page Title (EN) still reads 'About Qatar Chamber'"
+   }
+  ]
+ },
+ {
+  "id": 134706,
+  "title": "Verify that a valid Arabic Page Title is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters 'غرفة قطر' in Page Title (AR). Verifies it saves and is returned on reload.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with Page Title (AR) editable"
+   },
+   {
+    "action": "Enter 'غرفة قطر' in Page Title (AR) and click Save",
+    "expected": "Value is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Page Title (AR) reads 'غرفة قطر' with the Arabic characters intact and not transliterated or mangled"
+   }
+  ]
+ },
+ {
+  "id": 134707,
+  "title": "Verify that a missing Arabic Page Title is rejected with the Arabic-title-required message",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Arabic is enabled and Page Title (AR) is cleared. Verifies the exact bilingual validation message and that publish is blocked.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record with the Arabic language enabled",
+    "expected": "Record opens with Arabic enabled and Page Title (AR) populated"
+   },
+   {
+    "action": "Clear Page Title (AR) and click Publish",
+    "expected": "Publish is blocked and the message 'Arabic title is required.' is shown against Page Title (AR)"
+   },
+   {
+    "action": "Switch the CMS interface language to Arabic and repeat",
+    "expected": "The same validation is shown in Arabic as 'العنوان العربي مطلوب.' and the page is still not published"
+   }
+  ]
+ },
+ {
+  "id": 134710,
+  "title": "Verify that a valid JPG Hero Banner image under 2 MB is accepted",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads hero.jpg (JPG, 900 KB) as the Hero Banner image. Verifies it is accepted and retained.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with the Hero Banner Image field available"
+   },
+   {
+    "action": "Upload hero.jpg (JPG, 900 KB) to the Hero Banner Image field and click Save",
+    "expected": "Upload is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "The Hero Banner Image field shows hero.jpg as the stored image"
+   }
+  ]
+ },
+ {
+  "id": 134711,
+  "title": "Verify that a Hero Banner image in an unsupported format is rejected with the format message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads hero.gif (GIF, 500 KB), which is outside the stated JPG/PNG/SVG set. Verifies the exact bilingual format message and that nothing is stored.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with the Hero Banner Image field available"
+   },
+   {
+    "action": "Upload hero.gif (GIF, 500 KB) to the Hero Banner Image field",
+    "expected": "Upload is rejected with the message 'Image must be JPG, PNG, or SVG.' and the previously stored Hero Banner image is unchanged"
+   },
+   {
+    "action": "Switch the CMS interface language to Arabic and repeat the upload",
+    "expected": "The same rejection is shown in Arabic as 'يجب أن تكون الصورة بتنسيق JPG أو PNG أو SVG.'"
+   }
+  ]
+ },
+ {
+  "id": 134712,
+  "title": "Verify that a Hero Banner image above 2 MB is rejected with the size message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads a 2 MB file (accepted at the boundary) then a 2.1 MB file (rejected). Verifies the exact bilingual size message.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with the Hero Banner Image field available"
+   },
+   {
+    "action": "Upload hero-2mb.jpg (JPG, exactly 2 MB) to the Hero Banner Image field and click Save",
+    "expected": "The exactly-2 MB file is accepted and saved with the success toast shown"
+   },
+   {
+    "action": "Upload hero-oversize.jpg (JPG, 2.1 MB) to the same field",
+    "expected": "The 2.1 MB file is rejected with the message 'Image size must not exceed 2 MB.' and the stored image is unchanged"
+   },
+   {
+    "action": "Switch the CMS interface language to Arabic and repeat the oversize upload",
+    "expected": "The same rejection is shown in Arabic as 'يجب ألا يتجاوز حجم الصورة 2 ميغابايت.'"
+   }
+  ]
+ },
+ {
+  "id": 134713,
+  "title": "Verify that publishing without a Hero Banner image is blocked",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Hero Banner Image is mandatory. Attempts to publish with the field empty and verifies publish is blocked.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an About Qatar Chamber page record with the Hero Banner Image field empty",
+    "expected": "Record opens with no Hero Banner image set"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish is blocked with a required-field validation error against Hero Banner Image and no success toast appears"
+   },
+   {
+    "action": "Check the record status",
+    "expected": "Record status is unchanged and the page is not published"
+   }
+  ]
+ },
+ {
+  "id": 134714,
+  "title": "Verify that a valid PNG Content Image under 2 MB is accepted",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads building.png (PNG, 1.1 MB) as the Content Image. Verifies it is accepted and retained.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with the Content Image field available"
+   },
+   {
+    "action": "Upload building.png (PNG, 1.1 MB) to the Content Image field and click Save",
+    "expected": "Upload is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "The Content Image field shows building.png as the stored image"
+   }
+  ]
+ },
+ {
+  "id": 134715,
+  "title": "Verify that a Content Image in an unsupported format is rejected with the format message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads building.bmp (BMP, 400 KB), outside the stated JPG/PNG/SVG set. Verifies the format message and that nothing is stored.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with the Content Image field available"
+   },
+   {
+    "action": "Upload building.bmp (BMP, 400 KB) to the Content Image field",
+    "expected": "Upload is rejected with the message 'Image must be JPG, PNG, or SVG.' and the previously stored Content Image is unchanged"
+   }
+  ]
+ },
+ {
+  "id": 134716,
+  "title": "Verify that a Content Image above 2 MB is rejected at the size boundary",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads a 2 MB Content Image (accepted) then a 2.1 MB one (rejected). Verifies the stated 2 MB cap applies to the Content Image field too.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with the Content Image field available"
+   },
+   {
+    "action": "Upload content-2mb.png (PNG, exactly 2 MB) to the Content Image field and click Save",
+    "expected": "The exactly-2 MB file is accepted and saved with the success toast shown"
+   },
+   {
+    "action": "Upload content-oversize.png (PNG, 2.1 MB) to the same field",
+    "expected": "The 2.1 MB file is rejected with the message 'Image size must not exceed 2 MB.' and the stored image is unchanged"
+   }
+  ]
+ },
+ {
+  "id": 134717,
+  "title": "Verify that publishing without a Content Image is blocked",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Content Image is mandatory. Attempts to publish with the field empty and verifies publish is blocked.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an About Qatar Chamber page record with the Content Image field empty",
+    "expected": "Record opens with no Content Image set"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish is blocked with a required-field validation error against Content Image and no success toast appears"
+   },
+   {
+    "action": "Check the record status",
+    "expected": "Record status is unchanged and the page is not published"
+   }
+  ]
+ },
+ {
+  "id": 134718,
+  "title": "Verify that valid image Alt Text is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters 'Qatar Chamber headquarters building' (35 chars) as image Alt Text. Verifies it saves and is returned on reload.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with the Alt Text field editable"
+   },
+   {
+    "action": "Enter 'Qatar Chamber headquarters building' in the image Alt Text field and click Save",
+    "expected": "Value is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Alt Text reads 'Qatar Chamber headquarters building'"
+   }
+  ]
+ },
+ {
+  "id": 134719,
+  "title": "Verify that empty image Alt Text is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Alt Text is mandatory for accessibility. Clears it and saves; verifies save is blocked and the stored value is preserved.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record with image Alt Text currently populated",
+    "expected": "Record opens with Alt Text populated"
+   },
+   {
+    "action": "Clear the Alt Text field completely and click Save",
+    "expected": "Save is blocked with a required-field validation error against Alt Text and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Alt Text retains its previous value"
+   }
+  ]
+ },
+ {
+  "id": 134722,
+  "title": "Verify that valid English Page Content is accepted and saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters a 400-character rich-text body with one heading and one bullet list in Page Content (EN). Verifies it saves with markup intact.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with the Page Content (EN) editor available"
+   },
+   {
+    "action": "Enter a 400-character body in Page Content (EN) containing one heading and a 3-item bullet list, then click Save",
+    "expected": "Content is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Page Content (EN) is returned with the heading and all three bullet items preserved"
+   }
+  ]
+ },
+ {
+  "id": 134723,
+  "title": "Verify that empty English Page Content is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Page Content (EN) is mandatory. Clears it and saves; verifies save is blocked and the stored content is preserved.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record with Page Content (EN) populated",
+    "expected": "Record opens with Page Content (EN) populated"
+   },
+   {
+    "action": "Clear the Page Content (EN) editor completely and click Save",
+    "expected": "Save is blocked with a required-field validation error against Page Content (EN) and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Page Content (EN) retains its previous content"
+   }
+  ]
+ },
+ {
+  "id": 134726,
+  "title": "Verify that valid Arabic Page Content is accepted and saved with RTL text preserved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters a 400-character Arabic body in Page Content (AR). Verifies it saves with Arabic characters and direction intact.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with the Page Content (AR) editor available"
+   },
+   {
+    "action": "Enter a 400-character Arabic body in Page Content (AR) including the heading 'صوت القطاع الخاص في قطر' and click Save",
+    "expected": "Content is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Page Content (AR) is returned with the Arabic text intact, including 'صوت القطاع الخاص في قطر', and rendered right-to-left in the editor"
+   }
+  ]
+ },
+ {
+  "id": 134727,
+  "title": "Verify that empty Arabic Page Content is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Page Content (AR) is mandatory when Arabic is enabled. Clears it and saves; verifies save is blocked.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record with Arabic enabled and Page Content (AR) populated",
+    "expected": "Record opens with Page Content (AR) populated"
+   },
+   {
+    "action": "Clear the Page Content (AR) editor completely and click Save",
+    "expected": "Save is blocked with a required-field validation error against Page Content (AR) and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Page Content (AR) retains its previous content"
+   }
+  ]
+ },
+ {
+  "id": 134734,
+  "title": "Verify that an invalid Hyperlink URL is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "Redirect"
+  ],
+  "description": "Enters 'htp:/qatarchamber' as the Hyperlink URL. Verifies URL-format validation blocks the save and preserves the stored value.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the About Qatar Chamber page record in Liferay CMS",
+    "expected": "Record opens with the Hyperlink URL field available"
+   },
+   {
+    "action": "Enter 'htp:/qatarchamber' as the Hyperlink URL and click Save",
+    "expected": "Save is blocked with a URL-format validation error against Hyperlink URL and no success toast appears"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Hyperlink URL retains its previous value and the invalid string is not stored"
+   }
+  ]
+ }
+]

@@ -334,7 +334,7 @@ def test_admin_publish_workflow_results_in_publication_on_home_page(page, browse
         admin.open_entry_by_code(entry_code)
         assert admin.current_status() == "Draft", "Publication did not save as Draft"
 
-        with allure.step('Set Publication Status = "Published" and Submit for Publishing (this build\'s closest real "publish" action — see docstring)'):
+        with allure.step('Set Publication Status = "Published" and Submit for Review (this build\'s closest real "publish" action — see docstring)'):
             admin.select_publication_status(PUBLICATION_STATUS_PUBLISHED)
             admin.submit_for_publishing()
 

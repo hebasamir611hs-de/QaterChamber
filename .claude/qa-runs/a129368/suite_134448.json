@@ -1,0 +1,3811 @@
+{
+  "status": "success",
+  "plan_id": 133534,
+  "suite_id": 134448,
+  "total_test_cases": 126,
+  "test_cases": [
+    {
+      "id": 135105,
+      "title": "Verify that the promotional banners section renders correctly in English (LTR)",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "GLOBAL",
+        "UI",
+        "Web"
+      ],
+      "description": "UI check of the EN slide: image, alt text, pagination dots, nav arrows.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Navigate to the Home Page with English language selected",
+          "expected": "Home Page loads in English (LTR)"
+        },
+        {
+          "action": "Scroll to the promotional banners section",
+          "expected": "Banner section is visible below the fold with the section in view"
+        },
+        {
+          "action": "Inspect the rendered slide",
+          "expected": "Slide displays the configured banner image with alt attribute; pagination dots render bottom-left with the active dot as an elongated pill; left/right arrow buttons render as semi-transparent rounded squares at the image's vertical center"
+        }
+      ]
+    },
+    {
+      "id": 135106,
+      "title": "Verify that the promotional banners section mirrors correctly in Arabic (RTL)",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "GLOBAL",
+        "UI",
+        "Web"
+      ],
+      "description": "UI check of RTL mirroring of the slider mechanism.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Navigate to the Home Page with Arabic language selected",
+          "expected": "Home Page loads in Arabic (RTL)"
+        },
+        {
+          "action": "Scroll to the promotional banners section",
+          "expected": "Banner section is visible below the fold"
+        },
+        {
+          "action": "Inspect the rendered slide",
+          "expected": "Slide displays the AR banner image with alt attribute; pagination dots and nav arrows mirror to the opposite (RTL-correct) side; no layout overlap or clipping"
+        }
+      ]
+    },
+    {
+      "id": 135107,
+      "title": "Verify that clicking the next-arrow control advances the banner slider",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "GLOBAL",
+        "UI",
+        "Web"
+      ],
+      "description": "UI check of forward manual navigation via the right arrow.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load the Home Page with 3 active banners published",
+          "expected": "Slide 1 displays as the active/elongated pill dot"
+        },
+        {
+          "action": "Note the currently active pagination dot (slide 1)",
+          "expected": "Slide 1 active dot confirmed"
+        },
+        {
+          "action": "Click the right navigation arrow",
+          "expected": "Slide 2 displays; slide 2's dot becomes the elongated pill; slide 1's dot returns to a small circle"
+        }
+      ]
+    },
+    {
+      "id": 135108,
+      "title": "Verify that clicking the previous-arrow / a pagination dot navigates back to a prior slide",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "GLOBAL",
+        "UI",
+        "Web"
+      ],
+      "description": "UI check of reverse manual navigation via left arrow and dot click.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "From slide 2, click the left navigation arrow",
+          "expected": "Slide 1 displays; slide 1's dot becomes the elongated pill"
+        },
+        {
+          "action": "Click directly on slide 3's pagination dot",
+          "expected": "Slide 3 displays immediately; slide 3's dot becomes the elongated pill"
+        }
+      ]
+    },
+    {
+      "id": 135109,
+      "title": "Verify that multiple active banners auto-cycle without user interaction",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "GLOBAL",
+        "Manual",
+        "UI",
+        "Web"
+      ],
+      "description": "UI check of auto-cycle timer behavior. Manual — no scriptable hook to fast-forward the timer deterministically.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load the Home Page with 3 active banners published",
+          "expected": "Slide 1 displays, active dot on slide 1"
+        },
+        {
+          "action": "Do not interact with the slider",
+          "expected": "No manual input given"
+        },
+        {
+          "action": "Wait for the configured auto-cycle interval to elapse",
+          "expected": "Slider automatically advances to slide 2; active dot updates to slide 2 without a page reload"
+        }
+      ]
+    },
+    {
+      "id": 135110,
+      "title": "Verify that the promotional banners section renders correctly at desktop viewport width",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Compatibility check at 1920x1080.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Resize browser to 1920x1080",
+          "expected": "Viewport set to desktop width"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Page loads without horizontal scroll"
+        },
+        {
+          "action": "Inspect the banner section layout",
+          "expected": "Banner image spans the full section width without distortion; arrows and dots positioned per design; no element overlap"
+        }
+      ]
+    },
+    {
+      "id": 135111,
+      "title": "Verify that the promotional banners section renders correctly at tablet viewport width",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Compatibility check at 768x1024.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Resize browser to 768x1024",
+          "expected": "Viewport set to tablet width"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Page loads without horizontal scroll"
+        },
+        {
+          "action": "Inspect the banner section layout",
+          "expected": "Banner image and controls reflow to tablet layout; touch targets for arrows/dots are at least 44x44px; no clipped content"
+        }
+      ]
+    },
+    {
+      "id": 135112,
+      "title": "Verify that the promotional banners section renders correctly at mobile viewport width",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Compatibility check at 375x812.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Resize browser to 375x812",
+          "expected": "Viewport set to mobile width"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Page loads without horizontal scroll"
+        },
+        {
+          "action": "Inspect the banner section layout",
+          "expected": "Banner image scales full-width; pagination dots and arrows remain tappable and do not overlap the image content"
+        }
+      ]
+    },
+    {
+      "id": 135113,
+      "title": "Verify that the promotional banners section renders correctly in light mode",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Compatibility",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Compatibility check, light theme. Manual — visual/theme judgement, no visual-regression tooling.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set the site theme toggle to light mode",
+          "expected": "Theme set to light mode"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Page loads with light-mode styling applied site-wide"
+        },
+        {
+          "action": "Inspect the banner section",
+          "expected": "Banner section renders with light-mode-appropriate contrast; dots/arrows/overlay remain legible against the light background"
+        }
+      ]
+    },
+    {
+      "id": 135114,
+      "title": "Verify that the promotional banners section renders correctly in dark mode",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Compatibility",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Compatibility check, dark theme. Manual — visual/theme judgement, no visual-regression tooling.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set the site theme toggle to dark mode",
+          "expected": "Theme set to dark mode"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Page loads with dark-mode styling applied site-wide"
+        },
+        {
+          "action": "Inspect the banner section",
+          "expected": "Banner section renders with dark-mode-appropriate contrast; dots/arrows/overlay remain legible against the dark background"
+        }
+      ]
+    },
+    {
+      "id": 135115,
+      "title": "Verify that a user without banner-management permission is denied access (English)",
+      "state": "Design",
+      "priority": 1,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "GLOBAL",
+        "Regression"
+      ],
+      "description": "Auth/RBAC check for a restricted CMS user, English locale.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log into the Liferay CMS with a user account lacking Promotional Banners permission",
+          "expected": "Login succeeds with a restricted account"
+        },
+        {
+          "action": "Navigate to Home Page > Promotional Banners / Ad Slots Management",
+          "expected": "Navigation is blocked or the management screen loads read-only"
+        },
+        {
+          "action": "Attempt to click Add Banner",
+          "expected": "System displays 'Access Denied. You do not have permission to perform this action.'; no banner slot is created"
+        }
+      ]
+    },
+    {
+      "id": 135116,
+      "title": "Verify that a user without banner-management permission is denied access (Arabic)",
+      "state": "Design",
+      "priority": 1,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "GLOBAL"
+      ],
+      "description": "Auth/RBAC check for a restricted CMS user, Arabic locale.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log into the Liferay CMS (Arabic locale) with a user account lacking Promotional Banners permission",
+          "expected": "Login succeeds with a restricted account"
+        },
+        {
+          "action": "Navigate to Home Page > Promotional Banners / Ad Slots Management",
+          "expected": "Navigation is blocked or the management screen loads read-only"
+        },
+        {
+          "action": "Attempt to click Add Banner",
+          "expected": "System displays the Arabic Access Denied message; no banner slot is created"
+        }
+      ]
+    },
+    {
+      "id": 135117,
+      "title": "Verify that a Site Content Editor can create and publish a new promotional banner slot",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL",
+        "Regression",
+        "UAT",
+        "Workflow"
+      ],
+      "description": "Functional-High: end-to-end create+publish flow.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log into Liferay CMS as Site Content Editor",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Navigate to Home Page > Promotional Banners / Ad Slots Management",
+          "expected": "Management screen loads with existing banner list"
+        },
+        {
+          "action": "Click Add Banner",
+          "expected": "Add Banner form opens"
+        },
+        {
+          "action": "Upload both bilingual images, enter bilingual alt text, redirect URL, display order = 1, set Active Status = true",
+          "expected": "All fields accept the entered values with no inline validation errors"
+        },
+        {
+          "action": "Save as Draft, then Publish",
+          "expected": "System displays a Liferay generic success toast; banner slot status changes to Published"
+        }
+      ]
+    },
+    {
+      "id": 135118,
+      "title": "Verify that a Site Content Editor can edit an existing published banner slot",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL"
+      ],
+      "description": "Functional-High: edit action.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log into Liferay CMS as Site Content Editor",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Open the existing published banner slot for edit",
+          "expected": "Edit form loads with current values (Display Order = 1)"
+        },
+        {
+          "action": "Change Display Order from 1 to 2",
+          "expected": "Field updates to 2"
+        },
+        {
+          "action": "Save",
+          "expected": "System displays a Liferay generic success toast; banner's stored Display Order = 2"
+        }
+      ]
+    },
+    {
+      "id": 135119,
+      "title": "Verify that a Site Content Editor can enable a disabled banner slot",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL"
+      ],
+      "description": "Functional-High: enable toggle.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log into Liferay CMS as Site Content Editor",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Locate a banner slot with Active Status = false",
+          "expected": "Banner listed with Active Status = false"
+        },
+        {
+          "action": "Toggle Active Status to true",
+          "expected": "Toggle switches to on/true"
+        },
+        {
+          "action": "Save",
+          "expected": "System displays a Liferay generic success toast; banner's Active Status stored as true"
+        }
+      ]
+    },
+    {
+      "id": 135120,
+      "title": "Verify that a Site Content Editor can disable an active banner slot",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL"
+      ],
+      "description": "Functional-High: disable toggle.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Locate the banner slot with Active Status = true",
+          "expected": "Banner listed with Active Status = true"
+        },
+        {
+          "action": "Toggle Active Status to false",
+          "expected": "Toggle switches to off/false"
+        },
+        {
+          "action": "Save",
+          "expected": "System displays a Liferay generic success toast; banner's Active Status stored as false"
+        }
+      ]
+    },
+    {
+      "id": 135121,
+      "title": "Verify that a Site Content Editor can delete a promotional banner slot",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL"
+      ],
+      "description": "Functional-High: delete action.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log into Liferay CMS as Site Content Editor",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Locate the draft banner slot",
+          "expected": "Banner slot found in the list"
+        },
+        {
+          "action": "Click Delete and confirm",
+          "expected": "System displays a Liferay generic success toast; banner slot no longer appears in the management list or on the frontend"
+        }
+      ]
+    },
+    {
+      "id": 135122,
+      "title": "Verify that a Site Content Editor can save a new banner slot as draft",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL"
+      ],
+      "description": "Functional-High: save as draft.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Click Add Banner",
+          "expected": "Add Banner form opens"
+        },
+        {
+          "action": "Fill all mandatory fields (images, alt text, display order, active status)",
+          "expected": "All fields populated, no validation errors"
+        },
+        {
+          "action": "Click Save as Draft",
+          "expected": "System displays a Liferay generic success toast; banner slot status = Draft; not visible on the Home Page"
+        }
+      ]
+    },
+    {
+      "id": 135123,
+      "title": "Verify that a Site Content Editor can submit a draft banner slot for review",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL",
+        "Workflow"
+      ],
+      "description": "Functional-High: submit for review.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open the draft banner slot",
+          "expected": "Draft banner opens for edit"
+        },
+        {
+          "action": "Click Submit for Review",
+          "expected": "System displays a Liferay generic success toast; banner slot status changes to Pending Review"
+        }
+      ]
+    },
+    {
+      "id": 135124,
+      "title": "Verify that publishing a banner slot in Pending Review status makes it live",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL",
+        "Regression",
+        "UAT",
+        "Workflow"
+      ],
+      "description": "Functional-High: publish action.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open the Pending Review banner slot",
+          "expected": "Pending Review banner opens for edit"
+        },
+        {
+          "action": "Click Publish",
+          "expected": "System displays a Liferay generic success toast; status changes to Published"
+        },
+        {
+          "action": "Navigate to the public Home Page and refresh the cache",
+          "expected": "Banner is now visible in the promotional banners section on the Home Page"
+        }
+      ]
+    },
+    {
+      "id": 135125,
+      "title": "Verify that unpublishing a published banner slot removes it from the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL",
+        "Workflow"
+      ],
+      "description": "Functional-High: unpublish action.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open the published banner slot",
+          "expected": "Published banner opens for edit"
+        },
+        {
+          "action": "Click Unpublish",
+          "expected": "System displays a Liferay generic success toast; status changes to Unpublished"
+        },
+        {
+          "action": "Navigate to the public Home Page and refresh",
+          "expected": "Banner no longer displays in the promotional banners section on the Home Page"
+        }
+      ]
+    },
+    {
+      "id": 135126,
+      "title": "Verify that a visitor clicking a banner navigates to the configured redirect URL in the same tab",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Redirect",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "description": "Functional-High: redirect navigation check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load the Home Page as an unauthenticated public visitor",
+          "expected": "Home Page loads with the banner section visible"
+        },
+        {
+          "action": "Locate the promotional banner slide",
+          "expected": "Slide displays with the configured image"
+        },
+        {
+          "action": "Click the banner image",
+          "expected": "Browser navigates to the configured redirect URL in the same tab"
+        }
+      ]
+    },
+    {
+      "id": 135127,
+      "title": "Verify that a banner within its published, active, and in-range status displays on the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "description": "Functional-High: visibility reachability check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish the banner slot with the stated dates and Active Status = true",
+          "expected": "Banner slot status = Published, Active = true"
+        },
+        {
+          "action": "Navigate to the Home Page",
+          "expected": "Banner is visible in the promotional banners section"
+        }
+      ]
+    },
+    {
+      "id": 135128,
+      "title": "Verify that a banner outside its configured date range does not display on the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Functional-High: date range exclusion.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish the banner slot with a future date range",
+          "expected": "Banner slot status = Published, Active = true, dates in the future"
+        },
+        {
+          "action": "Navigate to the Home Page",
+          "expected": "Banner does not appear in the promotional banners section"
+        }
+      ]
+    },
+    {
+      "id": 135129,
+      "title": "Verify that a draft (unpublished) banner slot does not display on the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Functional-High: draft exclusion.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Save a new banner slot as Draft only",
+          "expected": "Banner slot status = Draft"
+        },
+        {
+          "action": "Navigate to the Home Page",
+          "expected": "Banner does not appear in the promotional banners section"
+        }
+      ]
+    },
+    {
+      "id": 135130,
+      "title": "Verify that an inactive banner slot does not display on the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Functional-High: inactive exclusion.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish the banner slot and set Active Status = false",
+          "expected": "Banner slot status = Published, Active Status = false"
+        },
+        {
+          "action": "Navigate to the Home Page",
+          "expected": "Banner does not appear in the promotional banners section"
+        }
+      ]
+    },
+    {
+      "id": 135131,
+      "title": "Verify that the promotional banners section does not render when zero banners are active",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Regression",
+        "Web"
+      ],
+      "description": "Functional-High: zero-state check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Ensure all existing banner slots are unpublished, inactive, or out of date range",
+          "expected": "No banner slot meets Published+Active+in-range criteria"
+        },
+        {
+          "action": "Navigate to the Home Page",
+          "expected": "The promotional banners section does not render at all on the Home Page (no empty container, no placeholder)"
+        }
+      ]
+    },
+    {
+      "id": 135132,
+      "title": "Verify that multiple active banners all display within the same slider",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Functional-High: multi-banner ordering check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish 3 banner slots with Display Order 1, 2, and 3, all Active and in-range",
+          "expected": "All 3 banner slots are Published, Active, in-range"
+        },
+        {
+          "action": "Navigate to the Home Page",
+          "expected": "All 3 banners appear in the slider, ordered by Display Order 1 to 3, with 3 pagination dots"
+        }
+      ]
+    },
+    {
+      "id": 135133,
+      "title": "Verify that a valid Banner Image (EN) upload is accepted",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Upload a valid JPG image (1.2MB) as Banner Image (EN)",
+          "expected": "Image accepted, thumbnail preview shown, no validation error"
+        },
+        {
+          "action": "Save",
+          "expected": "Field value persists after save"
+        }
+      ]
+    },
+    {
+      "id": 135134,
+      "title": "Verify that saving a banner without a Banner Image (EN) is rejected",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low mandatory-field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Banner Image (EN) empty, fill remaining mandatory fields",
+          "expected": "Fields entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error 'Banner Image (EN) is required.' displayed; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135135,
+      "title": "Verify that a Banner Image (EN) exceeding 2MB or an unsupported format is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low invalid/boundary check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Attempt to upload a 3MB PNG file",
+          "expected": "Upload rejected — file exceeds the 2MB limit; error shown, field remains empty"
+        },
+        {
+          "action": "Attempt to upload a GIF file",
+          "expected": "Upload rejected — GIF is not an accepted format; error shown, field remains empty"
+        }
+      ]
+    },
+    {
+      "id": 135136,
+      "title": "Verify that a valid Banner Image (AR) upload is accepted",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Upload a valid JPG image (1.1MB) as Banner Image (AR)",
+          "expected": "Image accepted, thumbnail preview shown, no validation error"
+        },
+        {
+          "action": "Save",
+          "expected": "Field value persists after save"
+        }
+      ]
+    },
+    {
+      "id": 135137,
+      "title": "Verify that saving a banner without a Banner Image (AR) is rejected",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low mandatory-field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Banner Image (AR) empty, fill remaining mandatory fields",
+          "expected": "Fields entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error 'Banner Image (AR) is required.' displayed; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135138,
+      "title": "Verify that a Banner Image (AR) exceeding 2MB or an unsupported format is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low invalid/boundary check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Attempt to upload a 2.5MB PNG file",
+          "expected": "Upload rejected — exceeds 2MB; field remains empty"
+        },
+        {
+          "action": "Attempt to upload a BMP file",
+          "expected": "Upload rejected — BMP not accepted; field remains empty"
+        }
+      ]
+    },
+    {
+      "id": 135139,
+      "title": "Verify that a valid Banner Alt Text (EN) value is saved",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter a valid English alt-text string in Banner Alt Text (EN)",
+          "expected": "Value entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Value saved and persisted; rendered as the image's alt attribute on the frontend"
+        }
+      ]
+    },
+    {
+      "id": 135140,
+      "title": "Verify that an empty Banner Alt Text (EN) is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low mandatory-field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Banner Alt Text (EN) empty, fill remaining mandatory fields",
+          "expected": "Field left blank"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error displayed for the mandatory field; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135141,
+      "title": "Verify that Banner Alt Text (EN) exceeding 150 characters is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low boundary check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter a 151-character string in Banner Alt Text (EN)",
+          "expected": "151 characters entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error shown for exceeding the 150-character limit; save blocked or input truncated to 150 per implementation"
+        }
+      ]
+    },
+    {
+      "id": 135142,
+      "title": "Verify that a whitespace-only Banner Alt Text (EN) is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low whitespace check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter three spaces in Banner Alt Text (EN)",
+          "expected": "Whitespace entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Field is treated as empty; mandatory-field validation error displayed; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135143,
+      "title": "Verify that a valid Banner Alt Text (AR) value is saved",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter a valid Arabic alt-text string in Banner Alt Text (AR)",
+          "expected": "Value entered, RTL input rendered correctly"
+        },
+        {
+          "action": "Save",
+          "expected": "Value saved and persisted; rendered as the image's alt attribute on the Arabic frontend"
+        }
+      ]
+    },
+    {
+      "id": 135144,
+      "title": "Verify that an empty Banner Alt Text (AR) is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low mandatory-field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Leave Banner Alt Text (AR) empty, fill remaining mandatory fields",
+          "expected": "Field left blank"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error displayed for the mandatory field; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135145,
+      "title": "Verify that Banner Alt Text (AR) exceeding 150 characters is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low boundary check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter a 151-character Arabic string in Banner Alt Text (AR)",
+          "expected": "151 characters entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error shown for exceeding the 150-character limit; save blocked or input truncated to 150 per implementation"
+        }
+      ]
+    },
+    {
+      "id": 135146,
+      "title": "Verify that a whitespace-only Banner Alt Text (AR) is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low whitespace check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter three spaces in Banner Alt Text (AR)",
+          "expected": "Whitespace entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Field is treated as empty; mandatory-field validation error displayed; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135147,
+      "title": "Verify that a valid Redirect URL is saved",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter a valid absolute URL in Redirect URL",
+          "expected": "URL entered"
+        },
+        {
+          "action": "Save",
+          "expected": "URL accepted and saved with no validation error"
+        }
+      ]
+    },
+    {
+      "id": 135148,
+      "title": "Verify that an invalid Redirect URL format is rejected (English message)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low format-validation check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form (English locale)",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter an invalid string in Redirect URL",
+          "expected": "Invalid string entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error 'Please enter a valid URL.' displayed; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135150,
+      "title": "Verify that a Redirect URL exceeding 500 characters is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low boundary check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter a 501-character URL string in Redirect URL",
+          "expected": "501-character string entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error shown for exceeding the 500-character limit; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135151,
+      "title": "Verify that an invalid Redirect URL format is rejected (Arabic message)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low format-validation check, Arabic locale.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form (Arabic locale)",
+          "expected": "Form opens in Arabic"
+        },
+        {
+          "action": "Enter an invalid string in Redirect URL",
+          "expected": "Invalid string entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error shown in Arabic; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135152,
+      "title": "Verify that a valid positive Display Order value is saved",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter 3 in Display Order",
+          "expected": "Value entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Value saved and reflected in the slider ordering"
+        }
+      ]
+    },
+    {
+      "id": 135153,
+      "title": "Verify that a zero or negative Display Order value is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low boundary/invalid check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter 0 in Display Order and click Save",
+          "expected": "Validation error displayed; save blocked"
+        },
+        {
+          "action": "Enter -1 in Display Order and click Save",
+          "expected": "Validation error displayed; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135154,
+      "title": "Verify that the minimum valid Display Order value (1) is accepted",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low boundary check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter 1 in Display Order",
+          "expected": "Value entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Value saved without validation error"
+        }
+      ]
+    },
+    {
+      "id": 135155,
+      "title": "Verify that a valid Start Date is saved",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter a valid future date in Start Date",
+          "expected": "Value entered via date picker"
+        },
+        {
+          "action": "Save",
+          "expected": "Value saved and persisted"
+        }
+      ]
+    },
+    {
+      "id": 135156,
+      "title": "Verify that an invalid Start Date format is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low format check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Type an invalid date string into Start Date",
+          "expected": "Invalid date string entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error for invalid date format displayed; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135157,
+      "title": "Verify that a valid End Date after the Start Date is saved",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low field check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter Start Date and a later End Date",
+          "expected": "Both dates entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Values saved without validation error"
+        }
+      ]
+    },
+    {
+      "id": 135158,
+      "title": "Verify that an End Date earlier than the Start Date is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Functional-Low cross-field boundary check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form opens"
+        },
+        {
+          "action": "Enter Start Date later than End Date",
+          "expected": "Both dates entered"
+        },
+        {
+          "action": "Click Save",
+          "expected": "Validation error 'End date must be after start date' displayed; save blocked"
+        }
+      ]
+    },
+    {
+      "id": 135159,
+      "title": "Verify that a banner configured with Open in New Tab = true opens the redirect in a new tab",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "GLOBAL",
+        "Redirect",
+        "Web"
+      ],
+      "description": "Functional-Low: Open in New Tab = true behavior.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Configure and publish a banner with Open in New Tab = true",
+          "expected": "Banner saved with Open in New Tab = true"
+        },
+        {
+          "action": "Load the Home Page as a visitor",
+          "expected": "Banner visible on Home Page"
+        },
+        {
+          "action": "Click the banner",
+          "expected": "Redirect URL opens in a new browser tab; original tab remains on the Home Page"
+        }
+      ]
+    },
+    {
+      "id": 135160,
+      "title": "Verify that a banner configured with Open in New Tab = false opens the redirect in the same tab",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-Low",
+        "GLOBAL",
+        "Redirect",
+        "Web"
+      ],
+      "description": "Functional-Low: Open in New Tab = false behavior.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Configure and publish a banner with Open in New Tab = false",
+          "expected": "Banner saved with Open in New Tab = false"
+        },
+        {
+          "action": "Load the Home Page as a visitor",
+          "expected": "Banner visible on Home Page"
+        },
+        {
+          "action": "Click the banner",
+          "expected": "Redirect URL replaces the current tab's content"
+        }
+      ]
+    },
+    {
+      "id": 135161,
+      "title": "Verify that a banner with a failed-to-load image is hidden gracefully rather than breaking the slider",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Edge",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Edge: broken image asset. Manual — precondition (breaking a live asset in Documents &amp; Media) is not deterministically scriptable.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish a banner slot, then delete/break its underlying image asset directly in Documents & Media",
+          "expected": "Banner is Published/Active/in-range but its image asset is now unreachable"
+        },
+        {
+          "action": "Navigate to the Home Page",
+          "expected": "The broken banner slide is not rendered; remaining active banners (if any) display normally; no broken-image icon or layout break appears in the slider"
+        }
+      ]
+    },
+    {
+      "id": 135162,
+      "title": "Verify that clicking a banner with a broken redirect URL/unpublished target page shows a 404 page",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Edge",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Edge: broken redirect target. Manual — unpublishing the target mid-test is not reliably scriptable from the banner-editor flow.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish a banner slot with Redirect URL pointing to an existing page",
+          "expected": "Banner published with a valid-at-the-time redirect URL"
+        },
+        {
+          "action": "Unpublish the target page in the CMS",
+          "expected": "Target page status changes to unpublished"
+        },
+        {
+          "action": "As a visitor, click the banner on the Home Page",
+          "expected": "Browser navigates to the URL and the site's 404 page is displayed"
+        }
+      ]
+    },
+    {
+      "id": 135174,
+      "title": "Verify that the promotional banners section renders with the configured banner image and EN alt text on the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "GLOBAL",
+        "UAT",
+        "UI",
+        "Web"
+      ],
+      "description": "One active, published EN banner exists with image `promo-en.jpg` and alt text &quot;Qatar Chamber Annual Forum 2026&quot;. Verifies the section renders on the Home Page in English.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set browser locale to English",
+          "expected": "Home Page loads in English (LTR)"
+        },
+        {
+          "action": "Navigate to the Home Page",
+          "expected": "Home Page displays LTR layout"
+        },
+        {
+          "action": "Scroll to the promotional banners section",
+          "expected": "Banner image `promo-en.jpg` is visible with `alt=\"Qatar Chamber Annual Forum 2026\"`"
+        }
+      ]
+    },
+    {
+      "id": 135175,
+      "title": "Verify that the promotional banners section renders with the configured banner image and AR alt text on the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "GLOBAL",
+        "UI",
+        "Web"
+      ],
+      "description": "One active AR banner exists with image `promo-ar.jpg` and alt text &quot;منتدى غرفة قطر السنوي 2026&quot;. Verifies the section renders on the Home Page in Arabic.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set browser locale to Arabic",
+          "expected": "Home Page loads in Arabic (RTL)"
+        },
+        {
+          "action": "Navigate to the Home Page",
+          "expected": "Home Page displays RTL layout"
+        },
+        {
+          "action": "Scroll to the promotional banners section",
+          "expected": "Banner image `promo-ar.jpg` is visible with the configured Arabic alt text"
+        }
+      ]
+    },
+    {
+      "id": 135176,
+      "title": "Verify that a single active banner displays statically without slider/cycling controls",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "GLOBAL",
+        "UI",
+        "Web"
+      ],
+      "description": "Exactly one banner is active and published. Verifies ST-9 (single-banner state) shows no next/prev arrows or dots.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish one active banner only",
+          "expected": "One banner exists in Active/Published state"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Home Page loads"
+        },
+        {
+          "action": "Inspect the promotional banners section",
+          "expected": "Banner image displays with no arrow icons and no dot/pill indicator rendered"
+        }
+      ]
+    },
+    {
+      "id": 135177,
+      "title": "Verify that multiple active banners display with slider navigation controls (arrows and dot indicator)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "GLOBAL",
+        "Manual",
+        "UI",
+        "Web"
+      ],
+      "description": "Three banners are active and published. Verifies ST-10 renders arrow buttons and a dot/pill progress indicator consistent with the site's Hero Banner carousel visual pattern.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish three active banners with Display Order 1, 2, 3",
+          "expected": "Three banners exist Active/Published"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Home Page loads"
+        },
+        {
+          "action": "Inspect the promotional banners section",
+          "expected": "Rounded semi-transparent left/right arrow buttons and a dot/pill progress indicator are visible, matching the Hero Banner carousel treatment"
+        }
+      ]
+    },
+    {
+      "id": 135178,
+      "title": "Verify that slider navigation controls mirror correctly in RTL (Arabic) mode",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Bilingual",
+        "GLOBAL",
+        "Manual",
+        "UI",
+        "Web"
+      ],
+      "description": "Three banners are active/published, page rendered in Arabic. Verifies arrow direction, dot order, and icon position flip per site RTL convention.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set browser locale to Arabic",
+          "expected": "Page loads RTL"
+        },
+        {
+          "action": "Load the Home Page with 3 active banners",
+          "expected": "Section renders RTL"
+        },
+        {
+          "action": "Inspect arrow button positions and dot indicator order",
+          "expected": "Next/prev arrow positions are mirrored (right-to-left logical order) and dot indicator order is reversed relative to LTR, matching the Hero Banner RTL pattern"
+        }
+      ]
+    },
+    {
+      "id": 135179,
+      "title": "Verify that the promotional banners section is fully responsive at mobile width",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "GLOBAL",
+        "UI",
+        "Web"
+      ],
+      "description": "One active banner exists. Verifies mobile stacking/layout at 375px width.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Resize browser viewport to 375x812",
+          "expected": "Viewport set to mobile width"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Home Page loads responsively"
+        },
+        {
+          "action": "Scroll to promotional banners section",
+          "expected": "Banner image scales to full container width with no horizontal overflow or clipping"
+        }
+      ]
+    },
+    {
+      "id": 135180,
+      "title": "Verify that the promotional banners section is fully responsive at tablet and desktop widths",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "GLOBAL",
+        "UI",
+        "Web"
+      ],
+      "description": "One active banner exists. Verifies layout at 768px (tablet) and 1440px (desktop).",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Resize viewport to 768x1024, load Home Page, inspect section",
+          "expected": "Banner displays without overflow or misalignment at tablet width"
+        },
+        {
+          "action": "Resize viewport to 1440x900, reload Home Page, inspect section",
+          "expected": "Banner displays without overflow or misalignment at desktop width"
+        }
+      ]
+    },
+    {
+      "id": 135181,
+      "title": "Verify that Alt Text validation error is displayed inline on the CMS Add Banner form when exceeding 150 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "GLOBAL",
+        "UI"
+      ],
+      "description": "Admin enters an EN alt text of 151 characters. Verifies inline error UI rendering.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Add Banner form is visible"
+        },
+        {
+          "action": "Enter a 151-character string in Banner Alt Text (EN)",
+          "expected": "151-character value is entered"
+        },
+        {
+          "action": "Move focus out of the field (blur)",
+          "expected": "Inline red error text appears under the field: Max 150 characters allowed, character counter shows 151/150"
+        }
+      ]
+    },
+    {
+      "id": 135182,
+      "title": "Verify that the CMS Promotional Banners list view mirrors correctly in RTL (Arabic admin locale)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Bilingual",
+        "Control_Panel",
+        "GLOBAL",
+        "Manual",
+        "UI"
+      ],
+      "description": "Admin CMS is set to Arabic. Verifies the banner management grid renders RTL.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set CMS admin locale to Arabic",
+          "expected": "CMS locale switches to Arabic"
+        },
+        {
+          "action": "Navigate to Home Page → Promotional Banners / Ad Slots Management",
+          "expected": "Banner list grid renders right-to-left with column order mirrored and action icons (edit/delete) positioned on the left"
+        }
+      ]
+    },
+    {
+      "id": 135183,
+      "title": "Verify that a banner with a broken image URL is hidden gracefully without breaking section layout",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "GLOBAL",
+        "Manual",
+        "UI",
+        "Web"
+      ],
+      "description": "One of three active banners references a deleted/broken image file. Verifies ST-11.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Configure Banner 2 of 3 with a deleted image asset ID",
+          "expected": "Banner 2 has a broken image reference"
+        },
+        {
+          "action": "Publish all three banners as Active",
+          "expected": "All three banners saved/published"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Section renders Banner 1 and Banner 3 only; Banner 2 is omitted with no broken-image icon, no layout gap, and slider cycles only through the two remaining banners"
+        }
+      ]
+    },
+    {
+      "id": 135184,
+      "title": "Verify that an admin can create, publish, and see a promotional banner appear on the Home Page end-to-end",
+      "state": "Design",
+      "priority": 1,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "description": "Full happy-path CMS-to-frontend flow.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in to CMS as Site Content Editor",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Add Banner: upload EN+AR images, enter bilingual alt text, redirect URL, Display Order=1, Active=true",
+          "expected": "All fields populated as entered"
+        },
+        {
+          "action": "Save as Draft",
+          "expected": "Draft saved; Liferay success toast shown"
+        },
+        {
+          "action": "Submit for review",
+          "expected": "State moves to Pending Review; toast shown"
+        },
+        {
+          "action": "Publish the banner",
+          "expected": "State moves to Published; toast shown"
+        },
+        {
+          "action": "Trigger cache refresh / wait for cache TTL",
+          "expected": "Cache refreshed"
+        },
+        {
+          "action": "Load the public Home Page",
+          "expected": "Banner is visible on the Home Page with the configured EN image, alt text, and is clickable to the redirect URL"
+        }
+      ]
+    },
+    {
+      "id": 135185,
+      "title": "Verify that unpublishing a banner removes it from the Home Page after cache refresh",
+      "state": "Design",
+      "priority": 1,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL",
+        "Regression",
+        "Web"
+      ],
+      "description": "Banner from TC-019 is live.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in to CMS, locate the published banner",
+          "expected": "Banner list shows Published state"
+        },
+        {
+          "action": "Click Unpublish",
+          "expected": "State changes to Unpublished; Liferay success toast shown"
+        },
+        {
+          "action": "Wait for cache refresh",
+          "expected": "Cache refreshed"
+        },
+        {
+          "action": "Load the public Home Page",
+          "expected": "Banner no longer appears in the promotional banners section"
+        }
+      ]
+    },
+    {
+      "id": 135186,
+      "title": "Verify that deactivating (Active Status = false) a published banner hides it from the Home Page without changing its publish state",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Distinguishes Active toggle from workflow Publish/Unpublish.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in to CMS, open the published banner",
+          "expected": "Banner is Published and Active=true"
+        },
+        {
+          "action": "Toggle Active Status to False",
+          "expected": "Active Status set to False"
+        },
+        {
+          "action": "Save",
+          "expected": "Saved; workflow state remains Published; success toast shown"
+        },
+        {
+          "action": "Load the public Home Page",
+          "expected": "Banner does not appear on the Home Page despite Published workflow state"
+        }
+      ]
+    },
+    {
+      "id": 135188,
+      "title": "Verify that clicking a banner configured to open in a new tab opens the redirect URL in a new browser tab",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Regression",
+        "Web"
+      ],
+      "description": "Frontend consumption of the Open in New Tab toggle.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish a banner with Open in New Tab = True and redirect URL `https://qatarchamber.com/news`",
+          "expected": "Banner published with new-tab config"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Home Page loads with the banner visible"
+        },
+        {
+          "action": "Click the banner",
+          "expected": "A new browser tab opens and navigates to `https://qatarchamber.com/news`; the original Home Page tab remains open"
+        }
+      ]
+    },
+    {
+      "id": 135189,
+      "title": "Verify that clicking a banner configured to open in the same tab navigates within the current tab",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Regression",
+        "Web"
+      ],
+      "description": "Inverse configuration of TC-022.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish a banner with Open in New Tab = False and redirect URL `https://qatarchamber.com/about`",
+          "expected": "Banner published with same-tab config"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Home Page loads with the banner visible"
+        },
+        {
+          "action": "Click the banner",
+          "expected": "The current tab navigates to `https://qatarchamber.com/about`; no new tab is opened"
+        }
+      ]
+    },
+    {
+      "id": 135190,
+      "title": "Verify that clicking a banner with a broken/unpublished redirect target displays the site's 404 page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Negative end-to-end flow (ST-12).",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish a banner whose redirect URL points to an unpublished/deleted page `https://qatarchamber.com/deleted-page`",
+          "expected": "Banner published and visible"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Home Page loads"
+        },
+        {
+          "action": "Click the banner",
+          "expected": "Browser navigates and the site's standard 404 Not Found page is displayed"
+        }
+      ]
+    },
+    {
+      "id": 135191,
+      "title": "Verify that a banner only displays on the Home Page within its configured Start/End date range",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Control_Panel",
+        "Functional-High",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Scheduling flow end-to-end.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish a banner with Start Date = today and End Date = today+7, Active=true",
+          "expected": "Banner published, scheduled for today through today+7"
+        },
+        {
+          "action": "Load the Home Page today",
+          "expected": "Banner is visible today (within range)"
+        },
+        {
+          "action": "System-date-shift or wait to a date after End Date, reload the Home Page",
+          "expected": "After End Date has passed, banner no longer appears on the Home Page"
+        }
+      ]
+    },
+    {
+      "id": 135220,
+      "title": "Verify that the promotional banners section renders correctly in dark mode with the gradient overlay treatment",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Compatibility",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Site dark mode is enabled, one active banner exists.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enable site dark mode toggle",
+          "expected": "Dark mode is active site-wide"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Home Page loads in dark theme"
+        },
+        {
+          "action": "Inspect the promotional banners section styling",
+          "expected": "Banner section displays with a dark gradient overlay consistent with the Hero Banner dark-mode treatment; banner image and text remain legible"
+        }
+      ]
+    },
+    {
+      "id": 135221,
+      "title": "Verify that the promotional banners section renders correctly on mobile viewport in dark mode",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Compatibility",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Dark mode + mobile width 375px combined.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enable dark mode",
+          "expected": "Dark mode active"
+        },
+        {
+          "action": "Resize viewport to 375x812",
+          "expected": "Mobile viewport applied"
+        },
+        {
+          "action": "Load the Home Page and inspect section",
+          "expected": "Banner stacks correctly, gradient overlay legible, no overflow at mobile width in dark mode"
+        }
+      ]
+    },
+    {
+      "id": 135222,
+      "title": "Verify that the promotional banners section renders correctly on the latest Chrome and Firefox desktop browsers",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Compatibility",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Cross-browser check with one active banner.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Home Page in latest Chrome desktop",
+          "expected": "Section renders identically: image, alt text, arrows/dots position in Chrome"
+        },
+        {
+          "action": "Open Home Page in latest Firefox desktop",
+          "expected": "Section renders identically in Firefox"
+        },
+        {
+          "action": "Compare promotional banner section rendering",
+          "expected": "No layout or click-target differences between the two browsers"
+        }
+      ]
+    },
+    {
+      "id": 135223,
+      "title": "Verify that the promotional banners section renders correctly on Safari (iOS) mobile browser",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Compatibility",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Mobile Safari check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open the Home Page on an iOS device using Safari",
+          "expected": "Home Page loads in Safari mobile"
+        },
+        {
+          "action": "Scroll to the promotional banners section",
+          "expected": "Banner section displays correctly, touch targets are adequately sized"
+        },
+        {
+          "action": "Tap a banner",
+          "expected": "Tap navigates to the configured redirect URL"
+        }
+      ]
+    },
+    {
+      "id": 135224,
+      "title": "Verify that an unauthenticated Public Visitor can view and click published promotional banners without logging in",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "GLOBAL",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "description": "No login required for frontend viewing.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open the Home Page in an incognito/unauthenticated browser session",
+          "expected": "Home Page loads without any login prompt"
+        },
+        {
+          "action": "Scroll to the promotional banners section",
+          "expected": "Active published banner(s) are visible"
+        },
+        {
+          "action": "Click an active banner",
+          "expected": "Click navigates to the configured redirect URL"
+        }
+      ]
+    },
+    {
+      "id": 135225,
+      "title": "Verify that a Site Content Editor with the correct Home Page content permission can access Promotional Banners management",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "GLOBAL",
+        "Regression",
+        "UAT"
+      ],
+      "description": "Admin logs in with an account assigned the Site Content Editor role scoped to the Home Page.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log into Liferay CMS as a Site Content Editor with Home Page permissions",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Navigate to Home Page → Promotional Banners / Ad Slots Management",
+          "expected": "Promotional Banners management screen loads with Add/Edit/Delete/Publish controls visible"
+        }
+      ]
+    },
+    {
+      "id": 135226,
+      "title": "Verify that a CMS user without Home Page content permission is denied access to Promotional Banners management",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel",
+        "GLOBAL",
+        "Regression"
+      ],
+      "description": "Admin logs in with an account lacking Home Page content edit rights and attempts to reach the management screen via direct URL.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log into Liferay CMS as a user without Home Page content permission",
+          "expected": "Login succeeds (valid credentials, no Home Page rights)"
+        },
+        {
+          "action": "Navigate directly to the Promotional Banners / Ad Slots Management URL",
+          "expected": "System blocks access and displays Access Denied. You do not have permission to perform this action. / تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء."
+        }
+      ]
+    },
+    {
+      "id": 135227,
+      "title": "Verify that a denied-permission user attempting to publish a banner via a direct action URL (forced browsing) is blocked with the same access-denied message",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Auth",
+        "Control_Panel",
+        "GLOBAL",
+        "Manual"
+      ],
+      "description": "Deep-link/forced-browsing attempt at the publish action endpoint bypassing the UI.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as a CMS user without Home Page permission",
+          "expected": "Login succeeds"
+        },
+        {
+          "action": "Directly invoke the Publish action URL for an existing banner ID",
+          "expected": "Publish action is attempted via direct navigation"
+        },
+        {
+          "action": "Observe the response",
+          "expected": "Action is blocked; Access Denied message is shown; banner state is unchanged"
+        }
+      ]
+    },
+    {
+      "id": 135228,
+      "title": "Verify that no promotional banners section renders on the Home Page when zero banners are active",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "GLOBAL",
+        "Regression",
+        "Web"
+      ],
+      "description": "Global empty-state end-to-end.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Ensure all existing banners are set to Active=false or remain Unpublished",
+          "expected": "No banner is Active+Published"
+        },
+        {
+          "action": "Load the public Home Page",
+          "expected": "Home Page loads and the promotional banners section does not render at all — no empty placeholder"
+        }
+      ]
+    },
+    {
+      "id": 135229,
+      "title": "Verify that multiple published active banners auto-cycle in Display Order sequence on the Home Page",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Functional-High",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Multi-banner ordering end-to-end.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish 3 banners with Display Order 1, 2, 3 respectively, all Active=true",
+          "expected": "Three banners published in order 1,2,3"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Banner with Display Order 1 displays first"
+        },
+        {
+          "action": "Observe the section without interaction for the auto-cycle interval",
+          "expected": "Section automatically transitions to Display Order 2, then 3, then loops back to 1, without user interaction"
+        }
+      ]
+    },
+    {
+      "id": 135230,
+      "title": "Verify that a valid Banner Image (EN) upload is accepted",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Uploads `banner-en.jpg`, 800KB, JPG.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Upload `banner-en.jpg` (800KB, JPG) into Banner Image (EN)",
+          "expected": "Image thumbnail preview is displayed"
+        },
+        {
+          "action": "Save as Draft",
+          "expected": "Draft saved successfully with the image attached"
+        }
+      ]
+    },
+    {
+      "id": 135231,
+      "title": "Verify that Banner Image (EN) is rejected as required when left empty",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Attempts to save without an EN image.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Leave Banner Image (EN) empty; fill all other mandatory fields",
+          "expected": "EN image field remains empty"
+        },
+        {
+          "action": "Click Save/Publish",
+          "expected": "Save is blocked; error Banner Image (EN) is required. / صورة البانر (إنجليزي) مطلوبة. is displayed; no record is created"
+        }
+      ]
+    },
+    {
+      "id": 135232,
+      "title": "Verify that Banner Image (EN) upload is rejected when the file exceeds 2MB or is an unsupported type",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Attempts a 3MB JPG and a .gif file.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Upload a 3MB JPG file into Banner Image (EN)",
+          "expected": "Upload is rejected with a file-size error; field remains empty"
+        },
+        {
+          "action": "Observe result, then attempt a .gif file into the same field",
+          "expected": ".gif upload is rejected with an unsupported-file-type error; field remains empty"
+        }
+      ]
+    },
+    {
+      "id": 135233,
+      "title": "Verify that a valid Banner Image (AR) upload is accepted",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Uploads `banner-ar.png`, 1MB, PNG.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Upload `banner-ar.png` (1MB, PNG) into Banner Image (AR)",
+          "expected": "Image thumbnail preview is displayed"
+        },
+        {
+          "action": "Save as Draft",
+          "expected": "Draft saved successfully with the AR image attached"
+        }
+      ]
+    },
+    {
+      "id": 135234,
+      "title": "Verify that Banner Image (AR) is rejected as required when left empty",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Attempts to save without an AR image.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Leave Banner Image (AR) empty; fill all other mandatory fields",
+          "expected": "AR image field remains empty"
+        },
+        {
+          "action": "Click Save/Publish",
+          "expected": "Save is blocked; error Banner Image (AR) is required. / صورة البانر (عربي) مطلوبة. is displayed; no record is created"
+        }
+      ]
+    },
+    {
+      "id": 135235,
+      "title": "Verify that Banner Image (AR) upload is rejected when the file exceeds 2MB or is an unsupported type",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Attempts a 2.5MB oversized file and a .bmp file.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Upload a 2.5MB file into Banner Image (AR)",
+          "expected": "Upload rejected with file-size error; field remains empty"
+        },
+        {
+          "action": "Observe result, then attempt a .bmp file into the same field",
+          "expected": ".bmp upload rejected with unsupported-file-type error; field remains empty"
+        }
+      ]
+    },
+    {
+      "id": 135236,
+      "title": "Verify that a valid Banner Alt Text (EN) value up to 150 characters is accepted",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters exactly 150 characters.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter a 150-character string in Banner Alt Text (EN)",
+          "expected": "150 characters accepted, counter shows 150/150"
+        },
+        {
+          "action": "Save",
+          "expected": "Saved successfully; toast shown"
+        }
+      ]
+    },
+    {
+      "id": 135237,
+      "title": "Verify that Banner Alt Text (EN) is rejected as required when left empty",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Empty EN alt text on save.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Leave Banner Alt Text (EN) empty; fill all other mandatory fields",
+          "expected": "Field remains empty"
+        },
+        {
+          "action": "Click Save/Publish",
+          "expected": "Save is blocked; Banner Alt Text (EN) is required. error displayed; no record created"
+        }
+      ]
+    },
+    {
+      "id": 135238,
+      "title": "Verify that Banner Alt Text (EN) rejects input exceeding 150 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters 151 characters.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter a 151-character string in Banner Alt Text (EN)",
+          "expected": "Input is either truncated at 150 or a max-length error is shown"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save is blocked (if error path) or value is capped at 150 characters (if truncation path); saved value never exceeds 150 chars"
+        }
+      ]
+    },
+    {
+      "id": 135239,
+      "title": "Verify that Banner Alt Text (EN) rejects a whitespace-only value",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters spaces only.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter three space characters into Banner Alt Text (EN)",
+          "expected": "Whitespace-only value entered"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save is blocked; treated as required-field-empty; error is displayed"
+        }
+      ]
+    },
+    {
+      "id": 135240,
+      "title": "Verify that a valid Banner Alt Text (AR) value up to 150 characters is accepted",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters exactly 150 Arabic characters.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter a 150-character Arabic string in Banner Alt Text (AR)",
+          "expected": "150 characters accepted, RTL text displays correctly, counter shows 150/150"
+        },
+        {
+          "action": "Save",
+          "expected": "Saved successfully; toast shown"
+        }
+      ]
+    },
+    {
+      "id": 135241,
+      "title": "Verify that Banner Alt Text (AR) is rejected as required when left empty",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Empty AR alt text on save.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Leave Banner Alt Text (AR) empty; fill all other mandatory fields",
+          "expected": "Field remains empty"
+        },
+        {
+          "action": "Click Save/Publish",
+          "expected": "Save is blocked; Banner Alt Text (AR) is required. error displayed; no record created"
+        }
+      ]
+    },
+    {
+      "id": 135242,
+      "title": "Verify that Banner Alt Text (AR) rejects input exceeding 150 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters 151 Arabic characters.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter a 151-character Arabic string in Banner Alt Text (AR)",
+          "expected": "Max-length error shown or input truncated"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save blocked or capped at 150 characters"
+        }
+      ]
+    },
+    {
+      "id": 135243,
+      "title": "Verify that Banner Alt Text (AR) rejects a whitespace-only value",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters spaces only.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter three space characters into Banner Alt Text (AR)",
+          "expected": "Whitespace-only value entered"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save is blocked; treated as required-field-empty; error displayed"
+        }
+      ]
+    },
+    {
+      "id": 135244,
+      "title": "Verify that a valid Redirect URL (EN) is accepted",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters `https://qatarchamber.com/news/summit-2026`.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter `https://qatarchamber.com/news/summit-2026` in Redirect URL (EN)",
+          "expected": "URL entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Saved successfully with the URL stored"
+        }
+      ]
+    },
+    {
+      "id": 135245,
+      "title": "Verify that an invalid Redirect URL (EN) format is rejected",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters not-a-valid-url.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter not-a-valid-url in Redirect URL (EN)",
+          "expected": "Malformed value entered"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save is blocked; Please enter a valid URL. / يرجى إدخال رابط صالح. error displayed"
+        }
+      ]
+    },
+    {
+      "id": 135246,
+      "title": "Verify that Redirect URL (EN) rejects a value exceeding 500 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters a 501-character URL string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter a 501-character valid-format URL in Redirect URL (EN)",
+          "expected": "501-character value entered"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save is blocked with a max-length error, or the field enforces a 500-character input cap"
+        }
+      ]
+    },
+    {
+      "id": 135247,
+      "title": "Verify that a valid Redirect URL (AR) is accepted",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters `https://qatarchamber.com/ar/news/summit-2026`.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter `https://qatarchamber.com/ar/news/summit-2026` in Redirect URL (AR)",
+          "expected": "URL entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Saved successfully with the AR URL stored"
+        }
+      ]
+    },
+    {
+      "id": 135248,
+      "title": "Verify that an invalid Redirect URL (AR) format is rejected",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters htp:/broken.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter htp:/broken in Redirect URL (AR)",
+          "expected": "Malformed value entered"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save is blocked; Please enter a valid URL. / يرجى إدخال رابط صالح. error displayed"
+        }
+      ]
+    },
+    {
+      "id": 135249,
+      "title": "Verify that Redirect URL (AR) rejects a value exceeding 500 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters a 501-character URL string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter a 501-character valid-format URL in Redirect URL (AR)",
+          "expected": "501-character value entered"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save is blocked with a max-length error, or the field enforces a 500-character input cap"
+        }
+      ]
+    },
+    {
+      "id": 135250,
+      "title": "Verify that Open in New Tab toggle set to True is saved and reflected on reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Toggle ON persistence check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Set Open in New Tab = True",
+          "expected": "Toggle shows ON"
+        },
+        {
+          "action": "Save, then reopen the banner record",
+          "expected": "Saved; on reopen the toggle still shows ON"
+        }
+      ]
+    },
+    {
+      "id": 135251,
+      "title": "Verify that Open in New Tab toggle set to False (default) is saved and reflected on reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Toggle OFF/default persistence check.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Leave Open in New Tab at its default (False)",
+          "expected": "Toggle shows OFF by default"
+        },
+        {
+          "action": "Save, then reopen the banner record",
+          "expected": "Saved; on reopen the toggle still shows OFF"
+        }
+      ]
+    },
+    {
+      "id": 135252,
+      "title": "Verify that a valid positive Display Order value is accepted",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters Display Order = 2.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter 2 in Display Order",
+          "expected": "Value 2 entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Saved successfully; banner ordered as position 2"
+        }
+      ]
+    },
+    {
+      "id": 135253,
+      "title": "Verify that Display Order is rejected as required when left empty",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Empty Display Order on save.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Leave Display Order empty; fill other mandatory fields",
+          "expected": "Field remains empty"
+        },
+        {
+          "action": "Click Save/Publish",
+          "expected": "Save is blocked; Display Order is required. error displayed"
+        }
+      ]
+    },
+    {
+      "id": 135254,
+      "title": "Verify that a non-numeric Display Order value is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters abc.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter abc in Display Order",
+          "expected": "Non-numeric value entered"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save is blocked; Positive number required. error displayed"
+        }
+      ]
+    },
+    {
+      "id": 135255,
+      "title": "Verify that a negative or zero Display Order value is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters -1 and separately 0.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter -1 in Display Order, attempt Save",
+          "expected": "-1 rejected with Positive number required. error"
+        },
+        {
+          "action": "Clear and enter 0 in Display Order, attempt Save",
+          "expected": "0 rejected with Positive number required. error"
+        }
+      ]
+    },
+    {
+      "id": 135256,
+      "title": "Verify that Active Status set to True saves and takes effect",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL",
+        "Regression"
+      ],
+      "description": "Toggle Active=True persistence and effect.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form, complete all mandatory fields",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Set Active Status = True",
+          "expected": "Toggle shows Active=True"
+        },
+        {
+          "action": "Save and publish",
+          "expected": "Saved and published; banner is eligible to display on the frontend (subject to date range)"
+        }
+      ]
+    },
+    {
+      "id": 135257,
+      "title": "Verify that Active Status set to False saves and prevents frontend display",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Toggle Active=False persistence and effect.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form, complete all mandatory fields",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Set Active Status = False",
+          "expected": "Toggle shows Active=False"
+        },
+        {
+          "action": "Save and publish",
+          "expected": "Saved and published; banner does not display on the frontend despite being Published"
+        }
+      ]
+    },
+    {
+      "id": 135258,
+      "title": "Verify that a valid Start Date is accepted",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters Start Date = 2026-08-15.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter 2026-08-15 in Start Date",
+          "expected": "Date entered via date picker in the expected format"
+        },
+        {
+          "action": "Save",
+          "expected": "Saved successfully with Start Date stored as 2026-08-15"
+        }
+      ]
+    },
+    {
+      "id": 135259,
+      "title": "Verify that an invalid Start Date format is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Enters 32/13/2026.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter 32/13/2026 in Start Date",
+          "expected": "Invalid date string entered"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save is blocked; Valid date format required. error displayed"
+        }
+      ]
+    },
+    {
+      "id": 135260,
+      "title": "Verify that an End Date after the Start Date is accepted",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Start=2026-08-15, End=2026-08-22.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter Start Date = 2026-08-15, End Date = 2026-08-22",
+          "expected": "Both dates entered"
+        },
+        {
+          "action": "Save",
+          "expected": "Saved successfully; End Date stored as 2026-08-22"
+        }
+      ]
+    },
+    {
+      "id": 135261,
+      "title": "Verify that an End Date earlier than the Start Date is rejected",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low",
+        "GLOBAL"
+      ],
+      "description": "Start=2026-08-22, End=2026-08-15.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter Start Date = 2026-08-22, End Date = 2026-08-15",
+          "expected": "End Date entered before Start Date"
+        },
+        {
+          "action": "Attempt to Save",
+          "expected": "Save is blocked; End date must be after start date. error displayed"
+        }
+      ]
+    },
+    {
+      "id": 135262,
+      "title": "Verify that a banner in Draft or Pending Review state never displays on the frontend even if Active=true",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Governance-model edge.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Create a banner, set Active=true, save as Draft (do not publish)",
+          "expected": "Banner exists as Draft, Active=true"
+        },
+        {
+          "action": "Load the public Home Page",
+          "expected": "Banner is not visible on the Home Page — only Published banners are eligible"
+        }
+      ]
+    },
+    {
+      "id": 135263,
+      "title": "Verify that two banners sharing the same Display Order value both display without a system error, using a defined tie-break",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Edge",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Duplicate Display Order not explicitly forbidden.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish two active banners both with Display Order = 1",
+          "expected": "Both banners saved successfully with Display Order = 1"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Both banners appear in the slider; order between them is either creation-date or ID-based (consistent, not erroring)"
+        }
+      ]
+    },
+    {
+      "id": 135264,
+      "title": "Verify that a banner with Start Date equal to today is visible on the Home Page (inclusive start boundary)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Start Date boundary edge.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish a banner with Start Date = today, End Date = today+5, Active=true",
+          "expected": "Banner published with today as Start Date"
+        },
+        {
+          "action": "Load the Home Page on the current date",
+          "expected": "Banner is visible on the Home Page today"
+        }
+      ]
+    },
+    {
+      "id": 135265,
+      "title": "Verify that a banner with End Date equal to today is still visible on the Home Page (inclusive end boundary)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "End Date boundary edge.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish a banner with Start Date = today-5, End Date = today, Active=true",
+          "expected": "Banner published with today as End Date"
+        },
+        {
+          "action": "Load the Home Page on the current date",
+          "expected": "Banner is still visible on the Home Page today (boundary inclusive)"
+        }
+      ]
+    },
+    {
+      "id": 135266,
+      "title": "Verify that a banner becomes invisible on the Home Page the day immediately after its End Date",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "End Date boundary.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Publish a banner with End Date = today-1",
+          "expected": "Banner's End Date has passed by 1 day"
+        },
+        {
+          "action": "Load the Home Page on the current date",
+          "expected": "Banner is not visible on the Home Page"
+        }
+      ]
+    },
+    {
+      "id": 135267,
+      "title": "Verify that publishing a banner with an End Date already in the past does not display it despite Active=true",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Control_Panel",
+        "Edge",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Admin misconfiguration edge.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Create a banner with End Date = today-10, Active=true",
+          "expected": "Banner created with a past End Date, Active=true"
+        },
+        {
+          "action": "Publish the banner",
+          "expected": "Publish succeeds (system allows saving a past-dated schedule)"
+        },
+        {
+          "action": "Load the Home Page",
+          "expected": "Banner does not appear on the Home Page since the current date is outside its date range"
+        }
+      ]
+    },
+    {
+      "id": 135268,
+      "title": "Verify that deleting a banner that is currently displayed on the frontend removes it after cache refresh without breaking the section for remaining banners",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Control_Panel",
+        "Edge",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Concurrent-lifecycle edge.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "With 2 active published banners live on the Home Page, in CMS select Banner 1 and click Delete and confirm",
+          "expected": "Two banners are live"
+        },
+        {
+          "action": "Wait for cache refresh",
+          "expected": "Banner 1 is deleted; Liferay success toast shown; banner record removed from the list"
+        },
+        {
+          "action": "Reload the Home Page",
+          "expected": "Only Banner 2 remains and displays correctly, no slider errors"
+        }
+      ]
+    },
+    {
+      "id": 135269,
+      "title": "Verify that reactivating a previously disabled banner restores it to the Home Page without needing republish",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "GLOBAL",
+        "Web"
+      ],
+      "description": "Recovery scenario.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Disable an active, published banner (Active=false)",
+          "expected": "Banner disabled; disappears from frontend after cache refresh"
+        },
+        {
+          "action": "Confirm it disappears from the Home Page",
+          "expected": "Confirmed not visible"
+        },
+        {
+          "action": "Re-enable it (Active=true), save",
+          "expected": "Banner reappears on the Home Page after cache refresh without re-running Publish"
+        }
+      ]
+    },
+    {
+      "id": 135270,
+      "title": "Verify that the sole active banner disappearing mid-session does not crash the slider on the visitor's next interaction",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Edge",
+        "GLOBAL",
+        "Manual",
+        "Web"
+      ],
+      "description": "Concurrent state-change edge.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Visitor loads the Home Page with exactly one active banner visible",
+          "expected": "Banner visible to visitor"
+        },
+        {
+          "action": "Without reloading the visitor's browser, admin deactivates that banner in CMS",
+          "expected": "Banner deactivated server-side"
+        },
+        {
+          "action": "Visitor interacts with the page (scroll/reload) after cache TTL",
+          "expected": "On the visitor's next reload, the promotional banners section no longer renders (ST-8); no JavaScript error or broken slider is shown"
+        }
+      ]
+    },
+    {
+      "id": 135271,
+      "title": "Verify that submitting a banner for review with a redirect URL containing a script-injection-style string is sanitized and not executed",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge",
+        "GLOBAL"
+      ],
+      "description": "Basic input-safety edge.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Add Banner form",
+          "expected": "Form is open"
+        },
+        {
+          "action": "Enter javascript:alert('xss') in Redirect URL (EN)",
+          "expected": "Script-scheme value entered"
+        },
+        {
+          "action": "Attempt to Save/Publish",
+          "expected": "Save is blocked with Please enter a valid URL. (javascript: scheme rejected as invalid), or the value is stored inert and never executes on click"
+        }
+      ]
+    }
+  ]
+}

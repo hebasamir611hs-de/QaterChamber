@@ -35,6 +35,22 @@ deliverables/
 *.log
 temp/
 
+# --- Scratch / ad-hoc analysis output (added 2026-09-30) ---
+# Placement rule: throwaway analysis output belongs in the session scratchpad
+# directory, NOT the repo root. These patterns are a safety net for what slips
+# through, not a licence to keep writing scratch files here.
+#   - reusable one-off scripts  -> tools/
+#   - bug / test evidence       -> docs/evidence/   (KEPT, and tracked)
+scratch_*
+snap*.md
+*_snapshot.md
+.allure-results-*
+out_*.txt
+
+# NOTE: root-level evidence screenshots (bug_evidence_*.png, tc*.png, live_*.png)
+# are deliberately NOT ignored — 24 of them are tracked and are attachments on
+# filed Azure bugs. They are being relocated to docs/evidence/, not deleted.
+
 # QA coverage baselines are COMMITTED - they are the anti-regression record
 # (.claude/qa-baselines/<PBI>.json). Do not ignore them.
 

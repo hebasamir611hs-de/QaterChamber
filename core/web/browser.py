@@ -35,12 +35,38 @@ not about caching one at all. Single-process runs (no xdist, e.g. `-n0` or
 a bare `pytest <path>`) are UNCHANGED — PYTEST_XDIST_WORKER is unset there,
 so this falls straight back to the original single shared AUTH_STATE_PATH
 file with the same exists-or-skip behavior as before this fix.
+
+FRESHNESS + ROLE SESSIONS (2026-10-13). A cached storageState file older than
+AUTH_STATE_TTL_S (25 min) is treated as stale and recaptured with a real login
+before a context loads it -- qcdev drops idle sessions, and a stale file made
+every test start on a dead session that session_guard then had to repair.
+`new_context(role=...)` caches one file per role per worker
+(`state_<role-slug>_<gwN|main>.json`) the same lazy + TTL way, and
+CmsLoginPage.ensure_signed_in_as() reuses those files by cookie swap, so a role
+test no longer pays a full login every time. Every context built here records
+which file it came from and which account that file belongs to;
+refresh_auth_state() writes a recovered session back to that file only.
 """
 
+import json
 import os
+import re
+import time
+import weakref
 from pathlib import Path
 
-from config.settings import auth_state_path, settings
+from config.settings import CMS_ROLE_CREDENTIALS, auth_state_path, cms_role_credentials, settings
+from core.utils.logger import get_logger
+
+logger = get_logger("browser")
+
+# A cached storageState older than this is recaptured before use.
+AUTH_STATE_TTL_S = 25 * 60
+
+# context -> {"path": Path | None, "account": email | None}. A context built
+# with use_auth_state=False is recorded with account None (anonymous on
+# purpose); a context this factory did not build is absent.
+_CONTEXT_SESSION: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
 
 
 def launch_browser(playwright):
@@ -127,7 +153,107 @@ def _worker_auth_state_path(worker: str) -> Path:
     return base.with_name(f"{base.stem}_{worker}{base.suffix}")
 
 
-def _capture_worker_auth_state(browser, path: Path) -> None:
+def _slug(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", (text or "").casefold()).strip("_") or "x"
+
+
+def _state_is_fresh(path: Path) -> bool:
+    try:
+        return path.exists() and (time.time() - path.stat().st_mtime) < AUTH_STATE_TTL_S
+    except OSError:
+        return False
+
+
+def _write_state_atomically(state: dict, path: Path) -> None:
+    """Temp file + os.replace: parallel sessions read the shared files, and a
+    half-written JSON is worse than a stale one."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")
+    tmp.write_text(json.dumps(state), encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def default_auth_state_path() -> Path:
+    """TEST_USER's file for this process: `state_gw<N>.json` under xdist,
+    the shared AUTH_STATE_PATH file otherwise."""
+    worker = _xdist_worker_id()
+    return _worker_auth_state_path(worker) if worker else auth_state_path()
+
+
+def role_auth_state_path(role: str) -> Path:
+    """`.auth/state_<role-slug>_<gwN|main>.json` -- per role, per worker."""
+    base = auth_state_path()
+    return base.with_name(f"{base.stem}_{_slug(role)}_{_xdist_worker_id() or 'main'}{base.suffix}")
+
+
+def account_auth_state_path(email: str) -> Path:
+    """The cache file for an account: TEST_USER's default file, a role's file
+    when `email` is a configured role account, else one keyed by the email."""
+    if email and email == settings.test_user:
+        return default_auth_state_path()
+    for role, (role_email, _pwd) in CMS_ROLE_CREDENTIALS.items():
+        if role_email and role_email == email:
+            return role_auth_state_path(role)
+    base = auth_state_path()
+    return base.with_name(f"{base.stem}_{_slug(email)}_{_xdist_worker_id() or 'main'}{base.suffix}")
+
+
+def track_context_session(context, path, account) -> None:
+    """Record which storageState file `context` now belongs to, and whose."""
+    try:
+        _CONTEXT_SESSION[context] = {"path": Path(path) if path else None, "account": account}
+    except TypeError:  # not weak-referenceable -- tracking is best-effort
+        pass
+
+
+def context_session(context) -> dict | None:
+    try:
+        return _CONTEXT_SESSION.get(context)
+    except TypeError:
+        return None
+
+
+def refresh_auth_state(context, path=None) -> bool:
+    """Save `context`'s current storageState to `path` (default: the file the
+    context was built from / last switched to). Called after a successful
+    re-login so the next context starts on the live session. Never raises."""
+    info = context_session(context) or {}
+    target = Path(path) if path else info.get("path")
+    if not target:
+        return False
+    try:
+        _write_state_atomically(context.storage_state(), target)
+        return True
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("could not refresh %s: %s", target, exc)
+        return False
+
+
+def load_cached_session(context, email: str) -> bool:
+    """Swap `context` onto the cached session of `email` (cookies only) when a
+    fresh cache file exists. False when there is none or it is stale."""
+    path = account_auth_state_path(email)
+    if not _state_is_fresh(path):
+        return False
+    try:
+        cookies = json.loads(path.read_text(encoding="utf-8")).get("cookies") or []
+    except Exception:  # noqa: BLE001 -- unreadable cache: log in instead
+        return False
+    if not cookies:
+        return False
+    context.add_cookies(cookies)
+    track_context_session(context, path, email)
+    return True
+
+
+def save_session_cache(context, email: str) -> None:
+    """After a real login as `email`, cache the session for the next test."""
+    path = account_auth_state_path(email)
+    track_context_session(context, path, email)
+    refresh_auth_state(context, path)
+
+
+def _capture_worker_auth_state(browser, path: Path, username: str = None, password: str = None) -> None:
     """Logs in ONCE (real Liferay login via CmsLoginPage — the same Page
     Object flow tools/save_auth.py's own capture already relies on
     project-wide) and saves the resulting storageState to `path`. Runs in a
@@ -142,7 +268,9 @@ def _capture_worker_auth_state(browser, path: Path) -> None:
     not configured, so a misconfigured env fails the same visible way it
     already did before this change rather than hanging on a login attempt
     with blank credentials."""
-    if not settings.test_user or not settings.test_password:
+    username = username or settings.test_user
+    password = password or settings.test_password
+    if not username or not password:
         return
     from cms.pages.control_panel.login_page import CmsLoginPage
 
@@ -151,11 +279,22 @@ def _capture_worker_auth_state(browser, path: Path) -> None:
     )
     page = context.new_page()
     try:
-        CmsLoginPage(page).open_login().login(settings.test_user, settings.test_password)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        context.storage_state(path=str(path))
+        CmsLoginPage(page).open_login().login(username, password)
+        _write_state_atomically(context.storage_state(), path)
     finally:
         context.close()
+
+
+def _ensure_fresh_state(browser, path: Path, username: str = None, password: str = None) -> None:
+    """Capture `path` when missing or older than AUTH_STATE_TTL_S. A failed
+    recapture keeps the stale file (session_guard can still recover a dead
+    session) rather than failing every test at context creation."""
+    if _state_is_fresh(path):
+        return
+    try:
+        _capture_worker_auth_state(browser, path, username, password)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("auth-state recapture for %s failed (%s) -- using the existing file", path.name, exc)
 
 
 def new_context(
@@ -165,8 +304,13 @@ def new_context(
     locale: str = None,
     timezone_id: str = None,
     use_auth_state: bool = True,
+    role: str = None,
 ):
-    """`locale`/`timezone_id` map straight onto Playwright's
+    """`role` (a config.settings CMS role name) builds the context on that
+    role's cached session instead of TEST_USER's -- see the module docstring's
+    FRESHNESS + ROLE SESSIONS note. Ignored when use_auth_state is False.
+
+    `locale`/`timezone_id` map straight onto Playwright's
     `browser.new_context(locale=..., timezone_id=...)` — used by browser
     "primary language" / fresh-session cases (e.g. Chrome-with-ar-QA,
     Safari-with-en-US) that need a real locale-flavoured context rather than
@@ -187,24 +331,34 @@ def new_context(
     # default auto-load, a cached admin storageState silently pre-authenticates
     # the context — an RBAC test would then assert "denied" against an ADMIN
     # session and could false-PASS (or false-fail) the permission check.
+    state_file = None
+    account = None
     if use_auth_state:
-        worker = _xdist_worker_id()
-        if worker:
-            # Under xdist: this worker's OWN session, never the shared file —
-            # see module docstring's PER-XDIST-WORKER SESSION ISOLATION note.
-            # Generated lazily, once per worker, the first time it's missing.
-            state_file = _worker_auth_state_path(worker)
-            if not state_file.exists():
-                _capture_worker_auth_state(browser, state_file)
+        if role:
+            account, password = cms_role_credentials(role)
+            state_file = role_auth_state_path(role)
+            _ensure_fresh_state(browser, state_file, account, password)
         else:
-            # Single-process run (no xdist) — unchanged from before this fix:
-            # the one shared file, loaded if present, silently skipped if not.
-            state_file = auth_state_path()
+            # Under xdist: this worker's OWN session, never the shared file --
+            # see module docstring's PER-XDIST-WORKER SESSION ISOLATION note.
+            # Without xdist: the one shared AUTH_STATE_PATH file. Either is
+            # captured lazily when missing and recaptured when older than
+            # AUTH_STATE_TTL_S.
+            account = settings.test_user
+            state_file = default_auth_state_path()
+            _ensure_fresh_state(browser, state_file)
         if state_file.exists():
             kwargs["storage_state"] = str(state_file)
+        else:
+            state_file = None  # intended account kept: session_guard may still log it in
 
     context = browser.new_context(**kwargs)
-    context.tracing.start(screenshots=True, snapshots=True, sources=True)
+    track_context_session(context, state_file, account)
+    # Tracing is opt-in (QC_TRACE=1). Always-on screenshot+snapshot tracing on the
+    # heavy Liferay CMS pages made each test's teardown take 7–11 min (measured
+    # 2026-10-08, PBI 129384 run): user decision to drop it from the default run.
+    if os.environ.get("QC_TRACE") == "1":
+        context.tracing.start(screenshots=True, snapshots=True, sources=True)
     return context
 
 

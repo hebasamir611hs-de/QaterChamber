@@ -1,0 +1,94 @@
+[
+ {
+  "id": 135508,
+  "title": "Verify that a name/designation mismatch between the portrait caption and signature block is visibly detectable if content is authored inconsistently",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Control_Panel",
+   "DataIntegrity",
+   "Edge",
+   "GMMessage",
+   "Manual"
+  ],
+  "description": "Record deliberately authored with two different GM Name/Designation values in the two fields (mirroring the discrepancy found in the verified Figma reference). Verifies the system does not silently mask a data-consistency violation of its own acceptance rule.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Author the portrait GM Name/Designation and the signature GM Name/Designation with two different values and Publish",
+    "expected": "Publish succeeds (system does not currently enforce cross-field consistency); visitor page displays both mismatched values as entered, exposing the inconsistency for content-review catch, not a runtime block"
+   }
+  ]
+ },
+ {
+  "id": 134850,
+  "title": "Verify that the Chamber Legal Framework section renders its configured heading and intro content",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Intro Section Heading (EN) is 'Chamber Legal Framework' with the configured intro body beneath it. Per the QA Manager (2026-08-12) the English intro is a **single paragraph** whose visual gaps are spacing, not separate paragraphs. Verifies the heading renders in the maroon brand colour above the full intro body, rendered once.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In Liferay CMS, set Intro Section Heading (EN) to 'Chamber Legal Framework' and Intro Content (EN) to the configured intro body, then publish",
+    "expected": "Content saved and published with the success toast shown"
+   },
+   {
+    "action": "Open the Chamber's Law page in English",
+    "expected": "Page loads with the intro block visible"
+   },
+   {
+    "action": "Inspect the intro heading and the body beneath it",
+    "expected": "The heading reads 'Chamber Legal Framework' in the maroon brand colour, larger and bolder than body text, with the intro body rendered beneath it in body grey"
+   },
+   {
+    "action": "Compare the rendered body text against the authored source",
+    "expected": "The body matches the authored source exactly - the full text renders once with its internal spacing preserved, and no sentence or block is repeated on the page"
+   }
+  ]
+ },
+ {
+  "id": 134851,
+  "title": "Verify that the Official Legal References section renders its configured heading above the law entry cards",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Legal References Section Heading (EN) is 'Official Legal References' with two active published law entries. Verifies the heading renders in the maroon brand colour above the card list.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In Liferay CMS, set Legal References Section Heading (EN) to 'Official Legal References' with two active published law entries, then publish",
+    "expected": "Content saved and published with the success toast shown"
+   },
+   {
+    "action": "Open the Chamber's Law page in English",
+    "expected": "Page loads with the section visible below the intro block"
+   },
+   {
+    "action": "Inspect the section heading and the card list beneath it",
+    "expected": "The heading reads 'Official Legal References' in the maroon brand colour, and exactly two law entry cards render beneath it — the heading text is not a repeat of the intro heading"
+   }
+  ]
+ }
+]

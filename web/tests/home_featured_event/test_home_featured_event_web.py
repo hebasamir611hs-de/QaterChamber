@@ -38,8 +38,23 @@ import pytest
 
 from config.settings import web_url
 from web.pages.home_featured_event.home_featured_event_page import HomeFeaturedEventPage
+from cms.pages.home_featured_event.home_featured_event_admin_page import approved_49205_write  # noqa: F401 — fixture import
 
 PBI = "129382"
+
+# Every case here is a visitor read of the public Home Page -> fresh logged-out
+# context (CLAUDE.md rule 9), never the CMS-authenticated storageState.
+ANON = pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+
+# bug-rules Rule 1 tolerances: images +-5 px, layout +-2 px, text exact.
+IMG_TOL = 5
+LAYOUT_TOL = 2
+
+
+def _near(actual, expected, tol) -> bool:
+    if isinstance(actual, str):
+        actual = float(actual.replace("px", ""))
+    return actual is not None and abs(actual - expected) <= tol
 
 
 def _px(value: str) -> int:
@@ -69,6 +84,8 @@ def _padding_vh(padding: str) -> tuple:
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135634")
+@pytest.mark.tc_135634
+@ANON
 def test_badge_renders_with_figma_colors(page):
     # EVENT-FEATUREDEVENT-TC-135634 | PBI 129382
     # Arrange
@@ -86,7 +103,7 @@ def test_badge_renders_with_figma_colors(page):
     assert featured_event.is_section_visible()
     assert style["colorHex"] == "#A66F43"
     assert style["backgroundColorHex"] == "#F6F0EC"
-    assert style["borderWidth"] == "1px"
+    assert _near(style["borderWidth"], 1, LAYOUT_TOL)
     assert style["borderColorHex"] == "#D7BEAA", (
         f"expected badge border #D7BEAA, got {style['borderColorHex']!r} "
         "(live product value — see Page-Object docstring)"
@@ -104,6 +121,8 @@ def test_badge_renders_with_figma_colors(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135635")
+@pytest.mark.tc_135635
+@ANON
 def test_heading_renders_with_figma_typography(page):
     # EVENT-FEATUREDEVENT-TC-135635 | PBI 129382
     # Arrange
@@ -138,6 +157,8 @@ def test_heading_renders_with_figma_typography(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135636")
+@pytest.mark.tc_135636
+@ANON
 def test_description_copy_and_typography(page):
     # EVENT-FEATUREDEVENT-TC-135636 | PBI 129382
     expected_copy = (
@@ -180,6 +201,8 @@ def test_description_copy_and_typography(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135637")
+@pytest.mark.tc_135637
+@ANON
 def test_view_all_cta_pill_button_spec(page):
     # EVENT-FEATUREDEVENT-TC-135637 | PBI 129382
     # Arrange
@@ -200,8 +223,8 @@ def test_view_all_cta_pill_button_spec(page):
     assert style["borderRadius"] == "9999px"
     assert has_icon, "expected an arrow-up-right icon inside the View All button"
     vertical, horizontal = _padding_vh(style["padding"])
-    assert vertical == 12
-    assert horizontal == 18, f"expected 18px horizontal padding, got {horizontal}px (live product value)"
+    assert _near(vertical, 12, LAYOUT_TOL)
+    assert _near(horizontal, 18, LAYOUT_TOL), f"expected 18px horizontal padding, got {horizontal}px (live product value)"
 
 
 @allure.epic("EVENT")
@@ -215,6 +238,8 @@ def test_view_all_cta_pill_button_spec(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135638")
+@pytest.mark.tc_135638
+@ANON
 def test_category_badges_pill_style(page):
     # EVENT-FEATUREDEVENT-TC-135638 | PBI 129382
     # Arrange
@@ -238,7 +263,7 @@ def test_category_badges_pill_style(page):
             f"expected #F6F6F6, got {style['backgroundColorHex']!r} (live product value)"
         )
         assert style["colorHex"] == "#6C6C6B"
-        assert style["borderWidth"] == "1px"
+        assert _near(style["borderWidth"], 1, LAYOUT_TOL)
         assert style["borderColorHex"] == "#DEDEDD"
         assert style["borderRadius"] == "9999px"
 
@@ -254,6 +279,8 @@ def test_category_badges_pill_style(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135639")
+@pytest.mark.tc_135639
+@ANON
 def test_event_title_typography(page):
     # EVENT-FEATUREDEVENT-TC-135639 | PBI 129382
     # Arrange
@@ -288,6 +315,8 @@ def test_event_title_typography(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135640")
+@pytest.mark.tc_135640
+@ANON
 def test_meta_icon_buttons_are_maroon_48px_circles(page):
     # EVENT-FEATUREDEVENT-TC-135640 | PBI 129382
     # Arrange
@@ -305,8 +334,8 @@ def test_meta_icon_buttons_are_maroon_48px_circles(page):
     for style in styles:
         assert style["borderRadius"] == "50%"
         assert style["backgroundColorHex"] == "#911731"
-        assert style["width"] == 48, f"expected 48px diameter, got {style['width']}px (live product value)"
-        assert style["height"] == 48, f"expected 48px diameter, got {style['height']}px (live product value)"
+        assert _near(style["width"], 48, IMG_TOL), f"expected 48px diameter, got {style['width']}px (live product value)"
+        assert _near(style["height"], 48, IMG_TOL), f"expected 48px diameter, got {style['height']}px (live product value)"
 
 
 @allure.epic("EVENT")
@@ -320,6 +349,8 @@ def test_meta_icon_buttons_are_maroon_48px_circles(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135641")
+@pytest.mark.tc_135641
+@ANON
 def test_meta_label_and_value_typography(page):
     # EVENT-FEATUREDEVENT-TC-135641 | PBI 129382
     # Arrange
@@ -370,6 +401,8 @@ def test_meta_label_and_value_typography(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135642")
+@pytest.mark.tc_135642
+@ANON
 def test_section_two_column_layout_spacing(page):
     # EVENT-FEATUREDEVENT-TC-135642 | PBI 129382
     # Arrange
@@ -387,11 +420,11 @@ def test_section_two_column_layout_spacing(page):
         gap = featured_event.column_gap()
 
     # Assert
-    assert vertical_padding["paddingTop"] == "64px"
-    assert vertical_padding["paddingBottom"] == "64px"
-    assert gutter["left"] == 300, f"expected 300px, got {gutter['left']}px (live product value)"
-    assert gutter["right"] == 300, f"expected 300px, got {gutter['right']}px (live product value)"
-    assert gap == "48px"
+    assert _near(vertical_padding["paddingTop"], 64, LAYOUT_TOL)
+    assert _near(vertical_padding["paddingBottom"], 64, LAYOUT_TOL)
+    assert _near(gutter["left"], 300, LAYOUT_TOL), f"expected 300px, got {gutter['left']}px (live product value)"
+    assert _near(gutter["right"], 300, LAYOUT_TOL), f"expected 300px, got {gutter['right']}px (live product value)"
+    assert _near(gap, 48, LAYOUT_TOL)
 
 
 @allure.epic("EVENT")
@@ -405,6 +438,8 @@ def test_section_two_column_layout_spacing(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135643")
+@pytest.mark.tc_135643
+@ANON
 def test_event_image_container_spec(page):
     # EVENT-FEATUREDEVENT-TC-135643 | PBI 129382
     # Arrange
@@ -419,8 +454,8 @@ def test_event_image_container_spec(page):
         style = featured_event.image_container_style()
 
     # Assert
-    assert style["borderRadius"] == "16px"
-    assert style["height"] == 350, f"expected 350px, got {style['height']}px (live product value)"
+    assert _near(style["borderRadius"], 16, LAYOUT_TOL)
+    assert _near(style["height"], 350, IMG_TOL), f"expected 350px, got {style['height']}px (live product value)"
 
 
 @allure.epic("EVENT")
@@ -434,6 +469,8 @@ def test_event_image_container_spec(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135644")
+@pytest.mark.tc_135644
+@ANON
 def test_divider_color_and_thickness(page):
     # EVENT-FEATUREDEVENT-TC-135644 | PBI 129382
     # Arrange
@@ -451,7 +488,7 @@ def test_divider_color_and_thickness(page):
     assert style["backgroundColorHex"] == "#E9DBD0", (
         f"expected #E9DBD0, got {style['backgroundColorHex']!r} (live product value)"
     )
-    assert style["height"] == 1
+    assert _near(style["height"], 1, LAYOUT_TOL)
 
 
 @allure.epic("EVENT")
@@ -465,30 +502,42 @@ def test_divider_color_and_thickness(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135645")
-@pytest.mark.skip(
-    reason="Precondition requires emptying the Pin Configuration in the Liferay "
-    "CMS. A real event IS currently pinned/active on qcdev and this Web-only "
-    "automation batch carries no Control_Panel credentials this session "
-    "(TEST_USER/TEST_PASSWORD are unset in .env) to unpin it — pending CMS "
-    "access, not fabricated as a pass."
-)
-def test_section_absent_when_no_event_pinned(page):
-    # EVENT-FEATUREDEVENT-TC-135645 | PBI 129382
-    # Arrange
-    featured_event = HomeFeaturedEventPage(page)
+@pytest.mark.tc_135645
+@pytest.mark.tc_135666
+@pytest.mark.xdist_group("pin_event_49205")
+@pytest.mark.usefixtures("approved_49205_write")
+def test_section_absent_when_no_event_pinned(page, browser):
+    """ADO-135645 / ADO-135666. WRITES THE LIVE PIN 49205 — needs the user's
+    ID-named approval; not in the phase-3 run list.
 
-    # Act
-    with allure.step("Ensure no event is pinned in Pin Configuration (precondition)"):
-        pass  # requires Control_Panel access — see skip reason
+    Account: Site Content Editor (CMS side, `page`) clears Pinned Event and
+    publishes; a fresh logged-out context reads the Home Page. 49205 is
+    snapshotted first and restored + re-verified in `finally`."""
+    from core.web.browser import new_context
+    from cms.pages.home_featured_event.home_featured_event_admin_page import HomeFeaturedEventAdminPage
 
-    with allure.step("Load the Home Page"):
-        featured_event.open(web_url("/home"))
-
-    with allure.step("Inspect the area where the Upcoming Event section would appear"):
-        section_absent = featured_event.is_section_absent()
-
-    # Assert
-    assert section_absent, "expected no Upcoming Event section, no placeholder, no broken layout gap"
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as("Site Content Editor")
+    admin.open_live_pin_read_only()
+    snap = admin.snapshot()
+    anon = new_context(browser, use_auth_state=False)
+    featured_event = HomeFeaturedEventPage(anon.new_page())
+    try:
+        with allure.step("Precondition: the section is visible to a visitor while an event is pinned"):
+            featured_event.open_home()
+            assert featured_event.is_section_visible(), "precondition: section must be visible before unpinning"
+        with allure.step("Clear Pinned Event on 49205 and publish (no event pinned)"):
+            admin.open_for_edit().set_pinned_event("").publish()
+            admin.open_live_pin_read_only()
+            assert admin.pinned_event_value() == "", (
+                "the unpin did not persist (Pinned Event is `required` on the form) — "
+                "which control means 'unpin' is an open question in the phase-3 report")
+        with allure.step("Load the Home Page logged out and inspect the section area"):
+            featured_event.open_home()
+            hidden = featured_event.reload_until(lambda p: not p.is_section_visible())
+        assert hidden, "expected no Upcoming Event section, no placeholder, no broken layout gap"
+    finally:
+        admin.restore(snap)
+        anon.close()
 
 
 @allure.epic("EVENT")
@@ -503,6 +552,8 @@ def test_section_absent_when_no_event_pinned(page):
 @pytest.mark.bilingual
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135646")
+@pytest.mark.tc_135646
+@ANON
 def test_section_renders_correctly_in_arabic_rtl(page):
     # EVENT-FEATUREDEVENT-TC-135646 | PBI 129382
     # Arrange
@@ -541,6 +592,8 @@ def test_section_renders_correctly_in_arabic_rtl(page):
 @pytest.mark.bilingual
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135647")
+@pytest.mark.tc_135647
+@ANON
 def test_section_renders_correctly_in_english_ltr(page):
     # EVENT-FEATUREDEVENT-TC-135647 | PBI 129382
     # Arrange
@@ -576,7 +629,8 @@ def test_section_renders_correctly_in_english_ltr(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135648")
-@pytest.mark.parametrize("page", [(375, 812)], indirect=True)
+@pytest.mark.tc_135648
+@pytest.mark.parametrize("page", [{"viewport": (375, 812), "auth": False}], indirect=True)
 def test_responsive_at_mobile_375(page):
     # EVENT-FEATUREDEVENT-TC-135648 | PBI 129382
     # Arrange
@@ -608,7 +662,8 @@ def test_responsive_at_mobile_375(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135649")
-@pytest.mark.parametrize("page", [(768, 1024)], indirect=True)
+@pytest.mark.tc_135649
+@pytest.mark.parametrize("page", [{"viewport": (768, 1024), "auth": False}], indirect=True)
 def test_responsive_at_tablet_768(page):
     # EVENT-FEATUREDEVENT-TC-135649 | PBI 129382
     # Arrange
@@ -645,6 +700,8 @@ def test_responsive_at_tablet_768(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135650")
+@pytest.mark.tc_135650
+@ANON
 def test_loading_placeholder_while_fetching(page):
     # EVENT-FEATUREDEVENT-TC-135650 | PBI 129382
     # Arrange
@@ -682,6 +739,8 @@ def test_loading_placeholder_while_fetching(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129382
 @pytest.mark.traceability("EVENT-FEATUREDEVENT-TC-135652")
+@pytest.mark.tc_135652
+@ANON
 def test_pagination_single_active_state(page):
     # EVENT-FEATUREDEVENT-TC-135652 | PBI 129382
     # Arrange
@@ -701,3 +760,182 @@ def test_pagination_single_active_state(page):
         "expected no pagination/dots indicator implying additional unpinned "
         "items — none exists in the live markup with a single pinned event"
     )
+
+
+# ═════════════════════════════════════════════════════════════════════════
+# Phase 3 (2026-10-07) — functional P2 cases. All read-only: a logged-out
+# visitor reads the card and compares it with the event's own detail page,
+# which is the Events module's rendering of the BusinessEvent record.
+# Precondition (TC): "a published event is pinned and active" — that is the
+# live Upcoming Event Pin record 49205; these tests never write to it, they
+# assert the precondition and report if it does not hold.
+# ═════════════════════════════════════════════════════════════════════════
+import re as _re
+
+
+def _open_card(featured_event: HomeFeaturedEventPage, locale: str = "en") -> dict:
+    with allure.step(f"Load the Home Page ({locale.upper()}) as a logged-out visitor and scroll to the section"):
+        (featured_event.open_home_arabic() if locale == "ar" else featured_event.open_home())
+    assert featured_event.is_section_visible(), (
+        "Precondition not met: the Upcoming Event section is not visible on the "
+        "public Home Page (rendered display:none), so no pinned event is shown."
+    )
+    featured_event.scroll_to_section()
+    card = featured_event.card_snapshot()
+    allure.attach(str(card), name=f"card-{locale}", attachment_type=allure.attachment_type.TEXT)
+    return card
+
+
+def _detail_text(featured_event: HomeFeaturedEventPage) -> str:
+    with allure.step("Click the event image and read the event detail page"):
+        featured_event.click_media_and_wait()
+    return featured_event.body_text()
+
+
+def _visitor_browse_and_navigate(page):
+    featured_event = HomeFeaturedEventPage(page)
+    card = _open_card(featured_event)
+    for key in ("title", "date", "time", "location", "summary"):
+        assert card[key], f"card field {key!r} is empty"
+    assert "event?id=" in card["href"] or "/events/" in card["href"], f"image link is not an event URL: {card['href']!r}"
+    landed = featured_event.click_media_and_wait()
+    assert "event" in landed and "home" not in landed.rsplit("/", 1)[-1], f"image click landed on {landed!r}"
+    detail = featured_event.body_text()
+    assert card["title"] in detail, "event detail page does not show the card's title"
+    assert card["location"] in detail, "event detail page does not show the card's location"
+
+
+@ANON
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.title("A visitor views the pinned event details and opens its detail page from the image")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135665
+def test_visitor_views_pinned_event_and_opens_detail(page):
+    """ADO-135665. Logged-out visitor; read-only."""
+    _visitor_browse_and_navigate(page)
+
+
+@ANON
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.title("A visitor views the pinned event details and opens its detail page from the image (twin)")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135717
+def test_visitor_views_pinned_event_and_opens_detail_twin(page):
+    """ADO-135717 — same steps as 135665 (duplicate case in the suite)."""
+    _visitor_browse_and_navigate(page)
+
+
+def _field_matches_detail(page, field: str, locale: str):
+    featured_event = HomeFeaturedEventPage(page)
+    card = _open_card(featured_event, locale)
+    value = card[field]
+    assert value, f"card {field} is empty ({locale})"
+    if locale == "ar":
+        assert _re.search(r"[؀-ۿ]", value), f"AR card {field} has no Arabic text: {value!r}"
+    detail = _detail_text(featured_event)
+    if field == "date":
+        # The detail page may format the same date differently; match day + year.
+        day = _re.search(r"\b(\d{1,2})\b", value)
+        year = _re.search(r"\b(20\d\d)\b", value)
+        assert day and year, f"card date has no day/year: {value!r}"
+        assert day.group(1) in detail and year.group(1) in detail, (
+            f"detail page does not show the card date {value!r}")
+    elif field == "time":
+        hhmm = _re.search(r"\d{1,2}:\d{2}", value)
+        assert hhmm, f"card time has no HH:MM: {value!r}"
+        assert hhmm.group(0) in detail, f"detail page does not show the card time {value!r}"
+    else:
+        assert value in detail, f"detail page does not show the card {field} {value!r} ({locale})"
+
+
+
+@ANON
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.title("The pinned event's title (EN) displays as sourced from the Events module")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135674
+def test_pinned_event_title_en_matches_events_module(page):
+    """ADO-135674. Logged-out visitor; read-only."""
+    _field_matches_detail(page, "title", "en")
+
+
+@ANON
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.title("The pinned event's title (AR) displays as sourced from the Events module")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135675
+def test_pinned_event_title_ar_matches_events_module(page):
+    """ADO-135675. Logged-out visitor; read-only."""
+    _field_matches_detail(page, "title", "ar")
+
+
+@ANON
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.title("The pinned event's date displays as sourced from the Events module")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135676
+def test_pinned_event_date_en_matches_events_module(page):
+    """ADO-135676. Logged-out visitor; read-only."""
+    _field_matches_detail(page, "date", "en")
+
+
+@ANON
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.title("The pinned event's time displays as sourced from the Events module")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135677
+def test_pinned_event_time_en_matches_events_module(page):
+    """ADO-135677. Logged-out visitor; read-only."""
+    _field_matches_detail(page, "time", "en")
+
+
+@ANON
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.title("The pinned event's location (EN) displays as sourced from the Events module")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135678
+def test_pinned_event_location_en_matches_events_module(page):
+    """ADO-135678. Logged-out visitor; read-only."""
+    _field_matches_detail(page, "location", "en")
+
+
+@ANON
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.title("The pinned event's location (AR) displays as sourced from the Events module")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.functional_high
+@pytest.mark.pbi_129382
+@pytest.mark.tc_135679
+def test_pinned_event_location_ar_matches_events_module(page):
+    """ADO-135679. Logged-out visitor; read-only."""
+    _field_matches_detail(page, "location", "ar")

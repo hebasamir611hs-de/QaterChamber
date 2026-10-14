@@ -1,0 +1,1781 @@
+{
+ "status": "success",
+ "plan_id": 133534,
+ "suite_id": 134450,
+ "total_test_cases": 57,
+ "test_cases": [
+  {
+   "id": 135272,
+   "title": "Verify that a public visitor can view and navigate the Latest News section end to end",
+   "state": "Design",
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT",
+    "Web"
+   ],
+   "description": "Functional-High e2e browse+navigate.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Load Home Page as unauthenticated visitor",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Section renders with tag, heading, and up to the configured number of news cards, newest first"
+    },
+    {
+     "action": "Click a news card",
+     "expected": "Browser navigates to that article's full detail page showing matching title/date/image"
+    },
+    {
+     "action": "Navigate back to Home Page",
+     "expected": "Home Page reloads with the section intact"
+    },
+    {
+     "action": "Click View All CTA",
+     "expected": "Browser redirects to the full News listing page"
+    }
+   ]
+  },
+  {
+   "id": 135273,
+   "title": "Verify that publishing a news article surfaces it in the Latest News section with a success toast",
+   "state": "Design",
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT"
+   ],
+   "description": "Functional-High publish flow.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS as Site Content Editor",
+     "expected": "CMS loads"
+    },
+    {
+     "action": "Navigate to News module > Create Article",
+     "expected": "Create Article form displayed"
+    },
+    {
+     "action": "Fill Title EN/AR, category, publication date, thumbnail, body EN/AR",
+     "expected": "All fields accept entered values"
+    },
+    {
+     "action": "Save as Draft, Submit for Review, then Publish",
+     "expected": "Liferay generic success toast displayed after publish; article status = Published; article appears on Home Page Latest News section, newest first, above older articles"
+    }
+   ]
+  },
+  {
+   "id": 135274,
+   "title": "Verify that unpublishing a news article removes it from the Latest News section with a success toast",
+   "state": "Design",
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "description": "Functional-High unpublish flow.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS as Site Content Editor",
+     "expected": "CMS loads"
+    },
+    {
+     "action": "Navigate to News module",
+     "expected": "News module list displayed"
+    },
+    {
+     "action": "Select the published article",
+     "expected": "Article selected, status = Published"
+    },
+    {
+     "action": "Click Unpublish",
+     "expected": "Liferay generic success toast displayed; article status = Unpublished; article no longer appears in Home Page Latest News section"
+    }
+   ]
+  },
+  {
+   "id": 135275,
+   "title": "Verify that the Latest News section sorts cards by publication date descending",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Functional-High",
+    "MEDIA",
+    "Web"
+   ],
+   "description": "Functional-High sort order.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Publish three articles with the stated dates",
+     "expected": "All three published successfully"
+    },
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Observe card order in the Latest News section",
+     "expected": "Cards render in order newest to oldest"
+    }
+   ]
+  },
+  {
+   "id": 135276,
+   "title": "Verify that View All redirects to the News listing page when the listing page is published",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT",
+    "Web"
+   ],
+   "description": "Functional-High CTA redirect.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Section renders with View All CTA visible"
+    },
+    {
+     "action": "Click View All CTA",
+     "expected": "Browser redirects to the full News listing page, showing all published articles"
+    }
+   ]
+  },
+  {
+   "id": 135277,
+   "title": "Verify that the View All CTA does not appear when the News listing page is unpublished",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "Web"
+   ],
+   "description": "Functional-High CTA suppressed.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Unpublish the News listing page via CMS",
+     "expected": "Listing page status = Unpublished"
+    },
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Latest News section renders with news cards"
+    },
+    {
+     "action": "Inspect the CTA area of the section",
+     "expected": "View All CTA is not rendered anywhere in the section"
+    }
+   ]
+  },
+  {
+   "id": 135278,
+   "title": "Verify that clicking a news card navigates to the correct full article page",
+   "state": "Design",
+   "priority": 1,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT",
+    "Web"
+   ],
+   "description": "Functional-High card navigation.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Section renders the 'Trade Fair 2026' card with its thumbnail, date, title, and view count"
+    },
+    {
+     "action": "Click the card titled 'Trade Fair 2026'",
+     "expected": "Browser navigates to the 'Trade Fair 2026' full article detail page, title matches exactly"
+    }
+   ]
+  },
+  {
+   "id": 135279,
+   "title": "Verify that saving an article as Draft does not surface it in the Latest News section",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "description": "Functional-High draft exclusion.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Log in to CMS as Site Content Editor",
+     "expected": "CMS loads"
+    },
+    {
+     "action": "Navigate to News module > Create Article",
+     "expected": "Create Article form displayed"
+    },
+    {
+     "action": "Fill mandatory fields with Title EN = 'Draft Test Article'",
+     "expected": "Fields populated"
+    },
+    {
+     "action": "Click Save as Draft",
+     "expected": "Article saved with status = Draft; article does not appear in Home Page Latest News section"
+    }
+   ]
+  },
+  {
+   "id": 135280,
+   "title": "Verify that Section Tag (EN) accepts a valid value within 50 characters",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open Home Page section config for Latest News",
+     "expected": "Config screen displayed with current values"
+    },
+    {
+     "action": "Enter 'Latest Updates' in Section Tag (EN)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Saved successfully; 'Latest Updates' displays above the section heading on the Home Page"
+    }
+   ]
+  },
+  {
+   "id": 135281,
+   "title": "Verify that Section Tag (EN) can be left empty since it is optional",
+   "state": "Design",
+   "priority": 4,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low optional-empty check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Leave Section Tag (EN) empty",
+     "expected": "Field remains empty"
+    },
+    {
+     "action": "Save",
+     "expected": "Saved successfully; Home Page section renders with no tag label above the heading, no validation error"
+    }
+   ]
+  },
+  {
+   "id": 135282,
+   "title": "Verify that Section Tag (EN) rejects input exceeding 50 characters",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low boundary check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter a 51-character string in Section Tag (EN)",
+     "expected": "51-character value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved; field remains at its previous value"
+    }
+   ]
+  },
+  {
+   "id": 135283,
+   "title": "Verify that Section Tag (AR) accepts a valid Arabic value within 50 characters",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter Arabic tag value",
+     "expected": "Value entered, rendered RTL"
+    },
+    {
+     "action": "Save",
+     "expected": "Saved successfully; tag displays RTL above the heading on the Arabic Home Page"
+    }
+   ]
+  },
+  {
+   "id": 135284,
+   "title": "Verify that Section Tag (AR) can be left empty since it is optional",
+   "state": "Design",
+   "priority": 4,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low optional-empty check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Leave Section Tag (AR) empty",
+     "expected": "Field remains empty"
+    },
+    {
+     "action": "Save",
+     "expected": "Saved successfully; Arabic Home Page section renders with no tag label, no validation error"
+    }
+   ]
+  },
+  {
+   "id": 135285,
+   "title": "Verify that Section Tag (AR) rejects input exceeding 50 characters",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low boundary check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter a 51-character Arabic string in Section Tag (AR)",
+     "expected": "51-character value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown in Arabic; value not saved"
+    }
+   ]
+  },
+  {
+   "id": 135286,
+   "title": "Verify that Section Heading (EN) accepts a valid value within 200 characters",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "description": "Functional-Low field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter 'Latest News' in Section Heading (EN)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Saved successfully; heading displays as the section's main title"
+    }
+   ]
+  },
+  {
+   "id": 135287,
+   "title": "Verify that Section Heading (EN) rejects an empty value",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low mandatory-field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Clear Section Heading (EN)",
+     "expected": "Field cleared"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error 'Section Heading (EN) is required' shown; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135288,
+   "title": "Verify that Section Heading (EN) rejects whitespace-only input",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low whitespace check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter spaces only in Section Heading (EN)",
+     "expected": "Whitespace entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown as if empty; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135289,
+   "title": "Verify that Section Heading (EN) rejects input exceeding 200 characters",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low boundary check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter a 201-character string in Section Heading (EN)",
+     "expected": "201-character value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ]
+  },
+  {
+   "id": 135290,
+   "title": "Verify that Section Heading (AR) accepts a valid value within 200 characters",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "description": "Functional-Low field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter Arabic heading value",
+     "expected": "Value entered RTL"
+    },
+    {
+     "action": "Save",
+     "expected": "Saved successfully; heading displays RTL on Arabic Home Page"
+    }
+   ]
+  },
+  {
+   "id": 135291,
+   "title": "Verify that Section Heading (AR) rejects an empty value",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low mandatory-field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Clear Section Heading (AR)",
+     "expected": "Field cleared"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown in Arabic; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135292,
+   "title": "Verify that Section Heading (AR) rejects whitespace-only input",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low whitespace check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter spaces only in Section Heading (AR)",
+     "expected": "Whitespace entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown as if empty; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135293,
+   "title": "Verify that Section Heading (AR) rejects input exceeding 200 characters",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low boundary check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter a 201-character Arabic string",
+     "expected": "201-character value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ]
+  },
+  {
+   "id": 135294,
+   "title": "Verify that Section Description (EN) accepts a valid rich-text value within 1000 characters",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "description": "Functional-Low field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter rich-text description in Section Description (EN)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Apply bold formatting to part of the text",
+     "expected": "Bold formatting applied"
+    },
+    {
+     "action": "Save",
+     "expected": "Saved successfully; description renders with formatting intact on Home Page"
+    }
+   ]
+  },
+  {
+   "id": 135295,
+   "title": "Verify that Section Description (EN) rejects an empty value",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low mandatory-field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Clear Section Description (EN)",
+     "expected": "Field cleared"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135296,
+   "title": "Verify that Section Description (EN) rejects whitespace-only input",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low whitespace check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter spaces only in Section Description (EN)",
+     "expected": "Whitespace entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown as if empty; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135297,
+   "title": "Verify that Section Description (EN) rejects input exceeding 1000 characters",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low boundary check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter a 1001-character string",
+     "expected": "1001-character value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ]
+  },
+  {
+   "id": 135298,
+   "title": "Verify that Section Description (AR) accepts a valid rich-text value within 1000 characters",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "description": "Functional-Low field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter rich-text description in Section Description (AR)",
+     "expected": "Value entered RTL"
+    },
+    {
+     "action": "Save",
+     "expected": "Saved successfully; description renders RTL on Arabic Home Page"
+    }
+   ]
+  },
+  {
+   "id": 135299,
+   "title": "Verify that Section Description (AR) rejects an empty value",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low mandatory-field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Clear Section Description (AR)",
+     "expected": "Field cleared"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135300,
+   "title": "Verify that Section Description (AR) rejects whitespace-only input",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low whitespace check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter spaces only in Section Description (AR)",
+     "expected": "Whitespace entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown as if empty; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135301,
+   "title": "Verify that Section Description (AR) rejects input exceeding 1000 characters",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low boundary check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open section config",
+     "expected": "Config screen displayed"
+    },
+    {
+     "action": "Enter a 1001-character Arabic string",
+     "expected": "1001-character value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ]
+  },
+  {
+   "id": 135302,
+   "title": "Verify that News Article Title (EN) accepts a valid value within 200 characters",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "description": "Functional-Low field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Enter Title (EN)",
+     "expected": "Title entered"
+    },
+    {
+     "action": "Save as Draft",
+     "expected": "Draft saved with the entered title"
+    }
+   ]
+  },
+  {
+   "id": 135303,
+   "title": "Verify that News Article Title (EN) rejects an empty value",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low mandatory-field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Leave Title (EN) empty",
+     "expected": "Field left empty"
+    },
+    {
+     "action": "Attempt to Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135304,
+   "title": "Verify that News Article Title (EN) rejects whitespace-only input",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low whitespace check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Enter spaces only in Title (EN)",
+     "expected": "Whitespace entered"
+    },
+    {
+     "action": "Attempt to Save",
+     "expected": "Validation error shown as if empty; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135305,
+   "title": "Verify that News Article Title (EN) rejects input exceeding 200 characters",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low boundary check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Enter a 201-character string in Title (EN)",
+     "expected": "201-character value entered"
+    },
+    {
+     "action": "Attempt to Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ]
+  },
+  {
+   "id": 135306,
+   "title": "Verify that News Article Title (AR) accepts a valid value within 200 characters",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "description": "Functional-Low field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Enter Title (AR)",
+     "expected": "Title entered RTL"
+    },
+    {
+     "action": "Save as Draft",
+     "expected": "Draft saved with the entered title, rendered RTL"
+    }
+   ]
+  },
+  {
+   "id": 135307,
+   "title": "Verify that News Article Title (AR) rejects an empty value",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low mandatory-field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Leave Title (AR) empty",
+     "expected": "Field left empty"
+    },
+    {
+     "action": "Attempt to Save",
+     "expected": "Validation error shown in Arabic; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135308,
+   "title": "Verify that News Article Title (AR) rejects whitespace-only input",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low whitespace check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Enter spaces only in Title (AR)",
+     "expected": "Whitespace entered"
+    },
+    {
+     "action": "Attempt to Save",
+     "expected": "Validation error shown as if empty; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135309,
+   "title": "Verify that News Article Title (AR) rejects input exceeding 200 characters",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low boundary check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Enter a 201-character Arabic string",
+     "expected": "201-character value entered"
+    },
+    {
+     "action": "Attempt to Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ]
+  },
+  {
+   "id": 135310,
+   "title": "Verify that a valid JPG thumbnail under 2MB uploads successfully",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "description": "Functional-Low field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Upload thumbnail.jpg (800KB)",
+     "expected": "File uploads with preview shown"
+    },
+    {
+     "action": "Save as Draft",
+     "expected": "Draft saved with thumbnail attached and previewed on the card"
+    }
+   ]
+  },
+  {
+   "id": 135311,
+   "title": "Verify that saving an article without a thumbnail is rejected",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low mandatory-field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Fill all fields except thumbnail",
+     "expected": "Fields populated, thumbnail empty"
+    },
+    {
+     "action": "Attempt to Save",
+     "expected": "Validation error 'Thumbnail Image is required' shown; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135312,
+   "title": "Verify that an oversized thumbnail exceeding 2MB is rejected",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low boundary check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Upload thumbnail-large.png (3.5MB)",
+     "expected": "Upload attempted"
+    },
+    {
+     "action": "Attempt to Save",
+     "expected": "Validation error 'File exceeds maximum size of 2MB' shown; file not attached"
+    }
+   ]
+  },
+  {
+   "id": 135313,
+   "title": "Verify that a valid Publication Date is accepted and displayed on the card",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "description": "Functional-Low field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Set Publication Date to 2026-08-12",
+     "expected": "Date selected via date picker"
+    },
+    {
+     "action": "Publish",
+     "expected": "Article published; card shows '2026-08-12' as the publication date"
+    }
+   ]
+  },
+  {
+   "id": 135314,
+   "title": "Verify that Publication Date rejects an empty value",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low mandatory-field check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Leave Publication Date empty",
+     "expected": "Field left empty"
+    },
+    {
+     "action": "Attempt to Save",
+     "expected": "Validation error 'Publication Date is required' shown; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135315,
+   "title": "Verify that Publication Date rejects an invalid/malformed date value",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "description": "Functional-Low invalid check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open News module > Create Article",
+     "expected": "Create form displayed"
+    },
+    {
+     "action": "Enter '32/13/2026' in Publication Date",
+     "expected": "Invalid value entered"
+    },
+    {
+     "action": "Attempt to Save",
+     "expected": "Validation error 'Invalid date format' shown; save blocked"
+    }
+   ]
+  },
+  {
+   "id": 135316,
+   "title": "Verify that View Count displays as a system-generated positive integer on the news card",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "description": "Functional-Low display check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Section renders"
+    },
+    {
+     "action": "Locate the article card",
+     "expected": "Card displayed with thumbnail, date, title"
+    },
+    {
+     "action": "Inspect the View Count value shown",
+     "expected": "View Count displays as a non-negative whole number, never blank, negative, or non-numeric"
+    }
+   ]
+  },
+  {
+   "id": 135317,
+   "title": "Verify that each news card renders all four required elements",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "MEDIA",
+    "Regression",
+    "UI",
+    "Web"
+   ],
+   "description": "UI element-presence check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Section renders"
+    },
+    {
+     "action": "Inspect a single news card",
+     "expected": "Card shows thumbnail image, publication date, headline title, and view count, all visible and non-overlapping"
+    }
+   ]
+  },
+  {
+   "id": 135318,
+   "title": "Verify that the Latest News section renders correctly on desktop viewport (1920x1080)",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "MEDIA",
+    "UI",
+    "Web"
+   ],
+   "description": "UI responsive check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Resize browser to 1920x1080",
+     "expected": "Viewport set"
+    },
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Cards render in the desktop grid layout with no overlap, truncation, or horizontal scroll"
+    }
+   ]
+  },
+  {
+   "id": 135319,
+   "title": "Verify that the Latest News section renders correctly on tablet viewport (768x1024)",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "MEDIA",
+    "UI",
+    "Web"
+   ],
+   "description": "UI responsive check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Resize browser to 768x1024",
+     "expected": "Viewport set"
+    },
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Cards re-flow into tablet layout, all elements readable, no overlap"
+    }
+   ]
+  },
+  {
+   "id": 135320,
+   "title": "Verify that the Latest News section renders correctly on mobile viewport (375x667)",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "MEDIA",
+    "UI",
+    "Web"
+   ],
+   "description": "UI responsive check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Resize browser to 375x667",
+     "expected": "Viewport set"
+    },
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Cards stack in single-column mobile layout, View All CTA remains reachable, no horizontal scroll"
+    }
+   ]
+  },
+  {
+   "id": 135321,
+   "title": "Verify that the Latest News section renders in English LTR correctly",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "MEDIA",
+    "Regression",
+    "UI",
+    "Web"
+   ],
+   "description": "UI language-direction check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Set site language to English",
+     "expected": "Language set"
+    },
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads in EN"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Section tag, heading, description, and cards render left-to-right with EN text; View All CTA is left-aligned per LTR convention"
+    }
+   ]
+  },
+  {
+   "id": 135322,
+   "title": "Verify that the Latest News section renders in Arabic RTL correctly",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "MEDIA",
+    "Regression",
+    "UI",
+    "Web"
+   ],
+   "description": "UI language-direction check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Set site language to Arabic",
+     "expected": "Language set"
+    },
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads in AR"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Section tag, heading, description, and cards render right-to-left with AR text and mirrored layout; View All CTA is right-aligned per RTL convention"
+    }
+   ]
+  },
+  {
+   "id": 135323,
+   "title": "Verify that the Latest News section displays only available cards when fewer than the configured count are published",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "MEDIA",
+    "Regression",
+    "UI",
+    "Web"
+   ],
+   "description": "UI under-population check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Publish exactly 2 news articles",
+     "expected": "2 articles published"
+    },
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Section renders exactly 2 cards with no placeholder/empty cards filling the remaining slots"
+    }
+   ]
+  },
+  {
+   "id": 135324,
+   "title": "Verify that the Latest News section degrades gracefully when zero articles are published",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Manual",
+    "MEDIA",
+    "UI",
+    "Web"
+   ],
+   "description": "UI empty-state check. Manual â€” expected empty-state behavior unconfirmed against spec, no deterministic expected result to assert against.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Ensure all news articles are unpublished/draft",
+     "expected": "No published articles exist"
+    },
+    {
+     "action": "Load Home Page",
+     "expected": "Home Page loads without error"
+    },
+    {
+     "action": "Scroll to the Latest News section area",
+     "expected": "Section renders its tag/heading/description with no cards and no layout break"
+    }
+   ]
+  },
+  {
+   "id": 135325,
+   "title": "Verify that the Latest News section renders correctly in Chrome (latest stable)",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Compatibility",
+    "MEDIA",
+    "Web"
+   ],
+   "description": "Compatibility check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open Home Page in Chrome (latest stable)",
+     "expected": "Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Section renders identically to the spec description: tag, heading, cards, View All CTA, no layout break"
+    }
+   ]
+  },
+  {
+   "id": 135326,
+   "title": "Verify that the Latest News section renders correctly in Safari (latest stable)",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Compatibility",
+    "MEDIA",
+    "Web"
+   ],
+   "description": "Compatibility check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Open Home Page in Safari (latest stable)",
+     "expected": "Page loads"
+    },
+    {
+     "action": "Scroll to Latest News section",
+     "expected": "Section renders identically: tag, heading, cards, View All CTA, no layout break, image lazy-load functions correctly"
+    }
+   ]
+  },
+  {
+   "id": 135327,
+   "title": "Verify that a user without News module permissions cannot publish/unpublish articles",
+   "state": "Design",
+   "priority": 2,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "description": "Auth/RBAC check.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS with a role lacking News module publish permission",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Attempt to navigate to News module > Create/Edit Article",
+     "expected": "Access denied â€” News module create/publish actions are not available or an authorization error is shown; no article can be published by this user"
+    }
+   ]
+  },
+  {
+   "id": 135328,
+   "title": "Verify that an article remains visible on a card the visitor already opened after it is unpublished mid-session",
+   "state": "Design",
+   "priority": 3,
+   "tags": [
+    "Ai_MCP_Injected",
+    "Edge",
+    "Manual",
+    "MEDIA",
+    "Web"
+   ],
+   "description": "Edge cross-tab check. Manual â€” requires cross-tab/cross-session concurrent state not deterministically scriptable.",
+   "area_path": "Qatar Chamber Website Revamp",
+   "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+   "steps": [
+    {
+     "action": "Load Home Page and open the article's detail page in a new tab",
+     "expected": "Article detail page loads normally"
+    },
+    {
+     "action": "In a separate admin session, unpublish that article",
+     "expected": "Article status becomes Unpublished"
+    },
+    {
+     "action": "Return to the visitor's open article detail tab",
+     "expected": "Detail tab still shows previously loaded content or a graceful 'no longer available' state"
+    },
+    {
+     "action": "Refresh the visitor's Home Page tab",
+     "expected": "Refreshed Home Page no longer shows the card for this article"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,408 @@
+[
+ {
+  "id": 135466,
+  "title": "Verify that an unsupported Hero Banner image format is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Attempt to upload hero-banner.gif as Hero Banner",
+    "expected": "Upload is rejected with a format-not-supported error; no file is saved"
+   }
+  ]
+ },
+ {
+  "id": 135468,
+  "title": "Verify that a Hero Banner image exactly at the 2MB boundary is accepted",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Upload a file sized exactly 2MB as Hero Banner",
+    "expected": "Upload succeeds, no size-error is shown"
+   }
+  ]
+ },
+ {
+  "id": 135475,
+  "title": "Verify that an unsupported GM Portrait Image format (SVG) is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Attempt to upload gm-portrait.svg as GM Portrait Image",
+    "expected": "Upload rejected with a format-not-supported error"
+   }
+  ]
+ },
+ {
+  "id": 135498,
+  "title": "Verify that a valid Signature Avatar image uploads successfully as an optional field",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Upload avatar.png (200KB) as Signature Avatar and click Save",
+    "expected": "Image uploads and displays in the signature block preview"
+   }
+  ]
+ },
+ {
+  "id": 135500,
+  "title": "Verify that an unsupported Signature Avatar format is rejected even though the field is optional",
+  "priority": 4,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Attempt to upload avatar.bmp as Signature Avatar",
+    "expected": "Upload rejected with a format-not-supported error"
+   }
+  ]
+ },
+ {
+  "id": 135503,
+  "title": "Verify that a valid hyperlink URL entered in the message content is saved and rendered as a working link",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Insert the hyperlink into Page Content and click Save",
+    "expected": "Link saves without error"
+   },
+   {
+    "action": "Preview the page and click the link",
+    "expected": "Link opens per the approved open-behavior configuration (new tab/same tab as configured)"
+   }
+  ]
+ },
+ {
+  "id": 135509,
+  "title": "Verify that republishing a page immediately after unpublishing restores it to the live site correctly",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Unpublish the currently live record",
+    "expected": "Page goes offline"
+   },
+   {
+    "action": "Immediately click Publish again on the same record",
+    "expected": "Success toast appears; page is live again with all original content intact"
+   }
+  ]
+ },
+ {
+  "id": 135512,
+  "title": "Verify that rapidly double-clicking Publish does not create a duplicate publish action or duplicate audit log entry",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Click Publish twice in rapid succession on the same record",
+    "expected": "The page is published exactly once; the audit log records a single Publish event, not two"
+   }
+  ]
+ },
+ {
+  "id": 135514,
+  "title": "Verify that the system handles two admin sessions editing the same GM's Message Draft record concurrently without silent data loss",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Session A opens the record and edits Page Title",
+    "expected": "Change made but not yet saved"
+   },
+   {
+    "action": "Session B opens the same record, edits Page Content, and saves",
+    "expected": "Session B's change is saved"
+   },
+   {
+    "action": "Session A saves its Page Title change",
+    "expected": "System either shows a conflict/stale-data warning or applies last-write-wins without silently discarding Session B's change"
+   }
+  ]
+ },
+ {
+  "id": 136380,
+  "title": "Verify that an expired admin session forces re-authentication during GM's Message editing",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor and open the GM's Message edit form.",
+    "expected": "Form loads with current field values."
+   },
+   {
+    "action": "Allow the session to expire (or force-expire it), then attempt to Save.",
+    "expected": "User is prompted to re-authenticate; in-progress unsaved field changes are not silently committed without a valid session."
+   }
+  ]
+ },
+ {
+  "id": 136381,
+  "title": "Verify that a role change mid-session is reflected on the next permission-checked action",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "With the Editor's session already open on the GM's Message record, an Administrator revokes the Editor's publish permission in a separate session.",
+    "expected": "Permission change is saved."
+   },
+   {
+    "action": "The original Editor attempts to click Publish.",
+    "expected": "Action is rejected with the standard Access Denied message; the page status is unchanged."
+   }
+  ]
+ },
+ {
+  "id": 136390,
+  "title": "Verify that publishing the GM's Message page records an audit log entry",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "As Site Content Editor, publish a change to the GM's Message page.",
+    "expected": "Publish succeeds."
+   },
+   {
+    "action": "Open the audit log for this page record.",
+    "expected": "A new entry is present showing the acting Editor's identity, the action (\"Published\"), and a timestamp matching the publish time."
+   }
+  ]
+ },
+ {
+  "id": 136403,
+  "title": "Verify that Salutation Heading (EN) sanitizes embedded HTML tags",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Enter <b>Dear</b> members in Salutation Heading (EN) and click Save.",
+    "expected": "Raw HTML tags are stripped/escaped on the rendered page; no unintended bold rendering or raw tag text appears."
+   }
+  ]
+ },
+ {
+  "id": 136409,
+  "title": "Verify that GM Name (EN) sanitizes embedded HTML tags",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Enter <b>Ahmed</b> in GM Name (EN) and click Save.",
+    "expected": "Tags are stripped/escaped on render; no raw HTML or unintended bold formatting appears in the caption/signature."
+   }
+  ]
+ },
+ {
+  "id": 136415,
+  "title": "Verify that GM Designation (EN) sanitizes script injection input",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Enter <img src=x onerror=alert(1)> in GM Designation (EN) and click Save.",
+    "expected": "Input is sanitized/escaped; no script executes on the rendered page."
+   }
+  ]
+ },
+ {
+  "id": 136427,
+  "title": "Verify that Signature Closing Text (EN) sanitizes script injection input",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Enter <img src=x onerror=alert(1)> in Signature Closing Text (EN) and click Save.",
+    "expected": "Input is sanitized/escaped; no script executes on render."
+   }
+  ]
+ },
+ {
+  "id": 136438,
+  "title": "Verify that a valid Signature Avatar (EN) image uploads, saves, and persists",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Upload a 200KB .jpg file as Signature Avatar (EN) and click Save.",
+    "expected": "Upload accepted."
+   },
+   {
+    "action": "Reload and view the published page.",
+    "expected": "The uploaded avatar image displays in the signature block (replacing the default gold placeholder)."
+   }
+  ]
+ },
+ {
+  "id": 136439,
+  "title": "Verify that an unsupported Signature Avatar (EN) file format is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Attempt to upload a .bmp file as Signature Avatar (EN).",
+    "expected": "Format validation error displays; upload is rejected."
+   }
+  ]
+ },
+ {
+  "id": 136440,
+  "title": "Verify that the page saves and publishes successfully with no Signature Avatar uploaded",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Leave Signature Avatar (EN) empty and fill in all other mandatory fields, then click Publish.",
+    "expected": "Publish succeeds with no validation error for the avatar field; default gold-circle placeholder displays on the live page."
+   }
+  ]
+ },
+ {
+  "id": 136441,
+  "title": "Verify that a valid Signature Avatar (AR) uploads, saves, and persists per language",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Upload a 200KB .png file as Signature Avatar (AR) and click Save.",
+    "expected": "Upload accepted."
+   },
+   {
+    "action": "View the page with AR locale selected.",
+    "expected": "The AR-specific avatar image displays."
+   }
+  ]
+ },
+ {
+  "id": 136446,
+  "title": "Verify that a valid hyperlink URL is saved and persists in the message body",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Insert a hyperlink with target URL https://www.qcci.org inside Page Content and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload and view the published page.",
+    "expected": "Link is retained, correctly targeted, and clickable per its configured open behavior."
+   }
+  ]
+ },
+ {
+  "id": 136447,
+  "title": "Verify that an invalid hyperlink URL is rejected on save",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Insert a hyperlink with target \"not-a-url\" inside Page Content and click Save.",
+    "expected": "\"Please enter a valid URL.\" error displays; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 136458,
+  "title": "Verify that an image exactly at the 2MB boundary is accepted",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Upload a .jpg file sized exactly 2,097,152 bytes as Hero Banner (EN) and click Save.",
+    "expected": "Upload is accepted; no size-validation error displays."
+   }
+  ]
+ },
+ {
+  "id": 136461,
+  "title": "Verify that an interrupted Publish action does not leave the page in a partially-published state",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "As Site Content Editor, click Publish and immediately simulate a network interruption before the success toast appears.",
+    "expected": "Request does not complete."
+   },
+   {
+    "action": "Check the record's Status after reconnecting.",
+    "expected": "Status remains at its prior value (Draft or previous Published version); no partially-applied/corrupted content is visible to a Visitor."
+   },
+   {
+    "action": "Retry Publish.",
+    "expected": "Publish completes successfully and the page reflects the full intended content."
+   }
+  ]
+ },
+ {
+  "id": 136462,
+  "title": "Verify that the outcome is deterministic when two Site Content Editors save the same GM's Message record concurrently",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": true,
+  "steps": [
+   {
+    "action": "Editor A and Editor B both open the same GM's Message record in separate browser sessions.",
+    "expected": "Both see the same current values."
+   },
+   {
+    "action": "Editor A changes Page Content (EN) and clicks Save.",
+    "expected": "Editor A's change is stored."
+   },
+   {
+    "action": "Editor B (still on the stale pre-Editor-A view) changes GM Designation (EN) and clicks Save.",
+    "expected": "Record the actual system behavior: whether Editor B's save overwrites Editor A's content change (data-loss risk) or the system surfaces a conflict warning before allowing the save."
+   }
+  ]
+ }
+]

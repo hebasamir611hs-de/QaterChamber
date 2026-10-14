@@ -57,14 +57,14 @@ mounted create-new form:
     spinbutton "Page Count"
     combobox   "Active Status" (Draft/Published/Unpublished — CONFIRMED
                LIVE; this is the object's own business-status field, NOT
-               the workflow Draft/Approved state — mirrors
+               the workflow Draft/Published state — mirrors
                `annual_report_admin_page.py`'s identical distinction)
     spinbutton "Display Order" (present on the form; no case in this
                batch exercises it, not modelled as a FIELD_* constant)
     button     "Save as Draft"
     button     "Submit for Review" (CONFIRMED LIVE this object's own submit
                wording, same as Annual Report — NOT ObjectAuthoringPage's
-               default "Submit for Publishing")
+               default "Submit for Review")
 
 TEST-DATA POLICY (cms-profile.md): every write this class makes is against
 a brand-new `QCTEST-`-prefixed DISPOSABLE entry — never one of the 10 real,
@@ -295,7 +295,7 @@ class ExportReportAdminPage(BasePage):
 
     def submit_for_review(self) -> "ExportReportAdminPage":
         """This object's own confirmed-live wording — "Submit for Review",
-        not ObjectAuthoringPage's default "Submit for Publishing"."""
+        not ObjectAuthoringPage's default "Submit for Review"."""
         self.click(SUBMIT_FOR_REVIEW_BUTTON)
         self.authoring._wait_for_settle()
         return self

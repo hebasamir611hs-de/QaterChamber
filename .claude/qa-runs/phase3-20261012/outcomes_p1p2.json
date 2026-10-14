@@ -1,0 +1,1611 @@
+{
+ "129384": {
+  "suite": 134455,
+  "entries": [
+   {
+    "test_case_id": 135950,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135951,
+    "outcome": "NotApplicable",
+    "comment": "Weather has no CMS configuration (user decision)"
+   },
+   {
+    "test_case_id": 135952,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135954,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135966,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135967,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135968,
+    "outcome": "NotApplicable",
+    "comment": "Weather"
+   },
+   {
+    "test_case_id": 135970,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135971,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135972,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135973,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135974,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135979,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135980,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135985,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135986,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135987,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 135988,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136005,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136006,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136009,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136011,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136012,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136017,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136018,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136023,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136024,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136025,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136026,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136044,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136045,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136048,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   },
+   {
+    "test_case_id": 136049,
+    "outcome": "NotApplicable",
+    "comment": "Weather"
+   },
+   {
+    "test_case_id": 136050,
+    "outcome": "NotApplicable",
+    "comment": "Weather"
+   },
+   {
+    "test_case_id": 136064,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129384)"
+   }
+  ],
+  "untouched": [
+   [
+    "135953",
+    "failed",
+    "1 failed in 107.55s (0:01:47)"
+   ],
+   [
+    "136061",
+    "failed",
+    "1 passed, 1 error in 183.84s (0:03:03)"
+   ]
+  ]
+ },
+ "129388": {
+  "suite": 134459,
+  "entries": [
+   {
+    "test_case_id": 133646,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129388-20261013-0145-rerun)"
+   },
+   {
+    "test_case_id": 133647,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129388-20261013-0145-rerun)"
+   },
+   {
+    "test_case_id": 133655,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-fix-20261013)"
+   },
+   {
+    "test_case_id": 133656,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129388-20261013-0145-rerun)"
+   },
+   {
+    "test_case_id": 133658,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-fix-20261013)"
+   },
+   {
+    "test_case_id": 133659,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129388-20261013-0145-rerun)"
+   },
+   {
+    "test_case_id": 133661,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129388-20261013-0145-rerun)"
+   },
+   {
+    "test_case_id": 133671,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129388-20261013-0145-rerun)"
+   },
+   {
+    "test_case_id": 133672,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129388-20261013-0145-rerun)"
+   },
+   {
+    "test_case_id": 133674,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129388-20261013-0145-rerun)"
+   },
+   {
+    "test_case_id": 133677,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-debug-20261013-fix)"
+   },
+   {
+    "test_case_id": 133680,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-fix-20261013)"
+   },
+   {
+    "test_case_id": 133684,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129388-20261013-0145-rerun)"
+   }
+  ],
+  "untouched": [
+   [
+    "133654",
+    "failed",
+    "AssertionError: validation refused a valid item: '   '"
+   ],
+   [
+    "133657",
+    "failed",
+    "AssertionError: precondition: 'QCTEST-133657-deact' is not visible on "
+   ],
+   [
+    "133662",
+    "broken",
+    "cms.pages.components.object_authoring_page.UploadNotApplied: 'Thumbnai"
+   ],
+   [
+    "133666",
+    "failed",
+    "AssertionError: the saved title is not rendered as plain, escaped text"
+   ],
+   [
+    "133676",
+    "broken",
+    "playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded."
+   ],
+   [
+    "133678",
+    "broken",
+    "cms.pages.components.object_authoring_page.UploadNotApplied: 'Thumbnai"
+   ],
+   [
+    "133688",
+    "broken",
+    "cms.pages.components.object_authoring_page.UploadNotApplied: 'Thumbnai"
+   ]
+  ]
+ },
+ "129392": {
+  "suite": 134463,
+  "entries": [
+   {
+    "test_case_id": 134675,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134676,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134679,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2300-rerun)"
+   },
+   {
+    "test_case_id": 134684,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2300-rerun)"
+   },
+   {
+    "test_case_id": 134687,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134688,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2300-rerun)"
+   },
+   {
+    "test_case_id": 134690,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134694,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134698,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2300-rerun)"
+   },
+   {
+    "test_case_id": 134701,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2300-rerun)"
+   },
+   {
+    "test_case_id": 134702,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134703,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134706,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134707,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134712,
+    "outcome": "Failed",
+    "comment": "Phase-3 CMS run 2026-10-12/13 — confirmed bug B (see reports/bug-verification-20261013.md)"
+   },
+   {
+    "test_case_id": 134714,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134715,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2300-rerun)"
+   },
+   {
+    "test_case_id": 134716,
+    "outcome": "Failed",
+    "comment": "Phase-3 CMS run 2026-10-12/13 — confirmed bug B (see reports/bug-verification-20261013.md)"
+   },
+   {
+    "test_case_id": 134718,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134719,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134722,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134723,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134726,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134727,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2150)"
+   },
+   {
+    "test_case_id": 134734,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129392-20261012-2300-rerun)"
+   }
+  ],
+  "untouched": [
+   [
+    "134685",
+    "broken",
+    "playwright._impl._errors.TimeoutError: Timeout 8000ms exceeded."
+   ],
+   [
+    "134686",
+    "broken",
+    "playwright._impl._errors.TimeoutError: Timeout 8000ms exceeded."
+   ],
+   [
+    "134691",
+    "failed",
+    "AssertionError: expected the CMS record to hold the draft paragraph"
+   ],
+   [
+    "134692",
+    "failed",
+    "AssertionError: expected Preview to render the unpublished draft conte"
+   ],
+   [
+    "134693",
+    "broken",
+    "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qc"
+   ],
+   [
+    "134697",
+    "broken",
+    "playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded."
+   ],
+   [
+    "134710",
+    "failed",
+    "AssertionError: NOT EXECUTED -- manage-about-hero-banner rendered no v"
+   ],
+   [
+    "134711",
+    "broken",
+    "playwright._impl._errors.TimeoutError: Timeout 35000ms exceeded."
+   ],
+   [
+    "134713",
+    "failed",
+    "AssertionError: NOT EXECUTED -- manage-about-hero-banner rendered no v"
+   ],
+   [
+    "134717",
+    "failed",
+    "AssertionError: precondition: the Content Image still reads 'content-2"
+   ]
+  ]
+ },
+ "129393": {
+  "suite": 134464,
+  "entries": [
+   {
+    "test_case_id": 134772,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129393-20261013-0100)"
+   },
+   {
+    "test_case_id": 134773,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129393-20261013-0100)"
+   },
+   {
+    "test_case_id": 134789,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129393-20261013-0100)"
+   },
+   {
+    "test_case_id": 134805,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129393-20261013-0100)"
+   },
+   {
+    "test_case_id": 134807,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129393-20261013-0100)"
+   },
+   {
+    "test_case_id": 134809,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129393-20261013-0100)"
+   },
+   {
+    "test_case_id": 134813,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129393-20261013-0100)"
+   },
+   {
+    "test_case_id": 134817,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129393-20261013-0100)"
+   }
+  ],
+  "untouched": [
+   [
+    "134759",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134760",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record About Hero Banner row chair"
+   ],
+   [
+    "134770",
+    "failed",
+    "AssertionError: Unpublish control not enabled: {'save_draft': (True, T"
+   ],
+   [
+    "134771",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134774",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134776",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134777",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134778",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134779",
+    "broken",
+    "playwright._impl._errors.TimeoutError: Timeout 60000ms exceeded."
+   ],
+   [
+    "134780",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134783",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134784",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134787",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134788",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134792",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134793",
+    "failed",
+    "AssertionError: [ar] empty page_title (ar) was not refused on Save"
+   ],
+   [
+    "134796",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record About Hero Banner (one row "
+   ],
+   [
+    "134797",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record About Hero Banner (one row "
+   ],
+   [
+    "134798",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record About Hero Banner (one row "
+   ],
+   [
+    "134799",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record About Hero Banner (one row "
+   ],
+   [
+    "134800",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record About Hero Banner (one row "
+   ],
+   [
+    "134801",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record About Hero Banner (one row "
+   ],
+   [
+    "134804",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134806",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134808",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134812",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134816",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134820",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134821",
+    "failed",
+    "Failed: FINDING -- refusal not observed on singleton record Chairman M"
+   ],
+   [
+    "134824",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134825",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ],
+   [
+    "134832",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record Chairman Message Page 78261"
+   ]
+  ]
+ },
+ "129394": {
+  "suite": 134465,
+  "entries": [
+   {
+    "test_case_id": 134853,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134867,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134869,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134870,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134876,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134889,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134890,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134893,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134894,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134898,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134905,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134906,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134909,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134910,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134913,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134914,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134917,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134918,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134921,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134922,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134925,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134926,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134929,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134930,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134931,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134932,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134933,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   },
+   {
+    "test_case_id": 134934,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (129394-agent-run)"
+   }
+  ],
+  "untouched": [
+   [
+    "134850",
+    "no result",
+    ""
+   ],
+   [
+    "134851",
+    "no result",
+    ""
+   ],
+   [
+    "134868",
+    "no result",
+    ""
+   ],
+   [
+    "134871",
+    "no result",
+    ""
+   ],
+   [
+    "134873",
+    "no result",
+    ""
+   ],
+   [
+    "134874",
+    "no result",
+    ""
+   ],
+   [
+    "134875",
+    "no result",
+    ""
+   ],
+   [
+    "134877",
+    "no result",
+    ""
+   ],
+   [
+    "134882",
+    "no result",
+    ""
+   ],
+   [
+    "134883",
+    "no result",
+    ""
+   ],
+   [
+    "134884",
+    "no result",
+    ""
+   ],
+   [
+    "134885",
+    "no result",
+    ""
+   ],
+   [
+    "134886",
+    "no result",
+    ""
+   ],
+   [
+    "134887",
+    "no result",
+    ""
+   ],
+   [
+    "134888",
+    "no result",
+    ""
+   ],
+   [
+    "134897",
+    "no result",
+    ""
+   ],
+   [
+    "134899",
+    "no result",
+    ""
+   ],
+   [
+    "134900",
+    "no result",
+    ""
+   ],
+   [
+    "134901",
+    "no result",
+    ""
+   ],
+   [
+    "134902",
+    "no result",
+    ""
+   ],
+   [
+    "134940",
+    "no result",
+    ""
+   ],
+   [
+    "134941",
+    "no result",
+    ""
+   ],
+   [
+    "134942",
+    "no result",
+    ""
+   ],
+   [
+    "134943",
+    "no result",
+    ""
+   ],
+   [
+    "134944",
+    "no result",
+    ""
+   ],
+   [
+    "134945",
+    "no result",
+    ""
+   ],
+   [
+    "134948",
+    "no result",
+    ""
+   ],
+   [
+    "134949",
+    "no result",
+    ""
+   ],
+   [
+    "134952",
+    "no result",
+    ""
+   ],
+   [
+    "134953",
+    "no result",
+    ""
+   ],
+   [
+    "134956",
+    "no result",
+    ""
+   ],
+   [
+    "134957",
+    "no result",
+    ""
+   ],
+   [
+    "134960",
+    "no result",
+    ""
+   ],
+   [
+    "134961",
+    "no result",
+    ""
+   ],
+   [
+    "134964",
+    "no result",
+    ""
+   ],
+   [
+    "134965",
+    "no result",
+    ""
+   ],
+   [
+    "134968",
+    "no result",
+    ""
+   ],
+   [
+    "134969",
+    "no result",
+    ""
+   ],
+   [
+    "134971",
+    "no result",
+    ""
+   ],
+   [
+    "134972",
+    "no result",
+    ""
+   ],
+   [
+    "134973",
+    "no result",
+    ""
+   ],
+   [
+    "134975",
+    "no result",
+    ""
+   ],
+   [
+    "134976",
+    "no result",
+    ""
+   ],
+   [
+    "134977",
+    "no result",
+    ""
+   ],
+   [
+    "134987",
+    "no result",
+    ""
+   ]
+  ]
+ },
+ "129397": {
+  "suite": 134467,
+  "entries": [
+   {
+    "test_case_id": 135448,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135450,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135460,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135463,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135467,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135470,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135473,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135476,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135478,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135481,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135483,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135486,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 135495,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136375,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136376,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136379,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136395,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136401,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136407,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136413,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136425,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136431,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136435,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136443,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136456,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   },
+   {
+    "test_case_id": 136457,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (each_129397)"
+   }
+  ],
+  "untouched": [
+   [
+    "135445",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135446",
+    "broken",
+    "playwright._impl._errors.TimeoutError: Timeout 8000ms exceeded."
+   ],
+   [
+    "135447",
+    "broken",
+    "playwright._impl._errors.TimeoutError: Timeout 8000ms exceeded."
+   ],
+   [
+    "135453",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135454",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135456",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135457",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135458",
+    "failed",
+    "1 failed in 40.50s"
+   ],
+   [
+    "135465",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135474",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135489",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135490",
+    "failed",
+    "AssertionError: no validation error for Page Content (en) = ''"
+   ],
+   [
+    "135492",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135493",
+    "failed",
+    "AssertionError: no validation error for Page Content (ar) = ''"
+   ],
+   [
+    "135501",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135502",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135504",
+    "failed",
+    "AssertionError: no validation error for Page Content (en) = '<p><a hre"
+   ],
+   [
+    "135505",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135506",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "135508",
+    "failed",
+    "1 skipped in 0.07s"
+   ],
+   [
+    "135511",
+    "failed",
+    "AssertionError: no required-image error when 'GM Portrait Image' is em"
+   ],
+   [
+    "136377",
+    "broken",
+    "playwright._impl._errors.TimeoutError: Timeout 8000ms exceeded."
+   ],
+   [
+    "136378",
+    "broken",
+    "playwright._impl._errors.TimeoutError: Timeout 8000ms exceeded."
+   ],
+   [
+    "136383",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136384",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136385",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136386",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136389",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136391",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136392",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136393",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136394",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136397",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136398",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136400",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136404",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136406",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136410",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136412",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136416",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136418",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136419",
+    "failed",
+    "AssertionError: no validation error for Page Content (en) = ''"
+   ],
+   [
+    "136421",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136422",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136424",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136428",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136430",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136432",
+    "failed",
+    "AssertionError: no required-image error when 'Hero Banner' is empty"
+   ],
+   [
+    "136433",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136434",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136436",
+    "failed",
+    "AssertionError: no required-image error when 'GM Portrait Image' is em"
+   ],
+   [
+    "136437",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136442",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136445",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136449",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136450",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136451",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136453",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ],
+   [
+    "136454",
+    "NA",
+    "Failed: NOT APPLICABLE -- singleton record GM Message 79878 (QCDEMO-12"
+   ]
+  ]
+ },
+ "129566": {
+  "suite": 134470,
+  "entries": [
+   {
+    "test_case_id": 134543,
+    "outcome": "NotApplicable",
+    "comment": "Approval emails every real qcdev subscriber (user decision)"
+   },
+   {
+    "test_case_id": 134551,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-fix-20261013)"
+   },
+   {
+    "test_case_id": 134555,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129566-20261013-each)"
+   },
+   {
+    "test_case_id": 134559,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129566-20261013-each)"
+   },
+   {
+    "test_case_id": 134563,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129566-20261013-each)"
+   },
+   {
+    "test_case_id": 134572,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-fix-20261013)"
+   },
+   {
+    "test_case_id": 134573,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129566-20261013-each)"
+   },
+   {
+    "test_case_id": 134575,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-fix-20261013)"
+   },
+   {
+    "test_case_id": 134576,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129566-20261013-each)"
+   },
+   {
+    "test_case_id": 134577,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129566-20261013-each)"
+   },
+   {
+    "test_case_id": 134590,
+    "outcome": "Failed",
+    "comment": "Phase-3 CMS run 2026-10-12/13 — confirmed bug D (see reports/bug-verification-20261013.md)"
+   },
+   {
+    "test_case_id": 134595,
+    "outcome": "NotApplicable",
+    "comment": "same"
+   },
+   {
+    "test_case_id": 134596,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129566-20261013-each)"
+   },
+   {
+    "test_case_id": 134599,
+    "outcome": "NotApplicable",
+    "comment": "same"
+   },
+   {
+    "test_case_id": 134600,
+    "outcome": "Failed",
+    "comment": "Phase-3 CMS run 2026-10-12/13 — confirmed bug A (see reports/bug-verification-20261013.md)"
+   },
+   {
+    "test_case_id": 134601,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-fix-20261013)"
+   },
+   {
+    "test_case_id": 134602,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-129566-20261013-each)"
+   },
+   {
+    "test_case_id": 134604,
+    "outcome": "Failed",
+    "comment": "Phase-3 CMS run 2026-10-12/13 — confirmed bug A (see reports/bug-verification-20261013.md)"
+   },
+   {
+    "test_case_id": 134605,
+    "outcome": "Passed",
+    "comment": "Automated CMS run 2026-10-12/13 (reports/allure-fix-20261013)"
+   }
+  ],
+  "untouched": [
+   [
+    "134616",
+    "no result",
+    ""
+   ],
+   [
+    "134617",
+    "no result",
+    ""
+   ],
+   [
+    "134620",
+    "no result",
+    ""
+   ]
+  ]
+ }
+}

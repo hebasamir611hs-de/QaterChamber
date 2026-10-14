@@ -1,0 +1,134 @@
+{
+ "plan_id": 133534,
+ "suite_id": 134452,
+ "outcomes": [
+  {
+   "test_case_id": 135538,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135555,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135564,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135565,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135566,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135567,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135568,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135569,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135570,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135571,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135572,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135573,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135574,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135575,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135576,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135577,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135578,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135579,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135580,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135581,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135582,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135583,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135584,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135585,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135586,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135587,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135588,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135589,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135590,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135608,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135612,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135624,
+   "outcome": "NotApplicable"
+  }
+ ]
+}

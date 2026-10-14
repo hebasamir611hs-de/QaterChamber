@@ -335,10 +335,126 @@ class HomeQuickContactPage(BasePage):
         return self.page.locator(self.SUBMIT_BUTTON).evaluate("el => el.outerHTML")
 
     def has_loading_spinner(self) -> bool:
-        return self.page.locator(f"{self.SUBMIT_BUTTON} [class*='spinner'], {self.SUBMIT_BUTTON} [class*='loading']").count() > 0
+        """2026-10-08: the fragment now marks the in-flight button with class
+        `is-loading` (spinner styled in the fragment CSS) and aria-busy="true"."""
+        btn = self.page.locator(self.SUBMIT_BUTTON)
+        cls = btn.get_attribute("class") or ""
+        return ("is-loading" in cls or btn.get_attribute("aria-busy") == "true"
+                or self.page.locator(f"{self.SUBMIT_BUTTON} [class*='spinner'], {self.SUBMIT_BUTTON} [class*='loading']").count() > 0)
+
+    def spinner_visible(self) -> bool:
+        """The spinner is a CSS pseudo-element/child of .is-loading; report
+        whether the button renders anything animated while loading."""
+        return self.page.locator(self.SUBMIT_BUTTON).evaluate("""el => {
+            const pseudo = ['::before', '::after'].map(p => getComputedStyle(el, p))
+                .some(s => s.content && s.content !== 'none' && s.animationName && s.animationName !== 'none');
+            const child = [...el.querySelectorAll('*')].some(c => getComputedStyle(c).animationName !== 'none');
+            return pseudo || child; }""")
 
     def status_text(self) -> str:
         return self.text(self.STATUS_REGION)
+
+    # ── Submission traffic (2026-10-08, B-129390) ─────────────────────────
+    # A test proves "submission blocked" (no POST to the submit endpoint left
+    # the browser) or "submission proceeds" (a POST carrying the entered value
+    # left the browser).
+    # Live 2026-10-08 (fragment source): the form POSTs to the qc-inquiry OSGi
+    # module. Only that call counts — the page also fires unrelated non-GET
+    # traffic (HEAD news-archive, the map iframe's POST GetViewportInfo).
+    SUBMIT_ENDPOINT = "/o/qc-inquiry/submit"
+
+    @classmethod
+    def _is_submit(cls, request) -> bool:
+        return request.method == "POST" and cls.SUBMIT_ENDPOINT in request.url
+
+    def watch_submissions(self) -> list:
+        """Start recording submit POSTs; returns the live list
+        ({url, method, body}) the caller can read later."""
+        sent: list = []
+        self.page.on("request", lambda r: sent.append(
+            {"url": r.url, "method": r.method, "body": (r.post_data or "")[:2000]}) if self._is_submit(r) else None)
+        return sent
+
+    def intercept_submissions(self, mode: str, delay_ms: int = 0) -> list:
+        """Route the submit POST: mode 'abort' (nothing reaches the
+        server, so no record and no email), 'fail500' (server-error reply), or
+        'delay' (held `delay_ms`, then sent on for real). Returns the list of
+        intercepted requests."""
+        seen: list = []
+
+        def handler(route, request):
+            if not self._is_submit(request):
+                route.continue_()
+                return
+            seen.append({"url": request.url, "method": request.method, "body": (request.post_data or "")[:2000]})
+            if delay_ms:
+                self.page.wait_for_timeout(delay_ms)  # deliberate hold so the in-flight state is observable
+            if mode == "abort":
+                route.abort()
+            elif mode == "fail500":
+                route.fulfill(status=500, content_type="application/json", body='{"error":"QCTEST forced failure"}')
+            else:
+                route.continue_()
+
+        self.page.route("**/o/qc-inquiry/submit*", handler)
+        return seen
+
+    def block_map(self) -> "HomeQuickContactPage":
+        """Make the embedded map fail to load (every Google Maps request
+        aborted) — used for the map-load-failure edge case."""
+        self.page.route(re.compile(r"https://(maps|www)\.google\.[^/]+/maps.*|https://maps\.googleapis\.com/.*|https://maps\.gstatic\.com/.*"),
+                        lambda route: route.abort())
+        return self
+
+    def field_errors(self) -> dict:
+        """{input id: inline error text} for every field of the form."""
+        return self.page.evaluate("""() => Object.fromEntries([...document.querySelectorAll(
+            'section.qc-home-contact-us .qc-field')].map(f => [
+            (f.querySelector('input,select,textarea') || {}).id || f.className,
+            ((f.querySelector('.qc-field-error') || {}).innerText || '').trim()]))""")
+
+    def field_values(self) -> dict:
+        return {loc: self.page.locator(loc).input_value()
+                for loc in (self.NAME_INPUT, self.EMAIL_INPUT, self.CATEGORY_SELECT, self.MESSAGE_TEXTAREA)}
+
+    def fill_form(self, full_name: str = "", email: str = "", category_label: str = "", message: str = "",
+                  phone: str = "") -> "HomeQuickContactPage":
+        """Fill only what is given (an empty string leaves the field empty)."""
+        if full_name:
+            self.page.fill(self.NAME_INPUT, full_name)
+        if email:
+            self.page.fill(self.EMAIL_INPUT, email)
+        if phone and self.page.locator(self.PHONE_INPUT).count():
+            self.page.fill(self.PHONE_INPUT, phone)
+        if category_label:
+            self.page.locator(self.CATEGORY_SELECT).select_option(label=category_label)
+        if message:
+            self.page.fill(self.MESSAGE_TEXTAREA, message)
+        return self
+
+    def wait_for_status_text(self, timeout_ms: int = 30000) -> str:
+        """Wait until the status region carries text (success or failure)."""
+        self.page.wait_for_function(
+            "sel => { const e = document.querySelector(sel); return e && e.innerText.trim().length > 0; }",
+            arg=self.STATUS_REGION, timeout=timeout_ms)
+        return self.status_text()
+
+    def visible_form_field_ids(self) -> list:
+        return self.page.evaluate("""() => [...document.querySelectorAll(
+            'section.qc-home-contact-us form input, section.qc-home-contact-us form select, section.qc-home-contact-us form textarea')]
+            .filter(e => e.type !== 'hidden' && (e.offsetWidth || e.offsetHeight)).map(e => e.id || e.name)""")
+
+    def captcha_state(self) -> dict:
+        return self.page.evaluate("""() => { const c = document.querySelector('section.qc-home-contact-us .qc-field--captcha');
+            return { container: !!c, visible: !!(c && (c.offsetWidth || c.offsetHeight)),
+                     html: c ? c.innerHTML.slice(0, 400) : '',
+                     recaptcha_iframes: document.querySelectorAll('iframe[src*="recaptcha"]').length,
+                     grecaptcha: typeof window.grecaptcha }; }""")
+
+    def typography(self, locator: str) -> dict:
+        return self.page.locator(locator).first.evaluate("""el => { const s = getComputedStyle(el);
+            return { text: el.innerText.trim(), family: s.fontFamily, weight: s.fontWeight, size: s.fontSize,
+                     line_height: s.lineHeight, color: s.color, transform: s.textTransform }; }""")
 
     # ── Touch targets (TC 136473) ────────────────────────────────────────
     def element_box(self, locator: str) -> dict:

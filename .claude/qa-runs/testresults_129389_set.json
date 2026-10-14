@@ -1,0 +1,14 @@
+{
+ "plan_id": 133534,
+ "suite_id": 134460,
+ "outcomes": [
+  {
+   "test_case_id": 136115,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 136116,
+   "outcome": "NotApplicable"
+  }
+ ]
+}

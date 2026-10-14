@@ -1,0 +1,201 @@
+{
+ "plan_id": 133534,
+ "suite_id": 134460,
+ "run_name": "Phase 3 2026-10-07/08 - PBI 129389",
+ "automated": true,
+ "results": [
+  {
+   "test_case_id": 136088,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149493: Home section typography/colour tokens differ from Figma 849:15904 (About Us, 9 of 9 text elements).",
+   "error_message": "Typography/colour differ from Figma"
+  },
+  {
+   "test_case_id": 136089,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136090,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (after heal)"
+  },
+  {
+   "test_case_id": 136091,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136092,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136093,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136094,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136097,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136098,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136099,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136100,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136101,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136102,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136104,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (after heal)"
+  },
+  {
+   "test_case_id": 136105,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (after heal)"
+  },
+  {
+   "test_case_id": 136108,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136109,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149487: the 4-counter maximum is not enforced (5 listed, a 6th can be saved).",
+   "error_message": "Add New and Save offered with 5 counters; 6th saved"
+  },
+  {
+   "test_case_id": 136110,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136112,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (Rule 5.2: UI keeps the extra character, counter shows over-limit; not a bug under the char-limit ruling)"
+  },
+  {
+   "test_case_id": 136114,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (Rule 5.2: UI keeps the extra character, counter shows over-limit; not a bug under the char-limit ruling)"
+  },
+  {
+   "test_case_id": 136117,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (after heal)"
+  },
+  {
+   "test_case_id": 136118,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136119,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136121,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (Rule 5.2: UI keeps the extra character, counter shows over-limit; not a bug under the char-limit ruling)"
+  },
+  {
+   "test_case_id": 136123,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136124,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (after heal)"
+  },
+  {
+   "test_case_id": 136125,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136126,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136128,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136130,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136131,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (Rule 5.2: UI keeps the extra character, counter shows over-limit; not a bug under the char-limit ruling)"
+  },
+  {
+   "test_case_id": 136132,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (after heal)"
+  },
+  {
+   "test_case_id": 136133,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136134,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (after heal)"
+  },
+  {
+   "test_case_id": 136135,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136136,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (rerun3)"
+  },
+  {
+   "test_case_id": 136138,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 136140,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149487: the 4-counter maximum is not enforced (5 listed, a 6th can be saved).",
+   "error_message": "Add New and Save offered with 5 counters; 6th saved"
+  }
+ ]
+}

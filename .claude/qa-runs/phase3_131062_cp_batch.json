@@ -1,0 +1,2915 @@
+{
+ "pbi": 131062,
+ "plan_id": 137724,
+ "suite_id": 140396,
+ "module": "cms/tests/advertisements/test_advertisements_control_panel.py",
+ "object_name_source": "live Object Authoring sidebar (engineer brief 2026-10-01, 'Object-name source'); slugs pending live read",
+ "cases": [
+  {
+   "tc_id": 142409,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the CMS Advertisements management area renders correctly in Arabic admin locale",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Switch admin locale to AR",
+     "expected": "Admin locale switched"
+    },
+    {
+     "action": "Open Advertisements management",
+     "expected": "Admin screens render RTL where the CMS UI itself is localized; AR-authored field values display correctly in the AR fields regardless of admin chrome locale"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor'), /ar/ admin locale"
+  },
+  {
+   "tc_id": 142417,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the CMS rate card authoring form renders all field groups",
+   "steps": [
+    {
+     "action": "Open 'Create Rate Card'",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Inspect form",
+     "expected": "All listed fields/groups present and correctly labelled, EN and AR sub-fields shown for bilingual fields"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142418,
+   "priority": 2,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression",
+    "UI"
+   ],
+   "title": "Verify that the CMS Booking Requests panel lists Booking Reference, Company Name, Contact Person, Email, Ads Type, Preferred Date, Submission Date and Status columns",
+   "steps": [
+    {
+     "action": "Log in as QC Admin Reviewer",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open Advertisement Booking Requests panel",
+     "expected": "Grid displays all 8 named columns with correct values for the seeded request"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142419,
+   "priority": 2,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the Booking Request detail view renders all submitted field values as read-only",
+   "steps": [
+    {
+     "action": "Click a row to open detail view",
+     "expected": "All submitted values (Company Name, Contact Person, Email, Mobile, Ads Type, Preferred Date, Additional Notes) render read-only, not editable"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142426,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the Acknowledgement Email template preview in the CMS renders the correct EN and AR subject/body with placeholder merge fields visible",
+   "steps": [
+    {
+     "action": "Open Acknowledgement Email template in CMS",
+     "expected": "Template opens"
+    },
+    {
+     "action": "Inspect EN and AR tabs",
+     "expected": "Both EN and AR subject/body render with {{full_name}}, {{booking_reference}}, {{advertising_type}}, {{submission_date}} shown as merge tokens, no raw braces broken"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the email-template preview surface is not located yet in the CMS",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142427,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the New-Request-to-Reviewer Email template preview renders correctly with its named merge fields",
+   "steps": [
+    {
+     "action": "Open template",
+     "expected": "Template opens"
+    },
+    {
+     "action": "Inspect EN/AR",
+     "expected": "Subject/body render with {{company_name}}, {{contact_person}}, {{email}}, {{mobile_number}}, {{ads_type}}, {{preferred_date}}, {{additional_notes}}, {{booking_reference}} shown correctly, both languages"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the email-template preview surface is not located yet in the CMS",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142431,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor can perform full CRUD and lifecycle actions on a rate card",
+   "steps": [
+    {
+     "action": "Create, edit, preview, publish, unpublish, delete a QCTEST- rate card",
+     "expected": "Every action succeeds; each state change reflected in the CMS grid and, where published, on the live page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142432,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author can view and update assigned advertisement content but cannot publish",
+   "steps": [
+    {
+     "action": "Open an assigned rate card",
+     "expected": "Card opens"
+    },
+    {
+     "action": "Edit a field, save",
+     "expected": "Edit/save succeeds (Draft)"
+    },
+    {
+     "action": "Attempt to Publish",
+     "expected": "Publish action is blocked/unavailable, 'Access Denied. You do not have permission to perform this action.' shown if attempted directly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 142433,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author cannot access the Booking Requests review panel",
+   "steps": [
+    {
+     "action": "Attempt to navigate to Advertisement Booking Requests panel URL directly",
+     "expected": "Access Denied message shown; panel content not rendered"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 142434,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that a QC Admin Reviewer can review, approve and reject Booking Requests",
+   "steps": [
+    {
+     "action": "Open a submitted request",
+     "expected": "Request opens"
+    },
+    {
+     "action": "Approve it",
+     "expected": "Approve sets status Approved + Approval Email sent"
+    },
+    {
+     "action": "Open another, Reject it",
+     "expected": "Reject sets status Rejected + no email sent, both actions audit-logged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142435,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a QC Admin Reviewer cannot edit rate card content or publish the Advertisements page",
+   "steps": [
+    {
+     "action": "Attempt to open the rate card authoring form and edit a field",
+     "expected": "Access Denied message shown; no field-level edit access granted"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142443,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a Site Content Editor can create, save as draft, preview and publish a new rate card, and it appears correctly on the live Advertisements page",
+   "steps": [
+    {
+     "action": "Create rate card (title='Print Feature', category='Directory', price=3000, currency=QAR, unit='/issue', ≥1 checklist item, mapped Ads Type='Directory Listing')",
+     "expected": "Card created"
+    },
+    {
+     "action": "Save as Draft",
+     "expected": "Draft saved, not visible publicly"
+    },
+    {
+     "action": "Preview",
+     "expected": "Preview shows the card as it will render, still not public"
+    },
+    {
+     "action": "Publish",
+     "expected": "After Publish, card appears live on the Advertisements page with all authored values, in the configured display order"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142448,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that flagging a card as Featured while another card is already Featured is blocked at publish time",
+   "steps": [
+    {
+     "action": "Edit Card B, toggle Featured=true",
+     "expected": "Toggle set"
+    },
+    {
+     "action": "Attempt to Publish/Save",
+     "expected": "System blocks the change and displays a validation message; Card A remains the only featured card, Card B's Featured flag is not persisted as true"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: setting Featured on a QCTEST record unsets the live featured record visitors see",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142449,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing a rate card without price, currency or pricing unit is blocked",
+   "steps": [
+    {
+     "action": "Fill title/category/description/checklist only",
+     "expected": "Fields filled"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; 'Price, currency and pricing unit are required.' (EN) shown; card remains unpublished"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142450,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing a rate card without at least one feature checklist item is blocked",
+   "steps": [
+    {
+     "action": "Leave checklist empty",
+     "expected": "Checklist left empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; 'At least one specification is required.' (EN) shown"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Feature Checklist's structure (own object vs repeater) is read live first; automate once confirmed",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142451,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing a rate card without required Arabic content is blocked",
+   "steps": [
+    {
+     "action": "Fill only EN title/description",
+     "expected": "EN fields filled, AR fields left blank"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; 'Arabic content is required.' shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142454,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that every admin change to a rate card is recorded in the audit log with a generic success toast",
+   "steps": [
+    {
+     "action": "Edit a card field, Save",
+     "expected": "Liferay generic success toast shown on save"
+    },
+    {
+     "action": "Open audit log",
+     "expected": "Audit log records the change with actor and timestamp"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the audit-log surface is not located yet - automate once it is found on the live CMS (read only)",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142455,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that a QC Admin Reviewer can filter Booking Requests by Ads Type",
+   "steps": [
+    {
+     "action": "Open Booking Requests panel",
+     "expected": "Panel opens"
+    },
+    {
+     "action": "Filter by Ads Type = 'Website Banner'",
+     "expected": "Only requests with Ads Type='Website Banner' listed"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142456,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that a QC Admin Reviewer can filter Booking Requests by Status",
+   "steps": [
+    {
+     "action": "Filter by Status='Submitted'",
+     "expected": "Only Submitted requests listed"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142457,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that a QC Admin Reviewer can filter Booking Requests by date range",
+   "steps": [
+    {
+     "action": "Apply a date range filter covering only one request's submission date",
+     "expected": "Only the matching request listed"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142458,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that approving a Booking Request updates status to Approved and sends the Approval Email",
+   "steps": [
+    {
+     "action": "Open the request",
+     "expected": "Request opens"
+    },
+    {
+     "action": "Click Approve",
+     "expected": "Status changes to 'Approved'; Approval Date auto-stamped; Approval Email sent to requester with {{full_name}}, {{booking_reference}}, {{approval_date}} resolved, correct language; audit log entry recorded"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling; needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142459,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that rejecting a Booking Request updates status to Rejected and sends no email to the requester",
+   "steps": [
+    {
+     "action": "Open the request",
+     "expected": "Request opens"
+    },
+    {
+     "action": "Click Reject, optionally add a reason",
+     "expected": "Status changes to 'Rejected'; no rejection email sent to the requester's mailbox; record remains stored/queryable (not deleted); audit log entry recorded"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling; needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142460,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that a Booking Request cannot be moved to any status other than Approved or Rejected",
+   "steps": [
+    {
+     "action": "Attempt to set status directly to an arbitrary value via any exposed status control",
+     "expected": "Only Approved/Rejected are selectable transitions; no other status reachable, no auto-progression occurs without reviewer action"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142461,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that internal notes added by the reviewer are stored against the request and not visible to the requester",
+   "steps": [
+    {
+     "action": "Add Internal Notes='Verified CR, approved for Q4 slot'",
+     "expected": "Notes entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Notes stored and visible only within the CMS to QC staff"
+    },
+    {
+     "action": "Check the requester's Acknowledgement/Approval email content",
+     "expected": "Notes text does not appear anywhere in requester-facing emails or any public surface"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142462,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Eyebrow accepts a valid value up to 60 characters and renders on the live page",
+   "steps": [
+    {
+     "action": "Enter value 'Insights & Media Hub' (21 chars)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Published"
+    },
+    {
+     "action": "View live page",
+     "expected": "Live hero shows the exact eyebrow text"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142463,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Eyebrow rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Attempt Save/Publish",
+     "expected": "'This field is required.' shown; save blocked"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142464,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Eyebrow rejects a value exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter a 61-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Validation error shown (max-length exceeded); save blocked or value truncated per configured behavior — record actual behavior"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142465,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Eyebrow rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces ('   ')",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Treated as empty; 'This field is required.' shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142466,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Title accepts a valid value up to 100 characters and renders on the live page",
+   "steps": [
+    {
+     "action": "Enter 'Advertisements' (15 chars)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live hero title renders exactly"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142467,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Title rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142468,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Title rejects a value exceeding 100 characters",
+   "steps": [
+    {
+     "action": "Enter a 101-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length validation error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142469,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Page Title rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142470,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Description accepts a valid value up to 200 characters and renders on the live page",
+   "steps": [
+    {
+     "action": "Enter a 150-character description",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live hero description renders exactly, rich-text formatting intact"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142471,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Description rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142472,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Description rejects a value exceeding 200 characters",
+   "steps": [
+    {
+     "action": "Enter a 201-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142473,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Description rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142474,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Image accepts a valid JPG under 2MB and renders on the live page",
+   "steps": [
+    {
+     "action": "Upload hero.jpg (800KB)",
+     "expected": "File uploaded"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live hero illustration renders the uploaded image"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142475,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Image rejects an unsupported file type",
+   "steps": [
+    {
+     "action": "Upload hero.gif",
+     "expected": "File uploaded"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Error shown: unsupported file type; upload rejected"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142476,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Image rejects a file exceeding 2MB",
+   "steps": [
+    {
+     "action": "Upload hero.png (3.5MB)",
+     "expected": "File uploaded"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Error shown: file exceeds 2MB limit; upload rejected"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142477,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Hero Image is enforced as mandatory",
+   "steps": [
+    {
+     "action": "Leave field empty",
+     "expected": "Field left empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Required error shown; publish blocked"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142478,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Eyebrow accepts a valid value up to 60 characters",
+   "steps": [
+    {
+     "action": "Enter 'Advertising rate cards' (23 chars)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live section eyebrow renders exactly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142479,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Eyebrow rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142480,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Eyebrow rejects a value exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter a 61-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142481,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Eyebrow rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142482,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Title accepts a valid value up to 150 characters",
+   "steps": [
+    {
+     "action": "Enter 'Choose the right placement' (27 chars)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live heading renders exactly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142483,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Title rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142484,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Title rejects a value exceeding 150 characters",
+   "steps": [
+    {
+     "action": "Enter a 151-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142485,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Title rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142486,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Description accepts a valid value up to 300 characters",
+   "steps": [
+    {
+     "action": "Enter a 200-character description",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live description renders exactly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142487,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Description rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142488,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Description rejects a value exceeding 300 characters",
+   "steps": [
+    {
+     "action": "Enter a 301-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142489,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Section Description rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142490,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Card Icon accepts a valid PNG under 2MB and renders on the live card",
+   "steps": [
+    {
+     "action": "Upload icon.png (500KB)",
+     "expected": "File uploaded"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card icon renders the uploaded image"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142491,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Card Icon rejects an unsupported file type",
+   "steps": [
+    {
+     "action": "Upload icon.bmp",
+     "expected": "File uploaded"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Unsupported-type error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142492,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Card Icon rejects a file exceeding 2MB",
+   "steps": [
+    {
+     "action": "Upload icon.svg (4MB)",
+     "expected": "File uploaded"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "File-size error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142493,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Card Icon is enforced as mandatory",
+   "steps": [
+    {
+     "action": "Attempt Publish without icon",
+     "expected": "Required error shown, publish blocked"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142494,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Category/Eyebrow Label accepts a valid value up to 60 characters",
+   "steps": [
+    {
+     "action": "Enter 'Website' (7 chars)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card category tag renders 'Website'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142495,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Category/Eyebrow Label rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142496,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Category/Eyebrow Label rejects a value exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter a 61-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142497,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Category/Eyebrow Label rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142498,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Advertisement Title accepts a valid value up to 200 characters",
+   "steps": [
+    {
+     "action": "Enter 'Digital Banner' (14 chars)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card title renders 'Digital Banner'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142499,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Advertisement Title rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142500,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Advertisement Title rejects a value exceeding 200 characters",
+   "steps": [
+    {
+     "action": "Enter a 201-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142501,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Advertisement Title rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142502,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that Price accepts a valid positive value with up to 2 decimals and renders combined with currency and unit",
+   "steps": [
+    {
+     "action": "Enter Price=5000.00 (Currency=QAR, Unit='/month')",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card shows 'QAR 5,000.00 /month' (or configured formatting) together as one unit"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "public half asserted as the QCTEST record being visible; the exact rendered format/position is not asserted",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142503,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Price rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "'Price, currency and pricing unit are required.' shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142504,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Price rejects zero and negative values",
+   "steps": [
+    {
+     "action": "Enter 0, Save",
+     "expected": "Validation error shown"
+    },
+    {
+     "action": "Enter -500, Save",
+     "expected": "Validation error shown; positive-only enforced on both attempts"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142505,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Price rejects a non-numeric value",
+   "steps": [
+    {
+     "action": "Enter 'five thousand'",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: numeric value required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142506,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Price rejects a value with more than 2 decimal places",
+   "steps": [
+    {
+     "action": "Enter 5000.999",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: max 2 decimal places exceeded"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142507,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Currency accepts a valid selection and defaults to QAR",
+   "steps": [
+    {
+     "action": "Open new card form, inspect Currency",
+     "expected": "Dropdown pre-populated with QAR as default; selecting another valid currency (e.g. USD) persists correctly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142508,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Currency rejects being left unselected on a form where the default was cleared",
+   "steps": [
+    {
+     "action": "Clear the Currency selection",
+     "expected": "Selection cleared"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "'Price, currency and pricing unit are required.' shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142509,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Pricing Unit accepts a valid value up to 30 characters and renders combined with price",
+   "steps": [
+    {
+     "action": "Enter '/month' (6 chars)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card shows unit appended to price exactly as 'QAR 5,000 /month'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "public half asserted as the QCTEST record being visible; the exact rendered format/position is not asserted",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142510,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Pricing Unit rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "'Price, currency and pricing unit are required.' shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142511,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Pricing Unit rejects a value exceeding 30 characters",
+   "steps": [
+    {
+     "action": "Enter a 31-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142512,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Pricing Unit rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142513,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Short Description accepts a valid value up to 500 characters",
+   "steps": [
+    {
+     "action": "Enter a 300-character description",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card description renders exactly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142514,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Short Description rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142515,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Short Description rejects a value exceeding 500 characters",
+   "steps": [
+    {
+     "action": "Enter a 501-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142516,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Short Description rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142517,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Feature Checklist accepts the minimum of 1 item and renders it beneath the description with a check icon",
+   "steps": [
+    {
+     "action": "Add 1 item ('24/7 visibility')",
+     "expected": "Item added"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card shows exactly 1 checklist line with a check icon beneath the description"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Feature Checklist's structure (own object vs repeater) is read live first; automate once confirmed",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142518,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Feature Checklist accepts the maximum of 5 items and renders all 5 in configured order",
+   "steps": [
+    {
+     "action": "Add 5 distinct items in a specific order",
+     "expected": "Items added"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card shows all 5 items, each with a check icon, in the configured order"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Feature Checklist's structure (own object vs repeater) is read live first; automate once confirmed",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142519,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing with 0 checklist items is blocked",
+   "steps": [
+    {
+     "action": "Leave checklist empty",
+     "expected": "Checklist left empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "'At least one specification is required.' shown"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Feature Checklist's structure (own object vs repeater) is read live first; automate once confirmed",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142520,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a checklist item exceeding 100 characters per line is rejected",
+   "steps": [
+    {
+     "action": "Enter a 101-character checklist item",
+     "expected": "Item entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length (100 chars/line) validation error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142521,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that the Featured toggle can be set on a single card and persists on publish",
+   "steps": [
+    {
+     "action": "Toggle Featured on",
+     "expected": "Toggle set"
+    },
+    {
+     "action": "Publish",
+     "expected": "Card publishes as featured; live page shows it in the highlighted style"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: setting Featured on a QCTEST record unsets the live featured record visitors see",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142522,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that setting a second card's Featured toggle while one is already featured is blocked",
+   "steps": [
+    {
+     "action": "Toggle Card B Featured=true",
+     "expected": "Toggle set"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Validation message blocks the change; only Card A remains featured"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: setting Featured on a QCTEST record unsets the live featured record visitors see",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142523,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Book Now Button Label accepts a valid custom value up to 50 characters and overrides the default",
+   "steps": [
+    {
+     "action": "Enter custom label 'Reserve This Slot' (18 chars)",
+     "expected": "Label entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card's action button shows 'Reserve This Slot' instead of the default"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142524,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Book Now Button Label defaults to 'Book Now' when left unset",
+   "steps": [
+    {
+     "action": "Leave label field at default",
+     "expected": "Field left at default"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card button shows 'Book Now'"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "public half asserted as the QCTEST record being visible; the exact rendered format/position is not asserted",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142525,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Book Now Button Label rejects a value exceeding 50 characters",
+   "steps": [
+    {
+     "action": "Enter a 51-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142526,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Book Now Button Label rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Falls back to required/default handling — required error or default re-applied (verify actual behavior); does not save as blank"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142527,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Mapped Ads Type dropdown lists only Published Ads Type records and persists the selection",
+   "steps": [
+    {
+     "action": "Open Mapped Ads Type dropdown",
+     "expected": "Only the 2 Published types listed (Draft type absent)"
+    },
+    {
+     "action": "Select a Published type, Save",
+     "expected": "Selection persists and correctly pre-selects on the frontend modal"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Ads Type object (Published vs Draft types) is read live first",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142528,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Mapped Ads Type rejects being left unselected",
+   "steps": [
+    {
+     "action": "Leave unselected",
+     "expected": "Left unselected"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Required error shown, publish blocked"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142529,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order accepts a valid positive integer and controls the card's rendering position",
+   "steps": [
+    {
+     "action": "Set Display Order=1",
+     "expected": "Order set"
+    },
+    {
+     "action": "Publish",
+     "expected": "Card renders first among published cards"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "public half asserted as the QCTEST record being visible; the exact rendered format/position is not asserted",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142530,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142531,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order rejects zero or a negative value",
+   "steps": [
+    {
+     "action": "Enter 0, Save",
+     "expected": "Validation error shown"
+    },
+    {
+     "action": "Enter -1, Save",
+     "expected": "Validation error shown on both; positive-integer-only enforced"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142532,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Display Order rejects a non-numeric value",
+   "steps": [
+    {
+     "action": "Enter 'first'",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: numeric value required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142533,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Checklist Item Text accepts a valid value up to 100 characters",
+   "steps": [
+    {
+     "action": "Enter 'Premium placement' (18 chars)",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Publish",
+     "expected": "Live card checklist line renders exactly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142534,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Checklist Item Text rejects an empty value when the item row is kept",
+   "steps": [
+    {
+     "action": "Leave item text blank, row not removed",
+     "expected": "Text left blank"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Required error shown for that row"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142535,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Checklist Item Text rejects a value exceeding 100 characters",
+   "steps": [
+    {
+     "action": "Enter a 101-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Max-length error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142536,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Checklist Item Text rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter spaces",
+     "expected": "Spaces entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142537,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Checklist Item Display Order accepts a valid positive integer and controls item rendering order",
+   "steps": [
+    {
+     "action": "Set order=1 for first item",
+     "expected": "Order set"
+    },
+    {
+     "action": "Publish",
+     "expected": "Item renders in the corresponding position on the live card"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142538,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Checklist Item Display Order rejects an empty value",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save",
+     "expected": "Required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142539,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Checklist Item Display Order rejects zero or a negative value",
+   "steps": [
+    {
+     "action": "Enter 0, Save",
+     "expected": "Validation error shown"
+    },
+    {
+     "action": "Enter -1, Save",
+     "expected": "Validation error shown on both"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142540,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Checklist Item Display Order rejects a non-numeric value",
+   "steps": [
+    {
+     "action": "Enter 'one'",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142572,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Internal Notes accepts a valid filled value up to 1000 characters",
+   "steps": [
+    {
+     "action": "Enter a 500-character note",
+     "expected": "Note entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Value accepted and stored against the Booking Request"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142573,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Internal Notes is accepted when left empty, being optional",
+   "steps": [
+    {
+     "action": "Leave blank",
+     "expected": "Left blank"
+    },
+    {
+     "action": "Save the reviewer action",
+     "expected": "No validation error; request processed normally"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142574,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Internal Notes rejects a value exceeding 1000 characters",
+   "steps": [
+    {
+     "action": "Enter a 1001-character string",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Max-length validation error shown"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142577,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a saved rate card's field values persist correctly after Save → reload",
+   "steps": [
+    {
+     "action": "Save as Draft (all fields filled)",
+     "expected": "Saved"
+    },
+    {
+     "action": "Reload the CMS edit form",
+     "expected": "All previously entered field values (icon, category, title, price, currency, unit, description, checklist, display order) are retained exactly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142580,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA"
+   ],
+   "title": "Verify that a second admin cannot publish a card as Featured while a first admin's Featured card publish is already in flight",
+   "steps": [
+    {
+     "action": "Publish Card A as Featured",
+     "expected": "Card A published Featured"
+    },
+    {
+     "action": "Immediately attempt to publish Card B as Featured",
+     "expected": "Card B's publish is blocked with the featured-conflict validation message regardless of timing"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "needs a real shared record mutated: setting Featured on a QCTEST record unsets the live featured record visitors see",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142581,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA"
+   ],
+   "title": "Verify that rejecting an already-Rejected Booking Request is not possible",
+   "steps": [
+    {
+     "action": "Reopen the Rejected request",
+     "expected": "Request reopened"
+    },
+    {
+     "action": "Attempt Reject again",
+     "expected": "Reject action is unavailable/disabled for a terminal Rejected record, or is rejected with a state-conflict message — no duplicate audit entries or emails fire"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142582,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA"
+   ],
+   "title": "Verify that approving an already-Approved Booking Request does not re-trigger a duplicate Approval Email",
+   "steps": [
+    {
+     "action": "Reopen the Approved request",
+     "expected": "Request reopened"
+    },
+    {
+     "action": "Attempt Approve again",
+     "expected": "Action is unavailable/disabled for a terminal Approved record, or is blocked with a state-conflict message — no second Approval Email sent"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the case names a 'QC Admin Reviewer' account, which is not one of the eight provisioned roles (standards.md, Named CMS User Roles) - needs the account or a ruling; needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Admin Reviewer (named by the case; not one of the eight provisioned roles)"
+  },
+  {
+   "tc_id": 142584,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA"
+   ],
+   "title": "Verify that the Feature Checklist's maximum of 5 items is enforced — a 6th item cannot be added",
+   "steps": [
+    {
+     "action": "Attempt to add a 6th checklist item (5 already present)",
+     "expected": "Add-item control is disabled at 5, or the 6th add attempt is rejected with a max-items message"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "the Feature Checklist's structure (own object vs repeater) is read live first; automate once confirmed",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  }
+ ],
+ "out_of_scope": [
+  {
+   "tc_id": 142439,
+   "priority": 1,
+   "reason": "Manual",
+   "title": "Verify that a successful submission sends the New-Request notification email to the QC Admin Reviewer"
+  },
+  {
+   "tc_id": 142588,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that a rate card published with the Advertisement ID's auto-generated value remains stable and unique across repeated saves"
+  },
+  {
+   "tc_id": 142591,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that deleting a Draft rate card that was never published leaves no trace on the live page or Booking Requests panel"
+  }
+ ]
+}

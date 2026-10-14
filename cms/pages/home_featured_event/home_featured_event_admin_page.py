@@ -1,180 +1,232 @@
 """
-web/pages/home_featured_event/home_featured_event_admin_page.py —
+cms/pages/home_featured_event/home_featured_event_admin_page.py —
 HomeFeaturedEventAdminPage.
 
-Control_Panel Page Object for PBI 129382 (Home Page "Upcoming Event Pins"),
-backing the "Upcoming Event Pins" Object Definition (objectDefinitionId
-49124) singleton record that drives the public Home Page's
-`section.qc-home-upcoming-event` card (home_featured_event_page.py is the
-public-frontend counterpart).
+Control_Panel Page Object for PBI 129382 (Home Page "Upcoming Featured
+Event"). Rewritten 2026-10-07 (phase 3) to the Object Authoring surface.
 
-REAL, LIVE-VERIFIED FACTS (this session, 2026-08-31, headed Chromium against
-qcdev via the Playwright MCP browser, single non-parallel session):
+CONTENT MODEL (cms/Content-Admin-Guide.docx §10): object `UpcomingEventPin`
+— fields `pinnedEvent` (which BusinessEvent to feature) and `activeStatus`.
+Nothing else. The PBI's Section Tag / Section Heading / Section Description
+fields are NOT part of this object (requirements-vs-implementation conflict,
+escalated in the phase-3 report — never satisfied by inventing an object).
 
-NAVIGATION
-  - Same regenerating-portlet-instance-id behavior already documented for
-    every other Object Definition on this project (gm_message_admin_page.py,
-    home_business_events_admin_page.py, etc.) — reach it ONLY via Product
-    Menu > Content & Data > "Upcoming Event Pins", never a cached deep-link
-    URL across sessions.
-  - There is exactly ONE row on the list screen: id 49205, External Reference
-    Code `QCDEMO-129382-PIN-001` — a TEST_OWNED singleton per cms-profile.md
-    (reset to a fixed known baseline, not "whatever it was before" in the
-    general case; here the fixed baseline IS also literally what was
-    observed pre-mutation, confirmed live before any test in this batch
-    touched it: `pinnedEvent=/web/qatar-chamber/events/novgorod-delegation`,
-    `activeStatus=Yes`).
+LIVE FACTS (read-only recon 2026-10-07, as Site Content Editor / Author /
+Site Member / logged out):
+  - Sidebar label "Upcoming Event Pin" -> `/web/qatar-chamber/manage-upcoming-event-pin`.
+    The page carries the normal 7-state workflow (PUBLISHED / DRAFT badges,
+    Unpublish + History row actions), so the old "Content & Data, not an
+    Object-Definition record" exemption in standards.md is stale for it.
+  - Live singleton: entry code `QCDEMO-129382-PIN-001`, id 49205, PUBLISHED.
+    A second row, `76e1088e-b6c9-0f7a-5559-a4f415b6b57b` (id 149262), is a
+    DRAFT of unknown origin — not QCTEST, never touched by automation.
+  - Form fields: `ObjectField_pinnedEvent` (plain text input) and
+    `ObjectField_activeStatus` (checkbox). Editor's submit button reads
+    "Publish"; Author's reads "Submit for Review".
+  - Editor row actions on 49205: Edit / Preview / Unpublish / History / Delete.
+    Author row actions on 49205: View / Preview / History (no edit).
+  - Site Member and logged-out visitors get the public "Coming Soon" page
+    (HTTP-404 style) on the manage URL — no form, no rows.
 
-CONFIRMED LIVE FORM FIELD MAP (exactly 2 fields on this record's edit form)
-  - Active Status  -> `activeStatus`  -> native `input[type="checkbox"]`
-    under `[data-field-reference="activeStatus"]`.
-  - Pinned Event   -> `pinnedEvent`   -> plain `input.ddm-field-text` under
-    `[data-field-reference="pinnedEvent"]`, holding a raw path/slug STRING —
-    confirmed live NOT a picker/dropdown despite the case text's wording.
-  - Save/Cancel only — no separate Publish button (confirmed live: the
-    rendered edit form has exactly two buttons).
-
-OPEN QUESTION RESOLVED THIS SESSION — CONFIRMED PRODUCT DEFECT, not a locator
-gap: the `pinnedEvent` field does NOT control which event the public
-Home Page card renders. Reproduced independently, twice, with two different
-real candidate values, live, each followed by a hard navigation + an
-11-15s wait (well past this project's only measured propagation budget,
-~0s for a different data source, and past the client-render settle time
-documented on home_featured_event_page.py):
-  1. `pinnedEvent = /web/qatar-chamber/events/event?id=110785` ("Export
-     Documentation Workshop", a real, live, Published, future-dated
-     [20 Oct 2026] event page) — card did not change.
-  2. `pinnedEvent = /web/qatar-chamber/events/event?id=49443` ("Qatar–GCC
-     Economic Cooperation Forum", a real event FROM the same Chamber Events
-     collection the widget's fallback card is drawn from, ruling out the
-     first attempt's "wrong collection" concern) — card still did not
-     change.
-  In both cases the Home Page kept showing "International Trade & Logistics
-  Expo" (id 49485) — the same card shown with the ORIGINAL baseline pin
-  value (`/web/qatar-chamber/events/novgorod-delegation`, which itself
-  404s as a real page — confirmed live, `Coming Soon` / HTTP 404 — as does
-  the OTHER bare-slug format tried, `/web/qatar-chamber/events/
-  international-trade-logistics-expo`). No bare-slug URL on this site
-  resolves to a real event page at all; the only real, working event URL
-  format is the query-string one (`?id=<N>`), which is also the exact
-  format the widget's own rendered `[data-qc-ue-media]` href uses. Given
-  that even the native `?id=` format the widget speaks itself was ignored
-  twice, the field is treated as CONFIRMED NON-FUNCTIONAL, not merely
-  "wrong format" — see test_home_featured_event_control_panel.py's
-  docstring for the full disclosure and why TC 135669 is left unautomated
-  (documented defect) rather than scripted to assert a pass.
-
-  What WAS confirmed to work live: toggling `activeStatus` OFF and Saving
-  sets `section.qc-home-upcoming-event`'s inline `style` to `display:none`
-  on the next page load (the section itself stays in the DOM — this is a
-  CSS visibility toggle, not a DOM removal) — confirmed live, and this is
-  the real mechanism TC 135670 automates below.
+SAFETY: record 49205 is a real shared singleton. Every write helper below
+(`set_*`, `publish`, `restore`) is used only by tests carrying
+`xdist_group("pin_event_49205")`, and those tests need the user's ID-named
+approval before they are run. Read helpers never save.
 """
 
+from __future__ import annotations
+
+import os
+
+import pytest
+
+from cms.pages.components.object_authoring_page import (
+    ObjectAuthoringPage,
+    normalize_status,
+)
+from cms.pages.control_panel.login_page import CmsLoginPage
+from config.settings import cms_role_credentials, control_panel_url
 from core.web.base_page import BasePage
-from config.settings import control_panel_url, settings
+
+
+# ---- Write gate for the live pin 49205 -------------------------------------
+# 49205 is the REAL Home Page pin. Every test that writes it requests the
+# `approved_49205_write` fixture, which FAILS (never skips: skips are
+# forbidden on this project) during setup, before any browser step, unless
+# the user has given ID-named approval and the run sets QC_ALLOW_49205_WRITE=1.
+# So `pytest -m control_panel`, `-m pbi_129382` or CI still collect these
+# tests but cannot write 49205 by accident.
+ALLOW_49205_WRITE_ENV = "QC_ALLOW_49205_WRITE"
+GATE_MESSAGE = (
+    "NEEDS USER: writes real record 49205 — requires ID-named approval; "
+    f"set {ALLOW_49205_WRITE_ENV}=1"
+)
+
+
+@pytest.fixture
+def approved_49205_write():
+    if os.environ.get(ALLOW_49205_WRITE_ENV) != "1":
+        pytest.fail(GATE_MESSAGE, pytrace=False)
 
 
 class HomeFeaturedEventAdminPage(BasePage):
-    # ---- Menu navigation (verbatim pattern from gm_message_admin_page.py /
-    # home_business_events_admin_page.py) --------------------------------
-    PRODUCT_MENU_TOGGLE = '[data-qa-id="productMenu"]'
-    CONTENT_DATA_MENU_ITEM = '[role="menuitem"]:text-is("Content & Data")'
-    UPCOMING_EVENT_PINS_MENU_ITEM = '[role="menuitem"]:text-is("Upcoming Event Pins")'
-    ADMIN_HOME_EN_URL_PATH = "/en/home"
+    SLUG = "upcoming-event-pin"
+    SIDEBAR_LABEL = "Upcoming Event Pin"
+    OBJECT_AUTHORING_INDEX = "/en/object-authoring"
+    LIVE_PIN_CODE = "QCDEMO-129382-PIN-001"
+    LIVE_PIN_ID = "49205"
 
-    # ---- List screen ------------------------------------------------------
-    # The one and only singleton row, confirmed live (id 49205).
-    PIN_ROW_LINK = 'table tbody tr a:text-is("49205")'
+    PINNED_EVENT_INPUT = 'input[name$="ObjectField_pinnedEvent"]'
+    ACTIVE_STATUS_CHECKBOX = 'input[name$="ObjectField_activeStatus"]'
+    OBJECT_FIELD_INPUTS = '[name*="ObjectField_"]'
+    # A selector "list" would surface as one of these once the field is focused.
+    SELECTOR_LIST = '[role="listbox"]:visible, [role="option"]:visible, datalist, .dropdown-menu.show'
 
-    # ---- Edit form fields (data-field-reference — see module docstring) ---
-    ACTIVE_STATUS_CONTAINER = '[data-field-reference="activeStatus"]'
-    ACTIVE_STATUS_CHECKBOX = f'{ACTIVE_STATUS_CONTAINER} input[type="checkbox"]'
-    PINNED_EVENT_CONTAINER = '[data-field-reference="pinnedEvent"]'
-    PINNED_EVENT_INPUT = f'{PINNED_EVENT_CONTAINER} input.ddm-field-text'
+    def __init__(self, page):
+        super().__init__(page)
+        self.authoring = ObjectAuthoringPage(page, self.SLUG)
 
-    SAVE_BUTTON = 'button:has-text("Save")'
-    CANCEL_BUTTON = 'button:has-text("Cancel")'
-
-    # Confirmed-live baseline this session (see module docstring) — the
-    # TEST_OWNED fixed reset target per cms-profile.md's Test-Data Policy.
-    BASELINE_PINNED_EVENT = "/web/qatar-chamber/events/novgorod-delegation"
-    BASELINE_ACTIVE = True
+    # ---- Session ----------------------------------------------------------
+    def sign_in_as(self, role: str) -> "HomeFeaturedEventAdminPage":
+        email, password = cms_role_credentials(role)
+        CmsLoginPage(self.page).ensure_signed_in_as(email, password)
+        return self
 
     # ---- Navigation -------------------------------------------------------
-    def open_upcoming_event_pins_list(self) -> "HomeFeaturedEventAdminPage":
-        """Product Menu > Content & Data > Upcoming Event Pins. Mirrors
-        HomeBusinessEventsAdminPage.open_business_events_list()'s
-        re-login-if-needed pattern."""
-        from cms.pages.control_panel.login_page import CmsLoginPage
+    def open_manage_page_raw(self) -> "HomeFeaturedEventAdminPage":
+        """Navigate to the manage URL without waiting for the form — used by
+        the denial cases, where the form must NOT appear.
 
-        login = CmsLoginPage(self.page)
-        self.open(control_panel_url(self.ADMIN_HOME_EN_URL_PATH))
-        if not (self.is_visible(self.CONTENT_DATA_MENU_ITEM) or self.is_visible(self.PRODUCT_MENU_TOGGLE)):
-            login.open_login().login(settings.test_user, settings.test_password)
-            self.open(control_panel_url(self.ADMIN_HOME_EN_URL_PATH))
-
-        if not self.is_visible(self.CONTENT_DATA_MENU_ITEM):
-            self.click(self.PRODUCT_MENU_TOGGLE)
-            self.wait_for(self.CONTENT_DATA_MENU_ITEM)
-        self.click(self.CONTENT_DATA_MENU_ITEM)
-        self.wait_for(self.UPCOMING_EVENT_PINS_MENU_ITEM)
-        self.click(self.UPCOMING_EVENT_PINS_MENU_ITEM)
-        self.wait_for(self.PIN_ROW_LINK, timeout=20000)
+        Uses a bare page.goto(), NOT BasePage.open(): open() runs
+        core/web/session_guard.reauthenticate(), which treats a manage-<slug>
+        URL rendered without `body.signed-in` as a dead session and silently
+        signs in as TEST_USER — turning the logged-out case (135663) into an
+        admin session (seen in run 20261007-2025)."""
+        self.page.goto(
+            control_panel_url(f"/en/web/qatar-chamber/manage-{self.SLUG}"),
+            wait_until="domcontentloaded",
+        )
         return self
 
-    def open_pin_record(self) -> "HomeFeaturedEventAdminPage":
-        self.click(self.PIN_ROW_LINK)
-        self.wait_for(self.PINNED_EVENT_INPUT, timeout=15000)
+    def open_entries_list(self) -> "HomeFeaturedEventAdminPage":
+        self.authoring.open_entries_list(locale="en")
         return self
 
-    # ---- Field actions ------------------------------------------------------
+    def open_live_pin_read_only(self) -> "HomeFeaturedEventAdminPage":
+        """Opens 49205's form by its own entry code. Callers never save."""
+        self.authoring.open_entry_by_code(self.LIVE_PIN_CODE, locale="en")
+        self.wait_for(self.PINNED_EVENT_INPUT, state="attached", timeout=20000, first=True)
+        return self
+
+    def open_object_authoring_index(self) -> "HomeFeaturedEventAdminPage":
+        self.open(control_panel_url(self.OBJECT_AUTHORING_INDEX))
+        self.page.get_by_text(self.SIDEBAR_LABEL, exact=True).first.wait_for(timeout=35000)
+        return self
+
+    def open_from_sidebar(self) -> "HomeFeaturedEventAdminPage":
+        self.page.get_by_text(self.SIDEBAR_LABEL, exact=True).first.click()
+        self.page.wait_for_url(f"**/manage-{self.SLUG}**", timeout=35000)
+        self.wait_for(self.PINNED_EVENT_INPUT, state="attached", timeout=35000, first=True)
+        return self
+
+    # ---- Reads ------------------------------------------------------------
+    def sidebar_has_entry(self) -> bool:
+        return self.page.get_by_text(self.SIDEBAR_LABEL, exact=True).count() > 0
+
+    def pin_form_present(self) -> bool:
+        return (
+            self.page.locator(self.PINNED_EVENT_INPUT).count() > 0
+            and self.page.locator(self.ACTIVE_STATUS_CHECKBOX).count() > 0
+        )
+
+    def pin_form_editable(self) -> bool:
+        pe = self.page.locator(self.PINNED_EVENT_INPUT).first
+        ac = self.page.locator(self.ACTIVE_STATUS_CHECKBOX).first
+        return pe.is_editable() and ac.is_enabled()
+
+    def object_field_names(self) -> set:
+        names = self.page.locator(self.OBJECT_FIELD_INPUTS).evaluate_all(
+            "els => els.map(e => e.getAttribute('name') || '')"
+        )
+        return {n.split("ObjectField_", 1)[1].split("_")[0] for n in names if "ObjectField_" in n}
+
+    def pinned_event_value(self) -> str:
+        return self.page.locator(self.PINNED_EVENT_INPUT).first.input_value()
+
+    def is_active(self) -> bool:
+        return self.page.locator(self.ACTIVE_STATUS_CHECKBOX).first.is_checked()
+
+    def pinned_event_input_type(self) -> str:
+        return self.page.locator(self.PINNED_EVENT_INPUT).first.get_attribute("type") or ""
+
+    def open_pinned_event_selector(self) -> bool:
+        """Focus the Pinned Event control the way an editor would to pick an
+        event, and report whether any selectable list appears. Types nothing
+        and never saves."""
+        self.page.locator(self.PINNED_EVENT_INPUT).first.click()
+        try:
+            self.page.locator(self.SELECTOR_LIST).first.wait_for(state="attached", timeout=5000)
+            return True
+        except Exception:  # noqa: BLE001 — absence of a list is the answer
+            return False
+
+    def selector_option_texts(self) -> list:
+        return [t.strip() for t in self.page.locator('[role="option"]').all_inner_texts() if t.strip()]
+
+    def live_pin_row_actions(self) -> set:
+        """Workflow/edit actions the signed-in role is offered on 49205's row.
+        `data-qc-oel-*` attributes, plus the row's own Edit/View link text."""
+        row = self.page.locator("table tbody tr", has_text=self.LIVE_PIN_CODE).first
+        attrs = row.locator("a, button").evaluate_all(
+            "els => els.flatMap(e => [...e.attributes].map(a => a.name)"
+            ".filter(n => n.startsWith('data-qc-oel-')).map(n => n.slice(12))"
+            ".concat([(e.innerText || '').trim().toLowerCase()]))"
+        )
+        return {a for a in attrs if a}
+
+    def live_pin_status(self) -> str:
+        return normalize_status(self.authoring.row_status_text_by_code(self.LIVE_PIN_CODE))
+
+    def manage_page_rendered(self) -> bool:
+        return self.page.title().startswith("Manage:") or self.pin_form_present()
+
+    def login_form_visible(self) -> bool:
+        return CmsLoginPage(self.page).login_form_visible()
+
+    def body_text(self) -> str:
+        return self.page.locator("body").inner_text()
+
+    # ---- Writes (49205 — approval-gated tests only) -------------------------
+    def snapshot(self) -> dict:
+        return {"pinnedEvent": self.pinned_event_value(), "activeStatus": self.is_active()}
+
     def set_pinned_event(self, value: str) -> "HomeFeaturedEventAdminPage":
-        self.type(self.PINNED_EVENT_INPUT, value)
+        self.page.locator(self.PINNED_EVENT_INPUT).first.fill(value)
         return self
 
     def set_active(self, active: bool) -> "HomeFeaturedEventAdminPage":
-        self.set_checkbox(self.ACTIVE_STATUS_CHECKBOX, active)
+        self.page.locator(self.ACTIVE_STATUS_CHECKBOX).first.set_checked(active)
         return self
 
-    def save(self) -> "HomeFeaturedEventAdminPage":
-        self.click(self.SAVE_BUTTON)
-        # Same disclosed save-commit grace already adopted for every other
-        # Object Definition edit form on this project (e.g.
-        # HomeBusinessEventsAdminPage.save()) — a real Save was completed
-        # and observed live this session (unlike Business Events'), so this
-        # is a real, confirmed-safe margin here, not a placeholder.
-        self.page.wait_for_timeout(1500)
+    def publish(self) -> "HomeFeaturedEventAdminPage":
+        """Editor's submit ("Publish"; SUBMIT_FOR_REVIEW_BUTTON matches both labels)."""
+        self.authoring.submit_for_review()
         return self
 
-    def cancel(self) -> "HomeFeaturedEventAdminPage":
-        self.click(self.CANCEL_BUTTON)
+    def open_for_edit(self) -> "HomeFeaturedEventAdminPage":
+        """Open 49205 for a WRITE. A published record is edited by
+        "Unpublish to edit as draft" first (OBJECT-AUTHORING-GUIDE: "Edit a
+        published record — Unpublish to edit as draft, edit, publish again"),
+        then reopened so the form reflects the draft. Approval-gated callers only."""
+        self.open_live_pin_read_only()
+        if self.page.locator(ObjectAuthoringPage.UNPUBLISH_BUTTON).count():
+            self.authoring.unpublish_to_edit_as_draft()
+            self.open_live_pin_read_only()
         return self
 
-    # ---- State queries --------------------------------------------------------
-    def pinned_event_value(self) -> str:
-        return self.page.locator(self.PINNED_EVENT_INPUT).input_value()
-
-    def is_active(self) -> bool:
-        return self.page.locator(self.ACTIVE_STATUS_CHECKBOX).is_checked()
-
-    def field_references(self) -> set:
-        """Every `data-field-reference` present on the open record's edit
-        form — TC 135672's own evidence that no manual event-detail fields
-        (title/date/time/location/description/image) exist alongside the
-        confirmed-live 2-field map (activeStatus, pinnedEvent)."""
-        return set(self.page.locator("[data-field-reference]").evaluate_all(
-            "els => els.map(el => el.getAttribute('data-field-reference'))"
-        ))
-
-    def reset_to_baseline(self) -> "HomeFeaturedEventAdminPage":
-        """Restore the singleton to its confirmed original baseline and
-        SAVE — callers must still reopen the record afterward and assert
-        pinned_event_value()/is_active() match BASELINE_* to verify the
-        restore actually persisted (the "reopen + assert" hardening used
-        elsewhere in this repo), rather than trusting this method's own
-        in-form read."""
-        self.set_pinned_event(self.BASELINE_PINNED_EVENT)
-        self.set_active(self.BASELINE_ACTIVE)
-        self.save()
-        return self
+    def restore(self, snap: dict) -> None:
+        """Write the snapshot back to 49205, publish, then reopen and verify."""
+        self.open_for_edit()
+        self.set_pinned_event(snap["pinnedEvent"]).set_active(snap["activeStatus"]).publish()
+        self.open_live_pin_read_only()
+        assert self.snapshot() == snap, f"49205 restore did not persist: {self.snapshot()} != {snap}"

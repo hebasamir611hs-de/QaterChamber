@@ -1,0 +1,404 @@
+[
+ {
+  "id": 134537,
+  "title": "Verify that the Newsletter Management create/edit form renders all required fields in English",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Log in to Liferay CMS as Administrator",
+    "expected": "Admin logged in"
+   },
+   {
+    "action": "Navigate to Newsletter Management",
+    "expected": "Newsletter Management module opens"
+   },
+   {
+    "action": "Click Create New",
+    "expected": "Create form displays fields: Title (EN/AR), Subject Line (EN/AR), Short Description (EN/AR), Content (EN/AR rich text), Banner Image upload, Attachments upload, Language dropdown, Status dropdown, Publish Date, Expiry Date"
+   }
+  ]
+ },
+ {
+  "id": 134538,
+  "title": "Verify that the Newsletter Listing page displays Title, Status, Publish Date, Created By, Last Modified, and Actions columns",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Navigate to Newsletter Management listing",
+    "expected": "Listing page opens"
+   },
+   {
+    "action": "Inspect the listing table columns",
+    "expected": "Columns Title, Status, Publish Date, Created By, Last Modified, Actions (View/Edit/Delete/Publish/Archive) are all present and populated for each row"
+   }
+  ]
+ },
+ {
+  "id": 134539,
+  "title": "Verify that the section enable/disable toggles are visible before sending a newsletter",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open an Approved newsletter",
+    "expected": "Approved newsletter opens"
+   },
+   {
+    "action": "Navigate to the Send/Schedule step",
+    "expected": "Send/Schedule step displayed"
+   },
+   {
+    "action": "Inspect section controls",
+    "expected": "Toggle controls visible for Latest News, Upcoming Events, Circulars & Announcements, Publications & Research, each defaulting to Enabled"
+   }
+  ]
+ },
+ {
+  "id": 134544,
+  "title": "Verify that an admin can archive a Published newsletter",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open the Published newsletter listing",
+    "expected": "Listing opens"
+   },
+   {
+    "action": "Select the newsletter",
+    "expected": "Newsletter selected"
+   },
+   {
+    "action": "Click Archive",
+    "expected": "Status changes to Archived; success toast shown (EN+AR); newsletter no longer eligible for Publish/Schedule actions"
+   }
+  ]
+ },
+ {
+  "id": 134567,
+  "title": "Verify that leaving Short Description (EN) empty is accepted since the field is optional",
+  "priority": 4,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Leave Short Description (EN) empty; fill all other mandatory fields",
+    "expected": "Field left empty"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Draft saved successfully with no validation error for Short Description (EN)"
+   }
+  ]
+ },
+ {
+  "id": 134570,
+  "title": "Verify that leaving Short Description (AR) empty is accepted since the field is optional",
+  "priority": 4,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Leave Short Description (AR) empty; fill all other mandatory fields",
+    "expected": "Field left empty"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Draft saved successfully with no validation error for Short Description (AR)"
+   }
+  ]
+ },
+ {
+  "id": 134579,
+  "title": "Verify that Banner Image accepts a valid JPG under 2 MB",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Upload banner.jpg (1.2 MB) to Banner Image",
+    "expected": "File uploaded, thumbnail preview shown"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Draft saved successfully with the banner image attached"
+   }
+  ]
+ },
+ {
+  "id": 134580,
+  "title": "Verify that leaving Banner Image empty is accepted since the field is optional",
+  "priority": 4,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Leave Banner Image empty; fill all other mandatory fields",
+    "expected": "Field left empty"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Draft saved successfully with no validation error for Banner Image"
+   }
+  ]
+ },
+ {
+  "id": 134581,
+  "title": "Verify that Banner Image rejects a file exceeding 2 MB or an unsupported format",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Attempt to upload banner.gif (3.5 MB, GIF format) to Banner Image",
+    "expected": "Upload attempted"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Validation error shown indicating unsupported format and/or file exceeds 2 MB; file not attached; draft not saved with this file"
+   }
+  ]
+ },
+ {
+  "id": 134582,
+  "title": "Verify that Attachments accepts a valid PDF file",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Upload newsletter-report.pdf to Attachments",
+    "expected": "File uploaded and listed"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Draft saved successfully with the attachment stored"
+   }
+  ]
+ },
+ {
+  "id": 134583,
+  "title": "Verify that leaving Attachments empty is accepted since the field is optional",
+  "priority": 4,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Leave Attachments empty; fill all other mandatory fields",
+    "expected": "Field left empty"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Draft saved successfully with no validation error for Attachments"
+   }
+  ]
+ },
+ {
+  "id": 134584,
+  "title": "Verify that Attachments rejects an unsupported file format",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Attempt to upload image.png to Attachments",
+    "expected": "Upload attempted"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Validation error shown indicating only PDF, DOC, DOCX are supported; file not attached"
+   }
+  ]
+ },
+ {
+  "id": 134586,
+  "title": "Verify that saving a newsletter with no Language selected is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Leave the Language dropdown at its unselected/placeholder state; fill remaining mandatory fields",
+    "expected": "Dropdown remains unselected"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Validation error \"Language is required.\" displayed; draft not saved"
+   }
+  ]
+ },
+ {
+  "id": 134588,
+  "title": "Verify that saving a newsletter with no Status selected is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Leave the Status dropdown unselected; fill remaining mandatory fields",
+    "expected": "Dropdown remains unselected"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error \"Status is required.\" displayed; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 134589,
+  "title": "Verify that Publish Date accepts a valid future date/time",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Enter tomorrow's date at 09:00 in Publish Date",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Draft saved successfully with Publish Date stored"
+   }
+  ]
+ },
+ {
+  "id": 134591,
+  "title": "Verify that Expiry Date accepts a valid date after the Publish Date",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Set Publish Date = Oct 10 2026 09:00",
+    "expected": "Publish Date entered"
+   },
+   {
+    "action": "Set Expiry Date = Oct 20 2026 09:00",
+    "expected": "Expiry Date entered"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Draft saved successfully with both dates stored"
+   }
+  ]
+ },
+ {
+  "id": 134592,
+  "title": "Verify that an Expiry Date on or before the Publish Date is rejected",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Set Publish Date = Oct 10 2026 09:00",
+    "expected": "Publish Date entered"
+   },
+   {
+    "action": "Set Expiry Date = Oct 10 2026 09:00 (same as Publish Date)",
+    "expected": "Expiry Date entered"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Validation error indicating Expiry Date must be after Publish Date displayed; draft not saved"
+   }
+  ]
+ },
+ {
+  "id": 134598,
+  "title": "Verify that enabling then disabling the Upcoming Events section toggle correctly updates the Send/Schedule preview",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "On the Send/Schedule step, disable the Upcoming Events toggle",
+    "expected": "Toggle switches to Disabled; preview no longer shows the Upcoming Events section"
+   },
+   {
+    "action": "Re-enable the Upcoming Events toggle",
+    "expected": "Toggle switches back to Enabled; preview shows the Upcoming Events section again"
+   }
+  ]
+ },
+ {
+  "id": 134606,
+  "title": "Verify that an Administrator is not denied any Newsletter Management permission (negative-control sanity check)",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Log in as Administrator",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Attempt every RBAC-gated action: Approve, Reject, Publish, Schedule, Archive, manage subscribers",
+    "expected": "Every action completes successfully; no Access Denied message is ever shown"
+   }
+  ]
+ },
+ {
+  "id": 134611,
+  "title": "Verify that publishing a newsletter whose enabled sections have zero currently-published items sends without those empty sections",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Confirm Latest News, Upcoming Events, Circulars & Announcements, and Publications & Research each have zero published items",
+    "expected": "Precondition confirmed"
+   },
+   {
+    "action": "Publish a newsletter with all sections enabled",
+    "expected": "Newsletter publishes successfully; sent email shows a graceful empty-state rather than an error or broken layout"
+   }
+  ]
+ },
+ {
+  "id": 134618,
+  "title": "Verify that only Active/Urgent published Circulars & Announcements are included in the Newsletter Issue Email",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Confirm one Circular is published with Active/Urgent flag and one is published without it",
+    "expected": "Precondition confirmed"
+   },
+   {
+    "action": "Enable Circulars & Announcements section and publish the newsletter",
+    "expected": "Newsletter publishes with success toast"
+   },
+   {
+    "action": "Open the sent newsletter email",
+    "expected": "Email's Circulars & Announcements section lists only the Active/Urgent published circular"
+   }
+  ]
+ }
+]

@@ -7,7 +7,8 @@ module for this page.
 
 SCRIPTED HERE (all 17): 140969, 140970, 140971, 140972, 140973, 140974,
 140975, 140976, 140977, 140978, 140979, 140980, 140981, 140982, 140983,
-140984, 140985 — of which 16 are delivered on the Web surface and 140981 is
+140984, 140985 (2026-10-07 batch: +21 more at the end of this module,
+logged-out, scripted offline) — of which 16 are delivered on the Web surface and 140981 is
 scripted and complete but BLOCKED (below), so it counts as blocked, not as
 delivered coverage.
 
@@ -1062,3 +1063,783 @@ def test_coo_arabic_hero_title_type_scale(page):
                            label="Arabic hero title")
         assert coo.effective_text_align(coo.HERO_TITLE) == "right"
         assert not coo.hero_overflows_container()
+
+
+# ===========================================================================
+# 2026-10-07 batch (OFFLINE scripted, not executed) — the 21 remaining Web
+# Automation cases of suite 140380: 140986-140991, 140997, 140999, 141002,
+# 141005, 141006, 141119-141127, 141144.
+# Every one runs in a fresh LOGGED-OUT context (`"auth": False`), unlike the
+# earlier tests above that use the default auth-state page. URLs: the cases'
+# /en/e-services/... path is a 404 (see the module docstring); the canonical
+# page is reached through web_url().
+# ===========================================================================
+E1920 = {"viewport": (1920, 1080), "auth": False}
+T768 = {"viewport": (768, 1024), "auth": False}
+M390 = {"viewport": (390, 844), "auth": False}
+DARK_PALETTE = {hex_to_rgb(h) for h in ("#1D1D1B", "#343432", "#4A4A49")}
+WHITE = hex_to_rgb("#FFFFFF")
+PDF_LABEL = "Certificate of Origin (PDF)"
+DOWNLOAD_TITLE_EN = "Download the Application Form"
+BANNER_EYEBROW_EN = "Ready to continue?"
+BANNER_TITLE_EN = "Choose the service you need"
+APPLY_HEADING_EN = "Apply for a Certificate of Origin Online"
+SECOND_REQUIREMENT = "QCTEST-130947 Second Requirement"
+FORM_FILE = "QCTEST-130947-application-form.pdf"
+LOGIN_URL = "https://coo.qatarchamber.com/login"
+VERIFY_URL = "https://coo.qatarchamber.com/verify"
+DEAD_URL = "https://coo.qatarchamber.com/qctest-130947-nonexistent"
+FACT_LABELS_AR = ["قناة الخدمة", "أنواع الشهادات", "التحقق", "نطاق الخدمة"]
+SECTION_HEADINGS_AR = ["نظرة عامة", "المستندات المطلوبة", "التقديم على شهادة المنشأ إلكترونيًا"]
+CARD_TITLES_AR = ["التقديم على شهادة المنشأ", "التحقق من شهادة المنشأ", "متطلبات التقديم"]
+ACCORDION_ITEM_AR = "شهادة المنشأ للأمتعة الشخصية"
+STEP_TITLES_AR = ["تنزيل واستكمال نموذج الطلب", "استلام بيانات الدخول", "الدخول إلى النظام الإلكتروني",
+                  "مراجعة المتطلبات", "الالتزام بقواعد المنشأ", "شاركنا ملاحظاتك"]
+DOWNLOAD_TITLE_AR = "تنزيل نموذج الطلب"
+DOWNLOAD_BUTTON_AR = "تحميل"
+# The content column's top once a section is scrolled to (scroll-margin-top 96px,
+# sticky header); "at the top of the content column" = within this band.
+SECTION_TOP_BAND = (0.0, 160.0)
+
+
+def _px(value: str) -> float:
+    return float(str(value).replace("px", "") or 0)
+
+
+def _rgb_of(css: str):
+    m = re.findall(r"[\d.]+", css or "")
+    return tuple(int(float(v)) for v in m[:3]) if len(m) >= 3 else None
+
+
+def _no_overlap(boxes) -> bool:
+    bs = [b for b in boxes if b]
+    for i, a in enumerate(bs):
+        for b in bs[i + 1:]:
+            if (a["x"] < b["x"] + b["width"] - 1 and b["x"] < a["x"] + a["width"] - 1
+                    and a["y"] < b["y"] + b["height"] - 1 and b["y"] < a["y"] + a["height"] - 1):
+                return False
+    return True
+
+
+def _stacked(boxes) -> bool:
+    return all(boxes[k]["y"] + boxes[k]["height"] <= boxes[k + 1]["y"] + 1 for k in range(len(boxes) - 1))
+
+
+def _type(coo, selector, weight, size, line, index=0):
+    s = coo.computed_style(selector, ["fontFamily", "fontWeight", "fontSize", "lineHeight"], index=index)
+    assert font_family_contains(s["fontFamily"], "Cairo"), f"{selector}: font {s['fontFamily']!r}"
+    assert (str(s["fontWeight"]), px_close(s["fontSize"], size), px_close(s["lineHeight"], line)) == (str(weight), True, True), (
+        f"{selector}: expected {weight} {size}/{line}, got {s['fontWeight']} {s['fontSize']}/{s['lineHeight']}")
+
+
+def _nav_requests(page) -> list:
+    """Records every navigation-request URL in the context (new tabs included)."""
+    seen = []
+    page.context.on("request", lambda r: seen.append(r.url) if r.is_navigation_request() else None)
+    return seen
+
+
+# --------------------------------------------------------------------------
+# Compatibility (140986-140991)
+# --------------------------------------------------------------------------
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Compatibility")
+@allure.title("The page renders correctly at 1920px in English Light theme")
+@pytest.mark.web
+@pytest.mark.compatibility
+@pytest.mark.eserv
+@pytest.mark.uat
+@pytest.mark.pbi_130947
+@pytest.mark.tc_140986
+@pytest.mark.traceability("ESERV-COO-TC-018")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "140986")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_desktop_1920_en_light(page):
+    """ESERV-COO-TC-018 — Azure TC 140986. Hero padding 40/300/0 on linear-gradient(118deg,#46071E,#601430 48%,
+    #911731); body 64/300 with a 24px gap; 312px #F6F6F6 index rail left of the 944px content column (40px
+    left padding); footer 80/300/32 on 90deg #422C1B 16% -> #911731 84%; no h-scroll/clipping; title Cairo
+    700 48/60."""
+    coo = CertificateOfOriginPage(page)
+    coo.start_console_capture()
+    coo.open_coo(locale="en")
+    assert coo.http_status(page.url) == 200
+    assert coo.document_direction() == "ltr"
+    assert coo.console_errors() == []
+    with allure.step("Hero, body, index rail, content column and footer layout tokens"):
+        hero = coo.computed_style(coo.HERO, ["paddingTop", "paddingRight", "paddingBottom", "paddingLeft", "backgroundImage"])
+        assert [_px(hero[k]) for k in ("paddingTop", "paddingRight", "paddingBottom", "paddingLeft")] == [40, 300, 0, 300], hero
+        g = hero["backgroundImage"].replace(" ", "")
+        assert "linear-gradient(118deg,rgb(70,7,30)" in g and "rgb(96,20,48)48%" in g and "rgb(145,23,49)" in g, hero["backgroundImage"]
+        body = coo.computed_style(coo.BODY, ["paddingTop", "paddingRight", "paddingBottom", "paddingLeft"])
+        assert [_px(body["paddingTop"]), _px(body["paddingRight"]), _px(body["paddingLeft"])] == [64, 300, 300], body
+        assert _px(coo.computed_style(coo.LAYOUT, ["columnGap"])["columnGap"]) == 24
+        rail, content = coo.element_box(coo.INDEX_COL), coo.element_box(coo.CONTENT)
+        assert abs(rail["width"] - 312) <= 1 and rail["x"] < content["x"], (rail, content)
+        assert _rgb_of(coo.computed_style(coo.INDEX, ["backgroundColor"])["backgroundColor"]) == hex_to_rgb("#F6F6F6")
+        assert abs(content["width"] - 944) <= 1, content
+        assert _px(coo.computed_style(coo.CONTENT, ["paddingLeft"])["paddingLeft"]) == 40
+        foot = coo.computed_style(coo.FOOTER, ["paddingTop", "paddingRight", "paddingBottom", "paddingLeft", "backgroundImage"])
+        assert [_px(foot[k]) for k in ("paddingTop", "paddingRight", "paddingBottom", "paddingLeft")] == [80, 300, 32, 300], foot
+        fg = foot["backgroundImage"].replace(" ", "")
+        assert "linear-gradient(90deg,rgb(66,44,27)16%,rgb(145,23,49)84%)" in fg, foot["backgroundImage"]
+    with allure.step("Scroll top to bottom"):
+        assert not coo.has_horizontal_scrollbar()
+        assert coo.clipped_text_in() == []
+        _type(coo, coo.HERO_TITLE, 700, "48px", "60px")
+        assert coo.hero_title_text() == HERO_TITLE_EN
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Compatibility")
+@allure.title("The page renders correctly at 1920px in Arabic Light theme")
+@pytest.mark.web
+@pytest.mark.compatibility
+@pytest.mark.bilingual
+@pytest.mark.eserv
+@pytest.mark.uat
+@pytest.mark.pbi_130947
+@pytest.mark.tc_140987
+@pytest.mark.traceability("ESERV-COO-TC-019")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "140987")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_desktop_1920_ar_light(page):
+    """ESERV-COO-TC-019 — Azure TC 140987. dir=rtl; 312px rail on the RIGHT of the 944px column; title right-aligned
+    Cairo 700 40/64; quick facts read right to left; footer mirrored; no h-scroll/clipping; height <= 3073."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="ar")
+    assert coo.http_status(page.url) == 200 and coo.document_direction() == "rtl"
+    rail, content = coo.element_box(coo.INDEX_COL), coo.element_box(coo.CONTENT)
+    assert rail["x"] > content["x"] and abs(rail["width"] - 312) <= 1 and abs(content["width"] - 944) <= 1, (rail, content)
+    assert coo.hero_title_text() == HERO_TITLE_AR
+    assert coo.effective_text_align(coo.HERO_TITLE) == "right"
+    _type(coo, coo.HERO_TITLE, 700, "40px", "64px")
+    facts = coo.boxes(coo.FACT)
+    assert [lbl for lbl, _ in coo.fact_pairs()] == FACT_LABELS_AR
+    assert all(facts[k]["x"] > facts[k + 1]["x"] for k in range(len(facts) - 1)), "quick facts do not read right to left"
+    assert coo.computed_style(coo.FOOTER, ["direction"])["direction"] == "rtl", "footer is not mirrored"
+    assert not coo.has_horizontal_scrollbar()
+    assert coo.clipped_text_in() == []
+    assert coo.page_height() <= 3073, f"page height {coo.page_height()} exceeds the 3073px reference"
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Compatibility")
+@allure.title("The page renders correctly at 1920px in Dark theme")
+@pytest.mark.web
+@pytest.mark.compatibility
+@pytest.mark.accessibility
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_140988
+@pytest.mark.traceability("ESERV-COO-TC-020")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "140988")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_desktop_1920_dark(page):
+    """ESERV-COO-TC-020 — Azure TC 140988. Dark persists across reload; surfaces from #1D1D1B/#343432/#4A4A49;
+    accent #C44561; rail not #F6F6F6; legible contrast; no white cards; no h-scroll."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en").enable_dark_mode()
+    coo.reload_coo()
+    assert coo.theme() == "dark", "Dark theme did not persist across a reload"
+    for sel in (coo.BODY, coo.INDEX):
+        rgb = _rgb_of(coo.computed_style(sel, ["backgroundColor"])["backgroundColor"])
+        assert rgb in DARK_PALETTE, f"{sel} surface {rgb} is not in the dark palette"
+    assert_color(coo, coo.section_badge_selector(SECTION_OVERVIEW), "#C44561", label="accent (Overview badge)")
+    assert _rgb_of(coo.computed_style(coo.INDEX, ["backgroundColor"])["backgroundColor"]) != hex_to_rgb("#F6F6F6")
+    whites = [sel for sel in (coo.CARD, coo.ACC_ITEM, coo.DOWNLOAD_CARD)
+              if any(_rgb_of(s["backgroundColor"]) == WHITE for s in coo.computed_styles_all(sel, ["backgroundColor"]))]
+    assert whites == [], f"light-theme white backgrounds kept in dark mode: {whites!r}"
+    assert coo.low_contrast_text() == []
+    assert not coo.has_horizontal_scrollbar()
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Compatibility")
+@allure.title("The page reflows to a single column at 390px in English")
+@pytest.mark.web
+@pytest.mark.compatibility
+@pytest.mark.eserv
+@pytest.mark.uat
+@pytest.mark.pbi_130947
+@pytest.mark.tc_140989
+@pytest.mark.traceability("ESERV-COO-TC-021")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "140989")
+@pytest.mark.parametrize("page", [M390], indirect=True)
+def test_coo_mobile_390_en(page):
+    """ESERV-COO-TC-021 — Azure TC 140989. Title Cairo 700 30/38; facts and the three info cards stack; headings
+    600 18/28; no index side column; both hero CTAs full width, unclipped; no overflow."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    assert not coo.has_horizontal_scrollbar()
+    _type(coo, coo.HERO_TITLE, 700, "30px", "38px")
+    assert _stacked(coo.boxes(coo.FACT)), "quick facts are not one per row"
+    assert coo.card_titles() == CARD_TITLES_EN and _stacked(coo.card_boxes()), "info cards do not stack in order"
+    for i in range(coo.page.locator(coo.SECTION_TITLE).count()):
+        _type(coo, coo.SECTION_TITLE, 600, "18px", "28px", index=i)
+    assert not coo.is_visible(coo.INDEX_COL), "the index rail is still rendered as a side column"
+    ctas, row = coo.boxes(coo.HERO_CTA), coo.element_box(coo.HERO_CTAS)
+    assert len(ctas) == 2 and all(abs(c["width"] - row["width"]) <= 1 for c in ctas), (ctas, row)
+    assert coo.hero_cta_labels() == CTA_LABELS_EN and not any(coo.is_text_clipped(coo.HERO_CTA, i) for i in range(2))
+    assert coo.clipped_text_in() == []
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Compatibility")
+@allure.title("The page reflows to a single mirrored column at 390px in Arabic")
+@pytest.mark.web
+@pytest.mark.compatibility
+@pytest.mark.bilingual
+@pytest.mark.eserv
+@pytest.mark.uat
+@pytest.mark.pbi_130947
+@pytest.mark.tc_140990
+@pytest.mark.traceability("ESERV-COO-TC-022")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "140990")
+@pytest.mark.parametrize("page", [M390], indirect=True)
+def test_coo_mobile_390_ar(page):
+    """ESERV-COO-TC-022 — Azure TC 140990. rtl; title 700 30/38 right-aligned; facts and cards stack right-aligned;
+    accordion chevrons on the left edge; AR CTA labels in full; no overlapping blocks."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="ar")
+    assert coo.document_direction() == "rtl" and not coo.has_horizontal_scrollbar()
+    assert coo.hero_title_text() == HERO_TITLE_AR
+    _type(coo, coo.HERO_TITLE, 700, "30px", "38px")
+    assert coo.effective_text_align(coo.HERO_TITLE) == "right"
+    assert _stacked(coo.boxes(coo.FACT)) and _stacked(coo.card_boxes())
+    assert all(coo.effective_text_align(coo.FACT_LABEL, i) == "right" for i in range(coo.fact_count()))
+    assert all(coo.effective_text_align(coo.CARD_TITLE, i) == "right" for i in range(coo.card_count()))
+    marks, rows = coo.boxes(f"{coo.ACC_ITEM} {coo.ACC_MARK}"), coo.boxes(coo.ACC_QUESTION)
+    assert marks and all(m["x"] + m["width"] / 2 < r["x"] + r["width"] / 2 for m, r in zip(marks, rows)), (
+        "accordion chevrons are not on the left edge")
+    assert coo.hero_cta_labels() == CTA_LABELS_AR and not any(coo.is_text_clipped(coo.HERO_CTA, i) for i in range(2))
+    assert coo.clipped_text_in() == []
+    # Sibling blocks only (the banner sits inside .qc-coo-body, so body/banner would overlap by containment).
+    blocks = [coo.element_box(coo.HERO)] + coo.boxes(coo.SECTION) + [coo.element_box(coo.BANNER), coo.element_box(coo.FOOTER)]
+    assert _no_overlap(blocks), "a block overlaps the next"
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Compatibility")
+@allure.title("The page reflows legibly at 768px in English")
+@pytest.mark.web
+@pytest.mark.compatibility
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_140991
+@pytest.mark.traceability("ESERV-COO-TC-023")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "140991")
+@pytest.mark.parametrize("page", [T768], indirect=True)
+def test_coo_tablet_768_en(page):
+    """ESERV-COO-TC-023 — Azure TC 140991. Reflow + legibility (no Figma frame, A-6): facts unclipped; <= 2 cards
+    per row; rail hidden or not overlapping; banner CTAs side by side or stacked cleanly; headers clickable;
+    index anchors scroll."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    assert not coo.has_horizontal_scrollbar()
+    assert not any(coo.is_text_clipped(coo.FACT_LABEL, i) or coo.is_text_clipped(coo.FACT_VALUE, i)
+                   for i in range(coo.fact_count()))
+    rows = {}
+    for b in coo.card_boxes():
+        rows[round(b["y"])] = rows.get(round(b["y"]), 0) + 1
+    assert max(rows.values()) <= 2, f"info cards per row {rows!r}"
+    if coo.is_visible(coo.INDEX_COL):
+        assert _no_overlap([coo.element_box(coo.INDEX_COL), coo.element_box(coo.CONTENT)])
+    assert _no_overlap(coo.boxes(coo.BANNER_CTA))
+    assert coo.clipped_text_in() == []
+    coo.scroll_section_into_view(SECTION_DOCUMENTS)
+    coo.expand_accordion_item(ACCORDION_ITEM_TITLE)
+    assert coo.is_accordion_item_expanded(ACCORDION_ITEM_TITLE)
+    if coo.is_visible(coo.INDEX_COL):
+        coo.click_index_entry("How to Apply")
+        top = coo.section_top(SECTION_APPLY)
+        assert SECTION_TOP_BAND[0] <= top <= SECTION_TOP_BAND[1], f"How to Apply section top at {top}px after the anchor"
+
+
+# --------------------------------------------------------------------------
+# Acceptance journeys (140997, 140999, 141002)
+# --------------------------------------------------------------------------
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Journey")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("A public visitor sees the complete published page with every active component in display order")
+@pytest.mark.web
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.eserv
+@pytest.mark.uat
+@pytest.mark.pbi_130947
+@pytest.mark.tc_140997
+@pytest.mark.traceability("ESERV-COO-TC-029")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "140997")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_public_full_page_en(page):
+    """ESERV-COO-TC-029 — Azure TC 140997."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    assert coo.http_status(page.url) == 200 and coo.page.locator("input[type='password']").count() == 0
+    with allure.step("Hero, quick facts and sticky index"):
+        assert (coo.hero_eyebrow_text(), coo.hero_title_text(), coo.hero_description_text()) == (
+            HERO_EYEBROW_EN, HERO_TITLE_EN, HERO_DESC_EN)
+        assert coo.hero_cta_labels() == CTA_LABELS_EN
+        assert coo.fact_pairs() == QUICK_FACTS_EN
+        assert coo.index_entries() == INDEX_ENTRIES_EN
+    with allure.step("Sections 01, 02, 03"):
+        assert coo.section_intro_text(SECTION_OVERVIEW).startswith(OVERVIEW_BODY_PREFIX)
+        assert coo.card_titles() == CARD_TITLES_EN
+        assert coo.section_intro_text(SECTION_DOCUMENTS) == DOCUMENTS_INTRO_EN
+        assert coo.pdf_button_label() == PDF_LABEL
+        assert coo.accordion_item_count() > 0 and not any(
+            coo.is_accordion_item_expanded(t) for t in coo.accordion_titles()), "accordion is not collapsed on load"
+        assert coo.step_numerals() == STEP_NUMERALS and coo.step_titles() == STEP_TITLES_EN
+        assert coo.download_card_title() == DOWNLOAD_TITLE_EN
+    with allure.step("Next-step banner; nothing Inactive or draft-only rendered"):
+        coo.scroll_to_banner()
+        assert (coo.banner_eyebrow_text(), coo.banner_title_text(), coo.banner_body_text()) == (
+            BANNER_EYEBROW_EN, BANNER_TITLE_EN, BANNER_BODY_EN)
+        assert coo.banner_cta_labels() == CTA_LABELS_EN
+        assert coo.page.locator(coo.SECTION).count() == 3, "a section beyond the three active ones is rendered"
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Journey")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("The Arabic published page delivers the full authored Arabic content set end to end")
+@pytest.mark.web
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.bilingual
+@pytest.mark.eserv
+@pytest.mark.uat
+@pytest.mark.pbi_130947
+@pytest.mark.tc_140999
+@pytest.mark.traceability("ESERV-COO-TC-031")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "140999")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_public_full_page_ar(page):
+    """ESERV-COO-TC-031 — Azure TC 140999. No English fallback in any named position."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="ar")
+    assert coo.http_status(page.url) == 200 and coo.document_direction() == "rtl"
+    assert (coo.hero_eyebrow_text(), coo.hero_title_text()) == (HERO_EYEBROW_AR, HERO_TITLE_AR)
+    assert coo.hero_cta_labels() == CTA_LABELS_AR
+    assert coo.fact_pairs() == QUICK_FACTS_AR
+    assert coo.index_entries() == INDEX_ENTRIES_AR
+    assert [coo.section_title_text(s) for s in (SECTION_OVERVIEW, SECTION_DOCUMENTS, SECTION_APPLY)] == SECTION_HEADINGS_AR
+    assert coo.card_titles() == CARD_TITLES_AR
+    assert ACCORDION_ITEM_AR in coo.accordion_titles()
+    assert coo.step_titles() == STEP_TITLES_AR
+    assert (coo.download_card_title(), coo.download_button_label()) == (DOWNLOAD_TITLE_AR, DOWNLOAD_BUTTON_AR)
+    coo.scroll_to_banner()
+    assert (coo.banner_eyebrow_text(), coo.banner_title_text()) == (BANNER_EYEBROW_AR, BANNER_TITLE_AR)
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Journey")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Document discovery: sticky index -> expanded requirement -> PDF guide in a new tab")
+@pytest.mark.web
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.eserv
+@pytest.mark.uat
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141002
+@pytest.mark.traceability("ESERV-COO-TC-034")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141002")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_document_discovery_journey(page):
+    """ESERV-COO-TC-034 — Azure TC 141002."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    with allure.step("Click '02 Documents Required'"):
+        coo.click_index_entry(DOCUMENTS_INDEX_LABEL)
+        assert coo.active_index_label() == DOCUMENTS_INDEX_LABEL
+        top = coo.section_top(SECTION_DOCUMENTS)
+        assert SECTION_TOP_BAND[0] <= top <= SECTION_TOP_BAND[1], f"Documents Required section top at {top}px"
+    with allure.step(f"Expand '{ACCORDION_ITEM_TITLE}'"):
+        coo.expand_accordion_item(ACCORDION_ITEM_TITLE)
+        assert coo.accordion_item_answer_text(ACCORDION_ITEM_TITLE).startswith(ACCORDION_ANSWER_PREFIX)
+        others = [t for t in coo.accordion_titles() if t != ACCORDION_ITEM_TITLE]
+        assert not any(coo.is_accordion_item_expanded(t) for t in others)
+    with allure.step(f"Click '{PDF_LABEL}'"):
+        url, title = page.url, coo.hero_title_text()
+        popup = coo.click_expect_popup(coo.PDF_BUTTON)
+        assert popup is not page and popup.url not in ("", "about:blank")
+        assert (page.url, coo.hero_title_text()) == (url, title), "the original tab did not stay on the COO page"
+
+
+# --------------------------------------------------------------------------
+# Hero CTAs (141005, 141006, 141144)
+# --------------------------------------------------------------------------
+def _cta_new_tab(page, index, expected):
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    assert coo.hero_cta_labels()[index] == CTA_LABELS_EN[index]
+    assert coo.href_of(coo.HERO_CTA, index) == expected, f"href {coo.href_of(coo.HERO_CTA, index)!r} != {expected!r}"
+    navs = _nav_requests(page)
+    url = page.url
+    popup = coo.click_expect_popup(coo.HERO_CTA, index)
+    assert popup is not page, "the CTA did not open a new tab"
+    assert any(u.rstrip("/") == expected.rstrip("/") for u in navs), f"the new tab never requested {expected}: {navs!r}"
+    assert page.url == url and coo.is_hero_visible(), "the Certificate of Origin page did not stay loaded"
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Hero")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("The Login to COO call to action opens the configured portal URL in a new tab")
+@pytest.mark.web
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.eserv
+@pytest.mark.uat
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141005
+@pytest.mark.traceability("ESERV-COO-TC-037")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141005")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_login_cta_redirect(page):
+    """ESERV-COO-TC-037 — Azure TC 141005. href exactly https://coo.qatarchamber.com/login; New Tab."""
+    _cta_new_tab(page, 0, LOGIN_URL)
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Hero")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("The Verify Certificate call to action opens the configured verification URL in a new tab")
+@pytest.mark.web
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.eserv
+@pytest.mark.uat
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141006
+@pytest.mark.traceability("ESERV-COO-TC-038")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141006")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_verify_cta_redirect(page):
+    """ESERV-COO-TC-038 — Azure TC 141006. href exactly https://coo.qatarchamber.com/verify; New Tab."""
+    _cta_new_tab(page, 1, VERIFY_URL)
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Hero")
+@allure.title("The page degrades gracefully when a CTA Redirect URL is well-formed but its destination returns 404")
+@pytest.mark.web
+@pytest.mark.edge
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141144
+@pytest.mark.traceability("ESERV-COO-TC-184")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141144")
+@pytest.mark.skip(reason="CONDITIONAL: step 1 rewrites the Redirect URL of the shared 'Login to COO' CTA that the live "
+                         "COO page renders. That record is real shared content, it is not in the approved live-restore "
+                         "set (reports/live-restore/live_restore.py), and no QCTEST copy of the CTA can be rendered on "
+                         "the page. Needs an explicit, ID-named go-ahead before it may run.")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_dead_cta_destination_degrades(page):
+    """ESERV-COO-TC-184 — Azure TC 141144. Precondition (CMS, not automated here): the shared 'Login to COO' CTA's
+    Redirect URL set to https://coo.qatarchamber.com/qctest-130947-nonexistent and published. The public half
+    below runs as written once that precondition exists."""
+    coo = CertificateOfOriginPage(page)
+    coo.start_console_capture()
+    coo.open_coo(locale="en")
+    assert coo.href_of(coo.HERO_CTA, 0) == DEAD_URL and coo.href_of(coo.BANNER_CTA, 0) == DEAD_URL
+    assert coo.is_enabled_link(coo.HERO_CTA, 0) and coo.is_enabled_link(coo.BANNER_CTA, 0)
+    popup = coo.click_expect_popup(coo.HERO_CTA, 0)
+    assert coo.http_status(DEAD_URL) == 404
+    assert popup is not page and coo.is_hero_visible() and coo.console_errors() == []
+    coo.reload_coo()
+    assert coo.hero_title_text() == HERO_TITLE_EN and coo.card_count() and coo.step_count() and coo.is_banner_visible()
+
+
+# --------------------------------------------------------------------------
+# Controls (141119-141123)
+# --------------------------------------------------------------------------
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Documents Required")
+@allure.title("The Certificate of Origin (PDF) action button is an activatable control, including by keyboard")
+@pytest.mark.web
+@pytest.mark.functional_low
+@pytest.mark.accessibility
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141119
+@pytest.mark.traceability("ESERV-COO-TC-159")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141119")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_pdf_button_activatable(page):
+    """ESERV-COO-TC-159 — Azure TC 141119."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    coo.scroll_section_into_view(SECTION_DOCUMENTS)
+    assert coo.is_enabled_link(coo.PDF_BUTTON), "the PDF button is not an enabled control with a non-empty href"
+    assert coo.tab_to(coo.PDF_BUTTON), "the PDF button is not reachable in the keyboard tab order"
+    ring = coo.focus_indicator(coo.PDF_BUTTON)
+    assert ring["visible"] and (ring["outline"] != "none" or ring["shadow"] != "none"), f"no visible focus indicator: {ring!r}"
+    popup = coo.press_enter_expect_popup()
+    assert popup is not page and popup.url not in ("", "about:blank")
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Documents Required")
+@allure.title("Clicking a document-requirement accordion header expands its content panel")
+@pytest.mark.web
+@pytest.mark.functional_low
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141120
+@pytest.mark.traceability("ESERV-COO-TC-160")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141120")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_accordion_expands(page):
+    """ESERV-COO-TC-160 — Azure TC 141120. PRECONDITION: a second active item 'QCTEST-130947 Second Requirement';
+    the last assertion is gated on its presence."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    coo.scroll_section_into_view(SECTION_DOCUMENTS)
+    titles = coo.accordion_titles()
+    assert not any(coo.is_accordion_item_expanded(t) or coo.is_accordion_answer_visible(t) for t in titles)
+    before = coo.accordion_chevron_transform(ACCORDION_ITEM_TITLE)
+    coo.expand_accordion_item(ACCORDION_ITEM_TITLE)
+    assert coo.is_accordion_answer_visible(ACCORDION_ITEM_TITLE)
+    assert coo.accordion_item_answer_text(ACCORDION_ITEM_TITLE).startswith(ACCORDION_ANSWER_PREFIX)
+    assert coo.accordion_chevron_transform(ACCORDION_ITEM_TITLE) != before, "the chevron did not rotate"
+    if SECOND_REQUIREMENT not in titles:
+        pytest.skip(f"PRECONDITION UNAVAILABLE: no active accordion item {SECOND_REQUIREMENT!r} on the page "
+                    f"(items: {titles!r}). The expansion half ran for real above.")
+    assert not coo.is_accordion_item_expanded(SECOND_REQUIREMENT)
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Documents Required")
+@allure.title("Clicking an expanded accordion header collapses it again")
+@pytest.mark.web
+@pytest.mark.functional_low
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141121
+@pytest.mark.traceability("ESERV-COO-TC-161")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141121")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_accordion_collapses(page):
+    """ESERV-COO-TC-161 — Azure TC 141121."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    coo.scroll_section_into_view(SECTION_DOCUMENTS)
+    chevron, height = coo.accordion_chevron_transform(ACCORDION_ITEM_TITLE), coo.section_height(SECTION_DOCUMENTS)
+    next_top = coo.section_top(SECTION_APPLY) + coo.scroll_y()  # document-relative
+    coo.expand_accordion_item(ACCORDION_ITEM_TITLE)
+    assert coo.is_accordion_answer_visible(ACCORDION_ITEM_TITLE)
+    coo.collapse_accordion_item(ACCORDION_ITEM_TITLE)
+    assert not coo.is_accordion_item_expanded(ACCORDION_ITEM_TITLE)
+    assert not coo.is_accordion_answer_visible(ACCORDION_ITEM_TITLE)
+    assert coo.accordion_chevron_transform(ACCORDION_ITEM_TITLE) == chevron
+    assert abs(coo.section_height(SECTION_DOCUMENTS) - height) <= 1
+    assert abs(coo.section_top(SECTION_APPLY) + coo.scroll_y() - next_top) <= 1
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("How to Apply")
+@allure.title("Clicking the Download button downloads the configured application form file")
+@pytest.mark.web
+@pytest.mark.functional_low
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141122
+@pytest.mark.traceability("ESERV-COO-TC-162")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141122")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_download_application_form(page):
+    """ESERV-COO-TC-162 — Azure TC 141122. PRECONDITION: QCTEST-130947-application-form.pdf configured on the card;
+    gated on the card's href naming that file."""
+    import os
+
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    assert coo.is_download_card_visible() and coo.is_enabled_link(coo.DOWNLOAD_BUTTON)
+    href = coo.href_of(coo.DOWNLOAD_BUTTON)
+    if FORM_FILE.rsplit(".", 1)[0] not in href:
+        pytest.skip(f"PRECONDITION UNAVAILABLE: the download card is not configured with {FORM_FILE} (href {href!r}).")
+    from urllib.parse import urljoin
+    assert coo.http_status(urljoin(page.url, href)) == 200
+    dl = coo.download_via_button()
+    assert dl.suggested_filename == FORM_FILE
+    assert os.path.getsize(dl.path()) > 0
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Sticky index")
+@allure.title("Clicking a sticky section index entry scrolls to the matching section")
+@pytest.mark.web
+@pytest.mark.functional_low
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141123
+@pytest.mark.traceability("ESERV-COO-TC-163")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141123")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_index_scrolls_to_section(page):
+    """ESERV-COO-TC-163 — Azure TC 141123."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    coo.click_index_entry("How to Apply")
+    assert coo.active_index_label() == "How to Apply"
+    assert coo.section_title_text(SECTION_APPLY) == APPLY_HEADING_EN
+    top = coo.section_top(SECTION_APPLY)
+    assert SECTION_TOP_BAND[0] <= top <= SECTION_TOP_BAND[1], f"How to Apply section top at {top}px"
+    pinned = coo.index_viewport_top()
+    coo.click_index_entry("Overview")
+    assert coo.active_index_label() == "Overview"
+    assert coo.section_title_text(SECTION_OVERVIEW) == "Overview"
+    top = coo.section_top(SECTION_OVERVIEW)
+    assert SECTION_TOP_BAND[0] <= top <= SECTION_TOP_BAND[1], f"Overview section top at {top}px"
+    assert abs(coo.index_viewport_top() - pinned) <= 1, "the index did not stay pinned"
+
+
+# --------------------------------------------------------------------------
+# Language and theme switches (141124-141127)
+# --------------------------------------------------------------------------
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Bilingual / direction")
+@allure.title("Switching EN -> AR loads the Arabic Certificate of Origin page")
+@pytest.mark.web
+@pytest.mark.functional_low
+@pytest.mark.bilingual
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141124
+@pytest.mark.traceability("ESERV-COO-TC-164")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141124")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_switch_en_to_ar(page):
+    """ESERV-COO-TC-164 — Azure TC 141124."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en")
+    assert coo.document_direction() == "ltr" and coo.language_switcher_label() == "AR"
+    coo.switch_language("ar")
+    assert coo.document_direction() == "rtl" and coo.hero_title_text() == HERO_TITLE_AR
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Bilingual / direction")
+@allure.title("Switching AR -> EN loads the English Certificate of Origin page at the top")
+@pytest.mark.web
+@pytest.mark.functional_low
+@pytest.mark.bilingual
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141125
+@pytest.mark.traceability("ESERV-COO-TC-165")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141125")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_switch_ar_to_en(page):
+    """ESERV-COO-TC-165 — Azure TC 141125."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="ar")
+    assert coo.document_direction() == "rtl" and coo.language_switcher_label() == "EN"
+    coo.switch_language("en")
+    assert coo.document_direction() == "ltr" and coo.hero_title_text() == HERO_TITLE_EN
+    assert coo.scroll_y() == 0
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Theming")
+@allure.title("Switching Light -> Dark applies the dark palette")
+@pytest.mark.web
+@pytest.mark.functional_low
+@pytest.mark.accessibility
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141126
+@pytest.mark.traceability("ESERV-COO-TC-166")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141126")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_theme_light_to_dark(page):
+    """ESERV-COO-TC-166 — Azure TC 141126. 'About the service' badge #911731 -> #C44561; surfaces
+    #1D1D1B/#343432/#4A4A49; no error, no clipping layout shift."""
+    coo = CertificateOfOriginPage(page)
+    coo.start_console_capture()
+    coo.open_coo(locale="en")
+    badge = coo.section_badge_selector(SECTION_OVERVIEW)
+    assert coo.theme() != "dark"
+    assert_color(coo, badge, "#911731", label="light badge")
+    assert _rgb_of(coo.computed_style(coo.BODY, ["backgroundColor"])["backgroundColor"]) not in DARK_PALETTE
+    coo.enable_dark_mode()
+    assert_color(coo, badge, "#C44561", label="dark badge")
+    for sel in (coo.BODY, coo.INDEX):
+        assert _rgb_of(coo.computed_style(sel, ["backgroundColor"])["backgroundColor"]) in DARK_PALETTE, sel
+    assert coo.console_errors() == [] and coo.clipped_text_in() == [] and not coo.has_horizontal_scrollbar()
+
+
+@allure.epic("E-Services")
+@allure.feature("Certificate of Origin Online")
+@allure.story("Theming")
+@allure.title("Switching Dark -> Light restores the light palette")
+@pytest.mark.web
+@pytest.mark.functional_low
+@pytest.mark.accessibility
+@pytest.mark.eserv
+@pytest.mark.pbi_130947
+@pytest.mark.tc_141127
+@pytest.mark.traceability("ESERV-COO-TC-167")
+@allure.label("pbi", "130947")
+@allure.label("testcase", "141127")
+@pytest.mark.parametrize("page", [E1920], indirect=True)
+def test_coo_theme_dark_to_light(page):
+    """ESERV-COO-TC-167 — Azure TC 141127. Badge back to #911731; rail #F6F6F6 with #EDEDED stroke; no element
+    left on a dark-theme colour."""
+    coo = CertificateOfOriginPage(page)
+    coo.open_coo(locale="en").enable_dark_mode()
+    badge = coo.section_badge_selector(SECTION_OVERVIEW)
+    assert_color(coo, badge, "#C44561", label="dark badge")
+    coo.disable_dark_mode()
+    assert coo.theme() != "dark"
+    assert_color(coo, badge, "#911731", label="light badge")
+    rail = coo.computed_style(coo.INDEX, ["backgroundColor", "borderTopColor", "borderTopWidth", "boxShadow"])
+    assert _rgb_of(rail["backgroundColor"]) == hex_to_rgb("#F6F6F6"), rail
+    edge = hex_to_rgb("#EDEDED")
+    assert (_rgb_of(rail["borderTopColor"]) == edge and _px(rail["borderTopWidth"]) > 0) or str(edge) in (
+        str(_rgb_of(rail["boxShadow"]))), f"rail stroke is not #EDEDED: {rail!r}"
+    stuck = [c for c in coo.surface_colors() if _rgb_of(c) in DARK_PALETTE]
+    assert stuck == [], f"surfaces still on dark-theme colours: {stuck!r}"

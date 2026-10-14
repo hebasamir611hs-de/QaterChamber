@@ -1136,3 +1136,49 @@ def test_proposal_for_research_switch_dark_to_light(page):
         assert badge_color != ""
         assert heading_color != ""
         assert pr.section_title_text(1) == EN_SECTION01_TITLE
+
+
+# ===========================================================================
+# 141364 / SVC-PROPOSALRESEARCH-TC-187 — Main Menu > Services > Proposal for
+# Research (2026-10-07 batch, OFFLINE scripted, not executed). Logged out.
+# URL NOTE: the case's /en/our-services/information/proposal-for-research does
+# not exist (see ProposalForResearchPage's docstring); the menu's configured
+# target is /web/qatar-chamber/our-services/proposal-for-research, so the
+# landing is asserted on the page's own path segment.
+# ===========================================================================
+@allure.epic("Services")
+@allure.feature("Proposal for Research")
+@allure.story("Navigation")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("A visitor reaches the Proposal for Research page from the Main Menu Services entry")
+@pytest.mark.web
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.svc
+@pytest.mark.pbi_130949
+@pytest.mark.tc_141364
+@pytest.mark.traceability("SVC-PROPOSALRESEARCH-TC-187")
+@allure.label("pbi", "130949")
+@allure.label("testcase", "141364")
+@pytest.mark.parametrize("page", [{"viewport": (1920, 1080), "auth": False}], indirect=True)
+def test_proposal_for_research_reached_from_main_menu(page):
+    pr = ProposalForResearchPage(page).start_console_capture()
+
+    with allure.step("Open the English home page logged out at 1920x1080"):
+        pr.open_home()
+        assert "Services" in pr.services_menu_label()
+
+    with allure.step("Open the 'Services' entry of the Main Menu"):
+        items = pr.open_services_menu()
+        assert "Proposal for Research" in items, f"Services menu lists {items!r}"
+
+    with allure.step("Click 'Proposal for Research'"):
+        pr.click_services_menu_item()
+        assert page.url.split("?")[0].rstrip("/").endswith("/our-services/proposal-for-research"), page.url
+        assert pr.http_status(page.url) == 200
+        assert [" ".join(t.split()) for t in pr.breadcrumb_texts()] == EN_BREADCRUMB
+        assert pr.hero_title_text() == EN_HERO_TITLE
+        assert len(pr.quick_fact_labels()) == 4
+        assert pr.index_entries() == EN_INDEX_ENTRIES
+        assert pr.console_errors() == []

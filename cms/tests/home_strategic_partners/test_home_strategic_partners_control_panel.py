@@ -97,7 +97,7 @@ def test_create_and_publish_strategic_partner(page, browser):
             f"got {admin.row_status_text(TEST_PARTNER_NAME_EN)!r}"
         )
 
-        with allure.step("Publish (Submit for Publishing)"):
+        with allure.step("Publish (Submit for Review)"):
             admin.open_entry_by_edit_link(TEST_PARTNER_NAME_EN)
             admin.submit_for_publishing()
 

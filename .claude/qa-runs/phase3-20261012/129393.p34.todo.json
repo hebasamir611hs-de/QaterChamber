@@ -1,0 +1,112 @@
+[
+ {
+  "id": 134829,
+  "title": "Verify that an empty Hyperlink Title is allowed because the field is optional",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Hyperlink Title field empty"
+   },
+   {
+    "action": "Leave the Hyperlink Title field empty, complete all mandatory fields, and click Publish",
+    "expected": "Publish succeeds with no validation error against Hyperlink Title and the success toast is shown"
+   },
+   {
+    "action": "Open the Chairman's Message page in English",
+    "expected": "The message renders normally with no empty or broken link label displayed"
+   }
+  ]
+ },
+ {
+  "id": 134831,
+  "title": "Verify that a valid Hyperlink URL is accepted and saved",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Hyperlink URL field available"
+   },
+   {
+    "action": "Enter 'https://www.qatarchamber.com' as the Hyperlink URL and click Save",
+    "expected": "Value is accepted with no validation error and the success toast is shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Hyperlink URL reads 'https://www.qatarchamber.com'"
+   }
+  ]
+ },
+ {
+  "id": 134834,
+  "title": "Verify that an empty Hyperlink URL is allowed because the field is optional",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Hyperlink URL field empty"
+   },
+   {
+    "action": "Leave the Hyperlink URL field empty, complete all mandatory fields, and click Publish",
+    "expected": "Publish succeeds with no validation error against Hyperlink URL and the success toast is shown"
+   },
+   {
+    "action": "Open the Chairman's Message page in English",
+    "expected": "The message renders normally with no anchor pointing to an empty or malformed destination"
+   }
+  ]
+ },
+ {
+  "id": 134835,
+  "title": "Verify that the Status dropdown offers and stores the Draft value",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS",
+    "expected": "Record opens with the Status dropdown available"
+   },
+   {
+    "action": "Open the Status dropdown and select Draft, then click Save",
+    "expected": "The dropdown lists exactly Draft and Published; Draft is selected and saved with the success toast shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Status reads Draft"
+   }
+  ]
+ },
+ {
+  "id": 134836,
+  "title": "Verify that the Status dropdown offers and stores the Published value",
+  "priority": 3,
+  "importance": "high",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open the Chairman's Message page record in Liferay CMS with Status currently Draft",
+    "expected": "Record opens with Status Draft"
+   },
+   {
+    "action": "Open the Status dropdown and select Published, then click Save",
+    "expected": "Published is selected and saved with the success toast shown"
+   },
+   {
+    "action": "Reload the record",
+    "expected": "Status reads Published"
+   }
+  ]
+ }
+]

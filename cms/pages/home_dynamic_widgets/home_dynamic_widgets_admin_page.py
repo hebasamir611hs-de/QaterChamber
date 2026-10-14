@@ -1,252 +1,612 @@
 """
 cms/pages/home_dynamic_widgets/home_dynamic_widgets_admin_page.py —
-HomeDynamicWidgetsAdminPage.
+DynamicWidgetAdminPage.
 
 Control_Panel Page Object for PBI 129384 (QC-HOME-008 — Home Page "Dynamic
-Widgets": Marhaba Guide / B2B Platform / Weather), backing the "Dynamic
-Widget" **Object Authoring** surface
-(`https://qcdev.ihorizons.com/web/qatar-chamber/manage-dynamic-widget`) that
-feeds the public Home Page `section.qc-home-dynamic-widgets` block (see
-home_dynamic_widgets_page.py, `web/pages/home_dynamic_widgets/`, for the
-public-frontend counterpart).
+Widgets": Weather / Marhaba Guide / B2B). Public counterpart:
+web/pages/home_dynamic_widgets/home_dynamic_widgets_page.py.
 
-CORRECTED 2026-09-07 (mandatory re-verification per
-`.claude/context/active/standards.md`'s "Object Authoring Is the Only Path
-for Content Operations — Not Content & Data" section, broadened same day):
-this file's PRIOR version drove every field write and every "publish"
-action through `Content & Data`'s raw Object Definitions grid
-(objectDefinitionId=49566) using its inline Active-Status checkbox as the
-only lifecycle signal. That surface is retired for this project — a real,
-dedicated Object Authoring surface exists for this exact object and was
-CONFIRMED LIVE this session (Playwright MCP, qcdev, existing authenticated
-super-admin session — not assumed):
+REWRITTEN 2026-10-08 (Phase 3). The previous version captured, edited and
+"restored" the two REAL records (`QCDEMO-129384-directory`,
+`QCDEMO-129384-b2b-verified`) as TEST_USER, and its restore never put the
+images back. Under the 2026-10-07 user order real shared data is untouched:
+every write here goes to a disposable record, and the two real codes are
+refused by `_guard()`.
 
-  - **Slug: `dynamic-widget`** (singular) — confirmed live navigating
-    `/web/qatar-chamber/manage-dynamic-widget` directly; it renders the
-    same generic Save-as-Draft / Submit-for-Publishing / Unpublish-to-
-    edit-as-draft state machine every other Object Authoring surface in
-    this project uses (see `cms/pages/components/object_authoring_page.py`).
-  - **Still a flat 2-entry object**, same identity mapping as before (no
-    "widget name/type" field anywhere — see the historical note below):
-    Entry-column code `QCDEMO-129384-directory` (redirects to
-    qatarchamber.com, Display Order 100) mapped to **Marhaba Guide BY
-    ELIMINATION ONLY** — the only other seeded entry besides the confirmed
-    B2B row; Entry-column code `QCDEMO-129384-b2b-verified` (redirects to
-    qcci.org, Display Order 200) **confirmed live** as B2B Platform (its
-    public `.qc-dw-card` was independently observed). Both entries'
-    workflow Status is `APPROVED` (confirmed live via the Content & Data
-    grid's own Status column, and via this surface's editing-banner
-    "(approved)" wording) — this IS an Object-Definition-backed record
-    with real Draft/Approved lifecycle states, NOT a plain widget-config
-    toggle like Upcoming Event Pins (record 49205) — do not conflate the
-    two: Dynamic Widgets is the Business-Events/GM-Message class of
-    surface, Upcoming Event Pins is the confirmed exception.
-  - **Field labels on this surface, confirmed live** (all reachable via
-    `page.get_by_role(<role>, name=<label>, exact=True)` per
-    `ObjectAuthoringPage`'s generic helpers — no bilingual locale-toggle
-    on this form, every field is EN-only): `Redirect URL` (textbox),
-    `Display Order` (spinbutton), `Open in New Tab` (checkbox),
-    `Active Status` (checkbox), `Widget Image (EN)` / `Widget Image (AR)`
-    (file-upload fields, reached via `ObjectAuthoringPage.upload_file()`'s
-    confirmed-live "<Field Label> Select File" hidden-textbox pattern).
-  - **For an APPROVED entry, `Save as Draft` is disabled but `Submit for
-    Publishing` remains enabled** (confirmed live via an accessibility
-    snapshot of the real editing banner + button row) — editing a field
-    (e.g. flipping Active Status) on an already-Approved entry and
-    clicking `submit_for_publishing()` re-commits the same Approved
-    record with the new value; there is no need to unpublish first for a
-    plain field/toggle change on this object.
-  - **No confirmed generic Liferay "success toast" was found on this
-    surface** — a live, two-part investigation this session (a real
-    `Submit for Publishing` on the `directory` entry with no field change,
-    and a real `Save as Draft` on a fresh disposable test entry, both
-    polled every ~100ms across the following ~1-2s for any
-    `.alert`/`[role="alert"]`/`[role="status"]`/`[class*="toast"]` node
-    with non-empty text) found NOTHING — both saves genuinely committed
-    (confirmed via the entries list showing the new Draft rows / updated
-    timestamp) but produced no visible toast this session. This mirrors
-    `GmMessageAdminPage.SUCCESS_TOAST`'s own disclosed, never-confirmed
-    placeholder for the same class of surface — TC 135969 is left
-    disclosed/skipped in the test module rather than asserting on an
-    invented selector (see that module's own docstring). Two disposable
-    Draft rows (`0dc3833b-4059-d16e-1b6a-c87167be01b6`,
-    `ad39bc5f-55b9-2b7c-0fe6-b4179c2399de`, redirect
-    `https://qctest-toast-probe.example.com`) were created by this probe
-    and are STILL PRESENT on qcdev — the delete action was blocked by this
-    session's own destructive-action guard; flag back for manual cleanup
-    or an explicit user-approved delete, do not delete unattended.
-  - **Weather still has no confirmed control-panel surface anywhere** —
-    re-checked this session (no "Weather" Object Definition entry in the
-    Product Menu's Content & Data app list, and no `manage-weather*` slug
-    resolved) — same finding as the prior (Content & Data-era) version of
-    this file; TC 135968 remains skipped in the test module for the same
-    disclosed reason, now re-confirmed under the Object-Authoring-first
-    search too.
+OBJECT NAME. `cms/Content-Admin-Guide.docx` §15: **DynamicWidget** —
+widgetImageEn / widgetImageAr, redirectUrl, openInNewTab, displayOrder,
+activeStatus. Slug `dynamic-widget` (lower-kebab). The guide lists no
+Weather field and no widget-type field; the Weather card is rendered by the
+`qc-weather-widget` client extension (inline comment on the live page).
 
-HISTORICAL NOTE (Content & Data-era finding, still true of the underlying
-data model, kept for context): the object has no "widget name/type" field
-anywhere — the grid columns are Item Selection, ID, Active Status, Display
-Order, Open in New Tab, Redirect URL, Widget Image (AR), Widget Image (EN),
-Status, Author, Item Actions — identity is only inferable from each
-record's `externalReferenceCode`, which IS what the Object Authoring
-surface's own Entry column renders (confirmed live), unlike this project's
-other ERC-only object, manage-strategic-pillar-card.
+IDENTITY. The object has no title field; the entries list's Entry column
+shows the record's external reference code (a UUID for a new record). A
+disposable record is therefore identified by:
+  1. the entry code read from the post-save URL (`previewEntry=` /
+     `editEntry=`) — never by row position; and
+  2. its Redirect URL, which always carries the marker `QCTEST-<tc>-<short>`
+     and is re-read from the record's own form before any state change.
+`_guard()` enforces both, and refuses the two real codes outright.
 
-DISPLAY ORDER — SHARED/RELATIVE ORDERING, still applies on this surface
-(same underlying Object Definition data, only the editing surface
-changed): both entries live under the same object and the public Home page
-renders `.qc-dw-card` elements in the same relative order as their Display
-Order values. Every test below captures BOTH entries' full baseline
-(`active`, `open_in_new_tab`, `display_order`, `redirect_url`) and restores
-BOTH in `finally`, not just the one it directly touched.
+ACCOUNT. Every lifecycle write signs in as the QC Site Content Editor through
+`config.settings.cms_role_credentials()` — an Editor's submit lands on
+Published directly (standards.md, Content Editorial Workflow). Never
+TEST_USER.
+
+Live facts this file relies on are recorded in
+`.claude/qa-runs/phase3_129384_2026-10-07_report.md` (probe of 2026-10-08).
 """
 
-from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+from __future__ import annotations
 
+import logging
+import re
+import time
+
+from cms.pages.components.disposable_object_admin import (
+    DisposableObjectAdminPage,
+    FieldSpec as F,
+    ROLE_EDITOR,
+)
+from cms.pages.components.object_authoring_page import (
+    STATUS_PUBLISHED,
+    STATUS_UNKNOWN,
+    UploadNotApplied,
+    UploadPickerUnavailable,
+    normalize_status,
+)
+
+logger = logging.getLogger(__name__)
+
+REAL_CODES = ("QCDEMO-129384-directory", "QCDEMO-129384-b2b-verified")
+# Real records added by the dev team 2026-09-19 — never written by this suite.
+REAL_OTHER_CODES = ("1187b438-79ce-3e21-c233-6d2011705c0d", "1f8b96c6-e81b-d98a-40da-8d67afd7a075")
+MARHABA_ERC, B2B_ERC = REAL_CODES  # read-only use (public-page identity)
 SLUG = "dynamic-widget"
 
-# CORRECTED 2026-09-07 (tc_135966 investigation): the original timeout seen
-# here was NOT this surface's own render latency — it was a stale
-# `.auth/state.json` (session already expired), so the editing banner never
-# rendered at all (the page was effectively unauthenticated) and no
-# timeout value would have fixed it. Separately, a real cross-surface bug
-# was found and fixed in the SHARED component instead of here: a bare
-# `wait_for_load_state("networkidle")` in `ObjectAuthoringPage.
-# open_entry_by_code()`/`open_entry_by_edit_link()` could hang the full
-# Playwright default (30000ms) because this page's network never fully
-# idles (site-wide chatbot-widget polling — the same finding
-# `_wait_for_settle()` already documented for a different call site). See
-# `ObjectAuthoringPage._wait_for_network_settle()`. No local override is
-# needed here anymore — `open_entry()` below uses the shared
-# `open_entry_by_code()` directly at its normal
-# `APPROVED_BANNER_SETTLE_TIMEOUT_MS` (8000ms) budget, confirmed live to be
-# sufficient once authenticated.
 
-# Entry-column codes (== externalReferenceCode) — see module docstring's
-# identity-mapping note for the disclosed Marhaba-by-elimination caveat.
-MARHABA_ENTRY_CODE = "QCDEMO-129384-directory"
-B2B_ENTRY_CODE = "QCDEMO-129384-b2b-verified"
-
-FIELD_REDIRECT_URL = "Redirect URL"
-FIELD_DISPLAY_ORDER = "Display Order"
-FIELD_OPEN_IN_NEW_TAB = "Open in New Tab"
-FIELD_ACTIVE_STATUS = "Active Status"
-FIELD_WIDGET_IMAGE_EN = "Widget Image (EN)"
-FIELD_WIDGET_IMAGE_AR = "Widget Image (AR)"
+class RefusedWrite(RuntimeError):
+    """A write/delete target could not be proven to be a disposable QCTEST record."""
 
 
-class HomeDynamicWidgetsAdminPage(ObjectAuthoringPage):
-    """Composes the generic Object Authoring state machine
-    (`ObjectAuthoringPage`) with this object's own field map. Constructed
-    with just `page` (slug is fixed to "dynamic-widget" for this class,
-    unlike the shared base class's own `__init__(page, slug)` signature)."""
+def marker_url(tc_id, short: str) -> str:
+    return f"https://qctest-{tc_id}.example.com/QCTEST-{tc_id}-{short}"
+
+
+class DynamicWidgetAdminPage(DisposableObjectAdminPage):
+    SIDEBAR_LABEL = "Dynamic Widget"
+    SLUG = SLUG
+    SLUG_CONFIRMED_LIVE = True
+    TITLE_FIELD = ""
+    ACTIVE_FIELD = "active_status"
+    FIELDS = {
+        "image_en": F("Widget Image (EN)", kind="file", required=True, confirmed_live=True),
+        "image_ar": F("Widget Image (AR)", kind="file", required=True, confirmed_live=True),
+        "redirect_url": F("Redirect URL", kind="url", required=True, confirmed_live=True),
+        "open_new_tab": F("Open in New Tab", kind="checkbox", confirmed_live=True),
+        "display_order": F("Display Order", kind="number", required=True, default="9900", confirmed_live=True),
+        "active_status": F("Active Status", kind="checkbox", confirmed_live=True),
+    }
+    # The non-draft submit is matched by structure, not label: an Editor sees
+    # "Publish", an Author "Submit for Publishing"/"Submit for Review".
+    SUBMIT_FOR_REVIEW_BUTTON = 'button[type="submit"][name="status"]:not(:text-is("Save as Draft"))'
+    CODE_IN_URL = re.compile(r"(?:previewEntry|editEntry)=([^&#]+)")
 
     def __init__(self, page):
-        super().__init__(page, SLUG)
+        super().__init__(page)
+        self.created: list[str] = []
+        self.last_outcome: str | None = None
+        self.last_toast: str = ""
+        self.last_files: dict[str, str] = {}
+        self.all_files: set[str] = set()
 
-    # ---- Navigation ---------------------------------------------------------
-    def open_entry(self, entry_code: str) -> "HomeDynamicWidgetsAdminPage":
-        self.open_entry_by_code(entry_code)
+    # ---- guards ---------------------------------------------------------
+    def _guard(self, code: str) -> None:
+        if not code or code in REAL_CODES:
+            raise RefusedWrite(f"refusing to act on real/unknown dynamic-widget record {code!r}")
+        self.open_code(code)
+        if code in self.created:
+            return  # created by THIS test, code read from its own post-save URL
+        url = self.value("redirect_url")
+        if "QCTEST-" not in url:
+            raise RefusedWrite(f"record {code!r} carries no QCTEST marker (Redirect URL {url!r})")
+
+    # ---- navigation ------------------------------------------------------
+    def open_code(self, code: str) -> "DynamicWidgetAdminPage":
+        self.open_entry_by_code(code, locale="en")
         return self
 
-    def open_marhaba_entry(self) -> "HomeDynamicWidgetsAdminPage":
-        """See MARHABA_ENTRY_CODE's docstring note: this entry is mapped
-        onto Marhaba Guide BY ELIMINATION (the only other seeded entry
-        besides the confirmed B2B one), not by a live-confirmed "Marhaba"
-        label anywhere on this surface."""
-        return self.open_entry(MARHABA_ENTRY_CODE)
-
-    def open_b2b_entry(self) -> "HomeDynamicWidgetsAdminPage":
-        """Confirmed live: redirects to qcci.org, renders as the B2B
-        `.qc-dw-card` on the public Home page."""
-        return self.open_entry(B2B_ENTRY_CODE)
-
-    # ---- Field actions (thin, named wrappers over the base class's generic
-    # role-based helpers) ------------------------------------------------------
-    def set_redirect_url(self, value: str) -> "HomeDynamicWidgetsAdminPage":
-        self.fill_text(FIELD_REDIRECT_URL, value)
+    def open_new(self) -> "DynamicWidgetAdminPage":
+        """Create form. The page renders the form, then loads the entries list
+        ("Loading entries…") and re-initialises; an upload made before that
+        is lost (read live 2026-10-08: EN file empty at Publish). Wait for the
+        list rows first."""
+        self.open_new_entry_form(locale="en")
+        self.page.locator(self.ENTRIES_TABLE_ROW).first.wait_for(state="visible", timeout=35000)
         return self
 
-    def redirect_url_value(self) -> str:
-        return self.field_value(FIELD_REDIRECT_URL)
+    # ---- reads -----------------------------------------------------------
+    def value(self, key: str, locale: str = "en") -> str:
+        spec = self.spec(key)
+        if spec.kind == "file":
+            return self.current_file_name(spec.label) or self.uploaded_filename(spec.label) or \
+                self._placeholder_file(spec.label)
+        return super().value(key, locale)
 
-    def set_display_order(self, value: str) -> "HomeDynamicWidgetsAdminPage":
-        self.fill_number(FIELD_DISPLAY_ORDER, value)
+    def _placeholder_file(self, label: str) -> str:
+        ph = self.page.get_by_role("textbox", name=f"{label} Select File").get_attribute("placeholder") or ""
+        return ph[len("Current file:"):].split(" — ")[0].strip() if ph.startswith("Current file:") else ""
+
+    def values(self) -> dict:
+        return {k: self.value(k) for k in self.FIELDS}
+
+    def status_now(self) -> str:
+        try:
+            return self.current_status()
+        except Exception:  # noqa: BLE001
+            return STATUS_UNKNOWN
+
+    def submit_label(self) -> str:
+        loc = self.page.locator(self.SUBMIT_FOR_REVIEW_BUTTON)
+        return loc.first.inner_text().strip() if loc.count() else ""
+
+    # ---- form fill ---------------------------------------------------------
+    def fill_form(self, *, url: str | None = None, order: str | None = None, new_tab: bool | None = None,
+                  active: bool | None = None, image_en: str | None = None, image_ar: str | None = None,
+                  tag: str = "") -> "DynamicWidgetAdminPage":
+        if image_en:
+            self.upload("image_en", image_en, tag=tag)
+        if image_ar:
+            self.upload("image_ar", image_ar, tag=tag)
+        if url is not None:
+            self.page.get_by_role("textbox", name=self.label_pattern("Redirect URL")).fill(url)
+        if order is not None:
+            box = self.page.get_by_role("spinbutton", name=self.label_pattern("Display Order"))
+            try:
+                box.fill(order)
+            except Exception:  # noqa: BLE001 — a number input refuses non-numeric text at input
+                box.fill("")
+                box.press_sequentially(order)
+        if new_tab is not None:
+            self.set_flag("open_new_tab", new_tab)
+        if active is not None:
+            self.set_flag("active_status", active)
         return self
 
-    def display_order_value(self) -> str:
-        return self.page.get_by_role("spinbutton", name=FIELD_DISPLAY_ORDER, exact=True).input_value()
+    def upload(self, key: str, fixture_path: str, tag: str = "") -> "DynamicWidgetAdminPage":
+        """Uploads a uniquely named QCTEST copy and remembers its name — the
+        name is how a just-created record is found again (a NEW record's save
+        returns to a blank form, no entry code in the URL; read live 2026-10-08)."""
+        import os
 
-    def set_open_in_new_tab(self, enabled: bool) -> "HomeDynamicWidgetsAdminPage":
-        self.set_checkbox(FIELD_OPEN_IN_NEW_TAB, enabled)
+        from core.web.overlays import dismiss_overlays
+
+        copy = self.disposable_copy(fixture_path, tag)
+        label = self.spec(key).label
+        # A picker left open by an earlier step is closed inside upload_file().
+        try:
+            self.upload_file(label, copy)
+        except Exception:  # noqa: BLE001 — one retry, then the real error surfaces
+            self.page.keyboard.press("Escape")
+            dismiss_overlays(self.page)
+            self.upload_file(label, copy)
+        name = os.path.basename(copy)
+        # One retry max (2026-10-13): upload_file() now raises UploadNotApplied
+        # when the field shows no file, so a third, unguarded upload_file()
+        # here only re-masked a picker that had already failed twice.
+        if not self._file_shown(label, name):
+            raise UploadNotApplied(f"{label!r}: {name!r} is not shown on the form after upload")
+        self.last_files[key] = name
+        self.all_files.add(name)
         return self
 
-    def is_open_in_new_tab(self) -> bool:
-        return self.page.get_by_role("checkbox", name=FIELD_OPEN_IN_NEW_TAB, exact=True).is_checked()
+    def _file_shown(self, label: str, name: str, timeout_ms: int = 10000) -> bool:
+        end = time.monotonic() + timeout_ms / 1000
+        while time.monotonic() < end:
+            try:
+                if name in (self.page.locator("body").inner_text() or ""):
+                    return True
+            except Exception:  # noqa: BLE001
+                pass
+            self.page.wait_for_timeout(500)
+        return False
 
-    def set_active(self, active: bool) -> "HomeDynamicWidgetsAdminPage":
-        self.set_checkbox(FIELD_ACTIVE_STATUS, active)
-        return self
-
-    def is_active(self) -> bool:
-        return self.page.get_by_role("checkbox", name=FIELD_ACTIVE_STATUS, exact=True).is_checked()
-
-    def upload_widget_image_en(self, file_path: str) -> "HomeDynamicWidgetsAdminPage":
-        self.upload_file(FIELD_WIDGET_IMAGE_EN, file_path)
-        return self
-
-    def upload_widget_image_ar(self, file_path: str) -> "HomeDynamicWidgetsAdminPage":
-        self.upload_file(FIELD_WIDGET_IMAGE_AR, file_path)
-        return self
-
-    def widget_image_en_filename(self) -> str:
-        return self.uploaded_filename(FIELD_WIDGET_IMAGE_EN) or self._current_file_from_placeholder(
-            FIELD_WIDGET_IMAGE_EN
-        )
-
-    def widget_image_ar_filename(self) -> str:
-        return self.uploaded_filename(FIELD_WIDGET_IMAGE_AR) or self._current_file_from_placeholder(
-            FIELD_WIDGET_IMAGE_AR
-        )
-
-    def _current_file_from_placeholder(self, field_label: str) -> str:
-        """Fallback for this surface's own idiosyncrasy — CONFIRMED LIVE
-        2026-09-07 (Playwright MCP, manage-dynamic-widget, entry
-        QCDEMO-129384-directory): the shared ObjectAuthoringPage.
-        uploaded_filename()'s `<strong role="textbox">` readout (confirmed
-        live and correct on manage-promotional-banner) stays EMPTY on this
-        surface for an image that is already committed and being viewed
-        after a fresh page load/reload (e.g. right after
-        submit_for_publishing() + re-opening the entry) — the real filename
-        instead only shows as the field's OWN hidden `"<Field Label> Select
-        File"` textbox's placeholder text, literally
-        "Current file: <name> — pick a file to replace it". Kept local
-        (not raised into the shared component) since manage-promotional-
-        banner's own confirmed-live behavior must not be touched by this
-        object's quirk."""
-        hidden_textbox = self.page.get_by_role("textbox", name=f"{field_label} Select File")
-        placeholder = hidden_textbox.get_attribute("placeholder") or ""
-        prefix = "Current file:"
-        if not placeholder.startswith(prefix):
+    def try_upload(self, key: str, fixture_path: str, tag: str = "") -> str:
+        """Attempt an upload that may be refused. Returns '' when the picker
+        accepted it, else the refusal/exception text."""
+        try:
+            self.upload(key, fixture_path, tag)
             return ""
-        return placeholder[len(prefix):].split(" — ")[0].strip()
+        except UploadPickerUnavailable:
+            raise  # the picker never opened: not a refusal (2026-10-13, false-green guard)
+        except Exception as exc:  # noqa: BLE001 — the refusal itself is the observation
+            msg = ""
+            try:
+                frame = self.page.frame_locator(self.UPLOAD_MODAL_IFRAME)
+                msg = " ".join(frame.locator(".alert, .form-feedback-item, [role=alert]").all_inner_texts())
+            except Exception:  # noqa: BLE001
+                pass
+            self.page.keyboard.press("Escape")
+            return (msg or str(exc)).strip()[:400] or "refused"
 
-    # ---- Baseline capture/restore -------------------------------------------
-    def capture_baseline(self, entry_code: str) -> dict:
-        self.open_entry(entry_code)
-        return {
-            "entry_code": entry_code,
-            "active": self.is_active(),
-            "open_in_new_tab": self.is_open_in_new_tab(),
-            "display_order": self.display_order_value(),
-            "redirect_url": self.redirect_url_value(),
-        }
+    # ---- save --------------------------------------------------------------
+    def click_submit_once(self) -> str | None:
+        """Click Publish/Submit exactly once and wait for an outcome:
+        'nav' | 'toast' | 'refused' | 'spinner' | None. Never re-clicks."""
+        start = self.page.url
+        before = self._pre_save_snapshot()
+        self.page.locator(self.SUBMIT_FOR_REVIEW_BUTTON).first.click()
+        self.last_outcome = self._poll_save_outcome(start, before)
+        self.last_toast = self._toast_text()
+        return self.last_outcome
 
-    def restore(self, baseline: dict) -> "HomeDynamicWidgetsAdminPage":
-        self.open_entry(baseline["entry_code"])
-        self.set_active(baseline["active"])
-        self.set_open_in_new_tab(baseline["open_in_new_tab"])
-        self.set_display_order(baseline["display_order"])
-        self.set_redirect_url(baseline["redirect_url"])
-        self.submit_for_publishing()
+    def code_from_url(self) -> str:
+        m = self.CODE_IN_URL.search(self.page.url)
+        return m.group(1) if m else ""
+
+    def create(self, tc_id, short: str, *, active: bool = False, new_tab: bool | None = True,
+               order: str = "9900", url: str | None = None, image_en: str | None = None,
+               image_ar: str | None = None) -> str:
+        """Create one disposable record as the signed-in account and return its
+        verified entry code. `url` must carry the QCTEST marker."""
+        from cms.tests.home_dynamic_widgets import upload_files as uf
+
+        url = url or marker_url(tc_id, short)
+        self.snapshot_codes()
+        self.open_new()
+        self.fill_form(url=url, order=order, new_tab=new_tab, active=active,
+                       image_en=image_en or uf.valid("marhaba_en.jpg"),
+                       image_ar=image_ar or uf.valid("marhaba_ar.png"), tag=f"{tc_id}")
+        self.click_submit_once()
+        try:  # the lookup must not start while the save is still in flight
+            self.page.locator(self.FORM_BUSY).first.wait_for(state="detached", timeout=120000)
+        except Exception:  # noqa: BLE001
+            pass
+        code = self.code_from_url() or self.find_saved(url)
+        if not code:
+            # Register anything this object put on the public site BEFORE failing,
+            # so the finalizer can take it down (review 2026-10-08 §2).
+            for leak in self.public_leaks():
+                self.remember(leak, url)
+            raise AssertionError(f"create(): no saved record found (outcome={self.last_outcome!r}, "
+                                 f"refusal={self.refusal_text()!r}, url={self.page.url})")
+        self.remember(code, url)
+        self.open_code(code)
+        if self.value("redirect_url") != url:
+            raise AssertionError(f"create(): record {code} did not persist its Redirect URL")
+        return code
+
+    def edit(self, code: str, **fields) -> str | None:
+        """Guarded edit + one submit. Returns the save outcome."""
+        self._guard(code)
+        self.fill_form(**fields)
+        return self.click_submit_once()
+
+    # ---- list ----------------------------------------------------------------
+    def open_list_all(self, role: str = ROLE_EDITOR) -> "DynamicWidgetAdminPage":
+        self.open_list(role)
+        self._show_all()
         return self
+
+    def _show_all(self) -> None:
+        """The list pages at 10 rows by default. Its page-size select's "All"
+        option is value "0" (label localised — read live 2026-10-08 as
+        "الكل" in an EN session), so it is chosen by value."""
+        for sel in self.page.locator("select").all():
+            try:
+                values = sel.locator("option").evaluate_all("os => os.map(o => o.value)")
+            except Exception:  # noqa: BLE001
+                continue
+            if "0" in values and "10" in values:
+                sel.select_option(value="0")
+                try:
+                    self.page.locator("text=/Page 1 of [2-9]/").first.wait_for(state="detached", timeout=10000)
+                except Exception:  # noqa: BLE001
+                    pass
+                self.page.wait_for_timeout(1000)
+                return
+
+    def row_count(self) -> int:
+        return self.page.locator(self.ENTRIES_TABLE_ROW).count()
+
+    def codes_listed(self) -> list[str]:
+        rows = self.page.locator(self.ENTRIES_TABLE_ROW)
+        return [rows.nth(i).locator("td").first.inner_text().strip() for i in range(rows.count())]
+
+    SCOPE_GROUP_ID = "37246"  # qatar-chamber site (fragment's getScopeGroupId(), read live 2026-10-08)
+
+    def count_by_url(self, url: str) -> int | None:
+        """How many entries (any status) carry exactly this Redirect URL, via
+        the object's headless API in the signed-in session. None if the API
+        cannot answer (then the caller relies on the save outcome)."""
+        from urllib.parse import quote
+
+        from config.settings import control_panel_url
+
+        flt = quote(f"redirectUrl eq '{url}'")
+        try:
+            r = self.page.request.get(control_panel_url(
+                f"/o/c/dynamicwidgets/scopes/{self.SCOPE_GROUP_ID}?filter={flt}&pageSize=50"),
+                headers={"Accept": "application/json"})
+            if not r.ok:
+                return None
+            data = r.json()
+            return int(data.get("totalCount", len(data.get("items", []))))
+        except Exception:  # noqa: BLE001
+            return None
+
+    def count_saved_since_snapshot(self, url: str) -> int | None:
+        """How many entries created since `snapshot_codes()` hold exactly this
+        Redirect URL, read off each NEW row's own form (entries list, "All"
+        page size). Unlike `count_by_url()` it also sees records with Active
+        unticked, which the headless API does not return (read live
+        2026-10-08; 136066 read 0 for its own inactive save on 2026-10-13).
+        None when no snapshot was taken."""
+        before = getattr(self, "_codes_before", None)
+        if before is None:
+            return None
+        self.open_list_all()
+        found = 0
+        for code in [c for c in self.codes_listed() if c and c not in before and c not in REAL_CODES]:
+            try:
+                self.open_code(code)
+                if self.value("redirect_url") == url:
+                    found += 1
+            except Exception:  # noqa: BLE001 -- a row that will not open is not this save
+                continue
+        return found
+
+    def snapshot_codes(self) -> None:
+        """Entry codes listed before a save — the list-diff fallback below
+        only ever considers codes that appeared AFTER it."""
+        self.open_list_all()
+        self._codes_before = set(self.codes_listed())
+
+    def find_saved_in_list(self) -> str:
+        """Fallback for records the headless API does not return (Active
+        unticked — read live 2026-10-08): new codes in the entries list are
+        opened one by one and accepted only when the form shows the uniquely
+        named file this object uploaded. Identity by content, never position."""
+        before = getattr(self, "_codes_before", None)
+        names = {self.last_files.get("image_en"), self.last_files.get("image_ar")} - {None}
+        if before is None or not names:
+            return ""
+        self.open_list_all()
+        for code in [c for c in self.codes_listed() if c not in before and c not in REAL_CODES]:
+            try:
+                self.open_code(code)
+                shown = {self.value("image_en"), self.value("image_ar")}
+                if any(n.rsplit(".", 1)[0] in (v or "") for n in names for v in shown):
+                    return code
+            except Exception:  # noqa: BLE001
+                continue
+        return ""
+
+    def find_saved(self, url: str, timeout: float = 30.0) -> str:
+        """Entry code of the record THIS page object just saved: same Redirect
+        URL and the same uniquely named EN image (or AR image if no EN one was
+        uploaded). Polls the headless API (index lag). '' if none."""
+        from urllib.parse import quote
+
+        from config.settings import control_panel_url
+
+        names = {self.last_files.get("image_en"), self.last_files.get("image_ar")} - {None}
+        if not names:
+            return ""
+        if not url:
+            return self.find_saved_in_list()
+        flt = quote(f"redirectUrl eq '{url}'")
+        end = time.monotonic() + timeout
+        while True:
+            try:
+                r = self.page.request.get(control_panel_url(
+                    f"/o/c/dynamicwidgets/scopes/{self.SCOPE_GROUP_ID}?filter={flt}&pageSize=50"),
+                    headers={"Accept": "application/json"})
+                for it in (r.json().get("items", []) if r.ok else []):
+                    files = {(it.get("widgetImageEn") or {}).get("name"), (it.get("widgetImageAr") or {}).get("name")}
+                    if any(n.rsplit(".", 1)[0] in (f or "") for n in names for f in files) and it.get("externalReferenceCode") not in REAL_CODES:
+                        return it["externalReferenceCode"]
+            except Exception:  # noqa: BLE001
+                pass
+            if time.monotonic() > end:
+                return self.find_saved_in_list()
+            self.page.wait_for_timeout(3000)
+
+    LEDGER = ".claude/qa-runs/129384_qctest_ledger.txt"
+
+    def remember(self, code: str, url: str = "") -> None:
+        if code not in self.created:
+            self.created.append(code)
+            try:
+                with open(self.LEDGER, "a", encoding="utf-8") as fh:
+                    fh.write("\t".join((time.strftime("%Y-%m-%d %H:%M:%S"), code, url)) + "\n")
+            except Exception:  # noqa: BLE001
+                pass
+
+    def row_status_for(self, code: str) -> str:
+        row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{code}")')
+        if row.count() == 0:
+            return ""
+        return normalize_status(row.first.locator("td").nth(1).inner_text())
+
+    def raw_row_status(self, code: str) -> str:
+        row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{code}")')
+        return " ".join(row.first.locator("td").nth(1).inner_text().split()) if row.count() else ""
+
+    # ---- lifecycle -----------------------------------------------------------
+    def unpublish_code(self, code: str) -> "DynamicWidgetAdminPage":
+        self._guard(code)
+        self.open_list_all()
+        self.filter_entries(code)
+        self.unpublish_entry(code)
+        return self
+
+    def _row_by_exact_code(self, code: str):
+        """The entries-list row whose Entry cell is exactly `code`, or None.
+        The list paginates at 10 rows (observed 2026-10-13: test-created rows
+        sat beyond page 1, so an exact-match scan of page 1 never found them
+        and teardown deletes silently failed). Widen the page size to its
+        largest option first, then scan every row."""
+        def scan():
+            rows = self.page.locator(self.ENTRIES_TABLE_ROW)
+            for i in range(rows.count()):
+                row = rows.nth(i)
+                if " ".join(row.locator("td").first.inner_text().split()) == code:
+                    return row
+            return None
+
+        self.open_list_all()
+        try:
+            self.filter_entries(code)
+        except Exception:  # noqa: BLE001 -- the widened scan below still finds it
+            pass
+        found = scan()
+        if found is not None:
+            return found
+        # Not on the (filtered) first page: reload the unfiltered list and
+        # widen the page size to its last option ("الكل" = All; options are
+        # texts 10/25/50/100/الكل, read live 2026-10-13). Never `networkidle`
+        # here -- the site chatbot polls forever.
+        self.open_list_all()
+        size = self.page.locator('select:has(option:text-is("100"))').first
+        if size.count():
+            before = self.page.locator(self.ENTRIES_TABLE_ROW).count()
+            size.select_option(index=size.locator("option").count() - 1)
+            try:
+                self.page.wait_for_function(
+                    "n => document.querySelectorAll('table tbody tr').length > n",
+                    arg=before, timeout=30000)
+            except Exception:  # noqa: BLE001 -- fewer rows than one page: nothing more to load
+                pass
+        return scan()
+
+    def delete_created(self, code: str) -> bool:
+        """Teardown — permanently delete a record THIS test created (user
+        approval 2026-10-12: test data is deleted, not only deactivated).
+        Only codes in `self.created`, never REAL_CODES; the row is matched by
+        its exact first-cell entry code (not substring) and deleted through
+        that row's own `data-qc-oel-delete` control, then the list is re-read
+        to prove it is gone. Never raises; returns success."""
+        if not code or code in REAL_CODES or code not in self.created:
+            return False
+        try:
+            # The Editor role has no Delete row action (role sheet 2026-09-27:
+            # Editor = add/edit/publish/unpublish/archive/restore). Teardown
+            # deletes as the admin TEST_USER, swapping cookies locally only.
+            from config.settings import settings as _s
+            from cms.pages.control_panel.login_page import CmsLoginPage as _L
+            _L(self.page).ensure_signed_in_as(_s.test_user, _s.test_password)
+            target = self._row_by_exact_code(code)
+            if target is None:
+                return True  # already gone
+            if not getattr(self.page, "_qc_delete_dialogs", False):
+                def _accept(d):
+                    try:
+                        d.accept()
+                    except Exception:  # noqa: BLE001 -- another handler already answered it
+                        pass
+                self.page.on("dialog", _accept)
+                self.page._qc_delete_dialogs = True
+            target.locator("[data-qc-oel-delete]").first.click()
+            self.page.wait_for_timeout(3000)  # confirm() chain + row removal; verified by re-read below
+            return self._row_by_exact_code(code) is None
+        except Exception:  # noqa: BLE001 -- teardown reports, never masks
+            return False
+
+    def deactivate(self, code: str, attempts: int = 3) -> bool:
+        """Teardown — take a disposable record off the public site and VERIFY
+        it by re-reading the record's own form. Retries (network drops on
+        2026-10-08 left 7 test cards public). Never raises; returns success."""
+        for _ in range(attempts):
+            try:
+                self._guard(code)
+                if not self.flag("active_status"):
+                    return True
+                self.set_flag("active_status", False)
+                self.click_submit_once()
+                self.open_code(code)
+                if not self.flag("active_status"):
+                    return True
+            except Exception as exc:  # noqa: BLE001 — retried; the final failure is logged loudly
+                logger.warning("deactivate(%s) attempt failed: %s", code, exc)
+                try:
+                    self.page.wait_for_timeout(5000)
+                except Exception:  # noqa: BLE001
+                    pass
+        logger.error("deactivate(%s) FAILED after %d attempts — record may still be PUBLIC", code, attempts)
+        return False
+
+    def sweep_public_qctest(self) -> dict:
+        """Run-level guard: every card in the PUBLIC active feed whose images
+        are QCTEST-named (and is not a real record) is unticked and verified.
+        Returns {erc: inactive_ok}."""
+        from config.settings import control_panel_url
+
+        result = {}
+        try:
+            r = self.page.request.get(control_panel_url(
+                f"/o/c/dynamicwidgets/scopes/{self.SCOPE_GROUP_ID}?filter=activeStatus%20eq%20true&pageSize=100"),
+                headers={"Accept": "application/json"})
+            items = r.json().get("items", []) if r.ok else []
+        except Exception as exc:  # noqa: BLE001
+            logger.error("sweep_public_qctest: feed unreadable: %s", exc)
+            return {"<feed unreadable>": False}
+        for it in items:
+            erc = it.get("externalReferenceCode")
+            names = [str((it.get(k) or {}).get("name", "")) for k in ("widgetImageEn", "widgetImageAr")]
+            if erc in REAL_CODES or erc in REAL_OTHER_CODES or not all(n.startswith("QCTEST-") for n in names):
+                continue
+            self.remember(erc, it.get("redirectUrl", ""))
+            result[erc] = self.deactivate(erc)
+        return result
+
+    def public_leaks(self) -> list[str]:
+        """Entry codes in the PUBLIC active feed that this object created
+        (by code, or by one of its uniquely named uploads)."""
+        from config.settings import control_panel_url
+
+        try:
+            r = self.page.request.get(control_panel_url(
+                f"/o/c/dynamicwidgets/scopes/{self.SCOPE_GROUP_ID}?filter=activeStatus%20eq%20true&pageSize=50"),
+                headers={"Accept": "application/json"})
+            items = r.json().get("items", []) if r.ok else []
+        except Exception:  # noqa: BLE001
+            return []
+        stems = {n.rsplit(".", 1)[0] for n in self.all_files}
+        leaks = []
+        for it in items:
+            erc = it.get("externalReferenceCode")
+            names = " ".join(str((it.get(k) or {}).get("name", "")) for k in ("widgetImageEn", "widgetImageAr"))
+            if erc not in REAL_CODES and (erc in self.created or any(st in names for st in stems)):
+                leaks.append(erc)
+        return leaks
+
+    def delete_qctest(self, code: str) -> bool:
+        """Teardown step 2 — delete a disposable record by its verified code.
+        Refuses anything `_guard()` cannot prove is QCTEST. Never raises."""
+        try:
+            self._guard(code)
+            self.open_list_all()
+            self.filter_entries(code)
+            row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{code}")')
+            if row.count() != 1:
+                return False
+            ok = self.delete_entry_by_code(code)
+            self.open_list_all()
+            return ok and self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{code}")').count() == 0
+        except Exception:  # noqa: BLE001
+            return False
+
+    def wait_status(self, code: str, expected: str, timeout: float = 90.0) -> bool:
+        end = time.monotonic() + timeout
+        while time.monotonic() < end:
+            self.open_code(code)
+            if self.status_now() == expected:
+                return True
+            self.page.wait_for_timeout(3000)
+        return False
+
+
+# Backwards-compatible name used by older imports.
+HomeDynamicWidgetsAdminPage = DynamicWidgetAdminPage
+PUBLISHED = STATUS_PUBLISHED

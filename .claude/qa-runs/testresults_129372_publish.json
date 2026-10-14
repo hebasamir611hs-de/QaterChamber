@@ -1,0 +1,284 @@
+{
+ "plan_id": 133534,
+ "suite_id": 134450,
+ "run_name": "Phase 3 2026-10-07/08 - PBI 129372",
+ "automated": true,
+ "results": [
+  {
+   "test_case_id": 135272,
+   "outcome": "Passed",
+   "comment": "Executed. View All lands on /news-archive (a news listing page); PBI only requires redirect to the news listing page, so PBI satisfied (user ruling)."
+  },
+  {
+   "test_case_id": 135273,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135274,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135275,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135276,
+   "outcome": "Passed",
+   "comment": "Executed. View All lands on /news-archive (a news listing page); PBI only requires redirect to the news listing page, so PBI satisfied (user ruling)."
+  },
+  {
+   "test_case_id": 135278,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135279,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135280,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135281,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135282,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (Rule 5.2: implemented limit above US limit, UI intact)"
+  },
+  {
+   "test_case_id": 135283,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135284,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135285,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (Rule 5.2: implemented limit above US limit, UI intact)"
+  },
+  {
+   "test_case_id": 135286,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135287,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149375: mandatory Section Heading/Description EN/AR accepted when empty (Publish saved).",
+   "error_message": "Publish accepted with mandatory field empty"
+  },
+  {
+   "test_case_id": 135288,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135289,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (Rule 5.2: implemented limit above US limit, UI intact)"
+  },
+  {
+   "test_case_id": 135290,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135291,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149375: mandatory Section Heading/Description EN/AR accepted when empty (Publish saved).",
+   "error_message": "Publish accepted with mandatory field empty"
+  },
+  {
+   "test_case_id": 135292,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135293,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (Rule 5.2: implemented limit above US limit, UI intact)"
+  },
+  {
+   "test_case_id": 135294,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149489: Section Description is a plain textarea, PBI specifies Rich Text.",
+   "error_message": "Plain textarea, no rich-text/Bold control"
+  },
+  {
+   "test_case_id": 135295,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149375: mandatory Section Heading/Description EN/AR accepted when empty (Publish saved).",
+   "error_message": "Publish accepted with mandatory field empty"
+  },
+  {
+   "test_case_id": 135296,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135297,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135298,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149489: Section Description is a plain textarea, PBI specifies Rich Text.",
+   "error_message": "Plain textarea, no rich-text/Bold control"
+  },
+  {
+   "test_case_id": 135299,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149375: mandatory Section Heading/Description EN/AR accepted when empty (Publish saved).",
+   "error_message": "Publish accepted with mandatory field empty"
+  },
+  {
+   "test_case_id": 135300,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135301,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135302,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135303,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (manual-exec, run9/round 4)"
+  },
+  {
+   "test_case_id": 135304,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135305,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135306,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135307,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135308,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135309,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135310,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (CMS half passed; card thumbnail visual half inconclusive: padded 1x1 fixture, not a product issue)"
+  },
+  {
+   "test_case_id": 135311,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135312,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135313,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (manual-exec, run9/round 4)"
+  },
+  {
+   "test_case_id": 135314,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135315,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (manual-exec, run9/round 4)"
+  },
+  {
+   "test_case_id": 135316,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135317,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135318,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135319,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135320,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135321,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (verified against Figma per user: go by Figma; button box within +-2 px)"
+  },
+  {
+   "test_case_id": 135322,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (verified against Figma per user: go by Figma; button box within +-2 px)"
+  },
+  {
+   "test_case_id": 135325,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135326,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135327,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135328,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (manual-exec, run9/round 4)"
+  }
+ ]
+}

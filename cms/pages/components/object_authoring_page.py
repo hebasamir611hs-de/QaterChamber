@@ -217,6 +217,15 @@ STATUS_UNPUBLISHED = "Unpublished"
 STATUS_ARCHIVED = "Archived"
 STATUS_SCHEDULED = "Scheduled"
 STATUS_UNKNOWN = "Unknown"
+# NOT a workflow state (the seven above are). Observed live 2026-10-07 and
+# again 2026-10-13: a record PUBLISHED with its own `Active Status` unticked
+# badges `INACTIVE` in the entries list and reads "Editing <title>
+# (Inactive). Publish saves your changes; the record stays Inactive." on the
+# form, with no Unpublish row action. It is the second visibility gate
+# (Active Status) showing through the badge, so it is kept OUT of
+# WORKFLOW_STATUSES and reported on its own rather than as Unknown. Whether
+# that badge is intended is an open question in the 2026-10-08 bug list (B7).
+STATUS_INACTIVE = "Inactive"
 
 WORKFLOW_STATUSES = (
     STATUS_DRAFT,
@@ -241,6 +250,24 @@ VISITOR_VISIBLE_STATUS = STATUS_PUBLISHED
 STATUS_APPROVED_LEGACY = STATUS_PUBLISHED
 
 
+def selector_safe_escape(text: str) -> str:
+    """re.escape() plus a backslash before every "/", for a pattern handed to a Playwright
+    locator (see ObjectAuthoringPage.label_pattern)."""
+    return re.escape(text).replace("/", r"\/")
+
+
+class UploadNotApplied(RuntimeError):
+    """The Documents & Media picker closed (or refused) without the field
+    showing a file. Raised by ObjectAuthoringPage.upload_file() instead of
+    returning as if the upload had worked (2026-10-13)."""
+
+
+class UploadPickerUnavailable(RuntimeError):
+    """The picker never opened -- an environment failure, NOT a rejection.
+    Deliberately not an UploadNotApplied, so upload_file_expect_rejected()
+    cannot read it as "the server refused the file" (false green)."""
+
+
 def normalize_status(raw: str) -> str:
     """Map any rendered status badge / banner fragment onto the canonical
     vocabulary above, case- and whitespace-insensitively.
@@ -261,6 +288,8 @@ def normalize_status(raw: str) -> str:
     # The legacy build's wording, still possible on an un-migrated object.
     if collapsed == "approved":
         return STATUS_PUBLISHED
+    if collapsed == STATUS_INACTIVE.casefold():
+        return STATUS_INACTIVE
     return STATUS_UNKNOWN
 
 
@@ -292,6 +321,22 @@ class ObjectAuthoringPage(BasePage):
         'button[type="submit"]:text-is("Publish")'
     )
     SUBMIT_FOR_PUBLISHING_BUTTON = SUBMIT_FOR_REVIEW_BUTTON
+    # In-flight state of a Save as Draft / Submit for Review / Publish click.
+    # CONFIRMED LIVE 2026-10-02 (manage-coo-quick-fact, as Editor): once
+    # clicked, both form buttons gain class "disabled" and an inner
+    # <span class="loading-animation ...">. The span stays until the save
+    # commits, about 50s on qcdev that day, and then the page navigates to
+    # `?previewEntry=<uuid>`. Right after the click, before the spinner, the
+    # clicked button carries a bare `disabled` attribute. SUBMIT_STARTED
+    # (attach) uses both signals. FORM_BUSY (detach) is the spinner only,
+    # because a form button can be disabled at rest.
+    FORM_BUSY = 'button[type="submit"] .loading-animation'
+    SUBMIT_STARTED = (
+        f'{FORM_BUSY}, '
+        'button[type="submit"][disabled]:text-is("Submit for Review"), '
+        'button[type="submit"][disabled]:text-is("Publish"), '
+        'button[type="submit"][disabled]:text-is("Save as Draft")'
+    )
     # Row-level workflow actions carry a stable `data-qc-oel-<action>="<entryId>"`
     # attribute (confirmed live 2026-09-28 on manage-publication /
     # manage-law-entry / manage-social-media-icon) — the same convention the
@@ -316,10 +361,42 @@ class ObjectAuthoringPage(BasePage):
     # "to edit as draft" wording — it is matched on the verb alone.
     UNPUBLISH_BUTTON = 'button:has-text("Unpublish")'
     CANCEL_AND_ADD_NEW_LINK = 'a:has-text("Cancel and add a new entry instead")'
+    # The page's own banner element (live 2026-10-13): it carries the editing
+    # banner in EVERY locale ("Editing ..." and its Arabic render) and in
+    # every status, AND the Access Denied note a role that may not edit the
+    # record gets instead of the banner. Locale- and role-independent settle.
+    EDIT_BAR = "[data-qc-oel-editbar]"
+    # The Access Denied note (live 2026-10-13, Site Content Author on a
+    # Published GM / About / Chamber Laws record): "Access Denied. You do not
+    # have permission to perform this action. "<code>" is Published. Only a
+    # Content Editor can change a record once it has reached the website -
+    # you can view its status here." Form fields and both submit buttons are
+    # disabled. Matched on the English sentence (CMS admin is English-only).
+    ACCESS_DENIED_TEXT = "Access Denied"
     ENTRIES_TABLE_ROW = "table tbody tr"
 
     UPLOAD_MODAL_IFRAME = 'iframe[src*="selectFileEntry"]'
     UPLOAD_MODAL_ADD_BUTTON_TEXT = "Add"
+    # 2026-10-13 (PBI 129388 run: 8x set_input_files 30 s timeouts). The Add
+    # button is in the DOM at once but disabled until the server-side upload
+    # completes; Clay disables by attribute or class, so all three are excluded.
+    UPLOAD_MODAL_ADD_ENABLED = (
+        'button:has-text("Add"):not([disabled]):not([aria-disabled="true"]):not(.disabled):visible'
+    )
+    UPLOAD_MODAL_ERROR = '.alert, .form-feedback-item, [role="alert"]'
+    UPLOAD_MODAL_CLOSE = (
+        '.modal-dialog:has(iframe[src*="selectFileEntry"]) button.close, '
+        '.modal-dialog:has(iframe[src*="selectFileEntry"]) [aria-label="close"], '
+        '.modal-dialog:has(iframe[src*="selectFileEntry"]) [aria-label="Close"]'
+    )
+    UPLOAD_PICKER_OPEN_MS = 20000
+    UPLOAD_ADD_ENABLED_MS = 60000
+    UPLOAD_DETACH_MS = 30000
+    UPLOAD_READOUT_MS = 10000
+    # Live 2026-10-13: Add is ABSENT (not disabled) until the server-side
+    # upload completes, and the first click on it is intermittently ignored.
+    UPLOAD_ADD_CLICKS = 3
+    UPLOAD_ADD_SETTLE_MS = 6000
 
     # CKEditor rich-text description field — CONFIRMED LIVE 2026-09-03 against
     # manage-strategic-pillar-card: unlike the raw Object Definitions editor's
@@ -427,7 +504,36 @@ class ObjectAuthoringPage(BasePage):
         # first page rendered 10 rows and zero `a[data-qc-oel-delete]`, so
         # this timed out for every non-admin account.
         self.wait_for(self.ENTRIES_TABLE_ROW, first=True, timeout=35000)
+        self._show_all_rows()
         return self
+
+    # The entries list pages its rows (live 2026-10-13, manage-law-entry:
+    # "Showing 1-10 of 12", "Page 1 of 2"), so a row past the 10th was
+    # invisible to every title/code lookup -- a freshly created QCTEST law
+    # entry "never appeared in the list" (134877 / 134884). The page-size
+    # select offers `value="0"` = all rows; choosing it is a view setting only.
+    PAGE_SIZE_SELECT = "select[data-qc-oel-page-size]"
+    PAGER_COUNT = "[data-qc-oel-pager-count]"
+
+    def _show_all_rows(self) -> None:
+        size = self.page.locator(self.PAGE_SIZE_SELECT)
+        counter = self.page.locator(self.PAGER_COUNT)
+
+        def _whole_list_shown() -> bool:
+            # "Showing 1-10 of 12" -> partial; no counter / "1-12 of 12" -> whole.
+            text = (counter.first.inner_text() or "").strip() if counter.count() else ""
+            match = re.search(r"(\d+)\D+(\d+)\D+?(\d+)\s*$", text)
+            return not match or match.group(2) == match.group(3)
+
+        try:
+            if size.count() == 0 or _whole_list_shown():
+                return  # every row is already on this page (e.g. a singleton list)
+            size.first.select_option("0")
+            # The re-render is client-side; wait until the pager stops
+            # reporting a partial page.
+            wait_until(_whole_list_shown, timeout=10, poll=0.25)
+        except Exception:  # noqa: BLE001 -- a list without the control shows every row already
+            logger.warning("open_entries_list: could not switch the list to show all rows")
 
     def open_entry_by_edit_link(self, title: str) -> "ObjectAuthoringPage":
         """Opens an existing entry for edit via its row's own `Edit` link
@@ -459,7 +565,14 @@ class ObjectAuthoringPage(BasePage):
             dismiss_overlays(self.page)
             edit_link.click(force=True)
         self._wait_for_network_settle()
-        self.wait_for(self.CANCEL_AND_ADD_NEW_LINK, timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS)
+        self._wait_for_editing_banner()
+        # FIX 2026-10-13 ("record None ... never reached Published", 120 s):
+        # this path never recorded WHICH record it opened, so reopen() raised
+        # inside wait_for_status()'s poll and every poll failed silently. The
+        # Edit link lands on `?editEntry=<code>` -- the record's own code.
+        match = re.search(r"[?&]editEntry=([^&#]+)", self.page.url)
+        if match:
+            self._entry_code = match.group(1)
         return self
 
     def _wait_for_network_settle(self) -> None:
@@ -479,7 +592,14 @@ class ObjectAuthoringPage(BasePage):
         try:
             self.page.wait_for_load_state("networkidle", timeout=8000)
         except Exception:
-            self.page.wait_for_load_state("load", timeout=8000)
+            # `load` can also miss 8s on qcdev (observed 2026-10-12: 22 of
+            # 129384's tests died here). The caller's own settle signal
+            # (_wait_for_editing_banner / the list table) follows and is the
+            # real readiness check, so a slow `load` is not fatal here.
+            try:
+                self.page.wait_for_load_state("load", timeout=8000)
+            except Exception:
+                pass
 
     # ---- List state queries ----------------------------------------------
     def row_status_text(self, title: str) -> str:
@@ -619,7 +739,7 @@ class ObjectAuthoringPage(BasePage):
         for code in codes:
             self.open_entry_by_code(code)
             try:
-                value = self.page.get_by_role("textbox", name=field_label, exact=True).input_value()
+                value = self.page.get_by_role("textbox", name=self.label_pattern(field_label)).input_value()
             except Exception:  # noqa: BLE001 — field may not exist/apply to this row's form state
                 continue
             if value == expected_value:
@@ -637,8 +757,121 @@ class ObjectAuthoringPage(BasePage):
             return ""
         return normalize_status(row.locator("td").nth(1).inner_text())
 
+    def row_actions_by_code(self, entry_code: str) -> set:
+        """Workflow row actions (`ROW_ACTION_ATTRS` keys) the row for
+        `entry_code` offers the signed-in account right now -- read off the
+        stable `data-qc-oel-<action>` attributes, never the localised label.
+        Empty when no row matches. Read-only."""
+        row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{entry_code}")').first
+        if row.count() == 0:
+            return set()
+        # The actions cell fills in after the row itself (live 2026-10-13,
+        # 134770: a Published row read back with NO actions). History renders
+        # on every row in every status, so it marks the cell as filled.
+        try:
+            row.locator("[data-qc-oel-history]").first.wait_for(state="attached", timeout=5000)
+        except Exception:  # noqa: BLE001 -- read whatever rendered
+            pass
+        return {name for name, attr in self.ROW_ACTION_ATTRS.items()
+                if row.locator(f"[{attr}]").count() > 0}
+
+    def row_last_modified(self, title_or_code: str) -> str:
+        """The entries list's LAST MODIFIED cell (second resolution, e.g.
+        "10/13/2026, 10:40:46 PM") for the row matching `title_or_code`, ""
+        when no row matches. Read-only; call on the open entries list."""
+        row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{title_or_code}")').first
+        if row.count() == 0:
+            return ""
+        return row.locator("td").nth(2).inner_text().strip()
+
+    def row_statuses(self) -> list[tuple[str, str]]:
+        """`(entry text, normalized status)` for EVERY row of the open entries
+        list (call after `open_entries_list()`, which shows all rows). The
+        status goes through `normalize_status()`, so a Published row whose
+        Active Status is unticked reads `STATUS_INACTIVE`, not Published.
+        Read-only (added 2026-10-14 for the Chamber's Law card-count cases)."""
+        rows = self.page.locator(self.ENTRIES_TABLE_ROW)
+        out = []
+        for i in range(rows.count()):
+            cells = rows.nth(i).locator("td")
+            if cells.count() < 2:
+                continue
+            out.append((" ".join(cells.nth(0).inner_text().split()),
+                        normalize_status(cells.nth(1).inner_text())))
+        return out
+
+    def form_field_labels(self) -> list[str]:
+        """First line of every `<label>` on the open form page (field labels,
+        incl. the AR twins `<label> — العربية *`). Read-only; used to prove a
+        field does or does not exist before a case relies on it."""
+        texts = self.page.locator("label").all_inner_texts()
+        return [t.strip().splitlines()[0].strip() for t in texts if t and t.strip()]
+
+    # Read live 2026-10-14 (manage-general-manager-message): every required
+    # control on these forms carries a custom validity message FROM PAGE LOAD
+    # ("Hero Banner is required.", "Page Content is required.", "<field>
+    # (العربية): Arabic content is required.") even when it is filled, and the
+    # Publish button's click handler re-evaluates them before the browser's
+    # own constraint check. So a pre-click read says nothing; read this AFTER
+    # the Publish click: what is still listed is what blocked the submit (the
+    # browser shows it as a bubble -- no red bar, no request).
+    _INVALID_CONTROLS_JS = (
+        "(sel) => { const b = document.querySelector(sel);"
+        " const f = b ? b.form : document.querySelector('form');"
+        " if (!f) return [];"
+        " return Array.from(f.elements).filter(e => e.willValidate && !e.validity.valid)"
+        ".map(e => [e.name || e.id || '', e.validationMessage || 'invalid']); }"
+    )
+    PUBLISH_STATUS_SUBMIT = 'button[type="submit"][name="status"][value="0"]'
+
+    def invalid_form_controls(self) -> list[tuple[str, str]]:
+        """`(name or id, validationMessage)` of every control of the open
+        record form that currently fails the browser's constraint check.
+        Read-only (no checkValidity() events). Read it right after a Publish
+        click -- see the note above for why a pre-click read is meaningless."""
+        try:
+            pairs = self.page.evaluate(self._INVALID_CONTROLS_JS, self.PUBLISH_STATUS_SUBMIT)
+        except Exception:  # noqa: BLE001 -- navigated away: nothing blocked it
+            return []
+        return [(str(n), str(m)) for n, m in pairs]
+
+    _VISIBLE_FORM_MESSAGES_JS = (
+        "() => Array.from(document.querySelectorAll("
+        "'.form-feedback-item, .invalid-feedback, .alert, [role=alert]'))"
+        ".filter(e => e.offsetParent && e.innerText.trim())"
+        ".map(e => e.innerText.trim())"
+    )
+
+    def visible_form_messages(self) -> list[str]:
+        """Non-empty, VISIBLE validation / alert texts on the page -- what the
+        editor actually sees after a refused click (e.g. "Page Content is
+        required." under the field, or the site's Arabic guard line).
+        Read-only. Added 2026-10-14."""
+        try:
+            return [str(t) for t in self.page.evaluate(self._VISIBLE_FORM_MESSAGES_JS)]
+        except Exception:  # noqa: BLE001 -- navigating
+            return []
+
     def row_visible_by_code(self, entry_code: str) -> bool:
         return self.is_visible(f'{self.ENTRIES_TABLE_ROW}:has-text("{entry_code}")')
+
+    def _wait_for_editing_banner(self) -> None:
+        """Settle signal for an entry opened for edit. Multi-record objects
+        render a "Cancel and add a new entry instead" link in the editing
+        banner; singleton objects (e.g. Chamber Laws Page — "This page holds
+        this one record only", observed live 2026-10-12) render the banner
+        WITHOUT that link, so waiting on the link alone hangs. Either the
+        link or the banner's own "Editing <code>" text marks the form as
+        settled."""
+        # WIDENED 2026-10-13: the English "Editing <code> (<status>)" text
+        # alone timed out on an /ar render (134969), on an `(Inactive)`
+        # record, and for a Site Content Author on a Published record, who
+        # gets the Access Denied note instead of the banner (134685/134686,
+        # 135446/135447, 136377/136378). All three render inside EDIT_BAR.
+        banner = self.page.locator(self.CANCEL_AND_ADD_NEW_LINK).or_(
+            self.page.get_by_text(re.compile(r"^Editing .+\((Draft|Published|Pending Review|Rejected|Unpublished|Archived|Scheduled|Inactive)\)", re.I))
+        ).or_(self.page.locator(self.EDIT_BAR))
+        banner.first.wait_for(state="visible", timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS)
 
     def open_entry_by_code(
         self, entry_code: str, locale: str | None = None
@@ -658,7 +891,7 @@ class ObjectAuthoringPage(BasePage):
         self._entry_code = entry_code
         self._locale = locale
         self._wait_for_network_settle()
-        self.wait_for(self.CANCEL_AND_ADD_NEW_LINK, timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS)
+        self._wait_for_editing_banner()
         return self
 
     def delete_entry_by_code(self, entry_code: str) -> bool:
@@ -689,7 +922,7 @@ class ObjectAuthoringPage(BasePage):
 
     # ---- Form actions ------------------------------------------------------
     def fill_text(self, field_label: str, value: str) -> "ObjectAuthoringPage":
-        self.page.get_by_role("textbox", name=field_label, exact=True).fill(value)
+        self.page.get_by_role("textbox", name=self.label_pattern(field_label)).fill(value)
         return self
 
     def field_value(self, field_label: str) -> str:
@@ -702,7 +935,7 @@ class ObjectAuthoringPage(BasePage):
         no locale-toggle click needed — pass the AR-suffixed label
         (`"<Field Label> — العربية"`) directly to read/fill the Arabic
         value."""
-        return self.page.get_by_role("textbox", name=field_label, exact=True).input_value()
+        return self.page.get_by_role("textbox", name=self.label_pattern(field_label)).input_value()
 
     def current_status(self) -> str:
         """The record's status parsed out of `editing_banner_text()`, returned
@@ -727,22 +960,51 @@ class ObjectAuthoringPage(BasePage):
                 return status
         if "(approved)" in text.casefold():  # legacy wording, pre-workflow build
             return STATUS_PUBLISHED
+        if f"({STATUS_INACTIVE})".casefold() in text.casefold():
+            return STATUS_INACTIVE
+        # A role that may not edit the record gets the Access Denied note
+        # instead of the banner; it still names the status ('"<code>" is
+        # Published.'), live 2026-10-13.
+        denied = re.search(
+            "[\u201d\"] is (" + "|".join(WORKFLOW_STATUSES + (STATUS_INACTIVE,)) + ")\\.",
+            text, re.I)
+        if denied:
+            return normalize_status(denied.group(1))
         return STATUS_UNKNOWN
 
+    def access_denied_note(self) -> str:
+        """The Access Denied note shown instead of the editing banner when the
+        signed-in role may not change this record (see ACCESS_DENIED_TEXT);
+        "" when the record opened editable."""
+        bars = self.page.locator(self.EDIT_BAR)
+        for i in range(bars.count()):
+            text = bars.nth(i).inner_text()
+            if self.ACCESS_DENIED_TEXT in text:
+                return " ".join(text.split())
+        return ""
+
+    def submit_controls_enabled(self) -> dict:
+        """{label: enabled} for the form's Liferay `status` submit buttons
+        (value 0 = Publish / Submit for Review / Save Changes, 2 = Save as
+        Draft), read by attribute so the label's wording never matters."""
+        buttons = self.page.locator('button[type="submit"][name="status"]')
+        return {buttons.nth(i).inner_text().strip(): buttons.nth(i).is_enabled()
+                for i in range(buttons.count())}
+
     def fill_number(self, field_label: str, value: str) -> "ObjectAuthoringPage":
-        self.page.get_by_role("spinbutton", name=field_label, exact=True).fill(value)
+        self.page.get_by_role("spinbutton", name=self.label_pattern(field_label)).fill(value)
         return self
 
     def type_date(self, field_label: str, value: str) -> "ObjectAuthoringPage":
         """Clicks the date field then types directly (mirrors the
         confirmed-live-safe pattern already used by every raw-admin date
         field on this project, e.g. HomeLatestNewsAdminPage.set_publication_date())."""
-        self.page.get_by_role("textbox", name=field_label, exact=True).click()
+        self.page.get_by_role("textbox", name=self.label_pattern(field_label)).click()
         self.page.keyboard.type(value, delay=20)
         return self
 
     def set_checkbox(self, field_label: str, checked: bool) -> "ObjectAuthoringPage":  # noqa: D401
-        checkbox = self.page.get_by_role("checkbox", name=field_label, exact=True)
+        checkbox = self.page.get_by_role("checkbox", name=self.label_pattern(field_label))
         if checked:
             checkbox.check()
         else:
@@ -765,40 +1027,168 @@ class ObjectAuthoringPage(BasePage):
         return self
 
     def upload_file(self, field_label: str, file_path: str) -> "ObjectAuthoringPage":
-        """See module docstring's file-upload note: locates the field's own
-        hidden filename textbox by its confirmed-live accessible name
-        pattern ("<Field Label> Select File"), then that textbox's sibling
-        `Select File` button."""
+        """Uploads `file_path` into the field's Documents & Media picker and
+        returns only once the field SHOWS a file; otherwise raises.
+
+        Locates the field's hidden filename textbox by its confirmed-live
+        accessible name ("<Field Label> Select File"), then that textbox's
+        sibling `Select File` button.
+
+        REWRITTEN 2026-10-13 (PBI 129388 run, 8x `set_input_files` 30 s
+        timeouts on the picker's file input):
+          1. A picker left open by an earlier step is closed through its own
+             dialog close button first (waited `detached`) -- a second picker
+             on top of a stale one never got its file input.
+          2. The picker iframe is waited `attached` after Select File, with one
+             re-click (the click can land before the form's upload script is
+             wired -- same pattern as header_admin_component._open_logo_picker).
+          3. After `set_input_files` the wait is for the Add button to become
+             ENABLED (it is in the DOM at once but disabled until the server
+             finishes the upload) -- not for a "1 of 1" text.
+          4. After Add, the picker must detach and the field's own readout
+             must show a file; else UploadNotApplied. It never returns
+             silently on a picker that did nothing.
+        CORRECTED 2026-10-13 (live, manage-media-item): Add is not disabled
+        while uploading -- it is absent until the upload completes -- and the
+        first click on it is intermittently swallowed, so Add is re-clicked
+        (bounded, UPLOAD_ADD_CLICKS) while the picker is still open.
+        A picker that shows an error (a refused type/size) raises
+        UploadNotApplied carrying that error text, so
+        upload_file_expect_rejected() still reads a raise as "rejected"."""
+        import os
+
+        self._close_stale_upload_picker()
+        before = self._upload_readouts(field_label)
         hidden_textbox = self.page.get_by_role(
             "textbox", name=f"{field_label} Select File"
         )
         select_file_button = hidden_textbox.locator("xpath=..").get_by_role(
             "button", name="Select File"
         )
-        select_file_button.click()
-        frame = self.page.frame_locator(self.UPLOAD_MODAL_IFRAME)
+        iframe = self.page.locator(self.UPLOAD_MODAL_IFRAME).first
+        for attempt in (0, 1):
+            select_file_button.click()
+            try:
+                iframe.wait_for(state="attached", timeout=self.UPLOAD_PICKER_OPEN_MS)
+                break
+            except Exception:  # noqa: BLE001 -- one re-click; the second failure surfaces
+                if attempt:
+                    raise UploadPickerUnavailable(
+                        f"{field_label!r}: the file picker did not open after two Select File clicks"
+                    ) from None
+                self.page.keyboard.press("Escape")
+        frame = self.page.frame_locator(self.UPLOAD_MODAL_IFRAME).first
         frame.locator('input[type="file"]').set_input_files(file_path)
-        # The picker's own upload (set_input_files -> server-side upload ->
-        # the file becoming a real, selectable entry) is asynchronous — the
-        # "Add" button is present in the DOM immediately but not yet backed
-        # by a completed upload. A bare click() right after set_input_files
-        # intermittently hung for the full click timeout live 2026-09-03
-        # (both here and in an earlier throwaway probe, which needed an
-        # explicit ~2s wait between the two steps to pass reliably). Wait
-        # for the uploaded file's own "1 of 1" progress/count text to
-        # render as the real, condition-based signal instead of a blind
-        # sleep; fall back to a short bounded wait if that text's exact
-        # wording ever changes rather than hard-failing on a wording drift.
+
+        add_enabled = frame.locator(self.UPLOAD_MODAL_ADD_ENABLED).first
+        refusal = frame.locator(".alert-danger:visible, .has-error .form-feedback-item:visible")
+
+        def _add_ready_or_refused() -> bool:
+            return add_enabled.count() > 0 or refusal.count() > 0
+
         try:
-            frame.get_by_text("1 of 1").wait_for(state="visible", timeout=15000)
-        except Exception:
-            self.page.wait_for_timeout(2000)
-        frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+            wait_until(_add_ready_or_refused, timeout=self.UPLOAD_ADD_ENABLED_MS / 1000, poll=0.5)
+        except WaitTimeoutError:
+            pass
+        if add_enabled.count() == 0:
+            detail = self._picker_error_text(frame)
+            self._close_stale_upload_picker()
+            raise UploadNotApplied(
+                f"{field_label!r}: the picker never enabled Add for {os.path.basename(file_path)!r}"
+                + (f" -- picker says: {detail}" if detail else "")
+            )
+        # Bounded re-click (live 2026-10-13, manage-media-item "Thumbnail
+        # Image"): the FIRST Add click is intermittently swallowed -- Add is
+        # rendered and enabled, the click lands, the picker stays open; a
+        # second click on the same button closes it in ~0.3 s and applies the
+        # file. Escape-and-retry would throw the upload away, so Add is
+        # re-clicked while it is still there, at most UPLOAD_ADD_CLICKS times.
+        add_button = frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT, exact=True)
+        clicks = 0
+        closed = False
+        for _ in range(self.UPLOAD_ADD_CLICKS):
+            try:
+                (add_button if add_button.count() else add_enabled).first.click(timeout=5000)
+                clicks += 1
+            except Exception:  # noqa: BLE001 -- the picker may be detaching under the click
+                pass
+            if self._picker_closed(self.UPLOAD_ADD_SETTLE_MS):
+                closed = True
+                break
+        if not closed:
+            detail = self._picker_error_text(frame)
+            self._close_stale_upload_picker()
+            raise UploadNotApplied(
+                f"{field_label!r}: the picker stayed open after {clicks} Add click(s)"
+                + (f" -- picker says: {detail}" if detail else "")
+            )
+
         try:
-            self.page.locator(self.UPLOAD_MODAL_IFRAME).wait_for(state="detached", timeout=8000)
-        except Exception:
-            self.page.wait_for_timeout(1000)
+            wait_until(
+                lambda: self._upload_applied(field_label, before),
+                timeout=self.UPLOAD_READOUT_MS / 1000,
+                poll=0.3,
+            )
+        except WaitTimeoutError:
+            raise UploadNotApplied(
+                f"{field_label!r}: the picker closed but the field shows no new file "
+                f"(before={before}, after={self._upload_readouts(field_label)})"
+            ) from None
         return self
+
+    def _close_stale_upload_picker(self) -> None:
+        """Closes an open Documents & Media picker through the dialog's own
+        close button (Escape when none renders) and waits for it to detach.
+        No-op when no picker is open. Never raises."""
+        iframe = self.page.locator(self.UPLOAD_MODAL_IFRAME)
+        try:
+            if iframe.count() == 0:
+                return
+            close = self.page.locator(self.UPLOAD_MODAL_CLOSE)
+            if close.count():
+                close.first.click(timeout=5000)
+            else:
+                self.page.keyboard.press("Escape")
+            iframe.first.wait_for(state="detached", timeout=10000)
+        except Exception:  # noqa: BLE001
+            logger.warning("a stale file picker did not close cleanly")
+
+    def _picker_error_text(self, frame) -> str:
+        try:
+            return " ".join(
+                t.strip() for t in frame.locator(self.UPLOAD_MODAL_ERROR).all_inner_texts() if t.strip()
+            )[:400]
+        except Exception:  # noqa: BLE001
+            return ""
+
+    def _upload_readouts(self, field_label: str) -> dict:
+        """Every place this surface can show a field's file: the base
+        `<strong role="textbox">` readout (a newly selected file), the class's
+        own uploaded_filename() (subclasses override it, e.g. the footer reads
+        the current-file block) and the saved `Current file:` block."""
+        out = {}
+
+        def _selected() -> str:
+            # Zero-wait: a bare inner_text() on a missing element would burn
+            # the 30 s default on every poll.
+            box = self.page.get_by_role("textbox", name=self.label_pattern(field_label))
+            return box.first.inner_text(timeout=2000) if box.count() else ""
+
+        readers = [("selected", _selected), ("current", lambda: self.current_file_name(field_label))]
+        if type(self).uploaded_filename is not ObjectAuthoringPage.uploaded_filename:
+            readers.append(("override", lambda: self.uploaded_filename(field_label)))
+        for key, read in readers:
+            try:
+                out[key] = (read() or "").strip()
+            except Exception:  # noqa: BLE001 -- a variant without that element
+                out[key] = ""
+        return out
+
+    def _upload_applied(self, field_label: str, before: dict) -> bool:
+        """True when a readout shows a file it did not show before the upload.
+        A pre-existing saved file on an edit form does not count."""
+        after = self._upload_readouts(field_label)
+        return any(v and v != before.get(k, "") for k, v in after.items())
 
     def upload_file_expect_rejected(self, field_label: str, file_path: str) -> bool:
         """Attempts upload_file() for a file expected to be rejected by
@@ -828,9 +1218,12 @@ class ObjectAuthoringPage(BasePage):
         import os
 
         attempted_name = os.path.basename(file_path)
+        # Only a picker that took the file and did not apply it counts as a
+        # rejection (2026-10-13). A picker that never opened, or any other
+        # error, propagates -- reading it as "rejected" was a false green.
         try:
             self.upload_file(field_label, file_path)
-        except Exception:
+        except UploadNotApplied:
             return True
         try:
             current = self.uploaded_filename(field_label)
@@ -1004,13 +1397,15 @@ class ObjectAuthoringPage(BasePage):
         Playwright raises "Node is not an <input>..." on that call), hence
         `.inner_text()` on the narrowly-scoped element."""
         return self.page.get_by_role(
-            "textbox", name=field_label, exact=True
+            "textbox", name=self.label_pattern(field_label)
         ).inner_text().strip()
 
     # ---- Lifecycle actions --------------------------------------------------
     def save_as_draft(self) -> "ObjectAuthoringPage":
+        start_url = self.page.url
+        before = self._pre_save_snapshot()
         self.click(self.SAVE_AS_DRAFT_BUTTON)
-        self._wait_for_settle()
+        self._wait_for_settle(start_url, before=before)
         return self
 
     def submit_for_review(self) -> "ObjectAuthoringPage":
@@ -1026,9 +1421,54 @@ class ObjectAuthoringPage(BasePage):
         knows which account it authenticated as and must assert accordingly.
         Callers that want the record live regardless of role should submit and
         then `approve_entry()` as an Editor."""
+        start_url = self.page.url
+        before = self._pre_save_snapshot()
         self.click(self.SUBMIT_FOR_REVIEW_BUTTON)
-        self._wait_for_settle()
+        self._wait_for_settle(start_url, before=before)
         return self
+
+    def submit_via(self, button_selector: str) -> "ObjectAuthoringPage":
+        """Click a specific form submit control and wait for the same save
+        outcome `submit_for_review()` waits for. For callers that must pick
+        the control locale-independently (e.g. `button[name="status"]
+        [value="0"]`, which is "Publish" in EN and "نشر" in AR — added
+        2026-10-12 for PBI 129394's Arabic-UI validation cases). A submit the
+        browser blocks natively (an empty `required` control) never starts,
+        and this returns after the not-started cap."""
+        start_url = self.page.url
+        before = self._pre_save_snapshot()
+        self.page.locator(button_selector).first.click()
+        self._wait_for_settle(start_url, before=before)
+        return self
+
+    def submit_via_reading_validity(self, button_selector: str) -> list[tuple[str, str]]:
+        """`submit_via()`, returning `invalid_form_controls()` read IMMEDIATELY
+        after the click -- before the settle wait.
+
+        Added 2026-10-14 (GM Message 79878, read live with every write
+        aborted): with a required control emptied, the Publish click leaves
+        that control's own message ("Page Content is required.") as the only
+        invalid one, and the browser shows it as a bubble -- but the message
+        is cleared again within ~8 s, so a read after the settle misses it.
+        The same click ALSO fires the Arabic-twin sync (`PUT /o/c/<object>/
+        <id>` built from the STORED record, not from the form), which bumps
+        the row's LAST MODIFIED without changing any value -- so on these
+        forms LAST MODIFIED is not a persistence signal; the stored value is."""
+        start_url = self.page.url
+        before = self._pre_save_snapshot()
+        shown_before = set(self.visible_form_messages())
+        self.page.locator(button_selector).first.click()
+        blocked = self.invalid_form_controls()
+        # The visible message too, before it can be cleared (same ~8 s):
+        # polled for up to 3 s (seen 1.5 s after the click, live 2026-10-14);
+        # a save that is not refused simply shows none.
+        try:
+            wait_until(lambda: bool(set(self.visible_form_messages()) - shown_before), timeout=3, poll=0.25)
+        except WaitTimeoutError:
+            pass
+        self.last_click_messages = [m for m in self.visible_form_messages() if m not in shown_before]
+        self._wait_for_settle(start_url, before=before)
+        return blocked
 
     def submit_for_publishing(self) -> "ObjectAuthoringPage":
         """DEPRECATED alias for `submit_for_review()`, kept so the existing
@@ -1106,7 +1546,18 @@ class ObjectAuthoringPage(BasePage):
             # actions column, and the native confirm() is the real gate on the
             # action, not the click.
             control.first.click(force=True)
-            self._wait_for_settle()
+            if action == "history":
+                # History does not remove its control: it expands an in-table
+                # row, so waiting for the control to detach always burned the
+                # full 30s cap (review fix 2026-10-04).
+                try:
+                    self.page.locator(self.HISTORY_LIST).first.wait_for(
+                        state="visible", timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS
+                    )
+                except Exception:  # noqa: BLE001 — history_entries() reports []
+                    pass
+            else:
+                self._wait_for_settle(gone=control.first)
         finally:
             self.page.remove_listener("dialog", _accept)
         return self
@@ -1204,7 +1655,82 @@ class ObjectAuthoringPage(BasePage):
             )
         return entries
 
-    def _wait_for_settle(self) -> None:
+    SETTLE_OUTCOME_TIMEOUT_MS = 120000
+    SAVE_SUCCESS_TOAST = (
+        '.alert-success:visible, .toast:visible, [class*="toast"]:visible'
+    )
+    SAVE_SUCCESS_TEXT = re.compile(r"Saved and submitted for review\.|\bsaved\b|\bpublished\b", re.I)
+    SAVE_REFUSAL = (
+        '.alert-danger:visible, .form-feedback-item:visible, '
+        ':text("Please complete the required fields"):visible'
+    )
+
+    def _count(self, selector: str) -> int:
+        try:
+            return self.page.locator(selector).count()
+        except Exception:  # noqa: BLE001 — mid-navigation
+            return -1
+
+    def _toast_text(self) -> str:
+        try:
+            return " ".join(self.page.locator(self.SAVE_SUCCESS_TOAST).all_inner_texts())
+        except Exception:  # noqa: BLE001
+            return ""
+
+    # Without SUBMIT_STARTED ever seen, the save most likely never fired:
+    # wait only this long (the pre-2026-10-02 budget), not the full 120s.
+    SETTLE_NOT_STARTED_CAP_MS = 15000
+
+    def _pre_save_snapshot(self) -> dict:
+        """Refusal / toast state sampled BEFORE the Save / Submit click (review
+        fix 2026-10-04): sampled after it, a refusal rendered synchronously by
+        the click was counted as the baseline and never seen as an outcome."""
+        return {"refusals": max(self._count(self.SAVE_REFUSAL), 0), "toast": self._toast_text()}
+
+    def _poll_save_outcome(self, start_url: str | None, before: dict | None = None) -> str | None:
+        """Poll (in Python, so it survives navigations) for the first save
+        outcome: 'nav' | 'toast' | 'refused' | 'spinner'; None on timeout.
+
+        `before` is the pre-click snapshot (_pre_save_snapshot); callers that
+        click themselves and pass none get the old post-click sample.
+        `start_url` None (those same callers) means any `previewEntry=` URL
+        counts as 'nav'."""
+        import time
+        if before is None:
+            before = self._pre_save_snapshot()
+        refusals_before = before["refusals"]
+        toast_before = before["toast"]
+        seen_busy = False
+        started = False
+        t0 = time.monotonic()
+        deadline = t0 + self.SETTLE_OUTCOME_TIMEOUT_MS / 1000
+        not_started_deadline = t0 + self.SETTLE_NOT_STARTED_CAP_MS / 1000
+        while time.monotonic() < deadline:
+            url = self.page.url
+            if "previewEntry=" in url and (start_url is None or url != start_url):
+                return "nav"
+            toast = self._toast_text()
+            if toast != toast_before and self.SAVE_SUCCESS_TEXT.search(toast):
+                return "toast"
+            if self._count(self.SAVE_REFUSAL) > refusals_before:
+                return "refused"
+            if not started and self._count(self.SUBMIT_STARTED) > 0:
+                started = True
+            busy = self._count(self.FORM_BUSY)
+            if busy > 0:
+                seen_busy = True
+                started = True
+            elif seen_busy and busy == 0:
+                return "spinner"
+            if not started and time.monotonic() > not_started_deadline:
+                return None
+            try:
+                self.page.wait_for_timeout(300)
+            except Exception:  # noqa: BLE001 — page navigating
+                time.sleep(0.3)
+        return None
+
+    def _wait_for_settle(self, start_url: str | None = None, gone=None, before: dict | None = None) -> None:
         """POSITIVE-signal wait — HEALED 2026-09-14 (Group B triage of
         tc_135184/135185/133294's teardown, evidence: `reports/allure-
         results/`). The PRIOR strategy here (`networkidle` with a `load`
@@ -1234,16 +1760,36 @@ class ObjectAuthoringPage(BasePage):
         reach at all. Falls back to a short, explicitly-capped `load` wait
         (never unbounded) for the rare state that matches none of the
         three (e.g. a genuine validation-error state)."""
-        settle_selector = (
-            f'a[data-qc-oel-delete], {self.CANCEL_AND_ADD_NEW_LINK}, {self.SAVE_AS_DRAFT_BUTTON}'
-        )
-        try:
-            self.page.wait_for_selector(settle_selector, state="attached", timeout=15000)
-        except Exception:  # noqa: BLE001 — real, explicitly-capped fallback, never unbounded
+        # FIX 2026-10-02/03 (B triage, traces for tc_141047 / tc_140981): the
+        # old selector included the create form's own Save as Draft button,
+        # which stays attached for the WHOLE in-flight save, and the manage
+        # page renders the entries list (with `a[data-qc-oel-delete]`) next to
+        # the form. Both matched at once, so the caller navigated away while
+        # qcdev was still saving (about 50s that day) and the record was never
+        # stored. Neither marker, nor a bare `disabled`, is a settle signal.
+        # Now we poll for an OUTCOME, up to SETTLE_OUTCOME_TIMEOUT_MS:
+        #   (a) the page navigated to `?previewEntry=` (live 2026-10-02: a
+        #       successful Publish lands there) or a success toast appeared;
+        #   (b) a refusal bar or a field error appeared that wasn't there
+        #       before the save;
+        #   (c) fallback: the busy spinner was seen and has gone again.
+        # A row action passes `gone` (its own control) and waits for that
+        # control to detach instead.
+        if gone is not None:
             try:
-                self.page.wait_for_load_state("load", timeout=8000)
+                gone.wait_for(state="detached", timeout=30000)
+            except Exception:  # noqa: BLE001 — explicitly capped, falls through
+                logger.warning("_wait_for_settle: row-action control did not detach in 30s")
+            self.page.wait_for_timeout(2500)
+            return
+        outcome = self._poll_save_outcome(start_url, before)
+        if outcome == "nav":
+            try:
+                self.page.wait_for_load_state("domcontentloaded", timeout=15000)
             except Exception:  # noqa: BLE001
                 pass
+        elif outcome is None:
+            logger.warning("_wait_for_settle: no save outcome within %sms", self.SETTLE_OUTCOME_TIMEOUT_MS)
         # Widened from 1500ms to 2500ms 2026-09-03: this is the ONLY settle
         # the write (Save as Draft / Submit for Publishing) gets before a
         # caller may immediately poll the delivery surface (e.g.
@@ -1273,7 +1819,11 @@ class ObjectAuthoringPage(BasePage):
         self.wait_for(self.UNPUBLISH_BUTTON, timeout=APPROVED_BANNER_SETTLE_TIMEOUT_MS)
         self.page.once("dialog", lambda d: d.accept())
         self.page.locator(self.UNPUBLISH_BUTTON).click()
-        self.page.wait_for_load_state("networkidle")
+        # BOUNDED 2026-10-13 (134770: a bare networkidle waited its full 30 s
+        # default -- the chatbot polling keeps the network busy). The caller
+        # proves the transition on a fresh read (wait_for_status /
+        # list_status); this only lets the request leave.
+        self._wait_for_network_settle()
         self.page.wait_for_timeout(1500)
         return self
 
@@ -1475,13 +2025,14 @@ class ObjectAuthoringPage(BasePage):
         return hidden_textbox.locator("xpath=../../..")
 
     def _picker_closed(self, timeout: int) -> bool:
-        """True once the file-picker iframe is detached; False on timeout."""
+        """True once no file-picker iframe is attached; False on timeout.
+        Counted rather than `wait_for(detached)`, which raises a strict-mode
+        violation (read here as "still open") when two pickers are attached."""
+        iframes = self.page.locator(self.UPLOAD_MODAL_IFRAME)
         try:
-            self.page.locator(self.UPLOAD_MODAL_IFRAME).wait_for(
-                state="detached", timeout=timeout
-            )
+            wait_until(lambda: iframes.count() == 0, timeout=timeout / 1000, poll=0.25)
             return True
-        except Exception:  # noqa: BLE001 — caller decides what to do next
+        except WaitTimeoutError:
             return False
 
     def description_editor_iframe(self, field_name: str | None = None) -> str:
@@ -1502,8 +2053,14 @@ class ObjectAuthoringPage(BasePage):
         """Anchored accessible-name matcher tolerant of a required field's
         trailing ` *` (see the note above). Use this instead of
         `exact=True` for every role-based form-field lookup on this
-        surface."""
-        return re.compile(r"^\s*" + re.escape(field_label) + r"\s*\*?\s*$")
+        surface.
+
+        "/" is escaped (2026-10-13, PBI 129388): Playwright serializes the
+        pattern as `/source/flags` into its role selector, and re.escape()
+        leaves "/" bare, so "Video File / Embed URL" ended the regex early
+        ("Error while parsing selector ... unexpected symbol"). A
+        backslash-escaped slash means the same thing to Python's re and to Playwright's JS regex."""
+        return re.compile(r"^\s*" + selector_safe_escape(field_label) + r"\s*\*?\s*$")
 
     def current_file_download_url(self, field_label: str) -> str:
         """Absolute URL of the current file's own `Download` link (see class
@@ -1554,6 +2111,16 @@ class ObjectAuthoringPage(BasePage):
         return self
 
     # ---- Lifecycle actions --------------------------------------------------
+
+    def file_removal_pending(self, field_label: str) -> bool:
+        """True once `remove_current_file()` has been clicked and the removal
+        is waiting for the save (live 2026-10-13: the field swaps its "Remove
+        file" button for "Undo remove" while `Current file: ...` stays on
+        screen -- Remove / Undo remove take effect only on save, per the
+        Object Authoring guide). So "the field reads empty" is NOT observable
+        before the save; this is the pre-save signal that it will be."""
+        return self._file_upload_container(field_label).get_by_role(
+            "button", name="Undo remove").first.is_visible()
 
     def is_checked(self, field_label: str) -> bool:
         """Read-back counterpart to `set_checkbox()` — the class had a

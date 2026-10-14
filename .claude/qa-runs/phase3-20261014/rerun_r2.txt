@@ -1,0 +1,4 @@
+cms/tests/components/test_header_control_panel.py::test_134271_logo_image_empty_rejected
+cms/tests/components/test_header_control_panel.py::test_134286_nav_label_en_empty_rejected
+cms/tests/components/test_footer_phase3_control_panel.py::test_130988_unprivileged_user_cannot_publish_footer
+cms/tests/components/test_footer_phase3_control_panel.py::test_130996_unprivileged_user_denied_arabic

@@ -24,7 +24,7 @@ submitted) create/edit form:
     button "Select File" -> "Supporting Image" (upload: .jpg/.jpeg/.png/.svg, <=2MB)
     spinbutton "Display Order"
     checkbox "Active Status"
-    button "Save as Draft" / "Submit for Publishing"
+    button "Save as Draft" / "Submit for Review"
 
 SCHEMA MISMATCH, DISCLOSED (2026-09-22): the QA batch's tc_144304/144305
 ("a Supporting Image's Display Order accepts/rejects...") and

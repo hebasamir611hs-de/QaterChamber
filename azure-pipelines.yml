@@ -41,6 +41,18 @@ stages:
             displayName: "Install pinned dependencies"
           - script: pytest --collect-only -q
             displayName: "pytest --collect-only"
+          # pytest.ini's pbi_/tc_ marker block is generated, not hand-written.
+          # This fails the build if a new test's marker was never registered,
+          # which is what let the block drift to 200 dead / 535 missing entries
+          # before 2026-09-30. Fix with: python tools/sync_tc_markers.py
+          - script: python tools/sync_tc_markers.py --check
+            displayName: "pytest.ini marker block in sync"
+          # CMS editorial-workflow conventions (7 states, vocabulary, roles,
+          # Object-Authoring-only). No browser, no qcdev — pure AST inspection.
+          # This is what stops the retired Draft/Approved vocabulary coming back
+          # without anyone having to ask for the new flow on every run.
+          - script: pytest cms/tests/test_cms_conventions.py -q -o addopts=
+            displayName: "CMS conventions guard"
 
   - stage: LiveRun
     displayName: "Live suite vs qcdev (opt-in)"

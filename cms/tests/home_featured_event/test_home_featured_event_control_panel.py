@@ -1,508 +1,387 @@
 """
-web/tests/home_featured_event/test_home_featured_event_control_panel.py —
-Control_Panel-tagged cases for PBI 129382 (Home Page "Upcoming Event Pins").
+cms/tests/home_featured_event/test_home_featured_event_control_panel.py —
+Control_Panel cases for PBI 129382 (Home Page "Upcoming Featured Event").
 
-OPEN QUESTION RESOLVED THIS SESSION (2026-08-31, single non-parallel
-Playwright MCP session against qcdev) — CONFIRMED PRODUCT DEFECT, not an
-automation gap:
+Rewritten 2026-10-07 (phase 3):
+  - Surface: Object Authoring, `manage-upcoming-event-pin` (object
+    `UpcomingEventPin`, Content-Admin-Guide §10). The old Content & Data path
+    and the TEST_USER fallback login are gone.
+  - Every test names the account it runs as, resolved through
+    `cms_role_credentials()`. TEST_USER is never used.
+  - Public checks use a fresh logged-out context.
 
-The `pinnedEvent` field on the Upcoming Event Pins singleton (record 49205,
-ERC `QCDEMO-129382-PIN-001`) does NOT control which event the public Home
-Page card renders. This was tested with TWO independent, real, valid
-candidate values, each followed by a hard navigation and an 11-15s wait
-(well past every propagation/render-settle budget this project has
-established elsewhere):
+TWO KINDS OF TEST IN THIS FILE
+  1. READ-ONLY (no xdist group): open forms and lists, never save. Safe to run.
+  2. WRITES TO THE LIVE PIN 49205 (`xdist_group("pin_event_49205")`): every
+     case whose steps pin / unpin / re-save the configuration. 49205 is the
+     real Home Page pin, so these need the user's ID-named approval before
+     they run. They are real tests — snapshot first, verified restore in
+     `finally` — and they are NOT in the phase-3 run list until approved.
 
-  1. `/web/qatar-chamber/events/event?id=110785` — "Export Documentation
-     Workshop", a real, live, Published, future-dated (20 Oct 2026) event
-     detail page. Card did not change (an earlier, carried-over attempt
-     already tried this exact value and format; this session independently
-     reproduced the same non-result live rather than trusting that report).
-  2. `/web/qatar-chamber/events/event?id=49443` — "Qatar–GCC Economic
-     Cooperation Forum", a real event FROM THE SAME Chamber Events
-     collection (`/web/qatar-chamber/events` listing) the widget's own
-     fallback card is drawn from — ruling out the "wrong collection/content
-     type" explanation for attempt 1. Card still did not change.
-
-In both cases the Home Page kept showing "International Trade & Logistics
-Expo" (id 49485) regardless of the saved `pinnedEvent` value. Both bare-slug
-URL formats that could plausibly be tried (`/events/novgorod-delegation` —
-the pre-existing baseline value itself, and `/events/international-trade-
-logistics-expo`) independently 404 as real pages on this site (`Coming
-Soon`) — there is no working slug-based route on this project's Events
-feature at all. The ONLY real, working event URL format on this site is the
-query-string one (`?id=<N>`), which is also the exact format the widget's
-own rendered `[data-qc-ue-media]` href already uses — so this is not a
-"wrong value format" finding, it is a confirmed non-functional field: even
-the widget's native href format was ignored twice, with a real future-dated
-event and a real in-collection event.
-
-**TC 135669 ("pin a published event ... see it appear on Home Page") is
-therefore NOT automated as a passing test** — scripting an assertion that
-the card matches the pinned event would either always fail (correctly
-flagging the defect, at the cost of a permanently-red suite entry) or be
-quietly written to assert something else and mask the defect. Per this
-project's contract (documented, not worked around — the same precedent as
-the GM Message Draft-blank-page defect and home_dynamic_widgets_control_
-panel.py's Weather-widget-has-no-admin-surface finding), it is disclosed
-here and left UNAUTOMATED. File/confirm a bug against PBI 129382 with this
-session's two independent repro values before any future attempt to
-automate TC 135669 — do not re-guess a third value format without a
-product-side fix or clarification first.
-
-**TC 135671 ("pinning a different event replaces the previously featured
-event without a duplicate section appearing") is PARTIALLY automated**: the
-propagation half (re-verified live 2026-09-06, still reproduces) is
-disclosed/blocked like TC 135669, but the case's separate "no duplicate
-section appearing" DOM-structural expectation does not depend on which
-event resolves and IS scripted and asserted (section count stays exactly 1
-before and after re-pinning) — same partial-script-plus-disclosure shape
-already used for TC 135672's step-1/2-only scripting.
-
-**TC 135670 ("unpin ... Upcoming Events section disappears") IS automated
-below** — the Active Status toggle was independently confirmed live to be
-the real, working mechanism: setting `activeStatus=false` and Saving makes
-`section.qc-home-upcoming-event` render with an inline `style=
-"display:none;"` on the next Home Page load (the section itself is never
-removed from the DOM — a visibility toggle, not a content-driven "no
-upcoming events" state). TC 135670's own wording ("unpin the currently
-featured event") is satisfied via the Active Status control, mirroring the
-disclosed-substitution precedent already used elsewhere in this project
-(gm_message's Status combobox for "publish/unpublish", Business Events'
-same combobox for "submit for review") — there is no separate "unpin"
-action on this singleton's 2-field form; Active Status is the pin's own
-on/off switch.
-
-DATA LIFECYCLE — TEST_OWNED singleton per cms-profile.md's Test-Data
-Policy: record 49205 is reset to its FIXED, confirmed-live baseline
-(`pinnedEvent=/web/qatar-chamber/events/novgorod-delegation`,
-`activeStatus=True`) in a `finally` block, with the "reopen + assert
-restore actually persisted" hardening already used elsewhere in this
-project (e.g. board_members tests) — never "restore whatever the UI showed
-before mutating", per this record being a fixed-baseline TEST_OWNED row,
-not a DISPOSABLE one.
-
-SHARED-SINGLETON SAFETY: both this test and TC 135669's write-up mutate the
-SAME record. TC 135670 below is self-sufficient — it establishes its own
-known Active=True precondition (re-asserting/re-saving the baseline's
-Active=True at the start, not assuming a prior test left it that way) before
-switching it off, so it does not depend on run order or on TC 135669 (which
-is not scripted at all).
+The 2026-08-31 "confirmed defect" (pinnedEvent ignored by the Home card) was
+observed as TEST_USER through Content & Data, before the 7-state workflow
+rules. It is unverified under the current flow; 135669 below re-tests it.
 """
 
 import allure
 import pytest
 
-from cms.pages.home_featured_event.home_featured_event_admin_page import HomeFeaturedEventAdminPage
+from cms.pages.home_featured_event.home_featured_event_admin_page import (  # noqa: F401 — fixture import
+    HomeFeaturedEventAdminPage,
+    approved_49205_write,
+)
 from web.pages.home_featured_event.home_featured_event_page import HomeFeaturedEventPage
 
+EDITOR = "Site Content Editor"
+AUTHOR = "Site Content Author"
+MEMBER = "Site Member"
+ACCESS_DENIED_EN = "Access Denied. You do not have permission to perform this action."
+LOGGED_OUT = pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 
-@allure.epic("Home Page")
-@allure.feature("Upcoming Event Pins")
-@allure.story("Pin an event to feature it on the Home Page")
-@allure.severity(allure.severity_level.CRITICAL)
-@allure.title("DEFECT — pinning a valid event does not change the Home Page featured card")
-@pytest.mark.control_panel
-@pytest.mark.event
-@pytest.mark.regression
+common = [
+    allure.epic("Home Page"),
+    allure.feature("Upcoming Featured Event"),
+    pytest.mark.control_panel,
+    pytest.mark.event,
+    pytest.mark.pbi_129382,
+]
+
+
+def _marks(fn):
+    for m in reversed(common):
+        fn = m(fn)
+    return fn
+
+
+# ═════════════════════════════════ READ-ONLY ═════════════════════════════════
+
+@_marks
 @pytest.mark.functional_high
-@pytest.mark.pbi_129382
+@pytest.mark.tc_135653
+@allure.title("The Upcoming Event Pin configuration is reachable from Object Authoring")
+def test_pin_configuration_reachable_from_authoring(page):
+    """ADO-135653. Account: Site Content Editor. Read-only."""
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(EDITOR)
+    with allure.step("Open Object Authoring and pick 'Upcoming Event Pin' from the sidebar"):
+        admin.open_object_authoring_index()
+        assert admin.sidebar_has_entry(), "'Upcoming Event Pin' is missing from the Object Authoring sidebar"
+        admin.open_from_sidebar()
+    assert admin.pin_form_present(), "the Pin configuration form does not show Pinned Event + Active Status"
+
+
+@_marks
+@pytest.mark.security
+@pytest.mark.tc_135661
+@allure.title("A Site Content Editor gets read/write access to the Pin configuration")
+def test_editor_has_read_write_access(page):
+    """ADO-135661. Account: Site Content Editor. Read-only: proves the
+    controls are editable and the live row offers edit/workflow actions,
+    never saves."""
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(EDITOR)
+    admin.open_entries_list()
+    actions = admin.live_pin_row_actions()
+    allure.attach(str(sorted(actions)), name="row actions on 49205", attachment_type=allure.attachment_type.TEXT)
+    assert "edit" in actions, f"Editor is not offered Edit on the live pin: {actions}"
+    assert "unpublish" in actions, f"Editor is not offered Unpublish on the live pin: {actions}"
+    admin.open_live_pin_read_only()
+    assert admin.pin_form_editable(), "Pinned Event / Active Status are not editable for the Editor"
+
+
+@_marks
+@pytest.mark.security
+@pytest.mark.tc_135662
+@allure.title("A user without Home Page permission is denied the Pin configuration")
+def test_site_member_denied_pin_configuration(page):
+    """ADO-135662. Account: Site Member (signs in, holds no content role).
+    Asserts the denial positively: login succeeded, and the manage page
+    renders neither the form nor any entries. The exact 'Access Denied' copy
+    is recorded, not asserted (message wording is not a bug on this project)."""
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(MEMBER)
+    admin.open_manage_page_raw()
+    body = admin.body_text()
+    allure.attach(body[:1500], name="what the Site Member sees", attachment_type=allure.attachment_type.TEXT)
+    assert not admin.login_form_visible(), "Site Member login did not hold — denial would be meaningless"
+    assert not admin.pin_form_present(), "Site Member can see the Pin configuration form"
+    assert page.locator("table tbody tr", has_text=admin.LIVE_PIN_CODE).count() == 0, "Site Member sees the pin entries"
+    allure.attach(str(ACCESS_DENIED_EN in body), name="EN Access Denied copy shown", attachment_type=allure.attachment_type.TEXT)
+
+
+@_marks
+@pytest.mark.security
+@pytest.mark.tc_135663
+@LOGGED_OUT
+@allure.title("Logged out: the Pin configuration URL redirects to the Liferay login")
+def test_logged_out_direct_url_redirects_to_login(page):
+    """ADO-135663. Account: none (fresh logged-out context)."""
+    admin = HomeFeaturedEventAdminPage(page)
+    admin.open_manage_page_raw()
+    allure.attach(page.url, name="landed on", attachment_type=allure.attachment_type.TEXT)
+    assert not admin.pin_form_present(), "the Pin configuration form rendered without a session"
+    assert admin.login_form_visible(), (
+        f"expected a redirect to the Liferay login page, landed on {page.url} "
+        f"({page.title()!r})")
+
+
+@_marks
+@pytest.mark.security
+@pytest.mark.tc_135664
+@allure.title("A Site Content Author cannot change the live Pin configuration")
+def test_author_cannot_change_live_pin(page):
+    """ADO-135664. Account: Site Content Author. Read-only — never clicks
+    Save. Asserts the live pin's row offers the Author no edit / publish /
+    unpublish / delete action. Whether the bilingual 'Access Denied' copy
+    appears is recorded, not asserted."""
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(AUTHOR)
+    admin.open_entries_list()
+    actions = admin.live_pin_row_actions()
+    allure.attach(str(sorted(actions)), name="Author row actions on 49205", attachment_type=allure.attachment_type.TEXT)
+    forbidden = actions & {"edit", "publish", "unpublish", "delete", "approve", "archive"}
+    assert not forbidden, f"Author is offered write actions on the live pin: {forbidden}"
+
+
+@_marks
+@pytest.mark.functional_high
+@pytest.mark.tc_135672
+@allure.title("Pin configuration exposes only Pinned Event + Active Status (no manual event fields)")
+def test_pin_configuration_has_no_manual_event_detail_fields(page):
+    """ADO-135672 step 2. Account: Site Content Editor. Read-only: opens the
+    live pin's form, never saves. Steps 1 and 3 (select + save + Home check)
+    write to 49205 — see test_pinned_event_details_sourced_from_events_module."""
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(EDITOR)
+    admin.open_live_pin_read_only()
+    names = admin.object_field_names()
+    allure.attach(str(sorted(names)), name="ObjectField_* on the form", attachment_type=allure.attachment_type.TEXT)
+    assert names == {"pinnedEvent", "activeStatus"}, f"unexpected fields on the Pin form: {names}"
+
+
+@_marks
+@pytest.mark.functional_high
+@pytest.mark.tc_135654
+@allure.title("The Event Selector lists the published events")
+def test_event_selector_lists_published_events(page):
+    """ADO-135654. Account: Site Content Editor. Opens the NEW-entry form
+    (not the live record), focuses the Pinned Event control, never saves."""
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(EDITOR)
+    admin.authoring.open_new_entry_form(locale="en")
+    allure.attach(admin.pinned_event_input_type(), name="Pinned Event input type", attachment_type=allure.attachment_type.TEXT)
+    opened = admin.open_pinned_event_selector()
+    assert opened, "focusing Pinned Event opens no event list (the control is a plain text input)"
+    assert admin.selector_option_texts(), "the Event Selector opened but lists no events"
+
+
+# ══════════════════ WRITES TO LIVE PIN 49205 — APPROVAL REQUIRED ══════════════════
+# Not in the phase-3 run list. Each snapshots 49205 first and restores it in
+# `finally` with a reopen-and-compare check.
+
+def _anon_home(browser):
+    from core.web.browser import new_context
+    ctx = new_context(browser, use_auth_state=False)
+    return ctx, HomeFeaturedEventPage(ctx.new_page())
+
+
+def _published_event_href(browser) -> str:
+    """The detail URL of a published event, read from the public Events listing."""
+    ctx, home = _anon_home(browser)
+    try:
+        from config.settings import control_panel_url
+        home.open(control_panel_url("/web/qatar-chamber/events"))
+        link = home.page.locator('a[href*="event?id="]').first
+        link.wait_for(state="attached", timeout=30000)
+        return link.get_attribute("href")
+    finally:
+        ctx.close()
+
+
+def _pin_and_check(page, browser, value: str, active: bool, visible_before: bool = False, expect_stored: bool = True):
+    """Editor writes (value, active) to 49205, publishes, then hands back a
+    fresh logged-out Home Page. Returns (admin, snapshot, home, ctx); the
+    caller restores in `finally`.
+
+    visible_before: assert the section is visible to a visitor BEFORE the
+      write — a "hidden after" assertion is meaningless otherwise (the live
+      pin can already be hidden for an unrelated reason, see report G1).
+    expect_stored: reopen the record and assert the write actually persisted
+      (Pinned Event is `required`, so a refused publish writes nothing)."""
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(EDITOR)
+    admin.open_live_pin_read_only()
+    snap = admin.snapshot()
+    allure.attach(str(snap), name="49205 snapshot", attachment_type=allure.attachment_type.TEXT)
+    ctx, home = _anon_home(browser)
+    if visible_before:
+        home.open_home()
+        assert home.is_section_visible(), "precondition: section must be visible to a visitor before the change"
+    admin.open_for_edit().set_pinned_event(value).set_active(active).publish()
+    if expect_stored:
+        admin.open_live_pin_read_only()
+        stored = admin.snapshot()
+        if stored != {"pinnedEvent": value, "activeStatus": active}:
+            admin.restore(snap)
+            ctx.close()
+            pytest.fail(f"the write did not persist on 49205: stored {stored}")
+    return admin, snap, home, ctx
+
+
+@_marks
+@pytest.mark.functional_high
 @pytest.mark.tc_135669
-@pytest.mark.skip(
-    reason="CONFIRMED PRODUCT DEFECT, not an automation gap — live-"
-    "reproduced this session (2026-08-31) with TWO independent real "
-    "candidate values (a future-dated event id=110785, and an in-collection "
-    "past-dated event id=49443, both in the widget's own native '?id=' href "
-    "format), each followed by an 11-15s wait past every propagation/"
-    "render-settle budget this project has established. The Home Page "
-    "featured card never changed from its fallback ('International Trade & "
-    "Logistics Expo', id 49485) in either case. See this module's own "
-    "docstring for the full repro and why this is scripted as a documented, "
-    "disclosed defect rather than a scripted (and permanently failing, or "
-    "silently altered) assertion. File/confirm a bug against PBI 129382 "
-    "before re-attempting this TC."
-)
-def test_pinning_a_valid_event_updates_the_home_page_card():
-    """ADO-135669. Left deliberately unautomated/skipped — see module
-    docstring and this test's own skip reason for the full disclosure."""
-    pytest.fail(
-        "Not reached — see the skip reason: TC 135669 documents a "
-        "confirmed product defect in the Pinned Event field rather than "
-        "asserting a pass against it."
-    )
+@pytest.mark.xdist_group("pin_event_49205")
+@pytest.mark.usefixtures("approved_49205_write")
+@allure.title("Pinning a published event with Active Status on shows it on the Home Page")
+def test_pin_published_event_shows_on_home(page, browser):
+    """ADO-135669. Account: Site Content Editor (Publish goes live directly).
+    WRITES 49205 — approval required."""
+    href = _published_event_href(browser)
+    admin, snap, home, ctx = _pin_and_check(page, browser, href, True)
+    try:
+        shown = home.reload_until(lambda p: p.is_section_visible() and p.media_href().endswith(href.split("/")[-1]))
+        assert shown, f"Home card did not switch to the pinned event {href}"
+    finally:
+        admin.restore(snap)
+        ctx.close()
 
 
-@allure.epic("Home Page")
-@allure.feature("Upcoming Event Pins")
-@allure.story("Unpin the featured event")
-@allure.severity(allure.severity_level.CRITICAL)
-@allure.title("Turning off Active Status hides the Upcoming Events section from the Home Page")
-@pytest.mark.control_panel
-@pytest.mark.event
-@pytest.mark.regression
+@_marks
 @pytest.mark.functional_high
-@pytest.mark.pbi_129382
 @pytest.mark.tc_135670
 @pytest.mark.xdist_group("pin_event_49205")
-def test_unpinning_the_featured_event_hides_the_home_page_section(page, browser):
-    """ADO-135670.
-
-    Steps (mapped onto the confirmed-live 2-field form and the confirmed-
-    live visibility mechanism — see module docstring's disclosed
-    substitution): log into the CMS -> Content & Data -> Upcoming Event
-    Pins -> open the singleton record -> establish a known Active=True
-    precondition (self-sufficient, no ordering dependency) -> confirm the
-    section IS visible on the public Home Page -> set Active Status to OFF
-    and Save -> reload the Home Page -> assert the
-    `section.qc-home-upcoming-event` is no longer visible (rendered with
-    `display:none`, per the confirmed-live mechanism — not a DOM-removal
-    check).
-
-    PUBLIC-PAGE-ANONYMOUS-CONTEXT: the public Home Page check now runs in a
-    dedicated, fresh, logged-out browser context (never the CMS admin
-    `page`) so it reflects a real anonymous visitor rather than a still-
-    authenticated CMS session.
-    """
-    from core.web.browser import new_context
-
-    admin = HomeFeaturedEventAdminPage(page)
-    anon_context = new_context(browser, use_auth_state=False)
-    anon_page = anon_context.new_page()
-    home = HomeFeaturedEventPage(anon_page)
-
+@pytest.mark.usefixtures("approved_49205_write")
+@allure.title("Unpinning the featured event hides the Upcoming Events section")
+def test_unpin_hides_section(page, browser):
+    """ADO-135670. Account: Site Content Editor. Unpin = clear Pinned Event
+    and publish. WRITES 49205 — approval required."""
+    admin, snap, home, ctx = _pin_and_check(page, browser, "", True, visible_before=True)
     try:
-        with allure.step(
-            "Open Content & Data > Upcoming Event Pins and establish a "
-            "known Active=True precondition (self-sufficient)"
-        ):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            admin.set_active(True)
-            admin.save()
-
-        assert admin.is_active() is True, (
-            "Precondition setup failed: Active Status did not read True "
-            "immediately after Save."
-        )
-
-        with allure.step("Confirm the section is visible on the public Home Page before unpinning"):
-            visible_before = home.reload_until(lambda p: p.is_section_visible())
-        assert visible_before, (
-            "The Upcoming Events section was not visible with Active=True "
-            f"within {home.RELOAD_POLL_TIMEOUT_MS}ms of Save — cannot "
-            "proceed to the unpin assertion without a confirmed "
-            "precondition."
-        )
-
-        with allure.step('Reopen the record, set Active Status to OFF ("unpin"), and Save'):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            admin.set_active(False)
-            admin.save()
-
-        assert admin.is_active() is False
-
-        with allure.step("Reload the Home Page and assert the Upcoming Events section is hidden"):
-            hidden_after = home.reload_until(lambda p: not p.is_section_visible())
-        assert hidden_after, (
-            "Active Status was set to False but "
-            "section.qc-home-upcoming-event is still visible on the public "
-            f"Home Page after {home.RELOAD_POLL_TIMEOUT_MS}ms of polling."
-        )
+        assert home.reload_until(lambda p: not p.is_section_visible()), "section still visible after unpinning"
     finally:
-        with allure.step("Restore the singleton to its confirmed original baseline"):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            admin.reset_to_baseline()
-
-        with allure.step("Reopen and verify the restore actually persisted"):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            assert admin.pinned_event_value() == admin.BASELINE_PINNED_EVENT, (
-                "Baseline restore did not persist for pinnedEvent: expected "
-                f"{admin.BASELINE_PINNED_EVENT!r}, got "
-                f"{admin.pinned_event_value()!r}."
-            )
-            assert admin.is_active() == admin.BASELINE_ACTIVE, (
-                "Baseline restore did not persist for activeStatus: "
-                f"expected {admin.BASELINE_ACTIVE!r}, got "
-                f"{admin.is_active()!r}."
-            )
-
-        # Anon-context cleanup runs LAST, after the baseline restore — never
-        # ahead of it. See conftest.py's `page` teardown for the same lesson:
-        # a raw context.close() thrown mid-teardown must never be able to
-        # abort the safety-critical restore of a shared TEST_OWNED singleton.
-        try:
-            anon_context.close()
-        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
-            pass
+        admin.restore(snap)
+        ctx.close()
 
 
-@allure.epic("Home Page")
-@allure.feature("Upcoming Event Pins")
-@allure.story("Replace the featured event")
-@allure.severity(allure.severity_level.CRITICAL)
-@allure.title("Pinning a different event never renders a duplicate Upcoming Event section")
-@pytest.mark.control_panel
-@pytest.mark.event
-@pytest.mark.regression
+@_marks
 @pytest.mark.functional_high
-@pytest.mark.pbi_129382
 @pytest.mark.tc_135671
 @pytest.mark.xdist_group("pin_event_49205")
-def test_pinning_replaces_the_previously_featured_event(page, browser):
-    """ADO-135671.
-
-    RE-VERIFIED LIVE 2026-09-06 (single serial session, qcdev): the
-    pinnedEvent propagation defect documented above for TC 135669/this
-    module's docstring (2026-08-31) still reproduces today with the exact
-    same in-format candidate (`?id=49443`) — saved and read back correctly
-    on the admin form, but the public Home Page card never changed within
-    15s of polling. Step 3's "only Event B appears; Event A no longer
-    appears" half of the expectation is therefore still BLOCKED by that
-    confirmed, unresolved product defect and is NOT asserted here (would
-    either always fail or be silently rewritten to mask the defect — same
-    reasoning as TC 135669).
-
-    What IS independently assertable today, per this module's own
-    step-1-and-2-only precedent (test_pin_configuration_has_no_manual_
-    event_detail_fields, TC 135672): step 3's OTHER, DOM-structural
-    expectation — "no duplicate section appearing" — does not depend on
-    which event the card resolves to. Confirmed live this session: exactly
-    one `section.qc-home-upcoming-event` renders both before and after
-    re-pinning, in both the failing-propagation state and the baseline
-    state. This test pins Event B (the same in-format, in-collection
-    candidate value re-used from the original repro, not a newly-guessed
-    third value), reloads, and asserts the section count stays exactly 1 —
-    i.e. re-pinning never duplicates the section, whether or not the
-    pinned card itself visibly changes.
-
-    PUBLIC-PAGE-ANONYMOUS-CONTEXT: the public Home Page checks now run in a
-    dedicated, fresh, logged-out browser context (never the CMS admin
-    `page`) so they reflect a real anonymous visitor rather than a still-
-    authenticated CMS session.
-    """
-    from core.web.browser import new_context
-
-    admin = HomeFeaturedEventAdminPage(page)
-    anon_context = new_context(browser, use_auth_state=False)
-    anon_page = anon_context.new_page()
-    home = HomeFeaturedEventPage(anon_page)
-    EVENT_B_PINNED_VALUE = "/web/qatar-chamber/events/event?id=49443"
-
+@pytest.mark.usefixtures("approved_49205_write")
+@allure.title("Pinning a different event replaces the featured one with no duplicate section")
+def test_repin_replaces_without_duplicate(page, browser):
+    """ADO-135671 (P3, previously scripted). Account: Site Content Editor.
+    WRITES 49205 — approval required."""
+    href = _published_event_href(browser)
+    admin, snap, home, ctx = _pin_and_check(page, browser, href, True)
     try:
-        with allure.step("Confirm Event A (the current baseline pin) is visible on the Home Page"):
-            visible_before = home.reload_until(lambda p: p.is_section_visible())
-        assert visible_before, (
-            "The Upcoming Events section was not visible with the baseline "
-            f"pin within {home.RELOAD_POLL_TIMEOUT_MS}ms — cannot proceed "
-            "to the re-pin assertion without a confirmed precondition."
-        )
-        assert anon_page.locator(home.SECTION).count() == 1, (
-            "Expected exactly one Upcoming Event section before re-pinning, "
-            f"found {anon_page.locator(home.SECTION).count()}."
-        )
-
-        with allure.step("In Pin Configuration, select Event B instead of Event A and save"):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            admin.set_pinned_event(EVENT_B_PINNED_VALUE)
-            admin.set_active(True)
-            admin.save()
-
-        with allure.step("Reopen and verify Event B's value actually persisted on the admin form"):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            assert admin.pinned_event_value() == EVENT_B_PINNED_VALUE, (
-                "Pin Configuration did not persist Event B: expected "
-                f"{EVENT_B_PINNED_VALUE!r}, got "
-                f"{admin.pinned_event_value()!r}."
-            )
-            admin.cancel()
-
-        with allure.step(
-            "Wait for cache refresh and reload the Home Page — assert no "
-            "duplicate section is ever rendered"
-        ):
-            home.reload_until(lambda p: True, timeout_ms=home.RELOAD_POLL_TIMEOUT_MS)
-            section_count_after = anon_page.locator(home.SECTION).count()
-        assert section_count_after == 1, (
-            "Re-pinning to Event B rendered "
-            f"{section_count_after} Upcoming Event sections on the Home "
-            "Page instead of exactly 1 — a duplicate section, independent "
-            "of the separately-disclosed pinnedEvent propagation defect "
-            "(see this test's docstring)."
-        )
+        home.reload_until(lambda p: p.is_section_visible())
+        assert home.page.locator(home.SECTION).count() == 1, "more than one Upcoming Event section rendered"
+        assert home.media_href().endswith(href.split("/")[-1]), "the card still shows the previous event"
     finally:
-        with allure.step("Restore the singleton to its confirmed original baseline"):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            admin.reset_to_baseline()
-
-        with allure.step("Reopen and verify the restore actually persisted"):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            assert admin.pinned_event_value() == admin.BASELINE_PINNED_EVENT, (
-                "Baseline restore did not persist for pinnedEvent: expected "
-                f"{admin.BASELINE_PINNED_EVENT!r}, got "
-                f"{admin.pinned_event_value()!r}."
-            )
-            assert admin.is_active() == admin.BASELINE_ACTIVE, (
-                "Baseline restore did not persist for activeStatus: "
-                f"expected {admin.BASELINE_ACTIVE!r}, got "
-                f"{admin.is_active()!r}."
-            )
-            admin.cancel()
-
-        # Anon-context cleanup runs LAST, after the baseline restore — see
-        # TC 135670's finally block for the same lesson from conftest.py.
-        try:
-            anon_context.close()
-        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
-            pass
+        admin.restore(snap)
+        ctx.close()
 
 
-@allure.epic("Home Page")
-@allure.feature("Upcoming Event Pins")
-@allure.story("Pin Configuration sources event details from the Events module")
-@allure.severity(allure.severity_level.NORMAL)
-@allure.title("Pin Configuration exposes only the Event Selector and Active Status — no manual content fields")
-@pytest.mark.control_panel
-@pytest.mark.event
-@pytest.mark.regression
+@_marks
 @pytest.mark.functional_high
-@pytest.mark.pbi_129382
+@pytest.mark.tc_135673
+@pytest.mark.tc_135705
+@pytest.mark.xdist_group("pin_event_49205")
+@pytest.mark.usefixtures("approved_49205_write")
+@allure.title("Active Status off hides the section while an event stays pinned")
+def test_active_status_off_hides_section(page, browser):
+    """ADO-135673 / ADO-135705. Account: Site Content Editor. WRITES 49205."""
+    href = _published_event_href(browser)
+    admin, snap, home, ctx = _pin_and_check(page, browser, href, True)
+    try:
+        assert home.reload_until(lambda p: p.is_section_visible()), "precondition: section not visible with the event pinned + active"
+        admin.open_for_edit().set_active(False).publish()
+        admin.open_live_pin_read_only()
+        assert admin.is_active() is False and admin.pinned_event_value() == href, "Active Status off did not persist (or the pin was lost)"
+        assert home.reload_until(lambda p: not p.is_section_visible()), "section visible with Active Status off"
+    finally:
+        admin.restore(snap)
+        ctx.close()
+
+
+@_marks
+@pytest.mark.functional_high
+@pytest.mark.tc_135704
+@pytest.mark.tc_135698
+@pytest.mark.xdist_group("pin_event_49205")
+@pytest.mark.usefixtures("approved_49205_write")
+@allure.title("Saving a published event with Active Status on stores the pin and shows the section")
+def test_active_status_on_stores_pin_and_shows_section(page, browser):
+    """ADO-135704 / ADO-135698. Account: Site Content Editor. WRITES 49205."""
+    href = _published_event_href(browser)
+    admin, snap, home, ctx = _pin_and_check(page, browser, href, True)
+    try:
+        admin.open_live_pin_read_only()
+        assert admin.pinned_event_value() == href and admin.is_active(), "pin not stored"
+        assert home.reload_until(lambda p: p.is_section_visible()), "section not visible with Active Status on"
+    finally:
+        admin.restore(snap)
+        ctx.close()
+
+
+@_marks
+@pytest.mark.functional_high
 @pytest.mark.tc_135672
 @pytest.mark.xdist_group("pin_event_49205")
-def test_pin_configuration_has_no_manual_event_detail_fields(page):
-    """ADO-135672.
-
-    Steps 1-2 only (self-sufficient, independent of the TC 135669/135671
-    Pinned Event propagation defect — see module docstring): log into the
-    CMS -> Content & Data -> Upcoming Event Pins -> open the singleton
-    record -> enumerate every `data-field-reference` on the edit form and
-    assert it is EXACTLY {"activeStatus", "pinnedEvent"} — i.e. no manual
-    title/date/time/location/description/image entry fields exist for
-    event details, per the case's own step-2 expectation. Read-only: opens
-    and Cancels, never Saves, so no baseline-restore burden — but it still
-    carries `xdist_group("pin_event_49205")` because concurrent navigation
-    to the same singleton's admin record from another worker (not just a
-    concurrent Save) was observed to make the list row miss its 20s render
-    timeout — confirmed live: this test and TC 135673 failed only when
-    xdist ran them in parallel, and both passed reliably serialized.
-
-    Step 3 ("Home Page displays the event's title/date/time/location/
-    description/image exactly as recorded") is BLOCKED by the same TC
-    135669/135671 defect (the admin's pin selection does not reach the Home
-    Page card at all) and is disclosed here, not scripted.
-    """
-    admin = HomeFeaturedEventAdminPage(page)
-
-    with allure.step("Open Content & Data > Upcoming Event Pins and open the singleton record"):
-        admin.open_upcoming_event_pins_list()
-        admin.open_pin_record()
-
-    with allure.step("Enumerate every data-field-reference on the edit form"):
-        refs = admin.field_references()
-
-    admin.cancel()
-
-    assert refs == {"activeStatus", "pinnedEvent"}, (
-        "Pin Configuration exposes unexpected fields — expected exactly "
-        f"{{'activeStatus', 'pinnedEvent'}}, got {refs!r}."
-    )
-
-
-@allure.epic("Home Page")
-@allure.feature("Upcoming Event Pins")
-@allure.story("Hide the section without unpinning")
-@allure.severity(allure.severity_level.CRITICAL)
-@allure.title("Disabling Active Status hides the section even while an event remains pinned")
-@pytest.mark.control_panel
-@pytest.mark.event
-@pytest.mark.regression
-@pytest.mark.functional_high
-@pytest.mark.pbi_129382
-@pytest.mark.tc_135673
-@pytest.mark.xdist_group("pin_event_49205")
-def test_disabling_active_status_hides_section_without_unpinning(page, browser):
-    """ADO-135673.
-
-    NOT a duplicate of TC 135670: this test captures pinned_event_value()
-    before toggling Active Status off and asserts it is UNCHANGED after
-    Save (the case's own core invariant — "while an event remains pinned"),
-    then confirms the section hides on the Home Page — proving the hide is
-    driven purely by Active Status, never by touching pinnedEvent. Step 3
-    ("success toast displays") has no locator anywhere in this project's
-    admin POMs (verified by grep) so it is disclosed, not scripted;
-    persistence is instead verified via the same reopen-and-assert
-    hardening TC 135670 uses. Carries the same `xdist_group` as TC 135670
-    since both mutate the same singleton, plus the same baseline-restore
-    `finally` block.
-
-    PUBLIC-PAGE-ANONYMOUS-CONTEXT: the public Home Page check now runs in a
-    dedicated, fresh, logged-out browser context (never the CMS admin
-    `page`) so it reflects a real anonymous visitor rather than a still-
-    authenticated CMS session.
-    """
-    from core.web.browser import new_context
-
-    admin = HomeFeaturedEventAdminPage(page)
-    anon_context = new_context(browser, use_auth_state=False)
-    anon_page = anon_context.new_page()
-    home = HomeFeaturedEventPage(anon_page)
-
+@pytest.mark.usefixtures("approved_49205_write")
+@allure.title("The pinned event's card details come from the Events module record")
+def test_pinned_event_details_sourced_from_events_module(page, browser):
+    """ADO-135672 steps 1 + 3. Account: Site Content Editor. WRITES 49205."""
+    href = _published_event_href(browser)
+    admin, snap, home, ctx = _pin_and_check(page, browser, href, True)
     try:
-        with allure.step("Establish a known pinned + Active=True precondition"):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            admin.set_active(True)
-            admin.save()
-            pinned_before = admin.pinned_event_value()
-
-        visible_before = home.reload_until(lambda p: p.is_section_visible())
-        assert visible_before, (
-            "The Upcoming Events section was not visible with Active=True "
-            f"within {home.RELOAD_POLL_TIMEOUT_MS}ms of Save."
-        )
-
-        with allure.step("Disable Active Status without changing the Pinned Event selection, then Save"):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            admin.set_active(False)
-            admin.save()
-
-        assert admin.is_active() is False
-        assert admin.pinned_event_value() == pinned_before, (
-            "Pinned Event selection changed as a side effect of disabling "
-            f"Active Status: expected {pinned_before!r}, got "
-            f"{admin.pinned_event_value()!r}."
-        )
-
-        with allure.step("Reload the Home Page and assert the section is hidden"):
-            hidden_after = home.reload_until(lambda p: not p.is_section_visible())
-        assert hidden_after, (
-            "Active Status was disabled but section.qc-home-upcoming-event "
-            f"is still visible after {home.RELOAD_POLL_TIMEOUT_MS}ms of "
-            "polling, even though the Pinned Event selection was left "
-            "unchanged."
-        )
+        assert home.reload_until(lambda p: p.is_section_visible()), "section not visible"
+        card = home.card_snapshot()
+        home.open(href)
+        detail = home.body_text()
+        assert card["title"] in detail and card["location"] in detail, f"card {card} differs from the event record"
     finally:
-        with allure.step("Restore the singleton to its confirmed original baseline"):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            admin.reset_to_baseline()
+        admin.restore(snap)
+        ctx.close()
 
-        with allure.step("Reopen and verify the restore actually persisted"):
-            admin.open_upcoming_event_pins_list()
-            admin.open_pin_record()
-            assert admin.pinned_event_value() == admin.BASELINE_PINNED_EVENT
-            assert admin.is_active() == admin.BASELINE_ACTIVE
 
-        # Anon-context cleanup runs LAST, after the baseline restore — see
-        # TC 135670's finally block for the same lesson from conftest.py.
-        try:
-            anon_context.close()
-        except Exception:  # noqa: BLE001 — cleanup must never mask the real result
-            pass
+@_marks
+@pytest.mark.functional_high
+@pytest.mark.tc_135701
+@pytest.mark.xdist_group("pin_event_49205")
+@pytest.mark.usefixtures("approved_49205_write")
+@allure.title("Active Status on with no Pinned Event is refused")
+def test_active_without_pinned_event_refused(page, browser):
+    """ADO-135701. Account: Site Content Editor. WRITES 49205 if the product
+    accepts the save — approval required."""
+    admin, snap, home, ctx = _pin_and_check(page, browser, "", True, expect_stored=False)
+    try:
+        admin.open_live_pin_read_only()
+        assert admin.pinned_event_value() == snap["pinnedEvent"], "an empty Pinned Event was saved with Active Status on"
+    finally:
+        admin.restore(snap)
+        ctx.close()
+
+
+@_marks
+@pytest.mark.security
+@pytest.mark.tc_135716
+@pytest.mark.xdist_group("pin_event_49205")
+@pytest.mark.usefixtures("approved_49205_write")
+@allure.title("A user without permission cannot save the pin through a direct request")
+def test_direct_save_request_rejected(page, browser):
+    """ADO-135716. Account: Site Member. Sends a direct PATCH to 49205 that
+    re-states its CURRENT values; the expected outcome is a 401/403 and no
+    change. If the server wrongly accepts it, 49205 is written — approval
+    required."""
+    from config.settings import control_panel_url
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(EDITOR)
+    admin.open_live_pin_read_only()
+    snap = admin.snapshot()
+    admin.sign_in_as(MEMBER)
+    admin.open(control_panel_url("/home"))
+    status = page.evaluate(
+        """async ([u, body]) => (await fetch(u, {method: 'PATCH', credentials: 'include',
+             headers: {'Content-Type': 'application/json', 'x-csrf-token': (window.Liferay && Liferay.authToken) || ''},
+             body: JSON.stringify(body)})).status""",
+        [control_panel_url(f"/o/c/upcomingeventpins/{admin.LIVE_PIN_ID}"), snap],
+    )
+    admin.sign_in_as(EDITOR)
+    admin.open_live_pin_read_only()
+    assert admin.snapshot() == snap, "49205 changed after the Site Member's direct request"
+    assert status in (401, 403), f"direct save by Site Member returned HTTP {status}"

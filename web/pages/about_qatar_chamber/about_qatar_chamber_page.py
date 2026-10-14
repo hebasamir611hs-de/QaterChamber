@@ -314,6 +314,15 @@ class AboutQatarChamberPage(BasePage):
         self.open(web_url(ABOUT_PATH))
         return self
 
+    def page_http_status(self) -> int:
+        """HTTP status the EN About page returns to THIS page's context (an
+        anonymous context gives a visitor's answer). Added 2026-10-14: since
+        at least 2026-10-13 the page answers 404 to visitors and to signed-in
+        staff alike (only the `?qcPreview=` render works), and a "marker is
+        NOT on the public page" check then passes for any content -- callers
+        gate such checks on a 200 here."""
+        return self.page.request.get(web_url(ABOUT_PATH)).status
+
     def hero_title_is_rendered(self) -> bool:
         """True when the hero title is BOTH present and non-empty — the
         honest "is this page actually serving its content?" signal, since an
@@ -575,6 +584,21 @@ class AboutQatarChamberPage(BasePage):
 
     def inline_link_is_visible(self) -> bool:
         return self.is_visible(self.INTRO_LINK)
+
+    def bullet_item_count(self) -> int:
+        """Direct <li> children of the body's bulleted lists (134675)."""
+        return self.page.locator(f"{self.BODY_UL} > li").count()
+
+    def numbered_item_count(self) -> int:
+        return self.page.locator(f"{self.BODY_OL} > li").count()
+
+    def content_link_hrefs(self) -> list:
+        """hrefs of the inline anchors in the authored rich text (intro +
+        body) -- deliberately NOT the CTA button, which can carry the same
+        URL (134694)."""
+        return self.page.locator(f"{self.INTRO_LINK}, {self.BODY_LINKS}").evaluate_all(
+            "els => els.map(e => e.getAttribute('href'))"
+        )
 
     # ── Section order (134679, 134700) ─────────────────────────────────────
     def section_heading_order(self) -> list:

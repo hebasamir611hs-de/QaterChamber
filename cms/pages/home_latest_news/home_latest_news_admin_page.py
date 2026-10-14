@@ -1,279 +1,350 @@
 """
-cms/pages/home_latest_news/home_latest_news_admin_page.py —
-HomeLatestNewsAdminPage.
+cms/pages/home_latest_news/home_latest_news_admin_page.py — HomeLatestNewsAdminPage.
 
-Control_Panel Page Object for PBI 129372 (Home Page "Stay Connected &
-Informed" / Latest News section), backing the Object Definition entry
-list/create form for "News Articles" reached via Content & Data >
-"News Articles" (objectDefinitionId=48649, groupId=37246). Renders the
-public Home Page's Latest News cards — see
-web/pages/home_latest_news/home_latest_news_page.py (web/) for the public-
-frontend counterpart.
+Control_Panel Page Object for PBI 129372 (Home Page "Latest News" section).
 
-CONFIRMED LIVE THIS SESSION (2026-09-02, headless Chromium via a fresh
-login re-issuing .auth/cp_admin_state.json this session, against qcdev) —
-navigation, list, and Create form all independently probed with throwaway
-scripts mirroring the pattern already used project-wide (e.g.
-home_promo_banners_admin_page.py):
+REWRITTEN 2026-10-07 (Phase 3, 7-state workflow migration). The previous
+version drove the raw Object Definition through Content & Data, which is
+retired for Object-Definition-backed records (standards.md "Object Authoring
+Is the Only Path"), and logged in as TEST_USER as a fallback. Its
+"No Workflow" finding was an artifact of that path and is withdrawn.
 
-NAVIGATION — Product Menu > Content & Data > "News Articles" resolves live
-to the Object Entries portlet deep link with objectDefinitionId=48649,
-p_v_l_s_g_id=37246 (both confirmed by reading the menu item's own href
-rather than guessed).
+OBJECTS (live Object Authoring sidebar, read 2026-10-07 as Site Content Editor;
+NewsArticle is also in cms/Content-Admin-Guide.docx section 11):
+  - "News Article"              -> manage-news-article
+      fields: Title | Title — العربية * | Thumbnail Image | Publication Date |
+              View Count | Active/Published Status
+  - "Home Latest News Section"  -> manage-home-latest-news-section
+      fields: Section Tag (+ — العربية) | Section Heading (+ — العربية) |
+              Section Description (+ — العربية, textarea 0/1000) |
+              View All Label (+ — العربية) | Active Status (ticked by default)
+      ONE real record: QCDEMO-129372-HOME_LATEST_NEWS_SECTION-MAIN (PUBLISHED,
+      id 147240). Never opened for write by this suite — `+ Add New` / the
+      empty create form only, and every delete is guarded against that code.
+  - "News Archive Page"         -> manage-news-archive-page (the View All
+      target). Real singleton; never mutated here.
 
-LIST SCREEN — confirmed live 3 real rows at probe time (48759, 48789,
-48819) — real editorial content, never mutated by this suite.
+Editor form submit button reads "Publish" (SUBMIT_FOR_REVIEW_BUTTON matches
+both labels). As Editor it lands on Published directly.
 
-CREATE FORM — confirmed live field set via `[data-field-reference]`
-containers (all 5 unique refs enumerated live, no guessing):
-  activeStatus (checkbox, labelled "Active/Published Status" on the
-  rendered form), publicationDate* (text input with a date-picker widget,
-  format `__/__/____` i.e. MM/DD/YYYY), thumbnailImage* (file, "Select
-  File"), title* (text, TRANSLATABLE — an `en-us` locale-switcher chip sits
-  beside the input, unlike bannerAltTextAR/EN's separate-field-per-locale
-  pattern on Promotional Banners; "Title EN" in the ADO case maps to the
-  default en-US value of this one field), viewCount (text/number,
-  optional). Save/Cancel only — no separate Save-as-Draft/Publish/Submit-
-  for-Review button on this form (see WORKFLOW FINDING below).
-
-WORKFLOW FINDING — CONFIRMED PRODUCT/CASE-MISMATCH, not an automation gap
-(same class of finding already on file for Promotional Banners' TC 135122
-in home_promo_banners_admin_page.py, and reached the same way — this is
-NOT a re-guess, it's the same live check repeated for this object):
-Configuration > Workflow (Site Administration Workflow screen) lists
-"News Article" as Asset Type with Workflow Assigned = **"No Workflow"**
-(confirmed live this session via the Workflow admin screen's own search).
-Every existing list row on this object auto-approves on Save — there is no
-Draft/Pending Review/Published/Unpublished state machine on this object at
-all. The Create form's own button set was dumped live and is exactly
-Save/Cancel — no "Save as Draft" control exists to click. The row-level
-"Item Actions" kebab (confirmed live on the list, matching the pattern
-already documented for Promotional Banners) exposes only View / Delete /
-Permissions — no Publish/Unpublish/Submit-for-Review action either.
-
-IMPORTANT — do NOT read "Active/Published Status" as a substitute Draft
-toggle: its underlying field reference is `activeStatus` (a visibility
-flag Liferay Objects renders on every object regardless of workflow), not
-a second, independent publish-workflow field. ADO Test Case 135279 asserts
-`status = Draft` — a workflow status this no-workflow object structurally
-cannot hold, permanently APPROVED for every entry. Force-fitting
-`activeStatus = False` onto "Draft" would be exactly the false-green class
-cms-testing.md catalogues (asserting a proxy value under a different label
-than the one the case names). This is reported back as a case-vs-product
-mismatch for the QA Manager to resolve — not resolved unilaterally here.
-See this page's module-level tests file for the disclosed skip.
-
-TEST-DATA POLICY (cms-profile.md): DISPOSABLE — every fixture created here
-(should this ever become runnable) would carry the project's `QCTEST-`
-prefix in its Title and be deleted via the row's own Actions kebab ->
-Delete -> confirm. Never mutates rows 48759/48789/48819 (real editorial
-content).
+PUBLIC FACTS (logged-out, 2026-10-07): section `data-qc-count=3`; cards link
+to /web/qatar-chamber/news-article?id=<id> (detail heading `.qc-nd-heading`);
+View All links to /web/qatar-chamber/news.
 """
 
-from core.web.base_page import BasePage
-from config.settings import control_panel_url, settings
+from __future__ import annotations
 
-CONTENT_DATA_MENU_ITEM = '[role="menuitem"]:text-is("Content & Data")'
-NEWS_ARTICLES_MENU_ITEM = '[role="menuitem"]:has-text("News Articles")'
-PRODUCT_MENU_TOGGLE = '[data-qa-id="productMenu"]'
+import datetime
+import os
+import re
+import time
+
+from cms.pages.components.object_authoring_page import (
+    ObjectAuthoringPage,
+    normalize_status,
+)
+from cms.pages.control_panel.login_page import CmsLoginPage
+from config.settings import cms_role_credentials
+from core.utils.logger import get_logger
+from core.web.base_page import BasePage
+
+logger = get_logger("home_latest_news_admin_page")
+
+NEWS_SLUG = "news-article"
+SECTION_SLUG = "home-latest-news-section"
+
+# News Article field labels (live accessible names)
+F_TITLE = "Title"
+F_TITLE_AR = "Title — العربية"
+F_THUMBNAIL = "Thumbnail Image"
+F_PUB_DATE = "Publication Date"
+F_ACTIVE = "Active/Published Status"
+
+# Home Latest News Section field labels
+S_TAG = "Section Tag"
+S_TAG_AR = "Section Tag — العربية"
+S_HEADING = "Section Heading"
+S_HEADING_AR = "Section Heading — العربية"
+S_DESC = "Section Description"
+S_DESC_AR = "Section Description — العربية"
+S_ACTIVE = "Active Status"
+
+# The one real section record — never a delete/write target.
+LIVE_SECTION_CODE = "QCDEMO-129372-HOME_LATEST_NEWS_SECTION-MAIN"
+# Real editorial article codes seen live — never a delete/write target.
+LIVE_NEWS_CODES = ("QCDEMO-129372-NEWS-1", "QCDEMO-129372-NEWS-2", "QCDEMO-129372-NEWS-3")
+
+QCTEST_PREFIX = "QCTEST-"
+
+# User decision 2026-10-07 (one round): "do not delete anything this round".
+# QC_KEEP_QCTEST=1 turns every delete helper below into a logged no-op and
+# records what it would have removed, so the report can list it.
+KEEP_QCTEST = os.getenv("QC_KEEP_QCTEST") == "1"
+KEPT: list = []
 
 
 class HomeLatestNewsAdminPage(BasePage):
-    ADMIN_HOME_EN_URL_PATH = "/en/home"
+    """Thin feature layer over ObjectAuthoringPage for the two objects above."""
 
-    # ---- List screen ------------------------------------------------------
-    ADD_BUTTON = 'button:has-text("New")'
-    LIST_ROW = "table tbody tr"
-    ROW_ID_LINK = 'td a[href*="mvcRenderCommandName=%2Fobject_entries%2Fedit_object_entry"]'
+    def __init__(self, page):
+        super().__init__(page)
+        self.news = ObjectAuthoringPage(page, slug=NEWS_SLUG)
+        self.section = ObjectAuthoringPage(page, slug=SECTION_SLUG)
 
-    # ---- Create/Edit form ---------------------------------------------------
-    SAVE_BUTTON = 'button:has-text("Save")'
-    CANCEL_BUTTON = 'button:has-text("Cancel")'
-
-    # Disclosed, confirmed-live-absent: this Object Definition's form
-    # renders ONLY Save/Cancel (no Save-as-Draft) — see module docstring's
-    # WORKFLOW FINDING. Kept as a named constant (not inlined) so a future
-    # re-probe after a workflow gets attached only needs to update this one
-    # line and drop the module-level skip.
-    SAVE_AS_DRAFT_BUTTON = 'button:has-text("Save as Draft")'  # TODO(locator): not rendered on qcdev today
-
-    ACTIVE_STATUS_CONTAINER = '[data-field-reference="activeStatus"]'
-    ACTIVE_STATUS_CHECKBOX = f'{ACTIVE_STATUS_CONTAINER} input[type="checkbox"]'
-    PUBLICATION_DATE_CONTAINER = '[data-field-reference="publicationDate"]'
-    PUBLICATION_DATE_INPUT = f'{PUBLICATION_DATE_CONTAINER} input[type="text"]'
-    THUMBNAIL_IMAGE_CONTAINER = '[data-field-reference="thumbnailImage"]'
-    TITLE_CONTAINER = '[data-field-reference="title"]'
-    TITLE_INPUT = f'{TITLE_CONTAINER} input[type="text"]'
-    VIEW_COUNT_CONTAINER = '[data-field-reference="viewCount"]'
-    VIEW_COUNT_INPUT = f'{VIEW_COUNT_CONTAINER} input[type="text"]'
-
-    SELECT_FILE_BUTTON = 'button:has-text("Select File")'
-    # Same confirmed-live Documents-and-Media picker widget reused verbatim
-    # from home_promo_banners_admin_page.py._upload_image() — see that
-    # module's docstring for the original discovery.
-    UPLOAD_MODAL_IFRAME = 'iframe[title="Select File"]'
-    UPLOAD_MODAL_ADD_BUTTON_TEXT = "Add"
-
-    SAVE_ERROR_BANNER_TEXT = "This form is invalid. Check field"
-    INLINE_REQUIRED_TEXT = "This field is required."
-
-    # Disclosed, unmeasured-for-this-object-specifically save-commit grace —
-    # same convention as HomePromoBannersAdminPage.SAVE_COMMIT_GRACE_MS.
-    SAVE_COMMIT_GRACE_MS = 2000
-
-    # Confirmed-live accepted date format for the publicationDate field's
-    # rendered placeholder (`__/__/____`) — MM/DD/YYYY, no time component
-    # (unlike home_business_events' MM/DD/YYYY hh:mm AM date/time fields).
-    DATE_FORMAT_EXAMPLE = "MM/DD/YYYY"
-
-    # ---- Navigation -------------------------------------------------------
-    def open_news_articles_list(self) -> "HomeLatestNewsAdminPage":
-        """Product Menu > Content & Data > News Articles. Never a cached
-        deep-link URL — the rendered list URL embeds a per-session portlet
-        instance id that regenerates every session (same pattern as every
-        sibling admin Page Object on this project)."""
-        from cms.pages.control_panel.login_page import CmsLoginPage
-
-        login = CmsLoginPage(self.page)
-        self.open(control_panel_url(self.ADMIN_HOME_EN_URL_PATH))
-        if not (self.is_visible(CONTENT_DATA_MENU_ITEM) or self.is_visible(PRODUCT_MENU_TOGGLE)):
-            login.open_login().login(settings.test_user, settings.test_password)
-            self.open(control_panel_url(self.ADMIN_HOME_EN_URL_PATH))
-
-        if not self.is_visible(CONTENT_DATA_MENU_ITEM):
-            self.click(PRODUCT_MENU_TOGGLE)
-            self.wait_for(CONTENT_DATA_MENU_ITEM)
-        self.click(CONTENT_DATA_MENU_ITEM)
-        self.wait_for(NEWS_ARTICLES_MENU_ITEM)
-        self.click(NEWS_ARTICLES_MENU_ITEM)
-        self.wait_for(self.LIST_ROW, first=True, timeout=20000)
+    # ---- accounts ----------------------------------------------------------
+    def sign_in_as(self, role: str) -> "HomeLatestNewsAdminPage":
+        """Sign the page in as a named role (never TEST_USER). Uses
+        ensure_signed_in_as(): a bare login() on the default page fixture
+        (pre-loaded TEST_USER storageState) would not switch accounts."""
+        email, password = cms_role_credentials(role)
+        CmsLoginPage(self.page).ensure_signed_in_as(email, password)
         return self
 
-    def open_new_article_form(self) -> "HomeLatestNewsAdminPage":
-        self.open_news_articles_list()
-        self.click(self.ADD_BUTTON)
-        self.wait_for(self.SAVE_BUTTON, timeout=20000)
-        self.wait_for(self.TITLE_INPUT, timeout=20000)
-        return self
+    # ---- forms -------------------------------------------------------------
+    def box(self, label: str):
+        """Textbox by accessible name. A required field's name carries a
+        trailing " *" (live 2026-10-07: "Title — العربية *"), which an
+        exact match on the bare label misses — fall back to that shape."""
+        exact = self.page.get_by_role("textbox", name=label, exact=True)
+        if exact.count():
+            return exact.first
+        return self.page.get_by_role(
+            "textbox", name=ObjectAuthoringPage.label_pattern(label)
+        ).first
 
-    def open_article_edit_form_by_title(self, title: str) -> "HomeLatestNewsAdminPage":
-        self.open_news_articles_list()
-        self.click(f'{self.LIST_ROW}:has-text("{title}") >> {self.ROW_ID_LINK}')
-        self.wait_for(self.SAVE_BUTTON, timeout=20000)
-        self.wait_for(self.TITLE_INPUT, timeout=20000)
-        return self
+    def checkbox_checked(self, label: str) -> bool:
+        """Exact-name read. ObjectAuthoringPage.is_checked() builds a regex
+        selector that fails to parse on a "/" in the label
+        ("Active/Published Status", rerun2 2026-10-07)."""
+        return self.page.get_by_role("checkbox", name=label, exact=True).is_checked()
 
-    # ---- List state queries -------------------------------------------------
-    def row_visible(self, title: str) -> bool:
-        return self.is_visible(f'{self.LIST_ROW}:has-text("{title}")')
-
-    def wait_for_row_visible(self, title: str, timeout_ms: int = 20000, poll_ms: int = 500) -> bool:
-        """Poll (re-navigating the list each cycle) until the row appears —
-        mirrors HomePromoBannersAdminPage.wait_for_row_visible()."""
-        import time
-
-        deadline = time.monotonic() + (timeout_ms / 1000)
-        while True:
-            self.open_news_articles_list()
-            if self.row_visible(title):
+    def publish_disabled(self, authoring: ObjectAuthoringPage) -> bool:
+        """True when the form's Publish/Submit button is rendered disabled
+        (the form blocking a submit client-side counts as a refusal)."""
+        btn = self.page.locator(authoring.SUBMIT_FOR_REVIEW_BUTTON).first
+        try:
+            if btn.is_disabled():
                 return True
+            cls = btn.get_attribute("class") or ""
+            return "disabled" in cls.split()
+        except Exception:  # noqa: BLE001
+            return False
+
+    def fill(self, label: str, value: str) -> None:
+        self.box(label).fill(value)
+
+    def value(self, label: str) -> str:
+        return self.box(label).input_value()
+
+    DATE_PLACEHOLDER_NAME = "dd/mm/yyyy"
+
+    def date_box(self, label: str):
+        """The date input for `label`.
+
+        FIXED 2026-10-07 (review): on this surface a date field's accessible
+        name is its PLACEHOLDER (`dd/mm/yyyy`), not its label — same widget as
+        magazine_issue_admin_page.py:139 (FIELD_ISSUE_DATE). The list's two
+        "Modified from/to" filters carry the same placeholder, so the input is
+        resolved by its own label first (the first input after the label
+        text), and only then by placeholder name inside the entry <form>."""
+        exact = self.page.get_by_role("textbox", name=label, exact=True)
+        if exact.count():
+            return exact.first
+        by_label = self.page.locator(
+            f"xpath=//label[starts-with(normalize-space(.), '{label}')]"
+            "/following::input[not(@type='hidden')][1]"
+        )
+        if by_label.count():
+            return by_label.first
+        return self.page.locator("form").get_by_role(
+            "textbox", name=self.DATE_PLACEHOLDER_NAME, exact=True
+        ).first
+
+    def set_date(self, authoring: ObjectAuthoringPage, label: str, value: datetime.date) -> None:
+        """Native `type=date` gets ISO; a text date is typed in the order its
+        placeholder states (dd/mm/yyyy here — MM/DD is never assumed)."""
+        box = self.date_box(label)
+        kind = (box.get_attribute("type") or "text").lower()
+        if kind == "date":
+            box.fill(value.isoformat())
+            return
+        placeholder = (box.get_attribute("placeholder") or self.DATE_PLACEHOLDER_NAME).lower()
+        text = value.strftime("%m/%d/%Y") if placeholder.startswith("mm") else value.strftime("%d/%m/%Y")
+        box.click()
+        self.page.keyboard.type(text, delay=20)
+
+    def date_value(self, label: str) -> str:
+        return self.date_box(label).input_value()
+
+    def fill_news_article(
+        self,
+        title: str = "",
+        title_ar: str = "",
+        pub_date: datetime.date | None = None,
+        thumbnail: str | None = None,
+        active: bool = True,
+    ) -> "HomeLatestNewsAdminPage":
+        """Opens the empty create form and fills only what is passed."""
+        a = self.news
+        a.open_new_entry_form()
+        if title:
+            self.fill(F_TITLE, title)
+        if title_ar:
+            self.fill(F_TITLE_AR, title_ar)
+        if pub_date is not None:
+            self.set_date(a, F_PUB_DATE, pub_date)
+        a.set_checkbox(F_ACTIVE, active)
+        if thumbnail:
+            a.upload_file(F_THUMBNAIL, thumbnail)
+        return self
+
+    # Positive success banner (live: "Saved and published.", "Saved ...").
+    SAVED_BANNER = re.compile(r"Saved and published|Saved and submitted|Saved as draft|^Saved", re.I)
+    # Client-side field errors added to the form 2026-10-07 evening (live:
+    # "Use dd/mm/yyyy" under Publication Date) are not in SAVE_REFUSAL.
+    INLINE_FIELD_ERROR = '[aria-invalid="true"]:visible, .has-error:visible, .invalid-feedback:visible, .form-feedback-item:visible'
+
+    def save_outcome(self, authoring: ObjectAuthoringPage) -> str:
+        """After a Save/Publish: "refused" when a refusal bar or an inline
+        field error is on screen, "saved" when a success banner is, else
+        "unknown" (never guessed as saved — a silent no-op is not a save)."""
+        if authoring._count(authoring.SAVE_REFUSAL) > 0:  # noqa: SLF001 — read-only probe of a public selector
+            return "refused"
+        if authoring._count(self.INLINE_FIELD_ERROR) > 0:  # noqa: SLF001
+            return "refused"
+        try:
+            banners = self.page.locator(".alert:visible, [role=status]:visible, [role=alert]:visible").all_inner_texts()
+        except Exception:  # noqa: BLE001
+            banners = []
+        if any(self.SAVED_BANNER.search(t.strip()) for t in banners):
+            return "saved"
+        if "previewEntry=" in self.page.url:
+            return "saved"
+        return "unknown"
+
+    def refusal_text(self, authoring: ObjectAuthoringPage) -> str:
+        try:
+            return " | ".join(self.page.locator(authoring.SAVE_REFUSAL).all_inner_texts())[:500]
+        except Exception:  # noqa: BLE001
+            return ""
+
+    # ---- status polling -----------------------------------------------------
+    def wait_row_status(
+        self, authoring: ObjectAuthoringPage, title: str, expected: str, timeout_s: float = 120.0
+    ) -> str:
+        """Re-reads the entries list until `title`'s row shows `expected`
+        (normalized) or the timeout lapses; returns the last status read.
+        Publish commits in ~27-30 s on qcdev (measured 2026-09-15), so a
+        single read right after the click races the transition."""
+        expected = normalize_status(expected)
+        deadline = time.monotonic() + timeout_s
+        last = ""
+        while True:
+            authoring.open_entries_list()
+            last = authoring.row_status_text(title)
+            if last == expected or time.monotonic() >= deadline:
+                return last
+            self.page.wait_for_timeout(3000)
+
+    # ---- guarded teardown -----------------------------------------------------
+    def delete_qctest_article(self, title: str) -> int:
+        """Deletes every row whose title is exactly-contained `title`, only
+        inside the QCTEST- namespace (delete_all_entries_by_title enforces
+        the prefix). Never raises."""
+        if not title.startswith(QCTEST_PREFIX):
+            raise ValueError(f"refusing to delete non-QCTEST title {title!r}")
+        if KEEP_QCTEST:
+            logger.warning("KEEP_QCTEST: not deleting news article(s) titled %r", title)
+            KEPT.append(("news", title))
+            return 0
+        try:
+            return self.news.delete_all_entries_by_title(title)
+        except Exception:  # noqa: BLE001
+            logger.warning("teardown: QCTEST article %r may remain", title)
+            return 0
+
+    def delete_verified_entry(
+        self, authoring: ObjectAuthoringPage, field_label: str, qctest_value: str
+    ) -> str:
+        """For rows whose Entry column is not the title: resolve the code by
+        reading `field_label` back from each row's form (never by position),
+        refuse anything that is a known live record or whose read-back value
+        is not QCTEST-, then delete by that code. Returns the deleted code
+        or ""."""
+        if not qctest_value.startswith(QCTEST_PREFIX):
+            raise ValueError(f"refusing: {qctest_value!r} is not a QCTEST value")
+        if KEEP_QCTEST:
+            logger.warning("KEEP_QCTEST: not deleting entry with %s=%r", field_label, qctest_value)
+            KEPT.append((authoring.slug, f"{field_label}={qctest_value}"))
+            return ""
+        try:
+            code = self.find_code_by_field(authoring, field_label, qctest_value)
+            if not code:
+                return ""
+            authoring.open_entry_by_code(code)
+            if not self._await_value(field_label, qctest_value):
+                return ""
+            authoring.open_entries_list()
+            return code if authoring.delete_entry_by_code(code) else ""
+        except Exception:  # noqa: BLE001
+            logger.warning("teardown: QCTEST entry with %s=%r may remain", field_label, qctest_value)
+            return ""
+
+    def _await_value(self, label: str, expected: str, timeout_ms: int = 10000) -> bool:
+        """The edit form fills its inputs after the page settles; poll the
+        read-back instead of reading once (a single early read returned ""
+        live 2026-10-07 and lost a just-saved entry)."""
+        deadline = time.monotonic() + timeout_ms / 1000
+        while True:
+            try:
+                if self.value(label) == expected:
+                    return True
+            except Exception:  # noqa: BLE001 — form still mounting
+                pass
             if time.monotonic() >= deadline:
                 return False
-            self.page.wait_for_timeout(poll_ms)
+            self.page.wait_for_timeout(500)
 
-    def delete_row_by_title(self, title: str) -> bool:
-        """Delete via the row's Actions kebab -> Delete -> confirm. Returns
-        False (no-op) if no matching row exists, so teardown code can call
-        this unconditionally. Mirrors
-        HomePromoBannersAdminPage.delete_row_by_alt_text()'s confirmed-live
-        kebab/get_by_role flow."""
-        row = self.page.locator(f'{self.LIST_ROW}:has-text("{title}")')
-        if row.count() == 0:
-            return False
-        kebab = row.get_by_role("button", name="Actions")
-        kebab.first.click()
-        delete_item = self.page.locator('[role="menuitem"]:visible:has-text("Delete")')
-        delete_item.first.wait_for(state="visible", timeout=5000)
-        delete_item.first.click()
-        confirm = self.page.get_by_role("button", name="Delete")
-        confirm.wait_for(state="visible", timeout=10000)
-        confirm.click()
-        self.page.wait_for_load_state("networkidle")
-        return True
-
-    # ---- Field actions ------------------------------------------------------
-    def set_title(self, value: str) -> "HomeLatestNewsAdminPage":
-        self.page.locator(self.TITLE_INPUT).fill(value)
-        return self
-
-    def set_publication_date(self, value: str) -> "HomeLatestNewsAdminPage":
-        """Types `value` (see DATE_FORMAT_EXAMPLE) directly into the
-        publicationDate field — mirrors
-        HomeBusinessEventsAdminPage.fill_date_field()'s click+type pattern
-        (confirmed-live-safe: no Escape keystroke afterward)."""
-        self.click(self.PUBLICATION_DATE_INPUT)
-        self.page.keyboard.type(value, delay=20)
-        return self
-
-    def is_active(self) -> bool:
-        return self.page.locator(self.ACTIVE_STATUS_CHECKBOX).is_checked()
-
-    def set_active(self, active: bool) -> "HomeLatestNewsAdminPage":
-        self.set_checkbox(self.ACTIVE_STATUS_CHECKBOX, active)
-        return self
-
-    def upload_thumbnail_image(self, file_path: str) -> "HomeLatestNewsAdminPage":
-        """Same confirmed-live Documents-and-Media picker flow reused
-        verbatim from HomePromoBannersAdminPage._upload_image()."""
-        self.page.locator(f"{self.THUMBNAIL_IMAGE_CONTAINER} {self.SELECT_FILE_BUTTON}").click()
-        frame = self.page.frame_locator(self.UPLOAD_MODAL_IFRAME)
-        frame.locator('input[type="file"]').set_input_files(file_path)
-        frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click()
-        try:
-            self.page.locator(self.UPLOAD_MODAL_IFRAME).wait_for(state="detached", timeout=8000)
-        except Exception:
-            self.page.wait_for_timeout(1000)
-        return self
-
-    def uploaded_thumbnail_filename(self) -> str:
-        container_text = self.page.locator(self.THUMBNAIL_IMAGE_CONTAINER).inner_text()
-        for line in container_text.splitlines():
-            line = line.strip()
-            if line and line != "Select File" and "Upload a " not in line and not line.endswith(")"):
-                return line
+    def find_code_by_field(self, authoring: ObjectAuthoringPage, label: str, value: str) -> str:
+        """Verified (never positional) lookup: opens each non-live row by its
+        own Entry code and returns the one whose `label` reads back `value`."""
+        authoring.open_entries_list()
+        rows = self.page.locator(authoring.ENTRIES_TABLE_ROW)
+        codes = [rows.nth(i).locator("td").nth(0).inner_text().strip() for i in range(rows.count())]
+        for code in codes:
+            if not code or code == LIVE_SECTION_CODE or code in LIVE_NEWS_CODES:
+                continue
+            try:
+                authoring.open_entry_by_code(code)
+            except Exception:  # noqa: BLE001
+                continue
+            if self._await_value(label, value, timeout_ms=6000):
+                return code
         return ""
 
-    def status_value(self) -> str:
-        """TODO(locator): no field/column on this Object Definition
-        currently carries a Draft/Approved workflow status (see module
-        docstring's WORKFLOW FINDING) — there is nothing live to read yet.
-        Left unimplemented (raises) rather than faked so the one caller
-        (this page's disclosed-skip test) fails loudly if the skip is ever
-        removed without wiring this up first."""
-        raise NotImplementedError(
-            "status_value() has no confirmed-live locator: the 'News Article' "
-            "Object Definition has No Workflow attached, so no field carries a "
-            "Draft/Approved status today. Implement this once a workflow (and "
-            "therefore a status column/field) is attached on the environment."
-        )
-
-    def save(self) -> "HomeLatestNewsAdminPage":
-        self.click(self.SAVE_BUTTON)
-        self.page.wait_for_load_state("networkidle")
-        self.page.wait_for_timeout(self.SAVE_COMMIT_GRACE_MS)
+    # ---- section form (create form only; never the live record) ------------
+    def open_new_section_form(self) -> "HomeLatestNewsAdminPage":
+        """Empty create form only. Asserts it IS empty, so a future change
+        that opens the live record here can never be typed over
+        (singleton-manage-page trap, incident 183176)."""
+        self.section.open_new_entry_form()
+        for label in (S_TAG, S_HEADING, S_DESC):
+            value = self.value(label)
+            assert value == "", (
+                f"create form for {SECTION_SLUG} is not empty ({label}={value!r}) — "
+                "refusing to type over what may be the live record"
+            )
         return self
 
-    def cancel(self) -> "HomeLatestNewsAdminPage":
-        self.click(self.CANCEL_BUTTON)
-        return self
-
-    def is_save_error_shown(self) -> bool:
-        body_text = self.page.locator("body").inner_text()
-        return self.SAVE_ERROR_BANNER_TEXT in body_text or self.INLINE_REQUIRED_TEXT in body_text
-
-    def save_error_text(self) -> str:
-        body_text = self.page.locator("body").inner_text()
-        idx = body_text.find(self.SAVE_ERROR_BANNER_TEXT)
-        if idx == -1:
-            idx = body_text.find(self.INLINE_REQUIRED_TEXT)
-        return body_text[idx: idx + 120] if idx != -1 else ""
+    def has_rich_text_bold_control(self, label: str) -> bool:
+        """True if the field renders a rich-text editor with a Bold control
+        (CKEditor iframe/toolbar). A plain <textarea> has none."""
+        try:
+            box = self.page.get_by_role("textbox", name=label, exact=True)
+            tag = box.first.evaluate("el => el.tagName.toLowerCase()") if box.count() else ""
+            if tag == "textarea":
+                container = box.first.locator("xpath=ancestor::*[contains(@class,'form-group')][1]")
+                return container.locator('[aria-label*="Bold" i], [title*="Bold" i], .cke_button__bold').count() > 0
+            return self.page.locator('[aria-label*="Bold" i], .cke_button__bold').count() > 0
+        except Exception:  # noqa: BLE001
+            return False

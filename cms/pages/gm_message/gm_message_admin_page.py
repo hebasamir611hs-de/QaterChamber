@@ -1,5 +1,5 @@
 """
-web/pages/gm_message/gm_message_admin_page.py — GmMessageAdminPage.
+cms/pages/gm_message/gm_message_admin_page.py — GmMessageAdminPage.
 
 Control_Panel Page Object for PBI 129397 (QC-ABOUT-005 — General Manager's
 Message), backing the "General Manager Messages" Object Definition entry
@@ -802,3 +802,393 @@ class GmMessageAdminPage(BasePage):
     def is_success_toast_shown(self) -> bool:
         self._require_verified(self.SUCCESS_TOAST, "SUCCESS_TOAST")
         return self.is_visible(self.SUCCESS_TOAST)
+
+    # =====================================================================
+    # Object Authoring helpers (added 2026-10-12, Phase-3 batch for PBI
+    # 129397). Every new lifecycle / validation case drives the singleton
+    # through `manage-general-manager-message` ONLY -- never the retired
+    # Content & Data path above, and never `open_object_authoring_form()`,
+    # which silently re-logs-in as TEST_USER (would void any RBAC case).
+    # =====================================================================
+    AR_SUFFIX = " — العربية"
+    # Field labels on the Object Authoring form (EN box; the AR twin is
+    # "<label> — العربية"). Confirmed live 2026-09-07 for GM Name /
+    # Salutation Heading / Signature Closing Text / Page Title.
+    LABEL_PAGE_TITLE = "Page Title"
+    LABEL_SALUTATION = "Salutation Heading"
+    LABEL_GM_NAME = "GM Name"
+    LABEL_DESIGNATION = "GM Designation"  # VERIFY-LIVE: label on Object Authoring
+    LABEL_CLOSING = "Signature Closing Text"
+    LABEL_ALT_TEXT = "Image Alt Text"  # VERIFY-LIVE: label on Object Authoring
+    LABEL_HERO = "Hero Banner"  # VERIFY-LIVE: attachment label
+    LABEL_PORTRAIT = "GM Portrait Image"  # VERIFY-LIVE: attachment label
+    TEXT_LABELS = (
+        LABEL_PAGE_TITLE, LABEL_SALUTATION, LABEL_GM_NAME,
+        LABEL_DESIGNATION, LABEL_CLOSING, LABEL_ALT_TEXT,
+    )
+    # VERIFY-LIVE: Page Content's CKEditor instance-name tokens, mirroring the
+    # live-confirmed shape on the sibling Chamber Laws Page object
+    # (EN "...ObjectField_<field>", AR "qc-ar-<field>").
+    PAGE_CONTENT_EDITOR_TOKENS = {"en": "ObjectField_pageContent", "ar": "qc-ar-pageContent"}
+    # Form submit by Liferay `status` value (locale-independent): 0 = Publish /
+    # Submit for Review. Same contract as ChambersLawAdminPage.PUBLISH_SUBMIT.
+    PUBLISH_SUBMIT = 'button[type="submit"][name="status"][value="0"]'
+    DIRECT_PUBLISH_CONTROLS = (
+        'button[type="submit"]:text-is("Publish"), '
+        "[data-qc-oel-publish], [data-qc-oel-approve]"
+    )
+    REFUSAL = ".alert-danger:visible, .form-feedback-item:visible"
+    ACCESS_DENIED_RE = (
+        r"Access Denied|تم رفض الوصول|Coming Soon|Not Found|404|Sign In|تسجيل الدخول"
+    )
+
+    def open_record(self, locale: str = "en"):
+        """The singleton's edit form on Object Authoring, opened in THIS
+        page's own session (a role context stays that role). Locale pinned
+        so the English labels resolve."""
+        from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+
+        authoring = ObjectAuthoringPage(self.page, slug=GM_MESSAGE_OBJECT_AUTHORING_SLUG)
+        authoring.open_entry_by_code(GM_MESSAGE_ENTRY_CODE, locale=locale)
+        return authoring
+
+    def open_list(self, locale: str = "en"):
+        """The entries list, read on the record's own `?editEntry=<code>`
+        URL and settled on THIS record's row.
+
+        CHANGED 2026-10-12 (PBI 129397 restore timeouts). The bare
+        `manage-general-manager-message` URL goes on to `?editEntry=<code>`
+        after `domcontentloaded`. The run log of allure-129397-20261012-2120
+        shows it: ensure_cms_session() opened the bare URL and reported the
+        page at `...?editEntry=QCDEMO-129397-general-managers-message`. That
+        second navigation is what the session guard misread as a dead session.
+        The editEntry page renders the same "General Manager Message entries"
+        table with the row and its workflow actions (screenshot in that run),
+        so the list is read there directly. The wait targets this record's
+        row, not whichever `table tbody tr` comes first."""
+        from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+
+        authoring = ObjectAuthoringPage(self.page, slug=GM_MESSAGE_OBJECT_AUTHORING_SLUG)
+        authoring.open(authoring._manage_url(edit_entry=GM_MESSAGE_ENTRY_CODE, locale=locale))
+        authoring._entry_code = GM_MESSAGE_ENTRY_CODE
+        authoring._locale = locale
+        authoring.wait_for(
+            f'{ObjectAuthoringPage.ENTRIES_TABLE_ROW}:has-text("{GM_MESSAGE_ENTRY_CODE}")',
+            first=True, timeout=35000,
+        )
+        return authoring
+
+    def open_manage_url_raw(self, locale: str = "en") -> None:
+        """Navigate to the record's edit URL WITHOUT waiting for the form --
+        for forced-browsing / no-role cases where the form must NOT render."""
+        self.open(control_panel_url(
+            f"/{locale}/web/qatar-chamber/manage-{GM_MESSAGE_OBJECT_AUTHORING_SLUG}"
+            f"?editEntry={GM_MESSAGE_ENTRY_CODE}"
+        ))
+        self.page.wait_for_load_state("domcontentloaded")
+
+    def form_rendered(self) -> bool:
+        return self.page.locator('button:has-text("Save as Draft")').count() > 0
+
+    def body_text(self) -> str:
+        return self.page.locator("body").inner_text()
+
+    def access_denied_shown(self) -> bool:
+        import re as _re
+
+        return bool(_re.search(self.ACCESS_DENIED_RE, self.body_text()))
+
+    def has_direct_publish_control(self) -> bool:
+        return self.page.locator(self.DIRECT_PUBLISH_CONTROLS).count() > 0
+
+    def row_actions(self) -> set:
+        """Workflow actions the GM row offers to the signed-in account."""
+        from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+
+        row = self.page.locator(f'table tbody tr:has-text("{GM_MESSAGE_ENTRY_CODE}")').first
+        return {name for name, attr in ObjectAuthoringPage.ROW_ACTION_ATTRS.items()
+                if row.locator(f"[{attr}]").count() > 0}
+
+    def entries_row_count(self) -> int:
+        return self.page.locator("table tbody tr").count()
+
+    def is_field_editable(self, label: str) -> bool:
+        from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+
+        box = self.page.get_by_role("textbox", name=ObjectAuthoringPage.label_pattern(label)).first
+        return box.is_visible() and box.is_editable()
+
+    def native_validation_message(self, label: str) -> str:
+        """The browser's own constraint message for a text control, "" if valid."""
+        from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+
+        box = self.page.get_by_role("textbox", name=ObjectAuthoringPage.label_pattern(label)).first
+        try:
+            return box.evaluate(
+                "el => el.validity && !el.validity.valid ? (el.validationMessage || 'invalid') : ''"
+            )
+        except Exception:  # noqa: BLE001 -- control gone after a navigation
+            return ""
+
+    def refusal_text(self) -> str:
+        try:
+            return " ".join(self.page.locator(self.REFUSAL).all_inner_texts()).strip()
+        except Exception:  # noqa: BLE001
+            return ""
+
+    def submit_publish(self, authoring) -> None:
+        """Locale-independent Publish / Submit for Review click."""
+        authoring.submit_via(self.PUBLISH_SUBMIT)
+
+    # ---- Page Content (CKEditor 4) ------------------------------------------
+    def _content_js(self, locale: str) -> str:
+        token = self.PAGE_CONTENT_EDITOR_TOKENS[locale]
+        return (
+            "(() => { const k = Object.keys(CKEDITOR.instances).find(n => n.endsWith("
+            f"'{token}')); return CKEDITOR.instances[k]; }})()"
+        )
+
+    def page_content_html(self, locale: str = "en") -> str:
+        return self.page.evaluate(f"() => {self._content_js(locale)}.getData()")
+
+    def set_page_content_html(self, html: str, locale: str = "en") -> None:
+        """CKEditor setData() + form sync -- byte-exact (typing doubles
+        paragraph breaks; see ChambersLawAdminPage.set_intro_html)."""
+        self.page.evaluate(
+            "([html]) => new Promise(resolve => { const ed = "
+            f"{self._content_js(locale)}; ed.setData(html, {{ callback: () => {{"
+            " ed.updateElement(); ed.fire('change'); resolve(true); } }); })",
+            [html],
+        )
+
+    # The editors' editable iframes, per locale (read live 2026-10-14).
+    PAGE_CONTENT_FRAMES = {
+        "en": "div[id*='ObjectField_pageContent'] iframe.cke_wysiwyg_frame",
+        "ar": "#cke_qc-ar-pageContent iframe",
+    }
+
+    def clear_page_content_like_a_user(self, locale: str = "en") -> None:
+        """Empties Page Content the way an editor does: click into the
+        editor, Ctrl+A, Delete. Added 2026-10-14: `set_page_content_html("")`
+        (setData) empties the editor but does NOT trigger the site's Arabic
+        required-content guard -- live, an AR box emptied by setData was
+        saved without any message (and the old Arabic kept), while the same
+        box emptied by keyboard was refused with "Page Content — العربية —
+        Arabic content is required. Fill it in, or use Save as Draft."
+        (writes aborted). A refusal case must clear the way a user does."""
+        self.page_content_html_or_none(locale)  # waits for the editor to be ready
+        body = self.page.frame_locator(self.PAGE_CONTENT_FRAMES[locale]).first.locator("body")
+        body.click()
+        self.page.keyboard.press("Control+A")
+        self.page.keyboard.press("Delete")
+
+    def has_publish_submit(self) -> bool:
+        """The form's Publish / Submit for Review control is rendered."""
+        return self.page.locator(self.PUBLISH_SUBMIT).count() > 0
+
+    def page_content_html_or_none(self, locale: str = "en", timeout: int = 15000):
+        """Page Content HTML once its CKEditor instance has mounted; None if
+        it never does (VERIFY-LIVE token) -- callers refuse to mutate then."""
+        token = self.PAGE_CONTENT_EDITOR_TOKENS[locale]
+        try:
+            self.page.wait_for_function(
+                "t => !!(window.CKEDITOR && Object.keys(CKEDITOR.instances).some("
+                "n => n.endsWith(t) && CKEDITOR.instances[n].status === 'ready'))",
+                arg=token, timeout=timeout,
+            )
+            return self.page_content_html(locale)
+        except Exception:  # noqa: BLE001
+            return None
+
+    def has_file_field(self, label: str) -> bool:
+        """The attachment field `label` exists (its hidden "<label> Select
+        File" textbox, the same handle ObjectAuthoringPage.upload_file uses)."""
+        return self.page.get_by_role("textbox", name=f"{label} Select File").count() > 0
+
+    def can_remove_file(self, label: str) -> bool:
+        from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+
+        container = ObjectAuthoringPage(self.page, slug=GM_MESSAGE_OBJECT_AUTHORING_SLUG)._file_upload_container(label)
+        button = container.get_by_role("button", name="Remove file")
+        return button.count() > 0 and button.first.is_enabled()
+
+    # ---- Active Status (the second public-visibility gate) -- added
+    # 2026-10-12 for the module-level singleton snapshot. VERIFY-LIVE: the
+    # control name mirrors `ObjectField_activeStatus`, read live on
+    # manage-chamber-laws-page; None when this form renders no such box.
+    ACTIVE_STATUS_CHECKBOX = 'input[name="ObjectField_activeStatus"]'
+
+    def active_status_or_none(self):
+        box = self.page.locator(self.ACTIVE_STATUS_CHECKBOX)
+        return box.first.is_checked() if box.count() else None
+
+    def set_active_status(self, checked: bool) -> None:
+        box = self.page.locator(self.ACTIVE_STATUS_CHECKBOX).first
+        box.check() if checked else box.uncheck()
+
+    def form_renders_within(self, timeout_ms: int) -> bool:
+        """True if the edit form mounts within `timeout_ms` (bounded wait, so
+        a late-mounting form is not mistaken for a denial)."""
+        try:
+            self.page.locator('button:has-text("Save as Draft")').first.wait_for(
+                state="visible", timeout=timeout_ms
+            )
+            return True
+        except Exception:  # noqa: BLE001
+            return False
+
+    # =====================================================================
+    # P3/P4 batch helpers (added 2026-10-13, scripted OFFLINE -- every
+    # VERIFY-LIVE below is unconfirmed until the first run).
+    # =====================================================================
+    # `signatureAvatar` (liferay-context.md, GeneralManagerMessage): ONE
+    # non-localized, OPTIONAL attachment (jpg, png). VERIFY-LIVE: label.
+    LABEL_AVATAR = "Signature Avatar"
+    ROW_HISTORY_ATTR = "data-qc-oel-history"
+    # Liferay Audit portlet -- same path AboutQatarChamberAdminPage reads.
+    AUDIT_PORTLET_PATH = (
+        "/group/guest/~/control_panel/manage?p_p_id="
+        "com_liferay_portal_security_audit_web_portlet_AuditPortlet"
+        "&_com_liferay_portal_security_audit_web_portlet_AuditPortlet_delta=200"
+    )
+    ROW_SETTLE_TIMEOUT_MS = 30000
+    NETWORK_CUT_TIMEOUT_MS = 20000
+    NETWORK_SETTLE_TIMEOUT_MS = 10000  # cap on keeping the cut in place (136461)
+
+    def current_user_id(self) -> str:
+        """Liferay user id of the account signed in on THIS page."""
+        return str(self.page.evaluate("() => Liferay.ThemeDisplay.getUserId()"))
+
+    def row_entry_id(self) -> str:
+        """Numeric entry id off the GM row's History control. Call on the
+        open entries list (open_list())."""
+        row = self.page.locator(f'table tbody tr:has-text("{GM_MESSAGE_ENTRY_CODE}")').first
+        return row.locator(f"[{self.ROW_HISTORY_ATTR}]").first.get_attribute(self.ROW_HISTORY_ATTR) or ""
+
+    def audit_rows_for(self, resource_id: str) -> list:
+        """Audit rows whose Resource ID equals `resource_id`, newest first:
+        [User ID, User Name, Resource ID, Resource Name, Action, IP, Date].
+        Needs an account that can read the Audit portlet (TEST_USER)."""
+        self.open(control_panel_url(self.AUDIT_PORTLET_PATH))
+        self.page.locator("table tbody tr").first.wait_for(state="visible", timeout=60000)
+        rows = self.page.evaluate(
+            "() => Array.from(document.querySelectorAll('table tbody tr')).map(r =>"
+            " Array.from(r.querySelectorAll('td')).map(td => td.innerText.trim()))"
+        )
+        return [r for r in rows if len(r) >= 5 and r[2] == str(resource_id)]
+
+    def double_click_row_action(self, action: str, comment: str = "") -> None:
+        """Two clicks in rapid succession (one dblclick) on the GM row's
+        `data-qc-oel-<action>` control, accepting every native confirm() /
+        prompt() either click raises. Waits for the control to leave the row
+        (the list re-renders after a transition). Call on the open list."""
+        from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+
+        attr = ObjectAuthoringPage.ROW_ACTION_ATTRS[action]
+        control = self.page.locator(
+            f'table tbody tr:has-text("{GM_MESSAGE_ENTRY_CODE}") [{attr}]'
+        ).first
+
+        def _accept(dialog):
+            try:
+                dialog.accept(comment)
+            except Exception:  # noqa: BLE001 -- already handled
+                pass
+
+        self.page.on("dialog", _accept)
+        try:
+            control.dblclick(force=True)
+            try:
+                control.wait_for(state="detached", timeout=self.ROW_SETTLE_TIMEOUT_MS)
+            except Exception:  # noqa: BLE001 -- the caller reads the outcome
+                pass
+        finally:
+            self.page.remove_listener("dialog", _accept)
+
+    def click_publish_control(self) -> None:
+        """Raw click on the form's Publish / Submit for Review control
+        (status value 0) WITHOUT waiting for a save outcome -- for cases
+        whose session is expected to be dead when it is clicked."""
+        self.page.locator(self.PUBLISH_SUBMIT).first.click()
+        self.page.wait_for_load_state("load")
+
+    # Request methods that never write -- everything else is cut (136461).
+    READ_ONLY_METHODS = ("GET", "HEAD", "OPTIONS")
+
+    def submit_publish_with_network_cut(self) -> list:
+        """Clicks Publish / Submit for Review while every WRITE request this
+        page makes (any method but GET / HEAD / OPTIONS) is aborted as a
+        dropped connection -- the "network interruption before the success
+        toast" of TC 136461. Returns `[(method, url), ...]` of the requests
+        actually cut on THIS site's origin (empty = nothing was interrupted).
+        The route is removed before returning, so the next submit runs
+        normally.
+
+        CHANGED 2026-10-14 (fix pass 7): the hook cut POST only, and the
+        2026-10-13 run reported "no request was cut" while History showed the
+        save COMPLETED -- the form's writes are not (only) POSTs: the same
+        click fires the Arabic-twin sync `PUT /o/c/<object>/<id>` (see
+        ObjectAuthoringPage.submit_via_reading_validity). Every write method
+        is cut now, and every aborted request is returned for the evidence."""
+        from urllib.parse import urlparse
+
+        origin = urlparse(self.page.url).netloc
+        cut: list = []
+
+        def _drop(route):
+            request = route.request
+            if request.method.upper() in self.READ_ONLY_METHODS:
+                route.continue_()
+                return
+            if urlparse(request.url).netloc == origin:
+                cut.append((request.method, request.url))
+            route.abort("internetdisconnected")
+
+        self.page.route("**/*", _drop)
+        try:
+            try:
+                with self.page.expect_event("requestfailed", timeout=self.NETWORK_CUT_TIMEOUT_MS):
+                    self.page.locator(self.PUBLISH_SUBMIT).first.click()
+            except Exception:  # noqa: BLE001 -- reported through the list
+                pass
+            # Keep the connection "down" until the page stops talking, so a
+            # retry / fallback write the form's JS makes after the first
+            # aborted request is cut too. Bounded: networkidle may never
+            # settle on this surface, which is fine -- the cap is the wait.
+            try:
+                self.page.wait_for_load_state("networkidle", timeout=self.NETWORK_SETTLE_TIMEOUT_MS)
+            except Exception:  # noqa: BLE001
+                pass
+        finally:
+            self.page.unroute("**/*", _drop)
+        return cut
+
+    REAUTH_RE = r"Sign In|Log In|تسجيل الدخول|Your session has expired|session expired"
+
+    def reauth_prompt_shown(self) -> bool:
+        """The page asks the user to sign in again: a login URL, a password
+        box, or sign-in / session-expired wording. VERIFY-LIVE: Liferay's
+        response to a form POST from an expired session."""
+        import re as _re
+
+        if "login" in (self.page.url or "").lower():
+            return True
+        if self.page.locator('input[type="password"]').count() > 0:
+            return True
+        try:
+            return bool(_re.search(self.REAUTH_RE, self.body_text(), _re.I))
+        except Exception:  # noqa: BLE001 -- page mid-navigation
+            return False
+
+    def current_file_name_or_empty(self, label: str) -> str:
+        """Name of the file held by attachment `label` on the OPEN form, ""
+        when the field is empty or absent (optional fields such as
+        Signature Avatar)."""
+        from cms.pages.components.object_authoring_page import ObjectAuthoringPage
+
+        if not self.has_file_field(label):
+            return ""
+        try:
+            return ObjectAuthoringPage(self.page, slug=GM_MESSAGE_OBJECT_AUTHORING_SLUG).current_file_name(label) or ""
+        except Exception:  # noqa: BLE001 -- empty optional attachment
+            return ""

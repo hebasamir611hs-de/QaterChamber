@@ -1,0 +1,20 @@
+143571 pr=3 Verify that the Annual Reports hero renders per the verified Figma tokens on EN/Light/Desktop
+143573 pr=3 Verify that the Report Archive section renders per the verified Figma tokens on EN/Light/Desktop
+143574 pr=3 Verify that a report card renders per the verified Figma tokens on EN/Light/Desktop
+143576 pr=3 Verify that the search input shows its default, focus, and typed states per Figma tokens
+143580 pr=4 Verify that the no-search-results empty state renders correctly (EN)
+143586 pr=3 Verify that the Annual Reports page renders correctly at mobile viewport width
+143605 pr=3 Verify that a zero-match search displays "No reports found for the selected search." (EN)
+143831 pr=3 التحقق من أنه يتم عرض رسالة "لا توجد تقارير مطابقة لبحثك." عند عدم وجود نتائج بحث مطابقة باللغة العربية
+143842 pr=2 Verify that the Private Sector Export Reports page renders hero and quarterly archive section content bilingually with correct English/LTR direction
+143845 pr=3 Verify that a published report card displays the report title
+143846 pr=3 Verify that a published report card displays the report description
+143852 pr=3 Verify that the Private Sector Export Reports page renders responsively on a tablet viewport
+143959 pr=2 Verify that "No reports match your search." is shown for a non-matching keyword
+143967 pr=2 التحقق من أنه تظهر رسالة "لا توجد تقارير مطابقة لبحثك." عند عدم وجود نتائج بحث مطابقة باللغة العربية
+143981 pr=2 Verify that the Publications page renders the page title, breadcrumb, search bar, filter and sort controls, quick filter chips, and card grid on initial load
+143983 pr=4 Verify that the breadcrumb "Home / Insights & Media" renders in Cairo Regular 14px with 22px line-height and both links are clickable
+144092 pr=2 Verify that the Al-Moltaqa Magazine page hero section and breadcrumb render correctly in English
+144250 pr=2 Verify that the Hero CTA redirects to the external site in a new browser tab when Open Behavior = New Tab
+144259 pr=1 Verify that a Public Visitor clicking the Hero CTA is redirected to the external Made in China Expo website
+144260 pr=1 Verify that a Public Visitor clicking the Side Card CTA is redirected to the external Made in China Expo website

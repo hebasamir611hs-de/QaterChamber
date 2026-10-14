@@ -1,0 +1,2266 @@
+{
+ "pbi": 131061,
+ "plan_id": 137724,
+ "suite_id": 140395,
+ "module": "cms/tests/media_dept_request/test_media_dept_request_control_panel.py",
+ "object_name_source": "live Object Authoring sidebar (engineer brief 2026-10-01, 'Object-name source'); slugs pending live read",
+ "cases": [
+  {
+   "tc_id": 142743,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the CMS admin content-entry form displays Hero and Card fields with EN/AR inputs",
+   "steps": [
+    {
+     "action": "Login as Site Content Editor",
+     "expected": "Editor session active"
+    },
+    {
+     "action": "Open Request to Media Dept. in Object Authoring",
+     "expected": "Hero and 4-card field panels each expose separate EN and AR inputs for every bilingual field"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142744,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the Admin Submissions list is filterable by Form Type and Status",
+   "steps": [
+    {
+     "action": "Login as Form Manager",
+     "expected": "Login succeeds, submissions list accessible"
+    },
+    {
+     "action": "Open Submissions list",
+     "expected": "List loads with all submissions"
+    },
+    {
+     "action": "Apply Form Type = 'Media Inquiry' filter",
+     "expected": "List narrows to Media Inquiry submissions only"
+    },
+    {
+     "action": "Apply Status = 'Pending' filter",
+     "expected": "List further narrows to Pending Media Inquiry submissions only"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager') (read-only; none of the named roles is mutated)"
+  },
+  {
+   "tc_id": 142745,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "UI"
+   ],
+   "title": "Verify that the Admin Submission detail view displays all submitted values read-only",
+   "steps": [
+    {
+     "action": "Open a Pending Interview Request submission",
+     "expected": "Detail view shows all 8 submitted fields as read-only text, plus a separate Internal Notes text area for admin-only input"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager') (read-only; none of the named roles is mutated)"
+  },
+  {
+   "tc_id": 142761,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that an unauthenticated visitor forced-browsing to the CMS Submissions list is denied",
+   "steps": [
+    {
+     "action": "As an unauthenticated user, navigate directly to the Control Panel Submissions list URL",
+     "expected": "User is redirected to CMS login (or shown 'Access Denied. You do not have permission to perform this action.' / 'تم رفض الوصول...') — submission data is never exposed"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "none - fresh logged-out context (new_context(browser, use_auth_state=False))"
+  },
+  {
+   "tc_id": 142762,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Editor has full CRUD+lifecycle rights on the page and Press Kit",
+   "steps": [
+    {
+     "action": "Login as Site Content Editor (test1@xyz.com)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Edit Hero content, save as draft, preview, publish, unpublish, and delete a test Press Kit card entry",
+     "expected": "Every lifecycle action (draft/preview/publish/unpublish/delete) succeeds without an Access-Denied response"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142763,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author can view and update assigned page/Press Kit content",
+   "steps": [
+    {
+     "action": "Login as Site Content Author (Test2@xyz.com)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open the assigned Request to Media Dept. page",
+     "expected": "Page opens"
+    },
+    {
+     "action": "Edit the Press Kit Description field and save",
+     "expected": "Author can view and edit the assigned content; save succeeds (submission for review, per role definition)"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 142764,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author is blocked from publishing directly",
+   "steps": [
+    {
+     "action": "Login as Site Content Author",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Edit the Hero Description",
+     "expected": "Description edited"
+    },
+    {
+     "action": "Attempt to click Publish directly (not Submit for Review)",
+     "expected": "Publish action is blocked; 'Access Denied. You do not have permission to perform this action.' / 'تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.' is displayed"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 142765,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Form Manager can view submissions and update status/notes",
+   "steps": [
+    {
+     "action": "Login as Form Manager",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open a Pending submission",
+     "expected": "Submission opens"
+    },
+    {
+     "action": "Change status to 'Under Review' and add an internal note",
+     "expected": "Status and note save successfully; Form Manager's actions succeed without Access-Denied"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager')"
+  },
+  {
+   "tc_id": 142766,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Form Manager is blocked from editing form structure or page content",
+   "steps": [
+    {
+     "action": "Login as Form Manager",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Attempt to open the Hero/Card content editor",
+     "expected": "Content editor access blocked"
+    },
+    {
+     "action": "Attempt to modify the Interview Request webform's field definitions",
+     "expected": "Both actions are blocked with 'Access Denied. You do not have permission to perform this action.' / AR equivalent"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager')"
+  },
+  {
+   "tc_id": 142771,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a Site Content Editor can update the Press Kit file and visitors immediately receive the new version",
+   "steps": [
+    {
+     "action": "Login as Site Content Editor",
+     "expected": "Editor session active"
+    },
+    {
+     "action": "Open Press Kit File field, upload a new EN PDF (press_kit_v2.pdf)",
+     "expected": "New file staged"
+    },
+    {
+     "action": "Publish",
+     "expected": "Publish succeeds; Liferay generic success toast shown; audit log records the change"
+    },
+    {
+     "action": "In a fresh anonymous browser context, load the public page and click Download on Card 01",
+     "expected": "Anonymous visitor's downloaded file is press_kit_v2.pdf, not the previous version"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142772,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a Site Content Editor's Hero/Card content edit is reflected bilingually on the live page",
+   "steps": [
+    {
+     "action": "Login as Site Content Editor",
+     "expected": "Editor session active"
+    },
+    {
+     "action": "Update Hero Description EN='Access approved press resources or contact our Media Department.' and AR equivalent",
+     "expected": "Values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; Liferay generic toast shown; audit log entry recorded"
+    },
+    {
+     "action": "Load the public EN page, then the public AR page",
+     "expected": "EN public page shows the new EN description; AR public page (/ar) shows the new AR description"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "the Hero half is a SINGLETON publish and is covered by 142891 (conditional); the Card half runs here",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142773,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a Form Manager can progress a submission through Pending → Under Review → Completed with no auto-email and full audit trail",
+   "steps": [
+    {
+     "action": "Login as Form Manager",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open the Interview Request submission from TC-032 (status Pending)",
+     "expected": "Submission opens, status shows 'Pending' (default)"
+    },
+    {
+     "action": "Change status to 'Under Review', add internal note 'Coordinating with Chairman's office'",
+     "expected": "Status field shows Under Review, note text entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds; Liferay generic toast shown; audit log records timestamp + acting Form Manager user; no additional email is sent to submitter or admin"
+    },
+    {
+     "action": "Re-open the submission, change status to 'Completed'",
+     "expected": "Submission re-opens showing Under Review + the saved note, all original field values still read-only and unchanged"
+    },
+    {
+     "action": "Save",
+     "expected": "Status shows 'Completed'; audit log records the second transition with timestamp + acting user; no email sent"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager')"
+  },
+  {
+   "tc_id": 142781,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Eyebrow Label saves with valid EN/AR text within 60 characters",
+   "steps": [
+    {
+     "action": "Login as Site Content Editor and open the Hero fields panel",
+     "expected": "Editor session active; Hero panel visible"
+    },
+    {
+     "action": "Enter Eyebrow Label EN='Insights & Media', AR='الأخبار والإعلام'",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; public page hero eyebrow displays both values correctly per locale"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142782,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Eyebrow Label blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open the Hero fields panel",
+     "expected": "Panel visible"
+    },
+    {
+     "action": "Enter Eyebrow Label EN='Insights & Media', leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; 'Arabic content is required.' / 'المحتوى بالعربية مطلوب.' shown; page not published"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142783,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Eyebrow Label rejects text exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Open the Hero fields panel",
+     "expected": "Panel visible"
+    },
+    {
+     "action": "Enter a 61-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142784,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Page Title saves with valid EN/AR text within 100 characters",
+   "steps": [
+    {
+     "action": "Open the Hero fields panel",
+     "expected": "Panel visible"
+    },
+    {
+     "action": "Enter Page Title EN='Request to the Media Dept.', AR='طلب إلى إدارة الإعلام'",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; public page title displays correctly per locale"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142785,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Page Title blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open the Hero fields panel",
+     "expected": "Panel visible"
+    },
+    {
+     "action": "Enter Page Title EN only, leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; bilingual-required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142786,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Page Title rejects text exceeding 100 characters",
+   "steps": [
+    {
+     "action": "Open the Hero fields panel",
+     "expected": "Panel visible"
+    },
+    {
+     "action": "Enter a 101-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142787,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Description saves with valid EN/AR rich text within 200 characters",
+   "steps": [
+    {
+     "action": "Open the Hero fields panel",
+     "expected": "Panel visible"
+    },
+    {
+     "action": "Enter Hero Description EN='Access approved press resources or send a focused request to Qatar Chamber's Media Department.' and AR equivalent",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; public page shows the formatted description per locale"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142788,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Description blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open the Hero fields panel",
+     "expected": "Panel visible"
+    },
+    {
+     "action": "Enter Hero Description EN only, leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; bilingual-required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142789,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Description rejects rich text exceeding 200 characters",
+   "steps": [
+    {
+     "action": "Open the Hero fields panel",
+     "expected": "Panel visible"
+    },
+    {
+     "action": "Enter a 201-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142790,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Image accepts a valid JPG under 2MB",
+   "steps": [
+    {
+     "action": "Open the Hero Image field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload hero_banner.jpg (1.4MB)",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Upload succeeds; image displays as the hero banner on the public page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142791,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Image rejects an unsupported file format",
+   "steps": [
+    {
+     "action": "Open the Hero Image field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload hero_banner.gif",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: unsupported format; upload rejected"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142792,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Hero Image rejects a file exceeding 2MB",
+   "steps": [
+    {
+     "action": "Open the Hero Image field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload hero_banner_large.jpg (2.4MB)",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: file exceeds 2MB limit; upload rejected"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142793,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Icon accepts a valid PNG under 2MB",
+   "steps": [
+    {
+     "action": "Open Card 01's Icon field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload press_icon.png (300KB)",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Icon uploads and displays on Card 01"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142794,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Icon rejects an unsupported file format",
+   "steps": [
+    {
+     "action": "Open Card 01's Icon field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload press_icon.bmp",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: unsupported format"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142795,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Icon rejects a file exceeding 2MB",
+   "steps": [
+    {
+     "action": "Open Card 01's Icon field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload press_icon_large.png (2.1MB)",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: exceeds 2MB"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142796,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Eyebrow Label saves with valid EN/AR text within 60 characters",
+   "steps": [
+    {
+     "action": "Open Card 01's Eyebrow field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN='Media resources', AR='موارد إعلامية'",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; displays on Card 01 per locale"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142797,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Eyebrow Label blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open Card 01's Eyebrow field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN only, leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; bilingual-required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142798,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Eyebrow Label rejects text exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Open Card 01's Eyebrow field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter a 61-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142799,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Title saves with valid EN/AR text within 150 characters",
+   "steps": [
+    {
+     "action": "Open Card 01's Title field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN='Press Kit', AR='حقيبة صحفية'",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; displays on Card 01"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142800,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Title blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open Card 01's Title field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN only, leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; bilingual-required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142801,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Title rejects text exceeding 150 characters",
+   "steps": [
+    {
+     "action": "Open Card 01's Title field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter a 151-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142802,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Description saves with valid EN/AR text within 400 characters",
+   "steps": [
+    {
+     "action": "Open Card 01's Description field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN='Download our official press kit including brand assets, logos and media guidelines.' and AR equivalent",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; displays on Card 01"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142803,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Description blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open Card 01's Description field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN only, leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; bilingual-required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142804,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit Description rejects text exceeding 400 characters",
+   "steps": [
+    {
+     "action": "Open Card 01's Description field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter a 401-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142805,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit File Button Label saves with valid EN/AR text within 50 characters",
+   "steps": [
+    {
+     "action": "Open Card 01's Button Label field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN='Download Press Kit', AR='تنزيل الحقيبة الصحفية'",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; button displays correct label per locale"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142806,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit File Button Label blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open Card 01's Button Label field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN only, leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; bilingual-required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142807,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit File Button Label rejects text exceeding 50 characters",
+   "steps": [
+    {
+     "action": "Open Card 01's Button Label field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter a 51-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142808,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit File EN accepts a valid PDF under 5MB",
+   "steps": [
+    {
+     "action": "Open the Press Kit File EN field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload press_kit_en.pdf (3.2MB)",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "File uploads; EN visitors download this file"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142809,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit File EN rejects an unsupported file format",
+   "steps": [
+    {
+     "action": "Open the Press Kit File EN field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload press_kit_en.docx",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: PDF only"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142810,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit File EN rejects a file exceeding 5MB",
+   "steps": [
+    {
+     "action": "Open the Press Kit File EN field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload press_kit_en_large.pdf (5.6MB)",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: exceeds 5MB"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142811,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit File AR accepts a valid PDF under 5MB",
+   "steps": [
+    {
+     "action": "Open the Press Kit File AR field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload press_kit_ar.pdf (2.8MB)",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "File uploads; AR visitors download this file"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142812,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit File AR rejects an unsupported file format",
+   "steps": [
+    {
+     "action": "Open the Press Kit File AR field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload press_kit_ar.docx",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: PDF only"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142813,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit File AR rejects a file exceeding 5MB",
+   "steps": [
+    {
+     "action": "Open the Press Kit File AR field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload press_kit_ar_large.pdf (5.3MB)",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: exceeds 5MB"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142814,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Icon accepts a valid SVG under 2MB",
+   "steps": [
+    {
+     "action": "Open Card 02's Icon field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload card_icon.svg (45KB)",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Icon uploads and displays on the card"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142815,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Icon rejects an unsupported file format",
+   "steps": [
+    {
+     "action": "Open Card 02's Icon field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload card_icon.tiff",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: unsupported format"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142816,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Icon rejects a file exceeding 2MB",
+   "steps": [
+    {
+     "action": "Open Card 02's Icon field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Upload card_icon_large.svg (2.2MB)",
+     "expected": "File selected"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error: exceeds 2MB"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142817,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Eyebrow Label saves with valid EN/AR text within 60 characters",
+   "steps": [
+    {
+     "action": "Open Card 02's Eyebrow field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN='Press Relations', AR='العلاقات الصحفية'",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; displays on Card 02"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142818,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Eyebrow Label blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open Card 02's Eyebrow field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN only, leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; bilingual-required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142819,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Eyebrow Label rejects text exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Open Card 02's Eyebrow field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter a 61-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142820,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Title saves with valid EN/AR text within 150 characters",
+   "steps": [
+    {
+     "action": "Open Card 02's Title field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN='Interview Request', AR='طلب مقابلة'",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; displays on Card 02"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142821,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Title blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open Card 02's Title field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN only, leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; bilingual-required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142822,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Title rejects text exceeding 150 characters",
+   "steps": [
+    {
+     "action": "Open Card 02's Title field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter a 151-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142823,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Description saves with valid EN/AR text within 400 characters",
+   "steps": [
+    {
+     "action": "Open Card 02's Description field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN='Submit a request to interview Qatar Chamber leadership.' and AR equivalent",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; displays on Card 02"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142824,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Description blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open Card 02's Description field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN only, leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; bilingual-required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142825,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Description rejects text exceeding 400 characters",
+   "steps": [
+    {
+     "action": "Open Card 02's Description field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter a 401-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142826,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Button Label saves with valid EN/AR text within 50 characters",
+   "steps": [
+    {
+     "action": "Open Card 02's Button Label field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN='Request Form', AR='نموذج الطلب'",
+     "expected": "Both values entered"
+    },
+    {
+     "action": "Save and Publish",
+     "expected": "Publish succeeds; button displays correct label"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142827,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Button Label blocks publish when the Arabic value is missing",
+   "steps": [
+    {
+     "action": "Open Card 02's Button Label field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter EN only, leave AR empty",
+     "expected": "EN entered, AR empty"
+    },
+    {
+     "action": "Attempt Publish",
+     "expected": "Publish blocked; bilingual-required error shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142828,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Standard Card Button Label rejects text exceeding 50 characters",
+   "steps": [
+    {
+     "action": "Open Card 02's Button Label field",
+     "expected": "Field visible"
+    },
+    {
+     "action": "Enter a 51-character EN value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142884,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Submission Reference No. is auto-generated and unique per submission",
+   "steps": [
+    {
+     "action": "Submit an Interview Request form",
+     "expected": "First submission record created"
+    },
+    {
+     "action": "Submit a second Interview Request form with different data",
+     "expected": "Second submission record created"
+    },
+    {
+     "action": "Compare the two submission records' Reference No. values",
+     "expected": "Each record received a distinct, auto-generated Reference No.; no duplicates"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager')"
+  },
+  {
+   "tc_id": 142885,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Submission Form Type is stored correctly for each of the 3 webform types",
+   "steps": [
+    {
+     "action": "Submit one Interview Request, one Event Coverage Request, and one Media Inquiry",
+     "expected": "All 3 submissions accepted"
+    },
+    {
+     "action": "Open each resulting submission record",
+     "expected": "Each submission record's Form Type field correctly reads 'Interview Request' / 'Event Coverage Request' / 'Media Inquiry' respectively"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager')"
+  },
+  {
+   "tc_id": 142886,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Submission's Submitted Field Values display as a complete read-only snapshot",
+   "steps": [
+    {
+     "action": "Submit the Media Inquiry form with an attachment",
+     "expected": "Submission accepted"
+    },
+    {
+     "action": "Open the submission in the admin detail view",
+     "expected": "All submitted values, including the attached file, display read-only; none are editable"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager') (read-only; none of the named roles is mutated)"
+  },
+  {
+   "tc_id": 142887,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Submission Date/Time is auto-recorded at the moment of submission",
+   "steps": [
+    {
+     "action": "Submit an Interview Request form and note the wall-clock time",
+     "expected": "Submission accepted at a known time"
+    },
+    {
+     "action": "Open the submission record",
+     "expected": "Submission Date/Time field matches the actual submission time (within the propagation budget)"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager')"
+  },
+  {
+   "tc_id": 142888,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Internal Notes field accepts valid text within 1000 characters and saves",
+   "steps": [
+    {
+     "action": "As Form Manager, open a submission",
+     "expected": "Submission detail view open"
+    },
+    {
+     "action": "Enter Internal Notes='Coordinating with Chairman's office'",
+     "expected": "Note entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Note saves successfully against the submission"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager')"
+  },
+  {
+   "tc_id": 142889,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Internal Notes field rejects text exceeding 1000 characters",
+   "steps": [
+    {
+     "action": "As Form Manager, open a submission",
+     "expected": "Submission detail view open"
+    },
+    {
+     "action": "Enter a 1001-character Internal Notes value",
+     "expected": "Over-limit value entered"
+    },
+    {
+     "action": "Attempt Save",
+     "expected": "Validation error shown; note not saved"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager')"
+  },
+  {
+   "tc_id": 142890,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that the Internal Notes field is never visible to the submitter",
+   "steps": [
+    {
+     "action": "As Form Manager, save an Internal Note against a submission",
+     "expected": "Note saved against the submission"
+    },
+    {
+     "action": "As the original submitter, attempt to view submission status via any public-facing channel",
+     "expected": "Internal Notes content is not exposed anywhere on the public/visitor side"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager')"
+  },
+  {
+   "tc_id": 142891,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing the Page makes it visible on the public site",
+   "steps": [
+    {
+     "action": "As Editor, with the Page in Draft state, click Publish",
+     "expected": "Liferay generic success toast shown; audit log entry recorded; public page becomes reachable and renders hero+cards"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142892,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that unpublishing the Page removes it from the public site",
+   "steps": [
+    {
+     "action": "As Editor, with the Page currently Published, click Unpublish",
+     "expected": "Toast shown; audit log entry recorded; public URL returns a not-found/unavailable state, not stale content"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142893,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing the Press Kit card makes the Press Kit downloadable",
+   "steps": [
+    {
+     "action": "As Editor, with Card 01 in Draft state, click Publish",
+     "expected": "Toast shown; audit logged; Download button becomes active and serves the file publicly"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142894,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that unpublishing the Press Kit card removes the Download option publicly",
+   "steps": [
+    {
+     "action": "As Editor, with Card 01 currently Published, click Unpublish",
+     "expected": "Toast shown; audit logged; Card 01/Download no longer available to public visitors"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142896,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that publishing a Standard Card makes it visible on the public site",
+   "steps": [
+    {
+     "action": "As Editor, with Card 02 in Draft state, click Publish",
+     "expected": "Toast shown; audit logged; Card 02 renders publicly"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142897,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that unpublishing a Standard Card removes it from the public site",
+   "steps": [
+    {
+     "action": "As Editor, with Card 02 currently Published, click Unpublish",
+     "expected": "Toast shown; audit logged; Card 02 no longer renders publicly (3-card layout, not 4)"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142919,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Page starts in Draft by default when newly created",
+   "steps": [
+    {
+     "action": "As Editor, create a new Request to Media Dept.-type record",
+     "expected": "Record defaults to Status = Draft; not visible publicly until explicitly published"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142920,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that the Press Kit card starts in Draft by default when newly created",
+   "steps": [
+    {
+     "action": "As Editor, create a new Press Kit card record",
+     "expected": "Record defaults to Status = Draft"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142921,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a Standard Card starts in Draft by default when newly created",
+   "steps": [
+    {
+     "action": "As Editor, create a new standard card record",
+     "expected": "Record defaults to Status = Draft"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142922,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that a submission can reach the Closed status as an alternate terminal state to Completed",
+   "steps": [
+    {
+     "action": "As Form Manager, with a submission currently Under Review, change status to 'Closed'",
+     "expected": "Status field changed"
+    },
+    {
+     "action": "Save",
+     "expected": "Save succeeds; status shows Closed; toast shown; audit log records the transition with timestamp + acting user; no email sent"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "needs a QCTEST submission/subscriber to mutate; real visitor records may only be read - automate only once a QCTEST record can be created (public form without a CAPTCHA wall, or an authoring add) and deleted by exact reference",
+   "account": "QC Form Manager via cms_role_credentials('Form Manager')"
+  }
+ ],
+ "out_of_scope": [
+  {
+   "tc_id": 142928,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that a reopened Closed submission retains its read-only values and Internal Notes unchanged"
+  }
+ ]
+}

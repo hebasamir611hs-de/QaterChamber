@@ -18,7 +18,7 @@ Title, Hero Description, Hero Banner, Section Badge, Section Title, Section
 Description, page Status) is therefore LIVE PRODUCTION CONTENT, not
 disposable test data — writing a new value and Publishing it would put
 literal `QCTEST-`/boundary-probe text on the real public Annual Reports
-page for every visitor until reverted, and because this object is Approved
+page for every visitor until reverted, and because this object is Published
 (published), any edit forces "Unpublish to edit as draft" first, which is
 itself a real, momentary content takedown per object_authoring_page.py's own
 documented state machine.
@@ -45,9 +45,9 @@ never submitted) create/edit form:
     textbox "Section Badge"              / "Section Badge — العربية *"
     textbox "Section Title"              / "Section Title — العربية *"
     textbox "Section Description"        / "Section Description — العربية *"
-    button  "Save as Draft" / "Submit for Publishing" (this object's own
+    button  "Save as Draft" / "Submit for Review" (this object's own
         confirmed-live submit wording DOES match ObjectAuthoringPage's
-        default "Submit for Publishing" — unlike the per-record "Annual
+        default "Submit for Review" — unlike the per-record "Annual
         Report" object's "Submit for Review", see
         annual_report_admin_page.py's own docstring for that distinction.)
 

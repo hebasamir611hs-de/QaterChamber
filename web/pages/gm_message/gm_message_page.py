@@ -93,8 +93,15 @@ class GmMessagePage(BasePage):
     SIG_DESIGNATION = ".qc-gm-sig-desig"
 
     # ---- Navigation -----------------------------------------------------
-    def open_gm_message(self, locale: str = "en") -> "GmMessagePage":
-        self.open(web_url(GM_MESSAGE_PATH, locale=locale))
+    def open_gm_message(self, locale: str = "en", cache_bust: bool = False) -> "GmMessagePage":
+        """`cache_bust=True` appends a unique `?cb=<ns>` query so a cached
+        copy older than a just-published change cannot be served."""
+        url = web_url(GM_MESSAGE_PATH, locale=locale)
+        if cache_bust:
+            import time
+
+            url += f"?cb={time.time_ns()}"
+        self.open(url)
         return self
 
     def open_broken_url(self) -> "GmMessagePage":
@@ -224,3 +231,140 @@ class GmMessagePage(BasePage):
 
     def bounding_box(self, locator: str) -> dict:
         return self.page.locator(locator).first.bounding_box()
+
+    # ---- Added 2026-10-12 (PBI 129397 CMS-to-public checks) ---------------
+    def document_direction(self) -> str:
+        return (self.page.locator("html").get_attribute("dir") or "").lower()
+
+    def page_text(self) -> str:
+        return self.page.locator("body").inner_text()
+
+    def hero_image_src(self) -> str:
+        """`src` of the hero <img>, or the hero's CSS background-image."""
+        img = self.page.locator(f"{self.HERO_MEDIA} img").first
+        if img.count():
+            return img.get_attribute("src") or ""
+        return self.page.locator(self.HERO_MEDIA).first.evaluate(
+            "el => getComputedStyle(el).backgroundImage || ''"
+        )
+
+    def portrait_image_src(self) -> str:
+        return self.page.locator(self.PORTRAIT_IMG).first.get_attribute("src") or ""
+
+    # ---- Added 2026-10-13 (PBI 129397 P3/P4 batch, OFFLINE) ---------------
+    # Text nodes a CMS field renders into, by field. VERIFY-LIVE: the
+    # signature regards node carries Signature Closing Text.
+    FIELD_NODES = {
+        "salutation": SALUTATION,
+        "name": f"{PORTRAIT_NAME}, {SIG_NAME}",
+        "designation": f"{PORTRAIT_DESIGNATION}, {SIG_DESIGNATION}",
+        "closing": SIG_REGARDS,
+    }
+
+    def field_nodes_html(self, key: str) -> list:
+        """innerHTML of every node field `key` renders into (both places
+        for the name / designation)."""
+        return self.page.locator(self.FIELD_NODES[key]).evaluate_all("els => els.map(e => e.innerHTML)")
+
+    def field_nodes_text(self, key: str) -> list:
+        return [t.strip() for t in self.page.locator(self.FIELD_NODES[key]).all_inner_texts()]
+
+    def field_nodes_have_markup(self, key: str, tags=("b", "strong", "img", "script")) -> bool:
+        """True when a real element (`<b>`, `<img>`, ...) was rendered INSIDE
+        the field's nodes -- i.e. the markup was interpreted, not escaped."""
+        selector = ", ".join(f"{node} {tag}" for node in self.FIELD_NODES[key].split(", ") for tag in tags)
+        return self.page.locator(selector).count() > 0
+
+    def onerror_node_count(self) -> int:
+        """Elements anywhere in the document carrying an `onerror` handler
+        attribute -- an injected `<img onerror>` that was rendered as markup."""
+        return self.page.evaluate("() => document.querySelectorAll('[onerror]').length")
+
+    def signature_avatar_src(self) -> str:
+        """`src` of an uploaded signature avatar <img>, else the avatar's CSS
+        background-image, else "" (the default placeholder icon)."""
+        img = self.page.locator(f"{self.SIG_AVATAR} img").first
+        if img.count():
+            return img.get_attribute("src") or ""
+        avatar = self.page.locator(self.SIG_AVATAR).first
+        if not avatar.count():
+            return ""
+        bg = avatar.evaluate("el => getComputedStyle(el).backgroundImage || ''")
+        return "" if bg in ("", "none") else bg
+
+    def signature_avatar_image(self, timeout: int = 15000) -> dict:
+        """The uploaded signature avatar as the visitor's browser loaded it:
+        {"present", "src" (absolute), "complete", "natural_width",
+        "natural_height"}. Added 2026-10-14 (fix pass 7): the avatar is served
+        by a FIELD-keyed endpoint (`/o/qc-newsletter/gm-asset?field=
+        signatureAvatar`, read live 2026-10-13), so the file name never
+        appears in `src`; whether the image actually decoded is the evidence.
+        Waits (bounded) for the <img> to finish loading."""
+        img = self.page.locator(f"{self.SIG_AVATAR} img").first
+        if not img.count():
+            return {"present": False, "src": "", "complete": False, "natural_width": 0, "natural_height": 0}
+        try:
+            img.evaluate(
+                "(el, ms) => el.complete ? true : new Promise(r => { el.addEventListener('load', () => r(true));"
+                " el.addEventListener('error', () => r(false)); setTimeout(() => r(false), ms); })",
+                timeout,
+            )
+        except Exception:  # noqa: BLE001 -- reported through `complete` below
+            pass
+        return img.evaluate(
+            "el => ({present: true, src: el.currentSrc || el.src, complete: el.complete,"
+            " natural_width: el.naturalWidth, natural_height: el.naturalHeight})"
+        )
+
+    def body_link(self, href_prefix: str) -> dict:
+        """{href, target, text, count} of the message-body anchors whose href
+        starts with `href_prefix` (first match). count == 0 when absent."""
+        links = self.page.locator(f'{self.BODY} a[href^="{href_prefix}"]')
+        n = links.count()
+        if not n:
+            return {"href": "", "target": "", "text": "", "count": 0}
+        first = links.first
+        return {
+            "href": first.get_attribute("href") or "",
+            "target": first.get_attribute("target") or "",
+            "text": first.inner_text().strip(),
+            "count": n,
+        }
+
+    def follow_body_link(self, href_prefix: str, timeout: int = 15000) -> dict:
+        """Clicks the first body anchor whose href starts with `href_prefix`
+        and reports where it went: {"url": <first navigated URL>,
+        "new_tab": bool}. Only the navigation REQUEST is waited for (an
+        external site's full load is not this site's behaviour)."""
+        link = self.page.locator(f'{self.BODY} a[href^="{href_prefix}"]').first
+        try:
+            with self.page.context.expect_page(timeout=4000) as popup_info:
+                link.click()
+            popup = popup_info.value
+            try:
+                popup.wait_for_load_state("commit", timeout=timeout)
+            except Exception:  # noqa: BLE001 -- the URL is still known
+                pass
+            url = popup.url
+            popup.close()
+            return {"url": url, "new_tab": True}
+        except Exception:  # noqa: BLE001 -- no new tab: same-tab navigation
+            try:
+                self.page.wait_for_url(f"{href_prefix}**", timeout=timeout, wait_until="commit")
+            except Exception:  # noqa: BLE001 -- reported through the URL
+                pass
+            return {"url": self.page.url, "new_tab": False}
+
+    def watch_dialogs(self) -> list:
+        """Starts recording every native dialog (e.g. an injected alert())."""
+        seen: list = []
+
+        def _on(dialog):
+            seen.append(dialog.message)
+            try:
+                dialog.dismiss()
+            except Exception:  # noqa: BLE001
+                pass
+
+        self.page.on("dialog", _on)
+        return seen

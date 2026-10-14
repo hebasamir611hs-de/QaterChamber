@@ -1,0 +1,918 @@
+{
+ "pbi": 129364,
+ "cases": [
+  {
+   "tc_id": 134491,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "GLOBAL",
+    "UI"
+   ],
+   "title": "Verify that the CMS Accessibility Settings page renders the Accessibility Tools Enabled toggle",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS as Site Content Editor",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Navigate to Global Components -> Header Management -> Accessibility Settings",
+     "expected": "Page displays the Accessibility Tools Enabled toggle in its current saved state"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Read-only render check"
+  },
+  {
+   "tc_id": 134492,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "GLOBAL",
+    "UI"
+   ],
+   "title": "Verify that the image upload dialog renders both Alt Text (EN) and Alt Text (AR) input fields",
+   "steps": [
+    {
+     "action": "In CMS, open any content item's image upload dialog",
+     "expected": "Alt Text (EN) and Alt Text (AR) input fields are both visible and marked mandatory"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134501,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that a CMS user without header-management permission cannot access Accessibility Settings",
+   "steps": [
+    {
+     "action": "Log in to Liferay CMS as a user without accessibility-settings permission",
+     "expected": "Login succeeds with restricted role"
+    },
+    {
+     "action": "Attempt to navigate to Global Components -> Header Management -> Accessibility Settings",
+     "expected": "System blocks access and displays 'Access Denied. You do not have permission to perform this action.'"
+    },
+    {
+     "action": "Switch CMS locale to Arabic and repeat the attempt",
+     "expected": "System displays the Arabic equivalent message in Arabic locale"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Non-mutating access-denial check"
+  },
+  {
+   "tc_id": 134511,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that enabling Accessibility Tools Enabled = True saves and publishes successfully",
+   "steps": [
+    {
+     "action": "Open CMS Accessibility Settings",
+     "expected": "Settings page opens with current value"
+    },
+    {
+     "action": "Set Accessibility Tools Enabled = True",
+     "expected": "Toggle set to True"
+    },
+    {
+     "action": "Click Save and Publish",
+     "expected": "Liferay generic success toast displays; configuration saved"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live AccessibilityHeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134512,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that setting Accessibility Tools Enabled = False saves and publishes successfully",
+   "steps": [
+    {
+     "action": "Open CMS Accessibility Settings",
+     "expected": "Settings page opens"
+    },
+    {
+     "action": "Set Accessibility Tools Enabled = False",
+     "expected": "Toggle set to False"
+    },
+    {
+     "action": "Click Save and Publish",
+     "expected": "Liferay generic success toast displays; configuration saved"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live AccessibilityHeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134513,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that the Accessibility Tools Enabled value persists after save, page reload, and re-navigation",
+   "steps": [
+    {
+     "action": "Set Accessibility Tools Enabled = True and publish",
+     "expected": "Toggle set and saved"
+    },
+    {
+     "action": "Navigate away to another CMS section",
+     "expected": "Navigation succeeds"
+    },
+    {
+     "action": "Return to Accessibility Settings",
+     "expected": "Accessibility Tools Enabled still shows True"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live AccessibilityHeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134514,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that changing Accessibility Tools Enabled without saving can be discarded",
+   "steps": [
+    {
+     "action": "Open Accessibility Settings (current value = True)",
+     "expected": "Settings page shows True"
+    },
+    {
+     "action": "Toggle to False",
+     "expected": "Toggle visually shows False (unsaved)"
+    },
+    {
+     "action": "Navigate away without clicking Save/Publish, then return",
+     "expected": "Returning to the page shows the original saved value, True (unsaved change discarded)"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Non-mutating: change the checkbox, leave WITHOUT saving, re-open and assert the stored value is unchanged. Never click Save."
+  },
+  {
+   "tc_id": 134515,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that entering valid Alt Text (EN) and Alt Text (AR) allows successful publish",
+   "steps": [
+    {
+     "action": "Open image upload dialog",
+     "expected": "Dialog opens"
+    },
+    {
+     "action": "Enter Alt Text (EN) = 'Qatar Chamber annual conference'",
+     "expected": "EN field accepts the value"
+    },
+    {
+     "action": "Enter Alt Text (AR) = matching Arabic text",
+     "expected": "AR field accepts the value"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Image publishes with Liferay generic success toast displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134516,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that publishing is blocked when Alt Text (EN) is left empty",
+   "steps": [
+    {
+     "action": "Open image upload dialog",
+     "expected": "Dialog opens"
+    },
+    {
+     "action": "Leave Alt Text (EN) empty; enter valid Alt Text (AR)",
+     "expected": "EN field remains empty"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked and message 'Alt text (EN) is required for accessibility compliance.' is displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134517,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL",
+    "Regression"
+   ],
+   "title": "Verify that publishing is blocked when Alt Text (AR) is left empty",
+   "steps": [
+    {
+     "action": "Open image upload dialog",
+     "expected": "Dialog opens"
+    },
+    {
+     "action": "Enter valid Alt Text (EN); leave Alt Text (AR) empty",
+     "expected": "AR field remains empty"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked and message 'Alt text (AR) is required before publishing.' is displayed"
+    },
+    {
+     "action": "Switch CMS locale to Arabic and repeat",
+     "expected": "In Arabic locale, the Arabic-equivalent message is displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134518,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that publishing is blocked with the generic message when both Alt Text fields are empty",
+   "steps": [
+    {
+     "action": "Open image upload dialog",
+     "expected": "Dialog opens"
+    },
+    {
+     "action": "Leave both Alt Text (EN) and Alt Text (AR) empty",
+     "expected": "Both fields remain empty"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked and message 'alt text is required before publishing.' is displayed"
+    },
+    {
+     "action": "Switch CMS locale to Arabic and repeat",
+     "expected": "In Arabic locale, the Arabic-equivalent generic message is displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134519,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that Alt Text (EN) exceeding 150 characters is rejected",
+   "steps": [
+    {
+     "action": "Open image upload dialog",
+     "expected": "Dialog opens"
+    },
+    {
+     "action": "Enter Alt Text (EN) = a 151-character string",
+     "expected": "Field either truncates input at 150 characters or displays a max-length validation message"
+    },
+    {
+     "action": "Attempt to Publish",
+     "expected": "Publish does not proceed with more than 150 characters saved"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134520,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that Alt Text (AR) exceeding 150 characters is rejected",
+   "steps": [
+    {
+     "action": "Open image upload dialog",
+     "expected": "Dialog opens"
+    },
+    {
+     "action": "Enter Alt Text (AR) = a 151-character Arabic string",
+     "expected": "Field either truncates input at 150 characters or displays a max-length validation message"
+    },
+    {
+     "action": "Attempt to Publish",
+     "expected": "Publish does not proceed with more than 150 characters saved"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134521,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that Alt Text (EN) accepts special characters within the length limit",
+   "steps": [
+    {
+     "action": "Open image upload dialog",
+     "expected": "Dialog opens"
+    },
+    {
+     "action": "Enter Alt Text (EN) with special characters and punctuation",
+     "expected": "Field accepts the string without script execution or encoding corruption"
+    },
+    {
+     "action": "Enter valid Alt Text (AR)",
+     "expected": "AR field accepts value"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Image publishes with the special characters stored and rendered as entered (no HTML injection)"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134522,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that saved Alt Text (EN/AR) values persist after publish and page reload",
+   "steps": [
+    {
+     "action": "Publish an image with Alt Text (EN) = 'Doha skyline' and Alt Text (AR) = matching Arabic text",
+     "expected": "Image publishes successfully"
+    },
+    {
+     "action": "Reload the CMS content page and reopen the image's edit dialog",
+     "expected": "Both Alt Text (EN) and Alt Text (AR) fields still show the originally entered values"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134523,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that entering only whitespace in Alt Text (EN) is treated as empty and blocks publish",
+   "steps": [
+    {
+     "action": "Open image upload dialog",
+     "expected": "Dialog opens"
+    },
+    {
+     "action": "Enter Alt Text (EN) = spaces only; enter valid Alt Text (AR)",
+     "expected": "EN field accepts the spaces visually"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked with 'Alt text (EN) is required for accessibility compliance.' (whitespace-only treated as empty)"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134640,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Accessibility",
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "GLOBAL",
+    "Regression",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that enabling the Accessibility Tools widget in CMS makes the icon appear on the frontend after cache refresh",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Editor",
+     "expected": "Login successful, CMS home visible"
+    },
+    {
+     "action": "Navigate to Global Components → Header Management → Accessibility Settings",
+     "expected": "Accessibility Settings page opens showing the current toggle state"
+    },
+    {
+     "action": "Toggle Accessibility Tools Enabled to True",
+     "expected": "Toggle switches to True (visually enabled)"
+    },
+    {
+     "action": "Click Save and Publish",
+     "expected": "Liferay generic success toast is displayed confirming save"
+    },
+    {
+     "action": "Wait for standard cache refresh, then load any public page",
+     "expected": "Public page loads showing the accessibility icon in the header"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live AccessibilityHeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134641,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Accessibility",
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "GLOBAL",
+    "Regression",
+    "Web"
+   ],
+   "title": "Verify that disabling the Accessibility Tools widget in CMS hides the icon from the frontend after cache refresh",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Editor with Accessibility Tools Enabled currently True",
+     "expected": "Login successful; setting confirmed True beforehand"
+    },
+    {
+     "action": "Navigate to Accessibility Settings",
+     "expected": "Settings page opens showing True"
+    },
+    {
+     "action": "Toggle Accessibility Tools Enabled to False",
+     "expected": "Toggle switches to False"
+    },
+    {
+     "action": "Click Save and Publish",
+     "expected": "Liferay generic success toast displayed"
+    },
+    {
+     "action": "Wait for standard cache refresh, then load any public page",
+     "expected": "Public page loads with NO accessibility icon present in the header"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live AccessibilityHeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134642,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-High",
+    "GLOBAL",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that publishing an image is blocked when both English and Arabic alt text are missing",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Editor",
+     "expected": "Login successful"
+    },
+    {
+     "action": "Upload a new image with both Alt Text (EN) and Alt Text (AR) left empty",
+     "expected": "Image uploaded to the media library, both alt-text fields blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish is blocked; the EN mandatory message \"Alt text (EN) is required for accessibility compliance.\" is shown for the empty EN field; the image is not published"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134643,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Accessibility",
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that setting Accessibility Tools Enabled to True saves correctly with a success toast",
+   "steps": [
+    {
+     "action": "Open Accessibility Settings with Enabled = False",
+     "expected": "Settings page shows Enabled = False"
+    },
+    {
+     "action": "Toggle Enabled to True",
+     "expected": "Toggle now shows True"
+    },
+    {
+     "action": "Click Save and Publish",
+     "expected": "Liferay generic success toast displayed"
+    },
+    {
+     "action": "Reload the Accessibility Settings page",
+     "expected": "Page reloads and Enabled still shows True"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live AccessibilityHeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134644,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Accessibility",
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that setting Accessibility Tools Enabled to False saves correctly with a success toast",
+   "steps": [
+    {
+     "action": "Open Accessibility Settings with Enabled = True",
+     "expected": "Settings page shows Enabled = True"
+    },
+    {
+     "action": "Toggle Enabled to False",
+     "expected": "Toggle now shows False"
+    },
+    {
+     "action": "Click Save and Publish",
+     "expected": "Liferay generic success toast displayed"
+    },
+    {
+     "action": "Reload the Accessibility Settings page",
+     "expected": "Page reloads and Enabled still shows False"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SINGLETON: saving/publishing/unpublishing the one live AccessibilityHeaderConfiguration entry changes shared qcdev for every visitor; user declined 2026-09-30 (standards 'Destructive-Precondition Tests Must Use Disposable Test Data' rule 5). Needs ID-named approval."
+  },
+  {
+   "tc_id": 134645,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that a valid English alt text value saves and publishes successfully",
+   "steps": [
+    {
+     "action": "Open an image with Alt Text (AR) populated and Alt Text (EN) empty",
+     "expected": "Image editor open, AR populated, EN empty"
+    },
+    {
+     "action": "Enter \"Qatar Chamber headquarters building exterior view\" in Alt Text (EN)",
+     "expected": "EN field shows the entered 51-character value"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Image publishes successfully; Liferay generic success toast displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134646,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that publish is blocked when the English alt text is left empty",
+   "steps": [
+    {
+     "action": "Open an image with Alt Text (AR) populated and Alt Text (EN) left empty",
+     "expected": "Image editor open, AR populated, EN blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish blocked; message \"Alt text (EN) is required for accessibility compliance.\" displayed; image not published"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134647,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that the English alt text field accepts exactly 150 characters and rejects 151",
+   "steps": [
+    {
+     "action": "Open an image's Alt Text (EN) field",
+     "expected": "Field is empty and editable"
+    },
+    {
+     "action": "Enter a value exactly 150 characters long and attempt to publish",
+     "expected": "150-character value is accepted; image publishes successfully"
+    },
+    {
+     "action": "Clear the field, enter a value 151 characters long, and attempt to publish",
+     "expected": "151-character value is rejected — either input is stopped at 150 characters or publish is blocked with a length-validation message; image not published with 151 characters"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134648,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that whitespace-only English alt text is treated as empty and blocks publish",
+   "steps": [
+    {
+     "action": "Open an image's Alt Text (EN) field",
+     "expected": "Field is empty and editable"
+    },
+    {
+     "action": "Enter 10 space characters only",
+     "expected": "Field shows whitespace (visually blank)"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish blocked; message \"Alt text (EN) is required for accessibility compliance.\" displayed; image not published"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134649,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that a valid Arabic alt text value saves and publishes successfully",
+   "steps": [
+    {
+     "action": "Open an image with Alt Text (EN) populated and Alt Text (AR) empty",
+     "expected": "Image editor open, EN populated, AR empty"
+    },
+    {
+     "action": "Enter \"منظر خارجي لمبنى غرفة قطر\" in Alt Text (AR)",
+     "expected": "AR field shows the entered value rendered right-to-left"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Image publishes successfully; Liferay generic success toast displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134650,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that publish is blocked when the Arabic alt text is left empty",
+   "steps": [
+    {
+     "action": "Open an image with Alt Text (EN) populated and Alt Text (AR) left empty",
+     "expected": "Image editor open, EN populated, AR blank"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish blocked; EN message \"Alt text (AR) is required before publishing.\" and AR message \"النص البديل (عربي) مطلوب قبل النشر.\" displayed; image not published"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134651,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that the Arabic alt text field accepts exactly 150 characters and rejects 151",
+   "steps": [
+    {
+     "action": "Open an image's Alt Text (AR) field",
+     "expected": "Field is empty and editable"
+    },
+    {
+     "action": "Enter a value exactly 150 characters long and attempt to publish",
+     "expected": "150-character AR value accepted; image publishes successfully"
+    },
+    {
+     "action": "Clear the field, enter a value 151 characters long, and attempt to publish",
+     "expected": "151-character AR value rejected — input stopped at 150 characters or publish blocked with a length-validation message; image not published with 151 characters"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134652,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "GLOBAL"
+   ],
+   "title": "Verify that whitespace-only Arabic alt text is treated as empty and blocks publish",
+   "steps": [
+    {
+     "action": "Open an image's Alt Text (AR) field",
+     "expected": "Field is empty and editable"
+    },
+    {
+     "action": "Enter 10 space characters only",
+     "expected": "Field shows whitespace (visually blank)"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish blocked; message \"Alt text (AR) is required before publishing.\" / \"النص البديل (عربي) مطلوب قبل النشر.\" displayed; image not published"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "SKIP-SPEC-GAP: guide §3 gives AccessibilityHeaderConfiguration only accessibilityToolsEnabled; no object in the guide carries these image Alt Text (EN/AR) fields — requirements-vs-implementation conflict per cms/Content-Admin-Guide.docx, escalated to QA Manager/BA 2026-09-30."
+  },
+  {
+   "tc_id": 134658,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Accessibility",
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "GLOBAL",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a CMS user without Header Management permission is denied access when attempting to change Accessibility Settings",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS with a role lacking Header Management permission",
+     "expected": "Login succeeds with the restricted role"
+    },
+    {
+     "action": "Attempt to navigate to Global Components → Header Management → Accessibility Settings",
+     "expected": "Access Denied message shown: EN \"Access Denied. You do not have permission to perform this action.\" / AR \"تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.\"; settings page does not load"
+    },
+    {
+     "action": "Attempt to toggle Accessibility Tools Enabled and Save",
+     "expected": "Toggle/save action is blocked entirely; no change is persisted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Non-mutating access-denial check"
+  }
+ ]
+}

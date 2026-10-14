@@ -1,0 +1,166 @@
+
+
+# =============================================================================
+# USER ORDER 2026-10-07 22:45 — every case executed (P3/P4 web edges,
+# compatibility). All logged out.
+# =============================================================================
+def _walk_both_arrows(sd) -> tuple:
+    start = sd.active_card_title_text()
+    sd.click_next()
+    after_next = sd.active_card_title_text()
+    sd.click_prev()
+    back = sd.active_card_title_text()
+    return start, after_next, back
+
+
+def _engine_case(page, tc: int) -> None:
+    errors = []
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home()
+    sd.scroll_to_section()
+    assert sd.is_section_visible() and sd.heading_text() == EXPECTED_HEADING_TEXT
+    start, after_next, back = _walk_both_arrows(sd)
+    page.screenshot(path=f"reports/manual-exec-129381-{tc}.png")
+    allure.attach("\n".join(errors) or "<none>", "page errors", allure.attachment_type.TEXT)
+    assert (start, after_next, back) == ("Vision", "Mission", "Vision"), f"arrow walk: {start}->{after_next}->{back}"
+    assert not errors, f"uncaught page errors: {errors}"
+
+
+@allure.label("pbi", PBI)
+@allure.title("Strategic Direction renders and navigates in Chrome (desktop)")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135544
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_renders_in_chrome(page):
+    """TC 135544 — Chromium (Chrome engine), anonymous."""
+    _engine_case(page, 135544)
+
+
+@allure.label("pbi", PBI)
+@allure.title("Strategic Direction renders and navigates in Safari (WebKit, desktop)")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135545
+@pytest.mark.parametrize("page", [{"auth": False, "engine": "webkit"}], indirect=True)
+def test_renders_in_safari(page):
+    """TC 135545 — Playwright WebKit (Safari engine), anonymous."""
+    _engine_case(page, 135545)
+
+
+@allure.label("pbi", PBI)
+@allure.title("Strategic Direction renders and navigates in Firefox (desktop)")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135546
+@pytest.mark.parametrize("page", [{"auth": False, "engine": "firefox"}], indirect=True)
+def test_renders_in_firefox(page):
+    """TC 135546 — Playwright Firefox, anonymous."""
+    _engine_case(page, 135546)
+
+
+@allure.label("pbi", PBI)
+@allure.title("Swipe left on a touch device advances to the next pillar")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135547
+def test_touch_swipe_advances(browser):
+    """TC 135547 — mobile touch emulation (390x844, hasTouch, isMobile),
+    anonymous. A real touch swipe right-to-left is dispatched through CDP
+    Input.dispatchTouchEvent on the visible card."""
+    ctx = browser.new_context(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True)
+    try:
+        pg = ctx.new_page()
+        sd = HomeStrategicDirectionPage(pg)
+        sd.open_home()
+        sd.scroll_to_section()
+        before = sd.active_card_title_text()
+        box = pg.locator(sd.STAGE).bounding_box()
+        y = box["y"] + box["height"] / 2
+        x0, x1 = box["x"] + box["width"] * 0.85, box["x"] + box["width"] * 0.15
+        cdp = ctx.new_cdp_session(pg)
+        cdp.send("Input.dispatchTouchEvent", {"type": "touchStart", "touchPoints": [{"x": x0, "y": y}]})
+        for i in range(1, 9):
+            cdp.send("Input.dispatchTouchEvent", {"type": "touchMove", "touchPoints": [{"x": x0 + (x1 - x0) * i / 8, "y": y}]})
+        cdp.send("Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []})
+        try:
+            pg.wait_for_function(
+                "(old) => { const t = document.querySelector('.qc-sd-card.is-active .qc-sd-card-title'); return t && t.textContent !== old; }",
+                arg=before, timeout=5000)
+        except Exception:  # noqa: BLE001 — asserted below
+            pass
+        after = sd.active_card_title_text()
+        pg.screenshot(path="reports/manual-exec-129381-135547.png")
+        assert (before, after) == ("Vision", "Mission"), f"swipe left: {before!r} -> {after!r}"
+    finally:
+        ctx.close()
+
+
+@allure.label("pbi", PBI)
+@allure.title("Arabic (RTL): the visually-forward arrow advances to the next pillar")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.bilingual
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135629
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_rtl_arrow_direction(page):
+    """TC 135629 — /ar/home, anonymous. In RTL the forward arrow sits on the
+    LEFT; clicking it must move Vision (الرؤية) to Mission (الرسالة)."""
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home_arabic()
+    sd.scroll_to_section()
+    assert sd.active_card_title_text() == AR_VISION_TITLE
+    next_x, prev_x = sd.arrow_x_position("next"), sd.arrow_x_position("prev")
+    left_arrow = sd.ARROW_NEXT if next_x < prev_x else sd.ARROW_PREV
+    allure.attach(f"next x={next_x}, prev x={prev_x}; left arrow={left_arrow}", "arrow positions", allure.attachment_type.TEXT)
+    assert next_x < prev_x, f"forward arrow is not on the left in RTL (next x={next_x}, prev x={prev_x})"
+    sd._click_arrow_and_wait_for_change(left_arrow)
+    assert sd.active_card_title_text() == "الرسالة", f"left (forward) arrow went to {sd.active_card_title_text()!r}"
+
+
+@allure.label("pbi", PBI)
+@allure.title("Right arrow on the last card loops or is disabled — no broken state")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135631
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_right_arrow_on_last_card(page):
+    """TC 135631 — anonymous."""
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home()
+    sd.click_next()
+    sd.click_next()
+    assert sd.active_card_title_text() == "Objectives"
+    disabled = page.locator(sd.ARROW_NEXT).is_disabled()
+    if not disabled:
+        sd.click_next()
+    title = sd.active_card_title_text()
+    assert title.strip(), "blank card after the last-card right arrow"
+    assert disabled or title == "Vision", f"right arrow on the last card went to {title!r}"
+
+
+@allure.label("pbi", PBI)
+@allure.title("Left arrow on the first card loops or is disabled — no broken state")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135632
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_left_arrow_on_first_card(page):
+    """TC 135632 — anonymous."""
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home()
+    assert sd.active_card_title_text() == "Vision"
+    disabled = page.locator(sd.ARROW_PREV).is_disabled()
+    if not disabled:
+        sd.click_prev()
+    title = sd.active_card_title_text()
+    assert title.strip(), "blank card after the first-card left arrow"
+    assert disabled or title == "Objectives", f"left arrow on the first card went to {title!r}"

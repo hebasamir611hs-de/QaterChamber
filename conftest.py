@@ -6,6 +6,8 @@ implements. Do not hand-edit the failure-hook wiring without re-running the
 scaffold's failure-evidence proof step.
 """
 
+import os
+
 import pytest
 from config.settings import settings
 
@@ -26,6 +28,19 @@ def pytest_addoption(parser):
 
 def pytest_sessionstart(session):
     config = session.config
+
+    # ── Upload-test binary fixtures are GENERATED, not committed. Materialise
+    #    any that are missing or the wrong size, at the same paths the tests
+    #    already reference, so no test needs to change. Runs on workers too:
+    #    the write is idempotent and size-checked, and a worker that starts
+    #    before the controller finishes must not find the tree empty.
+    #    See tools/fixture_factory.py.
+    try:
+        from tools.fixture_factory import ensure_fixtures
+        ensure_fixtures()
+    except Exception as exc:  # never block a run on fixture generation
+        print(f"[fixtures] generation skipped: {exc}")
+
     if hasattr(config, "workerinput"):  # xdist worker — controller already cleaned
         return
     if config.getoption("--no-clean-evidence"):
@@ -138,7 +153,9 @@ def page(request, browser, alt_engine_browser, tmp_path):
         use_auth_state = True
         engine = "chromium"
     active_browser = browser if engine == "chromium" else alt_engine_browser(engine)
-    video_dir = str(tmp_path / "videos")
+    # Video is opt-in (QC_VIDEO=1), like tracing in core/web/browser.py — user
+    # decision 2026-10-08 after the per-test teardown cost was measured at 7–11 min.
+    video_dir = str(tmp_path / "videos") if os.environ.get("QC_VIDEO") == "1" else None
     context = new_context(
         active_browser,
         viewport=viewport,
@@ -165,7 +182,11 @@ def page(request, browser, alt_engine_browser, tmp_path):
     # others down with it.
     video_path = None
     try:
-        video_path = pg.video.path() if pg.video else None
+        # Only touch `pg.video` when recording was requested: with video OFF
+        # (the default since 2026-10-08) reading the property blocked forever
+        # on this host (found 2026-10-12, PBI 129394 run) -- every test then
+        # hung in teardown until pytest-timeout killed the whole process.
+        video_path = pg.video.path() if video_dir and pg.video else None
     except Exception:  # noqa: BLE001 — evidence capture must never mask the real failure
         pass
 

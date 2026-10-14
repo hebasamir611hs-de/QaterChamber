@@ -756,7 +756,7 @@ _PAGE_SINGLETON_SKIP_REASON = (
     "The field under test lives on the real, singleton 'Export Report "
     "Page' record (QCDEMO-131313-PAGE-MAIN) — writing to it risks leaving "
     "live production hero/archive content in a test/garbage state, and "
-    "this Approved singleton must first be Unpublished (taking the real "
+    "this Published singleton must first be Unpublished (taking the real "
     "page offline) before any edit is possible. Not authorized without "
     "explicit ID-based confirmation per this project's destructive-ops rule."
 )

@@ -518,6 +518,21 @@ class ChairmanMessagePage(BasePage):
             for i in range(links.count())
         ]
 
+    def content_anchors(self) -> list:
+        """{text, href} of EVERY anchor in the page's own content area
+        (`.qc-cm-content`: message body, name card, signature and any
+        CMS-configured hyperlink) -- added 2026-10-13 for TC 134829/134834
+        ("no empty or broken link label", "no anchor pointing to an empty or
+        malformed destination").
+
+        DISPLAYED anchors only (`:visible`): with an empty Hyperlink Title the
+        page keeps its CTA markup but hides the wrapper (`div.qc-cm-cta[hidden]`
+        around `<a href="#">` with an empty label -- read live 2026-10-13,
+        logged out, EN), so a raw DOM read reported a link no visitor sees."""
+        return self.page.locator(f"{self.CONTENT} a:visible").evaluate_all(
+            "els => els.map(e => ({text: (e.innerText || '').trim(), href: e.getAttribute('href')}))"
+        )
+
     # ── Signature block (TC 134758, 134765) ─────────────────────────────
     def signature_box(self):
         return self._box(self.SIGNATURE)

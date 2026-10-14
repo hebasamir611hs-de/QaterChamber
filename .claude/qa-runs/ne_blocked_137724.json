@@ -1,0 +1,3597 @@
+{
+ "140375": {
+  "name": "130716 Sectoral",
+  "rows": [
+   {
+    "tc": 146843,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the page and accordions work in Safari desktop"
+   },
+   {
+    "tc": 146850,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a Site Content Editor can save, preview, publish and unpublish the page content"
+   },
+   {
+    "tc": 146851,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a Site Content Author can view and update assigned page content and save it as draft"
+   },
+   {
+    "tc": 146853,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a Site Content Author cannot publish through a direct call to the publish endpoint"
+   },
+   {
+    "tc": 146854,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a Public Visitor can read the page, expand entries, search and follow CTA links without logging in"
+   },
+   {
+    "tc": 146857,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a visitor can navigate from the main menu to the page and review it end to end"
+   },
+   {
+    "tc": 146858,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the Committee Joining Request card navigates to the Committee Joining Request page"
+   },
+   {
+    "tc": 146859,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the Business Council Joining Request card navigates to the Business Council Joining Request page"
+   },
+   {
+    "tc": 146860,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the Suggestions and Complaints card navigates to the Suggestions and Complaints page"
+   },
+   {
+    "tc": 146887,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Breadcrumb Label cannot be edited in the page form"
+   },
+   {
+    "tc": 146891,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Hero Eyebrow accepts exactly 60 characters and renders them in full"
+   },
+   {
+    "tc": 146900,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Hero Subtitle accepts exactly 250 characters and renders them in full"
+   },
+   {
+    "tc": 146910,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Sector Section Eyebrow accepts exactly 60 characters and renders them in full"
+   },
+   {
+    "tc": 146914,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Sector Section Heading accepts exactly 150 characters and renders them in full"
+   },
+   {
+    "tc": 146918,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Sector Section Body accepts exactly 500 characters and renders them in full"
+   },
+   {
+    "tc": 146919,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that script markup entered in the Sector Section Body is sanitised on the public page"
+   },
+   {
+    "tc": 146923,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Head Card Eyebrow accepts exactly 40 characters and renders them in full"
+   },
+   {
+    "tc": 146927,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Head Card Title accepts exactly 100 characters and renders them in full"
+   },
+   {
+    "tc": 146931,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Head Card Description accepts exactly 200 characters and renders them in full"
+   },
+   {
+    "tc": 146939,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Leader Name accepts exactly 150 characters and renders it in full"
+   },
+   {
+    "tc": 146943,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Committee/Sector Name accepts exactly 150 characters and renders it in full"
+   },
+   {
+    "tc": 146955,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Directory Section Eyebrow accepts exactly 60 characters and renders them in full"
+   },
+   {
+    "tc": 146959,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Directory Section Heading accepts exactly 150 characters and renders them in full"
+   },
+   {
+    "tc": 146963,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Directory Section Body accepts exactly 250 characters and renders them in full"
+   },
+   {
+    "tc": 146967,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Search Field Placeholder accepts exactly 60 characters and renders as much as fits without breaking the input"
+   },
+   {
+    "tc": 146975,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Committee Name accepts exactly 150 characters and renders it in full"
+   },
+   {
+    "tc": 146979,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Committee Short Description accepts exactly 150 characters and renders it in full"
+   },
+   {
+    "tc": 146985,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Mandate Panel Eyebrow accepts exactly 60 characters and renders them in full"
+   },
+   {
+    "tc": 146989,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the Mandate Panel Heading accepts exactly 150 characters and renders them in full"
+   },
+   {
+    "tc": 146993,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that a Mandate Bullet Item accepts exactly 500 characters and renders it in full"
+   },
+   {
+    "tc": 146997,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the CTA Panel Eyebrow accepts exactly 60 characters and renders them in full"
+   },
+   {
+    "tc": 147001,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the CTA Panel Heading accepts exactly 150 characters and renders them in full"
+   },
+   {
+    "tc": 147005,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that the CTA Panel Body accepts exactly 250 characters and renders them in full"
+   },
+   {
+    "tc": 147008,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a CTA card accepts an icon from the allowed icon set and shows it on the public card"
+   },
+   {
+    "tc": 147010,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that an icon outside the allowed set is rejected for a CTA card"
+   },
+   {
+    "tc": 147014,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that a CTA Card Title accepts exactly 100 characters and renders it in full"
+   },
+   {
+    "tc": 147018,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that a CTA Card Description accepts exactly 150 characters and renders it in full"
+   },
+   {
+    "tc": 147023,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a Target URL that does not resolve to a published page is rejected"
+   },
+   {
+    "tc": 147025,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a CTA card with Display Order 250 (between 200 and 300) is placed third in the public panel"
+   },
+   {
+    "tc": 147033,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the breadcrumb Home link navigates to the site home page"
+   },
+   {
+    "tc": 147034,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that clicking the Head of Sectoral committees card expands it to show the leader grid"
+   },
+   {
+    "tc": 147035,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that clicking the close control collapses the Head of Sectoral committees card again (also covers the collapsed default state)"
+   },
+   {
+    "tc": 147036,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that clicking a committee row expands it to show the mandate panel"
+   },
+   {
+    "tc": 147037,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that clicking an expanded committee row again collapses it (also covers the collapsed default state)"
+   },
+   {
+    "tc": 147038,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that typing a committee name in the search field filters the list to the matching committee"
+   },
+   {
+    "tc": 147039,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that clearing the search field restores all 12 committees (also covers the idle search state)"
+   },
+   {
+    "tc": 147040,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the expanded Head card grid shows 12 leader cards in the CMS display order"
+   },
+   {
+    "tc": 147041,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an expanded committee shows that committee's own mandate content"
+   },
+   {
+    "tc": 147042,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that searching by a sector keyword returns the committees whose sector text matches"
+   },
+   {
+    "tc": 147043,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a keyword matching no committee shows the empty/no-results state"
+   },
+   {
+    "tc": 147045,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that two committee rows can be expanded at the same time"
+   },
+   {
+    "tc": 147046,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the search filter applies regardless of whether a committee row is currently expanded"
+   },
+   {
+    "tc": 147047,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a CTA card whose target page is later unpublished still renders and its click ends on a not-found page"
+   },
+   {
+    "tc": 147055,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that a rapid double-click on the Head card toggle leaves it in a consistent collapsed state"
+   },
+   {
+    "tc": 147056,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that a whitespace-only search keyword is treated as empty and lists all committees"
+   },
+   {
+    "tc": 147057,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that markup characters typed in the search field are treated as plain text"
+   }
+  ]
+ },
+ "140376": {
+  "name": "130717 Join",
+  "rows": [
+   {
+    "tc": 143417,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the bilingual acknowledgement success screen renders correctly in English after a successful submission"
+   },
+   {
+    "tc": 143418,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the bilingual acknowledgement success screen renders correctly in Arabic after a successful submission"
+   },
+   {
+    "tc": 143432,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 1,
+    "title": "Verify that a Visitor can successfully submit a Committee Joining Request with all mandatory fields valid and CAPTCHA passed"
+   },
+   {
+    "tc": 143433,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that submission is blocked when any mandatory field is missing"
+   },
+   {
+    "tc": 143435,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a Draft/unpublished Committee Joining Request page is not visible to public visitors"
+   },
+   {
+    "tc": 143436,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a Site Content Editor can edit and publish the Committee Joining Request page content end-to-end"
+   },
+   {
+    "tc": 143441,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that selecting a valid Sector/Committee value is accepted"
+   },
+   {
+    "tc": 143442,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving the Sector/Committee field unselected blocks submission"
+   },
+   {
+    "tc": 143445,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a valid Applicant Name is accepted"
+   },
+   {
+    "tc": 143446,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Applicant Name empty blocks submission"
+   },
+   {
+    "tc": 143447,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Applicant Name accepts exactly 200 characters and rejects 201 characters"
+   },
+   {
+    "tc": 143448,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Applicant Name is rejected as if empty"
+   },
+   {
+    "tc": 143449,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a valid Company name is accepted"
+   },
+   {
+    "tc": 143450,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Company name empty blocks submission"
+   },
+   {
+    "tc": 143451,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Company name accepts exactly 200 characters and rejects 201 characters"
+   },
+   {
+    "tc": 143452,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Company name is rejected as if empty"
+   },
+   {
+    "tc": 143453,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a valid CR Number is accepted"
+   },
+   {
+    "tc": 143454,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving CR Number empty blocks submission"
+   },
+   {
+    "tc": 143455,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that CR Number accepts exactly 20 characters and rejects 21 characters (per the stated Validation-column limit)"
+   },
+   {
+    "tc": 143456,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only CR Number is rejected as if empty"
+   },
+   {
+    "tc": 143457,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that selecting a valid Established Since value is accepted"
+   },
+   {
+    "tc": 143458,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Established Since unselected blocks submission"
+   },
+   {
+    "tc": 143459,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a valid Owner Name is accepted"
+   },
+   {
+    "tc": 143460,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Owner Name empty blocks submission"
+   },
+   {
+    "tc": 143461,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Owner Name accepts exactly 200 characters and rejects 201 characters"
+   },
+   {
+    "tc": 143462,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Owner Name is rejected as if empty"
+   },
+   {
+    "tc": 143463,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a valid General Manager / CEO name is accepted"
+   },
+   {
+    "tc": 143464,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving General Manager / CEO empty blocks submission"
+   },
+   {
+    "tc": 143465,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that General Manager / CEO accepts exactly 200 characters and rejects 201 characters"
+   },
+   {
+    "tc": 143466,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only General Manager / CEO value is rejected as if empty"
+   },
+   {
+    "tc": 143467,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a valid optional Activity value is accepted and the form still submits when Activity is left empty"
+   },
+   {
+    "tc": 143468,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Activity accepts exactly 300 characters and rejects 301 characters"
+   },
+   {
+    "tc": 143469,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a valid Email address is accepted"
+   },
+   {
+    "tc": 143470,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Email empty blocks submission"
+   },
+   {
+    "tc": 143472,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Email accepts exactly 150 characters and rejects 151 characters"
+   },
+   {
+    "tc": 143473,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Email value is rejected as if empty"
+   },
+   {
+    "tc": 143474,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a valid Mobile Number with the +974 prefix is accepted"
+   },
+   {
+    "tc": 143475,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Mobile Number empty blocks submission"
+   },
+   {
+    "tc": 143477,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Mobile Number accepts up to 20 characters and rejects 21 characters"
+   },
+   {
+    "tc": 143478,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Mobile Number is rejected as if empty"
+   },
+   {
+    "tc": 143479,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a valid optional Telephone/Direct Line value is accepted"
+   },
+   {
+    "tc": 143481,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a valid optional Fax value is accepted"
+   },
+   {
+    "tc": 143483,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a valid optional Website URL is accepted"
+   },
+   {
+    "tc": 143485,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that selecting a valid Type of Ownership value is accepted"
+   },
+   {
+    "tc": 143486,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Type of Ownership unselected blocks submission"
+   },
+   {
+    "tc": 143487,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that selecting a valid Size of Company value is accepted"
+   },
+   {
+    "tc": 143489,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a valid positive Number of Employees value is accepted via the increment control"
+   },
+   {
+    "tc": 143490,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a zero/empty Number of Employees value blocks submission"
+   },
+   {
+    "tc": 143492,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 1,
+    "title": "Verify that passing CAPTCHA allows the form to be submitted"
+   },
+   {
+    "tc": 143495,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a Site Content Editor can Save as Draft, Preview, then Publish the page in sequence"
+   },
+   {
+    "tc": 143501,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Arabic equivalent of the invalid-email validation message displays when the UI language is Arabic"
+   },
+   {
+    "tc": 143506,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 2,
+    "title": "Verify that a submission is blocked if the CAPTCHA expires/times out mid-form before Submit is clicked"
+   },
+   {
+    "tc": 143507,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the system handles two submissions with the same Company name and CR Number submitted in quick succession"
+   },
+   {
+    "tc": 143508,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the system handles Number of Employees pushed to a very large boundary value with no explicit maximum stated"
+   }
+  ]
+ },
+ "140377": {
+  "name": "130718 QAFL",
+  "rows": [
+   {
+    "tc": 146498,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the breadcrumb and hero banner render per Figma in English desktop light"
+   },
+   {
+    "tc": 146499,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the breadcrumb and hero banner render mirrored per Figma in Arabic desktop light"
+   },
+   {
+    "tc": 146500,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the association overview section renders per Figma in English"
+   },
+   {
+    "tc": 146501,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the association overview section renders RTL in Arabic"
+   },
+   {
+    "tc": 146502,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Required template card renders per Figma in English"
+   },
+   {
+    "tc": 146503,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Required template card renders RTL in Arabic"
+   },
+   {
+    "tc": 146504,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the 5-step progress indicator renders per Figma in English with step 01 active"
+   },
+   {
+    "tc": 146505,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the progress indicator renders RTL in Arabic with 01 on the right"
+   },
+   {
+    "tc": 146506,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 1 Company Identity renders per Figma in English"
+   },
+   {
+    "tc": 146507,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 1 Company Identity renders RTL per Figma in Arabic"
+   },
+   {
+    "tc": 146508,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 2 Senior Executive renders its 7 fields with required markers in English"
+   },
+   {
+    "tc": 146509,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 2 Senior Executive renders RTL in Arabic"
+   },
+   {
+    "tc": 146510,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 3 Responsible Manager renders the same 7-field set in English"
+   },
+   {
+    "tc": 146511,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 3 Responsible Manager renders RTL in Arabic"
+   },
+   {
+    "tc": 146512,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 4 Company Location renders 5 fields with Website marked optional in English"
+   },
+   {
+    "tc": 146513,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 4 Company Location renders RTL in Arabic"
+   },
+   {
+    "tc": 146514,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 5 Supporting Documents renders 3 uploads, CAPTCHA and Submit in English"
+   },
+   {
+    "tc": 146515,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 5 Supporting Documents renders RTL in Arabic"
+   },
+   {
+    "tc": 146516,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the English on-screen acknowledgement is shown verbatim after a valid submission"
+   },
+   {
+    "tc": 146517,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the Arabic on-screen acknowledgement is shown verbatim after a valid submission"
+   },
+   {
+    "tc": 146518,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that an input shows the focus state when focused by click and by Tab"
+   },
+   {
+    "tc": 146519,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that an invalid input shows the inline error state under the field"
+   },
+   {
+    "tc": 146520,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that LTR values (email, phone, URL) stay readable inside Arabic RTL fields"
+   },
+   {
+    "tc": 146521,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the registration page and Step 1 to Step 2 flow work in Chrome (latest)"
+   },
+   {
+    "tc": 146522,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the registration page and Step 1 to Step 2 flow work in Firefox (latest)"
+   },
+   {
+    "tc": 146523,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the registration page and Step 1 to Step 2 flow work in Safari (latest)"
+   },
+   {
+    "tc": 146524,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the registration page and Step 1 to Step 2 flow work in Edge (latest)"
+   },
+   {
+    "tc": 146525,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the page lays out per Figma at the 1920 px desktop viewport"
+   },
+   {
+    "tc": 146526,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the page reflows without overflow at the 768 px tablet viewport"
+   },
+   {
+    "tc": 146527,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the page lays out per Figma at the 390 px mobile viewport"
+   },
+   {
+    "tc": 146528,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the page renders with light theme tokens per Figma"
+   },
+   {
+    "tc": 146529,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the page renders with dark theme tokens per Figma"
+   },
+   {
+    "tc": 146530,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the page renders with the Normal contrast baseline"
+   },
+   {
+    "tc": 146531,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 3,
+    "title": "Verify that the page renders legibly with High contrast active"
+   },
+   {
+    "tc": 146532,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the form stays usable at 200% browser zoom"
+   },
+   {
+    "tc": 146533,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the whole form can be completed using the keyboard only"
+   },
+   {
+    "tc": 146534,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a Public Visitor can view the page, download the template and submit the form without logging in"
+   },
+   {
+    "tc": 146539,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a Form Manager is denied access to the page content editor"
+   },
+   {
+    "tc": 146543,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the visitor reaches the registration page via Main Menu > Councils, Committees & Partnerships"
+   },
+   {
+    "tc": 146544,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 1,
+    "title": "Verify that a complete MOCI application is stored as Pending, acknowledged, and both emails are sent"
+   },
+   {
+    "tc": 146545,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 1,
+    "title": "Verify that a complete QFC application is stored as Pending with the QFC registration authority in the emails"
+   },
+   {
+    "tc": 146546,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 1,
+    "title": "Verify that a complete QFZ application is stored as Pending with the QFZ registration authority in the emails"
+   },
+   {
+    "tc": 146547,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 1,
+    "title": "Verify that a complete Other-authority application is stored as Pending with the typed authority name in the emails"
+   },
+   {
+    "tc": 146550,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Manual",
+    "pri": 2,
+    "title": "Verify that approving a Pending submission sends the Approval email to the applicant only"
+   },
+   {
+    "tc": 146551,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Manual",
+    "pri": 2,
+    "title": "Verify that rejecting a submission with a reason stores the reason, keeps the record and sends no email"
+   },
+   {
+    "tc": 146552,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a Draft page is not visible to an anonymous visitor"
+   },
+   {
+    "tc": 146554,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a Site Content Editor can Save Draft, Preview and Publish page content that then appears on the public page in EN and AR"
+   },
+   {
+    "tc": 146560,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 1,
+    "title": "Verify that an infected upload is blocked by the malware scan and not stored"
+   },
+   {
+    "tc": 146562,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 2,
+    "title": "Verify that an Arabic submission sends the Arabic Submission Confirmation email"
+   },
+   {
+    "tc": 146563,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 2,
+    "title": "Verify that an Arabic submission sends the Arabic New Request Notification email to the admin"
+   },
+   {
+    "tc": 146564,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Manual",
+    "pri": 2,
+    "title": "Verify that approving an Arabic submission sends the Arabic Approval email"
+   },
+   {
+    "tc": 146566,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Company English Name accepts the valid value 'Gulf Freight Logistics WLL'"
+   },
+   {
+    "tc": 146567,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Company English Name empty blocks progress with an inline required error"
+   },
+   {
+    "tc": 146568,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Company English Name enforces the 200-character limit (200 accepted, 201 rejected)"
+   },
+   {
+    "tc": 146569,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Company English Name is rejected as empty"
+   },
+   {
+    "tc": 146570,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Company Arabic Name accepts the valid value 'الخليج للشحن واللوجستيات ذ.م.م'"
+   },
+   {
+    "tc": 146571,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Company Arabic Name empty blocks progress with an inline required error"
+   },
+   {
+    "tc": 146572,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Company Arabic Name enforces the 200-character limit (200 accepted, 201 rejected)"
+   },
+   {
+    "tc": 146573,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Company Arabic Name is rejected as empty"
+   },
+   {
+    "tc": 146575,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Company Registered Under accepts the selection 'Qatar Ministry of Commerce and Industry (MOCI)'"
+   },
+   {
+    "tc": 146576,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Company Registered Under unselected blocks progress"
+   },
+   {
+    "tc": 146577,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Company Size accepts the selection 'Medium (51-500)'"
+   },
+   {
+    "tc": 146578,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Company Size unselected blocks progress"
+   },
+   {
+    "tc": 146579,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Company Size (Other) accepts the valid number 750"
+   },
+   {
+    "tc": 146580,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Company Size (Other) blocks progress"
+   },
+   {
+    "tc": 146581,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that non-numeric 'abc' is rejected in Company Size (Other)"
+   },
+   {
+    "tc": 146582,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Company Size (Other) enforces the 10-character limit (10 accepted, 11 rejected)"
+   },
+   {
+    "tc": 146583,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Company Size (Other) is rejected as empty"
+   },
+   {
+    "tc": 146584,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Company Type accepts the selection 'LLC'"
+   },
+   {
+    "tc": 146585,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Company Type unselected blocks progress"
+   },
+   {
+    "tc": 146586,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Company Type (Other) accepts the valid value 'Cooperative Society'"
+   },
+   {
+    "tc": 146587,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Company Type (Other) blocks progress"
+   },
+   {
+    "tc": 146588,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Company Type (Other) enforces the 100-character limit (100 accepted, 101 rejected)"
+   },
+   {
+    "tc": 146589,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Company Type (Other) is rejected as empty"
+   },
+   {
+    "tc": 146590,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Market Presence accepts 'Local' and reveals no conditional field"
+   },
+   {
+    "tc": 146591,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Market Presence unselected blocks progress"
+   },
+   {
+    "tc": 146592,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Regional Markets accepts 'Kuwait, Saudi Arabia, Bahrain'"
+   },
+   {
+    "tc": 146593,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Regional Markets blocks progress"
+   },
+   {
+    "tc": 146594,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Regional Markets is rejected as empty"
+   },
+   {
+    "tc": 146595,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that International Markets accepts 'Germany, India, China'"
+   },
+   {
+    "tc": 146596,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty International Markets blocks progress"
+   },
+   {
+    "tc": 146597,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only International Markets is rejected as empty"
+   },
+   {
+    "tc": 146598,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Market Presence (Other) accepts 'Africa and Central Asia'"
+   },
+   {
+    "tc": 146599,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Market Presence (Other) blocks progress"
+   },
+   {
+    "tc": 146600,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Market Presence (Other) enforces the 150-character limit (150 accepted, 151 rejected)"
+   },
+   {
+    "tc": 146601,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Market Presence (Other) is rejected as empty"
+   },
+   {
+    "tc": 146602,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that CR Number accepts the valid value 'CR-1234567'"
+   },
+   {
+    "tc": 146603,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty CR Number blocks progress"
+   },
+   {
+    "tc": 146604,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that CR Number enforces the 50-character limit (50 accepted, 51 rejected)"
+   },
+   {
+    "tc": 146605,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only CR Number is rejected as empty"
+   },
+   {
+    "tc": 146606,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Upload CR Copy accepts 'cr-copy.pdf' (1.2 MB)"
+   },
+   {
+    "tc": 146607,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a missing CR Copy blocks progress"
+   },
+   {
+    "tc": 146608,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Upload CR Copy rejects an unsupported type 'cr-copy.png'"
+   },
+   {
+    "tc": 146609,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Upload CR Copy enforces the 5 MB limit (4.99 MB accepted, 5.01 MB rejected)"
+   },
+   {
+    "tc": 146610,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Qatar Chamber Membership Number accepts 'QCM-7654321'"
+   },
+   {
+    "tc": 146611,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Qatar Chamber Membership Number blocks progress"
+   },
+   {
+    "tc": 146612,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Qatar Chamber Membership Number enforces the 50-character limit (50 accepted, 51 rejected)"
+   },
+   {
+    "tc": 146613,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Qatar Chamber Membership Number is rejected as empty"
+   },
+   {
+    "tc": 146614,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Upload Qatar Chamber Membership Copy accepts 'qcm-copy.pdf' (1 MB)"
+   },
+   {
+    "tc": 146615,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a missing Qatar Chamber Membership Copy blocks progress"
+   },
+   {
+    "tc": 146616,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Upload Qatar Chamber Membership Copy rejects an unsupported type 'qcm-copy.png'"
+   },
+   {
+    "tc": 146617,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Upload Qatar Chamber Membership Copy enforces the 5 MB limit (4.99 MB accepted, 5.01 MB rejected)"
+   },
+   {
+    "tc": 146618,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Verified on Qatar Commercial Directory? accepts the selection 'Yes'"
+   },
+   {
+    "tc": 146619,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that leaving Verified on Qatar Commercial Directory? unselected blocks progress"
+   },
+   {
+    "tc": 146620,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that QFC Number accepts 'QFC-00123'"
+   },
+   {
+    "tc": 146621,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty QFC Number blocks progress"
+   },
+   {
+    "tc": 146622,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that QFC Number enforces the 50-character limit (50 accepted, 51 rejected)"
+   },
+   {
+    "tc": 146623,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only QFC Number is rejected as empty"
+   },
+   {
+    "tc": 146624,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that QFC Membership Copy accepts 'qfc-membership.pdf' (1 MB)"
+   },
+   {
+    "tc": 146625,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a missing QFC Membership Copy blocks progress"
+   },
+   {
+    "tc": 146626,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that QFC Membership Copy rejects an unsupported type 'qfc-membership.png'"
+   },
+   {
+    "tc": 146627,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that QFC Membership Copy enforces the 5 MB limit (4.99 MB accepted, 5.01 MB rejected)"
+   },
+   {
+    "tc": 146628,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that QFZ Number accepts 'QFZ-00456'"
+   },
+   {
+    "tc": 146629,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty QFZ Number blocks progress"
+   },
+   {
+    "tc": 146630,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that QFZ Number enforces the 50-character limit (50 accepted, 51 rejected)"
+   },
+   {
+    "tc": 146631,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only QFZ Number is rejected as empty"
+   },
+   {
+    "tc": 146632,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that QFZ Membership Copy accepts 'qfz-membership.pdf' (1 MB)"
+   },
+   {
+    "tc": 146633,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a missing QFZ Membership Copy blocks progress"
+   },
+   {
+    "tc": 146634,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that QFZ Membership Copy rejects an unsupported type 'qfz-membership.png'"
+   },
+   {
+    "tc": 146635,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that QFZ Membership Copy enforces the 5 MB limit (4.99 MB accepted, 5.01 MB rejected)"
+   },
+   {
+    "tc": 146636,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Company Registered Under (Other) accepts 'Dubai Multi Commodities Centre'"
+   },
+   {
+    "tc": 146637,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Company Registered Under (Other) blocks progress"
+   },
+   {
+    "tc": 146638,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Company Registered Under (Other) enforces the 100-character limit (100 accepted, 101 rejected)"
+   },
+   {
+    "tc": 146639,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Company Registered Under (Other) is rejected as empty"
+   },
+   {
+    "tc": 146640,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the Other Membership Copy accepts 'other-authority.pdf' (1 MB)"
+   },
+   {
+    "tc": 146641,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a missing Other Membership Copy blocks progress"
+   },
+   {
+    "tc": 146642,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Other Membership Copy rejects an unsupported type 'other-authority.png'"
+   },
+   {
+    "tc": 146643,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Other Membership Copy enforces the 5 MB limit (4.99 MB accepted, 5.01 MB rejected)"
+   },
+   {
+    "tc": 146644,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that selecting MOCI reveals exactly the 5 MOCI fields, each required"
+   },
+   {
+    "tc": 146645,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that selecting QFC reveals exactly the 2 QFC fields, each required"
+   },
+   {
+    "tc": 146646,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that selecting QFZ reveals exactly the 2 QFZ fields, each required"
+   },
+   {
+    "tc": 146647,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that selecting Other reveals exactly the 2 Other fields, each required"
+   },
+   {
+    "tc": 146648,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Company Size = Other reveals the required count field"
+   },
+   {
+    "tc": 146649,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Company Type = Other reveals the required text field"
+   },
+   {
+    "tc": 146650,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Market Presence = Regional reveals the required Regional Markets text area"
+   },
+   {
+    "tc": 146651,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Market Presence = International reveals the required International Markets text area"
+   },
+   {
+    "tc": 146652,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Market Presence = Other reveals the required Market Presence (Other) field"
+   },
+   {
+    "tc": 146653,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that changing Company Registered Under clears and un-requires the previous selection's fields"
+   },
+   {
+    "tc": 146654,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 CEO / Chairman / Manager Name accepts 'Khalid Al-Marri'"
+   },
+   {
+    "tc": 146655,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 2 CEO / Chairman / Manager Name blocks progress"
+   },
+   {
+    "tc": 146656,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 2 CEO / Chairman / Manager Name enforces the 200-character limit (200 accepted, 201 rejected)"
+   },
+   {
+    "tc": 146657,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 2 CEO / Chairman / Manager Name is rejected as empty"
+   },
+   {
+    "tc": 146658,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 Designation accepts 'Chief Executive Officer'"
+   },
+   {
+    "tc": 146659,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 2 Designation blocks progress"
+   },
+   {
+    "tc": 146660,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 2 Designation enforces the 150-character limit (150 accepted, 151 rejected)"
+   },
+   {
+    "tc": 146661,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 2 Designation is rejected as empty"
+   },
+   {
+    "tc": 146662,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 Email accepts 'khalid.almarri@gulffreight.qa'"
+   },
+   {
+    "tc": 146663,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 2 Email blocks progress"
+   },
+   {
+    "tc": 146664,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 Email rejects the invalid format 'khalid.almarri@gulffreight'"
+   },
+   {
+    "tc": 146665,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 2 Email is rejected as empty"
+   },
+   {
+    "tc": 146666,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 Confirm Email accepts a value matching Email"
+   },
+   {
+    "tc": 146667,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 2 Confirm Email blocks progress"
+   },
+   {
+    "tc": 146668,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 Confirm Email shows a mismatch error for 'khalid.almarri@gulffreight.com'"
+   },
+   {
+    "tc": 146669,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 2 Confirm Email is rejected"
+   },
+   {
+    "tc": 146670,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 Phone accepts '+974 4412 3456'"
+   },
+   {
+    "tc": 146671,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 2 Phone blocks progress"
+   },
+   {
+    "tc": 146672,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 Phone rejects '+971 4 412 3456' (wrong prefix) and '+974 12ab'"
+   },
+   {
+    "tc": 146673,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 2 Phone is rejected as empty"
+   },
+   {
+    "tc": 146674,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 Extension Number accepts '204'"
+   },
+   {
+    "tc": 146675,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 2 Extension Number blocks progress"
+   },
+   {
+    "tc": 146676,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 2 Extension Number rejects non-numeric 'ab12'"
+   },
+   {
+    "tc": 146677,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 2 Extension Number is rejected as empty"
+   },
+   {
+    "tc": 146678,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 Mobile Number accepts '+974 5512 3456'"
+   },
+   {
+    "tc": 146679,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 2 Mobile Number blocks progress"
+   },
+   {
+    "tc": 146680,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 2 Mobile Number rejects '55123456' (no +974 prefix) and '+974 abcd'"
+   },
+   {
+    "tc": 146681,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 2 Mobile Number is rejected as empty"
+   },
+   {
+    "tc": 146682,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Responsible Manager Name accepts 'Noora Al-Thani'"
+   },
+   {
+    "tc": 146683,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 3 Responsible Manager Name blocks progress"
+   },
+   {
+    "tc": 146684,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 3 Responsible Manager Name enforces the 200-character limit (200 accepted, 201 rejected)"
+   },
+   {
+    "tc": 146685,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 3 Responsible Manager Name is rejected as empty"
+   },
+   {
+    "tc": 146686,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Designation accepts 'Operations Manager'"
+   },
+   {
+    "tc": 146687,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 3 Designation blocks progress"
+   },
+   {
+    "tc": 146688,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 3 Designation enforces the 150-character limit (150 accepted, 151 rejected)"
+   },
+   {
+    "tc": 146689,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 3 Designation is rejected as empty"
+   },
+   {
+    "tc": 146690,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Email accepts 'noora.althani@gulffreight.qa'"
+   },
+   {
+    "tc": 146691,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 3 Email blocks progress"
+   },
+   {
+    "tc": 146692,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Email rejects the invalid format 'noora.althani@@gulffreight.qa'"
+   },
+   {
+    "tc": 146693,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 3 Email is rejected as empty"
+   },
+   {
+    "tc": 146694,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Confirm Email accepts a value matching Email"
+   },
+   {
+    "tc": 146695,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 3 Confirm Email blocks progress"
+   },
+   {
+    "tc": 146696,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Confirm Email shows a mismatch error for 'noora.althani@gulffreight.com'"
+   },
+   {
+    "tc": 146697,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 3 Confirm Email is rejected"
+   },
+   {
+    "tc": 146698,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Phone accepts '+974 4412 3457'"
+   },
+   {
+    "tc": 146699,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 3 Phone blocks progress"
+   },
+   {
+    "tc": 146700,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Phone rejects '+971 4 412 3457' (wrong prefix) and '+974 12ab'"
+   },
+   {
+    "tc": 146701,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 3 Phone is rejected as empty"
+   },
+   {
+    "tc": 146702,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Extension Number accepts '205'"
+   },
+   {
+    "tc": 146703,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 3 Extension Number blocks progress"
+   },
+   {
+    "tc": 146704,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Step 3 Extension Number rejects non-numeric 'ab12'"
+   },
+   {
+    "tc": 146705,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 3 Extension Number is rejected as empty"
+   },
+   {
+    "tc": 146706,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Mobile Number accepts '+974 5512 3457'"
+   },
+   {
+    "tc": 146707,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Step 3 Mobile Number blocks progress"
+   },
+   {
+    "tc": 146708,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Step 3 Mobile Number rejects '55123457' (no +974 prefix) and '+974 abcd'"
+   },
+   {
+    "tc": 146709,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Step 3 Mobile Number is rejected as empty"
+   },
+   {
+    "tc": 146710,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Website accepts 'https://www.gulffreight.qa'"
+   },
+   {
+    "tc": 146711,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Website rejects the invalid URL 'www gulffreight'"
+   },
+   {
+    "tc": 146712,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that an empty Website does not block progress (optional field)"
+   },
+   {
+    "tc": 146713,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Location Name accepts 'Gulf Freight HQ'"
+   },
+   {
+    "tc": 146714,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Location Name blocks progress"
+   },
+   {
+    "tc": 146715,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Location Name enforces the 200-character limit (200 accepted, 201 rejected)"
+   },
+   {
+    "tc": 146716,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Location Name is rejected as empty"
+   },
+   {
+    "tc": 146717,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Building Number accepts '12'"
+   },
+   {
+    "tc": 146718,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Building Number blocks progress"
+   },
+   {
+    "tc": 146719,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Building Number enforces the 20-character limit (20 accepted, 21 rejected)"
+   },
+   {
+    "tc": 146720,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Building Number is rejected as empty"
+   },
+   {
+    "tc": 146721,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Zone Number accepts '55'"
+   },
+   {
+    "tc": 146722,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Zone Number blocks progress"
+   },
+   {
+    "tc": 146723,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Zone Number enforces the 20-character limit (20 accepted, 21 rejected)"
+   },
+   {
+    "tc": 146724,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Zone Number is rejected as empty"
+   },
+   {
+    "tc": 146725,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Street Number accepts '310'"
+   },
+   {
+    "tc": 146726,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an empty Street Number blocks progress"
+   },
+   {
+    "tc": 146727,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Street Number enforces the 20-character limit (20 accepted, 21 rejected)"
+   },
+   {
+    "tc": 146728,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a whitespace-only Street Number is rejected as empty"
+   },
+   {
+    "tc": 146729,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the Authorization Letter upload accepts 'auth-letter.pdf' (1 MB)"
+   },
+   {
+    "tc": 146730,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a missing Authorization Letter blocks submission"
+   },
+   {
+    "tc": 146731,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Authorization Letter upload rejects 'letter.jpg'"
+   },
+   {
+    "tc": 146732,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Authorization Letter upload enforces the 5 MB limit (4.99 MB accepted, 5.01 MB rejected)"
+   },
+   {
+    "tc": 146733,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the Qatar ID Front upload accepts 'qid-front.jpg' (500 KB)"
+   },
+   {
+    "tc": 146734,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a missing Qatar ID Front blocks submission"
+   },
+   {
+    "tc": 146735,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Qatar ID Front upload rejects 'qid-front.png'"
+   },
+   {
+    "tc": 146736,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Qatar ID Front upload enforces the 5 MB limit (4.99 MB accepted, 5.01 MB rejected)"
+   },
+   {
+    "tc": 146737,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the Qatar ID Back upload accepts 'qid-back.jpg' (500 KB)"
+   },
+   {
+    "tc": 146738,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a missing Qatar ID Back blocks submission"
+   },
+   {
+    "tc": 146739,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Qatar ID Back upload rejects 'qid-back.png'"
+   },
+   {
+    "tc": 146740,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Qatar ID Back upload enforces the 5 MB limit (4.99 MB accepted, 5.01 MB rejected)"
+   },
+   {
+    "tc": 146741,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 1,
+    "title": "Verify that a passed CAPTCHA allows the submission to proceed"
+   },
+   {
+    "tc": 146742,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 1,
+    "title": "Verify that submission is blocked when the CAPTCHA is not completed or fails"
+   },
+   {
+    "tc": 146744,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Download Authorization Letter downloads the current admin-managed template"
+   },
+   {
+    "tc": 146745,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Next advances to the following step when the current step is valid"
+   },
+   {
+    "tc": 146746,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Next is blocked and errors are shown when mandatory fields on the step are empty"
+   },
+   {
+    "tc": 146747,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Previous returns to the prior step with entered values retained"
+   },
+   {
+    "tc": 146748,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that moving Previous then Next again keeps every step's data"
+   },
+   {
+    "tc": 146749,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the progress indicator updates to the current step while navigating 1 to 5"
+   },
+   {
+    "tc": 146750,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Breadcrumb label reflects the site menu structure in EN and AR"
+   },
+   {
+    "tc": 146763,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that setting Page Active Status to Active makes the page visible on the public site"
+   },
+   {
+    "tc": 146776,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that an icon from the allowed set can be selected as Card Icon and shows on the public card"
+   },
+   {
+    "tc": 146798,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that Template File enforces the 5 MB limit (4.99 MB accepted, 5.01 MB rejected)"
+   },
+   {
+    "tc": 146806,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the form resets after 61 minutes of inactivity"
+   },
+   {
+    "tc": 146807,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the form is retained after 59 minutes of inactivity"
+   },
+   {
+    "tc": 146808,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a second submission with the same email and company name is blocked while the first is Pending"
+   },
+   {
+    "tc": 146809,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a new submission with the same email and company name is allowed after the earlier request is Approved or Rejected"
+   },
+   {
+    "tc": 146810,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that duplicate detection ignores case and surrounding spaces in the company name"
+   },
+   {
+    "tc": 146811,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the same email with a different company name is not treated as a duplicate"
+   },
+   {
+    "tc": 146812,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 2,
+    "title": "Verify that double-clicking Submit creates exactly one record and one email pair"
+   },
+   {
+    "tc": 146813,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that refreshing or using Back on the success screen does not resubmit the form"
+   },
+   {
+    "tc": 146814,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that special characters and emoji in the company name are stored and rendered escaped"
+   },
+   {
+    "tc": 146815,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a file named 'qid.jpg.exe' is rejected on the Qatar ID upload"
+   },
+   {
+    "tc": 146816,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that replacing an uploaded file before submitting stores only the latest file"
+   },
+   {
+    "tc": 146817,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that refreshing the browser mid-form never creates a partial submission"
+   },
+   {
+    "tc": 146818,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Manual",
+    "pri": 3,
+    "title": "Verify that re-approving an already Approved submission does not send a second Approval email"
+   }
+  ]
+ },
+ "140378": {
+  "name": "130719 BCMR",
+  "rows": [
+   {
+    "tc": 144497,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a Site Content Author cannot Publish the Business Council Membership Request page via a forced URL/action"
+   },
+   {
+    "tc": 144500,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a Site Content Editor can author, preview, and publish the Business Council Membership Request page content"
+   },
+   {
+    "tc": 144503,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that submission is blocked when CAPTCHA is not completed"
+   },
+   {
+    "tc": 144516,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that publishing is blocked when Hero Description AR is left empty"
+   },
+   {
+    "tc": 144521,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Section Badge EN accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144522,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Section Badge EN rejects a value exceeding 100 characters"
+   },
+   {
+    "tc": 144523,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Section Badge AR accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144524,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Section Badge AR rejects a value exceeding 100 characters"
+   },
+   {
+    "tc": 144525,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Section Title EN accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144526,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Section Title EN rejects a value exceeding 100 characters"
+   },
+   {
+    "tc": 144527,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Section Title AR accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144528,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Section Title AR rejects a value exceeding 100 characters"
+   },
+   {
+    "tc": 144529,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Overview Body EN accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144531,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Overview Body AR accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144533,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Card Icon rejects an unsupported file format"
+   },
+   {
+    "tc": 144534,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Card Icon accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144535,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Card Title EN accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144536,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Card Title EN rejects a value exceeding 100 characters"
+   },
+   {
+    "tc": 144537,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Card Title AR accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144538,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Card Title AR rejects a value exceeding 100 characters"
+   },
+   {
+    "tc": 144539,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Card Description EN accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144540,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Card Description EN rejects a value exceeding 200 characters"
+   },
+   {
+    "tc": 144541,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Card Description AR accepts an empty value (optional field)"
+   },
+   {
+    "tc": 144542,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Card Description AR rejects a value exceeding 200 characters"
+   },
+   {
+    "tc": 144572,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that submission is blocked when CAPTCHA is solved incorrectly / fails validation"
+   },
+   {
+    "tc": 144576,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that Preview shows unpublished draft content without affecting the live page"
+   },
+   {
+    "tc": 144584,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the Submission Confirmation email (EN) is sent to the applicant with correct subject and merge fields"
+   },
+   {
+    "tc": 144585,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the Submission Confirmation email (AR) is sent to the applicant with correct subject"
+   },
+   {
+    "tc": 144589,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the form handles the Country Lookup Table being empty at page load"
+   },
+   {
+    "tc": 144593,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a new submission with the same email and company name as an already-Approved prior request is still blocked as a duplicate"
+   },
+   {
+    "tc": 144599,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a submission is still stored as Pending if the Submission Confirmation email fails to send"
+   },
+   {
+    "tc": 144601,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the Rejection Reason is never exposed to the Public Visitor or included in any outbound email"
+   },
+   {
+    "tc": 144602,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the form degrades gracefully when the Country Lookup Table service goes down after the page has already loaded"
+   },
+   {
+    "tc": 144603,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that Business Council Membership Request has no public/headless API surface requiring dedicated API test coverage"
+   }
+  ]
+ },
+ "140379": {
+  "name": "130720 Partners",
+  "rows": [
+   {
+    "tc": 144353,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the empty-state messages render correctly for no offers and no offers in a category"
+   },
+   {
+    "tc": 144355,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Partners & Offers page renders and functions correctly on Firefox desktop"
+   },
+   {
+    "tc": 144356,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 3,
+    "title": "Verify that the Partners & Offers page renders and functions correctly on Safari desktop"
+   },
+   {
+    "tc": 144357,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Partners & Offers page renders and functions correctly on Microsoft Edge desktop"
+   },
+   {
+    "tc": 144359,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 3,
+    "title": "Verify that the Partners & Offers page renders and functions correctly on Safari iOS (mobile)"
+   },
+   {
+    "tc": 144407,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that an offer automatically appears on its validity start date and disappears after its validity end date"
+   },
+   {
+    "tc": 144416,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that a Partner Category's Display Order accepts a valid numeric value and reorders the dropdown"
+   },
+   {
+    "tc": 144417,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that a non-numeric Display Order value is rejected"
+   },
+   {
+    "tc": 144420,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that a Membership Tier's Display Order accepts a valid numeric value and reorders badges consistently"
+   },
+   {
+    "tc": 144421,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 4,
+    "title": "Verify that a non-numeric Membership Tier Display Order value is rejected"
+   },
+   {
+    "tc": 144619,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the 'Contract' and 'Open contract' actions are hidden on both the card and the modal when no Contract Document is configured"
+   },
+   {
+    "tc": 144623,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an offer becomes visible exactly on its Validity Start Date, not one day early"
+   },
+   {
+    "tc": 144624,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an offer remains visible through its full Validity End Date and disappears the next day"
+   },
+   {
+    "tc": 144625,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that an offer expiring while its details modal is open does not force-close the modal but disappears from the listing on refresh"
+   },
+   {
+    "tc": 144626,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a not-yet-started offer never appears in the listing or is reachable via the modal"
+   },
+   {
+    "tc": 144628,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Manual",
+    "pri": 3,
+    "title": "Verify that rapid repeated 'Load More' clicks during a concurrent offer publish do not produce duplicate or missing cards after a full refresh"
+   },
+   {
+    "tc": 144629,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that a missing Arabic translation on a published offer falls back to the active/default language rather than rendering blank"
+   },
+   {
+    "tc": 144631,
+    "outcome": "Not Executed",
+    "surf": "CMS",
+    "mode": "Manual",
+    "pri": 4,
+    "title": "Verify that Partner Offers has no public/headless API surface requiring dedicated API test coverage"
+   }
+  ]
+ },
+ "140380": {
+  "name": "130947 COO",
+  "rows": [
+   {
+    "tc": 140972,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the sticky section index renders only the three PBI-defined entries and highlights the active one on scroll"
+   },
+   {
+    "tc": 140976,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a document-requirement accordion item renders its title, subtitle and content with the verified tokens"
+   },
+   {
+    "tc": 140982,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the page renders the verified dark-theme palette when Dark mode is active"
+   },
+   {
+    "tc": 140986,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the page renders correctly on a 1920px desktop viewport in English Light theme"
+   },
+   {
+    "tc": 140987,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the page renders correctly on a 1920px desktop viewport in Arabic Light theme"
+   },
+   {
+    "tc": 140988,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the page renders correctly on a 1920px desktop viewport in Dark theme"
+   },
+   {
+    "tc": 140989,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the page reflows to a single column on a 390px mobile viewport in English"
+   },
+   {
+    "tc": 140990,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the page reflows to a single mirrored column on a 390px mobile viewport in Arabic"
+   },
+   {
+    "tc": 140991,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the page reflows legibly on a 768px tablet viewport in English"
+   },
+   {
+    "tc": 140993,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a Site Content Editor can run the full Certificate of Origin content lifecycle"
+   },
+   {
+    "tc": 140997,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a public visitor sees the complete published Certificate of Origin page with every active component in display order"
+   },
+   {
+    "tc": 140999,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the Arabic published page delivers the full authored Arabic content set end to end"
+   },
+   {
+    "tc": 141000,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a draft Certificate of Origin page is visible in Preview only and never to a public visitor"
+   },
+   {
+    "tc": 141002,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the end-to-end document-discovery journey works from the sticky index to an expanded requirement and the PDF guide"
+   },
+   {
+    "tc": 141005,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the Login to COO call to action redirects the visitor to the configured portal URL"
+   },
+   {
+    "tc": 141006,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that the Verify Certificate call to action redirects the visitor to the configured verification URL"
+   },
+   {
+    "tc": 141074,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that an oversize file is rejected as the Documents Required action target"
+   },
+   {
+    "tc": 141119,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Certificate of Origin (PDF) action button is an activatable control on the public page"
+   },
+   {
+    "tc": 141120,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that clicking a document-requirement accordion header expands its content panel"
+   },
+   {
+    "tc": 141121,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that clicking an expanded document-requirement accordion header collapses it again"
+   },
+   {
+    "tc": 141122,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that clicking the Download button downloads the configured application form file"
+   },
+   {
+    "tc": 141123,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that clicking a sticky section index entry scrolls the page to the matching section"
+   },
+   {
+    "tc": 141124,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that switching the language from English to Arabic loads the Arabic Certificate of Origin page"
+   },
+   {
+    "tc": 141125,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that switching the language from Arabic back to English loads the English Certificate of Origin page"
+   },
+   {
+    "tc": 141126,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that switching the theme from Light to Dark applies the dark palette to the Certificate of Origin page"
+   },
+   {
+    "tc": 141127,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that switching the theme from Dark back to Light restores the light palette"
+   },
+   {
+    "tc": 141144,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the page degrades gracefully when a CTA Redirect URL passes format validation but the destination returns 404"
+   },
+   {
+    "tc": 141145,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the download breaks visibly when the application form file is deleted from Documents and Media after publish"
+   },
+   {
+    "tc": 141174,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 3,
+    "title": "Verify that the Created and Last Modified audit dates are populated automatically and are read only"
+   }
+  ]
+ },
+ "140381": {
+  "name": "130949 PFR",
+  "rows": [
+   {
+    "tc": 141188,
+    "outcome": "Blocked",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that the Supporting information group renders its label, intro and exactly the four bullets defined by the PBI"
+   },
+   {
+    "tc": 141214,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that unpublished changes are visible in Preview only and never on the live public page"
+   },
+   {
+    "tc": 141345,
+    "outcome": "Blocked",
+    "surf": "CMS",
+    "mode": "Auto",
+    "pri": 2,
+    "title": "Verify that a visitor holding the page open receives the replacement document and its updated size after a live document swap"
+   },
+   {
+    "tc": 141364,
+    "outcome": "Not Executed",
+    "surf": "Web",
+    "mode": "Auto",
+    "pri": 1,
+    "title": "Verify that a visitor reaches the Proposal for Research page from the Main Menu Services entry"
+   }
+  ]
+ }
+}

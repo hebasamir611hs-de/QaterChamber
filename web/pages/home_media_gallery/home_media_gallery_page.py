@@ -306,6 +306,26 @@ class HomeMediaGalleryPage(BasePage):
     def card_locator_by_title(self, title: str):
         return self.page.locator(self.CARD).filter(has_text=title)
 
+    def card_html(self, title: str) -> str:
+        """innerHTML of the first card whose text contains `title`, "" if none
+        (escaping / injection checks read the rendered markup)."""
+        card = self.card_locator_by_title(title)
+        return card.first.inner_html() if card.count() else ""
+
+    # The section's own video source (fragment config `videoApiBase`, read
+    # live 2026-10-14): the Media Center Video Record module, which filters
+    # publish status server-side. Albums come from `/o/qc-photo-gallery-api`.
+    VIDEO_API_PATH = "/o/qc-video-library-api/videos"
+
+    def video_api_titles(self) -> list:
+        """EN titles the gallery's video source returns to THIS page's
+        context (an anonymous context = what a visitor's gallery is built
+        from). Call after open_home() -- the site's groupId is read from it."""
+        group_id = self.page.evaluate("() => Liferay.ThemeDisplay.getScopeGroupId()")
+        response = self.page.request.get(web_url(
+            f"{self.VIDEO_API_PATH}?groupId={group_id}&languageId=en_US&sort=recent&page=1&pageSize=200"))
+        return [item.get("title") or "" for item in response.json().get("items", [])]
+
     def is_element_present(self, locator, timeout: int = 3000) -> bool:
         """Bounded existence check — never throws, mirrors BasePage.is_visible's
         contract. Used for a card that may genuinely not exist in this
@@ -327,6 +347,22 @@ class HomeMediaGalleryPage(BasePage):
 
     def card_has_meta_separator(self, card) -> bool:
         return card.locator(self.META_SEP).count() > 0
+
+    def card_image_src(self, card) -> str:
+        """The card image's resolved URL: `currentSrc`/`src` of an <img>
+        at or under CARD_IMG, else the CSS `background-image` url. Added
+        OFFLINE 2026-10-13 for Control_Panel TC 133675. VERIFY-LIVE: that
+        CARD_IMG is (or wraps) the thumbnail and its URL carries the
+        Documents & Media file name."""
+        img = card.locator(self.CARD_IMG)
+        if img.count() == 0:
+            return ""
+        return img.first.evaluate(
+            "el => { const i = el.tagName === 'IMG' ? el : el.querySelector('img');"
+            " if (i) return i.currentSrc || i.src || '';"
+            " const bg = getComputedStyle(el).backgroundImage || '';"
+            " const m = bg.match(/url\\([\"']?(.*?)[\"']?\\)/); return m ? m[1] : ''; }"
+        )
 
     def card_has_play_button(self, card) -> bool:
         return card.evaluate(

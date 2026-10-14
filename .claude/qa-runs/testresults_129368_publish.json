@@ -1,0 +1,272 @@
+{
+ "plan_id": 133534,
+ "suite_id": 134448,
+ "run_name": "Phase 3 2026-10-07/08 - PBI 129368",
+ "automated": true,
+ "results": [
+  {
+   "test_case_id": 135115,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135116,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135117,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135118,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135119,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (rerun2 after heal)"
+  },
+  {
+   "test_case_id": 135120,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (rerun2 after heal)"
+  },
+  {
+   "test_case_id": 135121,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135122,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135123,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135124,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135125,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135126,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135127,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135128,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135129,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135130,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149491 (Published + Active=false reads INACTIVE, not a valid workflow state). Failed in latest run.",
+   "error_message": "Status after deactivate reads Inactive, expected Published/non-public per TC"
+  },
+  {
+   "test_case_id": 135133,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135134,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135136,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135137,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135139,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135143,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135147,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135152,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135174,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135175,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135179,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135180,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135184,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135185,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135186,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149491 (Published + Active=false reads INACTIVE, not a valid workflow state). Failed in latest run.",
+   "error_message": "Status after deactivate reads Inactive, expected Published/non-public per TC"
+  },
+  {
+   "test_case_id": 135188,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135189,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135190,
+   "outcome": "Blocked",
+   "comment": "Executed, ENVIRONMENT_ERROR: redirect target is external qatarchamber.com which answers HTTP 403 to automation, not 404. No product verdict.",
+   "error_message": "HTTP 403 from external production site instead of 404"
+  },
+  {
+   "test_case_id": 135191,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135224,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135225,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135226,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135230,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135231,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135232,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (rerun2 after heal)"
+  },
+  {
+   "test_case_id": 135233,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135234,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135235,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (rerun2 after heal)"
+  },
+  {
+   "test_case_id": 135244,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135245,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135247,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (rerun2 after heal)"
+  },
+  {
+   "test_case_id": 135248,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run (rerun2 after heal)"
+  },
+  {
+   "test_case_id": 135256,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135257,
+   "outcome": "Failed",
+   "comment": "Covered by Bug #149491 (Published + Active=false reads INACTIVE, not a valid workflow state). Failed in latest run.",
+   "error_message": "Status after deactivate reads Inactive, expected Published/non-public per TC"
+  },
+  {
+   "test_case_id": 135262,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  },
+  {
+   "test_case_id": 135271,
+   "outcome": "Passed",
+   "comment": "Passed in Phase 3 run"
+  }
+ ]
+}

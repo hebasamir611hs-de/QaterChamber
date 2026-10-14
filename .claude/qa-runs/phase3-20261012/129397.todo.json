@@ -1,0 +1,1980 @@
+[
+ {
+  "id": 135445,
+  "title": "Verify that a Site Content Editor can create, edit, preview, publish, and unpublish the GM's Message record",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GMMessage",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Logged-in user with Site Content Editor role. Verifies full lifecycle permission per the Permissions matrix.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor and open the GM's Message record",
+    "expected": "Record opens in edit mode"
+   },
+   {
+    "action": "Edit fields and click Preview",
+    "expected": "Preview renders unsaved changes"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Page publishes and success toast appears"
+   },
+   {
+    "action": "Click Unpublish",
+    "expected": "Page is removed from the live site"
+   }
+  ]
+ },
+ {
+  "id": 135446,
+  "title": "Verify that a Site Content Author can view and update assigned GM's Message content but cannot publish directly",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GMMessage",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Logged-in user with Site Content Author role, assigned to the GM's Message content. Verifies the Author cannot-publish restriction.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Author and open the assigned record",
+    "expected": "Record opens with fields editable"
+   },
+   {
+    "action": "Edit a field and save",
+    "expected": "Change is saved as Draft"
+   },
+   {
+    "action": "Inspect the Publish action",
+    "expected": "Publish control is disabled/hidden for this role"
+   }
+  ]
+ },
+ {
+  "id": 135447,
+  "title": "Verify that a Site Content Author attempting to force a Publish action via a direct workflow call is denied with the standard Access Denied message",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "GMMessage"
+  ],
+  "description": "Author-role session; attempt to trigger the publish action outside the normal UI. Verifies backend-enforced, not just UI-hidden, permission.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "As Author, attempt to invoke the Publish action directly",
+    "expected": "System rejects the action and displays \"Access Denied. You do not have permission to perform this action.\" (EN) / \"تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.\" (AR)"
+   }
+  ]
+ },
+ {
+  "id": 135448,
+  "title": "Verify that a Public Visitor cannot access the GM's Message CMS edit URL directly (forced browsing)",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GMMessage"
+  ],
+  "description": "Unauthenticated visitor session; attempt to navigate directly to the CMS edit URL. Verifies forced-browsing protection on the admin surface.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "As an unauthenticated visitor, navigate directly to the CMS record's edit URL",
+    "expected": "System redirects to login or displays \"Access Denied. You do not have permission to perform this action.\" — the record content is never exposed"
+   }
+  ]
+ },
+ {
+  "id": 135450,
+  "title": "Verify that a logged-in CMS user without any assigned role on the GM's Message content receives Access Denied when opening the record",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "GMMessage"
+  ],
+  "description": "User account exists in Liferay but has no Site Content Author/Editor role granted for this content. Verifies role-scoped, not just authenticated, access.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in with an account that has no role assignment on this content and attempt to open the GM's Message record",
+    "expected": "\"Access Denied. You do not have permission to perform this action.\" (EN) / Arabic equivalent is displayed; record is not opened"
+   }
+  ]
+ },
+ {
+  "id": 135460,
+  "title": "Verify that Page Title (EN) is rejected when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Page Title (EN) = &quot;&quot; (empty). Verifies the mandatory rule.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Page Title (EN) and click Save/Publish",
+    "expected": "\"Page title is required.\" is displayed; save/publish is blocked"
+   }
+  ]
+ },
+ {
+  "id": 135463,
+  "title": "Verify that Page Title (AR) is rejected with the Arabic-specific message when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Page Title (AR) = &quot;&quot; (empty), Arabic locale enabled. Verifies the exact bilingual error copy.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Page Title (AR) and click Save/Publish",
+    "expected": "\"Arabic title is required.\" (EN admin UI) / \"العنوان العربي مطلوب.\" is displayed; save/publish is blocked"
+   }
+  ]
+ },
+ {
+  "id": 135465,
+  "title": "Verify that a valid JPG Hero Banner image under 2MB uploads successfully",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Hero Banner file = hero-banner.jpg, 1.5MB. Verifies positive image upload.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload hero-banner.jpg (1.5MB) as Hero Banner and click Save",
+    "expected": "Image uploads, thumbnail preview displays, no error"
+   }
+  ]
+ },
+ {
+  "id": 135467,
+  "title": "Verify that a Hero Banner image exceeding 2MB is rejected with the exact bilingual error message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Hero Banner file = hero-banner-large.jpg, 3MB. Verifies the exact spec copy.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt to upload the 3MB file as Hero Banner",
+    "expected": "\"Image size must not exceed 2 MB.\" (EN) / \"يجب ألا يتجاوز حجم الصورة 2 ميغابايت.\" (AR) is displayed; upload is blocked"
+   }
+  ]
+ },
+ {
+  "id": 135470,
+  "title": "Verify that Image Alt Text (EN) is rejected when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Image Alt Text (EN) = &quot;&quot;. Verifies the mandatory rule for accessibility text.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Image Alt Text (EN) and click Save/Publish",
+    "expected": "A required-field validation error is shown; save/publish blocked"
+   }
+  ]
+ },
+ {
+  "id": 135473,
+  "title": "Verify that Image Alt Text (AR) is rejected when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Image Alt Text (AR) = &quot;&quot;. Verifies the mandatory rule for the AR alt text.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Image Alt Text (AR) and click Save/Publish",
+    "expected": "A required-field validation error is shown; save/publish blocked"
+   }
+  ]
+ },
+ {
+  "id": 135474,
+  "title": "Verify that a valid GM Portrait Image in PNG format under 2MB uploads successfully",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Portrait file = gm-portrait.png, 800KB. Verifies positive upload.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload gm-portrait.png (800KB) as GM Portrait Image and click Save",
+    "expected": "Image uploads, preview displays, no error"
+   }
+  ]
+ },
+ {
+  "id": 135476,
+  "title": "Verify that a GM Portrait Image exceeding 2MB is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Portrait file = gm-portrait-large.png, 2.8MB. Verifies size validation on the portrait field specifically.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt to upload the 2.8MB file as GM Portrait Image",
+    "expected": "\"Image size must not exceed 2 MB.\" (EN)/Arabic equivalent shown; upload blocked"
+   }
+  ]
+ },
+ {
+  "id": 135478,
+  "title": "Verify that GM Name (EN) is rejected when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "GM Name (EN) = &quot;&quot;. Verifies the mandatory rule.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear GM Name (EN) and click Save/Publish",
+    "expected": "A required-field validation error is shown; save/publish blocked"
+   }
+  ]
+ },
+ {
+  "id": 135481,
+  "title": "Verify that GM Name (AR) is rejected when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "GM Name (AR) = &quot;&quot;. Verifies the AR mandatory rule.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear GM Name (AR) and click Save/Publish",
+    "expected": "A required-field validation error is shown; save/publish blocked"
+   }
+  ]
+ },
+ {
+  "id": 135483,
+  "title": "Verify that GM Designation (EN) is rejected when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "GM Designation (EN) = &quot;&quot;. Verifies the mandatory rule.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear GM Designation (EN) and click Save/Publish",
+    "expected": "A required-field validation error is shown; save/publish blocked"
+   }
+  ]
+ },
+ {
+  "id": 135486,
+  "title": "Verify that Salutation Heading (EN) is rejected when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Salutation Heading (EN) = &quot;&quot;. Verifies the mandatory rule.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Salutation Heading (EN) and click Save/Publish",
+    "expected": "A required-field validation error is shown; save/publish blocked"
+   }
+  ]
+ },
+ {
+  "id": 135489,
+  "title": "Verify that Page Content (EN) accepts valid rich text with headings, paragraphs, bullets, and inline links",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Page Content (EN) rich text containing an H2 heading, two paragraphs, a bulleted list, and one hyperlink. Verifies rich-text feature support per spec.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Author Page Content (EN) with a heading, two paragraphs, a bullet list, and one inline link, then click Save",
+    "expected": "Content saves with formatting intact; preview renders heading, paragraphs, bullets, and a clickable link"
+   }
+  ]
+ },
+ {
+  "id": 135490,
+  "title": "Verify that Page Content (EN) is rejected when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Page Content (EN) = &quot;&quot;. Verifies the mandatory rule.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Page Content (EN) and click Save/Publish",
+    "expected": "A required-field validation error is shown; save/publish blocked"
+   }
+  ]
+ },
+ {
+  "id": 135492,
+  "title": "Verify that Page Content (AR) accepts valid Arabic rich text and saves correctly",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Page Content (AR) with Arabic headings/paragraphs. Verifies positive AR rich-text case, including correct RTL text direction in the stored/rendered content.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Author Arabic rich text content and click Save",
+    "expected": "Content saves with correct Arabic script and RTL paragraph direction preserved"
+   }
+  ]
+ },
+ {
+  "id": 135493,
+  "title": "Verify that Page Content (AR) is rejected when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Page Content (AR) = &quot;&quot;. Verifies the AR mandatory rule.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Page Content (AR) and click Save/Publish",
+    "expected": "A required-field validation error is shown; save/publish blocked"
+   }
+  ]
+ },
+ {
+  "id": 135495,
+  "title": "Verify that Signature Closing Text (EN) is rejected when left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Signature Closing Text (EN) = &quot;&quot;. Verifies the mandatory rule.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Signature Closing Text (EN) and click Save/Publish",
+    "expected": "A required-field validation error is shown; save/publish blocked"
+   }
+  ]
+ },
+ {
+  "id": 135501,
+  "title": "Verify that setting Status to Published makes the record visible on the live website",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Record with Status dropdown = Published (all mandatory fields complete). Verifies the dropdown's functional effect.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Select Status = Published and Save",
+    "expected": "Success toast appears"
+   },
+   {
+    "action": "Load the public page as a visitor",
+    "expected": "The record's content is visible live"
+   }
+  ]
+ },
+ {
+  "id": 135502,
+  "title": "Verify that setting Status to Draft keeps the record CMS-only and invisible on the live website",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Record with Status dropdown = Draft. Verifies the dropdown's functional effect for the opposite state.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Select Status = Draft and Save",
+    "expected": "Record is saved with Draft status"
+   },
+   {
+    "action": "Load the public page as a visitor",
+    "expected": "The Draft content does not appear; the previously Published version (or nothing, if never published) is shown instead"
+   }
+  ]
+ },
+ {
+  "id": 135504,
+  "title": "Verify that an invalid hyperlink URL is rejected with the exact validation message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "Hyperlink URL = &quot;not-a-valid-url&quot;. Verifies the exact spec copy for invalid URLs.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Insert \"not-a-valid-url\" as the hyperlink target and click Save",
+    "expected": "\"Please enter a valid URL.\" (EN) / \"يرجى إدخال رابط صالح.\" (AR) is displayed; the hyperlink is not saved"
+   }
+  ]
+ },
+ {
+  "id": 135505,
+  "title": "Verify that entering the GM Name once and saving reflects into both the portrait caption preview and the signature block preview without re-entry",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "DataIntegrity",
+   "Functional-Low",
+   "GMMessage"
+  ],
+  "description": "GM Name (EN) entered once in its single field. Verifies the field-dependency rule that a single entry drives two display locations.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter GM Name (EN) once in the GM Name field (not separately per display location) and click Preview",
+    "expected": "The preview's portrait caption and signature block both display the same entered name without requiring a second entry point"
+   }
+  ]
+ },
+ {
+  "id": 135511,
+  "title": "Verify that Publish is blocked when the GM Portrait Image field is left in an invalid state (upload failed)",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Edge",
+   "GMMessage"
+  ],
+  "description": "Portrait image upload deliberately left in a failed/incomplete state, all other fields complete. Verifies publish cannot proceed with a broken mandatory asset.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt an upload of the GM Portrait Image and interrupt it so the field remains empty, then click Publish",
+    "expected": "Publish is blocked with a required-image validation error; record stays in Draft"
+   }
+  ]
+ },
+ {
+  "id": 136375,
+  "title": "Verify that an unauthenticated user is denied direct access to the CMS edit screen for the GM's Message page",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel"
+  ],
+  "description": "Attempts to open the Liferay CMS edit URL for the GM's Message page record without any authenticated session.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt to navigate directly to the CMS edit URL for the GM's Message page without logging in.",
+    "expected": "User is redirected to the CMS login screen; the edit form is not rendered."
+   }
+  ]
+ },
+ {
+  "id": 136376,
+  "title": "Verify that a Site Content Editor has full lifecycle controls for the GM's Message page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel"
+  ],
+  "description": "Logs in as Site Content Editor and confirms Create/Edit/Preview/Publish/Unpublish controls are all visible and enabled on the GM's Message record.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as a Site Content Editor.",
+    "expected": "Login succeeds; CMS dashboard visible."
+   },
+   {
+    "action": "Open the GM's Message page record.",
+    "expected": "Edit, Preview, Publish, and Unpublish controls are all visible and enabled."
+   }
+  ]
+ },
+ {
+  "id": 136377,
+  "title": "Verify that a Site Content Author can edit assigned GM's Message content but cannot publish directly",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel"
+  ],
+  "description": "Logs in as Site Content Author on the GM's Message record and confirms Edit is available while Publish is unavailable/disabled.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as a Site Content Author assigned to the GM's Message page.",
+    "expected": "Login succeeds; page record is visible and editable."
+   },
+   {
+    "action": "Inspect the available actions on the record.",
+    "expected": "Edit/Save-as-draft/Submit-for-review controls are enabled; the Publish control is either absent or disabled."
+   }
+  ]
+ },
+ {
+  "id": 136378,
+  "title": "Verify that a Site Content Author is denied when attempting to publish the GM's Message page directly",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "Regression"
+  ],
+  "description": "Attempts a direct publish action as a Site Content Author, who lacks publish rights.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "As a logged-in Site Content Author, attempt to trigger the Publish action directly (e.g., via the publish endpoint/URL) on the GM's Message page.",
+    "expected": "Action is rejected; message \"Access Denied. You do not have permission to perform this action.\" / \"تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.\" is displayed; page status is unchanged."
+   }
+  ]
+ },
+ {
+  "id": 136379,
+  "title": "Verify that a user with no CMS permission is denied access when opening the GM's Message page record",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel"
+  ],
+  "description": "A logged-in Liferay user with no role/permission on the About Us site section attempts to open the GM's Message record.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as a user with no assigned role on the About Us content section.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Attempt to open the GM's Message page record in CMS.",
+    "expected": "\"Access Denied. You do not have permission to perform this action.\" / Arabic equivalent is displayed; the record does not open."
+   }
+  ]
+ },
+ {
+  "id": 136383,
+  "title": "Verify that a Site Content Editor can create and publish the GM's Message page end-to-end",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Full admin happy path: create bilingual content, upload images, save, preview, and publish; verify the page is live for visitors.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as Site Content Editor and open the GM's Message page record.",
+    "expected": "Edit form loads."
+   },
+   {
+    "action": "Enter Page Title, Salutation Heading, Page Content, GM Name, GM Designation, Signature Closing Text (EN+AR), upload Hero Banner and GM Portrait images with alt text.",
+    "expected": "All fields accept the entered/uploaded values."
+   },
+   {
+    "action": "Click Save as Draft, then Preview.",
+    "expected": "Preview renders the entered content exactly; page remains unpublished."
+   },
+   {
+    "action": "Click Publish.",
+    "expected": "Liferay success toast displays; page Status becomes Published."
+   },
+   {
+    "action": "Open the page as a Public Visitor.",
+    "expected": "All entered content is visible live on the public site."
+   }
+  ]
+ },
+ {
+  "id": 136384,
+  "title": "Verify that Draft GM's Message content is not visible to a Public Visitor",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "With the GM's Message page saved as Draft only (never published), confirms the content does not appear on the public site.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, save a new/edited version of the GM's Message content with Status = Draft (do not publish).",
+    "expected": "Record is stored as Draft."
+   },
+   {
+    "action": "As a Public Visitor, open the GM's Message page on the live site.",
+    "expected": "Only the last Published version (or nothing, if none was ever published) is visible; the Draft content does not appear."
+   }
+  ]
+ },
+ {
+  "id": 136385,
+  "title": "Verify that unpublishing the GM's Message page removes it from the live site",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Regression",
+   "Web"
+  ],
+  "description": "A previously Published GM's Message page is set to Unpublish by a Site Content Editor.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "As Site Content Editor, open a currently Published GM's Message page and click Unpublish.",
+    "expected": "Status changes to Unpublished; success toast displays."
+   },
+   {
+    "action": "As a Public Visitor, attempt to open the GM's Message page.",
+    "expected": "Page is no longer accessible on the live site (standard not-found/unavailable handling)."
+   }
+  ]
+ },
+ {
+  "id": 136386,
+  "title": "Verify that entering the GM Name once updates both the Portrait Caption and the Signature Block identically",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Confirms the PBI's core data-integrity rule — GM Name is a single underlying field referenced in two display locations, preventing spelling inconsistencies. Uses invented test data: GM Name (EN) = &quot;Ahmed Al-Kuwari&quot;, GM Designation (EN) = &quot;Acting General Manager&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, enter GM Name (EN) = \"Ahmed Al-Kuwari\" and GM Designation (EN) = \"Acting General Manager\" in the single GM Name/Designation field pair.",
+    "expected": "Values accepted."
+   },
+   {
+    "action": "Save and Publish the page.",
+    "expected": "Publish succeeds; success toast displays."
+   },
+   {
+    "action": "Open the published page as a Public Visitor and inspect the Portrait Caption.",
+    "expected": "Displays \"Ahmed Al-Kuwari\" / \"Acting General Manager\" exactly."
+   },
+   {
+    "action": "Inspect the Signature Block on the same page.",
+    "expected": "Displays \"Ahmed Al-Kuwari\" / \"Acting General Manager\" — identical to the Portrait Caption, sourced from the same field."
+   }
+  ]
+ },
+ {
+  "id": 136389,
+  "title": "Verify that Preview shows exact content without publishing the page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel"
+  ],
+  "description": "A Site Content Editor previews unsaved/unpublished changes before committing to Publish.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "As Site Content Editor, edit the Page Content field with new text and click Preview (without publishing).",
+    "expected": "Preview screen renders the new content exactly as entered."
+   },
+   {
+    "action": "Close preview and check the page's live Status.",
+    "expected": "Status remains at its prior value (Draft or previously Published, unchanged); the live public page (if previously published) still shows the old content."
+   }
+  ]
+ },
+ {
+  "id": 136391,
+  "title": "Verify that Draft to Preview to Publish lifecycle continuity is preserved across multiple editing sessions",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel"
+  ],
+  "description": "Content is saved as Draft, editing is resumed in a later session, then published — confirming no data loss across the lifecycle.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "As Site Content Editor, enter partial content and click Save as Draft, then log out.",
+    "expected": "Draft is stored."
+   },
+   {
+    "action": "Log back in later and reopen the same record.",
+    "expected": "All previously entered Draft values are present, unchanged."
+   },
+   {
+    "action": "Complete the remaining fields and click Publish.",
+    "expected": "Page publishes successfully with the full combined content (from both sessions)."
+   }
+  ]
+ },
+ {
+  "id": 136392,
+  "title": "Verify that a Site Content Editor can publish content submitted by a Site Content Author",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel"
+  ],
+  "description": "Two-role handoff: Author edits/submits, Editor reviews and publishes.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "As Site Content Author, edit the Page Content field and submit/save (no publish action available).",
+    "expected": "Change is stored, pending review; live page unchanged."
+   },
+   {
+    "action": "Log in as Site Content Editor and open the same record.",
+    "expected": "The Author's pending change is visible for review."
+   },
+   {
+    "action": "Click Publish.",
+    "expected": "Change goes live; success toast displays; the updated content is visible to a Public Visitor."
+   }
+  ]
+ },
+ {
+  "id": 136393,
+  "title": "Verify that republishing the GM's Message page updates the existing live page without creating a duplicate record",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel"
+  ],
+  "description": "An already-Published page is edited again and republished; confirms the same page record is updated in place.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Note the Page ID of the currently Published GM's Message page.",
+    "expected": "Page ID recorded (e.g., GM-MSG-001)."
+   },
+   {
+    "action": "Edit the Page Content and click Publish again.",
+    "expected": "Publish succeeds."
+   },
+   {
+    "action": "Check the Page ID of the live page after republish.",
+    "expected": "Page ID is unchanged (GM-MSG-001); no second/duplicate record was created."
+   }
+  ]
+ },
+ {
+  "id": 136394,
+  "title": "Verify that a valid Page Title (EN) is saved and persists after reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters Page Title (EN) = &quot;General Manager's Message&quot; (26 chars) and confirms it saves and persists.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"General Manager's Message\" in Page Title (EN) and click Save.",
+    "expected": "Value accepted, no validation error."
+   },
+   {
+    "action": "Reload the CMS record.",
+    "expected": "Page Title (EN) still shows \"General Manager's Message\"."
+   }
+  ]
+ },
+ {
+  "id": 136395,
+  "title": "Verify that an empty Page Title (EN) is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Leaves Page Title (EN) blank and attempts to save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear the Page Title (EN) field and click Save.",
+    "expected": "\"Page title is required.\" error displays; save is blocked; record is not updated."
+   }
+  ]
+ },
+ {
+  "id": 136397,
+  "title": "Verify that Page Title (EN) sanitizes script injection input",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters  into Page Title (EN).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter <script>alert(1)</script> in Page Title (EN) and click Save.",
+    "expected": "Input is sanitized/escaped on save; the published page title never executes the script and displays only safe text (or the save is rejected outright)."
+   }
+  ]
+ },
+ {
+  "id": 136398,
+  "title": "Verify that a valid Page Title (AR) is saved, renders RTL, and persists after reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters Page Title (AR) = &quot;رسالة المدير العام&quot; and confirms RTL rendering and persistence.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"رسالة المدير العام\" in Page Title (AR) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload and view the AR page.",
+    "expected": "Title displays \"رسالة المدير العام\" rendered right-to-left."
+   }
+  ]
+ },
+ {
+  "id": 136400,
+  "title": "Verify that a valid Salutation Heading (EN) is saved and persists after reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters &quot;Dear members and visitors,&quot; and confirms persistence.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"Dear members and visitors,\" in Salutation Heading (EN) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload the record.",
+    "expected": "Field still shows \"Dear members and visitors,\"."
+   }
+  ]
+ },
+ {
+  "id": 136401,
+  "title": "Verify that an empty Salutation Heading (EN) is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Leaves Salutation Heading (EN) blank and attempts to save/publish.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Salutation Heading (EN) and click Save/Publish.",
+    "expected": "Mandatory-field validation error displays; save/publish is blocked."
+   }
+  ]
+ },
+ {
+  "id": 136404,
+  "title": "Verify that a valid Salutation Heading (AR) is saved, renders RTL, and persists after reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters &quot;أعزاءنا الأعضاء والزوار،&quot; and confirms RTL persistence.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"أعزاءنا الأعضاء والزوار،\" in Salutation Heading (AR) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload and view the AR page.",
+    "expected": "Heading displays correctly, right-to-left."
+   }
+  ]
+ },
+ {
+  "id": 136406,
+  "title": "Verify that a valid GM Name (EN) is saved and persists after reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters GM Name (EN) = &quot;Ahmed Al-Kuwari&quot; and confirms persistence at the field level.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"Ahmed Al-Kuwari\" in GM Name (EN) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload the record.",
+    "expected": "GM Name (EN) still shows \"Ahmed Al-Kuwari\"."
+   }
+  ]
+ },
+ {
+  "id": 136407,
+  "title": "Verify that an empty GM Name (EN) is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Leaves GM Name (EN) blank and attempts to save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear GM Name (EN) and click Save.",
+    "expected": "Mandatory-field validation error displays; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 136410,
+  "title": "Verify that a valid GM Name (AR) is saved, renders RTL, and persists after reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters &quot;أحمد الكواري&quot; and confirms RTL persistence.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"أحمد الكواري\" in GM Name (AR) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload and view the AR page.",
+    "expected": "Name displays correctly, right-to-left."
+   }
+  ]
+ },
+ {
+  "id": 136412,
+  "title": "Verify that a valid GM Designation (EN) is saved and persists after reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters &quot;Acting General Manager&quot; and confirms persistence.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"Acting General Manager\" in GM Designation (EN) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload the record.",
+    "expected": "Field still shows \"Acting General Manager\"."
+   }
+  ]
+ },
+ {
+  "id": 136413,
+  "title": "Verify that an empty GM Designation (EN) is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Leaves GM Designation (EN) blank and attempts to save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear GM Designation (EN) and click Save.",
+    "expected": "Mandatory-field validation error displays; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 136416,
+  "title": "Verify that a valid GM Designation (AR) is saved, renders RTL, and persists after reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters &quot;المدير العام بالإنابة&quot; and confirms RTL persistence.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"المدير العام بالإنابة\" in GM Designation (AR) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload and view the AR page.",
+    "expected": "Designation displays correctly, right-to-left."
+   }
+  ]
+ },
+ {
+  "id": 136418,
+  "title": "Verify that valid rich-text Page Content (EN) with headings, bullets, and a link is saved and persists",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters multi-paragraph content including a sub-heading, a bullet list, and one inline hyperlink.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter rich-text content in Page Content (EN) containing a sub-heading, a 3-item bullet list, one inline link, and two body paragraphs, then click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload the record.",
+    "expected": "All formatting elements (heading, bullets, link, paragraphs) are retained exactly as entered."
+   }
+  ]
+ },
+ {
+  "id": 136419,
+  "title": "Verify that empty Page Content (EN) is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Leaves Page Content (EN) blank and attempts to save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Page Content (EN) and click Save.",
+    "expected": "Mandatory-field validation error displays; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 136421,
+  "title": "Verify that Page Content (EN) sanitizes script injection within the rich text editor",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters  inside the rich text editor.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Insert <script>alert(1)</script> into Page Content (EN) via the rich text editor and click Save.",
+    "expected": "Script tag is stripped/escaped on save; the published page never executes the script."
+   }
+  ]
+ },
+ {
+  "id": 136422,
+  "title": "Verify that valid rich-text Page Content (AR) is saved, renders RTL/bidi correctly, and persists",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters Arabic multi-paragraph content with a bullet list; confirms correct bidi handling.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter Arabic rich-text content with a bullet list and one embedded English link label in Page Content (AR), then click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload and view the AR page.",
+    "expected": "Arabic text flows right-to-left, the bullet list renders correctly, and the embedded English link label renders left-to-right within the RTL paragraph."
+   }
+  ]
+ },
+ {
+  "id": 136424,
+  "title": "Verify that a valid Signature Closing Text (EN) is saved and persists after reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters &quot;Best Regards,&quot; and confirms persistence.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"Best Regards,\" in Signature Closing Text (EN) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload the record.",
+    "expected": "Field still shows \"Best Regards,\"."
+   }
+  ]
+ },
+ {
+  "id": 136425,
+  "title": "Verify that an empty Signature Closing Text (EN) is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Leaves the field blank and attempts to save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Signature Closing Text (EN) and click Save.",
+    "expected": "Mandatory-field validation error displays; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 136428,
+  "title": "Verify that a valid Signature Closing Text (AR) is saved, renders RTL, and persists after reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters &quot;مع خالص التقدير،&quot; and confirms RTL persistence.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"مع خالص التقدير،\" in Signature Closing Text (AR) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload and view the AR page.",
+    "expected": "Closing text displays correctly, right-to-left."
+   }
+  ]
+ },
+ {
+  "id": 136430,
+  "title": "Verify that a valid Hero Banner (EN) image uploads, saves, and persists",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads a 500KB JPG as the Hero Banner (EN).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload a 500KB .jpg file as Hero Banner (EN) and click Save.",
+    "expected": "Upload accepted, no validation error."
+   },
+   {
+    "action": "Reload the record.",
+    "expected": "The same Hero Banner image is displayed as the saved value."
+   }
+  ]
+ },
+ {
+  "id": 136431,
+  "title": "Verify that an unsupported Hero Banner (EN) file format is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Attempts to upload a .pdf file as Hero Banner (EN).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt to upload a .pdf file as Hero Banner (EN).",
+    "expected": "Format validation error displays; upload is rejected."
+   }
+  ]
+ },
+ {
+  "id": 136432,
+  "title": "Verify that a missing Hero Banner (EN) is rejected on save/publish",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Attempts to save/publish without uploading a Hero Banner (EN).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave Hero Banner (EN) empty and click Save/Publish.",
+    "expected": "Mandatory-field validation error displays; save/publish is blocked."
+   }
+  ]
+ },
+ {
+  "id": 136433,
+  "title": "Verify that a valid Hero Banner (AR) image uploads, saves, and persists per language",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads a separate 500KB PNG as the Hero Banner for the Arabic locale.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload a 500KB .png file as Hero Banner (AR) and click Save.",
+    "expected": "Upload accepted."
+   },
+   {
+    "action": "View the page with AR locale selected.",
+    "expected": "The AR-specific Hero Banner image displays (independent of the EN Hero Banner image)."
+   }
+  ]
+ },
+ {
+  "id": 136434,
+  "title": "Verify that a valid GM Portrait (EN) image uploads, saves, and persists",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads an 800KB PNG as the GM Portrait Image (EN).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload an 800KB .png file as GM Portrait Image (EN) and click Save.",
+    "expected": "Upload accepted."
+   },
+   {
+    "action": "Reload the record.",
+    "expected": "Portrait image is displayed within the maroon-card styling as the saved value."
+   }
+  ]
+ },
+ {
+  "id": 136435,
+  "title": "Verify that an unsupported GM Portrait (EN) file format is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Attempts to upload a .gif file as GM Portrait Image (EN).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt to upload a .gif file as GM Portrait Image (EN).",
+    "expected": "Format validation error displays; upload is rejected."
+   }
+  ]
+ },
+ {
+  "id": 136436,
+  "title": "Verify that a missing GM Portrait Image (EN) is rejected on save/publish",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Attempts to save/publish without uploading a GM Portrait Image.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave GM Portrait Image (EN) empty and click Save/Publish.",
+    "expected": "Mandatory-field validation error displays; save/publish is blocked."
+   }
+  ]
+ },
+ {
+  "id": 136437,
+  "title": "Verify that a valid GM Portrait Image (AR) uploads, saves, and persists per language",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Uploads a separate portrait image for the Arabic locale.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload an 800KB .jpg file as GM Portrait Image (AR) and click Save.",
+    "expected": "Upload accepted."
+   },
+   {
+    "action": "View the page with AR locale selected.",
+    "expected": "The AR-specific portrait image displays."
+   }
+  ]
+ },
+ {
+  "id": 136442,
+  "title": "Verify that valid Image Alt Text (EN) is saved, exposed in HTML, and persists",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters &quot;Qatar Chamber General Manager Ahmed Al-Kuwari portrait&quot; as Alt Text (EN).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter \"Qatar Chamber General Manager Ahmed Al-Kuwari portrait\" in Image Alt Text (EN) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "Reload the live page and inspect the image alt attribute.",
+    "expected": "Attribute matches the entered text exactly."
+   }
+  ]
+ },
+ {
+  "id": 136443,
+  "title": "Verify that empty Image Alt Text (EN) is rejected on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Leaves Image Alt Text (EN) blank and attempts to save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Image Alt Text (EN) and click Save.",
+    "expected": "Mandatory-field validation error displays; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 136445,
+  "title": "Verify that valid Image Alt Text (AR) is saved and persists per language",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Enters the Arabic-equivalent alt text.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter an Arabic alt text value in Image Alt Text (AR) and click Save.",
+    "expected": "Value accepted."
+   },
+   {
+    "action": "View the AR page and inspect the image alt attribute.",
+    "expected": "Attribute matches the entered Arabic text."
+   }
+  ]
+ },
+ {
+  "id": 136449,
+  "title": "Verify that setting Status to Draft stores the record without publishing",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Confirms the Draft state saves correctly and shows the success toast.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Complete all mandatory fields, set Status = Draft, and click Save.",
+    "expected": "Success toast displays (\"Your request completed successfully.\" / Arabic equivalent)."
+   },
+   {
+    "action": "Check the record's Status.",
+    "expected": "Status = Draft; page is not visible on the live site."
+   }
+  ]
+ },
+ {
+  "id": 136450,
+  "title": "Verify that setting Status to Published makes the page live and shows a bilingual success toast",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "Confirms the Published state saves correctly, page goes live, and the success toast matches the current CMS UI language.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Complete all mandatory fields and click Publish.",
+    "expected": "Success toast displays in the CMS's current UI language (EN or AR)."
+   },
+   {
+    "action": "Check the record's Status and the live site.",
+    "expected": "Status = Published; page content is now visible to a Public Visitor."
+   }
+  ]
+ },
+ {
+  "id": 136451,
+  "title": "Verify that setting Status to Unpublish removes the page from the live site but keeps it editable",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "A Published page is transitioned to Unpublish.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "On a Published page, click Unpublish.",
+    "expected": "Success toast displays; Status changes to Unpublished."
+   },
+   {
+    "action": "Check the live site and the CMS record.",
+    "expected": "Page no longer accessible to Visitors; record remains fully editable in CMS."
+   }
+  ]
+ },
+ {
+  "id": 136453,
+  "title": "Verify that editing GM Name on an already-published page updates both the Portrait Caption and Signature Block only after republish",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Web"
+  ],
+  "description": "A GM's Message page is already Published with GM Name = &quot;Ahmed Al-Kuwari&quot;. The Editor changes GM Name to &quot;Khalid Al-Emadi&quot; and republishes; verifies both display locations update identically and the change is not visible until republish completes.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Confirm the currently Published page shows GM Name \"Ahmed Al-Kuwari\" in both the Portrait Caption and Signature Block.",
+    "expected": "Both locations show \"Ahmed Al-Kuwari\"."
+   },
+   {
+    "action": "In CMS, edit the GM Name field to \"Khalid Al-Emadi\" and click Save (without publishing yet).",
+    "expected": "Change is stored as a pending edit; the live page still shows \"Ahmed Al-Kuwari\" in both locations."
+   },
+   {
+    "action": "Click Publish.",
+    "expected": "Publish succeeds."
+   },
+   {
+    "action": "Reload the live page as a Public Visitor.",
+    "expected": "Portrait Caption and Signature Block both now show \"Khalid Al-Emadi\" — identical and updated together, with no location left showing the stale name."
+   }
+  ]
+ },
+ {
+  "id": 136454,
+  "title": "Verify that a Site Content Author's field update to assigned GM's Message content is stored pending Editor publish",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low"
+  ],
+  "description": "A Site Content Author updates the Page Content (EN) field on the GM's Message page and saves, per their view/update-assigned-content-only permission.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "As Site Content Author, edit Page Content (EN) and click Save.",
+    "expected": "Change is stored; no Publish control was available to the Author."
+   },
+   {
+    "action": "As Site Content Editor, open the same record.",
+    "expected": "The Author's saved change is visible and available for the Editor to review and publish."
+   }
+  ]
+ },
+ {
+  "id": 136456,
+  "title": "Verify that publishing is blocked when the Arabic title is missing while Arabic is enabled",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Edge"
+  ],
+  "description": "All fields are complete except Page Title (AR), which is left empty; Arabic is enabled for the site. Admin attempts Publish.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Complete all fields except Page Title (AR), leaving it blank, and click Publish.",
+    "expected": "\"Arabic title is required.\" / \"العنوان العربي مطلوب.\" error displays; publish is blocked."
+   }
+  ]
+ },
+ {
+  "id": 136457,
+  "title": "Verify that an image exceeding 2MB is rejected with the exact stated message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "ABOUT",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Edge"
+  ],
+  "description": "Uploads a 2.3MB JPG as the Hero Banner and confirms the exact bilingual error message.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt to upload a 2.3MB .jpg file as Hero Banner (EN).",
+    "expected": "\"Image size must not exceed 2 MB.\" / \"يجب ألا يتجاوز حجم الصورة 2 ميغابايت.\" error displays; upload/save is blocked."
+   }
+  ]
+ }
+]

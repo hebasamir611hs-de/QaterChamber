@@ -1,0 +1,1800 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-8.4.2, pluggy-1.6.0
+rootdir: D:\MCP servers\QaterChamper
+configfile: pytest.ini
+plugins: allure-pytest-2.16.0, anyio-4.11.0, Faker-20.0.0, base-url-2.1.0, html-4.1.1, metadata-3.1.1, playwright-0.4.1, xdist-3.3.1
+collected 66 items
+
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py FFFFFFFFFF [ 15%]
+FFFFFFFFFFFFFFFFFFFF                                                     [ 45%]
+web\tests\annual_reports\test_annual_reports_web.py FFFFFFFFFF           [ 60%]
+web\tests\export_reports\test_export_reports_web.py FFFFFFFFFFFFF        [ 80%]
+web\tests\publications\test_publications_web.py FFFFFFFFFFFFF            [100%]
+
+================================== FAILURES ===================================
+____________________ test_archive_sorts_by_date_descending ____________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:496: in test_archive_sorts_by_date_descending
+    _seed_published_issue(admin, "144114-1", title=title_1, issue_date="01/01/2026")
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________________ test_article_count_displayed_web _______________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:841: in test_article_count_displayed_web
+    _seed_published_issue(admin, "144144w", title=title, article_count="12")
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________________ test_cover_image_displayed_web ________________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:754: in test_cover_image_displayed_web
+    _seed_published_issue(admin, "144133w", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_draft_issue_absent_everywhere_web ____________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:599: in test_draft_issue_absent_everywhere_web
+    admin.create_disposable_entry("144117w", **{FIELD_ISSUE_TITLE_EN: title})
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_draft_not_viewable_via_direct_url ____________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:347: in test_draft_not_viewable_via_direct_url
+    admin.create_disposable_entry("144103", **{FIELD_ISSUE_TITLE_EN: title})
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+________________________ test_issue_date_reflected_web ________________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:783: in test_issue_date_reflected_web
+    _seed_published_issue(admin, "144136w", title=title, issue_date="01/05/2026")
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_issue_description_ar_displayed_web ___________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1663: in test_issue_description_ar_displayed_web
+    _seed_published_issue(admin, "144213w", title=title, **{FIELD_ISSUE_DESCRIPTION_AR: desc_ar})
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_issue_description_en_displayed_web ___________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:725: in test_issue_description_en_displayed_web
+    _seed_published_issue(admin, "144129w", title=title, **{FIELD_ISSUE_DESCRIPTION_EN: desc})
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________________ test_issue_number_displayed_web _______________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:670: in test_issue_number_displayed_web
+    _seed_published_issue(admin, "144122w", title=title, **{FIELD_ISSUE_NUMBER: "QCTEST-Issue #69"})
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________________ test_issue_title_ar_displayed_web ______________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1634: in test_issue_title_ar_displayed_web
+    _seed_published_issue(admin, "144209w", title=title, **{FIELD_ISSUE_TITLE_AR: title_ar})
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________________ test_issue_title_en_displayed_web ______________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:697: in test_issue_title_en_displayed_web
+    _seed_published_issue(admin, "144125w", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________________ test_latest_issue_by_date __________________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:464: in test_latest_issue_by_date
+    _seed_published_issue(admin, "144113-a", title=title_a, issue_date="01/03/2026")
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________ test_load_more_reveals_additional_issues ___________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1107: in test_load_more_reveals_additional_issues
+    _seed_published_issue(admin, "144186", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_open_in_new_tab_false_same_tab_web ___________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:942: in test_open_in_new_tab_false_same_tab_web
+    _seed_published_issue(admin, "144153w", title=title, open_in_new_tab=False)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_open_in_new_tab_true_opens_new_tab_web _________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:913: in test_open_in_new_tab_true_opens_new_tab_web
+    _seed_published_issue(admin, "144152", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+________________________ test_page_count_displayed_web ________________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:812: in test_page_count_displayed_web
+    _seed_published_issue(admin, "144139w", title=title, page_count="48")
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+________________ test_pdf_attachment_read_online_download_web _________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:873: in test_pdf_attachment_read_online_download_web
+    _seed_published_issue(admin, "144149w", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________ test_publish_makes_visible_as_latest_web ___________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:390: in test_publish_makes_visible_as_latest_web
+    admin.create_disposable_entry("144108", **{FIELD_ISSUE_TITLE_EN: title}, issue_date="05/09/2026")
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_publish_newer_redesignates_latest_web __________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:565: in test_publish_newer_redesignates_latest_web
+    _seed_published_issue(admin, "144116w-a", title=title_a, issue_date="01/04/2026")
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________ test_published_issue_persists_after_reload_web ________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:531: in test_published_issue_persists_after_reload_web
+    _seed_published_issue(admin, "144115w", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________ test_rapid_load_more_clicks_no_duplicates __________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1389: in test_rapid_load_more_clicks_no_duplicates
+    _seed_published_issue(admin, "144198", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+____________________ test_read_online_archive_card_new_tab ____________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1038: in test_read_online_archive_card_new_tab
+    new_page.wait_for_load_state("domcontentloaded")
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:9421: in wait_for_load_state
+    self._sync(self._impl_obj.wait_for_load_state(state=state, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_page.py:491: in wait_for_load_state
+    return await self._main_frame.wait_for_load_state(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:237: in wait_for_load_state
+    return await self._wait_for_load_state_impl(state, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:265: in _wait_for_load_state_impl
+    await waiter.result()
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+____________________ test_read_online_latest_issue_new_tab ____________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1013: in test_read_online_latest_issue_new_tab
+    new_page.wait_for_load_state("domcontentloaded")
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:9421: in wait_for_load_state
+    self._sync(self._impl_obj.wait_for_load_state(state=state, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_page.py:491: in wait_for_load_state
+    return await self._main_frame.wait_for_load_state(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:237: in wait_for_load_state
+    return await self._wait_for_load_state_impl(state, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:265: in _wait_for_load_state_impl
+    await waiter.result()
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+___________________ test_read_online_tab_behavior_per_issue ___________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:975: in test_read_online_tab_behavior_per_issue
+    _seed_published_issue(admin, "144181-d", title=title_d, open_in_new_tab=True)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_replace_cover_image_propagates_web ___________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1449: in test_replace_cover_image_propagates_web
+    _seed_published_issue(admin, "144199w", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_replace_pdf_attachment_propagates_web __________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1482: in test_replace_pdf_attachment_propagates_web
+    _seed_published_issue(admin, "144200w", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________________ test_search_by_issue_description _______________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1193: in test_search_by_issue_description
+    _seed_published_issue(admin, "144189", title=title,
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________________ test_search_by_issue_number _________________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1224: in test_search_by_issue_number
+    _seed_published_issue(admin, "144190", title=title, **{FIELD_ISSUE_NUMBER: issue_no})
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________________ test_search_by_issue_title __________________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:1164: in test_search_by_issue_title
+    _seed_published_issue(admin, "144188", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_unpublish_removes_from_public_page_web _________________
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:425: in test_unpublish_removes_from_public_page_web
+    _seed_published_issue(admin, "144109", title=title)
+web\tests\al_moltaqa_magazine\test_al_moltaqa_magazine_web.py:118: in _seed_published_issue
+    admin.create_disposable_entry(prefix, **values)
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:433: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/al_moltaqa_magazine/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\al_moltaqa_magazine\magazine_issue_admin_page.py:264: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_browse_search_view_download_end_to_end _________________
+web\tests\annual_reports\test_annual_reports_web.py:674: in test_browse_search_view_download_end_to_end
+    preview_page.wait_for_load_state("domcontentloaded")
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:9421: in wait_for_load_state
+    self._sync(self._impl_obj.wait_for_load_state(state=state, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_page.py:491: in wait_for_load_state
+    return await self._main_frame.wait_for_load_state(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:237: in wait_for_load_state
+    return await self._wait_for_load_state_impl(state, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:265: in _wait_for_load_state_impl
+    await waiter.result()
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+_________________ test_cover_image_uploaded_and_displayed_web _________________
+web\tests\annual_reports\test_annual_reports_web.py:1856: in test_cover_image_uploaded_and_displayed_web
+    admin.upload_file(FIELD_COVER_IMAGE, f"{FIXTURES}/valid_cover_1_5mb.jpg")
+cms\pages\annual_reports\annual_report_admin_page.py:182: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143727 Annual Report Cover Check') failed — leftover QCTEST data may remain
+_____________ test_edit_published_title_shows_new_value_live_web ______________
+cms\pages\components\object_authoring_page.py:250: in open_entry_by_edit_link
+    edit_link.click(timeout=10000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 10000ms exceeded.
+
+During handling of the above exception, another exception occurred:
+web\tests\annual_reports\test_annual_reports_web.py:1464: in test_edit_published_title_shows_new_value_live_web
+    admin.open_entry_by_edit_link(original_title)
+cms\pages\annual_reports\annual_report_admin_page.py:146: in open_entry_by_edit_link
+    self.authoring.open_entry_by_edit_link(title)
+cms\pages\components\object_authoring_page.py:255: in open_entry_by_edit_link
+    edit_link.click(force=True)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143641 Annual Report 2029 (Revised)') failed — leftover QCTEST data may remain
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143641 Annual Report 2029') failed — leftover QCTEST data may remain
+___________________ test_page_count_saved_and_displayed_web ___________________
+web\tests\annual_reports\test_annual_reports_web.py:1936: in test_page_count_saved_and_displayed_web
+    assert "20 Pages" in ar.card_meta(0)
+                         ^^^^^^^^^^^^^^^
+web\pages\annual_reports\annual_reports_page.py:282: in card_meta
+    return self.page.locator(self.CARD).nth(index).locator(self.CARD_META).inner_text()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:17310: in inner_text
+    self._sync(self._impl_obj.inner_text(timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:443: in inner_text
+    return await self._frame.inner_text(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:614: in inner_text
+    return await self._channel.send("innerText", locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143735 Annual Report Page Count Check') failed — leftover QCTEST data may remain
+_______ test_public_visitor_view_search_download_unauthenticated[page0] _______
+web\tests\annual_reports\test_annual_reports_web.py:635: in test_public_visitor_view_search_download_unauthenticated
+    preview_page.wait_for_load_state("domcontentloaded")
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:9421: in wait_for_load_state
+    self._sync(self._impl_obj.wait_for_load_state(state=state, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_page.py:491: in wait_for_load_state
+    return await self._main_frame.wait_for_load_state(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:237: in wait_for_load_state
+    return await self._wait_for_load_state_impl(state, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:265: in _wait_for_load_state_impl
+    await waiter.result()
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+_____________ test_replace_cover_image_removes_old_reference_web ______________
+web\tests\annual_reports\test_annual_reports_web.py:2038: in test_replace_cover_image_removes_old_reference_web
+    admin.upload_file(FIELD_COVER_IMAGE, f"{FIXTURES}/valid_cover_1_5mb.jpg")
+cms\pages\annual_reports\annual_report_admin_page.py:182: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143793 Annual Report Cover Replace') failed — leftover QCTEST data may remain
+___________ test_report_description_saved_and_displayed_on_card_web ___________
+web\tests\annual_reports\test_annual_reports_web.py:1830: in test_report_description_saved_and_displayed_on_card_web
+    assert ar.card_desc(0) == description
+           ^^^^^^^^^^^^^^^
+web\pages\annual_reports\annual_reports_page.py:279: in card_desc
+    return self.page.locator(self.CARD).nth(index).locator(self.CARD_DESC).inner_text()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:17310: in inner_text
+    self._sync(self._impl_obj.inner_text(timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:443: in inner_text
+    return await self._frame.inner_text(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:614: in inner_text
+    return await self._channel.send("innerText", locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143723 Annual Report Desc Check') failed — leftover QCTEST data may remain
+__________________ test_valid_pdf_uploaded_and_publishes_web __________________
+web\tests\annual_reports\test_annual_reports_web.py:1962: in test_valid_pdf_uploaded_and_publishes_web
+    admin.upload_file(FIELD_PDF_ATTACHMENT, f"{FIXTURES}/valid_pdf_4mb.pdf")
+cms\pages\annual_reports\annual_report_admin_page.py:182: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143740 Annual Report PDF Check') failed — leftover QCTEST data may remain
+_________________ test_view_details_and_download_independent __________________
+web\tests\annual_reports\test_annual_reports_web.py:943: in test_view_details_and_download_independent
+    preview_page.wait_for_load_state("domcontentloaded")
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:9421: in wait_for_load_state
+    self._sync(self._impl_obj.wait_for_load_state(state=state, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_page.py:491: in wait_for_load_state
+    return await self._main_frame.wait_for_load_state(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:237: in wait_for_load_state
+    return await self._wait_for_load_state_impl(state, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:265: in _wait_for_load_state_impl
+    await waiter.result()
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+_________________ test_view_details_opens_preview_no_download _________________
+web\tests\annual_reports\test_annual_reports_web.py:882: in test_view_details_opens_preview_no_download
+    preview_page.wait_for_load_state("domcontentloaded")
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:9421: in wait_for_load_state
+    self._sync(self._impl_obj.wait_for_load_state(state=state, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_page.py:491: in wait_for_load_state
+    return await self._main_frame.wait_for_load_state(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:237: in wait_for_load_state
+    return await self._wait_for_load_state_impl(state, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:265: in _wait_for_load_state_impl
+    await waiter.result()
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+______________ test_admin_publish_visitor_find_view_download_e2e ______________
+web\tests\export_reports\test_export_reports_web.py:1010: in test_admin_publish_visitor_find_view_download_e2e
+    admin.create_disposable_entry(
+cms\pages\export_reports\export_report_admin_page.py:379: in create_disposable_entry
+    self.upload_file(FIELD_COVER_THUMBNAIL, values.get("cover_path", "cms/tests/export_reports/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\export_reports\export_report_admin_page.py:219: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+________________ test_delete_removes_from_grid_and_public_page ________________
+web\tests\export_reports\test_export_reports_web.py:779: in test_delete_removes_from_grid_and_public_page
+    admin.create_disposable_entry(
+cms\pages\export_reports\export_report_admin_page.py:379: in create_disposable_entry
+    self.upload_file(FIELD_COVER_THUMBNAIL, values.get("cover_path", "cms/tests/export_reports/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\export_reports\export_report_admin_page.py:219: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_draft_report_not_visible_or_searchable _________________
+web\tests\export_reports\test_export_reports_web.py:822: in test_draft_report_not_visible_or_searchable
+    admin.create_disposable_entry(
+cms\pages\export_reports\export_report_admin_page.py:379: in create_disposable_entry
+    self.upload_file(FIELD_COVER_THUMBNAIL, values.get("cover_path", "cms/tests/export_reports/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\export_reports\export_report_admin_page.py:219: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+____________________ test_group_badge_name_period_derived _____________________
+web\tests\export_reports\test_export_reports_web.py:523: in test_group_badge_name_period_derived
+    admin.create_disposable_entry(
+cms\pages\export_reports\export_report_admin_page.py:379: in create_disposable_entry
+    self.upload_file(FIELD_COVER_THUMBNAIL, values.get("cover_path", "cms/tests/export_reports/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\export_reports\export_report_admin_page.py:219: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________________ test_light_theme_rendering __________________________
+web\tests\export_reports\test_export_reports_web.py:425: in test_light_theme_rendering
+    assert a11y.is_dark_mode_switch_checked() is False
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web\pages\components\accessibility_tools_component.py:638: in is_dark_mode_switch_checked
+    return self.dark_mode_toggle_state() == "true"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web\pages\components\accessibility_tools_component.py:632: in dark_mode_toggle_state
+    return self.page.locator(self.DARK_MODE_SWITCH).get_attribute("aria-checked")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:17193: in get_attribute
+    self._sync(self._impl_obj.get_attribute(name=name, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:411: in get_attribute
+    return await self._frame.get_attribute(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:624: in get_attribute
+    return await self._channel.send("getAttribute", locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+___________ test_public_visitor_browse_search_view_download[page0] ____________
+web\tests\export_reports\test_export_reports_web.py:461: in test_public_visitor_browse_search_view_download
+    preview_page.wait_for_load_state("domcontentloaded")
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:9421: in wait_for_load_state
+    self._sync(self._impl_obj.wait_for_load_state(state=state, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_page.py:491: in wait_for_load_state
+    return await self._main_frame.wait_for_load_state(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:237: in wait_for_load_state
+    return await self._wait_for_load_state_impl(state, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:265: in _wait_for_load_state_impl
+    await waiter.result()
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+________________ test_publish_makes_report_visible_and_correct ________________
+web\tests\export_reports\test_export_reports_web.py:598: in test_publish_makes_report_visible_and_correct
+    admin.create_disposable_entry(
+cms\pages\export_reports\export_report_admin_page.py:379: in create_disposable_entry
+    self.upload_file(FIELD_COVER_THUMBNAIL, values.get("cover_path", "cms/tests/export_reports/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\export_reports\export_report_admin_page.py:219: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________________ test_replace_pdf_supersedes_old _______________________
+web\tests\export_reports\test_export_reports_web.py:644: in test_replace_pdf_supersedes_old
+    admin.create_disposable_entry(
+cms\pages\export_reports\export_report_admin_page.py:379: in create_disposable_entry
+    self.upload_file(FIELD_COVER_THUMBNAIL, values.get("cover_path", "cms/tests/export_reports/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\export_reports\export_report_admin_page.py:219: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________________ test_report_card_cover_thumbnail _______________________
+web\tests\export_reports\test_export_reports_web.py:176: in test_report_card_cover_thumbnail
+    admin.create_disposable_entry(
+cms\pages\export_reports\export_report_admin_page.py:391: in create_disposable_entry
+    self.upload_file(FIELD_PDF_ATTACHMENT, values.get("pdf_path", "cms/tests/export_reports/fixtures/valid_pdf_4mb.pdf"))
+cms\pages\export_reports\export_report_admin_page.py:219: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_____________________ test_republish_restores_visibility ______________________
+web\tests\export_reports\test_export_reports_web.py:738: in test_republish_restores_visibility
+    admin.create_disposable_entry(
+cms\pages\export_reports\export_report_admin_page.py:379: in create_disposable_entry
+    self.upload_file(FIELD_COVER_THUMBNAIL, values.get("cover_path", "cms/tests/export_reports/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\export_reports\export_report_admin_page.py:219: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_unpublish_removes_from_public_page ___________________
+web\tests\export_reports\test_export_reports_web.py:693: in test_unpublish_removes_from_public_page
+    admin.create_disposable_entry(
+cms\pages\export_reports\export_report_admin_page.py:379: in create_disposable_entry
+    self.upload_file(FIELD_COVER_THUMBNAIL, values.get("cover_path", "cms/tests/export_reports/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\export_reports\export_report_admin_page.py:219: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________ test_unpublished_report_not_visible_or_searchable ______________
+web\tests\export_reports\test_export_reports_web.py:865: in test_unpublished_report_not_visible_or_searchable
+    admin.create_disposable_entry(
+cms\pages\export_reports\export_report_admin_page.py:379: in create_disposable_entry
+    self.upload_file(FIELD_COVER_THUMBNAIL, values.get("cover_path", "cms/tests/export_reports/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\export_reports\export_report_admin_page.py:219: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_view_details_opens_pdf_for_viewing ___________________
+web\tests\export_reports\test_export_reports_web.py:1150: in test_view_details_opens_pdf_for_viewing
+    preview_page.wait_for_load_state("domcontentloaded")
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:9421: in wait_for_load_state
+    self._sync(self._impl_obj.wait_for_load_state(state=state, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_page.py:491: in wait_for_load_state
+    return await self._main_frame.wait_for_load_state(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:237: in wait_for_load_state
+    return await self._wait_for_load_state_impl(state, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:265: in _wait_for_load_state_impl
+    await waiter.result()
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+__________________________ test_dark_theme_rendering __________________________
+web\tests\publications\test_publications_web.py:494: in test_dark_theme_rendering
+    assert a11y.is_dark_mode_switch_checked() is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web\pages\components\accessibility_tools_component.py:638: in is_dark_mode_switch_checked
+    return self.dark_mode_toggle_state() == "true"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web\pages\components\accessibility_tools_component.py:632: in dark_mode_toggle_state
+    return self.page.locator(self.DARK_MODE_SWITCH).get_attribute("aria-checked")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:17193: in get_attribute
+    self._sync(self._impl_obj.get_attribute(name=name, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:411: in get_attribute
+    return await self._frame.get_attribute(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:624: in get_attribute
+    return await self._channel.send("getAttribute", locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+______________ test_delete_removes_from_grid_and_public_page_web ______________
+web\tests\publications\test_publications_web.py:775: in test_delete_removes_from_grid_and_public_page_web
+    admin.publish_disposable_entry("144007", **{FIELD_PUBLICATION_TITLE_EN: title},
+cms\pages\publications\publication_admin_page.py:401: in publish_disposable_entry
+    values = self.create_disposable_entry(prefix, **overrides)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________ test_deleted_record_download_link_graceful_web ________________
+web\tests\publications\test_publications_web.py:902: in test_deleted_record_download_link_graceful_web
+    admin.publish_disposable_entry("144075", **{FIELD_PUBLICATION_TITLE_EN: title},
+cms\pages\publications\publication_admin_page.py:401: in publish_disposable_entry
+    values = self.create_disposable_entry(prefix, **overrides)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________ test_draft_not_accessible_via_direct_link __________________
+web\tests\publications\test_publications_web.py:569: in test_draft_not_accessible_via_direct_link
+    admin.create_disposable_entry(
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143995 Draft Publication') failed — leftover QCTEST data may remain
+____________ test_future_publication_date_appears_immediately_web _____________
+web\tests\publications\test_publications_web.py:869: in test_future_publication_date_appears_immediately_web
+    admin.publish_disposable_entry("144072", **{FIELD_PUBLICATION_TITLE_EN: title},
+cms\pages\publications\publication_admin_page.py:401: in publish_disposable_entry
+    values = self.create_disposable_entry(prefix, **overrides)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-144072 Future Date') failed — leftover QCTEST data may remain
+_________________________ test_light_theme_rendering __________________________
+web\tests\publications\test_publications_web.py:470: in test_light_theme_rendering
+    assert a11y.is_dark_mode_switch_checked() is False
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web\pages\components\accessibility_tools_component.py:638: in is_dark_mode_switch_checked
+    return self.dark_mode_toggle_state() == "true"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+web\pages\components\accessibility_tools_component.py:632: in dark_mode_toggle_state
+    return self.page.locator(self.DARK_MODE_SWITCH).get_attribute("aria-checked")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:17193: in get_attribute
+    self._sync(self._impl_obj.get_attribute(name=name, timeout=timeout))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:411: in get_attribute
+    return await self._frame.get_attribute(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:624: in get_attribute
+    return await self._channel.send("getAttribute", locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+__________________ test_load_more_reveals_additional_records __________________
+web\tests\publications\test_publications_web.py:1142: in test_load_more_reveals_additional_records
+    admin.publish_disposable_entry("144062", **{FIELD_PUBLICATION_TITLE_EN: title},
+cms\pages\publications\publication_admin_page.py:401: in publish_disposable_entry
+    values = self.create_disposable_entry(prefix, **overrides)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-144062 Load More') failed — leftover QCTEST data may remain
+__________________________ test_load_more_typography __________________________
+web\tests\publications\test_publications_web.py:323: in test_load_more_typography
+    admin.publish_disposable_entry("143987", **{FIELD_PUBLICATION_TITLE_EN: title},
+cms\pages\publications\publication_admin_page.py:401: in publish_disposable_entry
+    values = self.create_disposable_entry(prefix, **overrides)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143987 Publication') failed — leftover QCTEST data may remain
+_______________ test_only_published_appear_with_correct_fields ________________
+web\tests\publications\test_publications_web.py:612: in test_only_published_appear_with_correct_fields
+    admin.publish_disposable_entry("143999-pub", **{FIELD_PUBLICATION_TITLE_EN: published_title},
+cms\pages\publications\publication_admin_page.py:401: in publish_disposable_entry
+    values = self.create_disposable_entry(prefix, **overrides)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143999-Published-A') failed — leftover QCTEST data may remain
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143999-Draft-B') failed — leftover QCTEST data may remain
+_____________ test_publish_makes_visible_with_correct_fields_web ______________
+web\tests\publications\test_publications_web.py:657: in test_publish_makes_visible_with_correct_fields_web
+    admin.publish_disposable_entry("144004", **{FIELD_PUBLICATION_TITLE_EN: title},
+cms\pages\publications\publication_admin_page.py:401: in publish_disposable_entry
+    values = self.create_disposable_entry(prefix, **overrides)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-144004 Publish Flow') failed — leftover QCTEST data may remain
+____________________ test_published_card_element_inventory ____________________
+web\tests\publications\test_publications_web.py:362: in test_published_card_element_inventory
+    admin.publish_disposable_entry("143988", **{FIELD_PUBLICATION_TITLE_EN: title},
+cms\pages\publications\publication_admin_page.py:401: in publish_disposable_entry
+    values = self.create_disposable_entry(prefix, **overrides)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-143988 Qatar Economic Outlook 2026') failed — leftover QCTEST data may remain
+____________________ test_republish_updates_not_stale_web _____________________
+web\tests\publications\test_publications_web.py:693: in test_republish_updates_not_stale_web
+    admin.publish_disposable_entry("144005", **{FIELD_PUBLICATION_TITLE_EN: original_title},
+cms\pages\publications\publication_admin_page.py:401: in publish_disposable_entry
+    values = self.create_disposable_entry(prefix, **overrides)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-144005-Updated') failed — leftover QCTEST data may remain
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-144005-Original') failed — leftover QCTEST data may remain
+_________________ test_unpublish_removes_from_public_page_web _________________
+web\tests\publications\test_publications_web.py:738: in test_unpublish_removes_from_public_page_web
+    admin.publish_disposable_entry("144006", **{FIELD_PUBLICATION_TITLE_EN: title},
+cms\pages\publications\publication_admin_page.py:401: in publish_disposable_entry
+    values = self.create_disposable_entry(prefix, **overrides)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cms\pages\publications\publication_admin_page.py:376: in create_disposable_entry
+    self.upload_file(FIELD_COVER_IMAGE, values.get("cover_path", "cms/tests/publications/fixtures/valid_cover_1_5mb.jpg"))
+cms\pages\publications\publication_admin_page.py:226: in upload_file
+    self.authoring.upload_file(field_label, file_path)
+cms\pages\components\object_authoring_page.py:575: in upload_file
+    frame.get_by_role("button", name=self.UPLOAD_MODAL_ADD_BUTTON_TEXT).click(timeout=15000)
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\sync_api\_generated.py:15784: in click
+    self._sync(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_locator.py:159: in click
+    return await self._frame.click(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_frame.py:484: in click
+    await self._channel.send("click", locals_to_params(locals()))
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:62: in send
+    return await self._connection.wrap_api_call(
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:492: in wrap_api_call
+    return await cb()
+           ^^^^^^^^^^
+C:\Users\Heba.Samir\AppData\Roaming\Python\Python314\site-packages\playwright\_impl\_connection.py:100: in inner_send
+    result = next(iter(done)).result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+------------------------------ Captured log call ------------------------------
+WARNING  object_authoring_page:object_authoring_page.py:904 delete_entry_by_title('QCTEST-144006 Unpublish Flow') failed — leftover QCTEST data may remain
+=========================== short test summary info ===========================
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_archive_sorts_by_date_descending
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_article_count_displayed_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_cover_image_displayed_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_draft_issue_absent_everywhere_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_draft_not_viewable_via_direct_url
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_issue_date_reflected_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_issue_description_ar_displayed_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_issue_description_en_displayed_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_issue_number_displayed_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_issue_title_ar_displayed_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_issue_title_en_displayed_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_latest_issue_by_date
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_load_more_reveals_additional_issues
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_open_in_new_tab_false_same_tab_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_open_in_new_tab_true_opens_new_tab_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_page_count_displayed_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_pdf_attachment_read_online_download_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_publish_makes_visible_as_latest_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_publish_newer_redesignates_latest_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_published_issue_persists_after_reload_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_rapid_load_more_clicks_no_duplicates
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_read_online_archive_card_new_tab
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_read_online_latest_issue_new_tab
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_read_online_tab_behavior_per_issue
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_replace_cover_image_propagates_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_replace_pdf_attachment_propagates_web
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_search_by_issue_description
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_search_by_issue_number
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_search_by_issue_title
+FAILED web/tests/al_moltaqa_magazine/test_al_moltaqa_magazine_web.py::test_unpublish_removes_from_public_page_web
+FAILED web/tests/annual_reports/test_annual_reports_web.py::test_browse_search_view_download_end_to_end
+FAILED web/tests/annual_reports/test_annual_reports_web.py::test_cover_image_uploaded_and_displayed_web
+FAILED web/tests/annual_reports/test_annual_reports_web.py::test_edit_published_title_shows_new_value_live_web
+FAILED web/tests/annual_reports/test_annual_reports_web.py::test_page_count_saved_and_displayed_web
+FAILED web/tests/annual_reports/test_annual_reports_web.py::test_public_visitor_view_search_download_unauthenticated[page0]
+FAILED web/tests/annual_reports/test_annual_reports_web.py::test_replace_cover_image_removes_old_reference_web
+FAILED web/tests/annual_reports/test_annual_reports_web.py::test_report_description_saved_and_displayed_on_card_web
+FAILED web/tests/annual_reports/test_annual_reports_web.py::test_valid_pdf_uploaded_and_publishes_web
+FAILED web/tests/annual_reports/test_annual_reports_web.py::test_view_details_and_download_independent
+FAILED web/tests/annual_reports/test_annual_reports_web.py::test_view_details_opens_preview_no_download
+FAILED web/tests/export_reports/test_export_reports_web.py::test_admin_publish_visitor_find_view_download_e2e
+FAILED web/tests/export_reports/test_export_reports_web.py::test_delete_removes_from_grid_and_public_page
+FAILED web/tests/export_reports/test_export_reports_web.py::test_draft_report_not_visible_or_searchable
+FAILED web/tests/export_reports/test_export_reports_web.py::test_group_badge_name_period_derived
+FAILED web/tests/export_reports/test_export_reports_web.py::test_light_theme_rendering
+FAILED web/tests/export_reports/test_export_reports_web.py::test_public_visitor_browse_search_view_download[page0]
+FAILED web/tests/export_reports/test_export_reports_web.py::test_publish_makes_report_visible_and_correct
+FAILED web/tests/export_reports/test_export_reports_web.py::test_replace_pdf_supersedes_old
+FAILED web/tests/export_reports/test_export_reports_web.py::test_report_card_cover_thumbnail
+FAILED web/tests/export_reports/test_export_reports_web.py::test_republish_restores_visibility
+FAILED web/tests/export_reports/test_export_reports_web.py::test_unpublish_removes_from_public_page
+FAILED web/tests/export_reports/test_export_reports_web.py::test_unpublished_report_not_visible_or_searchable
+FAILED web/tests/export_reports/test_export_reports_web.py::test_view_details_opens_pdf_for_viewing
+FAILED web/tests/publications/test_publications_web.py::test_dark_theme_rendering
+FAILED web/tests/publications/test_publications_web.py::test_delete_removes_from_grid_and_public_page_web
+FAILED web/tests/publications/test_publications_web.py::test_deleted_record_download_link_graceful_web
+FAILED web/tests/publications/test_publications_web.py::test_draft_not_accessible_via_direct_link
+FAILED web/tests/publications/test_publications_web.py::test_future_publication_date_appears_immediately_web
+FAILED web/tests/publications/test_publications_web.py::test_light_theme_rendering
+FAILED web/tests/publications/test_publications_web.py::test_load_more_reveals_additional_records
+FAILED web/tests/publications/test_publications_web.py::test_load_more_typography
+FAILED web/tests/publications/test_publications_web.py::test_only_published_appear_with_correct_fields
+FAILED web/tests/publications/test_publications_web.py::test_publish_makes_visible_with_correct_fields_web
+FAILED web/tests/publications/test_publications_web.py::test_published_card_element_inventory
+FAILED web/tests/publications/test_publications_web.py::test_republish_updates_not_stale_web
+FAILED web/tests/publications/test_publications_web.py::test_unpublish_removes_from_public_page_web
+======================= 66 failed in 7583.82s (2:06:23) =======================

@@ -1,0 +1,1635 @@
+{
+ "pbi": 130711,
+ "plan_id": 137724,
+ "suite_id": 140370,
+ "module": "cms/tests/publications",
+ "cases": [
+  {
+   "tc_id": 143996,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor can create, edit, preview, publish, unpublish, delete publication records and manage Publication Types",
+   "steps": [
+    {
+     "action": "Log into Object Authoring as Site Content Editor (test1@xyz.com)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Create a publication record \"QCTEST-Editor-Full-Lifecycle\", save, edit, preview, publish, then unpublish it, then delete it",
+     "expected": "Editor is able to complete every lifecycle action (create/edit/preview/publish/unpublish/delete) without a permission error"
+    },
+    {
+     "action": "Add, edit, reorder and deactivate a Publication Type",
+     "expected": "Editor is able to complete every Publication Type management action without a permission error"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 143997,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author can view and update an assigned publication record",
+   "steps": [
+    {
+     "action": "Log into Object Authoring as Site Content Author (Test2@xyz.com)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open an assigned publication record and update its Description EN field",
+     "expected": "Record opens for editing"
+    },
+    {
+     "action": "Save the record",
+     "expected": "Change is saved and reflected in the record; no publish action is triggered"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "CMS_SITE_CONTENT_AUTHOR_EMAIL/PASSWORD in .env do not authenticate against qcdev — already confirmed 2026-09-17 for tc_131154/131155/131163/131200; reused here rather than re-attempting a known-blocked login."
+  },
+  {
+   "tc_id": 143998,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Author is denied Publish, Delete, and Manage Publication Types actions in Object Authoring",
+   "steps": [
+    {
+     "action": "Log into Object Authoring as Site Content Author (Test2@xyz.com)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open a publication record and attempt to click Publish",
+     "expected": "Publish action is unavailable/blocked with a permission message; record status does not change"
+    },
+    {
+     "action": "Attempt to click Delete on a record, and attempt to open Publication Type management",
+     "expected": "Delete is unavailable/blocked, and Publication Type management is not accessible to this role"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "Same CMS_SITE_CONTENT_AUTHOR_EMAIL/PASSWORD blocked-credentials gap as tc_143997."
+  },
+  {
+   "tc_id": 144000,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor can create a new publication record via Object Authoring and save it as Draft",
+   "steps": [
+    {
+     "action": "Log into Object Authoring as Site Content Editor (test1@xyz.com)",
+     "expected": "Create form opens"
+    },
+    {
+     "action": "Select Create Publication and fill Title EN/AR, Type, Cover, File, Page Count, Publication Date",
+     "expected": "All fields accept the entered values"
+    },
+    {
+     "action": "Save the record",
+     "expected": "Record is saved with Status = Draft and is not visible on the public Publications page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144001,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that cancelling the Create Publication form in Object Authoring discards all entered data",
+   "steps": [
+    {
+     "action": "Log into Object Authoring as Site Content Editor",
+     "expected": "Create form opens"
+    },
+    {
+     "action": "Start Create Publication and fill Title EN = \"QCTEST-Cancelled-Record\"",
+     "expected": "Fields are populated with the entered values"
+    },
+    {
+     "action": "Click Cancel/discard before saving",
+     "expected": "Form closes without saving"
+    },
+    {
+     "action": "Search the Publications listing for \"QCTEST-Cancelled-Record\"",
+     "expected": "No record titled \"QCTEST-Cancelled-Record\" exists in Object Authoring"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No Cancel/discard control exists anywhere on this form (confirmed live — a full a/button sweep for 'cancel'/'discard' text found none), same class of finding as tc_131174 on the Footer object."
+  },
+  {
+   "tc_id": 144002,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Editor can save a publication record as Draft via Object Authoring",
+   "steps": [
+    {
+     "action": "Open an existing publication record in Object Authoring",
+     "expected": "Record opens for editing"
+    },
+    {
+     "action": "Click Save as Draft",
+     "expected": "Record Status is set to Draft, Liferay success toast is shown, and the record does not appear on the public Publications page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144003,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Editor can preview a Draft publication record before publishing",
+   "steps": [
+    {
+     "action": "Open a Draft publication record in Object Authoring",
+     "expected": "Record opens for editing"
+    },
+    {
+     "action": "Click Preview",
+     "expected": "Preview renders the record's Draft content exactly as authored; the record remains Draft and is still not visible on the live public Publications page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144004,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that publishing a publication record via Object Authoring makes it visible on the public Publications page with correct field values",
+   "steps": [
+    {
+     "action": "In Object Authoring, publish \"QCTEST-Publish-Flow\" (Title EN/AR, Type = Guides, cover, PDF file, Page Count = 5)",
+     "expected": "Record Status becomes Published; Liferay success toast shown"
+    },
+    {
+     "action": "Navigate to the public Publications page",
+     "expected": "\"QCTEST-Publish-Flow\" card is visible with Type badge Guides, Page Count 5, and matching Title/File Type/File Size"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "Automated without the case's 'Page Count = 5' data point (Page Count not in guide §12); CP half asserts Published + History + Active Status."
+  },
+  {
+   "tc_id": 144005,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that editing an already-published publication and republishing updates the value shown on the public Publications page, not a stale cached value",
+   "steps": [
+    {
+     "action": "Publish \"QCTEST-Republish-Flow\" with Title EN = \"Original Title\"",
+     "expected": "Record Published with \"Original Title\" visible publicly"
+    },
+    {
+     "action": "Edit the record's Title EN to \"Updated Title\" and republish",
+     "expected": "Title updated and republished; success toast shown"
+    },
+    {
+     "action": "Reload the public Publications page and locate the card",
+     "expected": "Public card shows \"Updated Title\", not \"Original Title\""
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144006,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "Web"
+   ],
+   "title": "Verify that unpublishing a publication record via Object Authoring removes it from the public Publications page",
+   "steps": [
+    {
+     "action": "Publish \"QCTEST-Unpublish-Flow\" and confirm it appears publicly",
+     "expected": "Record is visible publicly"
+    },
+    {
+     "action": "In Object Authoring, click Unpublish on the record",
+     "expected": "Record Status becomes Unpublished; success toast shown"
+    },
+    {
+     "action": "Open the public Publications page in a fresh logged-out browser context",
+     "expected": "\"QCTEST-Unpublish-Flow\" no longer appears anywhere on the public Publications page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144007,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a Site Content Editor can delete a publication record via Object Authoring",
+   "steps": [
+    {
+     "action": "Publish \"QCTEST-Delete-Flow\"",
+     "expected": "Record is Published and visible publicly"
+    },
+    {
+     "action": "In Object Authoring, click Delete on the record and confirm",
+     "expected": "Record is removed from Object Authoring"
+    },
+    {
+     "action": "Check Object Authoring listing and the public Publications page",
+     "expected": "Record no longer appears in Object Authoring listing or on the public Publications page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144008,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that a Site Content Editor can add a new Publication Type via Object Authoring with EN/AR names",
+   "steps": [
+    {
+     "action": "In Object Authoring, open Manage Publication Types",
+     "expected": "Manage Publication Types opens"
+    },
+    {
+     "action": "Add a new type with Name EN = \"Case Studies\", Name AR = \"دراسات حالة\", Status = Active",
+     "expected": "New type is saved; success toast shown and recorded in the audit log"
+    },
+    {
+     "action": "Navigate to the public Publications page filter dropdown",
+     "expected": "\"Case Studies\" appears as a selectable option in \"All Categories\" and as a quick filter chip"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No 'Manage Publication Types' admin surface exists — see module docstring."
+  },
+  {
+   "tc_id": 144009,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that editing a Publication Type's EN/AR name reflects on the public filter dropdown and chips",
+   "steps": [
+    {
+     "action": "In Object Authoring, edit the \"Guides\" type's Name EN to \"Reference Guides\"",
+     "expected": "Change is saved; success toast shown"
+    },
+    {
+     "action": "Navigate to the public Publications page",
+     "expected": "\"All Categories\" dropdown and the corresponding quick filter chip now read \"Reference Guides\" instead of \"Guides\""
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No 'Manage Publication Types' admin surface exists — see module docstring."
+  },
+  {
+   "tc_id": 144010,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that reordering Publication Types reflects the new order in the public filter dropdown and quick filter chips",
+   "steps": [
+    {
+     "action": "In Object Authoring, move \"Brochures\" to the first position in the type order",
+     "expected": "New order is saved; success toast shown"
+    },
+    {
+     "action": "Navigate to the public Publications page",
+     "expected": "\"Brochures\" appears first in both the \"All Categories\" dropdown list and the quick filter chip row"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No 'Manage Publication Types' admin surface exists — see module docstring."
+  },
+  {
+   "tc_id": 144011,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Regression",
+    "Web"
+   ],
+   "title": "Verify that deactivating a Publication Type removes it from the public \"All Categories\" dropdown and quick filter chips",
+   "steps": [
+    {
+     "action": "In Object Authoring, set the \"Manuals\" type Status to Inactive",
+     "expected": "Status change is saved; success toast shown and recorded in the audit log"
+    },
+    {
+     "action": "Navigate to the public Publications page and open \"All Categories\" and view the quick filter chips",
+     "expected": "\"Manuals\" no longer appears in the \"All Categories\" dropdown or as a quick filter chip"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No 'Manage Publication Types' admin surface exists — see module docstring."
+  },
+  {
+   "tc_id": 144012,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that reactivating a previously deactivated Publication Type makes it reappear in the public \"All Categories\" dropdown and quick filter chips",
+   "steps": [
+    {
+     "action": "Following TC-034, in Object Authoring set the \"Manuals\" type Status back to Active",
+     "expected": "Status change is saved; success toast shown"
+    },
+    {
+     "action": "Navigate to the public Publications page and open \"All Categories\" and view the quick filter chips",
+     "expected": "\"Manuals\" reappears in the \"All Categories\" dropdown and as a quick filter chip"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "Depends on tc_144011's precondition — same no-Types-surface gap."
+  },
+  {
+   "tc_id": 144013,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that a newly created publication record receives a unique, system-generated Publication ID upon save",
+   "steps": [
+    {
+     "action": "Create and save a new publication record \"QCTEST-ID-Uniqueness\"",
+     "expected": "Record is saved"
+    },
+    {
+     "action": "Inspect the record's Publication ID field",
+     "expected": "A non-blank, system-generated Publication ID is present and not user-editable"
+    },
+    {
+     "action": "Create and save a second record \"QCTEST-ID-Uniqueness-2\" and inspect its Publication ID",
+     "expected": "The second record's Publication ID is different from the first"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144014,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that editing and saving a published publication record updates its Last Modified Date timestamp",
+   "steps": [
+    {
+     "action": "Open a Published record and note its current Last Modified Date",
+     "expected": "Current Last Modified Date is noted"
+    },
+    {
+     "action": "Edit the Description EN field and save",
+     "expected": "Save succeeds"
+    },
+    {
+     "action": "Reopen the record and check Last Modified Date",
+     "expected": "Last Modified Date is updated to the time of this save, later than the previously noted value"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144015,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that saving a change to a publication record displays the Liferay generic success toast and records the change in the audit log",
+   "steps": [
+    {
+     "action": "Open a publication record in Object Authoring and change the Page Count value",
+     "expected": "Record opens"
+    },
+    {
+     "action": "Save the record",
+     "expected": "Liferay generic success toast is displayed on save"
+    },
+    {
+     "action": "Open the audit log for this record",
+     "expected": "Audit log shows a new entry for this change, with actor, timestamp, and the modified field"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No confirmed-live, persistent success-toast element was captured within this session's probe budget (Save/Submit redirects the page immediately) — see module docstring."
+  },
+  {
+   "tc_id": 144016,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-High",
+    "MEDIA"
+   ],
+   "title": "Verify that adding a new Publication Type displays the Liferay generic success toast and records the change in the audit log",
+   "steps": [
+    {
+     "action": "In Object Authoring, add a new Publication Type \"QCTEST-Type-Audit\"",
+     "expected": "Liferay generic success toast is displayed on save"
+    },
+    {
+     "action": "Open the audit log for Publication Type management",
+     "expected": "Audit log shows a new entry recording the type addition, with actor and timestamp"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No 'Manage Publication Types' admin surface exists — see module docstring."
+  },
+  {
+   "tc_id": 144017,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that entering a valid Publication Title EN is accepted and saved",
+   "steps": [
+    {
+     "action": "Open Create Publication in Object Authoring",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Enter Title EN = \"Qatar Economic Outlook 2026\"",
+     "expected": "Value is entered"
+    },
+    {
+     "action": "Save the record and reload it",
+     "expected": "Record saves; on reload, Title EN still shows \"Qatar Economic Outlook 2026\""
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144018,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving Publication Title EN empty is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication in Object Authoring",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Leave Title EN empty and fill all other mandatory fields",
+     "expected": "Title EN left blank"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Validation error for missing required bilingual content is shown; record is not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144019,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Publication Title EN accepts exactly 200 characters and rejects 201",
+   "steps": [
+    {
+     "action": "Enter a 200-character string in Title EN and save",
+     "expected": "200-character value is accepted and saved"
+    },
+    {
+     "action": "Edit the record, enter a 201-character string in Title EN, and attempt to save",
+     "expected": "201-character value is rejected with a max-length validation error; the field is not saved beyond 200 characters"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144020,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that entering only whitespace in Publication Title EN is rejected as if empty",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Enter \"   \" (spaces only) in Title EN and fill remaining mandatory fields",
+     "expected": "Whitespace-only value entered"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Validation error for a required field is shown; record is not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144021,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that entering a valid Publication Title AR is accepted and saved",
+   "steps": [
+    {
+     "action": "Open Create Publication in Object Authoring",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Enter Title AR = \"توقعات الاقتصاد القطري 2026\"",
+     "expected": "Value is entered"
+    },
+    {
+     "action": "Save the record and reload it",
+     "expected": "Record saves; on reload, Title AR still shows \"توقعات الاقتصاد القطري 2026\""
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144022,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving Publication Title AR empty is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication in Object Authoring",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Leave Title AR empty and fill all other mandatory fields",
+     "expected": "Title AR left blank"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Validation error for missing required bilingual content is shown; record is not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144023,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Publication Title AR accepts exactly 200 characters and rejects 201",
+   "steps": [
+    {
+     "action": "Enter a 200-character Arabic string in Title AR and save",
+     "expected": "200-character value is accepted and saved"
+    },
+    {
+     "action": "Edit the record, enter a 201-character Arabic string in Title AR, and attempt to save",
+     "expected": "201-character value is rejected with a max-length validation error"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144024,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that entering only whitespace in Publication Title AR is rejected as if empty",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Enter \"   \" (spaces only) in Title AR and fill remaining mandatory fields",
+     "expected": "Whitespace-only value entered"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Validation error for a required field is shown; record is not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144025,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that selecting a valid Publication Type from the dropdown is accepted and saved",
+   "steps": [
+    {
+     "action": "Open Create Publication in Object Authoring",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Select Publication Type = \"Research Papers\"",
+     "expected": "Type is selected"
+    },
+    {
+     "action": "Save and reload the record",
+     "expected": "Record saves; on reload, Publication Type still shows \"Research Papers\""
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144026,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving Publication Type unselected is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Leave Publication Type unselected and fill all other mandatory fields",
+     "expected": "Type left unselected"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Validation error for missing required bilingual content (Type) is shown; record is not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144027,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that uploading a valid JPG cover/thumbnail image is accepted and displayed on the publication card",
+   "steps": [
+    {
+     "action": "Open Create Publication and upload a valid .jpg file as Cover/Thumbnail",
+     "expected": "Upload accepted"
+    },
+    {
+     "action": "Save and publish the record",
+     "expected": "Record is published"
+    },
+    {
+     "action": "View the record's card on the public Publications page",
+     "expected": "Card displays the uploaded thumbnail image"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144028,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving Publication Cover/Thumbnail empty is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Leave Cover/Thumbnail empty and fill all other mandatory fields",
+     "expected": "Cover/Thumbnail left empty"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Validation error for missing required Cover/Thumbnail is shown; record is not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144029,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that uploading an unsupported format for the Cover/Thumbnail is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Attempt to upload a .gif file as Cover/Thumbnail",
+     "expected": "Upload is rejected with a validation error naming the supported formats (JPG/PNG/JPEG)"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144030,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that uploading a valid PDF Publication File under 5 MB is accepted and drives the File Type/File Size meta line",
+   "steps": [
+    {
+     "action": "Open Create Publication and upload a valid 2 MB .pdf file as Publication File",
+     "expected": "Upload accepted"
+    },
+    {
+     "action": "Save and publish the record",
+     "expected": "Record is published"
+    },
+    {
+     "action": "View the record's card on the public Publications page",
+     "expected": "Card's meta line shows File Type = PDF and File Size ≈ 2 MB"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144031,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that leaving Publication File empty blocks publishing with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Leave Publication File empty; fill all other mandatory fields",
+     "expected": "File left empty"
+    },
+    {
+     "action": "Attempt to Publish",
+     "expected": "Publishing is blocked with a validation error stating the Publication File is required"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144032,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that uploading an unsupported file format for Publication File is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Attempt to upload a .exe file as Publication File",
+     "expected": "Upload is rejected with a validation error naming the supported formats (JPG, PNG, JPEG, DOCX, DOC, XLSX, PDF)"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144033,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that uploading a Publication File exceeding 5 MB is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Attempt to upload a 6 MB .pdf file as Publication File",
+     "expected": "Upload is rejected with a validation error stating the 5 MB size limit is exceeded"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144034,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that entering a valid Publication Description EN up to 500 characters is accepted and saved",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Enter a 480-character Description EN",
+     "expected": "Value is entered"
+    },
+    {
+     "action": "Save and reload the record",
+     "expected": "Record saves; on reload, Description EN is unchanged"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144036,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Publication Description EN accepts exactly 500 characters and rejects 501",
+   "steps": [
+    {
+     "action": "Enter a 500-character string in Description EN and save",
+     "expected": "500-character value is accepted and saved"
+    },
+    {
+     "action": "Edit the record, enter a 501-character string in Description EN, and attempt to save",
+     "expected": "501-character value is rejected with a max-length validation error"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144037,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that entering a valid Publication Description AR up to 500 characters is accepted and saved",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Enter a 480-character Arabic Description AR",
+     "expected": "Value is entered"
+    },
+    {
+     "action": "Save and reload the record",
+     "expected": "Record saves; on reload, Description AR is unchanged"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144039,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that Publication Description AR accepts exactly 500 characters and rejects 501",
+   "steps": [
+    {
+     "action": "Enter a 500-character Arabic string in Description AR and save",
+     "expected": "500-character value is accepted and saved"
+    },
+    {
+     "action": "Edit the record, enter a 501-character Arabic string in Description AR, and attempt to save",
+     "expected": "501-character value is rejected with a max-length validation error"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144040,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that entering a valid positive integer in Page Count is accepted and displayed on the card",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Value entered"
+    },
+    {
+     "action": "Enter Page Count = 42",
+     "expected": "Record published"
+    },
+    {
+     "action": "Save, publish, and view the record's card on the public Publications page",
+     "expected": "Card displays Page Count = 42"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: 'Page Count' is not a field of the Publication object in cms/Content-Admin-Guide.docx §12. Guide-vs-case conflict for the QA Manager/BA."
+  },
+  {
+   "tc_id": 144041,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving Page Count empty is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Leave Page Count empty; fill all other mandatory fields",
+     "expected": "Page Count left blank"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Validation error for missing required field is shown; record is not saved"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: 'Page Count' is not a field of the Publication object in cms/Content-Admin-Guide.docx §12. Guide-vs-case conflict for the QA Manager/BA."
+  },
+  {
+   "tc_id": 144042,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that entering 0 or a negative number in Page Count is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication and enter Page Count = 0; attempt to save",
+     "expected": "Value 0 is rejected with a positive-integer validation error"
+    },
+    {
+     "action": "Change Page Count to -5; attempt to save",
+     "expected": "Value -5 is rejected with the same validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: 'Page Count' is not a field of the Publication object in cms/Content-Admin-Guide.docx §12. Guide-vs-case conflict for the QA Manager/BA."
+  },
+  {
+   "tc_id": 144044,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA",
+    "Regression"
+   ],
+   "title": "Verify that selecting a valid Publication Date is accepted and drives the Latest First sort order",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Date is entered"
+    },
+    {
+     "action": "Set Publication Date = today's date",
+     "expected": "Record published"
+    },
+    {
+     "action": "Save, publish, and sort the public Publications page by \"Latest First\"",
+     "expected": "Record appears at or near the top of the Latest First ordering, consistent with its date"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144045,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving Publication Date empty is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Create Publication",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Leave Publication Date empty; fill all other mandatory fields",
+     "expected": "Publication Date left blank"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Validation error for missing required field is shown; record is not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144047,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that entering a valid Publication Type Name EN when adding a new type is accepted and saved",
+   "steps": [
+    {
+     "action": "In Object Authoring, open Manage Publication Types > Add",
+     "expected": "Add-type form opens"
+    },
+    {
+     "action": "Enter Name EN = \"Case Studies\" (and a valid Name AR)",
+     "expected": "Value is entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Type is saved with Name EN = \"Case Studies\""
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No 'Manage Publication Types' admin surface exists — see module docstring."
+  },
+  {
+   "tc_id": 144048,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving Publication Type Name EN empty is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Manage Publication Types > Add",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Leave Name EN empty; fill Name AR",
+     "expected": "Name EN left blank"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Validation error for missing required field is shown; type is not saved"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No 'Manage Publication Types' admin surface exists — see module docstring."
+  },
+  {
+   "tc_id": 144050,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that entering a valid Publication Type Name AR when adding a new type is accepted and saved",
+   "steps": [
+    {
+     "action": "In Object Authoring, open Manage Publication Types > Add",
+     "expected": "Add-type form opens"
+    },
+    {
+     "action": "Enter Name AR = \"دراسات حالة\" (and a valid Name EN)",
+     "expected": "Value is entered"
+    },
+    {
+     "action": "Save",
+     "expected": "Type is saved with Name AR = \"دراسات حالة\""
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No 'Manage Publication Types' admin surface exists — see module docstring."
+  },
+  {
+   "tc_id": 144051,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "Verify that leaving Publication Type Name AR empty is rejected with a validation error",
+   "steps": [
+    {
+     "action": "Open Manage Publication Types > Add",
+     "expected": "Form opens"
+    },
+    {
+     "action": "Leave Name AR empty; fill Name EN",
+     "expected": "Name AR left blank"
+    },
+    {
+     "action": "Attempt to save",
+     "expected": "Validation error for missing required field is shown; type is not saved"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No 'Manage Publication Types' admin surface exists — see module docstring."
+  },
+  {
+   "tc_id": 144071,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a published publication's Publication Type badge remains displayed after its Publication Type is later deactivated",
+   "steps": [
+    {
+     "action": "Publish \"QCTEST-Badge-Persistence\" with Type = \"White Papers\"",
+     "expected": "Record is Published with the White Papers badge"
+    },
+    {
+     "action": "In Object Authoring, deactivate the \"White Papers\" type",
+     "expected": "Type is deactivated; it no longer appears in the filter dropdown/chips"
+    },
+    {
+     "action": "Reload the public Publications page and locate the record's card (via direct link, since it no longer appears under the type filter)",
+     "expected": "The record's card still shows the \"White Papers\" badge, unaffected by the type's deactivation"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No 'Manage Publication Types' admin surface exists — see module docstring."
+  },
+  {
+   "tc_id": 144072,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that a publication saved with a future Publication Date still appears immediately and does not disrupt Latest First sort",
+   "steps": [
+    {
+     "action": "Publish \"QCTEST-Future-Date\" with Publication Date set 30 days in the future",
+     "expected": "Record is Published with the future date"
+    },
+    {
+     "action": "Navigate to the public Publications page and sort by \"Latest First\"",
+     "expected": "Record appears immediately on the page (no scheduling/holdback) and is correctly ordered ahead of older-dated records under Latest First"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144073,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA"
+   ],
+   "title": "Verify that an interrupted Publication File upload does not leave a partial file attached and keeps publishing blocked",
+   "steps": [
+    {
+     "action": "Open Create Publication and start uploading a valid Publication File",
+     "expected": "Upload begins"
+    },
+    {
+     "action": "Simulate a network drop mid-upload (throttle/disconnect)",
+     "expected": "Upload fails to complete; no partial/corrupt file is attached to the record"
+    },
+    {
+     "action": "Attempt to Publish the record",
+     "expected": "Publishing is blocked with a validation error stating the Publication File is required/invalid"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "Needs a controlled mid-upload network interruption — no reliable, repeatable technique for this was exercised this session."
+  },
+  {
+   "tc_id": 144075,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "MEDIA",
+    "Web"
+   ],
+   "title": "Verify that deleting a Published publication whose Download link was already shared results in a graceful not-found response",
+   "steps": [
+    {
+     "action": "Publish \"QCTEST-Delete-Reference\" and copy its public Download link",
+     "expected": "Record is Published and link is copied"
+    },
+    {
+     "action": "In Object Authoring, delete the record",
+     "expected": "Record is deleted"
+    },
+    {
+     "action": "Open the previously copied Download link directly",
+     "expected": "The old link resolves to a graceful not-found/empty-state response, not a broken link or server error"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Disposable QCTEST-<tc_id> Publication, created/deleted as QC Site Content Editor; public reads logged-out."
+  },
+  {
+   "tc_id": 144080,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يتم عرض رسالة النجاح العامة من Liferay باللغة العربية عند حفظ تغيير في سجل منشور ولغة لوحة التحكم عربية",
+   "steps": [
+    {
+     "action": "تسجيل الدخول إلى Object Authoring كمحرر محتوى الموقع مع اختيار اللغة العربية للواجهة",
+     "expected": "تسجيل الدخول ينجح والواجهة معروضة بالعربية"
+    },
+    {
+     "action": "فتح سجل منشور وتعديل حقل ثم الحفظ",
+     "expected": "تظهر رسالة نجاح Liferay العامة باللغة العربية بعد الحفظ"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "No confirmed-live success-toast element was captured within this session's probe budget even in English (see tc_144015), and switching the Control Panel's own UI language to Arabic was not exercised live this session."
+  },
+  {
+   "tc_id": 144081,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "Functional-Low",
+    "MEDIA"
+   ],
+   "title": "التحقق من أنه يتم عرض رسالة خطأ التحقق باللغة العربية عند عدم رفع ملف المنشور المطلوب ولغة لوحة التحكم عربية",
+   "steps": [
+    {
+     "action": "تسجيل الدخول إلى Object Authoring مع اختيار اللغة العربية للواجهة",
+     "expected": "تسجيل الدخول ينجح والواجهة معروضة بالعربية"
+    },
+    {
+     "action": "فتح نموذج إنشاء منشور جديد وترك حقل ملف المنشور فارغاً",
+     "expected": "نموذج الإنشاء يُفتح وحقل الملف فارغ"
+    },
+    {
+     "action": "محاولة النشر",
+     "expected": "تظهر رسالة خطأ تحقق باللغة العربية تفيد بأن ملف المنشور مطلوب، ولا يتم النشر"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "The underlying English validation error IS confirmed reachable (see tc_144031), but switching the Control Panel's own UI language to Arabic to verify the Arabic wording was not exercised live this session."
+  }
+ ],
+ "out_of_scope": [
+  {
+   "tc_id": 144035,
+   "priority": 4,
+   "reason": "Priority 4"
+  },
+  {
+   "tc_id": 144038,
+   "priority": 4,
+   "reason": "Priority 4"
+  },
+  {
+   "tc_id": 144043,
+   "priority": 4,
+   "reason": "Priority 4"
+  },
+  {
+   "tc_id": 144046,
+   "priority": 4,
+   "reason": "Priority 4"
+  },
+  {
+   "tc_id": 144049,
+   "priority": 4,
+   "reason": "Priority 4"
+  },
+  {
+   "tc_id": 144052,
+   "priority": 4,
+   "reason": "Priority 4"
+  },
+  {
+   "tc_id": 144078,
+   "priority": 3,
+   "reason": "Manual"
+  }
+ ],
+ "blocked_note": null
+}

@@ -1,0 +1,58 @@
+{
+ "plan_id": 133534,
+ "suite_id": 134455,
+ "outcomes": [
+  {
+   "test_case_id": 135951,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135962,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135965,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 135968,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 136049,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 136050,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 136051,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 136052,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 136053,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 136054,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 136055,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 136056,
+   "outcome": "NotApplicable"
+  },
+  {
+   "test_case_id": 136067,
+   "outcome": "NotApplicable"
+  }
+ ]
+}

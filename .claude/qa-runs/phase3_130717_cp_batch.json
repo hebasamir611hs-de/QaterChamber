@@ -1,0 +1,536 @@
+{
+ "pbi": 130717,
+ "cases": [
+  {
+   "tc_id": 143419,
+   "priority": 3,
+   "category": "UI",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "UI"
+   ],
+   "title": "Verify that the Committee Joining Request admin edit screen renders correctly in the Control Panel for a Site Content Editor (English)",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Editor (test1@xyz.com)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open the Committee Joining Request page for editing",
+     "expected": "Edit screen renders hero, info section, form header/disclaimer/consent/Privacy Policy fields, and 4 lookup-list management entries, all editable"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED: no page-content object for 'Request to Join a Committee' exists on the live Object Authoring sidebar (only the 'Committee Joining Request' submissions object). Brief stop condition: object missing from sidebar."
+  },
+  {
+   "tc_id": 143428,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel"
+   ],
+   "title": "Verify that a Site Content Editor is granted access to page content and lookup-list management",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Site Content Editor (test1@xyz.com)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Navigate to the Committee Joining Request page edit screen and the lookup-list management screen",
+     "expected": "Both screens open successfully with full edit/manage permissions"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED: no page-content object for 'Request to Join a Committee' exists on the live Object Authoring sidebar (only the 'Committee Joining Request' submissions object). Brief stop condition: object missing from sidebar."
+  },
+  {
+   "tc_id": 143429,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel"
+   ],
+   "title": "Verify that a Site Content Editor is denied access to the submissions review screen",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Attempt to navigate to the submissions-review screen",
+     "expected": "Access is blocked with 'Access Denied. You do not have permission to perform this action.' (EN/AR)"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "automate: denial-direction Auth case; needs no entry form and no submission. Assert the refusal positively as the named role."
+  },
+  {
+   "tc_id": 143430,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel"
+   ],
+   "title": "Verify that a Form Manager is granted access to view, filter, open, and review submissions",
+   "steps": [
+    {
+     "action": "Log into Liferay CMS as Form Manager",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open the submissions listing and apply a filter by Status = Pending",
+     "expected": "Listing shows only Pending submissions matching the filter"
+    },
+    {
+     "action": "Open a Pending submission",
+     "expected": "Submission opens with all captured field values shown read-only"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 143431,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "COMM",
+    "Control_Panel"
+   ],
+   "title": "Verify that a Form Manager is denied access to edit page content",
+   "steps": [
+    {
+     "action": "Log in as Form Manager",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Attempt to navigate to the Committee Joining Request page content edit screen",
+     "expected": "Access is blocked with 'Access Denied. You do not have permission to perform this action.' (EN/AR)"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "conditional: a Form Manager refusal on page content would look identical to the Editor missing-form bar, so a positive refusal cannot be told apart from the config gap."
+  },
+  {
+   "tc_id": 143436,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a Site Content Editor can edit and publish the Committee Joining Request page content end-to-end",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Update hero title, info-section body and disclaimer text (EN and AR)",
+     "expected": "Fields updated in the editor"
+    },
+    {
+     "action": "Save as Draft, then Preview, then Publish",
+     "expected": "Draft saved; Preview shows the updated content accurately; Publish succeeds with a Liferay success toast (MSG-10) and an audit log entry; the public page reflects the change in both EN and AR preserving formatting/hyperlinks"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED: no page-content object for 'Request to Join a Committee' exists on the live Object Authoring sidebar (only the 'Committee Joining Request' submissions object). Brief stop condition: object missing from sidebar."
+  },
+  {
+   "tc_id": 143437,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High"
+   ],
+   "title": "Verify that an RBAC-restricted action by a Site Content Editor without sufficient permission is blocked with the Access Denied message",
+   "steps": [
+    {
+     "action": "Log in as Content Contributor (Test3@xyz.com)",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Attempt to Publish the Committee Joining Request page",
+     "expected": "Publish action is blocked with 'Access Denied. You do not have permission to perform this action.' (EN/AR); page state unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01, Site Content Editor qc.editor.test): the authoring entry form does not render on this object's manage page; clicking a row's Edit shows the red bar 'Edit needs the entry form on this page, which is missing.' and '+ Add New' opens no form. TEST_USER does get the form, but lifecycle/role cases may not run as TEST_USER. Needs the form placed for the Editor/Author roles (environment/config, not fragments) before this case can be scripted."
+  },
+  {
+   "tc_id": 143438,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a Form Manager can approve a Pending submission and the applicant receives the Approval Notification email",
+   "steps": [
+    {
+     "action": "Log in as Form Manager",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open the Pending submission from TC-027",
+     "expected": "Submission opens with all fields read-only"
+    },
+    {
+     "action": "Change status to Approved and save",
+     "expected": "Status saved as Approved, timestamped and audit-logged with a Liferay success toast (MSG-10); Approval Notification email (subject MSG-9) is auto-sent to the applicant's entered address"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "CONDITIONAL: asserts an email in an inbox, plus needs a QCTEST submission (see NO_SUB). No mailbox access defined for automation."
+  },
+  {
+   "tc_id": 143439,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Regression"
+   ],
+   "title": "Verify that a Form Manager cannot save a Rejected status without entering a rejection reason",
+   "steps": [
+    {
+     "action": "Log in as Form Manager",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open a Pending submission",
+     "expected": "Submission opens"
+    },
+    {
+     "action": "Set status to Rejected, leave the reason field empty, and attempt to save",
+     "expected": "Save is blocked with the validation error 'A rejection reason is required before the status can be saved.' (EN/AR); status remains Pending"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 143440,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-High",
+    "Regression"
+   ],
+   "title": "Verify that a Form Manager can reject a submission with a reason, and no email is sent to the applicant",
+   "steps": [
+    {
+     "action": "Log in as Form Manager",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open a Pending submission",
+     "expected": "Submission opens"
+    },
+    {
+     "action": "Set status to Rejected, enter the rejection reason, and save",
+     "expected": "Status and reason are saved internally, timestamped and audit-logged with a success toast; the reason is never exposed to the applicant; NO email is sent to the applicant"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "CONDITIONAL: asserts an email in an inbox, plus needs a QCTEST submission (see NO_SUB). No mailbox access defined for automation."
+  },
+  {
+   "tc_id": 143495,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a Site Content Editor can Save as Draft, Preview, then Publish the page in sequence",
+   "steps": [
+    {
+     "action": "Edit the page content and Save as Draft",
+     "expected": "Draft saved; page state = Draft, audit-logged"
+    },
+    {
+     "action": "Click Preview and inspect the rendered draft",
+     "expected": "Preview accurately reflects the draft content"
+    },
+    {
+     "action": "Click Publish",
+     "expected": "Publish succeeds; page state = Published; Liferay success toast (MSG-10) shown and audit-logged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED: no page-content object for 'Request to Join a Committee' exists on the live Object Authoring sidebar (only the 'Committee Joining Request' submissions object). Brief stop condition: object missing from sidebar."
+  },
+  {
+   "tc_id": 143496,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a Site Content Editor can Unpublish a previously Published page",
+   "steps": [
+    {
+     "action": "Open the currently Published Committee Joining Request page",
+     "expected": "Page is Published"
+    },
+    {
+     "action": "Click Unpublish",
+     "expected": "Page state changes to Unpublished; Liferay success toast (MSG-10) shown and audit-logged; the public page is no longer accessible (per TC-030)"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED: no page-content object for 'Request to Join a Committee' exists on the live Object Authoring sidebar (only the 'Committee Joining Request' submissions object). Brief stop condition: object missing from sidebar."
+  },
+  {
+   "tc_id": 143497,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "LookupData"
+   ],
+   "title": "Verify that adding a new Sector/Committee lookup value in the CMS reflects automatically in the public form dropdown with no redeploy",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor and open the Sector/Committee lookup list",
+     "expected": "Lookup list opens"
+    },
+    {
+     "action": "Add a new value 'Technology' and save",
+     "expected": "New value saved; success toast shown, audit-logged"
+    },
+    {
+     "action": "Reload the public Committee Joining Request page and open the Sector/Committee dropdown",
+     "expected": "'Technology' appears in the public dropdown immediately, with no code deploy required"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "conditional: Editor DOES get a form on manage-committee-lookup-status; buildable on a disposable QCTEST lookup value. Not scripted because the session stopped on the form-missing blocker."
+  },
+  {
+   "tc_id": 143498,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low",
+    "LookupData"
+   ],
+   "title": "Verify that deactivating a lookup value removes it from the public dropdown while keeping it intact on historical submissions",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor and deactivate the 'Insurance' Sector/Committee value",
+     "expected": "Value deactivated; success toast shown, audit-logged"
+    },
+    {
+     "action": "Reload the public form and open the Sector/Committee dropdown",
+     "expected": "'Insurance' no longer appears as a selectable option in the public dropdown"
+    },
+    {
+     "action": "Open the historical submission from TC-027 as Form Manager",
+     "expected": "The historical submission still shows 'Insurance' as its stored Sector/Committee value, unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 143499,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that a valid hero background image upload succeeds",
+   "steps": [
+    {
+     "action": "Open the page edit screen",
+     "expected": "Edit screen opens"
+    },
+    {
+     "action": "Upload a valid JPG image within the allowed size limit for the hero background",
+     "expected": "Upload completes without error"
+    },
+    {
+     "action": "Save",
+     "expected": "Image is saved and reflected as the hero background on Preview"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED: no page-content object for 'Request to Join a Committee' exists on the live Object Authoring sidebar (only the 'Committee Joining Request' submissions object). Brief stop condition: object missing from sidebar."
+  },
+  {
+   "tc_id": 143500,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Functional-Low"
+   ],
+   "title": "Verify that an unsupported file type/size hero image upload is rejected with the correct error message",
+   "steps": [
+    {
+     "action": "Open the page edit screen",
+     "expected": "Edit screen opens"
+    },
+    {
+     "action": "Attempt to upload an unsupported file type (e.g. .EXE) as the hero background",
+     "expected": "Upload is rejected with 'Unsupported file type or size.' (EN/AR); the hero background is unchanged"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED: no page-content object for 'Request to Join a Committee' exists on the live Object Authoring sidebar (only the 'Committee Joining Request' submissions object). Brief stop condition: object missing from sidebar."
+  },
+  {
+   "tc_id": 143503,
+   "priority": 2,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Edge",
+    "LookupData"
+   ],
+   "title": "Verify that deactivating a lookup value already referenced by an existing Pending submission does not alter that submission's stored value",
+   "steps": [
+    {
+     "action": "Confirm a Pending submission exists with Sector/Committee = 'Insurance'",
+     "expected": "Pending submission confirmed"
+    },
+    {
+     "action": "As Site Content Editor, deactivate the 'Insurance' lookup value",
+     "expected": "Value deactivated, audit-logged"
+    },
+    {
+     "action": "As Form Manager, reopen the Pending submission",
+     "expected": "The submission still displays 'Insurance' as its Sector/Committee value, unaffected by the deactivation"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 143504,
+   "priority": 2,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Edge"
+   ],
+   "title": "Verify that a Form Manager can still approve a submission whose Sector/Committee value was deactivated after submission",
+   "steps": [
+    {
+     "action": "Open the Pending submission whose Sector/Committee value ('Insurance') is now deactivated",
+     "expected": "Submission opens with its historical value intact"
+    },
+    {
+     "action": "Set status to Approved and save",
+     "expected": "Approval succeeds normally; status saved as Approved, audit-logged, Approval Notification email sent to the applicant, unaffected by the lookup deactivation"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  },
+  {
+   "tc_id": 143505,
+   "priority": 2,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Approval",
+    "Automation",
+    "COMM",
+    "Control_Panel",
+    "Edge"
+   ],
+   "title": "Verify that a rejection reason is accepted at exactly 500 characters and rejected at 501 characters",
+   "steps": [
+    {
+     "action": "Open a Pending submission as Form Manager, set status to Rejected, enter a 500-character reason, and save",
+     "expected": "500-char reason accepted; status saved as Rejected, audit-logged"
+    },
+    {
+     "action": "Repeat with a 501-character reason",
+     "expected": "501-char reason is rejected/blocked with a length validation error; status remains Pending"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "BLOCKED (live 2026-10-01): the submissions object has 0 entries on qcdev (seen as Site Content Editor and Form Manager). Whether a QCTEST-<tc_id> submission can be created via '+ Add New' is UNVERIFIED (the form did not render in the probe); the public form is reCAPTCHA-gated. Brief: a case needing a submission we cannot create is BLOCKED -> STOP and ask."
+  }
+ ]
+}

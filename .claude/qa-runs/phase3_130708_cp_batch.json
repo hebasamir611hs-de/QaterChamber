@@ -1,0 +1,1752 @@
+{
+ "pbi": 130708,
+ "plan_id": 137724,
+ "suite_id": 140367,
+ "module": "cms/tests/made_in_qatar_expo/test_made_in_qatar_expo_control_panel.py",
+ "object_name_source": "live Object Authoring sidebar (engineer brief 2026-10-01, 'Object-name source'); slugs pending live read",
+ "cases": [
+  {
+   "tc_id": 142642,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Author can view and update assigned Made in Qatar Expo content",
+   "steps": [
+    {
+     "action": "Log in as Site Content Author",
+     "expected": "Login succeeds"
+    },
+    {
+     "action": "Open Made in Qatar Expo in Object Authoring",
+     "expected": "Page opens in edit mode"
+    },
+    {
+     "action": "Update About section body text and save",
+     "expected": "Save succeeds; updated value persists on reload"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 142643,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "EXPO"
+   ],
+   "title": "Verify that a Site Content Author cannot publish the Made in Qatar Expo page",
+   "steps": [
+    {
+     "action": "Log in as Site Content Author, open the page",
+     "expected": "Page opens"
+    },
+    {
+     "action": "Attempt Publish (via UI action and, if the environment exposes it, direct action endpoint)",
+     "expected": "\"Access Denied. You do not have permission to perform this action.\" / \"تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.\" is shown; page status unchanged"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "case expects an Access Denied text; the 7-state workflow routes an Author's submit to Pending Review instead - asserted positively (Pending Review, no approve/publish action)",
+   "account": "QC Site Content Author via cms_role_credentials('Site Content Author'); teardown as Editor"
+  },
+  {
+   "tc_id": 142644,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "EXPO"
+   ],
+   "title": "Verify that a Public Visitor cannot access the Made in Qatar Expo admin/edit page",
+   "steps": [
+    {
+     "action": "In a logged-out browser context, navigate directly to the Object Authoring edit URL for the page",
+     "expected": "Redirected to CMS login, or \"Access Denied\" shown; no page content/fields exposed"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "none - fresh logged-out context (new_context(browser, use_auth_state=False))"
+  },
+  {
+   "tc_id": 142646,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-High",
+    "Regression",
+    "UAT"
+   ],
+   "title": "Verify that a Site Content Editor can fully author and publish the Made in Qatar Expo page end-to-end",
+   "steps": [
+    {
+     "action": "Open Object Authoring, set Hero Eyebrow/Title/Description/Banner (EN/AR)",
+     "expected": "Fields accept values"
+    },
+    {
+     "action": "Set About Eyebrow/Title/Body (EN/AR)",
+     "expected": "Fields accept values"
+    },
+    {
+     "action": "Set Card Logo/Eyebrow/Heading/Description/Button/URL/Open Behavior (EN/AR)",
+     "expected": "Fields accept values"
+    },
+    {
+     "action": "Save as Draft, then Preview",
+     "expected": "Draft saved; preview renders configured content"
+    },
+    {
+     "action": "Publish",
+     "expected": "Liferay generic success toast shown; audit log records the publish action"
+    },
+    {
+     "action": "Reload the public Web page (anonymous context)",
+     "expected": "All configured EN/AR content is visible live, matching what was authored"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142649,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the Hero Eyebrow Label saves correctly with valid EN/AR values",
+   "steps": [
+    {
+     "action": "Enter EN + AR values, Save",
+     "expected": "Values accepted, no validation error"
+    },
+    {
+     "action": "Reload the edit form",
+     "expected": "Both values persist exactly as entered"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142650,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Eyebrow Label is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Leave Eyebrow EN empty (AR filled), attempt Save",
+     "expected": "Save blocked; \"This field is required.\" shown under EN field"
+    },
+    {
+     "action": "Fill EN, clear AR, attempt Save",
+     "expected": "Save blocked; \"هذا الحقل مطلوب.\" shown under AR field"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142651,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Eyebrow Label rejects input exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter a 61-character value in Eyebrow EN, attempt Save",
+     "expected": "Save blocked (or input truncated at 60, per field behavior); validation message shown / character count exceeded indicator displayed"
+    },
+    {
+     "action": "Enter exactly 60 characters",
+     "expected": "Value accepted and saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142652,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the Page Title saves correctly with valid EN/AR values",
+   "steps": [
+    {
+     "action": "Enter EN + AR, Save",
+     "expected": "Accepted, no error"
+    },
+    {
+     "action": "Reload",
+     "expected": "Values persist"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142653,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Page Title is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Clear Title EN, attempt Save",
+     "expected": "Blocked; \"This field is required.\" shown"
+    },
+    {
+     "action": "Restore EN, clear Title AR, attempt Save",
+     "expected": "Blocked; \"هذا الحقل مطلوب.\" shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142654,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Page Title rejects input exceeding 120 characters",
+   "steps": [
+    {
+     "action": "Enter 121 characters in Title EN, attempt Save",
+     "expected": "Save blocked/truncated; boundary validation triggers"
+    },
+    {
+     "action": "Enter exactly 120 characters",
+     "expected": "Accepted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142655,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the Hero Description saves correctly with valid EN/AR rich text",
+   "steps": [
+    {
+     "action": "Enter EN + AR rich text, Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Reload",
+     "expected": "Formatting and text persist"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142656,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Description is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Clear Description EN, attempt Save",
+     "expected": "Blocked; \"This field is required.\" shown"
+    },
+    {
+     "action": "Restore EN, clear AR, attempt Save",
+     "expected": "Blocked; \"هذا الحقل مطلوب.\" shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142657,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Description rejects content exceeding 200 characters",
+   "steps": [
+    {
+     "action": "Enter 201 characters, attempt Save",
+     "expected": "Blocked/truncated at boundary"
+    },
+    {
+     "action": "Enter exactly 200 characters",
+     "expected": "Accepted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142658,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the Hero Banner accepts a valid image upload with alt text",
+   "steps": [
+    {
+     "action": "Upload `hero-banner.jpg` (500KB), enter alt text EN/AR, Save",
+     "expected": "Upload succeeds, image preview shown"
+    },
+    {
+     "action": "Reload",
+     "expected": "Image and alt text persist; image renders on public Web page"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142659,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Banner rejects an unsupported file format",
+   "steps": [
+    {
+     "action": "Attempt to upload a `.pdf` file as Hero Banner",
+     "expected": "Upload rejected; format-not-supported message shown; no file saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142660,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Banner rejects an image exceeding 2MB",
+   "steps": [
+    {
+     "action": "Attempt to upload a 3MB `.jpg` as Hero Banner",
+     "expected": "Upload rejected; \"Image size must not exceed 2 MB.\" / \"يجب ألا يتجاوز حجم الصورة 2 ميغابايت.\" shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142661,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Publish is blocked when the Hero Banner is missing",
+   "steps": [
+    {
+     "action": "Leave Hero Banner unset, attempt Publish",
+     "expected": "Blocked; \"This field is required.\" shown; page not published"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142662,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the Hero CTA Button Label saves correctly with valid EN/AR values",
+   "steps": [
+    {
+     "action": "Enter EN + AR, Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Reload",
+     "expected": "Values persist and render on the CTA button"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142663,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Button Label is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Clear Button Label EN, attempt Save",
+     "expected": "Blocked; EN message shown"
+    },
+    {
+     "action": "Restore EN, clear AR, attempt Save",
+     "expected": "Blocked; AR message shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142664,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Button Label rejects input exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter 61 characters, attempt Save",
+     "expected": "Blocked/truncated"
+    },
+    {
+     "action": "Enter exactly 60",
+     "expected": "Accepted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142665,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Redirect",
+    "Regression"
+   ],
+   "title": "Verify that the Hero CTA Redirect URL saves correctly with a valid URL",
+   "steps": [
+    {
+     "action": "Enter the URL, Save",
+     "expected": "Accepted, no error"
+    },
+    {
+     "action": "Reload",
+     "expected": "URL persists"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142666,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Redirect URL rejects an invalid URL format",
+   "steps": [
+    {
+     "action": "Enter `not-a-valid-url`, attempt Save",
+     "expected": "Blocked; \"Please enter a valid URL.\" / \"يرجى إدخال رابط صالح.\" shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142667,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Publish is blocked when the Hero CTA Redirect URL is empty",
+   "steps": [
+    {
+     "action": "Leave Redirect URL empty (label filled), attempt Publish",
+     "expected": "Blocked; \"This field is required.\" shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142668,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Page Display Order saves correctly with a valid value",
+   "steps": [
+    {
+     "action": "Enter 3, Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Check Events menu ordering",
+     "expected": "Item positioned per the value"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated (the Events-menu ordering half needs the page published)",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142669,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Page Display Order rejects an empty value",
+   "steps": [
+    {
+     "action": "Clear Display Order, attempt Save",
+     "expected": "Blocked; \"This field is required.\" shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142670,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Page Display Order rejects a negative value",
+   "steps": [
+    {
+     "action": "Enter -1, attempt Save",
+     "expected": "Blocked; validation error shown; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142671,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Page Display Order rejects non-numeric input",
+   "steps": [
+    {
+     "action": "Enter \"abc\" into Display Order",
+     "expected": "Field rejects non-numeric characters, or Save is blocked with a validation error; value not saved"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142673,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the Section Eyebrow saves correctly with valid EN/AR values",
+   "steps": [
+    {
+     "action": "Enter EN + AR, Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Reload",
+     "expected": "Values persist"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142674,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Eyebrow is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Clear EN, attempt Save",
+     "expected": "Blocked; EN message shown"
+    },
+    {
+     "action": "Restore EN, clear AR, attempt Save",
+     "expected": "Blocked; AR message shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142675,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Eyebrow rejects input exceeding 100 characters",
+   "steps": [
+    {
+     "action": "Enter 101 characters, attempt Save",
+     "expected": "Blocked/truncated"
+    },
+    {
+     "action": "Enter exactly 100",
+     "expected": "Accepted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142676,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the Section Title saves correctly with valid EN/AR values",
+   "steps": [
+    {
+     "action": "Enter EN + AR, Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Reload",
+     "expected": "Values persist"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142677,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Title is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Clear EN, attempt Save",
+     "expected": "Blocked; EN message shown"
+    },
+    {
+     "action": "Restore EN, clear AR, attempt Save",
+     "expected": "Blocked; AR message shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142678,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Title rejects input exceeding 120 characters",
+   "steps": [
+    {
+     "action": "Enter 121 characters, attempt Save",
+     "expected": "Blocked/truncated"
+    },
+    {
+     "action": "Enter exactly 120",
+     "expected": "Accepted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142679,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the Section Body saves correctly with valid EN/AR rich text",
+   "steps": [
+    {
+     "action": "Enter EN + AR body content with basic formatting (bold/paragraph), Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Reload",
+     "expected": "Content and formatting persist; renders correctly on Web"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142680,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Body is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Clear EN body, attempt Save",
+     "expected": "Blocked; EN message shown"
+    },
+    {
+     "action": "Restore EN, clear AR body, attempt Save",
+     "expected": "Blocked; AR message shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142681,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Body rejects content exceeding 10000 characters",
+   "steps": [
+    {
+     "action": "Enter 10,001 characters, attempt Save",
+     "expected": "Blocked/truncated at boundary"
+    },
+    {
+     "action": "Enter exactly 10,000",
+     "expected": "Accepted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142682,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the CTA Card Logo accepts a valid image upload with alt text",
+   "steps": [
+    {
+     "action": "Upload logo, enter alt text, Save",
+     "expected": "Upload succeeds"
+    },
+    {
+     "action": "Reload",
+     "expected": "Logo and alt text persist; renders on the public card"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142683,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Logo rejects an unsupported file format",
+   "steps": [
+    {
+     "action": "Attempt to upload a `.docx` file as the card logo",
+     "expected": "Upload rejected; format-not-supported message shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142684,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Logo rejects an image exceeding 2MB",
+   "steps": [
+    {
+     "action": "Attempt to upload a 2.5MB `.png` as the logo",
+     "expected": "Upload rejected; \"Image size must not exceed 2 MB.\" shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142685,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Publish is blocked when the CTA Card Logo is missing",
+   "steps": [
+    {
+     "action": "Leave Card Logo unset, attempt Publish",
+     "expected": "Blocked; \"This field is required.\" shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142686,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the CTA Card Eyebrow saves correctly with valid EN/AR values",
+   "steps": [
+    {
+     "action": "Enter EN + AR, Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Reload",
+     "expected": "Values persist"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142687,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Eyebrow is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Clear EN, attempt Save",
+     "expected": "Blocked; EN message shown"
+    },
+    {
+     "action": "Restore EN, clear AR",
+     "expected": "Blocked; AR message shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142688,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Eyebrow rejects input exceeding 100 characters",
+   "steps": [
+    {
+     "action": "Enter 101 characters, attempt Save",
+     "expected": "Blocked/truncated"
+    },
+    {
+     "action": "Enter exactly 100",
+     "expected": "Accepted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142689,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the CTA Card Heading saves correctly with valid EN/AR values",
+   "steps": [
+    {
+     "action": "Enter EN + AR, Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Reload",
+     "expected": "Values persist"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142690,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Heading is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Clear EN, attempt Save",
+     "expected": "Blocked; EN message shown"
+    },
+    {
+     "action": "Restore EN, clear AR",
+     "expected": "Blocked; AR message shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142691,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Heading rejects input exceeding 120 characters",
+   "steps": [
+    {
+     "action": "Enter 121 characters, attempt Save",
+     "expected": "Blocked/truncated"
+    },
+    {
+     "action": "Enter exactly 120",
+     "expected": "Accepted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142692,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the CTA Card Description saves correctly with valid EN/AR rich text",
+   "steps": [
+    {
+     "action": "Enter EN + AR, Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Reload",
+     "expected": "Values persist"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142693,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Description is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Clear EN, attempt Save",
+     "expected": "Blocked; EN message shown"
+    },
+    {
+     "action": "Restore EN, clear AR",
+     "expected": "Blocked; AR message shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142694,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Description rejects content exceeding 200 characters",
+   "steps": [
+    {
+     "action": "Enter 201 characters, attempt Save",
+     "expected": "Blocked/truncated"
+    },
+    {
+     "action": "Enter exactly 200",
+     "expected": "Accepted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142695,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that the CTA Card Button Label saves correctly with valid EN/AR values",
+   "steps": [
+    {
+     "action": "Enter EN + AR, Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Reload",
+     "expected": "Values persist and render on the card's CTA button"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142696,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Button Label is rejected when EN or AR is left empty",
+   "steps": [
+    {
+     "action": "Clear EN, attempt Save",
+     "expected": "Blocked; EN message shown"
+    },
+    {
+     "action": "Restore EN, clear AR",
+     "expected": "Blocked; AR message shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142697,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Button Label rejects input exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter 61 characters, attempt Save",
+     "expected": "Blocked/truncated"
+    },
+    {
+     "action": "Enter exactly 60",
+     "expected": "Accepted"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142698,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Redirect",
+    "Regression"
+   ],
+   "title": "Verify that the CTA Card Redirect URL saves correctly with a valid URL",
+   "steps": [
+    {
+     "action": "Enter the URL, Save",
+     "expected": "Accepted"
+    },
+    {
+     "action": "Reload",
+     "expected": "URL persists"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142699,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Redirect URL rejects an invalid URL format",
+   "steps": [
+    {
+     "action": "Enter `htp:/badurl`, attempt Save",
+     "expected": "Blocked; \"Please enter a valid URL.\" / \"يرجى إدخال رابط صالح.\" shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142700,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Publish is blocked when the CTA Card Redirect URL is empty",
+   "steps": [
+    {
+     "action": "Leave Card Redirect URL empty (other card fields filled), attempt Publish",
+     "expected": "Blocked; \"This field is required.\" shown"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142701,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor can save the Made in Qatar Expo page as Draft",
+   "steps": [
+    {
+     "action": "Fill all mandatory fields, click \"Save as Draft\"",
+     "expected": "Liferay generic success toast shown (EN/AR per locale); Page Status = Draft; audit log records the save"
+    },
+    {
+     "action": "Reopen the page",
+     "expected": "All entered values persist"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142702,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that a Site Content Editor can preview the Made in Qatar Expo page before publishing",
+   "steps": [
+    {
+     "action": "With the page in Draft, click Preview",
+     "expected": "Preview renders hero/About/card exactly as configured"
+    },
+    {
+     "action": "Confirm the page is NOT live on the public site while only previewed",
+     "expected": "Anonymous context still shows the page as unavailable"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142703,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor can publish the Made in Qatar Expo page",
+   "steps": [
+    {
+     "action": "Click Publish on a valid Draft",
+     "expected": "Liferay generic success toast shown; Page Status = Published; audit log records the publish"
+    },
+    {
+     "action": "Load the page anonymously on Web",
+     "expected": "Page is live with the published content"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142704,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor can unpublish the Made in Qatar Expo page",
+   "steps": [
+    {
+     "action": "On a Published page, click Unpublish",
+     "expected": "Success toast shown; Page Status = Unpublished; audit log records the action"
+    },
+    {
+     "action": "Load the page anonymously on Web",
+     "expected": "Page returns not-found; menu item no longer visible"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142705,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that a previously Unpublished Made in Qatar Expo page can be republished and reappears live",
+   "steps": [
+    {
+     "action": "On the Unpublished page, click Publish again",
+     "expected": "Success toast shown; Status = Published"
+    },
+    {
+     "action": "Load the page anonymously",
+     "expected": "Page is live again with its content intact"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142711,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that setting Page Active Status = On makes the page appear in the Events menu",
+   "steps": [
+    {
+     "action": "On a Published page, set Active Status = On, save",
+     "expected": "Success toast shown"
+    },
+    {
+     "action": "Check the public Events menu",
+     "expected": "\"Made in Qatar Expo\" item visible"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142712,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that setting Page Active Status = Off hides the page from the Events menu",
+   "steps": [
+    {
+     "action": "On a Published page, set Active Status = Off, save",
+     "expected": "Success toast shown"
+    },
+    {
+     "action": "Check the public Events menu",
+     "expected": "\"Made in Qatar Expo\" item no longer visible"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142713,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that setting the Side CTA Card Active Status = On displays the card on the public page",
+   "steps": [
+    {
+     "action": "Set Card Active Status = On, save/publish",
+     "expected": "Success toast shown"
+    },
+    {
+     "action": "Load the public page",
+     "expected": "Side CTA Card is visible"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142714,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that setting the Side CTA Card Active Status = Off hides the card from the public page",
+   "steps": [
+    {
+     "action": "Set Card Active Status = Off, save/publish",
+     "expected": "Success toast shown"
+    },
+    {
+     "action": "Load the public page",
+     "expected": "Side CTA Card is not rendered; hero and About remain visible"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  },
+  {
+   "tc_id": 142722,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "EXPO"
+   ],
+   "title": "Verify that the system handles two Site Content Editors editing the Made in Qatar Expo page concurrently without data corruption",
+   "steps": [
+    {
+     "action": "Editor A opens the page for editing",
+     "expected": "Edit form loaded"
+    },
+    {
+     "action": "Editor B opens the same page and saves a change to the About Title",
+     "expected": "Editor B's save succeeds"
+    },
+    {
+     "action": "Editor A saves a different change without refreshing",
+     "expected": "System either blocks with a conflict warning or silently overwrites Editor B's change (record actual observed behavior); no data corruption or partial/blank record results either way"
+    }
+   ],
+   "disposition": "automate",
+   "disposition_reason": "Scripted on disposable QCTEST-<tc_id>-* records, torn down by exact title every run; account named in the docstring.",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor') in two sessions"
+  },
+  {
+   "tc_id": 142726,
+   "priority": 3,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "EXPO"
+   ],
+   "title": "Verify that the Hero CTA and Side Card CTA can be configured to different external destinations without a blocking validation error",
+   "steps": [
+    {
+     "action": "Set Hero CTA URL = `https://www.madeinqatar.qa`, Card CTA URL = `https://www.qatarchamber.com` (different domain), attempt Save",
+     "expected": "Save is allowed (no blocking validation observed) — record actual behavior for the Manager to confirm whether a warning should be added"
+    },
+    {
+     "action": "Load the public page and click each CTA",
+     "expected": "Each CTA redirects to its own independently configured URL"
+    }
+   ],
+   "disposition": "conditional",
+   "disposition_reason": "publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated (the redirect half needs both entries published)",
+   "account": "QC Site Content Editor via cms_role_credentials('Site Content Editor')"
+  }
+ ],
+ "out_of_scope": [
+  {
+   "tc_id": 142672,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that Created/Last Modified dates are auto-populated and read-only"
+  },
+  {
+   "tc_id": 142717,
+   "priority": 4,
+   "reason": "Priority 4",
+   "title": "Verify that toggling a Supporting Image's Active Status controls its display in the About section"
+  }
+ ]
+}

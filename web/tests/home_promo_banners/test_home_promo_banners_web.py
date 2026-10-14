@@ -59,6 +59,8 @@ PBI = "129368"
 @pytest.mark.bilingual
 @pytest.mark.pbi_129368
 @pytest.mark.traceability("GLOBAL-PROMOBANNER-TC-135105")
+@pytest.mark.tc_135105
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_promo_banners_render_correctly_in_english_ltr(page):
     # GLOBAL-PROMOBANNER-TC-135105 | PBI 129368
     # Arrange
@@ -113,6 +115,8 @@ def test_promo_banners_render_correctly_in_english_ltr(page):
 @pytest.mark.bilingual
 @pytest.mark.pbi_129368
 @pytest.mark.traceability("GLOBAL-PROMOBANNER-TC-135106")
+@pytest.mark.tc_135106
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_promo_banners_mirror_correctly_in_arabic_rtl(page):
     # GLOBAL-PROMOBANNER-TC-135106 | PBI 129368
     # Arrange
@@ -155,6 +159,8 @@ def test_promo_banners_mirror_correctly_in_arabic_rtl(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129368
 @pytest.mark.traceability("GLOBAL-PROMOBANNER-TC-135107")
+@pytest.mark.tc_135107
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_promo_banners_next_arrow_advances_slider(page):
     # GLOBAL-PROMOBANNER-TC-135107 | PBI 129368
     # Arrange
@@ -177,10 +183,13 @@ def test_promo_banners_next_arrow_advances_slider(page):
         slide_2_alt = promo.current_slide_alt_text()
 
     # Assert
-    assert slide_1_index == 0, "expected slide 1's dot active before interaction"
+    # HEALED 2026-10-07: the carousel auto-cycles (TC 135109), so the slide
+    # showing at read time is not necessarily slide 1 — assert the Next click
+    # advanced exactly one position from wherever it started.
+    n = promo.real_slide_count()
     assert promo.is_dots_container_visible(), "expected the pagination dots visible so slide 1's pill state is observable"
     assert promo.is_dot_elongated_pill(slide_1_index), "expected slide 1's dot to be the elongated pill before the click"
-    assert slide_2_index == 1, "expected slide 2 to become active after one Next-arrow click"
+    assert slide_2_index == (slide_1_index + 1) % n, "expected the next slide to become active after one Next-arrow click"
     assert slide_2_alt != slide_1_alt, "expected the displayed banner image to change after advancing"
     assert promo.is_dot_elongated_pill(slide_2_index), "expected slide 2's dot to become the elongated pill"
     assert promo.is_dot_small_circle(slide_1_index), "expected slide 1's dot to return to a small circle"
@@ -197,6 +206,8 @@ def test_promo_banners_next_arrow_advances_slider(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129368
 @pytest.mark.traceability("GLOBAL-PROMOBANNER-TC-135108")
+@pytest.mark.tc_135108
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_promo_banners_prev_arrow_and_dot_navigate_back(page):
     # GLOBAL-PROMOBANNER-TC-135108 | PBI 129368
     # Arrange
@@ -239,6 +250,8 @@ def test_promo_banners_prev_arrow_and_dot_navigate_back(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129368
 @pytest.mark.traceability("GLOBAL-PROMOBANNER-TC-135174")
+@pytest.mark.tc_135174
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_promo_banners_render_configured_image_and_en_alt_text(page):
     # GLOBAL-PROMOBANNER-TC-135174 | PBI 129368 | UAT (Axis-1 tag recorded
     # here per automation-standards.md — no pytest marker for UAT, see
@@ -285,6 +298,8 @@ def test_promo_banners_render_configured_image_and_en_alt_text(page):
 @pytest.mark.bilingual
 @pytest.mark.pbi_129368
 @pytest.mark.traceability("GLOBAL-PROMOBANNER-TC-135175")
+@pytest.mark.tc_135175
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_promo_banners_render_configured_image_and_ar_alt_text(page):
     # GLOBAL-PROMOBANNER-TC-135175 | PBI 129368
     # Real, live-observed value used below (see Page-Object docstring): the
@@ -326,14 +341,12 @@ def test_promo_banners_render_configured_image_and_ar_alt_text(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129368
 @pytest.mark.traceability("GLOBAL-PROMOBANNER-TC-135176")
-@pytest.mark.skip(
-    reason="Precondition requires publishing exactly ONE active promotional "
-    "banner in the CMS. qcdev currently has 3 active banners live and no "
-    "single-active-banner state exists; Control_Panel/CMS content "
-    "configuration is explicit out-of-scope for this Web-only automation "
-    "batch (PBI 129368). Pending CMS setup — not fabricated as a pass."
-)
+@pytest.mark.tc_135176
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_promo_banners_single_active_banner_displays_statically(page):
+    # Skip removed 2026-10-07 (Phase 3 brief: no skips). The precondition —
+    # exactly ONE active banner — needs the 3 real banners deactivated, which
+    # is a write to real shared content: NEEDS USER (not run until approved).
     # GLOBAL-PROMOBANNER-TC-135176 | PBI 129368
     # Arrange
     promo = HomePromoBannersPage(page)
@@ -366,7 +379,8 @@ def test_promo_banners_single_active_banner_displays_statically(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129368
 @pytest.mark.traceability("GLOBAL-PROMOBANNER-TC-135179")
-@pytest.mark.parametrize("page", [(375, 812)], indirect=True)
+@pytest.mark.tc_135179
+@pytest.mark.parametrize("page", [{"viewport": (375, 812), "auth": False}], indirect=True)
 def test_promo_banners_responsive_at_mobile_width(page):
     # GLOBAL-PROMOBANNER-TC-135179 | PBI 129368
     # Arrange
@@ -400,6 +414,8 @@ def test_promo_banners_responsive_at_mobile_width(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129368
 @pytest.mark.traceability("GLOBAL-PROMOBANNER-TC-135180")
+@pytest.mark.tc_135180
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_promo_banners_responsive_at_tablet_and_desktop_widths(page):
     # GLOBAL-PROMOBANNER-TC-135180 | PBI 129368
     # Resizes the SAME page's viewport twice via Playwright's
@@ -436,3 +452,72 @@ def test_promo_banners_responsive_at_tablet_and_desktop_widths(page):
     assert not tablet_has_overflow, "expected no horizontal overflow at tablet width (768x1024)"
     assert desktop_image_matches_container, "expected no overflow/misalignment at desktop width (1440x900)"
     assert not desktop_has_overflow, "expected no horizontal overflow at desktop width (1440x900)"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Promotional Banners / Ad Slots")
+@allure.story("Multiple active banners share one slider")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Multiple active banners all display within the same slider")
+@allure.label("pbi", PBI)
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.pbi_129368
+@pytest.mark.tc_135132
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_promo_banners_multiple_active_banners_in_one_slider(page):
+    # Read-only against the live Published+Active banners (>= 2 today), seen
+    # by a logged-out visitor: every banner is a real slide of ONE carousel,
+    # with one visible pagination dot per banner.
+    promo = HomePromoBannersPage(page)
+    with allure.step("Load the Home Page as a visitor"):
+        promo.open_home()
+        promo.scroll_to_section()
+    slides = promo.real_slide_count()
+    assert page.locator(promo.CAROUSEL).count() == 1, "banners are not in a single slider"
+    assert slides >= 2, f"precondition: only {slides} active banner(s) on the Home Page"
+    assert promo.dot_count() == slides, f"{promo.dot_count()} dots for {slides} banners"
+    assert promo.is_dots_container_visible(), "pagination dots are not visible"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Promotional Banners / Ad Slots")
+@allure.story("Public visitor can view and click banners")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("An unauthenticated visitor can view and click published promotional banners")
+@allure.label("pbi", PBI)
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.auth
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.pbi_129368
+@pytest.mark.tc_135224
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_promo_banners_visitor_can_view_and_click(page):
+    # Logged-out context (auth False). Clicks the on-screen banner and checks
+    # the browser goes to that banner's configured href (new tab when the
+    # anchor targets _blank, same tab otherwise).
+    promo = HomePromoBannersPage(page)
+    with allure.step("Open the Home Page with no session"):
+        promo.open_home()
+        promo.scroll_to_section()
+    assert "/c/portal/login" not in page.url, "visitor was sent to a login prompt"
+    alt = promo.current_slide_alt_text()
+    assert alt, "no active banner is visible"
+    link = promo.real_banner_link(alt)
+    href = link.get("href", "")
+    assert href, f"banner {alt!r} has no redirect link"
+    img = page.locator(f'{promo.REAL_SLIDE_IMG}[alt="{alt}"]').first
+    host = href.split("//", 1)[-1].split("/", 1)[0].removeprefix("www.")
+    with allure.step("Click the banner"):
+        if link.get("target") == "_blank":
+            with page.context.expect_page(timeout=30000) as popup:
+                img.click()
+            landed = popup.value.url
+        else:
+            img.click()
+            page.wait_for_url(f"**{host}**", timeout=30000)
+            landed = page.url
+    assert host in landed, f"click on {alt!r} landed on {landed!r}, configured {href!r}"

@@ -1,0 +1,1173 @@
+[
+ {
+  "id": 135950,
+  "title": "Verify that an unauthenticated user cannot access Dynamic Widgets Management via direct URL",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL"
+  ],
+  "description": "Forced-browsing check on the CMS admin screen managing the widgets.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log out of the Liferay CMS",
+    "expected": "Session ends, user is logged out"
+   },
+   {
+    "action": "Navigate directly to the Dynamic Widgets Management URL",
+    "expected": "User is redirected to the Liferay login page; Dynamic Widgets Management content is not displayed"
+   }
+  ]
+ },
+ {
+  "id": 135951,
+  "title": "Verify that a Site Content Editor can access and configure Dynamic Widgets Management",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL"
+  ],
+  "description": "Positive role-access check for the primary permitted role.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as Site Content Editor",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Navigate to Home Page → Dynamic Widgets Management",
+    "expected": "Dynamic Widgets Management screen loads showing Weather, Marhaba Guide, and B2B Platform widget entries, editable"
+   }
+  ]
+ },
+ {
+  "id": 135952,
+  "title": "Verify that a role without Home Page content permission is denied access to Dynamic Widgets Management",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL"
+  ],
+  "description": "Verifies RBAC enforcement for a role lacking the required permission.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as a role with no Home Page management permission",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Attempt to navigate to Dynamic Widgets Management",
+    "expected": "Access is denied with a permission-denied message; widget configuration is not displayed or editable"
+   }
+  ]
+ },
+ {
+  "id": 135953,
+  "title": "Verify that an expired session during widget editing discards unsaved changes and prompts re-login",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL"
+  ],
+  "description": "Session-timeout handling mid-edit of a widget configuration.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor, open Marhaba Guide widget for editing",
+    "expected": "Widget edit form is open with unsaved changes"
+   },
+   {
+    "action": "Let the session expire (or force-expire it)",
+    "expected": "Session is expired"
+   },
+   {
+    "action": "Attempt to Save",
+    "expected": "Save fails; user is prompted to re-authenticate; the unsaved edit is not persisted"
+   }
+  ]
+ },
+ {
+  "id": 135954,
+  "title": "Verify that a Public Visitor session cannot reach Dynamic Widgets Management even with a valid frontend session cookie",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL"
+  ],
+  "description": "Confirms the public-facing session context is not sufficient to reach the admin management screen.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Browse the public Home Page as an unauthenticated visitor",
+    "expected": "Home Page loads normally for the visitor"
+   },
+   {
+    "action": "Attempt to navigate directly to the Dynamic Widgets Management URL",
+    "expected": "Navigation is blocked/redirected to the CMS login; management screen is never rendered"
+   }
+  ]
+ },
+ {
+  "id": 135966,
+  "title": "Verify that a Site Content Editor can fully configure and publish the Marhaba Guide widget end-to-end",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Marhaba",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Full admin journey: image (EN/AR), URL, new-tab toggle, order, active status, save, publish, and visibility on the Home Page after cache refresh.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor, open Marhaba Guide widget",
+    "expected": "Widget edit form opens"
+   },
+   {
+    "action": "Upload Widget Image (EN) marhaba_en.jpg and Widget Image (AR) marhaba_ar.png",
+    "expected": "Both images upload successfully and preview"
+   },
+   {
+    "action": "Enter Redirect URL https://marhabaguide.qa/qatar-chamber, enable Open in New Tab, set Display Order = 1, set Active Status = True",
+    "expected": "Fields accept the entered values"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Save succeeds; success toast displays"
+   },
+   {
+    "action": "Refresh cache and load the Home Page",
+    "expected": "Marhaba Guide card appears on the Home Page reflecting the configured image and links correctly"
+   }
+  ]
+ },
+ {
+  "id": 135967,
+  "title": "Verify that a Site Content Editor can fully configure and publish the B2B Platform widget end-to-end",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Same full admin journey as TC-046, applied to the B2B Platform widget.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor, open B2B Platform widget",
+    "expected": "Widget edit form opens"
+   },
+   {
+    "action": "Upload Widget Image (EN) b2b_en.jpg and Widget Image (AR) b2b_ar.svg",
+    "expected": "Both images upload successfully and preview"
+   },
+   {
+    "action": "Enter Redirect URL https://b2b.qatarchamber.com/platform, enable Open in New Tab, set Display Order = 2, set Active Status = True",
+    "expected": "Fields accept the entered values"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Save succeeds; success toast displays"
+   },
+   {
+    "action": "Refresh cache and load the Home Page",
+    "expected": "B2B Platform card appears on the Home Page reflecting the configured image and links correctly"
+   }
+  ]
+ },
+ {
+  "id": 135968,
+  "title": "Verify that a Site Content Editor can configure the Weather widget's limited CMS settings end-to-end",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Weather"
+  ],
+  "description": "Weather is API-driven; CMS management is limited to Active Status and Display Order.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor, open Weather widget",
+    "expected": "Widget edit form opens showing only Active Status and Display Order fields (no image/URL fields)"
+   },
+   {
+    "action": "Set Display Order = 1 and Active Status = True",
+    "expected": "Fields accept the entered values"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Save succeeds; success toast displays"
+   },
+   {
+    "action": "Refresh cache and load the Home Page",
+    "expected": "Weather widget appears first on the Home Page with live API data"
+   }
+  ]
+ },
+ {
+  "id": 135970,
+  "title": "Verify that unpublishing a previously published widget removes it from the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Marhaba"
+  ],
+  "description": "Marhaba Guide widget is currently Active and Published, visible on the Home Page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, unpublish the Marhaba Guide widget",
+    "expected": "Widget status changes to Unpublished"
+   },
+   {
+    "action": "Refresh cache and load the Home Page",
+    "expected": "Marhaba Guide card no longer appears on the Home Page; the other two widgets remain unaffected"
+   }
+  ]
+ },
+ {
+  "id": 135971,
+  "title": "Verify that editing a published widget's Redirect URL updates the live link on the Home Page after republish",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Redirect"
+  ],
+  "description": "B2B Platform widget is live with URL https://b2b.qatarchamber.com/platform; admin updates it to https://b2b.qatarchamber.com/platform-v2.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, edit the B2B Platform widget's Redirect URL to https://b2b.qatarchamber.com/platform-v2 and save",
+    "expected": "Save succeeds; success toast displays"
+   },
+   {
+    "action": "Refresh cache",
+    "expected": "Cache refreshed"
+   },
+   {
+    "action": "Load the Home Page and click the B2B Platform widget",
+    "expected": "New tab opens navigating to https://b2b.qatarchamber.com/platform-v2, not the old URL"
+   }
+  ]
+ },
+ {
+  "id": 135972,
+  "title": "Verify that switching a widget's Active Status from True to False removes only that widget from the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Marhaba",
+   "Regression"
+  ],
+  "description": "All three widgets currently Active. Toggle only the Marhaba Guide widget off.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, set Marhaba Guide Active Status = False and save",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Refresh cache and load the Home Page",
+    "expected": "Marhaba Guide card no longer renders; Weather and B2B Platform cards remain visible and unaffected"
+   }
+  ]
+ },
+ {
+  "id": 135973,
+  "title": "Verify that a valid Widget Image (EN) uploads successfully for the Marhaba Guide widget",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba"
+  ],
+  "description": "Uploads marhaba_en.jpg, 450KB, JPG format.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Upload marhaba_en.jpg (450KB) in Widget Image (EN)",
+    "expected": "Image previews in the Widget Image (EN) field"
+   },
+   {
+    "action": "Save",
+    "expected": "Save succeeds; image is stored"
+   }
+  ]
+ },
+ {
+  "id": 135974,
+  "title": "Verify that saving the Marhaba Guide widget without a Widget Image (EN) is blocked",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba"
+  ],
+  "description": "Widget Image (EN) left empty; all other fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Leave Widget Image (EN) empty; fill all other fields",
+    "expected": "Image field remains empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Widget Image is required.' (EN) / 'صورة الأداة مطلوبة.' (AR) is displayed"
+   }
+  ]
+ },
+ {
+  "id": 135979,
+  "title": "Verify that a valid Widget Image (AR) uploads successfully for the Marhaba Guide widget",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba"
+  ],
+  "description": "Uploads marhaba_ar.png, 450KB, PNG format.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Upload marhaba_ar.png (450KB) in Widget Image (AR)",
+    "expected": "Image previews in the Widget Image (AR) field"
+   },
+   {
+    "action": "Save",
+    "expected": "Save succeeds; image is stored"
+   }
+  ]
+ },
+ {
+  "id": 135980,
+  "title": "Verify that saving the Marhaba Guide widget without a Widget Image (AR) is blocked",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba"
+  ],
+  "description": "Widget Image (AR) left empty; all other fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Leave Widget Image (AR) empty; fill all other fields",
+    "expected": "AR image field remains empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'صورة الأداة مطلوبة.' / 'Widget Image is required.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 135985,
+  "title": "Verify that saving is blocked when only Widget Image (EN) is uploaded and Widget Image (AR) is missing",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba"
+  ],
+  "description": "Field-dependency case: EN image uploaded, AR image left empty.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Upload only Widget Image (EN) = marhaba_en.jpg; leave Widget Image (AR) empty",
+    "expected": "EN image previews; AR field remains empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked with the AR-specific 'صورة الأداة مطلوبة.' message; the EN image entry is not lost from the form"
+   }
+  ]
+ },
+ {
+  "id": 135986,
+  "title": "Verify that a valid Redirect URL saves successfully for the Marhaba Guide widget",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba",
+   "Redirect"
+  ],
+  "description": "Enters https://marhabaguide.qa/qatar-chamber (35 characters).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Redirect URL https://marhabaguide.qa/qatar-chamber",
+    "expected": "URL entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Save succeeds; URL is stored"
+   }
+  ]
+ },
+ {
+  "id": 135987,
+  "title": "Verify that leaving the Redirect URL empty blocks saving the Marhaba Guide widget",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba",
+   "Redirect"
+  ],
+  "description": "Redirect URL left blank; other fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Leave Redirect URL empty",
+    "expected": "URL field is empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Please enter a valid URL.' / 'يرجى إدخال رابط صالح.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 135988,
+  "title": "Verify that an invalid Redirect URL format is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba",
+   "Redirect"
+  ],
+  "description": "Enters marhaba guide site (no protocol, contains spaces).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Redirect URL marhaba guide site",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Please enter a valid URL.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 136005,
+  "title": "Verify that setting Active Status = True and publishing renders the Marhaba Guide widget on the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba"
+  ],
+  "description": "All mandatory fields valid; Active Status set True.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Configure Marhaba Guide widget with all mandatory fields, Active Status = True",
+    "expected": "Fields accepted"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Save/publish succeeds"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Marhaba Guide card renders on the Home Page"
+   }
+  ]
+ },
+ {
+  "id": 136006,
+  "title": "Verify that setting Active Status = False prevents the Marhaba Guide widget from rendering",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba"
+  ],
+  "description": "All mandatory fields valid; Active Status set False.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Configure Marhaba Guide widget with all mandatory fields, Active Status = False",
+    "expected": "Fields accepted"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Save/publish succeeds"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Marhaba Guide card does not render on the Home Page"
+   }
+  ]
+ },
+ {
+  "id": 136009,
+  "title": "Verify that Active Status = True does not bypass the mandatory Widget Image (EN) validation",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Marhaba"
+  ],
+  "description": "Field-dependency case: Active Status toggled on, but Widget Image (EN) left missing.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Set Active Status = True; leave Widget Image (EN) empty",
+    "expected": "Active Status set True; EN image field empty"
+   },
+   {
+    "action": "Click Save/Publish",
+    "expected": "Save/publish is blocked by the mandatory image validation despite Active Status being enabled"
+   }
+  ]
+ },
+ {
+  "id": 136011,
+  "title": "Verify that a valid Widget Image (EN) uploads successfully for the B2B Platform widget",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Uploads b2b_en.jpg, 600KB, JPG format.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Upload b2b_en.jpg (600KB) in Widget Image (EN)",
+    "expected": "Image previews"
+   },
+   {
+    "action": "Save",
+    "expected": "Save succeeds; image is stored"
+   }
+  ]
+ },
+ {
+  "id": 136012,
+  "title": "Verify that saving the B2B Platform widget without a Widget Image (EN) is blocked",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Widget Image (EN) left empty; other fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Leave Widget Image (EN) empty; fill all other fields",
+    "expected": "Field remains empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Widget Image is required.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 136017,
+  "title": "Verify that a valid Widget Image (AR) uploads successfully for the B2B Platform widget",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Uploads b2b_ar.svg, 300KB, SVG format.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Upload b2b_ar.svg (300KB) in Widget Image (AR)",
+    "expected": "Image previews"
+   },
+   {
+    "action": "Save",
+    "expected": "Save succeeds; image stored"
+   }
+  ]
+ },
+ {
+  "id": 136018,
+  "title": "Verify that saving the B2B Platform widget without a Widget Image (AR) is blocked",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Widget Image (AR) left empty.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Leave Widget Image (AR) empty; fill all other fields",
+    "expected": "Field remains empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'صورة الأداة مطلوبة.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 136023,
+  "title": "Verify that saving is blocked when only Widget Image (AR) is uploaded and Widget Image (EN) is missing",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Field-dependency case: AR image uploaded, EN image left empty.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Upload only Widget Image (AR) = b2b_ar.svg; leave Widget Image (EN) empty",
+    "expected": "AR image previews; EN field empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked with the EN-specific 'Widget Image is required.' message; the AR image entry is not lost from the form"
+   }
+  ]
+ },
+ {
+  "id": 136024,
+  "title": "Verify that a valid Redirect URL saves successfully for the B2B Platform widget",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Redirect"
+  ],
+  "description": "Enters https://b2b.qatarchamber.com/platform (39 characters).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Redirect URL https://b2b.qatarchamber.com/platform",
+    "expected": "URL entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Save succeeds; URL is stored"
+   }
+  ]
+ },
+ {
+  "id": 136025,
+  "title": "Verify that leaving the Redirect URL empty blocks saving the B2B Platform widget",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Redirect"
+  ],
+  "description": "Redirect URL left blank.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Leave Redirect URL empty",
+    "expected": "Field empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Please enter a valid URL.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 136026,
+  "title": "Verify that an invalid Redirect URL format is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Redirect"
+  ],
+  "description": "Enters b2b platform link (no protocol, contains spaces).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Redirect URL b2b platform link",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Please enter a valid URL.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 136044,
+  "title": "Verify that setting Active Status = True and publishing renders the B2B Platform widget on the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "All mandatory fields valid; Active Status set True.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Configure B2B Platform widget with all mandatory fields, Active Status = True",
+    "expected": "Fields accepted"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Save/publish succeeds"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "B2B Platform card renders on the Home Page"
+   }
+  ]
+ },
+ {
+  "id": 136045,
+  "title": "Verify that setting Active Status = False prevents the B2B Platform widget from rendering",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "All mandatory fields valid; Active Status set False.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Configure B2B Platform widget with all mandatory fields, Active Status = False",
+    "expected": "Fields accepted"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Save/publish succeeds"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "B2B Platform card does not render on the Home Page"
+   }
+  ]
+ },
+ {
+  "id": 136048,
+  "title": "Verify that Active Status = True does not bypass the mandatory Redirect URL validation",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Field-dependency case: Active Status toggled on, but Redirect URL left missing.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Set Active Status = True; leave Redirect URL empty",
+    "expected": "Active Status set True; URL field empty"
+   },
+   {
+    "action": "Click Save/Publish",
+    "expected": "Save/publish is blocked by the mandatory URL validation despite Active Status being enabled"
+   }
+  ]
+ },
+ {
+  "id": 136049,
+  "title": "Verify that setting Weather widget Active Status = True and publishing renders it on the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Weather"
+  ],
+  "description": "Weather is API-driven; only Active Status/Display Order are CMS-configurable.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Weather widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Set Active Status = True",
+    "expected": "Toggle set True"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Save/publish succeeds"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Weather card renders on the Home Page"
+   }
+  ]
+ },
+ {
+  "id": 136050,
+  "title": "Verify that setting Weather widget Active Status = False prevents rendering without requiring image/URL fields",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Weather"
+  ],
+  "description": "Confirms Weather's Active toggle alone controls visibility.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Weather widget configuration",
+    "expected": "Form opens showing no image/URL fields"
+   },
+   {
+    "action": "Set Active Status = False",
+    "expected": "Toggle set False"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Save/publish succeeds without requiring an image or URL"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Weather card does not render on the Home Page"
+   }
+  ]
+ },
+ {
+  "id": 136061,
+  "title": "Verify that a concurrent invalid edit does not overwrite a widget's currently live, valid configuration",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Edge",
+   "GLOBAL"
+  ],
+  "description": "B2B Platform widget is live with a valid Redirect URL; a second admin session attempts to save an invalid URL concurrently.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Confirm B2B Platform widget is live with a valid Redirect URL",
+    "expected": "Widget confirmed live and valid"
+   },
+   {
+    "action": "In a second admin session, open the same widget and enter an invalid Redirect URL",
+    "expected": "Invalid value entered in the second session"
+   },
+   {
+    "action": "Attempt to save from the second session",
+    "expected": "Save from the second session is blocked by URL validation; the original valid URL remains live and unaffected on the Home Page"
+   }
+  ]
+ },
+ {
+  "id": 136064,
+  "title": "Verify that clearing the Redirect URL on a live, published widget blocks the save and keeps the previous URL live",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "B2B",
+   "Control_Panel",
+   "Edge",
+   "GLOBAL",
+   "Redirect"
+  ],
+  "description": "B2B Platform widget is Active and Published with a valid Redirect URL; admin clears the field and attempts to save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the live B2B Platform widget configuration",
+    "expected": "Form opens showing the current live URL"
+   },
+   {
+    "action": "Clear the Redirect URL field to empty",
+    "expected": "Field is cleared"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked by the mandatory URL validation"
+   },
+   {
+    "action": "Load the Home Page and click the B2B Platform widget",
+    "expected": "The previously published valid URL still opens correctly on the Home Page — nothing broke live"
+   }
+  ]
+ }
+]

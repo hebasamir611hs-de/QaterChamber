@@ -1,0 +1,33 @@
+passed ['tc_135117'] |  | 
+passed ['tc_135191'] |  | 
+passed ['tc_135120'] |  | 
+passed ['tc_135231'] |  | 
+passed ['tc_135188'] |  | 
+failed ['tc_135232'] | AssertionError: image_en: C:\Users\HEBA~1.SAM\AppData\Local\Temp\QCTEST-135232-big.jpg was accepted by the upload picker | ["files = {'image_ar': 'D:\\\\MCP servers\\\\QaterChamper\\\\cms\\\\tests\\\\home_promo_banners\\\\fixtures\\\\promo_banner_v2_qctest.png'}", 'cms\\tests\\authoring_checks.py:271: AssertionError']
+passed ['tc_135225'] |  | 
+passed ['tc_135143'] |  | 
+passed ['tc_135127'] |  | 
+failed ['tc_135257'] | AssertionError: 'QCTEST-135257-inactive': Editor submit left the record 'Unknown' (raw cell 'INACTIVE'), not 'Published' assert 'Unknown' == 'Published'      [0m[91m- Published[39;49;00m[90m[39;49;00m   [92m+ Unknown[39;49;00m[90m[ | ['admin = <cms.pages.home_promo_banners.home_promo_banners_admin_page.PromotionalBannerAdminPage object at 0x00000256C7AB6510>', 'cms\\tests\\home_promo_banners\\test_home_promo_banners_control_panel.py:120: AssertionError']
+passed ['tc_135147'] |  | 
+passed ['tc_135129'] |  | 
+failed ['tc_135119'] | AssertionError: 'QCTEST-135119-toggle': Editor submit left the record 'Unknown' (raw cell 'INACTIVE'), not 'Published' assert 'Unknown' == 'Published'      [0m[91m- Published[39;49;00m[90m[39;49;00m   [92m+ Unknown[39;49;00m[90m[39 | ['admin = <cms.pages.home_promo_banners.home_promo_banners_admin_page.PromotionalBannerAdminPage object at 0x0000018BC28C9E50>', 'cms\\tests\\home_promo_banners\\test_home_promo_banners_control_panel.py:120: AssertionError']
+passed ['tc_135230'] |  | 
+failed ['tc_135107'] | AssertionError: expected the pagination dots visible so slide 1's pill state is observable assert False  +  where False = is_dots_container_visible()  +    where is_dots_container_visible = <web.pages.home_promo_banners.home_promo_banners_p | ['E        +    where is_dots_container_visible = <web.pages.home_promo_banners.home_promo_banners_page.HomePromoBannersPage object at 0x0000018BC14227B0>.is_dots_container_visible', 'web\\tests\\home_promo_banners\\test_home_promo_banners_web.py:190: AssertionError']
+passed ['tc_135189'] |  | 
+passed ['tc_135134'] |  | 
+passed ['tc_135245'] |  | 
+passed ['tc_135116'] |  | 
+passed ['tc_135126'] |  | 
+passed ['tc_135256'] |  | 
+passed ['tc_135233'] |  | 
+passed ['tc_135133'] |  | 
+passed ['tc_135136'] |  | 
+passed ['tc_135139'] |  | 
+passed ['tc_135118'] |  | 
+failed ['tc_135130'] | AssertionError: 'QCTEST-135130-inactive': Editor submit left the record 'Unknown' (raw cell 'INACTIVE'), not 'Published' assert 'Unknown' == 'Published'      [0m[91m- Published[39;49;00m[90m[39;49;00m   [92m+ Unknown[39;49;00m[90m[ | ['admin = <cms.pages.home_promo_banners.home_promo_banners_admin_page.PromotionalBannerAdminPage object at 0x00000256C7318290>', 'cms\\tests\\home_promo_banners\\test_home_promo_banners_control_panel.py:120: AssertionError']
+passed ['tc_135184'] |  | 
+passed ['tc_135124'] |  | 
+failed ['tc_135186'] | AssertionError: workflow state changed on deactivate assert 'Unknown' == 'Published'      [0m[91m- Published[39;49;00m[90m[39;49;00m   [92m+ Unknown[39;49;00m[90m[39;49;00m | ['cms\\tests\\home_promo_banners\\test_home_promo_banners_control_panel.py:401: AssertionError']
+passed ['tc_135262'] |  | 
+passed ['tc_135244'] |  | 
+passed ['tc_135152'] |  | 

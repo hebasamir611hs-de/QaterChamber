@@ -1,510 +1,552 @@
 """
 cms/pages/home_strategic_direction/home_strategic_direction_admin_page.py —
-HomeStrategicDirectionAdminPage.
+StrategicPillarCardAdminPage (PBI 129381, Home — Strategic Direction).
 
-Control_Panel Page Object for PBI 129381 ("Strategic Direction Section" /
-Pillar Cards, Home Page), backing the "Strategic Pillar Cards" Object
-Definition entry (objectDefinitionId=48938, groupId=37246) — CONFIRMED LIVE
-this session (2026-08-31, headless Chromium, 1920x1080, TEST_USER), via a
-ONE-PROCESS Python probe script driven through this repo's own framework
-(BasePage + CmsLoginPage, sync Playwright, no cross-call state) — see the
-batch report for why: an earlier attempt to explore this surface through the
-Playwright MCP (separate tool calls per action) produced results that could
-not be trusted — clicks/hovers that "timed out" in one MCP call were still
-dispatched and resolved mid-navigation during the NEXT call, so several
-early observations (wrong object definitions, a spurious AR-locale flip, a
-"the environment auto-navigates on its own" theory) were artifacts of that
-tool boundary, not real site behavior. All facts in this docstring come from
-the single-process probe instead, which is the same execution model this
-Page Object itself runs under.
+REWRITTEN 2026-10-07 (Phase 3, A-129381). The previous version drove the
+retired Content & Data grid (`[role=menuitem] Content & Data`), signed in as
+TEST_USER, and carried `delete_pillar_card_by_title()`: an unguarded
+`:has-text(title)` substring delete with no QCTEST check. That method is GONE —
+on this PBI's own batch a positional delete destroyed the real "Objectives"
+card 49108 (docs/qa-decisions-log.md, 2026-09-03).
 
-CONFIRMED LIVE:
-  - Menu path: Product Menu > Content & Data > "Strategic Pillar Cards"
-    (role=menuitem, exact text). Like every other Object Definition entry
-    on this project, the rendered list URL embeds a per-session portlet
-    instance id (this session: ...ObjectDefinitionsPortlet_B5M0...,
-    objectDefinitionId=48938) — never hardcode it; always reach the list via
-    the menu link's live `href`, never a saved URL string (confirmed: the
-    same instance id 404s once the session's login state changes).
-  - Like gm_message_admin_page.py's documented locale-persistence bug,
-    visiting ANY page under a `/group/...` URL with no `/en/` locale segment
-    (e.g. hovering the parent "Content & Data" menu item, which is itself a
-    real link, not just a submenu expander) can flip the whole admin chrome
-    to Arabic for the rest of the session. Always enter via the explicit
-    English-locale home URL (ADMIN_HOME_EN_URL_PATH) before doing anything
-    else, exactly like GmMessageAdminPage.open_gm_message_edit_form().
-  - List view: a flat data grid, 3 live rows this session — Strategic Pillar
-    Cards is a small, fixed REPEATABLE list (Vision / Mission / Objectives),
-    not a singleton like GM Message and not an 18-row roster like Board
-    Members. Columns confirmed live (`table thead th`): Item Selection, ID,
-    Active Status, Display Order, Pillar Description, Pillar Icon, Pillar
-    Title, Status (workflow state, e.g. "APPROVED" — NOT a
-    Published/Draft toggle, see below), Author, Item Actions. An "Add"
-    button (`[data-testid="fdsCreationActionButton"]`, confirmed count 1)
-    opens the same field set as editing an existing row.
-  - Confirmed live row identities (ID -> Pillar Title -> icon filename):
-      49056 -> "Vision"     -> strategic-pillar-vision (1) (7).svg
-      49082 -> "Mission"    -> strategic-pillar-mission (1) (7).svg
-      49108 -> "Objectives" -> strategic-pillar-objectives (1) (7).svg
-    "Mission" (49082) is the TC 135557 target the case names — confirmed by
-    reading its live Pillar Title field value ("Mission") after opening its
-    edit form, not merely by row/list text (list column values were
-    independently cross-checked against the field's own `input_value()`).
-  - Edit/Add form fields confirmed live (record 49082, DOM dump via a real
-    Playwright session, same class of no-stable-id DDM problem as every
-    other Object Definition form on this project):
-      Active Status   — checkbox (ddm-field data-field-name="activeStatus")
-      Display Order   — text input, id contains "ddm$$displayOrder$"
-      Pillar Description — REQUIRED, rich text; renders as
-        `[role="textbox"][aria-label="Pillar Description"]` (same
-        role-based pattern board_members_admin_page.py's DETAILED_BIOGRAPHY
-        already established for this project's rich-text DDM fields — xpath
-        does not reliably resolve it, this widget mounts empty/hidden in the
-        raw DOM (`style="visibility:hidden"`) until Playwright's role engine
-        forces it, matching the shadow/late-mount behavior documented
-        there).
-      Pillar Icon     — REQUIRED, file upload; a single `Select File`
-        button (confirmed unique on this form — no scoping needed) plus the
-        already-uploaded filename text next to it.
-      Pillar Title    — REQUIRED, text input, id contains
-        "ddm$$pillarTitle$" and "inputValue" (same stable-substring
-        approach GM Message/Board Members use for fields with the file-
-        input-ambiguity problem `_field_after_label()` already documents).
-      Save / Cancel   — the only two buttons on the form.
-  - Pillar Description and Pillar Title are the only two bilingual fields
-    (2 `[data-testid="triggerButton"]` locale toggles confirmed, one inside
-    each field's own `div.ddm-field` ancestor) — Active Status, Display
-    Order, and Pillar Icon are NOT localizable. Same
-    `field_locale_toggle(label)` ancestor-scoping pattern as
-    gm_message_admin_page.py (ddm-field container, not raw `following::`,
-    which strict-mode-violates across fields on every DDM form probed on
-    this project so far).
-  - NO Status combobox (`[data-field-reference="publicationStatus"]`
-    confirmed absent, count 0), NO Preview button, NO Publish button
-    (confirmed absent by direct button-text scan). This Object Definition
-    entry editor exposes Save/Cancel only, exactly like
-    gm_message_admin_page.py's confirmed scope note for that form — Save
-    IS the publish action; "Active Status" (a plain Yes/No field, list
-    column confirmed "Yes" for all 3 live rows) is the only visibility
-    control this content type has. TC 135556's "Save as draft -> Preview ->
-    Publish" is therefore a DISCLOSED SUBSTITUTION, not a literal 3-step
-    pipeline: this batch's test performs Save (with Active Status checked)
-    and treats the reloaded record / the live public carousel as the
-    "preview"/"publish" evidence, the same substitution GM Message's batch
-    already established as this project's convention for object-entry
-    forms with no separate publish step.
-  - Validation, confirmed live by an actual blocked Save (Pillar Title
-    cleared on the real Mission record, Save clicked, error text captured,
-    then the field was restored and Save clicked again to confirm the
-    record still reads "Mission" — no lasting mutation):
-      Page-level banner: "This form is invalid. Check field Pillar Title."
-        (a trailing numeric token — a timestamp/nonce — follows the field
-        name; assertions below match the STABLE PREFIX, not the full
-        string with its nonce)
-      Inline message: "This field is required." appears twice — once right
-        under the empty Pillar Title's own field-feedback, once inside the
-        page banner region.
-    IMPORTANT — the QA case text for TC 135562 says the expected message is
-    "Section Heading (EN) is required." No field named "Section Heading"
-    exists anywhere on this form (confirmed by the full field/label
-    inventory above) — the real, confirmed-live required EN text field is
-    "Pillar Title". This is flagged as a live discrepancy between the case
-    text and the real form in the test module's own docstring; the test
-    asserts the REAL confirmed strings above, not the case's paraphrase.
-  - Save commit grace: reused SAVE_COMMIT_GRACE_MS = 2000 from
-    gm_message_admin_page.py's own measured-live constant (same class of
-    Liferay object-entry write/read-cache lag documented there). NOT
-    independently re-measured for Strategic Pillar Cards this session —
-    disclosed reuse of a sibling content type's confirmed value, same as
-    board_members_admin_page.py's own reuse pattern for this project.
+Object name: Content-Admin-Guide.docx §7 "Home — Strategic Direction":
+`StrategicPillarCard (one entry per pillar)` — pillarTitle (bilingual),
+pillarDescription (bilingual, rich text), pillarIcon, displayOrder,
+activeStatus. Object Authoring slug `strategic-pillar-card`, re-read live
+2026-10-07 (.claude/qa-runs/a129381/probe1.json). The guide lists NO
+section-level object (no Section Tag / Heading / Description, no section
+publish status): those are not CMS content records on this build.
 
-PUBLIC-SURFACE COUNTERPART: the Home Page's "Our Strategic Direction"
-carousel section is CONFIRMED LIVE server-rendered (all 3 `article.qc-sd-
-card` nodes present in the initial HTML response, not client-fetched) —
-see home_strategic_direction_page.py for the full selector inventory. Cache/
-propagation latency for THIS content type was not independently re-measured
-this session — cms-profile.md's Publish/Propagation Latency Budget section
-is confirmed only for the Board Members data source (a different, JAX-RS-
-backed content type); this batch's tests poll the reloaded Home Page with
-the SAME conservative timeout/interval cms-profile.md prescribes as a safety
-margin, not a literal re-use of the ~0s Board Members figure.
+IDENTITY (CONFIRMED LIVE 2026-10-07, probe1.json): this object's Entry column
+shows the externalReferenceCode — real rows QCDEMO-129381-STRATEGIC_PILLAR_CARD-
+01/02/03 = ids 49056/49082/49108 — NEVER the Pillar Title. Every title-based
+row lookup inherited from ObjectAuthoringPage would therefore find nothing, so
+each one is overridden here to go through a VERIFIED code: a code is accepted
+for a title only after that entry's own form reads Pillar Title == title
+exactly. The real QCDEMO rows are never opened by the scan.
+
+SAFETY CONTRACT — the only delete path in this feature is
+`delete_disposable()` below. It:
+  1. refuses any title that does not start with `QCTEST-`;
+  2. resolves the code by reading Pillar Title back off each non-QCDEMO row's
+     own form (exact match; two matches raise RefusedDelete);
+  3. re-reads Pillar Title from that code's form immediately before the click;
+  4. requires exactly one row for the code, and that row's delete link to carry
+     `data-qc-oel-label` == the code and a `data-qc-oel-delete` id that is NOT
+     one of the real pillars (49056 Vision, 49082 Mission, 49108 Objectives);
+  5. clicks only `a[data-qc-oel-delete="<that id>"]`, then re-lists and reports
+     success only when that id is gone.
+Nothing in this feature calls `newest_entry_code()`, `delete_entry_by_title()`
+or `delete_entry_by_code()`.
 """
 
+from __future__ import annotations
+
+import logging
 import re
 
-from core.web.base_page import BasePage
-from config.settings import control_panel_url, settings
+from cms.pages.components.disposable_object_admin import (
+    DISPOSABLE_PREFIX,
+    ROLE_EDITOR,
+    DisposableObjectAdminPage,
+    FieldSpec,
+)
+from cms.pages.components.object_authoring_page import ObjectAuthoringPage, normalize_status
 
-CONTENT_DATA_MENU_ITEM = '[role="menuitem"]:text-is("Content & Data")'
-PILLAR_CARDS_MENU_ITEM = '[role="menuitem"][data-title="Strategic Pillar Cards"]'
-PRODUCT_MENU_TOGGLE = '[data-qa-id="productMenu"]'
+logger = logging.getLogger(__name__)
+
+PILLAR_ICON_FIXTURE = "web/tests/home_strategic_direction/fixtures/pillar_icon.png"
+
+# Real, shared pillar records (docs/qa-environment-notes.md §5d/§5e). Never a
+# delete target; never mutated without ID-named user approval.
+REAL_PILLAR_IDS = frozenset({"49056", "49082", "49108"})
+REAL_PILLAR_TITLES = ("Vision", "Mission", "Objectives")
 
 
-class HomeStrategicDirectionAdminPage(BasePage):
-    # ---- List screen --------------------------------------------------------
-    ADD_BUTTON = '[data-testid="fdsCreationActionButton"]'
-    LIST_ROW = "table tbody tr"
-    ROW_ID_LINK = "td.cell-id a"
-    # Kebab -> Delete flow — same shape as BoardMembersAdminPage's
-    # (confirmed live: this grid also renders an "Item Actions" column,
-    # same fdsCreationActionButton toolbar) but NOT independently exercised
-    # live this session (time-boxed, mirrors that Page Object's own
-    # disclosed-not-verified note for its equivalent constants) — re-verify
-    # the exact kebab/menu-item text before first real use if this heals.
-    #
-    # HEALED (2026-09-01, live one-process probe against qcdev,
-    # objectDefinitionId=48938, tc_135556): confirmed live that repeatedly
-    # opening this row's kebab (as the real test's own flow does across its
-    # main-flow + teardown calls) leaves BEHIND detached-but-still-in-DOM
-    # dropdown menu nodes (`#clay-dropdown-menu-N`, one per prior open) —
-    # only the just-opened one is actually visible; the rest are
-    # `display:none`/hidden leftovers, not removed from the DOM when the
-    # menu closes. An unscoped `[role="menuitem"]:text-is("Delete")` (or
-    # either of its two fallback alternatives) therefore strict-mode-
-    # violates once more than one kebab open has happened in the same
-    # session (probe reproduced this exactly: 4 matches, 3 invisible + 1
-    # visible, immediately before this fix). Root-caused and fixed with the
-    # SAME `:visible` disambiguation pattern already established in
-    # gm_message_admin_page.py's switch_field_to_arabic()/
-    # switch_field_to_english() for the identical "duplicate detached menu
-    # nodes coexist in DOM" shape — scoping each of the 3 fallback
-    # selectors to `:visible` deterministically selects the one real open
-    # menu's Delete item (probe-confirmed: count drops from 4 to exactly 1
-    # with this fix applied, and the subsequent click + confirm actually
-    # removed a real QCTEST row end-to-end).
-    ROW_ACTIONS_KEBAB = 'button[aria-label="Actions"], button.dropdown-toggle'
-    KEBAB_DELETE_MENU_ITEM = (
-        '[role="menuitem"]:text-is("Delete"):visible, '
-        'li:has-text("Delete") a:visible, '
-        'button:has-text("Delete"):visible'
-    )
-    DELETE_CONFIRM_BUTTON = 'button:has-text("Delete"):visible, button:has-text("Yes"):visible'
-    SAVE_BUTTON = 'button:has-text("Save")'
-    CANCEL_BUTTON = 'button:has-text("Cancel")'
+class RefusedDelete(RuntimeError):
+    """A delete target could not be positively proven to be a QCTEST record."""
 
-    # ---- Edit/Add form fields — confirmed live 2026-08-31 (see docstring) --
-    PILLAR_TITLE = 'input[id*="ddm$$pillarTitle$"][id*="inputValue"]'
-    # CONFIRMED LIVE 2026-08-31 (fix): PILLAR_DESCRIPTION is the CKEditor's
-    # OUTER, non-editable mount wrapper (`role="textbox"`, stays
-    # `visibility:hidden`/empty forever) — it was never the real editable
-    # surface, and a previous session's conclusion that the widget "never
-    # mounts" was wrong: the wrapper must be CLICKED ONCE to force Liferay
-    # to lazily instantiate the classic (iframe-based) CKEditor. Once
-    # clicked, a real `<iframe title="editor">` mounts inside this field's
-    # own `div.ddm-field[data-field-name="pillarDescription"]` container,
-    # and its `<body>` is a genuine `isContentEditable === true` document
-    # (re-verified live via a one-process probe: `frame_locator(...)
-    # .locator("body")` resolved, read back the real persisted Mission
-    # description, and accepted a real keyboard Ctrl+A + type write —
-    # never a page.evaluate() bypass). See BasePage.fill_iframe_editor()/
-    # .iframe_editor_text() for the shared wrapper methods this uses.
-    PILLAR_DESCRIPTION = '[role="textbox"][aria-label="Pillar Description"]'
-    PILLAR_DESCRIPTION_FIELD_CONTAINER = 'div.ddm-field[data-field-name="pillarDescription"]'
-    PILLAR_DESCRIPTION_EDITOR_IFRAME = f'{PILLAR_DESCRIPTION_FIELD_CONTAINER} iframe[title="editor"]'
-    DISPLAY_ORDER = 'input[id*="ddm$$displayOrder$"]'
-    ACTIVE_STATUS_CHECKBOX = 'div.ddm-field[data-field-name="activeStatus"] input[type="checkbox"]'
-    PILLAR_ICON_SELECT_FILE = 'button:has-text("Select File")'
-    PILLAR_ICON_UPLOAD_INPUT = 'input[type="file"]'
 
-    LOCALE_TOGGLE_BUTTON = '[data-testid="triggerButton"]'
+class StrategicPillarCardAdminPage(DisposableObjectAdminPage):
+    SIDEBAR_LABEL = "Strategic Pillar Card"
+    SLUG = "strategic-pillar-card"
+    SLUG_CONFIRMED_LIVE = True
+    TITLE_FIELD = "pillar_title"
+    ACTIVE_FIELD = "active_status"
+    FIELDS = {
+        "pillar_title": FieldSpec("Pillar Title", "text", bilingual=True, required=True, confirmed_live=True),
+        "pillar_description": FieldSpec(
+            "Pillar Description", "rich", bilingual=True, required=True, ref="pillarDescription",
+            default="QCTEST disposable pillar card description.",
+            default_ar="وصف بطاقة ركيزة اختبارية.", confirmed_live=True,
+        ),
+        "pillar_icon": FieldSpec("Pillar Icon", "file", required=True, confirmed_live=True),
+        # Multiples of 100 (OBJECT-AUTHORING-GUIDE); 9900 sorts after the real
+        # cards so a QCTEST card never displaces Vision as the first card.
+        "display_order": FieldSpec("Display Order", "number", required=True, default="9900", confirmed_live=True),
+        "active_status": FieldSpec("Active Status", "checkbox", confirmed_live=True),
+    }
+    FILES = {"pillar_icon": PILLAR_ICON_FIXTURE}
 
-    # ---- Not present on this form — confirmed absent, see docstring -------
-    STATUS_COMBOBOX = '[data-field-reference="publicationStatus"]'
-    PREVIEW_BUTTON = 'button:has-text("Preview")'
-    PUBLISH_BUTTON = 'button:has-text("Publish")'
+    # The workflow submit button's LABEL varies by role and object (Editor:
+    # "Publish", probe1.json; Author: "Submit for Review" or the legacy wording,
+    # heads-up 2026-10-07). Matched by structure instead: the form's two
+    # `name="status"` submit buttons are Save as Draft and the workflow submit.
+    SUBMIT_FOR_REVIEW_BUTTON = 'button[type="submit"][name="status"]:not(:text-is("Save as Draft"))'
 
-    # See docstring: same measured-live grace GM Message's batch established
-    # for this project's object-entry write/read-cache lag, reused rather
-    # than independently re-measured for this content type this session.
-    SAVE_COMMIT_GRACE_MS = 2000
+    REAL_CODE_PREFIX = "QCDEMO-129381-STRATEGIC_PILLAR_CARD"
+    # CONFIRMED LIVE 2026-10-08 (probe7): `<select data-qc-oel-page-size>` with
+    # options 10/25/50/100 (no value attrs) + value "0" (all). Default 10: a
+    # card beyond row 10 sits on page 2 and was invisible to every lookup.
+    PAGE_SIZE_SELECT = "select[data-qc-oel-page-size]"
 
-    ADMIN_HOME_EN_URL_PATH = "/en/home"
+    def __init__(self, page):
+        super().__init__(page)
+        self._codes: dict[str, str] = {}
+        self._role = ROLE_EDITOR
+        self._pending_title: str | None = None
 
-    # ---- Navigation -----------------------------------------------------
-    def open_pillar_cards_list(self) -> "HomeStrategicDirectionAdminPage":
-        """Navigate via Content & Data > Strategic Pillar Cards, always
-        entering through the explicit English-locale home URL first (see
-        module docstring — a bare `/group/...` navigation, including just
-        hovering the parent "Content & Data" menu item, can flip the whole
-        admin session to Arabic for the rest of the run). Reads the menu
-        item's live `href` rather than a saved URL string, since the
-        embedded portlet instance id regenerates every session."""
+    # ---- session ----------------------------------------------------------
+    def sign_in(self, role: str) -> "StrategicPillarCardAdminPage":
+        self._role = role
+        super().sign_in(role)
+        return self
+
+    def open(self, url: str) -> None:
+        """Bare navigation that re-signs as THIS test's role, never TEST_USER.
+
+        BasePage.open() runs core/web/session_guard.reauthenticate(), which
+        silently signs a dropped/logged-out context into TEST_USER whenever it
+        lands on a `manage-*` URL (heads-up 2026-10-07). An Author or Site
+        Member case would then run as super-admin. core/ is not edited; this
+        page object simply does not go through that path."""
         from cms.pages.control_panel.login_page import CmsLoginPage
+        from config.settings import cms_role_credentials
+        from core.web.session_guard import is_dead_session, is_login_form_showing
 
-        login = CmsLoginPage(self.page)
-        self.open(control_panel_url(self.ADMIN_HOME_EN_URL_PATH))
-        if not (self.is_visible(CONTENT_DATA_MENU_ITEM) or self.is_visible(PRODUCT_MENU_TOGGLE)):
-            login.open_login().login(settings.test_user, settings.test_password)
-            self.open(control_panel_url(self.ADMIN_HOME_EN_URL_PATH))
+        self.page.goto(url, wait_until="domcontentloaded", timeout=60000)
+        if "/manage-" in url and (is_login_form_showing(self.page) or is_dead_session(self.page)):
+            email, password = cms_role_credentials(self._role)
+            CmsLoginPage(self.page).open_login().login(email, password)
+            self.page.goto(url, wait_until="domcontentloaded", timeout=60000)
+        try:
+            from core.web.overlays import dismiss_overlays
+            dismiss_overlays(self.page)
+        except Exception:  # noqa: BLE001
+            pass
 
-        if not self.is_visible(PILLAR_CARDS_MENU_ITEM):
-            self.click(PRODUCT_MENU_TOGGLE)
-            try:
-                self.wait_for(CONTENT_DATA_MENU_ITEM)
-            except Exception:
-                # CONFIRMED LIVE (2026-08-31): reproduced twice, single-
-                # worker, no xdist contention — a SECOND (or later) call to
-                # this method within one test (e.g. a teardown/verification
-                # re-open after a blocked Save) can have the toggle click
-                # land on a menu that fails to open the first time, timing
-                # out here even though the exact same click+wait sequence
-                # already succeeded once earlier in the same test/session.
-                # One retry (re-click the toggle, wait again) mirrors this
-                # wrapper's own established click()/wait_for() single-retry
-                # recovery convention (overlay/session-drop) rather than
-                # inventing a new pattern — surfaced as a real failure only
-                # if the retry also fails.
-                self.click(PRODUCT_MENU_TOGGLE)
-                self.wait_for(CONTENT_DATA_MENU_ITEM)
-        href = self.page.locator(PILLAR_CARDS_MENU_ITEM).get_attribute("href")
-        self.open(href)
-        self.wait_for(f"{self.LIST_ROW} >> nth=0")
+    def filter_entries(self, text: str) -> "StrategicPillarCardAdminPage":
+        """The list search matches the Entry column (codes), not titles, so it
+        is not used. Instead show the largest page so no row hides on page 2."""
+        sel = self.page.locator(self.PAGE_SIZE_SELECT)
+        try:
+            if sel.count() and sel.first.input_value() != "0":
+                sel.first.select_option(value="0")
+                # wait until the table shows every row the "N total" counter promises
+                self.page.wait_for_function(
+                    "() => { const m = document.body.innerText.match(/([0-9]+) total/);"
+                    " return !m || document.querySelectorAll('table tbody tr').length >= +m[1]; }",
+                    timeout=20000,
+                )
+        except Exception:  # noqa: BLE001 — a smaller page is still correct, only slower
+            pass
         return self
 
-    def open_pillar_card_edit_form_by_title(self, title: str) -> "HomeStrategicDirectionAdminPage":
-        """Open the row whose rendered text mentions `title` (e.g.
-        "Mission") — confirmed live: :text-is on the row's own ID-link
-        avoids ambiguity, so this scopes to the row's text instead and
-        clicks that row's ID link."""
-        self.click(f'{self.LIST_ROW}:has-text("{title}") >> {self.ROW_ID_LINK}')
-        self.wait_for(self.SAVE_BUTTON)
-        return self
+    # ---- identity: Pillar Title -> verified entry code --------------------
+    def _row_codes(self) -> list[tuple[str, str]]:
+        """(Entry-column code, entry id) for every listed row."""
+        rows = self.page.locator(self.ENTRIES_TABLE_ROW)
+        out = []
+        for i in range(rows.count()):
+            row = rows.nth(i)
+            code = row.locator("td").first.inner_text().strip()
+            ids = row.evaluate(
+                "el => Array.from(el.querySelectorAll('*')).flatMap(n => Array.from(n.attributes)"
+                ".filter(a => a.name.startsWith('data-qc-oel-') && a.name !== 'data-qc-oel-label')"
+                ".map(a => a.value))"
+            )
+            out.append((code, ids[0] if ids else ""))
+        return out
 
-    def open_new_pillar_card_form(self) -> "HomeStrategicDirectionAdminPage":
-        self.click(self.ADD_BUTTON)
-        self.wait_for(self.SAVE_BUTTON)
-        return self
+    API_BASE = "/o/c/strategicpillarcards"
 
-    def reopen_pillar_card_by_title_fresh(self, title: str) -> "HomeStrategicDirectionAdminPage":
-        """Re-navigate to the list fresh, then open the row for `title` —
-        used by teardown/verification steps so a re-check never assumes the
-        form the test left open is still in a good state (mirrors
-        BoardMembersAdminPage.open_member_edit_form_by_row_index_fresh)."""
-        self.open_pillar_cards_list()
-        return self.open_pillar_card_edit_form_by_title(title)
+    def _api_title(self, entry_id: str) -> str | None:
+        """Pillar Title (EN) of one entry by its numeric id via the object's
+        own headless endpoint, with this page's signed-in session. None when
+        the API does not answer (caller falls back to the form). REVIEW FIX
+        2026-10-08 (item 7): replaces one form load per row per lookup."""
+        if not entry_id or entry_id in REAL_PILLAR_IDS:
+            return None
+        from config.settings import control_panel_url
 
-    # ---- Field actions ------------------------------------------------------
-    def fill_pillar_card_form(
-        self,
-        pillar_title: str = None,
-        pillar_description: str = None,
-        display_order: str = None,
-        active_status: bool = None,
-    ) -> "HomeStrategicDirectionAdminPage":
-        if pillar_title is not None:
-            self.type(self.PILLAR_TITLE, pillar_title)
-        if pillar_description is not None:
-            # FIXED 2026-08-31 (see PILLAR_DESCRIPTION's own docstring note):
-            # click the wrapper once to force the classic CKEditor to mount
-            # its iframe, wait for that iframe to render, then write into
-            # its real editable body via the shared BasePage wrapper —
-            # never a page.evaluate() bypass.
-            self.click(self.PILLAR_DESCRIPTION)
-            self.wait_for(self.PILLAR_DESCRIPTION_EDITOR_IFRAME)
-            self.fill_iframe_editor(self.PILLAR_DESCRIPTION_EDITOR_IFRAME, pillar_description)
-        if display_order is not None:
-            self.type(self.DISPLAY_ORDER, display_order)
-        if active_status is not None:
-            self.set_checkbox(self.ACTIVE_STATUS_CHECKBOX, active_status)
-        return self
+        try:
+            resp = self.page.request.get(
+                control_panel_url(f"{self.API_BASE}/{entry_id}"),
+                headers={"Accept": "application/json", "Accept-Language": "en-US"},
+                timeout=20000,
+            )
+            if resp.status != 200:
+                return None
+            body = resp.json()
+            i18n = body.get("pillarTitle_i18n") or {}
+            return i18n.get("en_US") or body.get("pillarTitle") or ""
+        except Exception:  # noqa: BLE001
+            return None
 
-    # CORRECTED 2026-09-01 (live re-investigation via Playwright MCP, human-
-    # interaction pass — see test module's own docstring for the full
-    # before/after). The PRIOR conclusion that this modal has "no discoverable
-    # way to select/attach an uploaded file" was WRONG — an automation gap in
-    # THIS method, not a product defect.
-    #
-    # PILLAR_ICON_SELECT_FILE opens a Liferay Documents-and-Media "Select
-    # File" picker MODAL (`iframe[id*="selectAttachmentEntry_iframe"]`), the
-    # same class of stay-open modal home_dynamic_widgets_admin_page.py's
-    # UPLOAD_MODAL/_close_upload_modal_if_open() already documents. That part
-    # was already correctly handled. What was MISSING: after
-    # set_input_files() lands a new file, the modal renders an upload PREVIEW
-    # panel (thumbnail + filename + "N of N" counter) with its OWN small
-    # toolbar containing an "Add" button
-    # (`iframe[title="Select File"] >> role=button[name="Add"]`) — CONFIRMED
-    # LIVE this session to be the real, human-discoverable confirm control:
-    # clicking it is what actually SELECTS the just-uploaded file into the
-    # Pillar Icon field and closes the modal (verified: the field afterward
-    # shows the real uploaded filename plus Download/Delete buttons, not the
-    # empty "Select File" state). The filename text previously seen in a
-    # read-only sidebar was a red herring from probing an EXISTING library
-    # item's detail panel, not from this preview toolbar.
-    #
-    # Also confirmed live, as a secondary path: clicking directly on an
-    # EXISTING document's row/card in the grid (not its "Preview" button)
-    # also selects it and closes the modal immediately — no "Add" click
-    # needed for that path. upload_pillar_icon() always uploads a NEW file,
-    # so it always goes through the "Add" confirm step.
-    PILLAR_ICON_MODAL_IFRAME = 'iframe[id*="selectAttachmentEntry_iframe"]'
-    PILLAR_ICON_MODAL_CLOSE_BUTTON = 'button[aria-label="Close"]'
-    PILLAR_ICON_MODAL_ADD_BUTTON = 'button:has-text("Add")'
-    # CORRECTED 2026-09-01 (live re-investigation, one-process probe — see
-    # this method's own docstring note below): the modal's upload surface is
-    # a "Drag & Drop Your Files or Browse to Upload" dropzone
-    # (`text=Drag & Drop Your Files or Browse to Upload`), CONFIRMED LIVE to
-    # have NO static `<input type="file">` anywhere in its DOM (recursive
-    # search across every frame on the page found zero matches inside the
-    # modal iframe). Clicking the dropzone instead fires a native OS file
-    # dialog directly (CONFIRMED via `page.expect_file_chooser()`), so
-    # `BasePage.upload_file()` (`locator(...).set_input_files(...)`) can
-    # never find a target here — PILLAR_ICON_UPLOAD_INPUT was a wrong
-    # assumption, not a wrong selector; there is no such element to select
-    # in the first place. The ORIGINAL bug this fixes: the previous code
-    # called `set_input_files()` against `input[type="file"]` at page level
-    # with no iframe scoping, which silently matched an unrelated file
-    # input elsewhere on the host page (confirmed live: page-level count
-    # was 1, but 0 inside the modal iframe) and "succeeded" without ever
-    # touching the modal — so the preview panel/"Add" button this method
-    # waits for next never appeared, and the 15s wait always timed out.
-    PILLAR_ICON_MODAL_DROPZONE = "text=Drag & Drop Your Files or Browse to Upload"
+    def _read_title(self, code: str) -> str | None:
+        """Pillar Title (EN) read off the entry's OWN FORM, or None when the
+        form did not load. Used by the delete guard (identity re-read right
+        before the click) and as the API fallback. The input renders empty and
+        fills a moment later, so it is polled up to 20 s after the editing
+        banner appears. Nothing is cached (review fix 2026-10-08: a sticky ""
+        hid titled QCTEST records from teardown)."""
+        if not code or code.startswith(self.REAL_CODE_PREFIX):
+            return None
+        try:
+            self.open(self._manage_url(edit_entry=code, locale="en"))
+            self._entry_code = code
+            box = self.page.locator(self.EN_TITLE_INPUT)
+            box.first.wait_for(state="visible", timeout=30000)
+            self.page.locator(self.CANCEL_AND_ADD_NEW_LINK).first.wait_for(state="visible", timeout=30000)
+            value = ""
+            for _ in range(40):
+                value = box.first.input_value()
+                if value:
+                    break
+                self.page.wait_for_timeout(500)
+            return value
+        except Exception:  # noqa: BLE001
+            return None
 
-    def upload_pillar_icon(self, file_path: str) -> "HomeStrategicDirectionAdminPage":
-        self.click(self.PILLAR_ICON_SELECT_FILE)
-        modal_iframe = self.page.locator(self.PILLAR_ICON_MODAL_IFRAME)
-        modal_iframe.first.wait_for(state="visible", timeout=8000)
-        modal_frame = self.page.frame_locator(self.PILLAR_ICON_MODAL_IFRAME)
-        dropzone = modal_frame.locator(self.PILLAR_ICON_MODAL_DROPZONE)
-        dropzone.wait_for(state="visible", timeout=8000)
-        # CONFIRMED LIVE fix: clicking the dropzone opens the browser's
-        # native file-chooser dialog (no in-DOM file input to target with
-        # set_input_files()) — intercept it with expect_file_chooser() and
-        # feed it the fixture path directly, exactly like a human would pick
-        # a file from the OS dialog.
-        with self.page.expect_file_chooser(timeout=8000) as fc_info:
-            dropzone.click()
-        fc_info.value.set_files(file_path)
-        # CONFIRMED LIVE: the upload preview panel's own "Add" button is the
-        # real select/confirm control for a freshly uploaded file — click
-        # it, scoped to the modal's own iframe (never the page-level DOM,
-        # which has no such button). Same frame_locator idiom as
-        # BasePage.fill_iframe_editor()/.iframe_editor_text() rather than
-        # `.content_frame` on a Locator, to match this project's convention.
-        add_button = modal_frame.locator(self.PILLAR_ICON_MODAL_ADD_BUTTON)
-        add_button.first.wait_for(state="visible", timeout=15000)
-        add_button.first.click()
-        modal_iframe.first.wait_for(state="hidden", timeout=8000)
-        return self
+    def _verify_code(self, code: str, title: str) -> bool:
+        return self._read_title(code) == title
 
-    def pillar_title_value(self) -> str:
-        return self.page.locator(self.PILLAR_TITLE).input_value()
+    # The 27 untitled Drafts listed in the 2026-10-07 report §7 (no title, not
+    # QCTEST, not deletable by this page). The headless GET-by-id answers 404
+    # for drafts (probe9, 2026-10-08), so without this fixed list every lookup
+    # loaded their 27 forms. This is a FIXED id list from the report, not a
+    # learned cache: a new record can never land in it.
+    KNOWN_UNTITLED_IDS = frozenset({
+        "555085", "559326", "559408", "559544", "559582", "559611", "559663", "564387", "564393",
+        "564454", "564472", "564536", "564662", "564680", "564723", "564745", "564768", "564800",
+        "564976", "565001", "565024", "565048", "565074", "565099", "565133", "565198", "565220",
+    })
 
-    def pillar_description_text(self) -> str:
-        """Read the PERSISTED Pillar Description (EN) value straight out of
-        the portlet's own embedded field-config JSON in the page HTML,
-        rather than the rendered rich-text editor DOM.
-
-        CORRECTED 2026-08-31: an earlier session concluded the CKEditor
-        "never mounts" for this field. That was a locator bug, not a real
-        CMS defect — the wrapper div this constant addresses
-        (`PILLAR_DESCRIPTION`, `role="textbox"`) is CONFIRMED LIVE to be
-        the CKEditor's outer, permanently-empty/hidden mount POINT, not the
-        editable surface itself. Clicking it once forces Liferay to lazily
-        instantiate the real classic (iframe-based) CKEditor
-        (`<iframe title="editor">`, mounted inside this field's own
-        `div.ddm-field[data-field-name="pillarDescription"]` container);
-        that iframe's `<body>` IS a genuine `isContentEditable === true`
-        document (re-verified live via `frame_locator(...).locator("body")`
-        — see `fill_pillar_card_form()` and `BasePage.fill_iframe_editor()`/
-        `.iframe_editor_text()`). Writing now goes through that real path.
-
-        This READ method is kept reading the embedded field-config JSON
-        rather than the live iframe body on purpose — it is used for
-        POST-SAVE verification after a fresh re-open
-        (`reopen_pillar_card_by_title_fresh()`), where the persisted value
-        already reflects the saved write and the CKEditor may not even be
-        mounted yet (no click has happened on that fresh page). This is
-        independent of the write-path fix above, not superseded by it.
-
-        The reliable source of truth is the SAME embedded per-field config
-        object Liferay renders into the page's own <script> payload to
-        bootstrap the (broken) editor — it carries the field's real
-        persisted value regardless of whether the editor mounts:
-            "fieldReference":"pillarDescription", ... "value":{"en_US":"<p>...</p>", "ar_SA":"..."}
-        This was independently verified to match the live public Home
-        Page's server-rendered Mission card text exactly. Extracted via
-        regex (DDM-specific string surgery, kept out of BasePage on
-        purpose) rather than a JSON parse, since the surrounding blob is
-        not valid standalone JSON (it's embedded inline in a larger JS
-        object literal).
-        """
-        html = self.page.content()
-        match = re.search(
-            r'"fieldReference":"pillarDescription".*?"value":\{([^}]*)\}',
-            html,
-        )
-        if not match:
+    def _title_of(self, code: str, entry_id: str) -> str | None:
+        if entry_id in self.KNOWN_UNTITLED_IDS:
             return ""
-        locale_blob = match.group(1)
-        en_match = re.search(r'"en_US":"((?:[^"\\]|\\.)*)"', locale_blob)
-        if not en_match:
+        got = self._api_title(entry_id)
+        return got if got is not None else self._read_title(code)
+
+    def code_for(self, title: str, refresh: bool = False, wait: bool = True) -> str:
+        """Verified entry code for `title`, or "" when no entry carries it.
+        Titles come from the headless API by entry id (no form loads); a row
+        the API cannot answer is read from its form. Re-lists up to 3 times
+        when a row was unreadable, or (with `wait`) when a just-saved record
+        has not reached the list yet."""
+        import time
+
+        if not refresh and title in self._codes:
+            return self._codes[title]
+        found = ""
+        for attempt in range(3):
+            self.open_entries_list(locale="en")
+            self.filter_entries(title)
+            candidates = [
+                (code, entry_id) for code, entry_id in self._row_codes()
+                if code and not code.startswith(self.REAL_CODE_PREFIX) and entry_id not in REAL_PILLAR_IDS
+            ]
+            unreadable = False
+            for code, entry_id in candidates:
+                got = self._title_of(code, entry_id)
+                if got is None:
+                    unreadable = True
+                elif got == title:
+                    # Save as Draft can leave two copies with the same title (see
+                    # report); reads use the first, delete_disposable() removes all.
+                    found = found or code
+            if found or not (unreadable or wait):
+                break
+            time.sleep(5)
+        if found:
+            self._codes[title] = found
+        else:
+            self._codes.pop(title, None)
+        return found
+
+    def _remember_saved(self, title: str) -> None:
+        """A save navigates to `?previewEntry=<code>`; that code is accepted
+        only once the entry's own form confirms the title."""
+        # After Save as Draft the page lands on `?editEntry=<code>` (probe8,
+        # 2026-10-08); older builds used `?previewEntry=<code>`.
+        m = re.search(r"(?:previewEntry|editEntry)=([^&#]+)", self.page.url)
+        if m and self._verify_code(m.group(1), title):
+            self._codes[title] = m.group(1)
+
+    def _row(self, title: str):
+        code = self.code_for(title)
+        if not code:
+            return None, ""
+        self.open_entries_list(locale="en")
+        self.filter_entries(code)
+        return self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{code}")'), code
+
+    # ---- title-based overrides --------------------------------------------
+    def row_status_text(self, title: str) -> str:
+        row, _ = self._row(title)
+        if row is None or row.count() != 1:
             return ""
-        raw = en_match.group(1)
-        # Undo the JS-string escaping Liferay applies (\/ -> /, \" -> ", etc.)
-        # and strip the wrapping <p>...</p> the editor stores.
-        unescaped = raw.encode("utf-8").decode("unicode_escape") if "\\u" in raw else raw
-        unescaped = unescaped.replace('\\/', '/').replace('\\"', '"')
-        text = re.sub(r"^<p>|</p>$", "", unescaped).strip()
-        return text
+        return normalize_status(row.locator("td").nth(1).inner_text())
 
-    def field_locale_toggle(self, field_data_name: str) -> str:
-        """The locale toggle button scoped to the field's OWN
-        `div.ddm-field[data-field-name=...]` container — same ancestor-
-        scoping fix gm_message_admin_page.py's field_locale_toggle()
-        documents (an unscoped `following::`/bare selector strict-mode-
-        violates across this form's 2 bilingual fields)."""
-        return f'div.ddm-field[data-field-name="{field_data_name}"] {self.LOCALE_TOGGLE_BUTTON}'
-
-    def save(self) -> "HomeStrategicDirectionAdminPage":
-        self.click(self.SAVE_BUTTON)
-        self.page.wait_for_timeout(self.SAVE_COMMIT_GRACE_MS)
-        return self
-
-    def cancel(self) -> "HomeStrategicDirectionAdminPage":
-        self.click(self.CANCEL_BUTTON)
-        return self
-
-    # ---- State queries --------------------------------------------------------
-    # Confirmed live text this session (see docstring) — same signal shape
-    # as gm_message_admin_page.py / board_members_admin_page.py.
-    SAVE_ERROR_BANNER_PREFIX = "This form is invalid. Check field Pillar Title."
-    INLINE_REQUIRED_TEXT = "This field is required."
-
-    def is_save_error_shown(self) -> bool:
-        body_text = self.page.locator("body").inner_text()
-        return self.SAVE_ERROR_BANNER_PREFIX in body_text or self.INLINE_REQUIRED_TEXT in body_text
-
-    def save_error_text(self) -> str:
-        body_text = self.page.locator("body").inner_text()
-        idx = body_text.find(self.SAVE_ERROR_BANNER_PREFIX)
-        if idx == -1:
-            idx = body_text.find(self.INLINE_REQUIRED_TEXT)
-        return body_text[idx: idx + 120] if idx != -1 else ""
-
-    def has_status_combobox(self) -> bool:
-        """Confirmed absent this session (see docstring) — kept as a live
-        state query rather than a hardcoded False so a future re-probe
-        (e.g. after a CMS upgrade adds a real Publish pipeline) is
-        detectable instead of silently stale."""
-        return self.page.locator(self.STATUS_COMBOBOX).count() > 0
+    def raw_row_status(self, title: str) -> str:
+        row, _ = self._row(title)
+        if row is None or row.count() != 1:
+            return ""
+        return row.locator("td").nth(1).inner_text().strip().upper()
 
     def row_visible(self, title: str) -> bool:
-        return self.is_visible(f'{self.LIST_ROW}:has-text("{title}")')
+        return bool(self.code_for(title, refresh=True, wait=False))
 
-    def delete_pillar_card_by_title(self, title: str) -> "HomeStrategicDirectionAdminPage":
-        """QCTEST- disposable-record cleanup path (cms-profile.md Test-Data
-        Policy) — mirrors BoardMembersAdminPage.delete_member_by_name().
+    def entry_exists(self, title: str, role: str) -> bool:
+        self.sign_in(role)
+        return bool(self.code_for(title, refresh=True, wait=False))
 
-        CONFIRMED LIVE end-to-end (2026-09-01, one-process probe against
-        qcdev, objectDefinitionId=48938): opened a real QCTEST row's kebab,
-        clicked Delete via the now-`:visible`-scoped KEBAB_DELETE_MENU_ITEM
-        (see that constant's own docstring for the stale-dropdown root
-        cause and fix), confirmed the delete dialog, and re-verified via a
-        fresh `open_pillar_cards_list()` that the row was actually gone
-        from the list afterward — not just that the click resolved."""
-        row = f'{self.LIST_ROW}:has-text("{title}")'
-        self.click(f"{row} >> {self.ROW_ACTIONS_KEBAB}")
-        self.click(self.KEBAB_DELETE_MENU_ITEM)
-        if self.is_visible(self.DELETE_CONFIRM_BUTTON):
-            self.click(self.DELETE_CONFIRM_BUTTON)
+    def status_of(self, title: str, role: str) -> str:
+        self.sign_in(role)
+        return self.row_status_text(title)
+
+    def open_entry_by_edit_link(self, title: str) -> "StrategicPillarCardAdminPage":
+        code = self.code_for(title)
+        if not code:
+            raise AssertionError(f"no entry with Pillar Title {title!r}")
+        if self._read_title(code) != title:
+            raise AssertionError(f"entry {code} did not load with Pillar Title {title!r}")
+        return self
+
+    def row_preview_url(self, title: str) -> str:
+        row, code = self._row(title)
+        if row is None or row.count() != 1:
+            return ""
+        return self.row_preview_url_by_code(code)
+
+    def _run_row_action(self, title_or_code: str, action: str, comment: str = ""):
+        code = title_or_code if title_or_code in self._codes.values() else self.code_for(title_or_code)
+        if not code:
+            raise AssertionError(f"no entry with Pillar Title {title_or_code!r}")
+        self.open_entries_list(locale="en")
+        self.filter_entries(code)
+        return ObjectAuthoringPage._run_row_action(self, code, action, comment)
+
+    def row_offers_action(self, title: str, action: str) -> bool:
+        row, _ = self._row(title)
+        if row is None or row.count() != 1:
+            return False
+        return row.locator(f"[{self.ROW_ACTION_ATTRS[action]}]").count() > 0
+
+    def fill_required(self, title, skip=(), active=False, files=None):
+        self._pending_title = title if title and title.startswith(DISPOSABLE_PREFIX) else None
+        self._pending_skip = tuple(skip)
+        return super().fill_required(title, skip=skip, active=active, files=files)
+
+    EN_TITLE_INPUT = 'input[name="ObjectField_pillarTitle"]'
+    AR_TITLE_INPUT = "#qc-ar-pillarTitle"
+
+    def _restore_lost_title(self) -> None:
+        """HEALED 2026-10-08. Serial runs saved drafts with an EMPTY Pillar
+        Title (EN + AR) although the title had been typed first (7 untitled
+        drafts: 555085, 559326, 559408, 559544, 559582, 559611, 559663 —
+        description / order / active kept, title + icon lost). The title
+        inputs are re-checked right before the save click and re-typed if
+        the form dropped them. Recorded as an INCONCLUSIVE finding in the
+        report; this keeps every QCTEST record findable and deletable."""
+        title = self._pending_title
+        if not title or "pillar_title" in getattr(self, "_pending_skip", ()):
+            return
+        try:
+            en = self.page.locator(self.EN_TITLE_INPUT).first
+            if en.count() and en.input_value() != title:
+                # The EN title must be exactly what the test typed. AR is only
+                # refilled when it was lost TOGETHER with EN, so a test that
+                # empties AR on purpose keeps it empty.
+                logger.warning("Pillar Title changed/lost before save (%r) — re-typing", en.input_value())
+                en.fill(title)
+                ar = self.page.locator(self.AR_TITLE_INPUT).first
+                if ar.count() and not ar.input_value():
+                    ar.fill(f"{title} AR")
+                icon = self.page.locator('input[name="ObjectField_pillarIcon"]').first
+                if "pillar_icon" not in getattr(self, "_pending_skip", ()) and icon.count() and not icon.input_value():
+                    logger.warning("Pillar Icon was lost with the title — re-uploading")
+                    self.upload("pillar_icon", self.FILES["pillar_icon"], tag=title)
+        except Exception:  # noqa: BLE001 — the save itself reports any real problem
+            pass
+
+    INVALID_FIELD = '[aria-invalid="true"], .has-error, .is-invalid'
+
+    def refusal_visible(self) -> bool:
+        """Base check (red bar / English refusal text) OR any field marked
+        invalid — a structural, language-neutral signal. Healed 2026-10-08:
+        under the Arabic admin locale the refusal bar and Arabic inline errors
+        rendered (reports/manual-exec-129381-135543.png) but the base check,
+        tuned to the English text, missed them. No Arabic-text locator used."""
+        if super().refusal_visible():
+            return True
+        try:
+            self.page.locator(self.INVALID_FIELD).first.wait_for(state="attached", timeout=5000)
+            return True
+        except Exception:  # noqa: BLE001
+            return False
+
+    def field_present(self, key: str) -> bool:
+        """Rich-text editors mount their iframe a moment after the form;
+        waits for it (healed 2026-10-08, 135539 counted before mount)."""
+        if self.spec(key).kind == "rich":
+            try:
+                self.page.locator(self._rich_iframe(key, "en")).first.wait_for(state="attached", timeout=20000)
+                return True
+            except Exception:  # noqa: BLE001
+                return False
+        return super().field_present(key)
+
+    def _poll_save_outcome(self, start_url: str | None, before: dict | None = None) -> str | None:
+        """Same outcome poll as ObjectAuthoringPage._poll_save_outcome (shared
+        file, not edited), but this page lands on `?editEntry=<code>` after a
+        save (probe8, 2026-10-08), not only `?previewEntry=`. Without this,
+        every draft save waited the full 120 s cap and the caller then
+        navigated away mid-save (review item 7)."""
+        import time
+
+        if before is None:
+            before = self._pre_save_snapshot()
+        t0 = time.monotonic()
+        deadline = t0 + self.SETTLE_OUTCOME_TIMEOUT_MS / 1000
+        not_started_deadline = t0 + self.SETTLE_NOT_STARTED_CAP_MS / 1000
+        seen_busy = started = False
+        while time.monotonic() < deadline:
+            url = self.page.url
+            if ("previewEntry=" in url or "editEntry=" in url) and (start_url is None or url != start_url):
+                return "nav"
+            toast = self._toast_text()
+            if toast != before["toast"] and self.SAVE_SUCCESS_TEXT.search(toast):
+                return "toast"
+            if self._count(self.SAVE_REFUSAL) > before["refusals"]:
+                return "refused"
+            if not started and self._count(self.SUBMIT_STARTED) > 0:
+                started = True
+            busy = self._count(self.FORM_BUSY)
+            if busy > 0:
+                seen_busy = started = True
+            elif seen_busy and busy == 0:
+                return "spinner"
+            if not started and time.monotonic() > not_started_deadline:
+                return None
+            try:
+                self.page.wait_for_timeout(300)
+            except Exception:  # noqa: BLE001 — page navigating
+                time.sleep(0.3)
+        return None
+
+    def save_as_draft(self):
+        self._restore_lost_title()
+        super().save_as_draft()
+        if self._pending_title:
+            self._remember_saved(self._pending_title)
+        return self
+
+    def submit_for_review(self):
+        self._restore_lost_title()
+        super().submit_for_review()
+        if self._pending_title:
+            self._remember_saved(self._pending_title)
+        return self
+
+    def _rich_iframe(self, key: str, locale: str) -> str:
+        # Two CKEditors on the form, EN then AR (probe1.json).
+        return f'{self.RICH_TEXT_EDITOR_IFRAME_CSS} >> nth={1 if locale == "ar" else 0}'
+
+    # ---- the ONLY delete path in this feature --------------------------
+    def _delete_verified_code(self, code: str, title: str) -> bool:
+        """Delete ONE entry by its code after re-proving it is `title` (a
+        QCTEST title): form re-read, single row, label == code, id not real."""
+        if not title.startswith(DISPOSABLE_PREFIX):
+            raise RefusedDelete(f"refusing to delete non-QCTEST record {title!r}")
+        if not code or code.startswith(self.REAL_CODE_PREFIX):
+            raise RefusedDelete(f"{title!r} resolved to real/empty code {code!r}")
+        form_title = self._read_title(code)
+        if form_title != title:
+            raise RefusedDelete(f"{code}: form Pillar Title {form_title!r} != {title!r}")
+        self.open_entries_list(locale="en")
+        self.filter_entries(code)
+        rows = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{code}")')
+        if rows.count() != 1:
+            raise RefusedDelete(f"{rows.count()} rows match code {code!r}")
+        delete_link = rows.first.locator("a[data-qc-oel-delete]").first
+        entry_id = delete_link.get_attribute("data-qc-oel-delete") or ""
+        label = delete_link.get_attribute("data-qc-oel-label") or ""
+        if not entry_id or entry_id in REAL_PILLAR_IDS or label != code:
+            raise RefusedDelete(f"{code}: delete link id={entry_id!r} label={label!r}; refusing")
+        link = self.page.locator(f'a[data-qc-oel-delete="{entry_id}"]')
+        if link.count() != 1:
+            raise RefusedDelete(f"{link.count()} delete links for id {entry_id}")
+        self.page.once("dialog", lambda d: d.accept())
+        link.click(force=True)
+        try:
+            link.wait_for(state="detached", timeout=15000)
+        except Exception:  # noqa: BLE001 — verified below by re-listing
+            pass
+        # Verify by re-listing: teardown "delete failed" warnings have been false before.
+        self.open_entries_list(locale="en")
+        self.filter_entries(code)
+        return self.page.locator(f'a[data-qc-oel-delete="{entry_id}"]').count() == 0
+
+    def _codes_with_title(self, title: str) -> list:
+        self.open_entries_list(locale="en")
+        self.filter_entries(title)
+        out = []
+        for code, entry_id in self._row_codes():
+            if code and not code.startswith(self.REAL_CODE_PREFIX) and entry_id not in REAL_PILLAR_IDS:
+                if self._title_of(code, entry_id) == title:
+                    out.append(code)
+        return out
+
+    def delete_disposable(self, title: str, role: str = ROLE_EDITOR) -> bool:
+        """Guarded delete — see the module docstring's SAFETY CONTRACT.
+        Deletes EVERY entry whose own form reads exactly this QCTEST title
+        (Save as Draft can leave two copies — see report), each by its own
+        verified code. Raises RefusedDelete on any identity doubt; returns
+        False when nothing carrying the title was found or a click did not
+        stick."""
+        if not title or not title.startswith(DISPOSABLE_PREFIX):
+            raise RefusedDelete(f"refusing to delete non-QCTEST record {title!r}")
+        try:
+            self.sign_in(role)
+            codes = self._codes_with_title(title)
+            if not codes:
+                return False
+            ok = all([self._delete_verified_code(code, title) for code in codes])
+            if ok:
+                self._codes.pop(title, None)
+            return ok
+        except RefusedDelete:
+            raise
+        except Exception:  # noqa: BLE001 — teardown never masks the test result
+            return False
+
+    # ---- conveniences ---------------------------------------------------
+    def create(self, title: str, role: str = ROLE_EDITOR, active: bool = True,
+               display_order: str | None = None, submit: bool = True) -> "StrategicPillarCardAdminPage":
+        """Fill every required field (QCTEST icon copy), tick Active Status
+        when `active`, then Submit for Review (or Save as Draft)."""
+        self.open_form(role)
+        self.fill_required(title, active=active, files=self.FILES)
+        if display_order is not None:
+            self.fill("display_order", display_order)
+        if submit:
+            self.submit_for_review()
+        else:
+            self.save_as_draft()
+        return self
+
+    def open_by_title(self, title: str, role: str = ROLE_EDITOR) -> "StrategicPillarCardAdminPage":
+        self.sign_in(role)
+        self.open_entry_by_edit_link(title)
         return self

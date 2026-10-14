@@ -433,3 +433,26 @@ class HomePromoBannersPage(BasePage):
         disclosed, not silently assumed as independently confirmed."""
         img = self.page.locator(f'{self.IMG}[alt="{alt_text_en}"]').first
         return img.locator("xpath=..").get_attribute("href") or ""
+
+    # ---- Phase 3 (2026-10-07): identity by alt text on REAL slides only ----
+    # A banner's identity on the public page is its <img alt>, which is not
+    # part of body.innerText, and the carousel duplicates slides as
+    # `[data-clone]` loop copies. Presence is read from real slides only.
+    REAL_SLIDE_IMG = ".qc-promo-slide:not([data-clone]) img.qc-promo-img"
+
+    def real_banner_count(self, alt_text: str) -> int:
+        return self.page.locator(f'{self.REAL_SLIDE_IMG}[alt="{alt_text}"]').count()
+
+    def real_banner_link(self, alt_text: str) -> dict:
+        """{'href','target'} of the anchor wrapping the real slide whose image
+        alt matches; empty dict when absent."""
+        img = self.page.locator(f'{self.REAL_SLIDE_IMG}[alt="{alt_text}"]')
+        if img.count() == 0:
+            return {}
+        return img.first.evaluate(
+            "el => { const a = el.closest('a'); return a ? {href: a.getAttribute('href') || '',"
+            " target: a.getAttribute('target') || ''} : {}; }"
+        )
+
+    def real_banner_alts(self) -> list[str]:
+        return [a or "" for a in self.page.locator(self.REAL_SLIDE_IMG).evaluate_all("els => els.map(e => e.alt)")]

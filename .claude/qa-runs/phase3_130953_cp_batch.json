@@ -1,0 +1,1912 @@
+{
+ "pbi": 130953,
+ "plan_id": 137724,
+ "suite_id": 140384,
+ "module": "cms/tests/made_in_china_expo",
+ "cases": [
+  {
+   "tc_id": 144237,
+   "priority": 2,
+   "category": "Compatibility",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Compatibility",
+    "Control_Panel",
+    "EXPO"
+   ],
+   "title": "Verify that the Made in China Expo admin form in Control Panel renders correctly in Arabic with RTL layout",
+   "steps": [
+    {
+     "action": "Open the Made in China Expo page in Object Authoring with the Control Panel UI locale set to Arabic",
+     "expected": "Field labels, tabs and buttons render in Arabic, form direction is RTL, EN/AR field entry tabs remain distinguishable"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144238,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Editor can perform the full content lifecycle on the Made in China Expo page",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor; Open Made in China Expo in Object Authoring, edit a field, Save as Draft, Preview, Publish, then Unpublish",
+     "expected": "Each action succeeds without an Access Denied error; page reflects each resulting state"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144239,
+   "priority": 2,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "EXPO"
+   ],
+   "title": "Verify that a Site Content Author can view and update assigned Made in China Expo page content",
+   "steps": [
+    {
+     "action": "Log in as Site Content Author; Open the assigned page, edit the Section Body field, Save as Draft",
+     "expected": "Field is editable, save succeeds, no Access Denied error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144240,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Regression"
+   ],
+   "title": "Verify that a Site Content Author is denied direct publish on the Made in China Expo page",
+   "steps": [
+    {
+     "action": "Log in as Site Content Author; Open the page in Draft, attempt to click Publish",
+     "expected": "Action is blocked; error message \"Access Denied. You do not have permission to perform this action.\" (EN) is displayed; page remains in Draft"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144242,
+   "priority": 1,
+   "category": "Auth",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Auth",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Regression"
+   ],
+   "title": "Verify that a Public Visitor is denied access to the Control Panel admin URL for the Made in China Expo page",
+   "steps": [
+    {
+     "action": "Attempt to open the Object Authoring admin URL for the Made in China Expo page directly, unauthenticated",
+     "expected": "Redirected to CMS login / \"Access Denied. You do not have permission to perform this action.\" (EN) is shown; no admin content is exposed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144243,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-High",
+    "Regression",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that a Site Content Editor can configure all Made in China Expo fields (EN/AR), preview, and publish successfully",
+   "steps": [
+    {
+     "action": "Log in as Site Content Editor; Fill Hero eyebrow/title/description/CTA label/URL/behavior (EN+AR), upload Hero Banner Image; Fill About eyebrow/title/body (EN+AR); Fill Side card logo/eyebrow/heading/subtext/CTA label/URL/behavior (EN+AR); Save as Draft; Preview; Publish",
+     "expected": "Each step succeeds; Preview shows the entered content before publish; after Publish the live public Web page (`/events/made-in-china-expo`, both `/` and `/ar/`) displays every entered field exactly as configured"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144244,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-High",
+    "Web"
+   ],
+   "title": "Verify that editing an already-published Hero Title propagates the new value to the public Web delivery surface",
+   "steps": [
+    {
+     "action": "As Site Content Editor, edit Hero Title to \"Made in China Expo — 2027 Edition\" on the already-published page; Save and Publish (re-publish); Load the public Web page in a fresh browser tab",
+     "expected": "New title \"Made in China Expo — 2027 Edition\" is shown, not the stale cached \"Made in China Expo\""
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144247,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-High"
+   ],
+   "title": "Verify that saving a change to the Made in China Expo page displays the Liferay generic success toast and records an audit log entry (English)",
+   "steps": [
+    {
+     "action": "As Editor, edit the Hero Eyebrow field and click Save; Check the toast; Open the Audit Log for this page",
+     "expected": "Liferay's generic success toast is displayed in English; a new audit log entry is recorded with editor's username, timestamp, and the changed field"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144248,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-High"
+   ],
+   "title": "Verify that saving a change to the Made in China Expo page displays the Liferay generic success toast and records an audit log entry (Arabic)",
+   "steps": [
+    {
+     "action": "Set CMS UI locale to Arabic; As Editor, edit the Section Title (AR) field and click Save; Check the toast; Open the Audit Log",
+     "expected": "Liferay's generic success toast is displayed in Arabic; a new audit log entry is recorded"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144255,
+   "priority": 2,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-High"
+   ],
+   "title": "Verify that a Site Content Editor can save the Made in China Expo page as Draft",
+   "steps": [
+    {
+     "action": "As Editor, fill required fields, click \"Save as Draft\"",
+     "expected": "Page Status = Draft in the admin listing; page not visible on the public site (per TC-020)"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144256,
+   "priority": 3,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-High"
+   ],
+   "title": "Verify that a Site Content Editor can preview the Draft Made in China Expo page before publishing",
+   "steps": [
+    {
+     "action": "As Editor, open the Draft page and click Preview",
+     "expected": "Preview renders the entered hero/About/side-card content exactly as configured, without publishing it live"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144257,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-High",
+    "Regression",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that a Site Content Editor can publish the Made in China Expo page",
+   "steps": [
+    {
+     "action": "As Editor, click Publish",
+     "expected": "Page Status = Published; page appears live on the public Web site and in the Events navigation menu"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144258,
+   "priority": 1,
+   "category": "Functional-High",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-High",
+    "Regression",
+    "UAT",
+    "Web"
+   ],
+   "title": "Verify that a Site Content Editor can unpublish a previously published Made in China Expo page",
+   "steps": [
+    {
+     "action": "As Editor, open the published page and click Unpublish",
+     "expected": "Page Status = Unpublished; page disappears from the public Web site and Events menu (per TC-021)"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144262,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Eyebrow Label accepts a valid value within 60 characters",
+   "steps": [
+    {
+     "action": "Enter the value in EN and AR; Save/Publish",
+     "expected": "Value is saved; renders verbatim in the Hero eyebrow on the public Web page"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144263,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Eyebrow Label is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the EN value; Attempt Save",
+     "expected": "\"This field is required.\" shown; save is blocked; previous value retained"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144264,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Eyebrow Label rejects a value exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter a 61-character string; Attempt Save",
+     "expected": "Validation error shown; save is blocked; field remains at 61-char invalid state or reverts, per CMS behavior; value is not published"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144265,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Eyebrow Label rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "Treated as empty; \"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144266,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Page Title accepts a valid value within 120 characters",
+   "steps": [
+    {
+     "action": "Enter EN/AR values; Save/Publish",
+     "expected": "Value saved; renders verbatim as the Hero title on the public Web page"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144267,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Page Title is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the field; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144268,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Page Title rejects a value exceeding 120 characters",
+   "steps": [
+    {
+     "action": "Enter 121 characters; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144269,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Page Title rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144270,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Description accepts a valid value within 200 characters",
+   "steps": [
+    {
+     "action": "Enter EN/AR description; Save/Publish",
+     "expected": "Value saved; renders as the Hero lead paragraph"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144271,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Description is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear the field; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144272,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Description rejects a value exceeding 200 characters",
+   "steps": [
+    {
+     "action": "Enter 201 characters; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144273,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Description rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144274,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that a valid Hero Banner Image (JPG, 500KB) uploads and renders with alt text",
+   "steps": [
+    {
+     "action": "Upload `hero-banner.jpg` with alt text; Save/Publish",
+     "expected": "Image saved; renders in the Hero banner slot on the public page; `alt` attribute matches the entered EN/AR alt text per active locale"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144275,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Banner Image rejects an unsupported file format",
+   "steps": [
+    {
+     "action": "Attempt to upload `hero-banner.pdf`; Attempt Save",
+     "expected": "Upload is rejected with a format-validation error; no image is saved"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144276,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero Banner Image rejects a file exceeding 2 MB",
+   "steps": [
+    {
+     "action": "Attempt to upload a 2.1MB JPG; Attempt Save",
+     "expected": "\"Image size must not exceed 2 MB.\" shown; upload rejected"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144277,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Button Label accepts a valid value within 60 characters",
+   "steps": [
+    {
+     "action": "Enter EN/AR label; Save/Publish",
+     "expected": "Label saved; renders on the Hero CTA button"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144278,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Button Label is rejected when left empty while the Redirect URL is configured",
+   "steps": [
+    {
+     "action": "Set a valid Redirect URL, clear the label; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144279,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Button Label rejects a value exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter 61 characters; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144280,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Button Label rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144281,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Redirect URL accepts a valid URL",
+   "steps": [
+    {
+     "action": "Enter the URL; Save/Publish",
+     "expected": "URL saved; CTA click redirects there (per TC-034)"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144282,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Redirect URL rejects an invalid/malformed URL and blocks publishing",
+   "steps": [
+    {
+     "action": "Enter \"notaurl123\"; Attempt to Publish",
+     "expected": "\"Please enter a valid URL.\" shown; publishing is blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144283,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Redirect URL rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144284,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Hero CTA Open Behavior dropdown accepts a valid selection (\"Same Tab\")",
+   "steps": [
+    {
+     "action": "Select \"Same Tab\"; Save/Publish",
+     "expected": "Value saved; redirect behavior matches (per TC-024)"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144285,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Publish is blocked when the Hero CTA label and URL are configured but Open Behavior is left unselected",
+   "steps": [
+    {
+     "action": "Set label + URL, leave Open Behavior unselected; Attempt Publish",
+     "expected": "Validation error requiring Open Behavior selection is shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144286,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Page Status can be set to Published via the dropdown",
+   "steps": [
+    {
+     "action": "Select Page Status = Published; Save",
+     "expected": "Status persists as Published; page goes live (cross-ref TC-032)"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144287,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Page Status cannot be left unselected",
+   "steps": [
+    {
+     "action": "Clear/deselect Page Status; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144288,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Web"
+   ],
+   "title": "Verify that turning Page Active Status ON makes the page appear in the Events menu",
+   "steps": [
+    {
+     "action": "Toggle Active Status ON, save/publish; Load the public Events menu",
+     "expected": "Made in China Expo entry is present"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144289,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Web"
+   ],
+   "title": "Verify that turning Page Active Status OFF removes the page from the Events menu",
+   "steps": [
+    {
+     "action": "Toggle Active Status OFF, save; Load the public Events menu",
+     "expected": "Made in China Expo entry is absent, even though Page Status = Published"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144290,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Web"
+   ],
+   "title": "Verify that Page Display Order accepts a valid positive integer",
+   "steps": [
+    {
+     "action": "Enter Display Order = 3; Save/Publish",
+     "expected": "Value saved; Made in China Expo appears in position 3 of the Events menu ordering"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144291,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Page Display Order rejects a non-numeric value",
+   "steps": [
+    {
+     "action": "Enter \"abc\"; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144292,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Eyebrow accepts a valid value within 100 characters",
+   "steps": [
+    {
+     "action": "Enter EN/AR; Save/Publish",
+     "expected": "Value saved; renders as the About section eyebrow"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144293,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Eyebrow is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear field; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144294,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Eyebrow rejects a value exceeding 100 characters",
+   "steps": [
+    {
+     "action": "Enter 101 characters; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144295,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Eyebrow rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144296,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Title accepts a valid value within 120 characters",
+   "steps": [
+    {
+     "action": "Enter EN/AR; Save/Publish",
+     "expected": "Value saved; renders as the About section title"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144297,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Title is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear field; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144298,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Title rejects a value exceeding 120 characters",
+   "steps": [
+    {
+     "action": "Enter 121 characters; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144299,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Title rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144300,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Body accepts a valid value within 10000 characters",
+   "steps": [
+    {
+     "action": "Enter EN/AR body text; Save/Publish",
+     "expected": "Value saved; renders as the About section body paragraphs"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144301,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Body is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear field; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144302,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Body rejects a value exceeding 10000 characters",
+   "steps": [
+    {
+     "action": "Enter 10001 characters; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144303,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the Section Body rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144304,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that a Supporting Image's Display Order accepts a valid positive integer",
+   "steps": [
+    {
+     "action": "Add a Supporting Image, set Display Order = 1; Save/Publish",
+     "expected": "Value saved; image ordering on delivery matches"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144306,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Web"
+   ],
+   "title": "Verify that turning a Supporting Image's Active Status ON shows it on the delivery surface",
+   "steps": [
+    {
+     "action": "Toggle Active Status ON for a Supporting Image, save/publish; Load the public page",
+     "expected": "Supporting image is visible in the About section"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144307,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Web"
+   ],
+   "title": "Verify that turning a Supporting Image's Active Status OFF hides it from the delivery surface",
+   "steps": [
+    {
+     "action": "Toggle Active Status OFF, save; Load the public page",
+     "expected": "Supporting image is not visible, even though it still exists in the CMS"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144308,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that a valid CTA Card Logo (PNG, 300KB) uploads and renders with alt text",
+   "steps": [
+    {
+     "action": "Upload `mic-logo.png` (300KB) with alt text; Save/Publish",
+     "expected": "Logo saved; renders in the side card; `alt` attribute matches entered text"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144309,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Logo rejects an unsupported file format",
+   "steps": [
+    {
+     "action": "Attempt to upload `mic-logo.gif`; Attempt Save",
+     "expected": "Upload rejected with a format-validation error"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144310,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Logo rejects a file exceeding 2 MB",
+   "steps": [
+    {
+     "action": "Attempt to upload a 2.1MB PNG; Attempt Save",
+     "expected": "\"Image size must not exceed 2 MB.\" shown; upload rejected"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144311,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Eyebrow accepts a valid value within 100 characters",
+   "steps": [
+    {
+     "action": "Enter EN/AR; Save/Publish",
+     "expected": "Value saved; renders as side card eyebrow"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144312,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Eyebrow is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear field; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144313,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Eyebrow rejects a value exceeding 100 characters",
+   "steps": [
+    {
+     "action": "Enter 101 characters; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144314,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Eyebrow rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144315,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Heading accepts a valid value within 120 characters",
+   "steps": [
+    {
+     "action": "Enter EN/AR; Save/Publish",
+     "expected": "Value saved; renders as side card heading"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144316,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Heading is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear field; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144317,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Heading rejects a value exceeding 120 characters",
+   "steps": [
+    {
+     "action": "Enter 121 characters; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144318,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Heading rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144319,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Subtext accepts a valid value within 200 characters",
+   "steps": [
+    {
+     "action": "Enter EN/AR; Save/Publish",
+     "expected": "Value saved; renders as side card subtext"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144320,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Subtext is rejected when left empty",
+   "steps": [
+    {
+     "action": "Clear field; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144321,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Subtext rejects a value exceeding 200 characters",
+   "steps": [
+    {
+     "action": "Enter 201 characters; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144322,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Subtext rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144323,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Button Label accepts a valid value within 60 characters",
+   "steps": [
+    {
+     "action": "Enter EN/AR; Save/Publish",
+     "expected": "Value saved; renders on the side card CTA button"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144324,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Button Label is rejected when left empty while the Redirect URL is configured",
+   "steps": [
+    {
+     "action": "Set a valid Redirect URL, clear label; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144325,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Button Label rejects a value exceeding 60 characters",
+   "steps": [
+    {
+     "action": "Enter 61 characters; Attempt Save",
+     "expected": "Validation error shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144326,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Button Label rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144327,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Redirect URL accepts a valid URL",
+   "steps": [
+    {
+     "action": "Enter the URL; Save/Publish",
+     "expected": "URL saved; CTA click redirects there (per TC-035)"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144328,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Redirect URL rejects an invalid/malformed URL and blocks publishing",
+   "steps": [
+    {
+     "action": "Enter \"notaurl456\"; Attempt Publish",
+     "expected": "\"Please enter a valid URL.\" shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144329,
+   "priority": 3,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Redirect URL rejects a whitespace-only value",
+   "steps": [
+    {
+     "action": "Enter only spaces; Attempt Save",
+     "expected": "\"This field is required.\" shown; save blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144330,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the CTA Card Open Behavior dropdown accepts a valid selection (\"New Tab\")",
+   "steps": [
+    {
+     "action": "Select \"New Tab\"; Save/Publish",
+     "expected": "Value saved; redirect opens in a new tab (cross-ref TC-025 pattern applied to side card)"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144331,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that Publish is blocked when the CTA Card Open Behavior is left unselected",
+   "steps": [
+    {
+     "action": "Leave Open Behavior unselected with label+URL set; Attempt Publish",
+     "expected": "Validation error shown; publish blocked"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144332,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Web"
+   ],
+   "title": "Verify that turning the CTA Card Active Status ON shows the card on the delivery surface",
+   "steps": [
+    {
+     "action": "Toggle Active Status ON, save/publish; Load the public page",
+     "expected": "Side card is visible"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144333,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low",
+    "Web"
+   ],
+   "title": "Verify that turning the CTA Card Active Status OFF hides the card from the delivery surface",
+   "steps": [
+    {
+     "action": "Toggle Active Status OFF, save; Load the public page",
+     "expected": "Side card is not visible, About section remains visible"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144334,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the required-field validation message displays in Arabic when the CMS locale is Arabic",
+   "steps": [
+    {
+     "action": "Set CMS UI locale to Arabic; Clear the Section Title (AR) field and attempt Save",
+     "expected": "\"هذا الحقل مطلوب.\" is displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144335,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the invalid-URL validation message displays in Arabic when the CMS locale is Arabic",
+   "steps": [
+    {
+     "action": "Set CMS UI locale to Arabic; Enter \"notaurl789\" in Hero CTA Redirect URL, attempt Publish",
+     "expected": "\"يرجى إدخال رابط صالح.\" is displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144336,
+   "priority": 2,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the image-size validation message displays in Arabic when the CMS locale is Arabic",
+   "steps": [
+    {
+     "action": "Set CMS UI locale to Arabic; Attempt to upload a 2.1MB Hero Banner Image, attempt Save",
+     "expected": "\"يجب ألا يتجاوز حجم الصورة 2 ميغابايت.\" is displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144337,
+   "priority": 1,
+   "category": "Functional-Low",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Bilingual",
+    "Control_Panel",
+    "EXPO",
+    "Functional-Low"
+   ],
+   "title": "Verify that the access-denied message displays in Arabic when the CMS locale is Arabic",
+   "steps": [
+    {
+     "action": "Log in as Site Content Author with CMS UI locale set to Arabic; Attempt to click Publish",
+     "expected": "\"تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.\" is displayed"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  },
+  {
+   "tc_id": 144341,
+   "priority": 2,
+   "category": "Edge",
+   "tags": [
+    "Ai_MCP_Injected",
+    "Automation",
+    "Control_Panel",
+    "Edge",
+    "EXPO",
+    "Web"
+   ],
+   "title": "Verify that replacing the Hero Banner Image on an already-published page propagates correctly with no broken image reference",
+   "steps": [
+    {
+     "action": "As Editor, upload a new Hero Banner Image (`hero-banner-v2.jpg`) replacing the existing one on the published page, save/publish; Load the public Web page",
+     "expected": "New image renders correctly; no broken image icon; old image reference is fully replaced, not left as a dangling link"
+    }
+   ],
+   "disposition": "skip",
+   "disposition_reason": "BLOCKED: no object backing 'Made in China Expo' is listed in cms/Content-Admin-Guide.docx (sections 0-27; the §2 website map has no Made in China Expo entry). The existing Page Object slug(s) (made-in-china-expo-hero / made-in-china-expo-about-section / explore-made-in-china-cta-card) were derived by probing /object-authoring, which CLAUDE.md non-negotiable 5 forbids. Not scripted or run."
+  }
+ ],
+ "out_of_scope": [
+  {
+   "tc_id": 144305,
+   "priority": 4,
+   "reason": "Priority 4"
+  }
+ ],
+ "blocked_note": "Disposition `skip` with reason prefix BLOCKED: — object not in Content-Admin-Guide.docx (brief has no BLOCKED disposition)."
+}

@@ -79,6 +79,15 @@ from web.pages.home_strategic_direction.home_strategic_direction_page import Hom
 
 PBI = "129381"
 
+
+# Rule 1 (bug-rules.md): images +/-5 px, layout +/-2 px, text exact.
+IMG_TOL, LAYOUT_TOL = 5, 2
+
+
+def _near(value, target, tol=LAYOUT_TOL) -> bool:
+    v = float(str(value).replace("px", "")) if value not in (None, "") else float("nan")
+    return abs(v - target) <= tol
+
 EXPECTED_BADGE_TEXT = "Strategic Pillars"
 EXPECTED_HEADING_TEXT = "Our Strategic Direction"
 EXPECTED_DESCRIPTION_TEXT = (
@@ -122,6 +131,8 @@ AR_VISION_DESC = (
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135515")
+@pytest.mark.tc_135515
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_section_background_color(page):
     # ABOUT-STRATEGICDIRECTION-TC-135515 | PBI 129381
     # Arrange
@@ -152,6 +163,8 @@ def test_section_background_color(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135516")
+@pytest.mark.tc_135516
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_badge_style(page):
     # ABOUT-STRATEGICDIRECTION-TC-135516 | PBI 129381
     # Arrange
@@ -169,11 +182,14 @@ def test_badge_style(page):
     # Assert
     assert text == EXPECTED_BADGE_TEXT
     assert style["color"] == "rgb(166, 111, 67)"  # #A66F43
-    assert style["backgroundColor"] == "rgb(246, 240, 236)", (  # #F6F0EC
-        f"expected badge background #F6F0EC, got {style['backgroundColor']!r}"
+    # Badge background NOT asserted (reviewer 2026-10-08): the Figma text
+    # "Label" frame has no fill; the badge sits on the identical #F6F0EC
+    # section colour, so a transparent background renders the same.
+    assert "rgb(215, 190, 170)" in style["border"], (  # #D7BEAA stroke (width 0.5 vs 1 px is within +/-2)
+        f"expected badge stroke #D7BEAA, got {style['border']!r}"
     )
-    assert style["border"] == "1px solid rgb(215, 190, 170)", (  # #D7BEAA
-        f"expected badge border 1px solid #D7BEAA, got {style['border']!r}"
+    assert (style["fontWeight"], style["fontSize"], style["lineHeight"]) == ("400", "14px", "22px"), (
+        f"badge text: Figma Cairo 400 14/22, live {style['fontWeight']} {style['fontSize']}/{style['lineHeight']}"
     )
 
 
@@ -189,6 +205,8 @@ def test_badge_style(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135517")
+@pytest.mark.tc_135517
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_heading_text_and_typography(page):
     # ABOUT-STRATEGICDIRECTION-TC-135517 | PBI 129381
     # Arrange
@@ -224,6 +242,8 @@ def test_heading_text_and_typography(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135518")
+@pytest.mark.tc_135518
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_description_text_and_typography(page):
     # ABOUT-STRATEGICDIRECTION-TC-135518 | PBI 129381
     # Arrange
@@ -260,6 +280,8 @@ def test_description_text_and_typography(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135519")
+@pytest.mark.tc_135519
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_pillar_card_container_style(page):
     # ABOUT-STRATEGICDIRECTION-TC-135519 | PBI 129381
     # Arrange
@@ -280,7 +302,7 @@ def test_pillar_card_container_style(page):
     )
     assert style["borderRadius"] == "16px"
     assert style["boxShadow"] != "none", "expected a drop shadow on the pillar card"
-    assert style["width"] == "516px", f"expected card width 516px, got {style['width']!r}"
+    assert _near(style["width"], 516), f"expected card width 516px (+/-2), got {style['width']!r}"
 
 
 # ── TC 135520 — Pillar title typography ─────────────────────────────────────
@@ -295,6 +317,8 @@ def test_pillar_card_container_style(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135520")
+@pytest.mark.tc_135520
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_pillar_title_typography(page):
     # ABOUT-STRATEGICDIRECTION-TC-135520 | PBI 129381
     # Arrange
@@ -329,6 +353,8 @@ def test_pillar_title_typography(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135521")
+@pytest.mark.tc_135521
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_vision_pillar_description_text_and_typography(page):
     # ABOUT-STRATEGICDIRECTION-TC-135521 | PBI 129381
     # Arrange
@@ -365,6 +391,8 @@ def test_vision_pillar_description_text_and_typography(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135522")
+@pytest.mark.tc_135522
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_nav_arrow_style(page):
     # ABOUT-STRATEGICDIRECTION-TC-135522 | PBI 129381
     # Arrange
@@ -381,10 +409,10 @@ def test_nav_arrow_style(page):
         next_style = sd.arrow_style("next")
 
     # Assert
-    assert round(next_size["width"]) == 40 and round(next_size["height"]) == 40, (
+    assert _near(next_size["width"], 40) and _near(next_size["height"], 40), (
         f"expected 40x40px arrows, got {next_size}"
     )
-    assert round(prev_size["width"]) == 40 and round(prev_size["height"]) == 40, (
+    assert _near(prev_size["width"], 40) and _near(prev_size["height"], 40), (
         f"expected 40x40px arrows, got {prev_size}"
     )
     assert sd.is_arrow_circular("next") and sd.is_arrow_circular("prev"), "expected fully circular arrows"
@@ -406,33 +434,25 @@ def test_nav_arrow_style(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135523")
+@pytest.mark.tc_135523
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_progress_indicator_style(page):
-    # ABOUT-STRATEGICDIRECTION-TC-135523 | PBI 129381
-    # The live DOM's closest structural analog to a "progress indicator" is
-    # the pair of decorative stacked-card "peek" strips behind the active
-    # card (see Page Object docstring) — asserted against per the case's
-    # literal stated tokens.
-    # Arrange
+    """TC 135523 — RE-SCOPED 2026-10-08 (reviewer item 13): Figma has no
+    "1 of 3" indicator; it draws two stacked strips under the card (476 and
+    436 px wide, 18 px each, fill #D7BEAA, stroke #B3845F). Live renders the
+    next two cards behind the active one. Measured against Figma with Rule 1
+    tolerances (layout +/-2 px, colour exact). Anonymous visitor."""
     sd = HomeStrategicDirectionPage(page)
-
-    # Act
-    with allure.step("Navigate to Home Page and scroll to the section"):
-        sd.open_home()
-        sd.scroll_to_section()
-
-    with allure.step("Read both progress-indicator strips' computed style"):
-        peek_1 = sd.peek_style(1)
-        peek_2 = sd.peek_style(2)
-
-    # Assert
-    assert peek_1["borderRadius"] == "0px 0px 16px 16px", "expected bottom corners 16px, top corners 0"
-    assert peek_2["borderRadius"] == "0px 0px 16px 16px", "expected bottom corners 16px, top corners 0"
-    assert peek_1["backgroundColor"] == "rgb(215, 190, 170)", (  # #D7BEAA
-        f"expected first stroke color #D7BEAA, got {peek_1['backgroundColor']!r}"
-    )
-    assert peek_2["backgroundColor"] == "rgb(179, 132, 95)", (  # #B3845F
-        f"expected second stroke color #B3845F, got {peek_2['backgroundColor']!r}"
-    )
+    sd.open_home()
+    sd.scroll_to_section()
+    strips = sd.stack_strips()
+    allure.attach(str(strips), "stacked strips", allure.attachment_type.TEXT)
+    assert all(strips), f"expected two stacked strips under the card, got {strips}"
+    for strip, width in zip(strips, (476, 436)):
+        assert _near(strip["width"], width), f"strip {strip['depth']}: width {strip['width']} vs Figma {width}"
+        assert _near(strip["band"], 18), f"strip {strip['depth']}: visible band {strip['band']} vs Figma 18"
+        assert strip["bg"] == "rgb(215, 190, 170)", f"strip {strip['depth']}: fill {strip['bg']} vs Figma #D7BEAA"
+        assert strip["border"] == "rgb(179, 132, 95)", f"strip {strip['depth']}: stroke {strip['border']} vs Figma #B3845F"
 
 
 # ── TC 135524 — Mandala background graphic (P4) ─────────────────────────────
@@ -447,6 +467,8 @@ def test_progress_indicator_style(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135524")
+@pytest.mark.tc_135524
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_mandala_background_graphic(page):
     # ABOUT-STRATEGICDIRECTION-TC-135524 | PBI 129381
     # Arrange
@@ -483,6 +505,8 @@ def test_mandala_background_graphic(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135525")
+@pytest.mark.tc_135525
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_section_padding_at_1920_viewport(page):
     # ABOUT-STRATEGICDIRECTION-TC-135525 | PBI 129381
     # Arrange
@@ -499,8 +523,8 @@ def test_section_padding_at_1920_viewport(page):
 
     # Assert
     assert padding["top"] == 80 and padding["bottom"] == 80, f"expected 80px top/bottom padding, got {padding}"
-    assert round(gaps["left"]) == 300, f"expected 300px left content gap, got {gaps['left']}"
-    assert round(gaps["right"]) == 300, f"expected 300px right content gap, got {gaps['right']}"
+    assert _near(gaps["left"], 300), f"expected 300px left content gap, got {gaps['left']}"
+    assert _near(gaps["right"], 300), f"expected 300px right content gap, got {gaps['right']}"
 
 
 # ── TC 135526 — Carousel container geometry (P4) ────────────────────────────
@@ -515,6 +539,8 @@ def test_section_padding_at_1920_viewport(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135526")
+@pytest.mark.tc_135526
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_carousel_container_geometry(page):
     # ABOUT-STRATEGICDIRECTION-TC-135526 | PBI 129381
     # Arrange
@@ -531,9 +557,9 @@ def test_carousel_container_geometry(page):
         next_gap = sd.arrow_to_card_gap("next")
 
     # Assert
-    assert round(box["width"]) == 636, f"expected carousel container width 636px, got {box['width']}"
-    assert round(prev_gap) == 20, f"expected a 20px gap between the previous arrow and the card, got {prev_gap}"
-    assert round(next_gap) == 20, f"expected a 20px gap between the next arrow and the card, got {next_gap}"
+    assert _near(box["width"], 636), f"expected carousel container width 636px, got {box['width']}"
+    assert _near(prev_gap, 20), f"expected a 20px gap between the previous arrow and the card, got {prev_gap}"
+    assert _near(next_gap, 20), f"expected a 20px gap between the next arrow and the card, got {next_gap}"
 
 
 # ── TC 135527 — Pillar icon and header-row geometry (P4) ────────────────────
@@ -548,6 +574,8 @@ def test_carousel_container_geometry(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135527")
+@pytest.mark.tc_135527
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_pillar_icon_and_header_row_geometry(page):
     # ABOUT-STRATEGICDIRECTION-TC-135527 | PBI 129381
     # Arrange
@@ -563,13 +591,13 @@ def test_pillar_icon_and_header_row_geometry(page):
         card_style = sd.active_card_style()
 
     # Assert
-    assert round(icon_size["width"]) == 72 and round(icon_size["height"]) == 72, (
+    assert _near(icon_size["width"], 72, IMG_TOL) and _near(icon_size["height"], 72, IMG_TOL), (
         f"expected a 72x72px pillar icon, got {icon_size}"
     )
-    assert card_style["paddingTop"] == "20px", f"expected 20px top padding, got {card_style['paddingTop']!r}"
-    assert card_style["paddingBottom"] == "20px", f"expected 20px bottom padding, got {card_style['paddingBottom']!r}"
-    assert card_style["paddingLeft"] == "24px"
-    assert card_style["paddingRight"] == "24px"
+    assert _near(card_style["paddingTop"], 20), f"expected 20px top padding, got {card_style['paddingTop']!r}"
+    assert _near(card_style["paddingBottom"], 20), f"expected 20px bottom padding, got {card_style['paddingBottom']!r}"
+    assert _near(card_style["paddingLeft"], 24)
+    assert _near(card_style["paddingRight"], 24)
     assert card_style["gap"] == "16px", f"expected a 16px icon-to-text gap, got {card_style['gap']!r}"
 
 
@@ -586,6 +614,8 @@ def test_pillar_icon_and_header_row_geometry(page):
 @pytest.mark.regression
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135528")
+@pytest.mark.tc_135528
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_copy_matches_figma_exactly_no_truncation(page):
     # ABOUT-STRATEGICDIRECTION-TC-135528 | PBI 129381
     # Arrange
@@ -631,6 +661,8 @@ def test_copy_matches_figma_exactly_no_truncation(page):
 @pytest.mark.regression
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135529")
+@pytest.mark.tc_135529
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_only_one_pillar_card_visible_at_a_time(page):
     # ABOUT-STRATEGICDIRECTION-TC-135529 | PBI 129381
     # Arrange
@@ -665,6 +697,8 @@ def test_only_one_pillar_card_visible_at_a_time(page):
 @pytest.mark.regression
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135530")
+@pytest.mark.tc_135530
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_next_arrow_advances_vision_to_mission(page):
     # ABOUT-STRATEGICDIRECTION-TC-135530 | PBI 129381
     # Arrange
@@ -699,6 +733,8 @@ def test_next_arrow_advances_vision_to_mission(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135531")
+@pytest.mark.tc_135531
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_prev_arrow_returns_mission_to_vision(page):
     # ABOUT-STRATEGICDIRECTION-TC-135531 | PBI 129381
     # Arrange
@@ -732,37 +768,32 @@ def test_prev_arrow_returns_mission_to_vision(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135532")
+@pytest.mark.tc_135532
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_progress_indicator_updates_on_advance(page):
-    # ABOUT-STRATEGICDIRECTION-TC-135532 | PBI 129381
-    # CONFIRMED LIVE: the two "peek" strips (the closest structural analog to
-    # a progress indicator — see Page Object docstring) are identical in
-    # color/width before and after every Next-arrow click, across all 3
-    # pillars. This test is scripted per the case's literal expected result
-    # and is expected to fail honestly against that real gap, not a
-    # framework defect.
-    # Arrange
+    """TC 135532 — RE-SCOPED 2026-10-08 (reviewer item 13): no "1 of 3"
+    state exists in Figma or the PBI. What the design shows on every card is
+    the two-strip stack; after Next the new active card (Mission) must carry
+    the same two strips, so the deck cue follows the navigation."""
     sd = HomeStrategicDirectionPage(page)
-
-    # Act
-    with allure.step("Navigate to Home Page and scroll to the section"):
-        sd.open_home()
-        sd.scroll_to_section()
-
-    with allure.step("Snapshot the progress indicator before advancing"):
-        before = sd.peek_snapshot()
-
-    with allure.step("Click the next arrow to advance from Vision (1-of-3) to Mission (2-of-3)"):
-        sd.click_next()
-
-    with allure.step("Snapshot the progress indicator after advancing"):
-        after = sd.peek_snapshot()
-
-    # Assert
+    sd.open_home()
+    sd.scroll_to_section()
+    before = sd.stack_strips()
+    sd.click_next()
+    # the deck re-stacks with a ~0.42 s transition; read once it has settled
+    after = sd.stack_strips()
+    for _ in range(20):
+        if all(after) and all(x["band"] > 0 for x in after):
+            break
+        page.wait_for_timeout(250)
+        after = sd.stack_strips()
+    allure.attach(f"{before} | {after}", "strips before/after", allure.attachment_type.TEXT)
     assert sd.active_card_title_text() == "Mission"
-    assert before != after, (
-        "expected the progress indicator to change when advancing from pillar 1-of-3 to 2-of-3, "
-        f"but it was identical before and after: {before}"
-    )
+    assert all(after), f"stacked strips missing after advancing: {after}"
+    for b0, a0 in zip(before, after):
+        assert _near(a0["width"], b0["width"]) and _near(a0["band"], b0["band"]), (
+            f"strip geometry changed after advancing: {b0} -> {a0}"
+        )
 
 
 # ── TC 135533 — Visible transition/animation on card switch ────────────────
@@ -777,6 +808,8 @@ def test_progress_indicator_updates_on_advance(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135533")
+@pytest.mark.tc_135533
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_visible_transition_on_card_switch(page):
     # ABOUT-STRATEGICDIRECTION-TC-135533 | PBI 129381
     # Arrange
@@ -811,6 +844,8 @@ def test_visible_transition_on_card_switch(page):
 @pytest.mark.bilingual
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135534")
+@pytest.mark.tc_135534
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_renders_mirrored_in_arabic_rtl(page):
     # ABOUT-STRATEGICDIRECTION-TC-135534 | PBI 129381
     # Arrange
@@ -861,7 +896,8 @@ def test_renders_mirrored_in_arabic_rtl(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135535")
-@pytest.mark.parametrize("page", [(375, 812)], indirect=True)
+@pytest.mark.tc_135535
+@pytest.mark.parametrize("page", [{"viewport": (375, 812), "auth": False}], indirect=True)
 def test_responsive_at_375px(page):
     # ABOUT-STRATEGICDIRECTION-TC-135535 | PBI 129381
     # Arrange
@@ -899,7 +935,8 @@ def test_responsive_at_375px(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135536")
-@pytest.mark.parametrize("page", [(768, 1024)], indirect=True)
+@pytest.mark.tc_135536
+@pytest.mark.parametrize("page", [{"viewport": (768, 1024), "auth": False}], indirect=True)
 def test_responsive_at_768px(page):
     # ABOUT-STRATEGICDIRECTION-TC-135536 | PBI 129381
     # Arrange
@@ -937,6 +974,8 @@ def test_responsive_at_768px(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129381
 @pytest.mark.traceability("ABOUT-STRATEGICDIRECTION-TC-135537")
+@pytest.mark.tc_135537
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 def test_responsive_at_1920px_matches_figma_spacing(page):
     # ABOUT-STRATEGICDIRECTION-TC-135537 | PBI 129381
     # Arrange
@@ -956,6 +995,265 @@ def test_responsive_at_1920px_matches_figma_spacing(page):
 
     # Assert
     assert padding["top"] == 80 and padding["bottom"] == 80, f"expected 80px top/bottom padding, got {padding}"
-    assert round(gaps["left"]) == 300, f"expected 300px left padding, got {gaps['left']}"
-    assert round(gaps["right"]) == 300, f"expected 300px right padding, got {gaps['right']}"
-    assert round(carousel_box["width"]) == 636, f"expected a 636px carousel container, got {carousel_box['width']}"
+    assert _near(gaps["left"], 300), f"expected 300px left padding, got {gaps['left']}"
+    assert _near(gaps["right"], 300), f"expected 300px right padding, got {gaps['right']}"
+    assert _near(carousel_box["width"], 636), f"expected a 636px carousel container, got {carousel_box['width']}"
+
+
+# ── TC 135552 — Visitor views the fully published section end-to-end ──────
+@allure.epic("ABOUT")
+@allure.feature("Strategic Direction Section")
+@allure.story("Visitor views the published section")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("A logged-out visitor sees the tag, heading, description and the Vision pillar card")
+@allure.label("pbi", PBI)
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135552
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_visitor_views_published_section_end_to_end(page):
+    """TC 135552 — anonymous visitor (logged-out context). Precondition: the
+    3 real pillar cards (Vision/Mission/Objectives) are Published + Active;
+    this test does not change them."""
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home()
+    sd.scroll_to_section()
+
+    assert sd.is_section_visible(), "Strategic Direction section is not rendered"
+    assert sd.badge_text() == EXPECTED_BADGE_TEXT
+    assert sd.heading_text() == EXPECTED_HEADING_TEXT
+    assert sd.description_text() == EXPECTED_DESCRIPTION_TEXT
+    assert sd.active_card_title_text() == EXPECTED_VISION_TITLE
+    assert sd.active_card_description_text() == EXPECTED_VISION_DESC
+    size = sd.active_card_icon_size()
+    assert size["width"] > 0 and size["height"] > 0, "Vision pillar icon is not rendered"
+
+
+# ── TC 135553 — Forward through all three cards ────────────────────────────
+@allure.epic("ABOUT")
+@allure.feature("Strategic Direction Section")
+@allure.story("Visitor navigates forward through the pillars")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Right arrow walks Vision -> Mission -> Objectives")
+@allure.label("pbi", PBI)
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135553
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_visitor_navigates_forward_through_all_pillars(page):
+    """TC 135553 — anonymous visitor."""
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home()
+    sd.scroll_to_section()
+
+    seen = [sd.active_card_title_text()]
+    sd.click_next()
+    seen.append(sd.active_card_title_text())
+    sd.click_next()
+    seen.append(sd.active_card_title_text())
+
+    assert seen == ["Vision", "Mission", "Objectives"], f"forward sequence was {seen}"
+
+
+# ── TC 135554 — Backward through all three cards ───────────────────────────
+@allure.epic("ABOUT")
+@allure.feature("Strategic Direction Section")
+@allure.story("Visitor navigates backward through the pillars")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Left arrow walks Objectives -> Mission -> Vision")
+@allure.label("pbi", PBI)
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.functional_high
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135554
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_visitor_navigates_backward_through_all_pillars(page):
+    """TC 135554 — anonymous visitor. "Load carousel on Objectives" is reached
+    with two right-arrow clicks from the initial Vision card."""
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home()
+    sd.scroll_to_section()
+    sd.click_next()
+    sd.click_next()
+    assert sd.active_card_title_text() == "Objectives", "precondition: carousel not on Objectives"
+
+    seen = []
+    sd.click_prev()
+    seen.append(sd.active_card_title_text())
+    sd.click_prev()
+    seen.append(sd.active_card_title_text())
+
+    assert seen == ["Mission", "Vision"], f"backward sequence was {seen}"
+
+
+# =============================================================================
+# USER ORDER 2026-10-07 22:45 — every case executed (P3/P4 web edges,
+# compatibility). All logged out.
+# =============================================================================
+def _walk_both_arrows(sd) -> tuple:
+    start = sd.active_card_title_text()
+    sd.click_next()
+    after_next = sd.active_card_title_text()
+    sd.click_prev()
+    back = sd.active_card_title_text()
+    return start, after_next, back
+
+
+def _engine_case(page, tc: int) -> None:
+    errors = []
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home()
+    sd.scroll_to_section()
+    assert sd.is_section_visible() and sd.heading_text() == EXPECTED_HEADING_TEXT
+    start, after_next, back = _walk_both_arrows(sd)
+    page.screenshot(path=f"reports/manual-exec-129381-{tc}.png")
+    allure.attach("\n".join(errors) or "<none>", "page errors", allure.attachment_type.TEXT)
+    assert (start, after_next, back) == ("Vision", "Mission", "Vision"), f"arrow walk: {start}->{after_next}->{back}"
+    assert not errors, f"uncaught page errors: {errors}"
+
+
+@allure.label("pbi", PBI)
+@allure.title("Strategic Direction renders and navigates in Chrome (desktop)")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135544
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_renders_in_chrome(page):
+    """TC 135544 — Chromium (Chrome engine), anonymous."""
+    _engine_case(page, 135544)
+
+
+@allure.label("pbi", PBI)
+@allure.title("Strategic Direction renders and navigates in Safari (WebKit, desktop)")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135545
+@pytest.mark.parametrize("page", [{"auth": False, "engine": "webkit"}], indirect=True)
+def test_renders_in_safari(page):
+    """TC 135545 — Playwright WebKit (Safari engine), anonymous."""
+    _engine_case(page, 135545)
+
+
+@allure.label("pbi", PBI)
+@allure.title("Strategic Direction renders and navigates in Firefox (desktop)")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135546
+@pytest.mark.parametrize("page", [{"auth": False, "engine": "firefox"}], indirect=True)
+def test_renders_in_firefox(page):
+    """TC 135546 — Playwright Firefox, anonymous."""
+    _engine_case(page, 135546)
+
+
+@allure.label("pbi", PBI)
+@allure.title("Swipe left on a touch device advances to the next pillar")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135547
+def test_touch_swipe_advances(browser):
+    """TC 135547 — mobile touch emulation (390x844, hasTouch, isMobile),
+    anonymous. A real touch swipe right-to-left is dispatched through CDP
+    Input.dispatchTouchEvent on the visible card."""
+    ctx = browser.new_context(viewport={"width": 390, "height": 844}, has_touch=True, is_mobile=True)
+    try:
+        pg = ctx.new_page()
+        sd = HomeStrategicDirectionPage(pg)
+        sd.open_home()
+        sd.scroll_to_section()
+        before = sd.active_card_title_text()
+        box = pg.locator(sd.STAGE).bounding_box()
+        y = box["y"] + box["height"] / 2
+        x0, x1 = box["x"] + box["width"] * 0.85, box["x"] + box["width"] * 0.15
+        cdp = ctx.new_cdp_session(pg)
+        cdp.send("Input.dispatchTouchEvent", {"type": "touchStart", "touchPoints": [{"x": x0, "y": y}]})
+        for i in range(1, 9):
+            cdp.send("Input.dispatchTouchEvent", {"type": "touchMove", "touchPoints": [{"x": x0 + (x1 - x0) * i / 8, "y": y}]})
+        cdp.send("Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []})
+        try:
+            pg.wait_for_function(
+                "(old) => { const t = document.querySelector('.qc-sd-card.is-active .qc-sd-card-title'); return t && t.textContent !== old; }",
+                arg=before, timeout=5000)
+        except Exception:  # noqa: BLE001 — asserted below
+            pass
+        after = sd.active_card_title_text()
+        pg.screenshot(path="reports/manual-exec-129381-135547.png")
+        assert (before, after) == ("Vision", "Mission"), f"swipe left: {before!r} -> {after!r}"
+    finally:
+        ctx.close()
+
+
+@allure.label("pbi", PBI)
+@allure.title("Arabic (RTL): the visually-forward arrow advances to the next pillar")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.bilingual
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135629
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_rtl_arrow_direction(page):
+    """TC 135629 — /ar/home, anonymous. In RTL the forward arrow sits on the
+    LEFT; clicking it must move Vision (الرؤية) to Mission (الرسالة)."""
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home_arabic()
+    sd.scroll_to_section()
+    assert sd.active_card_title_text() == AR_VISION_TITLE
+    next_x, prev_x = sd.arrow_x_position("next"), sd.arrow_x_position("prev")
+    left_arrow = sd.ARROW_NEXT if next_x < prev_x else sd.ARROW_PREV
+    allure.attach(f"next x={next_x}, prev x={prev_x}; left arrow={left_arrow}", "arrow positions", allure.attachment_type.TEXT)
+    assert next_x < prev_x, f"forward arrow is not on the left in RTL (next x={next_x}, prev x={prev_x})"
+    sd._click_arrow_and_wait_for_change(left_arrow)
+    assert sd.active_card_title_text() == "الرسالة", f"left (forward) arrow went to {sd.active_card_title_text()!r}"
+
+
+@allure.label("pbi", PBI)
+@allure.title("Right arrow on the last card loops or is disabled — no broken state")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135631
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_right_arrow_on_last_card(page):
+    """TC 135631 — anonymous."""
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home()
+    sd.click_next()
+    sd.click_next()
+    assert sd.active_card_title_text() == "Objectives"
+    disabled = page.locator(sd.ARROW_NEXT).is_disabled()
+    if not disabled:
+        sd.click_next()
+    title = sd.active_card_title_text()
+    assert title.strip(), "blank card after the last-card right arrow"
+    assert disabled or title == "Vision", f"right arrow on the last card went to {title!r}"
+
+
+@allure.label("pbi", PBI)
+@allure.title("Left arrow on the first card loops or is disabled — no broken state")
+@pytest.mark.web
+@pytest.mark.about
+@pytest.mark.pbi_129381
+@pytest.mark.tc_135632
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_left_arrow_on_first_card(page):
+    """TC 135632 — anonymous."""
+    sd = HomeStrategicDirectionPage(page)
+    sd.open_home()
+    assert sd.active_card_title_text() == "Vision"
+    disabled = page.locator(sd.ARROW_PREV).is_disabled()
+    if not disabled:
+        sd.click_prev()
+    title = sd.active_card_title_text()
+    assert title.strip(), "blank card after the first-card left arrow"
+    assert disabled or title == "Objectives", f"left arrow on the first card went to {title!r}"

@@ -429,46 +429,55 @@ class NewsletterAdminPage(ObjectAuthoringPage):
         return self.field_value(NEWSLETTER_ID_LABEL)
 
     # ---- Language — Added 2026-09-20, see class-level constant note ------
-    def select_language(self, option_label: str) -> "NewsletterAdminPage":
-        """Newsletter's create/edit form renders TWO "Open Options Menu"
-        comboboxes (Language, then Status — confirmed live via DOM order
-        and each one's own `.form-group` label ancestor) — unlike
-        ObjectAuthoringPage.select_combobox_option()'s single-button
-        assumption (used by objects with exactly one such field, e.g.
-        service-card's "Assigned Tab"), which would hit a Playwright
-        strict-mode violation here. `.nth(0)` is the confirmed-live,
-        stable Language button (Status is `.nth(1)` — see
-        `select_status()` below; CORRECTED 2026-09-21, it is NOT read-only/
-        auto-set as this docstring previously claimed, see module
-        docstring's dated correction)."""
-        self.page.get_by_role("button", name="Open Options Menu").nth(0).click()
-        option = self.page.locator('[role="option"]:visible', has_text=option_label).first
-        option.wait_for(state="visible", timeout=5000)
+    # FIXED 2026-10-13 (tc_134551: 5 s option timeout at the old
+    # `nth(0)` click). Read live 2026-10-13 on manage-newsletter: Language and
+    # Status are `input[role=combobox][id$=-select-from-list-input]` named by
+    # their own label, each with `aria-controls=<listbox id>`, a toggle
+    # `button[aria-controls=<listbox id>]`, and `<li role=option
+    # data-option-label=...>` options (Language: EN / AR / Both; Status:
+    # Draft / Approved / Published / Archived). The toggle TOGGLES and the
+    # form hydrates after Save as Draft is visible -- an early click opened
+    # nothing -- so the open is retried until the wanted option is visible,
+    # and the pick is verified by read-back. Never positional.
+    FORM_COMBOBOX = '[id$="-select-from-list-input"]'
+    COMBO_OPEN_ATTEMPTS = 4
+    COMBO_OPTION_MS = 5000
+
+    def _pick_form_option(self, field_label: str, option_label: str) -> None:
+        combo = self.page.get_by_role("combobox", name=self.label_pattern(field_label)).and_(
+            self.page.locator(self.FORM_COMBOBOX)
+        ).first
+        combo.wait_for(state="visible", timeout=20000)
+        listbox = combo.get_attribute("aria-controls")
+        toggle = self.page.locator(f'button[aria-controls="{listbox}"]').first
+        option = self.page.locator(
+            f'[id="{listbox}"] [role="option"][data-option-label="{option_label}"]'
+        )
+        for _ in range(self.COMBO_OPEN_ATTEMPTS):
+            if combo.get_attribute("aria-expanded") != "true":
+                toggle.click()
+            try:
+                option.wait_for(state="visible", timeout=self.COMBO_OPTION_MS)
+                break
+            except Exception:  # noqa: BLE001 -- not hydrated yet: re-open
+                continue
         option.click()
+        got = combo.input_value()
+        if got != option_label:
+            raise LookupError(f"{field_label!r}: picked {option_label!r} but the field reads {got!r}")
+
+    def select_language(self, option_label: str) -> "NewsletterAdminPage":
+        """Language combobox (EN / AR / Both) -- see `_pick_form_option()`."""
+        self._pick_form_option("Language", option_label)
         return self
 
     # ---- Status — Added 2026-09-21, see module docstring's dated
     # CORRECTION section -----------------------------------------------------
     def select_status(self, option_label: str) -> "NewsletterAdminPage":
-        """CORRECTS this class's own prior (2026-09-20) claim that Status is
-        "read-only on the create/edit form... not user-editable despite
-        carrying a DOM required attribute". Confirmed live 2026-09-21: it is
-        a genuinely interactive SECOND "Open Options Menu" combobox
-        (`.nth(1)`, same widget pattern as `select_language()`'s `.nth(0)`),
-        offering Draft / Approved / Published / Archived, and its own
-        backing required input reports native
-        `validationMessage: "Please fill out this field."` until a real
-        option is explicitly clicked here — the "Published" text visible in
-        the closed combobox before any click is a display default, not a
-        bound value; Submit for Publishing was never unconditionally
-        blocked, this unfilled field (plus Newsletter ID, see
-        `set_newsletter_id()`) was the real, previously-missed cause. Every
-        Submit-for-Publishing test must call this (typically
-        `select_status("Published")`) alongside `select_language()`."""
-        self.page.get_by_role("button", name="Open Options Menu").nth(1).click()
-        option = self.page.locator('[role="option"]:visible', has_text=option_label).first
-        option.wait_for(state="visible", timeout=5000)
-        option.click()
+        """The object's own required "Status" picklist (Draft / Approved /
+        Published / Archived) -- an object field, NOT the workflow state the
+        row badge shows. See `_pick_form_option()`."""
+        self._pick_form_option("Status", option_label)
         return self
 
     # ---- Submit-for-Publishing blocked-state read — Added 2026-09-21, see
@@ -613,3 +622,394 @@ class NewsletterAdminPage(ObjectAuthoringPage):
         except WaitTimeoutError:
             pass
         return result["code"]
+
+
+# ---- Added 2026-10-12 (PBI 129566 batch 2: content, workflow, RBAC). ------
+# Scripted OFFLINE -- no qcdev browser was available. Every unread
+# identifier carries a VERIFY-LIVE note.
+# VERIFY-LIVE: the view-only "Newsletter Subscriber" object's slug.
+NEWSLETTER_SUBSCRIBER_SLUG = "newsletter-subscriber"
+# "Schedule Send" resolves as a checkbox by its name (read live 2026-10-13).
+PUBLISH_DATE_LABEL = "Publish Date"
+SCHEDULE_SEND_LABEL = "Schedule Send"
+# The project's email-delivery inbox (memory: test_email_inbox).
+TEST_INBOX = "heba.samir611.hs@gmail.com"
+ACCESS_DENIED_EN = "Access Denied. You do not have permission to perform this action."
+
+
+class NewsletterWorkflowPage(NewsletterAdminPage):
+    """Content (EN/AR) as HTML, row-action reads, and the subscriber-list
+    surface -- what the 2026-10-12 workflow/RBAC cases need on top of the
+    field actions above."""
+
+    # Content EN/AR: two CKEditor 4 instances, located BY FIELD NAME --
+    # read live 2026-10-13 on manage-newsletter: the EN instance is
+    # `<fragment-id>-ObjectField_content`, the Arabic twin `qc-ar-content`.
+    # FIXED 2026-10-13 (run allure-129566-20261012-2145): never positional.
+    # FIXED AGAIN 2026-10-13 (tc_134572/134575 read back '', tc_134601
+    # "Cannot read properties of undefined (reading 'getSelection')"): after
+    # the row's Edit link (a SPA navigation) CKEDITOR.instances still holds
+    # the PREVIOUS form's EN editor -- read live: two `...ObjectField_content`
+    # instances, the first `isConnected=false` with empty data, the second
+    # live with the stored HTML. Only instances whose element is still in the
+    # document are candidates; more than one live match is an error.
+    CONTENT_FIELD_NAMES = ("content",)
+    _CONTENT_TOKENS = {
+        "en": tuple(f"ObjectField_{n}" for n in CONTENT_FIELD_NAMES),
+        "ar": tuple(f"qc-ar-{n}" for n in CONTENT_FIELD_NAMES),
+    }
+    # Label fallback, anchored (EN "Content" + its static "Required" suffix;
+    # AR twin "Content — العربية").
+    _CONTENT_LABEL_RE = {
+        "en": r"^Content(\s*\(EN\))?\s*\*?(\s*Required)?$",
+        "ar": r"^Content\s*(—\s*العربية|\(AR\))\s*\*?$",
+    }
+    CONTENT_EDITOR_TIMEOUT_MS = 20000
+
+    # Resolves ONE locale's instance name, or null. Order of evidence:
+    # 1. instance name ends with a token; 2. an ancestor's id carries the
+    # token as a whole word; 3. the enclosing form group's label matches.
+    _RESOLVE_CONTENT_JS = """
+    ({tokens, labelRe}) => {
+      const C = window.CKEDITOR;
+      if (!C || !C.instances) return null;
+      const live = n => { const ed = C.instances[n]; const e = ed && ed.element && ed.element.$;
+                          return !!(e && e.isConnected); };
+      const names = Object.keys(C.instances).filter(live);
+      const ready = n => C.instances[n] && C.instances[n].status === 'ready';
+      for (const t of tokens) {
+        const hits = names.filter(n => n.endsWith(t));
+        if (hits.length > 1) return 'AMBIGUOUS:' + hits.join(',');
+        const k = hits[0];
+        if (k) return ready(k) ? k : null;
+      }
+      const el = n => (C.instances[n].element && C.instances[n].element.$) || null;
+      for (const t of tokens) {
+        const word = new RegExp(t.replace(/[-]/g, '\\\\-') + '(?![A-Za-z0-9])');
+        const k = names.find(n => {
+          for (let e = el(n); e; e = e.parentElement) { if (e.id && word.test(e.id)) return true; }
+          return false;
+        });
+        if (k) return ready(k) ? k : null;
+      }
+      const re = new RegExp(labelRe);
+      const k = names.find(n => {
+        const e = el(n);
+        const g = e && e.closest('.form-group, .lfr-ddm-field-group, fieldset');
+        const l = g && g.querySelector('label');
+        return !!l && re.test(l.textContent.replace(/\\s+/g, ' ').trim());
+      });
+      return k && ready(k) ? k : null;
+    }
+    """
+
+    _CONTENT_DIAG_JS = """
+    () => {
+      const C = window.CKEDITOR;
+      if (!C || !C.instances) return {ckeditor: typeof C, instances: []};
+      return {ckeditor: typeof C, instances: Object.keys(C.instances).map(n => {
+        const ed = C.instances[n];
+        const e = ed.element && ed.element.$;
+        const g = e && e.closest('[id*="ObjectField_"], [id*="qc-ar-"]');
+        return `${n} (status=${ed.status}, connected=${!!(e && e.isConnected)}, container=${g ? g.id : '-'})`;
+      }), editorIframes: document.querySelectorAll('iframe[title="editor"]').length};
+    }
+    """
+
+    def _content_instance(self, locale: str) -> str:
+        """Waits for, then returns, the CKEditor instance name of Content
+        (`locale`). Raises naming every instance on the form if none is
+        Content (`locale`) within CONTENT_EDITOR_TIMEOUT_MS."""
+        arg = {"tokens": list(self._CONTENT_TOKENS[locale]), "labelRe": self._CONTENT_LABEL_RE[locale]}
+        try:
+            handle = self.page.wait_for_function(
+                self._RESOLVE_CONTENT_JS, arg=arg, timeout=self.CONTENT_EDITOR_TIMEOUT_MS
+            )
+            name = handle.json_value()
+        except Exception as exc:  # noqa: BLE001 -- re-raised with the editors found
+            diag = self.page.evaluate(self._CONTENT_DIAG_JS)
+            raise RuntimeError(
+                f"Newsletter Content ({locale.upper()}) CKEditor not found/ready after "
+                f"{self.CONTENT_EDITOR_TIMEOUT_MS} ms. Tried name tokens "
+                f"{list(self._CONTENT_TOKENS[locale])}, then container id, then label "
+                f"/{self._CONTENT_LABEL_RE[locale]}/. typeof CKEDITOR={diag.get('ckeditor')}; "
+                f"instances on the form: {diag.get('instances') or 'NONE'}; "
+                f"iframe[title=editor] count={diag.get('editorIframes', 0)}. "
+                "Update CONTENT_FIELD_NAMES from the instance names above."
+            ) from exc
+        if name.startswith("AMBIGUOUS:"):
+            raise RuntimeError(f"Newsletter Content ({locale.upper()}): more than one live CKEditor "
+                               f"matches -- {name[len('AMBIGUOUS:'):]}")
+        return name
+
+    def content_html(self, locale: str = "en") -> str:
+        name = self._content_instance(locale)
+        return self.page.evaluate("(n) => CKEDITOR.instances[n].getData()", name)
+
+    def set_content_html(self, html: str, locale: str = "en") -> "NewsletterWorkflowPage":
+        """setData() + updateElement() + change -- the only way to put raw
+        markup (an unclosed <div>, a <script>) in, like the source view.
+        Same call as ChambersLawAdminPage.set_intro_html()."""
+        name = self._content_instance(locale)
+        self.page.evaluate(
+            "([n, html]) => new Promise(resolve => { const ed = CKEDITOR.instances[n];"
+            " ed.setData(html, { callback: () => {"
+            " ed.updateElement(); ed.fire('change'); resolve(true); } }); })",
+            [name, html],
+        )
+        return self
+
+    def content_direction(self, locale: str = "ar") -> str:
+        name = self._content_instance(locale)
+        return self.page.frame_locator(f'[id="cke_{name}"] iframe').locator("body").evaluate(
+            "b => (getComputedStyle(b).direction || b.getAttribute('dir') || '').toLowerCase()"
+        )
+
+    def body_text(self) -> str:
+        return self.page.locator("body").inner_text()
+
+    def access_denied_shown(self) -> bool:
+        return ACCESS_DENIED_EN in self.body_text()
+
+    def has_object_form(self) -> bool:
+        return self.page.locator('input[name^="ObjectField_"]').count() > 0
+
+    def submit_button_labels(self) -> list:
+        return [t.strip() for t in self.page.locator('button[type="submit"]').all_inner_texts() if t.strip()]
+
+    def row_action_attrs(self, title: str) -> list:
+        """`data-qc-oel-*` attribute names on the row matching `title`
+        exactly as rendered. Call on the open entries list."""
+        row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{title}")')
+        if row.count() == 0:
+            return []
+        return row.first.evaluate(
+            "r => Array.from(r.querySelectorAll('*')).flatMap(e => Array.from(e.attributes)"
+            ".map(a => a.name)).filter(n => n.startsWith('data-qc-oel-'))"
+        )
+
+    # Read live 2026-10-13: Publish Date is a custom picker -- a visible
+    # text input `#qc-dtp-<id>` (placeholder "dd/mm/yyyy hh:mm", no
+    # accessible name, so the old role lookup timed out on tc_134590) bound
+    # to the hidden native `input[name=ObjectField_publishDate]`
+    # (datetime-local). Typing "12/10/2026 09:00" stored "2026-10-12T09:00".
+    PUBLISH_DATE_NATIVE = 'input[name="ObjectField_publishDate"]'
+
+    def set_publish_date(self, value: str) -> "NewsletterWorkflowPage":
+        """`value` in the picker's own format, `dd/mm/yyyy HH:MM` (24 h)."""
+        native_id = self.page.locator(self.PUBLISH_DATE_NATIVE).first.get_attribute("id")
+        box = self.page.locator(f'[id="qc-dtp-{native_id}"]')
+        box.click()
+        box.fill("")
+        box.press_sequentially(value, delay=20)
+        box.press("Tab")
+        return self
+
+    def publish_date_stored(self) -> str:
+        """The hidden native value the form submits (`yyyy-mm-ddTHH:MM`)."""
+        return self.page.locator(self.PUBLISH_DATE_NATIVE).first.input_value()
+
+    def set_schedule_send(self, checked: bool) -> "NewsletterWorkflowPage":
+        self.set_checkbox(SCHEDULE_SEND_LABEL, checked)
+        return self
+
+    def open_manage_page_raw(self) -> "NewsletterWorkflowPage":
+        """manage-newsletter WITHOUT waiting for the entries table -- for
+        visitors/denied roles, where none must render."""
+        from config.settings import control_panel_url
+        self.open(control_panel_url(f"/web/qatar-chamber/manage-{NEWSLETTER_SLUG}"))
+        self.page.wait_for_load_state("load")
+        return self
+
+    # ---- Subscriber list (admin-only surface) -----------------------------
+    def open_subscriber_list(self) -> "NewsletterWorkflowPage":
+        """Navigates to the Newsletter Subscriber manage page WITHOUT
+        assuming it renders (permission cases expect it not to)."""
+        from config.settings import control_panel_url
+        self.open(control_panel_url(f"/web/qatar-chamber/manage-{NEWSLETTER_SUBSCRIBER_SLUG}"))
+        self.page.wait_for_load_state("load")
+        return self
+
+    def subscriber_rows(self) -> list:
+        """Every subscriber row's text. Call after open_subscriber_list()."""
+        rows = self.page.locator(self.ENTRIES_TABLE_ROW)
+        try:
+            rows.first.wait_for(state="visible", timeout=30000)
+        except Exception:  # noqa: BLE001 -- an empty/denied list reads as []
+            return []
+        return [t.strip() for t in rows.all_inner_texts() if t.strip()]
+
+    def subscriber_list_paginated(self) -> bool:
+        """True when ANY pagination / next-page control renders, or a
+        "... of N" total exceeds the rows read -- the email gate fails
+        closed on it. VERIFY-LIVE: pagination markup of this list."""
+        import re as _re
+
+        if self.page.locator(
+            '.pagination, [aria-label*="Next"], button:has-text("Next"), a:has-text("Next")'
+        ).count() > 0:
+            return True
+        match = _re.search(r"of\s+(\d+)", self.page.locator("body").inner_text())
+        rows = self.page.locator(self.ENTRIES_TABLE_ROW).count()
+        return bool(match) and int(match.group(1)) > rows
+
+    def login_form_visible(self) -> bool:
+        return self.page.locator('input[type="password"]').count() > 0
+
+    # ---- P3/P4 field cases (scripted OFFLINE 2026-10-13, not yet run) ------
+    # Labels follow the object schema (cms/liferay-context.md, QCDEMO-129566)
+    # and this surface's bilingual naming ("<Label> — العربية", a trailing
+    # " *" when required -- label_pattern() tolerates it).
+    SHORT_DESCRIPTION_LABEL = "Short Description"
+    SHORT_DESCRIPTION_AR_LABEL = "Short Description — العربية"
+    BANNER_IMAGE_LABEL = "Banner Image"
+    ATTACHMENTS_LABEL = "Attachments"
+    LANGUAGE_LABEL = "Language"
+    STATUS_LABEL = "Status"
+    # VERIFY-LIVE: Expiry Date is assumed to be the same `qc-dtp` picker as
+    # Publish Date, bound to `ObjectField_<schema field name>` (expiryDate).
+    EXPIRY_DATE_NATIVE = 'input[name="ObjectField_expiryDate"]'
+
+    def _set_dtp(self, native_css: str, value: str) -> None:
+        """Types `value` (`dd/mm/yyyy HH:MM`) into the visible `qc-dtp-<id>`
+        picker bound to the hidden native input `native_css`."""
+        native_id = self.page.locator(native_css).first.get_attribute("id")
+        box = self.page.locator(f'[id="qc-dtp-{native_id}"]')
+        box.click()
+        box.fill("")
+        box.press_sequentially(value, delay=20)
+        box.press("Tab")
+
+    def set_expiry_date(self, value: str) -> "NewsletterWorkflowPage":
+        """`value` in the picker's own format, `dd/mm/yyyy HH:MM` (24 h)."""
+        self._set_dtp(self.EXPIRY_DATE_NATIVE, value)
+        return self
+
+    def expiry_date_stored(self) -> str:
+        """The hidden native value the form submits (`yyyy-mm-ddTHH:MM`)."""
+        return self.page.locator(self.EXPIRY_DATE_NATIVE).first.input_value()
+
+    def set_short_description(self, value: str, locale: str = "en") -> "NewsletterWorkflowPage":
+        label = self.SHORT_DESCRIPTION_AR_LABEL if locale == "ar" else self.SHORT_DESCRIPTION_LABEL
+        self.fill_text(label, value)
+        return self
+
+    def short_description_value(self, locale: str = "en") -> str:
+        label = self.SHORT_DESCRIPTION_AR_LABEL if locale == "ar" else self.SHORT_DESCRIPTION_LABEL
+        return self.field_value(label)
+
+    def _textbox_present(self, label: str) -> bool:
+        return self.page.get_by_role("textbox", name=self.label_pattern(label)).count() > 0
+
+    def _upload_present(self, label: str) -> bool:
+        return self.page.get_by_role("textbox", name=f"{label} Select File").count() > 0
+
+    def upload_control_present(self, label: str) -> bool:
+        """The field's Documents & Media upload control is on the form."""
+        return self._upload_present(label)
+
+    def _combo_present(self, label: str) -> bool:
+        return self.page.get_by_role("combobox", name=self.label_pattern(label)).and_(
+            self.page.locator(self.FORM_COMBOBOX)
+        ).count() > 0
+
+    def _dtp_present(self, native_css: str) -> bool:
+        native = self.page.locator(native_css)
+        if native.count() == 0:
+            return False
+        native_id = native.first.get_attribute("id")
+        return self.page.locator(f'[id="qc-dtp-{native_id}"]').count() > 0
+
+    def _content_present(self, locale: str) -> bool:
+        try:
+            self._content_instance(locale)
+            return True
+        except RuntimeError:
+            return False
+
+    def form_field_presence(self) -> dict:
+        """{case field name: rendered?} for the create/edit form (TC 134537).
+        Call on an open form; waits for Title (EN) to hydrate first."""
+        self.page.get_by_role("textbox", name=self.label_pattern(TITLE_EN_LABEL)).first.wait_for(
+            state="visible", timeout=20000
+        )
+        return {
+            "Title (EN)": self._textbox_present(TITLE_EN_LABEL),
+            "Title (AR)": self._textbox_present(TITLE_AR_LABEL),
+            "Subject Line (EN)": self._textbox_present(SUBJECT_EN_LABEL),
+            "Subject Line (AR)": self._textbox_present(SUBJECT_AR_LABEL),
+            "Short Description (EN)": self._textbox_present(self.SHORT_DESCRIPTION_LABEL),
+            "Short Description (AR)": self._textbox_present(self.SHORT_DESCRIPTION_AR_LABEL),
+            "Content (EN)": self._content_present("en"),
+            "Content (AR)": self._content_present("ar"),
+            "Banner Image upload": self._upload_present(self.BANNER_IMAGE_LABEL),
+            "Attachments upload": self._upload_present(self.ATTACHMENTS_LABEL),
+            "Language dropdown": self._combo_present(self.LANGUAGE_LABEL),
+            "Status dropdown": self._combo_present(self.STATUS_LABEL),
+            "Publish Date": self._dtp_present(self.PUBLISH_DATE_NATIVE),
+            "Expiry Date": self._dtp_present(self.EXPIRY_DATE_NATIVE),
+        }
+
+    # ---- entries table read (TC 134538) ------------------------------------
+    ENTRIES_TABLE_HEADER = "table thead th"
+    _ROW_ACTIONS_JS = """
+    r => Array.from(r.querySelectorAll('a, button')).map(e => ({
+      text: (e.innerText || e.getAttribute('aria-label') || e.getAttribute('title') || '').trim(),
+      attrs: Array.from(e.attributes).map(a => a.name).filter(n => n.startsWith('data-qc-oel-'))
+    }))
+    """
+
+    def entries_table(self) -> dict:
+        """{"headers": [...], "rows": [{"cells": {header: text}, "actions":
+        [{"text", "attrs"}]}]} for the CURRENT page of the open entries list.
+        Read-only. Call after open_entries_list()."""
+        headers = [" ".join(t.split()) for t in self.page.locator(self.ENTRIES_TABLE_HEADER).all_inner_texts()]
+        rows = self.page.locator(self.ENTRIES_TABLE_ROW)
+        out = []
+        for i in range(rows.count()):
+            row = rows.nth(i)
+            tds = [" ".join(t.split()) for t in row.locator("td").all_inner_texts()]
+            cells = {(headers[j] if j < len(headers) else f"col{j}"): tds[j] for j in range(len(tds))}
+            out.append({"cells": cells, "actions": row.evaluate(self._ROW_ACTIONS_JS)})
+        return {"headers": headers, "rows": out}
+
+    # ---- file fields -------------------------------------------------------
+    def attached_filename(self, label: str) -> str:
+        """The field's filename readout ("" when nothing is attached).
+        Strict: raises unless exactly ONE readout carries the label, so a
+        wrong label can never read as "no file attached"."""
+        readout = self.page.get_by_role("textbox", name=self.label_pattern(label))
+        found = readout.count()
+        if found != 1:
+            raise LookupError(f"{label!r}: {found} filename readouts on the form, expected exactly 1")
+        # The readout shows a newly SELECTED file only; a SAVED file is in the
+        # field's `Current file:` block (read live 2026-10-13 on the sample
+        # newsletter: readout "" vs current "press-kit.pdf").
+        return readout.inner_text().strip() or self.current_file_name(label)
+
+    # ---- validation reads --------------------------------------------------
+    # Same selector family as DisposableObjectAdminPage.REFUSAL_BAR plus
+    # Clay's inline feedback. Only elements carrying text count: every field
+    # renders an always-present, EMPTY `role=alert` slot (live 2026-10-13).
+    VALIDATION_ERRORS = '[role="alert"], .alert-danger, .form-feedback-item'
+
+    def visible_error_texts(self) -> list:
+        out = []
+        found = self.page.locator(self.VALIDATION_ERRORS)
+        for i in range(found.count()):
+            el = found.nth(i)
+            try:
+                text = " ".join((el.inner_text(timeout=2000) or "").split())
+                if text and el.is_visible():
+                    out.append(text)
+            except Exception:  # noqa: BLE001 -- detached between count and read
+                continue
+        return out
+
+    def combo_value(self, label: str) -> str:
+        """Current value of the form's Language / Status combobox."""
+        combo = self.page.get_by_role("combobox", name=self.label_pattern(label)).and_(
+            self.page.locator(self.FORM_COMBOBOX)
+        ).first
+        combo.wait_for(state="visible", timeout=20000)
+        return combo.input_value()

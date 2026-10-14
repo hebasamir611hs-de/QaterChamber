@@ -1,0 +1,161 @@
+diff --git a/cms/pages/components/object_authoring_page.py b/cms/pages/components/object_authoring_page.py
+index 3dce31e..f4b614b 100644
+--- a/cms/pages/components/object_authoring_page.py
++++ b/cms/pages/components/object_authoring_page.py
+@@ -292,6 +292,22 @@ class ObjectAuthoringPage(BasePage):
+         'button[type="submit"]:text-is("Publish")'
+     )
+     SUBMIT_FOR_PUBLISHING_BUTTON = SUBMIT_FOR_REVIEW_BUTTON
++    # In-flight state of a Save as Draft / Submit for Review / Publish click.
++    # CONFIRMED LIVE 2026-10-02 (manage-coo-quick-fact, as Editor): once
++    # clicked, both form buttons gain class "disabled" and an inner
++    # <span class="loading-animation ...">. The span stays until the save
++    # commits, about 50s on qcdev that day, and then the page navigates to
++    # `?previewEntry=<uuid>`. Right after the click, before the spinner, the
++    # clicked button carries a bare `disabled` attribute. SUBMIT_STARTED
++    # (attach) uses both signals. FORM_BUSY (detach) is the spinner only,
++    # because a form button can be disabled at rest.
++    FORM_BUSY = 'button[type="submit"] .loading-animation'
++    SUBMIT_STARTED = (
++        f'{FORM_BUSY}, '
++        'button[type="submit"][disabled]:text-is("Submit for Review"), '
++        'button[type="submit"][disabled]:text-is("Publish"), '
++        'button[type="submit"][disabled]:text-is("Save as Draft")'
++    )
+     # Row-level workflow actions carry a stable `data-qc-oel-<action>="<entryId>"`
+     # attribute (confirmed live 2026-09-28 on manage-publication /
+     # manage-law-entry / manage-social-media-icon) — the same convention the
+@@ -1009,8 +1025,9 @@ class ObjectAuthoringPage(BasePage):
+ 
+     # ---- Lifecycle actions --------------------------------------------------
+     def save_as_draft(self) -> "ObjectAuthoringPage":
++        start_url = self.page.url
+         self.click(self.SAVE_AS_DRAFT_BUTTON)
+-        self._wait_for_settle()
++        self._wait_for_settle(start_url)
+         return self
+ 
+     def submit_for_review(self) -> "ObjectAuthoringPage":
+@@ -1026,8 +1043,9 @@ class ObjectAuthoringPage(BasePage):
+         knows which account it authenticated as and must assert accordingly.
+         Callers that want the record live regardless of role should submit and
+         then `approve_entry()` as an Editor."""
++        start_url = self.page.url
+         self.click(self.SUBMIT_FOR_REVIEW_BUTTON)
+-        self._wait_for_settle()
++        self._wait_for_settle(start_url)
+         return self
+ 
+     def submit_for_publishing(self) -> "ObjectAuthoringPage":
+@@ -1106,7 +1124,7 @@ class ObjectAuthoringPage(BasePage):
+             # actions column, and the native confirm() is the real gate on the
+             # action, not the click.
+             control.first.click(force=True)
+-            self._wait_for_settle()
++            self._wait_for_settle(gone=control.first)
+         finally:
+             self.page.remove_listener("dialog", _accept)
+         return self
+@@ -1204,7 +1222,57 @@ class ObjectAuthoringPage(BasePage):
+             )
+         return entries
+ 
+-    def _wait_for_settle(self) -> None:
++    SETTLE_OUTCOME_TIMEOUT_MS = 120000
++    SAVE_SUCCESS_TOAST = (
++        '.alert-success:visible, .toast:visible, [class*="toast"]:visible'
++    )
++    SAVE_SUCCESS_TEXT = re.compile(r"Saved and submitted for review\.|\bsaved\b|\bpublished\b", re.I)
++    SAVE_REFUSAL = (
++        '.alert-danger:visible, .form-feedback-item:visible, '
++        ':text("Please complete the required fields"):visible'
++    )
++
++    def _count(self, selector: str) -> int:
++        try:
++            return self.page.locator(selector).count()
++        except Exception:  # noqa: BLE001 — mid-navigation
++            return -1
++
++    def _toast_text(self) -> str:
++        try:
++            return " ".join(self.page.locator(self.SAVE_SUCCESS_TOAST).all_inner_texts())
++        except Exception:  # noqa: BLE001
++            return ""
++
++    def _poll_save_outcome(self, start_url: str) -> str | None:
++        """Poll (in Python, so it survives navigations) for the first save
++        outcome: 'nav' | 'toast' | 'refused' | 'spinner'; None on timeout."""
++        import time
++        refusals_before = max(self._count(self.SAVE_REFUSAL), 0)
++        toast_before = self._toast_text()
++        seen_busy = False
++        deadline = time.monotonic() + self.SETTLE_OUTCOME_TIMEOUT_MS / 1000
++        while time.monotonic() < deadline:
++            url = self.page.url
++            if "previewEntry=" in url and url != start_url:
++                return "nav"
++            toast = self._toast_text()
++            if toast != toast_before and self.SAVE_SUCCESS_TEXT.search(toast):
++                return "toast"
++            if self._count(self.SAVE_REFUSAL) > refusals_before:
++                return "refused"
++            busy = self._count(self.FORM_BUSY)
++            if busy > 0:
++                seen_busy = True
++            elif seen_busy and busy == 0:
++                return "spinner"
++            try:
++                self.page.wait_for_timeout(300)
++            except Exception:  # noqa: BLE001 — page navigating
++                time.sleep(0.3)
++        return None
++
++    def _wait_for_settle(self, start_url: str | None = None, gone=None) -> None:
+         """POSITIVE-signal wait — HEALED 2026-09-14 (Group B triage of
+         tc_135184/135185/133294's teardown, evidence: `reports/allure-
+         results/`). The PRIOR strategy here (`networkidle` with a `load`
+@@ -1234,16 +1302,36 @@ class ObjectAuthoringPage(BasePage):
+         reach at all. Falls back to a short, explicitly-capped `load` wait
+         (never unbounded) for the rare state that matches none of the
+         three (e.g. a genuine validation-error state)."""
+-        settle_selector = (
+-            f'a[data-qc-oel-delete], {self.CANCEL_AND_ADD_NEW_LINK}, {self.SAVE_AS_DRAFT_BUTTON}'
+-        )
+-        try:
+-            self.page.wait_for_selector(settle_selector, state="attached", timeout=15000)
+-        except Exception:  # noqa: BLE001 — real, explicitly-capped fallback, never unbounded
++        # FIX 2026-10-02/03 (B triage, traces for tc_141047 / tc_140981): the
++        # old selector included the create form's own Save as Draft button,
++        # which stays attached for the WHOLE in-flight save, and the manage
++        # page renders the entries list (with `a[data-qc-oel-delete]`) next to
++        # the form. Both matched at once, so the caller navigated away while
++        # qcdev was still saving (about 50s that day) and the record was never
++        # stored. Neither marker, nor a bare `disabled`, is a settle signal.
++        # Now we poll for an OUTCOME, up to SETTLE_OUTCOME_TIMEOUT_MS:
++        #   (a) the page navigated to `?previewEntry=` (live 2026-10-02: a
++        #       successful Publish lands there) or a success toast appeared;
++        #   (b) a refusal bar or a field error appeared that wasn't there
++        #       before the save;
++        #   (c) fallback: the busy spinner was seen and has gone again.
++        # A row action passes `gone` (its own control) and waits for that
++        # control to detach instead.
++        if gone is not None:
++            try:
++                gone.wait_for(state="detached", timeout=30000)
++            except Exception:  # noqa: BLE001 — explicitly capped, falls through
++                logger.warning("_wait_for_settle: row-action control did not detach in 30s")
++            self.page.wait_for_timeout(2500)
++            return
++        outcome = self._poll_save_outcome(start_url if start_url is not None else self.page.url)
++        if outcome == "nav":
+             try:
+-                self.page.wait_for_load_state("load", timeout=8000)
++                self.page.wait_for_load_state("domcontentloaded", timeout=15000)
+             except Exception:  # noqa: BLE001
+                 pass
++        elif outcome is None:
++            logger.warning("_wait_for_settle: no save outcome within %sms", self.SETTLE_OUTCOME_TIMEOUT_MS)
+         # Widened from 1500ms to 2500ms 2026-09-03: this is the ONLY settle
+         # the write (Save as Draft / Submit for Publishing) gets before a
+         # caller may immediately poll the delivery surface (e.g.

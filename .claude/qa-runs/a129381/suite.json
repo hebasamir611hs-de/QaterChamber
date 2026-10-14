@@ -1,0 +1,3428 @@
+{
+  "status": "success",
+  "plan_id": 133534,
+  "suite_id": 134452,
+  "total_test_cases": 119,
+  "test_cases": [
+    {
+      "id": 135515,
+      "title": "Verify that the Strategic Direction section background color matches the Figma token",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Section is published with default styling. Verifies the section background renders as #F6F0EC.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load the Home Page.",
+          "expected": "Home Page loads."
+        },
+        {
+          "action": "Scroll to the Strategic Direction section.",
+          "expected": "Section is visible."
+        },
+        {
+          "action": "Inspect the section container's computed background color.",
+          "expected": "Computed background color = #F6F0EC."
+        }
+      ]
+    },
+    {
+      "id": 135516,
+      "title": "Verify that the \"Strategic Pillars\" badge matches its Figma color and border tokens",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies badge text color #A66F43, pill background #F6F0EC, border #D7BEAA 1px.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the \"Strategic Pillars\" badge above the heading.",
+          "expected": "Badge visible with exact text \"Strategic Pillars\"."
+        },
+        {
+          "action": "Inspect computed text color, background, and border.",
+          "expected": "Text #A66F43; background #F6F0EC; border #D7BEAA 1px solid."
+        }
+      ]
+    },
+    {
+      "id": 135517,
+      "title": "Verify that the section heading matches the Figma copy, font, size, and color",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies heading text &quot;Our Strategic Direction&quot; renders Cairo Bold 30px/38px, color #1D1D1B.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the section heading.",
+          "expected": "Heading text reads exactly \"Our Strategic Direction\"."
+        },
+        {
+          "action": "Inspect computed font-family, weight, size/line-height, and color.",
+          "expected": "Font = Cairo, weight 700, 30px/38px; color #1D1D1B."
+        }
+      ]
+    },
+    {
+      "id": 135518,
+      "title": "Verify that the section description matches the Figma copy, font, and color",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies the exact EN description copy renders Cairo Regular 16px/24px, color #7C7B7B.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the section description text below the heading.",
+          "expected": "Text reads exactly \"Discover the principles that guide Qatar Chamber's role in supporting the business community, strengthening economic growth, and shaping a competitive future for Qatar.\""
+        },
+        {
+          "action": "Inspect text content and computed style.",
+          "expected": "Font Cairo Regular 16px/24px, color #7C7B7B."
+        }
+      ]
+    },
+    {
+      "id": 135519,
+      "title": "Verify that the pillar card matches Figma background, border, radius, shadow, and width",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies the visible pillar card: background #E9DBD0, border #A66F43 1px, 16px corner radius, shadow, width 516px.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the visible pillar card in the carousel.",
+          "expected": "One pillar card visible."
+        },
+        {
+          "action": "Inspect computed background, border, border-radius, box-shadow, and width.",
+          "expected": "Background #E9DBD0; border #A66F43 1px; radius 16px; shadow matches spec; width 516px."
+        }
+      ]
+    },
+    {
+      "id": 135520,
+      "title": "Verify that the pillar title matches Figma font, size, and color",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies title &quot;Vision&quot; renders Cairo Bold 20px/30px, color #A66F43.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the \"Vision\" pillar title inside the card.",
+          "expected": "Title reads exactly \"Vision\"."
+        },
+        {
+          "action": "Inspect text content and computed style.",
+          "expected": "Font Cairo Bold 20px/30px, color #A66F43."
+        }
+      ]
+    },
+    {
+      "id": 135521,
+      "title": "Verify that the pillar description body matches Figma font and color",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies the Vision pillar body copy renders Cairo Regular 14px/22px, color #343432.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the Vision pillar's description text.",
+          "expected": "Text reads exactly \"To achieve global leadership among chambers of commerce by advancing Qatar National Vision 2030, empowering the private sector, and positioning Qatar as a gateway for local and international business opportunities.\""
+        },
+        {
+          "action": "Inspect text content and computed style.",
+          "expected": "Font Cairo Regular 14px/22px, color #343432."
+        }
+      ]
+    },
+    {
+      "id": 135522,
+      "title": "Verify that the left/right navigation arrow buttons match Figma dimensions and style",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies each arrow button is 40x40px, circular, white fill, border #E9DBD0 1px.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the left and right carousel arrow buttons.",
+          "expected": "Both arrows visible flanking the card."
+        },
+        {
+          "action": "Inspect computed dimensions, shape, fill, and border.",
+          "expected": "Each is 40x40px, circular, white fill, #E9DBD0 1px border."
+        }
+      ]
+    },
+    {
+      "id": 135523,
+      "title": "Verify that the carousel progress indicator matches Figma color and placement",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies the progress indicator strip inside the card at the bottom uses #D7BEAA/#B3845F stroke with bottom corners rounded 16px.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the progress indicator bar at the bottom of the visible card.",
+          "expected": "Indicator bar visible inside the card footer."
+        },
+        {
+          "action": "Inspect computed colors and corner radii.",
+          "expected": "Stroke colors #D7BEAA/#B3845F; bottom-left/bottom-right radius 16px, top corners 0."
+        }
+      ]
+    },
+    {
+      "id": 135524,
+      "title": "Verify that the decorative Mandala background graphic renders at 20% opacity",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies the large rotating Mandala graphic renders behind the section content at reduced opacity.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the decorative background graphic behind the section.",
+          "expected": "Mandala graphic visible behind text/cards, not obscuring foreground content."
+        },
+        {
+          "action": "Inspect computed opacity and confirm rotation animation is active.",
+          "expected": "Opacity is approximately 20%; graphic is animating (rotating)."
+        }
+      ]
+    },
+    {
+      "id": 135525,
+      "title": "Verify that section padding matches the Figma layout spec (80px/300px)",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies outer section padding on a desktop viewport (1920px) matches 80px vertical / 300px horizontal.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page on a 1920px-wide viewport.",
+          "expected": "Page loads at 1920px width."
+        },
+        {
+          "action": "Locate the section container.",
+          "expected": "Section container visible."
+        },
+        {
+          "action": "Inspect computed padding values.",
+          "expected": "Padding = 80px top/bottom, 300px left/right."
+        }
+      ]
+    },
+    {
+      "id": 135526,
+      "title": "Verify that the card carousel container width and inter-element gap match Figma",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies the carousel container is 636px wide with 20px gap between left-arrow/card/right-arrow.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page on desktop viewport.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the carousel container (arrow + card + arrow group).",
+          "expected": "Carousel container visible."
+        },
+        {
+          "action": "Inspect computed width and gap.",
+          "expected": "Container width = 636px; gap between elements = 20px."
+        }
+      ]
+    },
+    {
+      "id": 135527,
+      "title": "Verify that the pillar icon size and header row spacing match Figma",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies the pillar icon is 72x72px inside a card header row with 20px/24px padding and 16px gap.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Locate the icon inside the visible pillar card's header row.",
+          "expected": "Icon visible at top of card."
+        },
+        {
+          "action": "Inspect computed icon dimensions and header row padding/gap.",
+          "expected": "Icon = 72x72px; header row padding 20px/24px; gap 16px."
+        }
+      ]
+    },
+    {
+      "id": 135528,
+      "title": "Verify that the badge, heading, description, and Vision pillar copy exactly match the verified Figma content",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Regression",
+        "UI",
+        "Web"
+      ],
+      "description": "Cross-checks all EN text nodes against the Figma-verified frame content as a content-integrity regression anchor.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page in English.",
+          "expected": "Page loads in EN."
+        },
+        {
+          "action": "Capture text of badge, heading, description, and Vision pillar title/description.",
+          "expected": "All four text nodes captured."
+        },
+        {
+          "action": "Compare each string against the Figma-verified copy.",
+          "expected": "All four strings match the Figma-verified copy exactly, no truncation or placeholder text."
+        }
+      ]
+    },
+    {
+      "id": 135529,
+      "title": "Verify that only one pillar card is visible at a time on initial load",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Regression",
+        "UI",
+        "Web"
+      ],
+      "description": "Section has 3 active pillar cards (Vision, Mission, Objectives). Verifies the carousel shows exactly one card at load.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Scroll to the Strategic Direction section.",
+          "expected": "Section visible."
+        },
+        {
+          "action": "Count visible pillar cards in the carousel viewport.",
+          "expected": "Exactly one pillar card is visible (Vision, first in Display Order); Mission and Objectives are not rendered/visible simultaneously."
+        }
+      ]
+    },
+    {
+      "id": 135530,
+      "title": "Verify that clicking the right arrow navigates from the Vision card to the Mission card",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Regression",
+        "UI",
+        "Web"
+      ],
+      "description": "Carousel is showing the Vision card. Verifies right-arrow click advances to the next active card in Display Order.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load Home Page with carousel on Vision card.",
+          "expected": "Vision card visible."
+        },
+        {
+          "action": "Click the right navigation arrow.",
+          "expected": "Arrow click registers, transition plays."
+        },
+        {
+          "action": "Read the currently displayed pillar title.",
+          "expected": "Displayed card title = \"Mission\"."
+        }
+      ]
+    },
+    {
+      "id": 135531,
+      "title": "Verify that clicking the left arrow navigates from the Mission card back to the Vision card",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Carousel is showing the Mission card. Verifies left-arrow click returns to the previous active card.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Navigate carousel to the Mission card.",
+          "expected": "Mission card visible."
+        },
+        {
+          "action": "Click the left navigation arrow.",
+          "expected": "Arrow click registers, transition plays."
+        },
+        {
+          "action": "Read the currently displayed pillar title.",
+          "expected": "Displayed card title = \"Vision\"."
+        }
+      ]
+    },
+    {
+      "id": 135532,
+      "title": "Verify that the carousel progress indicator updates when navigating to the next pillar card",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies the progress indicator reflects the current card position after arrow navigation.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load carousel on Vision card, note indicator state.",
+          "expected": "Indicator shows position 1 of 3."
+        },
+        {
+          "action": "Click the right arrow to move to Mission.",
+          "expected": "Card changes to Mission."
+        },
+        {
+          "action": "Inspect the indicator state.",
+          "expected": "Indicator updates to show position 2 of 3."
+        }
+      ]
+    },
+    {
+      "id": 135533,
+      "title": "Verify that an animation/transition effect plays when switching between pillar cards",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies the carousel plays a transition animation on arrow-triggered navigation.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load carousel on Vision card.",
+          "expected": "Vision card static and visible."
+        },
+        {
+          "action": "Click the right arrow.",
+          "expected": "Arrow clicked."
+        },
+        {
+          "action": "Observe the card transition.",
+          "expected": "A visible transition/animation effect plays between the outgoing and incoming card (not an instant hard-cut)."
+        }
+      ]
+    },
+    {
+      "id": 135534,
+      "title": "Verify that the section renders correctly in Arabic with RTL layout mirroring",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Regression",
+        "UI",
+        "Web"
+      ],
+      "description": "Website language switched to Arabic. Verifies the badge, heading, description, and pillar cards render in Arabic with the layout mirrored.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Switch site language to Arabic.",
+          "expected": "Site is in Arabic."
+        },
+        {
+          "action": "Load/scroll to the Strategic Direction section.",
+          "expected": "Section shows Arabic badge/heading/description/pillar copy."
+        },
+        {
+          "action": "Inspect text direction and layout order of elements.",
+          "expected": "Layout is mirrored (RTL): text is right-aligned, card content flows right-to-left."
+        }
+      ]
+    },
+    {
+      "id": 135535,
+      "title": "Verify that the section is fully responsive on a mobile viewport (375px width)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies layout, card sizing, and arrow controls adapt correctly at 375px width.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set viewport to 375px width.",
+          "expected": "Viewport set."
+        },
+        {
+          "action": "Load Home Page and scroll to the section.",
+          "expected": "Section renders without horizontal scroll or clipped content."
+        },
+        {
+          "action": "Inspect layout, overlaps, and control accessibility.",
+          "expected": "Card, arrows, and text resize/stack appropriately with no overlap."
+        }
+      ]
+    },
+    {
+      "id": 135536,
+      "title": "Verify that the section is fully responsive on a tablet viewport (768px width)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies layout adapts correctly at 768px width.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set viewport to 768px width.",
+          "expected": "Viewport set."
+        },
+        {
+          "action": "Load Home Page and scroll to the section.",
+          "expected": "Section renders without clipping."
+        },
+        {
+          "action": "Inspect layout and spacing.",
+          "expected": "Card and controls scale proportionally; no element overlap."
+        }
+      ]
+    },
+    {
+      "id": 135537,
+      "title": "Verify that the section is fully responsive on a desktop viewport (1920px width)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "UI",
+        "Web"
+      ],
+      "description": "Verifies layout renders per the Figma desktop spec at 1920px width.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set viewport to 1920px width.",
+          "expected": "Viewport set."
+        },
+        {
+          "action": "Load Home Page and scroll to the section.",
+          "expected": "Section renders at full desktop layout."
+        },
+        {
+          "action": "Inspect layout against Figma spacing tokens.",
+          "expected": "Padding/gaps match Figma tokens (80px/300px section padding, 636px carousel width)."
+        }
+      ]
+    },
+    {
+      "id": 135538,
+      "title": "Verify that the Strategic Direction Section Management screen displays all section-level fields",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "UI"
+      ],
+      "description": "Site Content Editor is logged into Liferay CMS. Verifies the management screen shows Section Tag, Heading, Description fields (EN/AR) and an &quot;Add Pillar Card&quot; action.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor.",
+          "expected": "Login succeeds."
+        },
+        {
+          "action": "Navigate to Home Page - Strategic Direction Section Management.",
+          "expected": "Management screen loads."
+        },
+        {
+          "action": "Inspect the screen's visible fields and actions.",
+          "expected": "Section Tag, Heading, Description (EN and AR) fields and an \"Add Pillar Card\" button are all visible."
+        }
+      ]
+    },
+    {
+      "id": 135539,
+      "title": "Verify that the Add Pillar Card form displays all pillar-level fields",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "UI"
+      ],
+      "description": "Verifies the Add Pillar Card form shows icon upload, title (EN/AR), description (EN/AR), display order, and active status.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "On the Section Management screen, click \"Add Pillar Card\".",
+          "expected": "Click registers."
+        },
+        {
+          "action": "Inspect the form fields displayed.",
+          "expected": "Form opens."
+        },
+        {
+          "action": "Confirm no field from the spec is missing.",
+          "expected": "Icon upload, Title (EN), Title (AR), Description (EN), Description (AR), Display Order, and Active Status are all present."
+        }
+      ]
+    },
+    {
+      "id": 135540,
+      "title": "Verify that a Liferay generic success toast (English) displays after a successful save",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "UI"
+      ],
+      "description": "Editor saves a valid pillar card with the CMS in English mode. Verifies the standard Liferay success toast appears.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Fill the Add Pillar Card form with valid data.",
+          "expected": "Form fields populated."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save action completes."
+        },
+        {
+          "action": "Observe the toast notification.",
+          "expected": "A Liferay generic success toast appears in English confirming the save."
+        }
+      ]
+    },
+    {
+      "id": 135541,
+      "title": "Verify that a Liferay generic success toast (Arabic) displays after a successful save",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "UI"
+      ],
+      "description": "Editor saves a valid pillar card with the CMS UI in Arabic mode. Verifies the toast text renders in Arabic.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Switch CMS UI language to Arabic.",
+          "expected": "CMS UI is in Arabic."
+        },
+        {
+          "action": "Fill the Add Pillar Card form with valid data and click Save.",
+          "expected": "Save completes."
+        },
+        {
+          "action": "Observe the toast notification.",
+          "expected": "The success toast text renders in Arabic."
+        }
+      ]
+    },
+    {
+      "id": 135542,
+      "title": "Verify that a mandatory-field validation error displays inline in English",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "UI"
+      ],
+      "description": "Editor attempts to save with Section Heading (EN) left blank.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Leave Section Heading (EN) blank.",
+          "expected": "Field is empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save is blocked."
+        },
+        {
+          "action": "Observe the inline error message and its position.",
+          "expected": "Inline error \"Section Heading (EN) is required.\" appears directly under the field."
+        }
+      ]
+    },
+    {
+      "id": 135543,
+      "title": "Verify that a mandatory-field validation error displays inline in Arabic",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "UI"
+      ],
+      "description": "Editor attempts to save with Section Heading (AR) left blank while CMS UI is in Arabic.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Switch CMS UI to Arabic.",
+          "expected": "CMS UI is Arabic."
+        },
+        {
+          "action": "Leave Section Heading (AR) blank and click Save.",
+          "expected": "Save is blocked."
+        },
+        {
+          "action": "Observe the inline error message.",
+          "expected": "Inline error reading \"عنوان القسم مطلوب.\" appears directly under the field."
+        }
+      ]
+    },
+    {
+      "id": 135544,
+      "title": "Verify that the Strategic Direction section renders correctly in Chrome (desktop)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "Web"
+      ],
+      "description": "Verifies the section, cards, and carousel render and function correctly in the latest Chrome desktop.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Home Page in Chrome (latest stable).",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Scroll to the section.",
+          "expected": "Section renders per design."
+        },
+        {
+          "action": "Navigate the carousel with both arrows.",
+          "expected": "Carousel navigates without visual defects or console errors."
+        }
+      ]
+    },
+    {
+      "id": 135545,
+      "title": "Verify that the Strategic Direction section renders correctly in Safari (desktop)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "Web"
+      ],
+      "description": "Verifies the section renders and functions correctly in the latest Safari desktop.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Home Page in Safari (latest stable).",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Scroll to the section.",
+          "expected": "Section renders per design."
+        },
+        {
+          "action": "Navigate the carousel with both arrows.",
+          "expected": "Carousel navigates without visual defects."
+        }
+      ]
+    },
+    {
+      "id": 135546,
+      "title": "Verify that the Strategic Direction section renders correctly in Firefox (desktop)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "Web"
+      ],
+      "description": "Verifies the section renders and functions correctly in the latest Firefox desktop.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Home Page in Firefox (latest stable).",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Scroll to the section.",
+          "expected": "Section renders per design."
+        },
+        {
+          "action": "Navigate the carousel with both arrows.",
+          "expected": "Carousel navigates without visual defects."
+        }
+      ]
+    },
+    {
+      "id": 135547,
+      "title": "Verify that carousel touch-swipe navigation works on a mobile touch browser",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Compatibility",
+        "Web"
+      ],
+      "description": "Verifies the carousel responds to swipe gestures on a touch device, in addition to arrow clicks.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open Home Page on a mobile touch device/emulator.",
+          "expected": "Page loads on mobile."
+        },
+        {
+          "action": "Scroll to the section.",
+          "expected": "Section visible."
+        },
+        {
+          "action": "Swipe left on the visible card.",
+          "expected": "Swipe left navigates to the next pillar card, equivalent to a right-arrow click."
+        }
+      ]
+    },
+    {
+      "id": 135548,
+      "title": "Verify that a Site Content Editor can access the Strategic Direction Section Management screen",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel"
+      ],
+      "description": "User is logged in with the Site Content Editor role.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as a user with the Site Content Editor role.",
+          "expected": "Login succeeds."
+        },
+        {
+          "action": "Navigate to Home Page - Strategic Direction Section Management.",
+          "expected": "Navigation attempted."
+        },
+        {
+          "action": "Observe access result.",
+          "expected": "Management screen loads successfully."
+        }
+      ]
+    },
+    {
+      "id": 135549,
+      "title": "Verify that a user without the required role cannot access the Strategic Direction Section Management screen",
+      "state": "Design",
+      "priority": 1,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel"
+      ],
+      "description": "User is logged into Liferay CMS with a role that lacks Home Page content management rights.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as a user without the Site Content Editor role.",
+          "expected": "Login succeeds with a lower-privilege role."
+        },
+        {
+          "action": "Directly navigate to the Strategic Direction Section Management URL.",
+          "expected": "Navigation attempted."
+        },
+        {
+          "action": "Observe access result.",
+          "expected": "Access is denied with a permission-error message; management screen does not load."
+        }
+      ]
+    },
+    {
+      "id": 135550,
+      "title": "Verify that an unauthenticated user directly navigating to the CMS management URL is redirected to login",
+      "state": "Design",
+      "priority": 1,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel"
+      ],
+      "description": "No active Liferay session.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Ensure no active CMS session (log out).",
+          "expected": "No session active."
+        },
+        {
+          "action": "Directly navigate to the Strategic Direction Section Management URL.",
+          "expected": "Navigation attempted."
+        },
+        {
+          "action": "Observe the result.",
+          "expected": "User is redirected to the Liferay login page; management screen content is never rendered."
+        }
+      ]
+    },
+    {
+      "id": 135551,
+      "title": "Verify that a Site Content Author without publish rights can save a draft but cannot publish the section",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Auth",
+        "Automation",
+        "Control_Panel"
+      ],
+      "description": "User has the Site Content Author role (submit-for-review only).",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as a Site Content Author.",
+          "expected": "Login succeeds."
+        },
+        {
+          "action": "Edit the section and click Save as Draft.",
+          "expected": "Draft saves successfully."
+        },
+        {
+          "action": "Attempt to click Publish.",
+          "expected": "Publish action is disabled/unavailable, or blocked with a permission message."
+        }
+      ]
+    },
+    {
+      "id": 135552,
+      "title": "Verify that a visitor can view the fully published Strategic Direction section end-to-end",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "description": "Section and all 3 pillar cards (Vision, Mission, Objectives) are published and Active.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load the Home Page as a public visitor.",
+          "expected": "Page loads."
+        },
+        {
+          "action": "Scroll to the Strategic Direction section.",
+          "expected": "Section is visible and fully rendered."
+        },
+        {
+          "action": "Read the section tag, heading, description, and the first pillar card.",
+          "expected": "Tag \"Strategic Pillars\", heading \"Our Strategic Direction\", description, and the Vision pillar card (icon/title/description) are all displayed correctly."
+        }
+      ]
+    },
+    {
+      "id": 135553,
+      "title": "Verify that a visitor can navigate forward through all three pillar cards sequentially",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "Regression",
+        "UAT",
+        "Web"
+      ],
+      "description": "Verifies the full forward journey Vision to Mission to Objectives via repeated right-arrow clicks.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load carousel on Vision.",
+          "expected": "Vision displayed."
+        },
+        {
+          "action": "Click right arrow.",
+          "expected": "Mission displayed."
+        },
+        {
+          "action": "Click right arrow again.",
+          "expected": "Objectives displayed."
+        }
+      ]
+    },
+    {
+      "id": 135554,
+      "title": "Verify that a visitor can navigate backward through all three pillar cards sequentially",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "Web"
+      ],
+      "description": "Verifies the full backward journey Objectives to Mission to Vision via repeated left-arrow clicks.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Load carousel on Objectives.",
+          "expected": "Objectives displayed."
+        },
+        {
+          "action": "Click left arrow.",
+          "expected": "Mission displayed."
+        },
+        {
+          "action": "Click left arrow again.",
+          "expected": "Vision displayed."
+        }
+      ]
+    },
+    {
+      "id": 135555,
+      "title": "Verify that the Strategic Direction section is hidden when the section is Unpublished",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Functional-High",
+        "Web"
+      ],
+      "description": "Section has valid Active pillar cards but its own publish status is set to Unpublished.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "In CMS, set the Strategic Direction section status to Unpublished.",
+          "expected": "Status set."
+        },
+        {
+          "action": "Refresh cache.",
+          "expected": "Cache refreshed."
+        },
+        {
+          "action": "Load the Home Page.",
+          "expected": "The Strategic Direction section does not render anywhere on the Home Page."
+        }
+      ]
+    },
+    {
+      "id": 135556,
+      "title": "Verify that a Site Content Editor can create, publish, and see a new pillar card live on the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "Regression",
+        "UAT"
+      ],
+      "description": "Full E2E: add a new pillar card with valid data, save as draft, preview, publish, refresh cache, verify on live Home Page.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor.",
+          "expected": "Login succeeds."
+        },
+        {
+          "action": "Click Add Pillar Card and fill all mandatory fields with valid data.",
+          "expected": "Form fields populated."
+        },
+        {
+          "action": "Save as draft.",
+          "expected": "Draft saved successfully."
+        },
+        {
+          "action": "Preview the card.",
+          "expected": "Preview shows the card as designed."
+        },
+        {
+          "action": "Publish the section.",
+          "expected": "Publish succeeds with success toast."
+        },
+        {
+          "action": "Refresh cache and load the Home Page.",
+          "expected": "The new pillar card is visible in the live carousel on the Home Page."
+        }
+      ]
+    },
+    {
+      "id": 135557,
+      "title": "Verify that editing an existing published pillar card reflects on the Home Page after cache refresh",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "Regression"
+      ],
+      "description": "An existing published &quot;Mission&quot; pillar card's description is edited.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor and open the existing \"Mission\" pillar card.",
+          "expected": "Card opens with current data."
+        },
+        {
+          "action": "Change the description text and save/publish.",
+          "expected": "Save/publish succeeds."
+        },
+        {
+          "action": "Refresh cache and reload the Home Page.",
+          "expected": "The Home Page displays the updated Mission description."
+        }
+      ]
+    },
+    {
+      "id": 135558,
+      "title": "Verify that deleting a pillar card removes it from the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High"
+      ],
+      "description": "The &quot;Objectives&quot; pillar card is deleted from the CMS.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor and open the \"Objectives\" pillar card.",
+          "expected": "Card opens."
+        },
+        {
+          "action": "Click Delete and confirm.",
+          "expected": "Card is deleted; deletion confirmed."
+        },
+        {
+          "action": "Refresh cache and reload the Home Page, navigate the carousel fully.",
+          "expected": "Carousel now cycles only Vision and Mission; Objectives never appears."
+        }
+      ]
+    },
+    {
+      "id": 135559,
+      "title": "Verify that unpublishing the Strategic Direction section removes it from the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High"
+      ],
+      "description": "A previously published section is unpublished via the CMS action.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor and open the Strategic Direction section.",
+          "expected": "Section opens showing Published status."
+        },
+        {
+          "action": "Click Unpublish.",
+          "expected": "Status changes to Unpublished with success toast."
+        },
+        {
+          "action": "Refresh cache and reload the Home Page.",
+          "expected": "The section no longer renders on the Home Page."
+        }
+      ]
+    },
+    {
+      "id": 135560,
+      "title": "Verify that saving the section as draft does not expose changes to public visitors",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High"
+      ],
+      "description": "Editor makes changes and saves as draft without publishing.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor and edit the section heading.",
+          "expected": "Edit made."
+        },
+        {
+          "action": "Click Save as Draft (do not publish).",
+          "expected": "Draft saved; success toast shown."
+        },
+        {
+          "action": "Load the Home Page as a public visitor.",
+          "expected": "Public Home Page still displays the previously published heading, not the draft change."
+        }
+      ]
+    },
+    {
+      "id": 135561,
+      "title": "Verify that submitting the section for review does not publish it until approved",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High"
+      ],
+      "description": "Editor submits the section for review via the workflow action.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor and make a content change.",
+          "expected": "Change made."
+        },
+        {
+          "action": "Click \"Submit for Review\".",
+          "expected": "Section status becomes Pending Review; success toast shown."
+        },
+        {
+          "action": "Load the Home Page as a public visitor before any approval action.",
+          "expected": "Public Home Page still shows the last-published (pre-change) content."
+        }
+      ]
+    },
+    {
+      "id": 135562,
+      "title": "Verify that publishing is blocked when a mandatory field is left empty",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High",
+        "Regression"
+      ],
+      "description": "Editor attempts to publish the section with Section Heading (EN) blank.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Log in as Site Content Editor and clear Section Heading (EN).",
+          "expected": "Field cleared."
+        },
+        {
+          "action": "Click Publish.",
+          "expected": "Publish is blocked; inline validation error \"Section Heading (EN) is required.\" is shown; the section remains in its previous status."
+        }
+      ]
+    },
+    {
+      "id": 135563,
+      "title": "Verify that canceling the Add Pillar Card form discards entered data",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-High"
+      ],
+      "description": "Editor fills the Add Pillar Card form partially/fully then cancels instead of saving.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Click Add Pillar Card and fill all fields with valid data.",
+          "expected": "Form filled."
+        },
+        {
+          "action": "Click Cancel/close the form without saving.",
+          "expected": "Form closes without a save action."
+        },
+        {
+          "action": "Check the pillar card list.",
+          "expected": "No new pillar card was created; the previous card list is unchanged."
+        }
+      ]
+    },
+    {
+      "id": 135564,
+      "title": "Verify that Section Tag (EN) accepts valid text and saves successfully",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Verifies a valid value within the 50-char limit saves correctly. Test data: Section Tag (EN) = &quot;Our Pillars&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter \"Our Pillars\" in Section Tag (EN).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains \"Our Pillars\"."
+        }
+      ]
+    },
+    {
+      "id": 135565,
+      "title": "Verify that Section Tag (EN) can be left empty since it is optional",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Field is optional per the field table.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Leave Section Tag (EN) blank.",
+          "expected": "Field empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds with no validation error for this field."
+        }
+      ]
+    },
+    {
+      "id": 135566,
+      "title": "Verify that Section Tag (EN) rejects input exceeding 50 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a 51-character string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a 51-character string in Section Tag (EN).",
+          "expected": "Value entered/truncated by field constraint."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "A max-length validation error is shown and the value is not saved beyond 50 characters."
+        }
+      ]
+    },
+    {
+      "id": 135567,
+      "title": "Verify that Section Tag (EN) handles special/script characters safely",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Tag (EN) = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter the script string in Section Tag (EN).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds, value stored as plain text."
+        },
+        {
+          "action": "View the value on the Home Page (if section is published).",
+          "expected": "The script does not execute on the frontend; it renders as literal escaped text or is stripped."
+        }
+      ]
+    },
+    {
+      "id": 135568,
+      "title": "Verify that Section Tag (EN) value persists after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Tag (EN) = &quot;Our Pillars&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter and save \"Our Pillars\" in Section Tag (EN).",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the management screen.",
+          "expected": "Field still shows \"Our Pillars\" after reload."
+        }
+      ]
+    },
+    {
+      "id": 135569,
+      "title": "Verify that canceling an edit to Section Tag (EN) discards the change",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Existing value is &quot;Our Pillars&quot;; editor types a new value then cancels.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Change Section Tag (EN) from \"Our Pillars\" to \"Test Value\".",
+          "expected": "New value entered in the field."
+        },
+        {
+          "action": "Click Cancel instead of Save.",
+          "expected": "Form closes without saving."
+        },
+        {
+          "action": "Reopen the management screen.",
+          "expected": "Section Tag (EN) still shows \"Our Pillars\", unchanged."
+        }
+      ]
+    },
+    {
+      "id": 135570,
+      "title": "Verify that Section Tag (AR) accepts valid Arabic text and saves successfully",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Tag (AR) = &quot;ركائزنا الاستراتيجية&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter \"ركائزنا الاستراتيجية\" in Section Tag (AR).",
+          "expected": "Value entered, displayed RTL."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains the Arabic value."
+        }
+      ]
+    },
+    {
+      "id": 135571,
+      "title": "Verify that Section Tag (AR) can be left empty since it is optional",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Tag (AR) = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Leave Section Tag (AR) blank.",
+          "expected": "Field empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds with no validation error for this field."
+        }
+      ]
+    },
+    {
+      "id": 135572,
+      "title": "Verify that Section Tag (AR) rejects input exceeding 50 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a 51-character Arabic string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a 51-character Arabic string in Section Tag (AR).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "A max-length validation error is shown; value not saved beyond 50 characters."
+        }
+      ]
+    },
+    {
+      "id": 135573,
+      "title": "Verify that Section Tag (AR) value persists after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Tag (AR) = &quot;ركائزنا الاستراتيجية&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter and save the Arabic value.",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the management screen.",
+          "expected": "Field still shows the same Arabic value after reload."
+        }
+      ]
+    },
+    {
+      "id": 135574,
+      "title": "Verify that Section Heading (EN) accepts valid text and saves successfully",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Heading (EN) = &quot;Our Strategic Direction&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter \"Our Strategic Direction\" in Section Heading (EN).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains the value."
+        }
+      ]
+    },
+    {
+      "id": 135575,
+      "title": "Verify that Section Heading (EN) is rejected when left empty",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Mandatory field. Test data: Section Heading (EN) = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Clear Section Heading (EN).",
+          "expected": "Field empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Validation error \"Section Heading (EN) is required.\" shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135576,
+      "title": "Verify that Section Heading (EN) rejects input exceeding 200 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a 201-character string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a 201-character string in Section Heading (EN).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Max-length validation error shown; value not saved beyond 200 characters."
+        }
+      ]
+    },
+    {
+      "id": 135577,
+      "title": "Verify that Section Heading (EN) handles special/script characters safely",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Heading (EN) = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter the script string in Section Heading (EN).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Save and publish.",
+          "expected": "Save/publish succeeds, stored as plain text."
+        },
+        {
+          "action": "View the heading on the Home Page.",
+          "expected": "The script does not execute; heading renders as literal escaped text."
+        }
+      ]
+    },
+    {
+      "id": 135578,
+      "title": "Verify that Section Heading (EN) value persists after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Heading (EN) = &quot;Our Strategic Direction&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter and save the heading.",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the management screen.",
+          "expected": "Field still shows \"Our Strategic Direction\" after reload."
+        }
+      ]
+    },
+    {
+      "id": 135579,
+      "title": "Verify that canceling an edit to Section Heading (EN) restores the previous saved value",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Existing value is &quot;Our Strategic Direction&quot;; editor types a new value then cancels.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Change Section Heading (EN) to \"Test Heading\".",
+          "expected": "New value entered."
+        },
+        {
+          "action": "Click Cancel.",
+          "expected": "Form closes without saving."
+        },
+        {
+          "action": "Reopen the management screen.",
+          "expected": "Heading still shows \"Our Strategic Direction\"."
+        }
+      ]
+    },
+    {
+      "id": 135580,
+      "title": "Verify that Section Heading (AR) accepts valid Arabic text and saves successfully",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Heading (AR) = &quot;توجهنا الاستراتيجي&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter \"توجهنا الاستراتيجي\" in Section Heading (AR).",
+          "expected": "Value entered RTL."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains the value."
+        }
+      ]
+    },
+    {
+      "id": 135581,
+      "title": "Verify that Section Heading (AR) is rejected when left empty",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Mandatory field. Test data: Section Heading (AR) = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Clear Section Heading (AR).",
+          "expected": "Field empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Validation error \"عنوان القسم مطلوب.\" shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135582,
+      "title": "Verify that Section Heading (AR) rejects input exceeding 200 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a 201-character Arabic string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a 201-character Arabic string in Section Heading (AR).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Max-length validation error shown; value not saved beyond 200 characters."
+        }
+      ]
+    },
+    {
+      "id": 135583,
+      "title": "Verify that Section Heading (AR) value persists after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Heading (AR) = &quot;توجهنا الاستراتيجي&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter and save the Arabic heading.",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the management screen.",
+          "expected": "Field still shows the same Arabic value after reload."
+        }
+      ]
+    },
+    {
+      "id": 135584,
+      "title": "Verify that Section Description (EN) accepts valid text and saves successfully",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: the verified Figma EN description string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter the verified description text in Section Description (EN).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains the value."
+        }
+      ]
+    },
+    {
+      "id": 135585,
+      "title": "Verify that Section Description (EN) can be left empty since it is optional",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Section Description (EN) = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Leave Section Description (EN) blank.",
+          "expected": "Field empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds with no validation error for this field."
+        }
+      ]
+    },
+    {
+      "id": 135586,
+      "title": "Verify that Section Description (EN) rejects input exceeding 500 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a 501-character string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a 501-character string in Section Description (EN).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Max-length validation error shown; value not saved beyond 500 characters."
+        }
+      ]
+    },
+    {
+      "id": 135587,
+      "title": "Verify that Section Description (EN) value persists after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: the verified Figma EN description string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter and save the description.",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the management screen.",
+          "expected": "Field still shows the same description after reload."
+        }
+      ]
+    },
+    {
+      "id": 135588,
+      "title": "Verify that Section Description (AR) accepts valid Arabic text and saves successfully",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a valid Arabic description string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a valid Arabic description in Section Description (AR).",
+          "expected": "Value entered RTL."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains the value."
+        }
+      ]
+    },
+    {
+      "id": 135589,
+      "title": "Verify that Section Description (AR) rejects input exceeding 500 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a 501-character Arabic string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a 501-character Arabic string in Section Description (AR).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Max-length validation error shown; value not saved beyond 500 characters."
+        }
+      ]
+    },
+    {
+      "id": 135590,
+      "title": "Verify that Section Description (AR) value persists after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a valid Arabic description string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter and save the description.",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the management screen.",
+          "expected": "Field still shows the same Arabic description after reload."
+        }
+      ]
+    },
+    {
+      "id": 135591,
+      "title": "Verify that Pillar Icon accepts a valid PNG file under 2MB",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: vision-icon.png, 400KB.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Click the Pillar Icon upload control.",
+          "expected": "Upload dialog opens."
+        },
+        {
+          "action": "Select and upload vision-icon.png (400KB).",
+          "expected": "File uploads and previews."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; icon is stored and displayed in the card preview."
+        }
+      ]
+    },
+    {
+      "id": 135592,
+      "title": "Verify that Pillar Icon accepts a valid SVG file under 2MB",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: vision-icon.svg, 50KB.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Click the Pillar Icon upload control.",
+          "expected": "Upload dialog opens."
+        },
+        {
+          "action": "Select and upload vision-icon.svg (50KB).",
+          "expected": "File uploads and previews."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; icon is stored and displayed correctly."
+        }
+      ]
+    },
+    {
+      "id": 135593,
+      "title": "Verify that Pillar Icon upload is rejected when no file is selected",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Mandatory field. Test data: no file selected.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Leave the Pillar Icon upload field empty.",
+          "expected": "No file selected."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Validation error \"Pillar Icon is required.\" shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135594,
+      "title": "Verify that Pillar Icon upload is rejected when the file exceeds 2MB",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: vision-icon-large.png, 3MB.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Upload vision-icon-large.png (3MB) in Pillar Icon.",
+          "expected": "File selected."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "A file-size validation error is shown; the file is not saved."
+        }
+      ]
+    },
+    {
+      "id": 135595,
+      "title": "Verify that Pillar Icon upload is rejected for an unsupported file format",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: vision-icon.jpg.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Upload vision-icon.jpg in Pillar Icon.",
+          "expected": "File selected."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "A file-format validation error is shown (PNG/SVG only); the file is not saved."
+        }
+      ]
+    },
+    {
+      "id": 135596,
+      "title": "Verify that the uploaded Pillar Icon persists after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: vision-icon.png, 400KB.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Upload and save vision-icon.png.",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the pillar card edit screen.",
+          "expected": "The same icon still displays on reload."
+        }
+      ]
+    },
+    {
+      "id": 135597,
+      "title": "Verify that a Pillar Icon can be replaced with a new image",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Card currently has vision-icon.png. Test data: replacement vision-icon-v2.svg.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Open the Vision pillar card.",
+          "expected": "Card opens showing the old icon."
+        },
+        {
+          "action": "Upload vision-icon-v2.svg over the existing icon.",
+          "expected": "New file uploads, replacing the preview."
+        },
+        {
+          "action": "Save and reload.",
+          "expected": "Save succeeds; reload shows only the new icon, not the old one."
+        }
+      ]
+    },
+    {
+      "id": 135598,
+      "title": "Verify that Pillar Title (EN) accepts valid text and saves successfully",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Pillar Title (EN) = &quot;Vision&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter \"Vision\" in Pillar Title (EN).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains \"Vision\"."
+        }
+      ]
+    },
+    {
+      "id": 135599,
+      "title": "Verify that Pillar Title (EN) is rejected when left empty",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Mandatory field. Test data: Pillar Title (EN) = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Clear Pillar Title (EN).",
+          "expected": "Field empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Validation error \"Pillar Title (EN) is required.\" shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135600,
+      "title": "Verify that Pillar Title (EN) rejects input exceeding 100 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a 101-character string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a 101-character string in Pillar Title (EN).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Max-length validation error shown; value not saved beyond 100 characters."
+        }
+      ]
+    },
+    {
+      "id": 135601,
+      "title": "Verify that Pillar Title (EN) value persists after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Pillar Title (EN) = &quot;Vision&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter and save \"Vision\".",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the pillar card edit screen.",
+          "expected": "Field still shows \"Vision\" after reload."
+        }
+      ]
+    },
+    {
+      "id": 135602,
+      "title": "Verify that Pillar Title (AR) accepts valid Arabic text and saves successfully",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Pillar Title (AR) = &quot;الرؤية&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter \"الرؤية\" in Pillar Title (AR).",
+          "expected": "Value entered RTL."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains the value."
+        }
+      ]
+    },
+    {
+      "id": 135603,
+      "title": "Verify that Pillar Title (AR) is rejected when left empty",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Mandatory field. Test data: Pillar Title (AR) = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Clear Pillar Title (AR).",
+          "expected": "Field empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Validation error \"عنوان الركيزة مطلوب.\" shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135604,
+      "title": "Verify that Pillar Title (AR) rejects input exceeding 100 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a 101-character Arabic string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a 101-character Arabic string in Pillar Title (AR).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Max-length validation error shown; value not saved beyond 100 characters."
+        }
+      ]
+    },
+    {
+      "id": 135605,
+      "title": "Verify that Pillar Title (AR) value persists after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Pillar Title (AR) = &quot;الرؤية&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter and save the Arabic title.",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the pillar card edit screen.",
+          "expected": "Field still shows the same Arabic value after reload."
+        }
+      ]
+    },
+    {
+      "id": 135606,
+      "title": "Verify that Pillar Description (EN) accepts valid formatted text and saves successfully",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: the verified Figma Vision pillar description with bold applied to one phrase.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter the description text in the Pillar Description (EN) rich text editor and bold one phrase.",
+          "expected": "Text entered with formatting applied in the editor."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains the text and the bold formatting."
+        }
+      ]
+    },
+    {
+      "id": 135607,
+      "title": "Verify that Pillar Description (EN) is rejected when left empty",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Mandatory field. Test data: Pillar Description (EN) = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Clear Pillar Description (EN).",
+          "expected": "Field empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Validation error \"Pillar Description (EN) is required.\" shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135608,
+      "title": "Verify that Pillar Description (EN) rejects input exceeding 1000 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a 1001-character string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a 1001-character string in Pillar Description (EN).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Max-length validation error shown; value not saved beyond 1000 characters."
+        }
+      ]
+    },
+    {
+      "id": 135609,
+      "title": "Verify that Pillar Description (EN) text and formatting persist after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: description with bold phrase, as in TC-092.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter and save the formatted description.",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the pillar card edit screen.",
+          "expected": "Field shows the same text with bold formatting still applied after reload."
+        }
+      ]
+    },
+    {
+      "id": 135610,
+      "title": "Verify that Pillar Description (AR) accepts valid formatted Arabic text and saves successfully",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a valid Arabic pillar description.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter the Arabic description in the Pillar Description (AR) rich text editor.",
+          "expected": "Text entered RTL."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains the Arabic text."
+        }
+      ]
+    },
+    {
+      "id": 135611,
+      "title": "Verify that Pillar Description (AR) is rejected when left empty",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Mandatory field. Test data: Pillar Description (AR) = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Clear Pillar Description (AR).",
+          "expected": "Field empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Validation error \"وصف الركيزة مطلوب.\" shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135612,
+      "title": "Verify that Pillar Description (AR) rejects input exceeding 1000 characters",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: a 1001-character Arabic string.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter a 1001-character Arabic string in Pillar Description (AR).",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Max-length validation error shown; value not saved beyond 1000 characters."
+        }
+      ]
+    },
+    {
+      "id": 135613,
+      "title": "Verify that Display Order accepts a valid positive integer and saves successfully",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Display Order = 1.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter 1 in Display Order.",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "Save succeeds; field retains 1."
+        }
+      ]
+    },
+    {
+      "id": 135614,
+      "title": "Verify that Display Order is rejected when left empty",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Mandatory field. Test data: Display Order = &quot;&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Clear Display Order.",
+          "expected": "Field empty."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "A required-field validation error is shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135615,
+      "title": "Verify that Display Order is rejected when set to zero",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Display Order = 0.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter 0 in Display Order.",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "A positive-number validation error is shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135616,
+      "title": "Verify that Display Order is rejected when set to a negative number",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Display Order = -1.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter -1 in Display Order.",
+          "expected": "Value entered."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "A positive-number validation error is shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135617,
+      "title": "Verify that Display Order is rejected when a non-numeric value is entered",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Display Order = &quot;abc&quot;.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter \"abc\" in Display Order.",
+          "expected": "Value entered/rejected by input mask."
+        },
+        {
+          "action": "Click Save.",
+          "expected": "A numeric-value validation error is shown; save is blocked."
+        }
+      ]
+    },
+    {
+      "id": 135618,
+      "title": "Verify that Display Order value persists after save and page reload",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Display Order = 2.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Enter and save 2 in Display Order.",
+          "expected": "Save succeeds."
+        },
+        {
+          "action": "Reload the pillar card edit screen.",
+          "expected": "Field still shows 2 after reload."
+        }
+      ]
+    },
+    {
+      "id": 135619,
+      "title": "Verify that changing Display Order updates the pillar's position in the frontend carousel",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Mission is currently Display Order 2, Objectives is 3. Test data: change Mission's Display Order to 3 and Objectives' to 2.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Edit the Mission pillar card and set Display Order to 3.",
+          "expected": "Mission's order updated and saved."
+        },
+        {
+          "action": "Edit the Objectives pillar card and set Display Order to 2.",
+          "expected": "Objectives' order updated and saved."
+        },
+        {
+          "action": "Publish and refresh cache, then load the Home Page carousel.",
+          "expected": "The frontend carousel now shows Vision then Objectives then Mission, matching the new Display Order values."
+        }
+      ]
+    },
+    {
+      "id": 135620,
+      "title": "Verify that setting Active Status to True displays the pillar card on the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Active Status = True.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set the Objectives pillar card's Active Status to True.",
+          "expected": "Status set."
+        },
+        {
+          "action": "Save, publish, and refresh cache.",
+          "expected": "Save/publish succeeds."
+        },
+        {
+          "action": "Load the Home Page carousel.",
+          "expected": "The Objectives card appears in the live carousel."
+        }
+      ]
+    },
+    {
+      "id": 135621,
+      "title": "Verify that setting Active Status to False excludes the pillar card from the Home Page",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Test data: Active Status = False.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set the Objectives pillar card's Active Status to False.",
+          "expected": "Status set."
+        },
+        {
+          "action": "Save, publish, and refresh cache.",
+          "expected": "Save/publish succeeds."
+        },
+        {
+          "action": "Load the Home Page carousel and cycle through all cards.",
+          "expected": "The Objectives card does not appear anywhere in the carousel; only active cards cycle."
+        }
+      ]
+    },
+    {
+      "id": 135622,
+      "title": "Verify that toggling a published pillar card to Inactive removes it from the Home Page without deleting the record",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "A live, published Vision card is toggled to Inactive rather than deleted.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set the Vision pillar card's Active Status to False.",
+          "expected": "Status set to False."
+        },
+        {
+          "action": "Save, publish, and refresh cache.",
+          "expected": "Save/publish succeeds."
+        },
+        {
+          "action": "Load the Home Page carousel, then reopen the CMS pillar card list.",
+          "expected": "Vision no longer appears on the Home Page, but the Vision card record still exists in the CMS pillar card list (not deleted)."
+        }
+      ]
+    },
+    {
+      "id": 135623,
+      "title": "Verify that the Strategic Direction section does not render when zero pillar cards are Active",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "Web"
+      ],
+      "description": "Section is Published but all pillar cards are set to Inactive.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set every pillar card's Active Status to False while keeping the section Published.",
+          "expected": "All cards set Inactive."
+        },
+        {
+          "action": "Refresh cache.",
+          "expected": "Cache refreshed."
+        },
+        {
+          "action": "Load the Home Page.",
+          "expected": "The Strategic Direction section does not render anywhere on the Home Page."
+        }
+      ]
+    },
+    {
+      "id": 135624,
+      "title": "Verify that an Active pillar card does not render when its parent Section is Unpublished",
+      "state": "Design",
+      "priority": 2,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "Web"
+      ],
+      "description": "Pillar Card status and Section status are independent objects.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Confirm the Vision pillar card is Active.",
+          "expected": "Vision Active confirmed."
+        },
+        {
+          "action": "Set the parent section to Unpublished.",
+          "expected": "Section status set."
+        },
+        {
+          "action": "Refresh cache and load the Home Page.",
+          "expected": "Neither the section nor the Vision card renders on the Home Page."
+        }
+      ]
+    },
+    {
+      "id": 135625,
+      "title": "Verify that a published edit is not visible to visitors until the cache is refreshed",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "Web"
+      ],
+      "description": "Relation edge case between content state and cache state.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Edit and publish a change to the Mission pillar title.",
+          "expected": "Publish succeeds."
+        },
+        {
+          "action": "Immediately load the Home Page before any cache refresh trigger.",
+          "expected": "The Home Page still shows the pre-edit title (stale cache)."
+        },
+        {
+          "action": "After the cache refresh interval/trigger, reload the Home Page.",
+          "expected": "After cache refresh, the Home Page shows the updated title."
+        }
+      ]
+    },
+    {
+      "id": 135626,
+      "title": "Verify that concurrent edits by two Site Content Editors on the same pillar card do not corrupt data",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge"
+      ],
+      "description": "Two editors open the same Vision card simultaneously and save different changes.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Editor A opens the Vision pillar card and changes the title.",
+          "expected": "Editor A's form shows the original data."
+        },
+        {
+          "action": "Editor B opens the same Vision pillar card (before Editor A saves) and changes the description.",
+          "expected": "Editor B's form also shows the original data (pre-Editor-A-save)."
+        },
+        {
+          "action": "Editor A saves, then Editor B saves.",
+          "expected": "The final saved record is a well-formed, non-corrupted card (either last-write-wins cleanly or a conflict warning is shown) - no partially-merged or broken field values."
+        }
+      ]
+    },
+    {
+      "id": 135627,
+      "title": "Verify that deleting the currently-displayed pillar card does not break the frontend carousel",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge"
+      ],
+      "description": "The Mission card is deleted while it happens to be the card most recently viewed by cached visitors.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Confirm the Mission card is Active and published.",
+          "expected": "Mission confirmed Active."
+        },
+        {
+          "action": "Delete the Mission pillar card from the CMS.",
+          "expected": "Deletion succeeds."
+        },
+        {
+          "action": "Refresh cache and load the Home Page carousel, cycling through all cards.",
+          "expected": "The carousel shows only Vision and Objectives with no blank/broken slot where Mission used to be."
+        }
+      ]
+    },
+    {
+      "id": 135628,
+      "title": "Verify that toggling a card to Inactive mid-session does not leave a broken slot for a visitor mid-carousel-navigation",
+      "state": "Design",
+      "priority": 4,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "Web"
+      ],
+      "description": "Visitor is viewing the Mission card when an editor deactivates it in another session.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Visitor loads the Home Page and navigates carousel to the Mission card.",
+          "expected": "Visitor sees Mission card."
+        },
+        {
+          "action": "In a separate CMS session, an editor sets Mission's Active Status to False and publishes.",
+          "expected": "Editor's change is published (cache not yet refreshed for the visitor's session)."
+        },
+        {
+          "action": "Visitor clicks the right arrow to move on from Mission.",
+          "expected": "Navigation proceeds without a JS error or blank card; on the visitor's next full page load (post cache-refresh), Mission no longer appears."
+        }
+      ]
+    },
+    {
+      "id": 135629,
+      "title": "Verify that carousel arrow navigation direction is mirrored correctly for Arabic (RTL)",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Bilingual",
+        "Edge",
+        "Web"
+      ],
+      "description": "Confirms whether &quot;right arrow = next&quot; holds visually/functionally once the layout mirrors.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Switch site language to Arabic.",
+          "expected": "Site in Arabic, layout mirrored."
+        },
+        {
+          "action": "Load the carousel on the Vision card.",
+          "expected": "Vision card displayed with arrow positions mirrored."
+        },
+        {
+          "action": "Click the arrow in the visually-forward (mirrored) direction.",
+          "expected": "The visually-forward arrow (now on the left, per RTL mirroring) advances to the Mission card - navigation direction matches reading direction, not raw left/right DOM position."
+        }
+      ]
+    },
+    {
+      "id": 135630,
+      "title": "Verify that the default Active Status value is defined when creating a new pillar card",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Functional-Low"
+      ],
+      "description": "Verifies whether a new card defaults to Active or Inactive.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Click Add Pillar Card.",
+          "expected": "Form opens."
+        },
+        {
+          "action": "Observe the Active Status control's initial value without changing it.",
+          "expected": "Active Status shows a defined default value."
+        },
+        {
+          "action": "Fill remaining mandatory fields and Save.",
+          "expected": "Save succeeds honoring the observed default."
+        }
+      ]
+    },
+    {
+      "id": 135631,
+      "title": "Verify that the carousel behaves correctly when clicking the right arrow on the last pillar card",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "Web"
+      ],
+      "description": "Carousel is on the last card (Objectives) with 3 total cards.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Navigate carousel to the Objectives card (last).",
+          "expected": "Objectives displayed."
+        },
+        {
+          "action": "Click the right arrow.",
+          "expected": "Arrow clicked."
+        },
+        {
+          "action": "Observe the resulting card and arrow state.",
+          "expected": "Carousel either loops back to Vision or the right arrow becomes disabled - no broken/blank state occurs."
+        }
+      ]
+    },
+    {
+      "id": 135632,
+      "title": "Verify that the carousel behaves correctly when clicking the left arrow on the first pillar card",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Edge",
+        "Web"
+      ],
+      "description": "Carousel is on the first card (Vision) with 3 total cards.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Navigate carousel to the Vision card (first).",
+          "expected": "Vision displayed."
+        },
+        {
+          "action": "Click the left arrow.",
+          "expected": "Arrow clicked."
+        },
+        {
+          "action": "Observe the resulting card and arrow state.",
+          "expected": "Carousel either loops to Objectives or the left arrow becomes disabled - no broken/blank state occurs."
+        }
+      ]
+    },
+    {
+      "id": 135633,
+      "title": "Verify that the carousel ordering is correct when two pillar cards share the same Display Order value",
+      "state": "Design",
+      "priority": 3,
+      "tags": [
+        "ABOUT",
+        "Ai_MCP_Injected",
+        "Automation",
+        "Control_Panel",
+        "Edge"
+      ],
+      "description": "Mission and Objectives are both saved with Display Order = 2.",
+      "area_path": "Qatar Chamber Website Revamp",
+      "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+      "steps": [
+        {
+          "action": "Set both Mission and Objectives to Display Order 2.",
+          "expected": "Both saved with the same value."
+        },
+        {
+          "action": "Save and publish.",
+          "expected": "Publish succeeds (no hard block, per current field spec)."
+        },
+        {
+          "action": "Load the Home Page carousel and cycle through all cards.",
+          "expected": "The carousel displays all 3 cards exactly once each in a deterministic order, with no card duplicated or dropped."
+        }
+      ]
+    }
+  ]
+}

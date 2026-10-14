@@ -1,0 +1,108 @@
+{
+ "big_bytes": 13383583,
+ "image_en": {
+  "error": "Timeout 30000ms exceeded.",
+  "deleted": false
+ },
+ "image_ar": {
+  "picker_rejected": false,
+  "field_after_pick": "QCTEST-manual-ar-baa67208d7.jpg",
+  "refusal": true,
+  "refusal_text": " \"QCTEST-manual-ar-baa67208d7.jpg\" is 12.8 MB. Banner Image (AR) accepts files up to 2 MB - choose a smaller file. Nothing was saved: choose a file within the limit, or reload the form to keep the cur",
+  "status": "",
+  "status_raw": "",
+  "deleted": false
+ },
+ "inactive": {
+  "status_after_submit": "Unknown",
+  "raw": "INACTIVE",
+  "row_actions": [
+   "data-qc-oel-history",
+   "data-qc-oel-delete",
+   "data-qc-oel-label"
+  ],
+  "history": [
+   {
+    "who": "Test Editor",
+    "when": "10/7/2026, 7:37:23 PM",
+    "comment": ""
+   },
+   {
+    "who": "Test Editor",
+    "when": "10/7/2026, 7:37:22 PM",
+    "comment": ""
+   },
+   {
+    "who": "Test Editor",
+    "when": "10/7/2026, 7:37:21 PM",
+    "comment": ""
+   },
+   {
+    "who": "Test Editor",
+    "when": "10/7/2026, 7:37:21 PM",
+    "comment": ""
+   },
+   {
+    "who": "",
+    "when": "",
+    "comment": ""
+   },
+   {
+    "who": "",
+    "when": "",
+    "comment": ""
+   },
+   {
+    "who": "",
+    "when": "",
+    "comment": ""
+   },
+   {
+    "who": "",
+    "when": "",
+    "comment": ""
+   },
+   {
+    "who": "",
+    "when": "",
+    "comment": ""
+   },
+   {
+    "who": "",
+    "when": "",
+    "comment": ""
+   },
+   {
+    "who": "",
+    "when": "",
+    "comment": ""
+   },
+   {
+    "who": "",
+    "when": "",
+    "comment": ""
+   },
+   {
+    "who": "",
+    "when": "",
+    "comment": ""
+   }
+  ],
+  "edit_banner": "Skip to Main Content\nOpen Accessibility Menu\nManage: Promotional Banner\nRestricted Page\nQatar Chamber\n2230\nHome\nSearch Results\nNewsletter Unsubscribe\nNews\nPodcast\nContact Us\nEvent Media, PR & Communications Support\nEvent Media/PR Request Fo",
+  "deleted": true
+ },
+ "rows_before_sweep": [
+  "Verified by Qatar Chamber — stand out with trusted verification",
+  "Qatar Chamber Commercial & Industrial Directory — register your business",
+  "Get Verified by Qatar Chamber",
+  "QCTEST-135133-file"
+ ],
+ "swept": {
+  "QCTEST-135133-file": true
+ },
+ "rows_final": [
+  "Verified by Qatar Chamber — stand out with trusted verification",
+  "Qatar Chamber Commercial & Industrial Directory — register your business",
+  "Get Verified by Qatar Chamber"
+ ]
+}

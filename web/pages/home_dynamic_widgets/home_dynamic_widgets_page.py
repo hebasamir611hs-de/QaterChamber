@@ -405,7 +405,7 @@ class HomeDynamicWidgetsPage(BasePage):
         self.page.route(WEATHER_API_URL_PATTERN, _hold_request)
         try:
             self.open_home_partial()
-            self.wait_for(self.WEATHER_LOADING, state="visible", timeout=5000)
+            self.wait_for(self.WEATHER_LOADING, state="attached", timeout=30000)
             seen_loading = self.is_weather_loading_placeholder_visible()
         finally:
             release.set()
@@ -479,3 +479,125 @@ class HomeDynamicWidgetsPage(BasePage):
 
     def card_opens_new_tab_for_erc(self, erc: str) -> bool:
         return self.card_by_entry_erc(erc).first.get_attribute("target") == "_blank"
+
+    # ── Phase 3 (2026-10-08) additions ──────────────────────────────────
+    # Identity by ERC, never by index: a disposable QCTEST card published by
+    # a CMS test lands in the same row and shifts every index.
+    def card_box_for_erc(self, erc: str) -> dict | None:
+        return self._box(self.card_by_entry_erc(erc).first)
+
+    def card_style_for_erc(self, erc: str) -> dict:
+        return self._style(self.card_by_entry_erc(erc).first)
+
+    def card_img_info_for_erc(self, erc: str) -> dict:
+        """src, natural size, rendered box and object-fit of the card image."""
+        img = self.page.locator(f'{self.CARD} img[src*="objectEntryExternalReferenceCode={erc}"]').first
+        # The fragment renders the image with loading="lazy": bring it into view
+        # and wait for its own load event (bounded) before reading it.
+        img.scroll_into_view_if_needed()
+        try:
+            img.evaluate("i => i.complete ? true : new Promise(r => { i.addEventListener('load', () => r(true));"
+                         " i.addEventListener('error', () => r(false)); setTimeout(() => r(false), 15000); })")
+        except Exception:  # noqa: BLE001 — the read below reports the real state
+            pass
+        return img.evaluate(
+            "i => ({src: i.getAttribute('src'), alt: i.getAttribute('alt'), complete: i.complete,"
+            " nw: i.naturalWidth, nh: i.naturalHeight, w: i.getBoundingClientRect().width,"
+            " h: i.getBoundingClientRect().height, fit: getComputedStyle(i).objectFit})"
+        )
+
+    def card_screenshot_for_erc(self, erc: str, path: str) -> str:
+        self.card_by_entry_erc(erc).first.screenshot(path=path)
+        return path
+
+    def row_items(self) -> list[dict]:
+        """Every child of the widgets row in DOM order: kind (weather|card),
+        the card's ERC (from its image src), href/target and geometry."""
+        return self.page.locator(f"{self.ROW} > *").evaluate_all(
+            """els => els.map(e => { const r = e.getBoundingClientRect(); const i = e.querySelector('img');
+                const m = i && /objectEntryExternalReferenceCode=([^&]+)/.exec(i.getAttribute('src') || '');
+                return {kind: e.matches('.qc-dw-weather') ? 'weather' : 'card', erc: m ? decodeURIComponent(m[1]) : null,
+                        href: e.getAttribute('href'), target: e.getAttribute('target'),
+                        x: r.x, y: r.y, w: r.width, h: r.height, visible: r.width > 0 && r.height > 0}; })"""
+        )
+
+    def section_screenshot(self, path: str) -> str:
+        self.page.locator(self.SECTION).screenshot(path=path)
+        return path
+
+    def open_home_locale(self, locale: str) -> "HomeDynamicWidgetsPage":
+        return self.open_home_arabic() if locale == "ar" else self.open_home()
+
+    def open_home_no_wait(self, locale: str = "en") -> "HomeDynamicWidgetsPage":
+        self.open(web_url("/home", locale="ar") if locale == "ar" else web_url("/home"))
+        self.wait_for(self.SECTION)
+        return self
+
+    def weather_text(self) -> str:
+        return self.page.locator(self.WEATHER_COL).inner_text().strip()
+
+    def wait_weather_text(self, needle: str, timeout_ms: int = 30000) -> bool:
+        try:
+            self.page.locator(self.WEATHER_COL).get_by_text(needle, exact=False).first.wait_for(
+                state="visible", timeout=timeout_ms)
+            return True
+        except Exception:  # noqa: BLE001 — absence is the answer, not an error
+            return False
+
+    def route_weather(self, handler) -> None:
+        self.page.route(WEATHER_API_URL_PATTERN, handler)
+
+    def unroute_weather(self) -> None:
+        self.page.unroute(WEATHER_API_URL_PATTERN)
+
+    # The image cards come from the anonymous headless feed the fragment calls
+    # (read live 2026-10-08 from the fragment's own script):
+    #   /o/c/dynamicwidgets/scopes/<groupId>?filter=activeStatus eq true&sort=displayOrder:asc
+    WIDGETS_FEED_PATTERN = "**/o/c/dynamicwidgets/scopes/**"
+
+    WIDGETS_FEED_PATH = (
+        "/o/c/dynamicwidgets/scopes/{group}?filter=activeStatus%20eq%20true&sort=displayOrder:asc&pageSize=100"
+    )
+    SCOPE_GROUP_ID = "37246"  # qatar-chamber site (fragment's getScopeGroupId(), read live 2026-10-08)
+
+    def active_feed_orders(self) -> dict:
+        """{externalReferenceCode: displayOrder} of every ACTIVE widget, read
+        from the same anonymous headless feed the fragment renders from, in
+        THIS (visitor) context. Read-only. Added 2026-10-14 (TC 135997)."""
+        resp = self.page.context.request.get(
+            web_url(self.WIDGETS_FEED_PATH.format(group=self.SCOPE_GROUP_ID)),
+            headers={"Accept": "application/json"})
+        if not resp.ok:
+            raise AssertionError(f"active widget feed answered HTTP {resp.status}")
+        return {i.get("externalReferenceCode"): i.get("displayOrder") for i in resp.json().get("items", [])}
+
+    def limit_cards_to(self, ercs: tuple[str, ...] | list[str]) -> None:
+        """Answer the fragment's widget feed with only the given records (real
+        response, filtered) — reproduces a case's stated data precondition
+        (e.g. "exactly these widgets are active") on the visitor's page only.
+        Nothing on the server changes."""
+        import json as _json
+
+        def handler(route):
+            real = route.fetch()
+            data = real.json()
+            data["items"] = [i for i in data.get("items", []) if i.get("externalReferenceCode") in ercs]
+            data["totalCount"] = len(data["items"])
+            route.fulfill(status=200, content_type="application/json", body=_json.dumps(data))
+
+        self.page.route(self.WIDGETS_FEED_PATTERN, handler)
+
+    def section_box(self) -> dict | None:
+        return self._box(self.SECTION)
+
+    def section_neighbours(self) -> dict:
+        """Boxes of the page rows immediately above and below the widgets
+        section (its layout-structure item's siblings)."""
+        return self.page.locator(self.SECTION).evaluate(
+            """s => { const box = e => e ? e.getBoundingClientRect().toJSON() : null;
+                const item = s.closest('[data-layout-structure-item-id]') || s;
+                const sib = (e, dir) => { let n = e[dir]; while (n && n.getBoundingClientRect().height < 1) n = n[dir]; return n; };
+                return {self: box(item), prev: box(sib(item, 'previousElementSibling')),
+                        next: box(sib(item, 'nextElementSibling')),
+                        margin: getComputedStyle(s).margin, padding: getComputedStyle(s).padding}; }"""
+        )

@@ -44,12 +44,12 @@ BOTH objects have a real, dedicated Object Authoring surface:
     fields — confirmed live a `"Counter Icon Select File"`-named hidden
     textbox + sibling `Select File` button exist).
   - Both surfaces render the same generic Save-as-Draft / Submit-for-
-    Publishing / Unpublish-to-edit-as-draft state machine every other
-    Object Authoring surface on this project uses — an Approved entry's
+    Review (Editor: Publish) / Unpublish-to-edit-as-draft state machine every other
+    Object Authoring surface on this project uses — a Published entry's
     editing banner text is exactly `'...(approved). It is published, so
     Save as Draft is unavailable until you unpublish it.'` (confirmed live
     on the Section form) — same shape `ObjectAuthoringPage`'s own module
-    docstring documents project-wide, so `submit_for_publishing()` /
+    docstring documents project-wide, so `submit_for_review()` /
     `current_status()` are used as-is with no local override needed.
 
 TEST-DATA POLICY: both objects' live records are pre-existing, dedicated
@@ -83,16 +83,42 @@ Every CP test below that depends on that mechanism uses
 `ObjectAuthoringPage.field_length_rejected()` /
 `upload_file_expect_rejected()`, which accept either observable branch the
 QA cases themselves allow ("Field truncates OR shows a max-length error";
-publish is blocked = `current_status() != "Approved"`) rather than assuming
+publish is blocked = a refusal bar and no stored change (see submit_outcome())) rather than assuming
 one specific mechanism. The public (unauthenticated) Home Page surface was
 NOT affected by this — that probe succeeded cleanly and its findings are
 folded into `web/pages/home_about_summary/home_about_summary_page.py`'s own
 module docstring as real, confirmed-live results.
 """
 
-from cms.pages.components.object_authoring_page import ObjectAuthoringPage
-from config.settings import control_panel_url
-from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
+import re
+
+from cms.pages.components.object_authoring_page import (
+    ObjectAuthoringPage,
+    STATUS_DRAFT,
+    STATUS_PUBLISHED,
+)
+from cms.pages.control_panel.login_page import CmsLoginPage
+from config.settings import cms_role_credentials, control_panel_url
+from core.web.session_guard import sign_out_locally
+
+# ---- 2026-10-07 (Phase 3, B-129389) - read live as Editor/Author ----------
+# * Both manage pages render the entries list PLUS an EMPTY create form at the
+#   bare `manage-<slug>` URL (verified: every ObjectField_* input blank), so
+#   the bare URL is a safe create path - it does NOT open the live record
+#   (the singleton trap seen on other objects).
+# * Submit label: Editor sees "Publish", Author sees "Submit for Review" -
+#   ObjectAuthoringPage.SUBMIT_FOR_REVIEW_BUTTON matches both.
+# * A NEW Section entry has `Active Status` TICKED by default; a new Counter
+#   has `Counter Active Status` unticked and `Active Status` ticked. Every
+#   disposable QCTEST record here unticks every active flag so it can never
+#   render publicly.
+# * Live records: Section 52157 (QCDEMO-129389-ABOUT_US_SECTION-01), Counters
+#   52165/52171/52177/52183 (QCDEMO-129389-ABOUT_US_COUNTER-01..04) plus a
+#   5th PUBLISHED counter 148930 (51c3aa92-..., created 2026-09-13, not ours).
+#   None of these is approved for writes in docs/qa-environment-notes.md 5,
+#   so every test that writes one is gated by REAL_WRITE_ENV below.
+REAL_WRITE_ENV = "ALLOW_129389_REAL_WRITE"
+QCTEST_PREFIX = "QCTEST-"
 
 SECTION_SLUG = "about-us-section"
 COUNTER_SLUG = "about-us-counter"
@@ -127,7 +153,206 @@ FIELD_COUNTER_ACTIVE_STATUS = "Counter Active Status"
 FIELD_COUNTER_ICON = "Counter Icon"
 
 
-class HomeAboutSummaryAdminPage(ObjectAuthoringPage):
+class _DisposableRecordMixin:
+    """Create / submit / tear down disposable QCTEST records on a manage page.
+    Never deletes a record whose identifying field does not start with
+    QCTEST- (standards.md, Destructive Operations Against qcdev)."""
+
+    TITLE_FIELDS: tuple = ()  # overridden: fields whose value proves QCTEST identity
+    INVALID_INPUTS = "form :invalid"
+
+    def sign_in_as(self, role: str):
+        email, password = cms_role_credentials(role)
+        CmsLoginPage(self.page).ensure_signed_in_as(email, password)
+        return self
+
+    def open_new_form(self):
+        self.open_new_entry_form(locale="en")
+        return self
+
+    def submit_outcome(self, draft: bool = False) -> dict:
+        """Click Save as Draft / the submit button ("Publish" for Editor,
+        "Submit for Review" for Author) and report what happened WITHOUT
+        assuming success: outcome is 'nav' (saved, URL moved to
+        ?previewEntry=), 'toast', 'refused' (red bar), 'spinner', or None
+        (the click never started a save, e.g. native browser validation)."""
+        start_url = self.page.url
+        before = self._pre_save_snapshot()
+        self.click(self.SAVE_AS_DRAFT_BUTTON if draft else self.SUBMIT_FOR_REVIEW_BUTTON)
+        outcome = self._poll_save_outcome(start_url, before)
+        refusal = ""
+        try:
+            refusal = " | ".join(
+                t.strip() for t in self.page.locator(self.SAVE_REFUSAL).all_inner_texts() if t.strip()
+            )
+        except Exception:  # noqa: BLE001
+            pass
+        return {
+            "outcome": outcome,
+            "refusal": refusal[:500],
+            "invalid_inputs": self._count(self.INVALID_INPUTS),
+            "url": self.page.url,
+            "created_code": self.created_code_from_url(),
+        }
+
+    def resolve_created(self, result: dict, prefix: str) -> dict:
+        """HEALED 2026-10-07: a successful save on the create form does NOT
+        move the URL to ?previewEntry= on these objects (outcome 'spinner',
+        URL unchanged), so the URL alone cannot prove a record was or was
+        not created. Unless the form showed the refusal bar, look the
+        record up by its QCTEST prefix in the entries list."""
+        if not result.get("created_code") and result.get("outcome") != "refused":
+            found = self.find_qctest_codes(prefix)
+            result["created_code"] = found[0] if found else ""
+            result["resolved_by_list"] = found
+        return result
+
+    def safe_upload(self, field_label: str, file_path: str):
+        """upload_file() with one retry (live: the picker iframe sometimes
+        never mounts its file input within 30 s), then waits for the picker
+        to close so later form clicks are not blocked by it."""
+        try:
+            self.upload_file(field_label, file_path)
+        except Exception:  # noqa: BLE001
+            self.page.keyboard.press("Escape")
+            self.upload_file(field_label, file_path)
+        try:
+            self.page.locator(self.UPLOAD_MODAL_IFRAME).wait_for(state="detached", timeout=30000)
+        except Exception:  # noqa: BLE001
+            pass
+        return self
+
+    def maxlength(self, field_label: str):
+        """Implemented limit read live (Rule 5): the textbox's maxlength
+        attribute, else the "<n> / <max>" character counter rendered under
+        the field (live 2026-10-07: e.g. "0 / 30" under Counter Title)."""
+        box = self.page.get_by_role("textbox", name=field_label, exact=True)
+        v = box.get_attribute("maxlength")
+        if v and v.isdigit():
+            return int(v)
+        return self.char_counter(field_label)[1]
+
+    def char_counter(self, field_label: str):
+        """(current, max) from the field's "<n> / <max>" counter, or (None, None)."""
+        box = self.page.get_by_role("textbox", name=field_label, exact=True)
+        txt = box.evaluate(
+            r"el => { let n = el; for (let i = 0; i < 4 && n; i++, n = n.parentElement) {"
+            r" const m = (n.innerText || '').match(/(\d+)\s*\/\s*(\d+)/); if (m) return m[0]; } return ''; }")
+        m = re.search(r"(\d+)\s*/\s*(\d+)", txt or "")
+        return (int(m.group(1)), int(m.group(2))) if m else (None, None)
+
+    def file_name_shown(self, field_label: str) -> str:
+        """Newly selected file (uploaded_filename) or the saved one
+        (current_file_name) - whichever the field renders."""
+        for read in (self.uploaded_filename, self.current_file_name):
+            try:
+                v = read(field_label)
+            except Exception:  # noqa: BLE001
+                v = ""
+            if v:
+                return v
+        return ""
+
+    def tick(self, label: str, on: bool):
+        box = self.page.get_by_role("checkbox", name=label, exact=True)
+        box.check(force=True) if on else box.uncheck(force=True)
+        return self
+
+    def created_code_from_url(self) -> str:
+        m = re.search(r"previewEntry=([^&#]+)", self.page.url)
+        return m.group(1) if m else ""
+
+    def entry_codes(self) -> list:
+        self.open_entries_list(locale="en")
+        rows = self.page.locator(self.ENTRIES_TABLE_ROW)
+        return [rows.nth(i).locator("td").nth(0).inner_text().strip() for i in range(rows.count())]
+
+    def _identity_values(self) -> list:
+        vals = []
+        for label in self.TITLE_FIELDS:
+            try:
+                vals.append(self.field_value(label))
+            except Exception:  # noqa: BLE001
+                vals.append("")
+        return vals
+
+    def is_qctest(self, code: str) -> bool:
+        """True only if the record, re-read fresh, carries QCTEST- in one of
+        its identity fields (a validation case may leave one of them empty)."""
+        self.open_entry_by_code(code, locale="en")
+        return any(v.startswith(QCTEST_PREFIX) for v in self._identity_values())
+
+    def find_qctest_codes(self, prefix: str) -> list:
+        """Every non-QCDEMO row whose identity fields start with `prefix`
+        (a per-test QCTEST-<tc> prefix). Opens each candidate row's form."""
+        assert prefix.startswith(QCTEST_PREFIX)
+        out = []
+        for code in self.entry_codes():
+            if code.startswith("QCDEMO-"):
+                continue
+            try:
+                self.open_entry_by_code(code, locale="en")
+                if any(v.startswith(prefix) for v in self._identity_values()):
+                    out.append(code)
+            except Exception:  # noqa: BLE001
+                continue
+        return out
+
+    def goto_bare(self, url: str):
+        """Plain page.goto, bypassing BasePage.open()'s session guard, which
+        signs an anonymous / unprivileged context into TEST_USER on manage-*
+        URLs and would make a denial check pass as admin. Returns the HTTP
+        status."""
+        resp = self.page.goto(url, wait_until="domcontentloaded", timeout=60000)
+        return resp.status if resp else None
+
+    def cms_form_controls(self) -> dict:
+        return {
+            "object_fields": self.page.locator('[name*="ObjectField_"]').count(),
+            "entry_rows": self.page.locator(self.ENTRIES_TABLE_ROW).count(),
+            "workflow_buttons": self.page.locator(
+                'button:text-is("Publish"), button:text-is("Submit for Review"), button:text-is("Save as Draft")'
+            ).count(),
+            "title": self.page.title(),
+        }
+
+    def delete_qctest(self, code: str) -> bool:
+        """Delete one record by its entry code, only after re-reading it and
+        confirming its TITLE_FIELD starts with QCTEST-. Verified by
+        re-listing (the row helper's own return value is not trusted).
+        Returns True when the row is gone."""
+        if not code or not self.is_qctest(code):
+            raise AssertionError(f"refusing to delete {code!r}: not positively a QCTEST record")
+        self.open_entries_list(locale="en")
+        self.delete_entry_by_code(code)
+        self.open_entries_list(locale="en")
+        return not self.row_visible_by_code(code)
+
+    def teardown_qctest(self, codes, author_first: bool = False) -> list:
+        """Delete every code; if a row survives (e.g. Author may not delete),
+        retry as Editor. Returns the codes still present."""
+        left = []
+        for code in [c for c in codes if c]:
+            try:
+                gone = self.delete_qctest(code)
+            except AssertionError:
+                raise
+            except Exception:  # noqa: BLE001
+                gone = False
+            if not gone and author_first:
+                self.sign_in_as("Site Content Editor")
+                try:
+                    gone = self.delete_qctest(code)
+                except AssertionError:
+                    raise
+                except Exception:  # noqa: BLE001
+                    gone = False
+            if not gone:
+                left.append(code)
+        return left
+
+
+class HomeAboutSummaryAdminPage(_DisposableRecordMixin, ObjectAuthoringPage):
     """Drives the About Us Section singleton via Object Authoring. Bilingual
     rich-text Section Description uses two independently-addressable
     CKEditor iframes (see module docstring) — overrides the base class's
@@ -136,8 +361,58 @@ class HomeAboutSummaryAdminPage(ObjectAuthoringPage):
     SECTION_DESC_EDITOR_EN = 'iframe[title="editor"] >> nth=0'
     SECTION_DESC_EDITOR_AR = 'iframe[title="editor"] >> nth=1'
 
+    TITLE_FIELDS = (FIELD_SECTION_HEADING_EN, FIELD_SECTION_HEADING_AR, FIELD_SECTION_TAG_EN)
+    FIELD_ACTIVE_STATUS = "Active Status"
+
     def __init__(self, page):
         super().__init__(page, SECTION_SLUG)
+
+    def create_qctest_section(self, prefix: str, *, public: bool, image: str | None = None, **overrides):
+        """Disposable section from the create form. public=True ticks Active
+        Status and submits (Editor -> Published, i.e. VISIBLE to visitors if
+        the widget picks it up: the caller must delete it right after its
+        assertion). public=False saves an inactive Draft. Returns
+        (result, values)."""
+        self.open_new_form()
+        values = self.fill_qctest_section(prefix, image=image, **overrides)
+        if public:
+            self.tick(self.FIELD_ACTIVE_STATUS, True)
+        result = self.resolve_created(self.submit_outcome(draft=not public), prefix)
+        return result, values
+
+    def fill_qctest_section(self, prefix: str, *, image: str | None = None, **overrides) -> dict:
+        """Fill the (already open) NEW-entry form with QCTEST data and untick
+        Active Status. Pass a field label -> "" override to leave it empty;
+        `description_en` / `description_ar` keys override the rich text."""
+        values = {
+            FIELD_SECTION_TAG_EN: f"{prefix} MORE ABOUT US",
+            FIELD_SECTION_TAG_AR: f"{prefix} المزيد عنا",
+            FIELD_SECTION_HEADING_EN: f"{prefix} Qatar Chamber",
+            FIELD_SECTION_HEADING_AR: f"{prefix} غرفة قطر",
+            FIELD_YEARS_BADGE_EN: f"{prefix} 63+ Years",
+            FIELD_YEARS_BADGE_AR: f"{prefix} 63+ سنة",
+            FIELD_READ_MORE_LABEL_EN: f"{prefix} Read More",
+            FIELD_READ_MORE_LABEL_AR: f"{prefix} اقرأ المزيد",
+            FIELD_READ_MORE_URL: "https://qcdev.ihorizons.com/web/qatar-chamber/about-us",
+            "description_en": f"{prefix} description EN",
+            "description_ar": f"{prefix} الوصف",
+        }
+        values.update(overrides)
+        for field, value in values.items():
+            if field == "description_en":
+                if value:
+                    self.fill_description_en(value)
+            elif field == "description_ar":
+                if value:
+                    self.fill_description_ar(value)
+            else:
+                self.fill_text(field, value)
+        # Untick BEFORE the upload: live, the file picker's leftover overlay
+        # swallowed the checkbox click after an upload (2026-10-07).
+        self.page.get_by_role("checkbox", name=self.FIELD_ACTIVE_STATUS, exact=True).uncheck()
+        if image:
+            self.safe_upload(FIELD_BUILDING_IMAGE_PRIMARY, image)
+        return values
 
     def open_section_entry(self) -> "HomeAboutSummaryAdminPage":
         self.open_entry_by_code(SECTION_ENTRY_CODE)
@@ -168,7 +443,7 @@ class HomeAboutSummaryAdminPage(ObjectAuthoringPage):
         fill(attempted)
         if len(read().strip()) <= limit:
             return True
-        self.submit_for_publishing()
+        self.submit_for_review()
         return self.current_status() != STATUS_PUBLISHED
 
     def upload_building_image_primary(self, file_path: str) -> "HomeAboutSummaryAdminPage":
@@ -207,25 +482,28 @@ class HomeAboutSummaryAdminPage(ObjectAuthoringPage):
         }
 
     def ensure_draft(self) -> "HomeAboutSummaryAdminPage":
-        """Unpublishes the currently-open entry (if Approved) so Save as
+        """Unpublishes the currently-open entry (if Published) so Save as
         Draft becomes available — several QA cases in the 136088-136140
         batch explicitly exercise "Save Draft" against this project's
-        Approved-by-default singleton, where Save as Draft is disabled
+        Published-by-default singleton, where Save as Draft is disabled
         until unpublished (see this module's REWRITTEN docstring above).
         No-op if already Draft. Must be called on an already-open entry."""
-        if self.current_status() == STATUS_PUBLISHED:
+        if self.current_status() != STATUS_DRAFT:
             self.unpublish_to_edit_as_draft()
             self.open_section_entry()
         return self
 
-    # ---- Real cross-session logout/login (TC-136136's own mechanism —
-    # confirmed live in the prior Content & Data-era version of this class:
-    # `GET /c/portal/logout` ends the session, a subsequent authenticated
-    # navigation re-renders the real login form) --------------------------
-    LOGOUT_PATH = "/c/portal/logout"
-
+    # ---- Sign-out / login (TC-136136's mechanism). Sign-out drops this
+    # context's cookies (2026-10-13) instead of the server logout used before,
+    # which also ended the shared storageState session; the next login()
+    # drives the real form again ----------------------------------------------
     def logout_and_return(self) -> "HomeAboutSummaryAdminPage":
-        self.open(control_panel_url(self.LOGOUT_PATH))
+        """Signs this context out by dropping its cookies (2026-10-13) --
+        never a server-side logout, which also ended the SHARED storageState
+        session every other context/worker/tool was using. The page is left
+        with no session owner, so a later navigation is not silently signed
+        back in; call login_as() for the next account."""
+        sign_out_locally(self.page)
         return self
 
     def login_as(self, username: str, password: str) -> "HomeAboutSummaryAdminPage":
@@ -249,18 +527,68 @@ class HomeAboutSummaryAdminPage(ObjectAuthoringPage):
             self.fill_description_en(baseline["description_en"])
         if "description_ar" in baseline:
             self.fill_description_ar(baseline["description_ar"])
-        self.submit_for_publishing()
+        self.submit_for_review()
         return self
 
 
-class HomeAboutCounterAdminPage(ObjectAuthoringPage):
+class HomeAboutCounterAdminPage(_DisposableRecordMixin, ObjectAuthoringPage):
     """Drives one "About Us Counter" repeatable-list row via Object
     Authoring — construct once per test and call open_counter(code) to
     switch rows (all 4 seeded QCDEMO rows share this one class, unlike the
     Section's fixed singleton)."""
 
+    TITLE_FIELDS = (FIELD_COUNTER_TITLE_EN, FIELD_COUNTER_TITLE_AR)
+    FIELD_RECORD_ACTIVE_STATUS = "Active Status"
+
     def __init__(self, page):
         super().__init__(page, COUNTER_SLUG)
+
+    def fill_qctest_counter(self, prefix: str, **overrides) -> dict:
+        """Fill the (already open) NEW-entry form; both active flags unticked
+        so the record can never render on the public Home Page."""
+        values = {
+            FIELD_COUNTER_TITLE_EN: f"{prefix} Counter",
+            FIELD_COUNTER_TITLE_AR: f"{prefix} عداد",
+            FIELD_COUNTER_VALUE: "99 +",
+            FIELD_COUNTER_DISPLAY_ORDER: "900",
+        }
+        values.update(overrides)
+        for field, value in values.items():
+            if field == FIELD_COUNTER_DISPLAY_ORDER:
+                self.fill_number(field, value)
+            else:
+                self.fill_text(field, value)
+        self.set_checkbox(FIELD_COUNTER_ACTIVE_STATUS, False)
+        self.set_checkbox(self.FIELD_RECORD_ACTIVE_STATUS, False)
+        return values
+
+    def create_qctest_counter(self, prefix: str, *, public: bool, **overrides):
+        """Disposable counter. public=True ticks both active flags and
+        submits (Editor -> Published); the caller deletes it right after its
+        assertion. Returns (result, values)."""
+        self.open_new_form()
+        values = self.fill_qctest_counter(prefix, **overrides)
+        if public:
+            self.tick(FIELD_COUNTER_ACTIVE_STATUS, True)
+            self.tick(self.FIELD_RECORD_ACTIVE_STATUS, True)
+        result = self.resolve_created(self.submit_outcome(draft=not public), prefix)
+        return result, values
+
+    def set_counter_active_and_submit(self, code: str, active: bool) -> dict:
+        self.open_entry_by_code(code, locale="en")
+        self.tick(FIELD_COUNTER_ACTIVE_STATUS, active)
+        return self.submit_outcome()
+
+    def create_control_state(self) -> dict:
+        """Read-only: is a create path offered on the counter list page?"""
+        add = self.page.locator('a:text-is("+ Add New"), button:text-is("+ Add New")')
+        draft = self.page.locator(self.SAVE_AS_DRAFT_BUTTON)
+        submit = self.page.locator(self.SUBMIT_FOR_REVIEW_BUTTON)
+        return {
+            "add_new_visible": add.count() > 0 and add.first.is_visible(),
+            "save_as_draft_enabled": draft.count() > 0 and draft.first.is_enabled(),
+            "submit_enabled": submit.count() > 0 and submit.first.is_enabled(),
+        }
 
     def open_counter(self, entry_code: str) -> "HomeAboutCounterAdminPage":
         self.open_entry_by_code(entry_code)
@@ -272,7 +600,7 @@ class HomeAboutCounterAdminPage(ObjectAuthoringPage):
 
     def ensure_draft(self) -> "HomeAboutCounterAdminPage":
         """Counter-row counterpart to HomeAboutSummaryAdminPage.ensure_draft()
-        — same unpublish-if-Approved no-op-if-Draft shape, for "Save Draft"
+        — same unpublish-if-Published no-op-if-Draft shape, for "Save Draft"
         cases exercised against a counter row."""
         if self.current_status() == STATUS_PUBLISHED:
             self.unpublish_to_edit_as_draft()
@@ -358,5 +686,44 @@ class HomeAboutCounterAdminPage(ObjectAuthoringPage):
         self.set_value(baseline["value"])
         self.set_display_order(baseline["display_order"])
         self.set_active(baseline["active"])
-        self.submit_for_publishing()
+        self.submit_for_review()
         return self
+
+
+class Disposables:
+    """Tracks the QCTEST prefixes / entry codes one test created on one
+    manage page and deletes them (QCTEST-guarded, verified by re-listing).
+    Shared by the CMS and Web About Us modules."""
+
+    def __init__(self, admin):
+        self.admin, self.prefixes, self.codes = admin, [], []
+
+    def track(self, prefix: str, result: dict | None = None) -> None:
+        self.prefixes.append(prefix)
+        if result and result.get("created_code"):
+            self.codes.append(result["created_code"])
+
+    def cleanup(self) -> dict:
+        from cms.tests.live_write_guard import LiveRecord, deletes_suppressed, keep_instead_of_delete
+
+        if deletes_suppressed():
+            # PBI running rules, rule 10: nothing is deleted. Log what this test
+            # created (known codes + the QCTEST title prefixes it used) as `kept`
+            # WITHOUT searching the list for them -- that search cost ~450 s per
+            # test on qcdev (measured 2026-10-14, 136535 teardown).
+            slug = getattr(self.admin, "SLUG", None) or getattr(self.admin, "slug", None) or type(self.admin).__name__
+            kept = list(dict.fromkeys(list(self.codes) + [f"{p}*" for p in self.prefixes]))
+            for c in kept:
+                keep_instead_of_delete(LiveRecord(str(slug), c, c), c)
+            self.prefixes, self.codes = [], []
+            return {"deleted": [], "kept": kept, "left": []}
+        codes = list(self.codes)
+        for p in self.prefixes:
+            try:
+                codes += self.admin.find_qctest_codes(p)
+            except Exception:  # noqa: BLE001
+                pass
+        codes = list(dict.fromkeys(codes))
+        left = self.admin.teardown_qctest(codes, author_first=True) if codes else []
+        self.prefixes, self.codes = [], []
+        return {"deleted": [c for c in codes if c not in left], "left": left}

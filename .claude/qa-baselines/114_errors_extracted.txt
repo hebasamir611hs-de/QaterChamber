@@ -1,0 +1,348 @@
+_________________________ test_hero_and_breadcrumb_en _________________________
+E   assert False
+E    +  where False = is_bc_current_link()
+E    +    where is_bc_current_link = <web.pages.al_moltaqa_magazine.al_moltaqa_magazine_page.AlMoltaqaMagazinePage object at 0x000001755E5C0C20>.is_bc_current_link
+___________________ test_draft_not_viewable_via_direct_url ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________ test_publish_makes_visible_as_latest_web ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_unpublish_removes_from_public_page_web _________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________________ test_latest_issue_by_date __________________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+____________________ test_archive_sorts_by_date_descending ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________ test_published_issue_persists_after_reload_web ________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_publish_newer_redesignates_latest_web __________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_draft_issue_absent_everywhere_web ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________________ test_issue_number_displayed_web _______________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________________ test_issue_title_en_displayed_web ______________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_issue_description_en_displayed_web ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________________ test_cover_image_displayed_web ________________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+________________________ test_issue_date_reflected_web ________________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+________________________ test_page_count_displayed_web ________________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________________ test_article_count_displayed_web _______________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+________________ test_pdf_attachment_read_online_download_web _________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_open_in_new_tab_true_opens_new_tab_web _________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_open_in_new_tab_false_same_tab_web ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_read_online_tab_behavior_per_issue ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+____________________ test_read_online_latest_issue_new_tab ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "networkidle" event fired
+E   ============================================================
+____________________ test_read_online_archive_card_new_tab ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+__________________ test_load_more_reveals_additional_issues ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________________ test_search_by_issue_title __________________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________________ test_search_by_issue_description _______________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________________ test_search_by_issue_number _________________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________ test_rapid_load_more_clicks_no_duplicates __________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_replace_cover_image_propagates_web ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_replace_pdf_attachment_propagates_web __________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________________ test_issue_title_ar_displayed_web ______________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_issue_description_ar_displayed_web ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_hero_figma_tokens_en_light_desktop ___________________
+E   AssertionError: assert '12px' == '14px'
+E     
+E     - 14px
+E     ?  ^
+E     + 12px
+E     ?  ^
+______________________ test_archive_section_figma_tokens ______________________
+E   AssertionError: assert '16px' == '14px'
+E     
+E     - 14px
+E     ?  ^
+E     + 16px
+E     ?  ^
+________________________ test_report_card_figma_tokens ________________________
+E   AssertionError: assert 'rgb(108, 108, 107)' == 'rgb(74, 74, 73)'
+E     
+E     - rgb(74, 74, 73)
+E     + rgb(108, 108, 107)
+__________________________ test_search_input_states ___________________________
+E   AssertionError: assert '0px' == '1px'
+E     
+E     - 1px
+E     + 0px
+____________________ test_no_search_results_empty_state_en ____________________
+E   AssertionError: assert 'No reports f... your search.' == 'No reports f...ected search.'
+E     
+E     - No reports found for the selected search.
+E     + No reports found matching your search.
+_________________________ test_mobile_viewport[page0] _________________________
+E   assert 36 >= 44
+_______ test_public_visitor_view_search_download_unauthenticated[page0] _______
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+_________________ test_browse_search_view_download_end_to_end _________________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+______________________ test_zero_match_search_message_en ______________________
+E   AssertionError: assert 'No reports f... your search.' == 'No reports f...ected search.'
+E     
+E     - No reports found for the selected search.
+E     + No reports found matching your search.
+_____________________ test_draft_record_not_on_live_page ______________________
+E   AssertionError: assert ['QCTEST-1437... Report 2025'] == ['Annual Repo... Report 2020']
+E     
+E     At index 0 diff: 'QCTEST-143728 Annual Report' != 'Annual Report 2025'
+E     Use -v to get more diff
+_________________ test_view_details_opens_preview_no_download _________________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+_________________ test_view_details_and_download_independent __________________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+___________________ test_two_reports_same_year_both_display ___________________
+E   AssertionError: assert 'QCTEST-143794-A Annual Report 2028' in []
+______________________ test_zero_match_search_message_ar ______________________
+E   AssertionError: assert '\u0644\u0645 \u064a\u062a\u0645 \u0627\u0644\u0639\u062b\u0648...\u0631 \u062a\u0637\u0627\u0628\u0642 \u0628\u062d\u062b\u0643.' == '\u0644\u0627 \u062a\u0648\u062c\u062f \u062a\u0642\u0627\u0631\u064a\u0631 \u0645\u0637\u0627\u0628\u0642\u0629 \u0644\u0628\u062d\u062b\u0643.'
+E     
+E     - \u0644\u0627 \u062a\u0648\u062c\u062f \u062a\u0642\u0627\u0631\u064a\u0631 \u0645\u0637\u0627\u0628\u0642\u0629 \u0644\u0628\u062d\u062b\u0643.
+E     + \u0644\u0645 \u064a\u062a\u0645 \u0627\u0644\u0639\u062b\u0648\u0631 \u0639\u0644\u0649 \u062a\u0642\u0627\u0631\u064a\u0631 \u062a\u0637\u0627\u0628\u0642 \u0628\u062d\u062b\u0643.
+_____________ test_new_report_created_published_appears_live_web ______________
+E   AssertionError: assert 'Draft' == 'Published'
+E     
+E     - Published
+E     + Draft
+_____________ test_edit_published_title_shows_new_value_live_web ______________
+E   playwright._impl._errors.TimeoutError: Timeout 10000ms exceeded.
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+_________________ test_unpublish_report_removes_from_live_web _________________
+E   assert 0 == 1
+E    +  where 0 = card_count()
+E    +    where card_count = <web.pages.annual_reports.annual_reports_page.AnnualReportsPage object at 0x000001756D881B20>.card_count
+__________________ test_delete_report_removes_from_live_web ___________________
+E   assert 0 == 1
+E    +  where 0 = card_count()
+E    +    where card_count = <web.pages.annual_reports.annual_reports_page.AnnualReportsPage object at 0x0000017569952B10>.card_count
+______________ test_report_title_saved_and_displayed_on_card_web ______________
+E   AssertionError: assert [] == ['QCTEST-1437... Title Check']
+E     
+E     Right contains one more item: 'QCTEST-143719 Annual Report Title Check'
+E     Use -v to get more diff
+___________ test_report_description_saved_and_displayed_on_card_web ___________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+_________________ test_cover_image_uploaded_and_displayed_web _________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________ test_publication_year_drives_sort_position_web ________________
+E   AssertionError: assert 'QCTEST-143728 Annual Report' == 'QCTEST-14373...rt Year Check'
+E     
+E     - QCTEST-143730 Annual Report Year Check
+E     ?            ^^              -----------
+E     + QCTEST-143728 Annual Report
+E     ?            ^^
+___________________ test_page_count_saved_and_displayed_web ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+__________________ test_valid_pdf_uploaded_and_publishes_web __________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+________________ test_active_status_published_appears_live_web ________________
+E   assert 0 == 1
+E    +  where 0 = card_count()
+E    +    where card_count = <web.pages.annual_reports.annual_reports_page.AnnualReportsPage object at 0x000001757414B610>.card_count
+_____________ test_replace_cover_image_removes_old_reference_web ______________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________ test_publish_blocked_then_succeeds_after_pdf_added_web ____________
+E   assert False
+E    +  where False = submit_blocked()
+E    +    where submit_blocked = <cms.pages.annual_reports.annual_report_admin_page.AnnualReportAdminPage object at 0x0000017564FA4FC0>.submit_blocked
+_____________________ test_hero_and_archive_render_en_ltr _____________________
+E   AssertionError: assert 'Search..' == 'Search.'
+E     
+E     - Search.
+E     + Search..
+E     ?        +
+______________________ test_report_card_cover_thumbnail _______________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________________ test_report_card_title ____________________________
+E   AssertionError: assert 'Private Sect... Quarter 2024' == 'Private Sect...r 2024 Report'
+E     
+E     Skipping 33 identical leading characters in diff, use -v to show
+E     - uarter 2024 Report
+E     ?            -------
+E     + uarter 2024
+________________________ test_report_card_description _________________________
+E   AssertionError: assert 'Analysis of ... comparisons.' == 'Export perfo...ring Q4 2024.'
+E     
+E     - Export performance summary for Qatar's private sector during Q4 2024.
+E     + Analysis of private-sector exports in Q4 2024, including performance by certificate of origin, destination markets, and quarterly comparisons.
+_________________________ test_tablet_viewport[page0] _________________________
+E   assert not True
+E    +  where True = has_horizontal_overflow()
+E    +    where has_horizontal_overflow = <web.pages.export_reports.export_reports_page.ExportReportsPage object at 0x000001757578E060>.has_horizontal_overflow
+_________________________ test_light_theme_rendering __________________________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+___________ test_public_visitor_browse_search_view_download[page0] ____________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+____________________ test_group_badge_name_period_derived _____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+________________ test_publish_makes_report_visible_and_correct ________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________________ test_replace_pdf_supersedes_old _______________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_unpublish_removes_from_public_page ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_____________________ test_republish_restores_visibility ______________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+________________ test_delete_removes_from_grid_and_public_page ________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_draft_report_not_visible_or_searchable _________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________ test_unpublished_report_not_visible_or_searchable ______________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________ test_admin_publish_visitor_find_view_download_e2e ______________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_view_details_opens_pdf_for_viewing ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+E   =========================== logs ===========================
+E   "commit" event fired
+E   "networkidle" event fired
+E   ============================================================
+________________________ test_no_match_search_message _________________________
+E   AssertionError: assert 'No reports match your search.' in 'No results match your search.'
+E    +  where 'No results match your search.' = groups_area_text()
+E    +    where groups_area_text = <web.pages.export_reports.export_reports_page.ExportReportsPage object at 0x000001757C416580>.groups_area_text
+_______________________ test_no_match_search_message_ar _______________________
+E   AssertionError: assert '\u0644\u0627 \u062a\u0648\u062c\u062f \u062a\u0642\u0627\u0631\u064a\u0631 \u0645\u0637\u0627\u0628\u0642\u0629 \u0644\u0628\u062d\u062b\u0643.' in '\u0644\u0627 \u062a\u0648\u062c\u062f \u0646\u062a\u0627\u0626\u062c \u0645\u0637\u0627\u0628\u0642\u0629.'
+E    +  where '\u0644\u0627 \u062a\u0648\u062c\u062f \u0646\u062a\u0627\u0626\u062c \u0645\u0637\u0627\u0628\u0642\u0629.' = groups_area_text()
+E    +    where groups_area_text = <web.pages.export_reports.export_reports_page.ExportReportsPage object at 0x0000017576727D50>.groups_area_text
+_______________________ test_hero_cta_new_tab_redirect ________________________
+E   AssertionError: assert False
+E    +  where False = <built-in method startswith of str object at 0x0000017576A11160>('https://www.madeinchinaexpo.com')
+E    +    where <built-in method startswith of str object at 0x0000017576A11160> = 'https://www.qatarchamber.com/'.startswith
+E    +      where 'https://www.qatarchamber.com/' = <Page url='https://www.qatarchamber.com/'>.url
+_________ test_public_visitor_hero_cta_redirects_to_expo_site[page0] __________
+E   AssertionError: assert False
+E    +  where False = <built-in method startswith of str object at 0x00000175767FA7E0>('https://www.madeinchinaexpo.com')
+E    +    where <built-in method startswith of str object at 0x00000175767FA7E0> = 'https://www.qatarchamber.com/'.startswith
+E    +      where 'https://www.qatarchamber.com/' = <Page url='https://www.qatarchamber.com/'>.url
+_________ test_public_visitor_card_cta_redirects_to_expo_site[page0] __________
+E   AssertionError: assert False
+E    +  where False = <built-in method startswith of str object at 0x00000175767F8B20>('https://www.madeinchinaexpo.com')
+E    +    where <built-in method startswith of str object at 0x00000175767F8B20> = 'https://www.qatarchamber.com/'.startswith
+E    +      where 'https://www.qatarchamber.com/' = <Page url='https://www.qatarchamber.com/'>.url
+___________________ test_initial_load_renders_all_controls ____________________
+E   AssertionError: assert ['All Publica...s', 'Manuals'] == ['All Publica...Manuals', ...]
+E     
+E     Right contains one more item: 'Brochures'
+E     Use -v to get more diff
+____________________ test_breadcrumb_typography_and_links _____________________
+E   AssertionError: assert False
+E    +  where False = <built-in method endswith of str object at 0x000001757CAACD50>('qatar-chamber')
+E    +    where <built-in method endswith of str object at 0x000001757CAACD50> = 'https://qcdev.ihorizons.com/web/qatar-chamber/publications'.endswith
+E    +      where 'https://qcdev.ihorizons.com/web/qatar-chamber/publications' = <built-in method rstrip of str object at 0x000001757CAACD50>('/')
+E    +        where <built-in method rstrip of str object at 0x000001757CAACD50> = 'https://qcdev.ihorizons.com/web/qatar-chamber/publications'.rstrip
+E    +          where 'https://qcdev.ihorizons.com/web/qatar-chamber/publications' = <Page url='https://qcdev.ihorizons.com/web/qatar-chamber/publications'>.url
+E    +            where <Page url='https://qcdev.ihorizons.com/web/qatar-chamber/publications'> = <web.pages.publications.publications_page.PublicationsPage object at 0x000001757CAB4910>.page
+__________________________ test_load_more_typography __________________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+____________________ test_published_card_element_inventory ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________________ test_light_theme_rendering __________________________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+__________________________ test_dark_theme_rendering __________________________
+E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.
+__________________ test_draft_not_accessible_via_direct_link __________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________ test_only_published_appear_with_correct_fields ________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_____________ test_publish_makes_visible_with_correct_fields_web ______________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+____________________ test_republish_updates_not_stale_web _____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_unpublish_removes_from_public_page_web _________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________ test_delete_removes_from_grid_and_public_page_web ______________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+____________ test_future_publication_date_appears_immediately_web _____________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________ test_deleted_record_download_link_graceful_web ________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________________ test_sort_most_downloaded __________________________
+E   ValueError: invalid literal for int() with base 10: 'PDF'
+__________________ test_load_more_reveals_additional_records __________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_view_details_increments_read_count ___________________
+E   AssertionError: assert 'publication-detail' in 'https://qcdev.ihorizons.com/web/qatar-chamber/publications'
+E    +  where 'https://qcdev.ihorizons.com/web/qatar-chamber/publications' = <Page url='https://qcdev.ihorizons.com/web/qatar-chamber/publications'>.url
+_______________ test_published_issue_persists_after_reload_cms ________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_________________ test_publish_newer_redesignates_latest_cms __________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_draft_issue_absent_everywhere_cms ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_issue_number_valid_saved_displayed ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________ test_issue_title_en_valid_saved_displayed __________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________ test_issue_description_en_valid_saved_displayed _______________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_cover_image_valid_saved_displayed ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+____________________ test_issue_date_valid_saved_reflected ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+____________________ test_page_count_valid_saved_displayed ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________ test_article_count_valid_saved_displayed ___________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+______________________ test_pdf_attachment_valid_usable _______________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_____________________ test_open_in_new_tab_defaults_true ______________________
+E   assert False is True
+E    +  where False = is_open_in_new_tab_checked()
+E    +    where is_open_in_new_tab_checked = <cms.pages.al_moltaqa_magazine.magazine_issue_admin_page.MagazineIssueAdminPage object at 0x0000017506A438F0>.is_open_in_new_tab_checked
+_____________________ test_open_in_new_tab_false_persists _____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_____________________ test_replace_cover_image_propagates _____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+___________________ test_replace_pdf_attachment_propagates ____________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+__________________ test_issue_title_ar_valid_saved_displayed __________________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.
+_______________ test_issue_description_ar_valid_saved_displayed _______________
+E   playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded.

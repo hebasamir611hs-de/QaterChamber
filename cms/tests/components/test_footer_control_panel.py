@@ -312,7 +312,7 @@ def test_valid_platform_name_en_saves(page):
                 display_order="9000", active_status=False,
             )
             admin.upload_icon_image(ICON_PNG_VALID)
-        with allure.step("Submit for Publishing — the entry reaches Approved"):
+        with allure.step("Submit for Review — the entry reaches Approved"):
             admin.save()
         with allure.step("Verify via the entries list"):
             code = admin.find_entry_code_by_alt_text_en(alt_en)

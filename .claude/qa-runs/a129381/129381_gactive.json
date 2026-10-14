@@ -1,0 +1,12 @@
+{
+ "requests": [
+  {
+   "phase": "create",
+   "method": "POST",
+   "url": "https://qcdev.ihorizons.com/home?p_p_id=com_liferay_login_web_portlet_LoginPortlet&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&_com_liferay_login_web_portlet_LoginPortlet_jakarta.portlet.action=%2Flogin%2Flogin&_com_liferay_login_web_portlet_LoginPortlet_mvcRenderCommandName=%2Flogin%2Flogin",
+   "body": "_com_liferay_login_web_portlet_LoginPortlet_formDate=1791461154690&_com_liferay_login_web_portlet_LoginPortlet_saveLastPath=false&_com_liferay_login_web_portlet_LoginPortlet_redirect=&_com_liferay_login_web_portlet_LoginPortlet_doActionAfterLogin=false&_com_liferay_login_web_portlet_LoginPortlet_login=qc.editor.test%40qatarchamber.local&_com_liferay_login_web_portlet_LoginPortlet_password=QcLifecycle%232026Sep&_com_liferay_login_web_portlet_LoginPortlet_checkboxNames=rememberMe&p_auth=Ou5Zj46H"
+  }
+ ],
+ "create_retry": "Error('net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/portal/logout')",
+ "teardown_error": "Error('net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/en/web/qatar-chamber/manage-strategic-pillar-card')"
+}

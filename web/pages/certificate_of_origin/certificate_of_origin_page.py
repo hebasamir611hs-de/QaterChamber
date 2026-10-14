@@ -629,3 +629,195 @@ class CertificateOfOriginPage(BasePage):
 
     def is_dark_mode_switch_checked(self) -> bool:
         return self.accessibility_tools.is_dark_mode_switch_checked()
+
+    # ---- 2026-10-07 additions (suite 140380 functional / compatibility cases) -------------------------------
+    # Composed only from existing locators and the shared components' public
+    # methods (no shared file edited). The language switcher is the header's own
+    # `a.qc-lang-switcher` (HeaderComponent.LANGUAGE_SWITCHER), switched with the
+    # same wait-on-URL-then-html[lang] pattern ProposalForResearchPage uses.
+    LANGUAGE_SWITCHER = "header.qc-global-site-header a.qc-lang-switcher"
+    ACC_MARK = ".qc-coo-acc-mark"
+    BODY = ".qc-coo-body"
+    LAYOUT = ".qc-coo-layout"
+    FOOTER = ".qc-global-site-footer"
+
+    def low_contrast_text(self, scope: str = ".qc-coo", normal: float = 4.5, large: float = 3.0) -> list:
+        """Visible leaf text under `normal` (or `large`) contrast against the nearest
+        opaque background (same algorithm as SectoralCommitteesPage.low_contrast_text)."""
+        return self.page.evaluate(
+            """([s, NORMAL, LARGE]) => { const parse = c => { const m = c.match(/[0-9.]+/g) || [0,0,0,0]; return [+m[0], +m[1], +m[2], m.length > 3 ? +m[3] : 1]; };
+                const lum = r => { const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+                                   return 0.2126 * f(r[0]) + 0.7152 * f(r[1]) + 0.0722 * f(r[2]); };
+                const out = [];
+                document.querySelectorAll(s + ', ' + s + ' *').forEach(e => {
+                    if (!e.offsetParent || e.closest('[aria-hidden="true"], .qc-coo-hero, .qc-coo-banner')) return;
+                    const t = [...e.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join('').trim(); if (!t) return;
+                    let n = e, bg = null; while (n && n.nodeType === 1) { const c = parse(getComputedStyle(n).backgroundColor); if (c[3] > 0) { bg = c; break; } n = n.parentElement; }
+                    bg = bg || [255, 255, 255, 1]; const st = getComputedStyle(e), fg = parse(st.color), a = fg[3] * parseFloat(st.opacity || 1);
+                    const mix = [0, 1, 2].map(i => fg[i] * a + bg[i] * (1 - a)); const l1 = lum(mix), l2 = lum(bg);
+                    const r = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+                    const big = parseFloat(st.fontSize) >= 24 || (parseFloat(st.fontSize) >= 18.66 && +st.fontWeight >= 700);
+                    if (r < (big ? LARGE : NORMAL)) out.push(String(e.className).split(' ')[0] + " '" + t.slice(0, 25) + "' = " + Math.round(r * 100) / 100);
+                }); return out; }""", [scope, normal, large])
+
+    def disable_dark_mode(self) -> "CertificateOfOriginPage":
+        """Dark -> Light through the same widget: the Dark Mode switch is a
+        toggle, so it is clicked only while checked, then the wait is on
+        `<html data-theme>` leaving 'dark'."""
+        tools = self.accessibility_tools
+        tools.click_accessibility_button()
+        self.wait_for(tools.PANEL)
+        if tools.is_dark_mode_switch_checked():
+            tools.switch_to_dark_mode()
+        self.page.wait_for_function("() => document.documentElement.getAttribute('data-theme') !== 'dark'")
+        tools.close_panel()
+        return self
+
+    def reload_coo(self) -> "CertificateOfOriginPage":
+        self.page.reload(wait_until="domcontentloaded")
+        self.wait_for(self.HERO_TITLE)
+        return self
+
+    def language_switcher_label(self) -> str:
+        return self.page.locator(self.LANGUAGE_SWITCHER).first.inner_text().strip()
+
+    def switch_language(self, target: str) -> "CertificateOfOriginPage":
+        """target 'ar' | 'en': clicks the header switcher, waits for the URL of the
+        same COO page in the target locale, then for html[lang] to flip."""
+        self.page.locator(self.LANGUAGE_SWITCHER).first.click()
+        expected = web_url(COO_PATH, locale=target).split("?")[0].rstrip("/")
+        self.wait_for_url(lambda url: url.split("?")[0].split("#")[0].rstrip("/") == expected, timeout=30000)
+        self.page.wait_for_function(
+            "(lang) => (document.documentElement.getAttribute('lang') || '').toLowerCase().startsWith(lang)",
+            arg=target, timeout=15000)
+        self.wait_for(self.HERO_TITLE)
+        return self
+
+    def scroll_y(self) -> float:
+        return self.page.evaluate("() => window.scrollY")
+
+    def page_height(self) -> float:
+        return self.page.evaluate("() => document.documentElement.scrollHeight")
+
+    def click_index_entry(self, label: str) -> None:
+        """Clicks the sticky index entry whose label reads `label` and waits until
+        the entry carries `is-active` and scrolling has stopped."""
+        entry = self.page.locator(f'{self.INDEX_ITEM}:has({self.INDEX_LABEL}:text-is("{label}"))').first
+        entry.click()
+        self.page.wait_for_function(
+            """(label) => [...document.querySelectorAll('.qc-coo-index-item.is-active .qc-coo-index-label')]
+                          .some(e => e.textContent.trim() === label)""", arg=label, timeout=15000)
+        self.page.evaluate(
+            """() => new Promise(res => { let last = -1, still = 0; const tick = () => {
+                   if (window.scrollY === last) { if (++still >= 5) return res(true); } else { still = 0; last = window.scrollY; }
+                   requestAnimationFrame(tick); }; tick(); })""")
+
+    def section_title_top(self, section_id: str) -> float:
+        return self.page.locator(self.section_title_selector(section_id)).first.evaluate(
+            "e => e.getBoundingClientRect().top")
+
+    def section_top(self, section_id: str) -> float:
+        return self.page.locator(f"#{section_id}").first.evaluate("e => e.getBoundingClientRect().top")
+
+    def index_viewport_top(self) -> float:
+        return self.page.locator(self.INDEX).first.evaluate("e => e.getBoundingClientRect().top")
+
+    def accordion_titles(self) -> list:
+        return [t.strip() for t in self.page.locator(self.ACC_TITLE).all_inner_texts()]
+
+    def is_accordion_answer_visible(self, title: str) -> bool:
+        return self._accordion_item(title).locator(self.ACC_ANSWER).is_visible()
+
+    def accordion_item_open_class(self, title: str) -> bool:
+        return "is-open" in (self._accordion_item(title).get_attribute("class") or "").split()
+
+    def accordion_chevron_transform(self, title: str) -> str:
+        """Computed transform of the header's chevron svg (the rotation state)."""
+        # `.qc-coo-acc-mark` rotates 45deg under `.qc-coo-acc-item.is-open` (page CSS, anonymous GET
+        # 2026-10-07: reports/locators/certificate_of_origin/coo_en_anon_20261007.html).
+        return self._accordion_item(title).locator(self.ACC_MARK).first.evaluate(
+            "e => getComputedStyle(e).transform")
+
+    def collapse_accordion_item(self, title: str) -> None:
+        item = self._accordion_item(title)
+        question = item.locator(self.ACC_QUESTION)
+        if question.get_attribute("aria-expanded") == "true":
+            question.click()
+        self.page.wait_for_function(
+            """(title) => { const i = [...document.querySelectorAll('.qc-coo-acc-item')].find(x =>
+                   (x.querySelector('.qc-coo-acc-title') || {}).textContent.trim() === title);
+                 return i && i.querySelector('.qc-coo-acc-q').getAttribute('aria-expanded') === 'false'; }""",
+            arg=title)
+        self.page.wait_for_function("() => document.getAnimations().every(a => a.playState !== 'running')")
+
+    def section_height(self, section_id: str) -> float:
+        return self.page.locator(f"#{section_id}").first.bounding_box()["height"]
+
+    def href_of(self, locator: str, index: int = 0) -> str:
+        return self.page.locator(locator).nth(index).get_attribute("href") or ""
+
+    def target_of(self, locator: str, index: int = 0) -> str:
+        return self.page.locator(locator).nth(index).get_attribute("target") or ""
+
+    def click_expect_popup(self, locator: str, index: int = 0):
+        """Clicks and returns the new tab (Playwright Page) the control opens."""
+        with self.page.context.expect_page(timeout=20000) as info:
+            self.page.locator(locator).nth(index).click()
+        popup = info.value
+        try:
+            popup.wait_for_load_state("domcontentloaded", timeout=30000)
+        except Exception:  # noqa: BLE001 — an external destination may never finish loading
+            pass
+        return popup
+
+    def tab_to(self, locator: str, max_presses: int = 120) -> bool:
+        """Presses Tab until the element matching `locator` holds focus."""
+        self.page.locator("body").click(position={"x": 1, "y": 1})
+        for _ in range(max_presses):
+            self.page.keyboard.press("Tab")
+            if self.page.locator(locator).first.evaluate("e => e === document.activeElement"):
+                return True
+        return False
+
+    def focus_indicator(self, locator: str) -> dict:
+        return self.page.locator(locator).first.evaluate(
+            "e => { const s = getComputedStyle(e); return {outline: s.outlineStyle, width: s.outlineWidth,"
+            " shadow: s.boxShadow, visible: e.matches(':focus-visible')}; }")
+
+    def press_enter_expect_popup(self):
+        with self.page.context.expect_page(timeout=20000) as info:
+            self.page.keyboard.press("Enter")
+        return info.value
+
+    def is_enabled_link(self, locator: str, index: int = 0) -> bool:
+        return self.page.locator(locator).nth(index).evaluate(
+            "e => e.tagName.toLowerCase() === 'a' && !!e.getAttribute('href') && !e.hasAttribute('disabled')"
+            " && e.getAttribute('aria-disabled') !== 'true' && getComputedStyle(e).pointerEvents !== 'none'")
+
+    def download_via_button(self):
+        """Clicks the download card's button; returns the Playwright Download."""
+        with self.page.expect_download(timeout=30000) as info:
+            self.page.locator(self.DOWNLOAD_BUTTON).first.click()
+        return info.value
+
+    def http_status(self, url: str) -> int:
+        return self.page.request.get(url).status
+
+    def boxes(self, locator: str) -> list:
+        loc = self.page.locator(locator)
+        return [loc.nth(i).bounding_box() for i in range(loc.count())]
+
+    def clipped_text_in(self, scope: str = ".qc-coo") -> list:
+        """Visible leaf elements whose text overflows their own box."""
+        return self.page.evaluate(
+            """(s) => [...document.querySelectorAll(s + ' *')].filter(e => e.offsetParent && e.children.length === 0
+                   && e.textContent.trim() && !/sr-only/.test(String(e.className))
+                   && e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).overflowX !== 'visible')
+                   .map(e => String(e.className) + ' ' + e.textContent.trim().slice(0, 30))""", scope)
+
+    def surface_colors(self, scope: str = ".qc-coo") -> list:
+        """Distinct opaque background colours painted inside `scope`."""
+        return self.page.evaluate(
+            """(s) => [...new Set([document.querySelector(s), ...document.querySelectorAll(s + ' *')]
+                   .filter(e => e && e.offsetParent !== null).map(e => getComputedStyle(e).backgroundColor)
+                   .filter(c => c && !/rgba\\([^)]*,\\s*0\\)$/.test(c) && c !== 'transparent'))]""", scope)

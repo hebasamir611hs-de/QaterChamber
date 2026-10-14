@@ -5,6 +5,8 @@ Web-platform cases for PBI 130716 ("QC - Councils, Committees & Partnerships -
 001 - Sectoral Committees and Business Councils"), suite 140375 — 30 approved
 Automation cases: 146820-146833, 146835-146839, 146840-146848, 146886, 147044
 (146849 is Manual; 146834 is not in the batch).
+2026-10-07 batch: +21 functional/edge cases (146854, 146857-146860, 147033-147043,
+147045, 147046, 147055-147057) at the end of this module, scripted offline.
 
 Page: /web/qatar-chamber/sectoral-committees-and-business-councils (AR: /ar).
 Every test uses a fresh UNAUTHENTICATED context (Chrome/Edge/Firefox via the
@@ -904,3 +906,403 @@ def test_dark_theme(page):
     if below_aa:
         check.note("Expanded panel text between 3:1 and 4.5:1 (design tokens): " + "; ".join(below_aa))
     check.assert_clean()
+
+
+# ===========================================================================
+# 2026-10-07 batch (OFFLINE scripted, not executed) — the 21 remaining Web
+# Automation cases of suite 140375: 146854, 146857-146860, 147033-147043,
+# 147045, 147046, 147055-147057. Logged-out EN 1920x1080 throughout.
+# CTA targets: the configured Target URL is the card's own href; the expected
+# paths are the live nav items read anonymously 2026-10-07
+# (reports/locators/proposal_for_research/navitems_anon_20261007.json).
+# ===========================================================================
+HEALTH = "Health Committee"
+INSURANCE = "Insurance Committee"
+CONTRACTING = "Contracting Committee"
+CTA_JOIN = "Committee Joining Request"
+CTA_BCMR = "Business Council Joining Request"
+CTA_SUGGEST = "Suggestions and Complaints"
+CTA_TARGETS = {
+    CTA_JOIN: "/web/qatar-chamber/request-to-join-a-committee",
+    CTA_BCMR: "/web/qatar-chamber/business-council-membership-request",
+    CTA_SUGGEST: "/web/qatar-chamber/suggestions-and-complaints",
+}
+NUMBERS_01_12 = [f"{n:02d}" for n in range(1, 13)]
+# 147057: the case's keyword was stripped to '' by the test-management HTML
+# sanitiser (its markup was removed). Substitute: a script tag that would raise
+# an alert if executed — disclosed in the batch report.
+MARKUP_KEYWORD = "<script>alert('qc')</script>"
+
+
+def _path(url: str) -> str:
+    from urllib.parse import urlparse
+    return urlparse(url).path.rstrip("/")
+
+
+def _assert_cta_lands(sc, title):
+    i = sc.cta_index(title)
+    assert i >= 0, f"no CTA card titled {title!r}; cards are {sc.cta_titles()!r}"
+    with allure.step(f"Scroll to the CTA panel; the '{title}' card is interactive over its whole area"):
+        card = sc.hover_cta(i)
+        assert card["tag"] == "a" and card["href"], f"'{title}' card is not a link: {card!r}"
+        assert card["cursor"] == "pointer", f"'{title}' card shows cursor {card['cursor']!r}, not a pointer"
+    with allure.step(f"Click '{title}'"):
+        href = sc.attr(sc.CTA_CARD, "href", i)
+        url = sc.click_cta(i)
+    with allure.step("Read the landing page title and URL"):
+        status = sc.status_of(url)
+        assert status == 200, f"'{title}' landed on {url} with HTTP {status}"
+        assert "404" not in sc.page_title() and "not found" not in sc.page_title().lower(), sc.page_title()
+        assert _path(url) == _path(href), f"landed on {url}, not the configured Target URL {href}"
+        assert _path(url).endswith(CTA_TARGETS[title]), f"'{title}' landed on {url}, expected {CTA_TARGETS[title]}"
+
+
+@_meta("146854", "A Public Visitor reads the page, expands entries, searches and follows a CTA without logging in", "Access")
+@pytest.mark.auth
+@pytest.mark.tc_146854
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_public_visitor_journey(page):
+    """Azure TC 146854 | PBI 130716 — logged-out EN: no login prompt; Head card + Banking row expand; search
+    'Health' filters to Health Committee; Committee Joining Request CTA navigates."""
+    sc = SectoralCommitteesPage(page).open_page()
+    with allure.step("Page is fully visible with no login prompt"):
+        assert sc.box(sc.HERO) and sc.box(sc.DIRECTORY) and sc.box(sc.CTA)
+        assert "login" not in sc.current_url().lower()
+        assert sc.count("input[type='password']") == 0, "a login form is shown to the visitor"
+    with allure.step("Expand the Head card and the Banking & Investment Committee row, then search 'Health'"):
+        sc.toggle_lead()
+        assert sc.lead_expanded() and sc.visible_count(sc.LEADER) > 0
+        i = sc.row_index(BANKING)
+        assert i >= 0, f"{BANKING!r} row missing: {sc.visible_row_titles()!r}"
+        sc.toggle_row(i)
+        assert sc.row_expanded(i) and sc.row_panel_visible(i)
+        sc.search("Health")
+        assert sc.visible_row_titles() == [HEALTH]
+    _assert_cta_lands(sc, CTA_JOIN)
+
+
+@_meta("146857", "A visitor navigates from the main menu to the page and reviews it end to end", "Journey", C)
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.tc_146857
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_main_menu_journey(page):
+    """Azure TC 146857 | PBI 130716 — Home > Main Menu > Councils, Committees & Partnerships > Sectoral Committees
+    and Business Councils; Head card 12 leaders open/close; search 'Health' + expand + clear restores 12; CTA
+    Committee Joining Request lands on the webform page."""
+    sc = SectoralCommitteesPage(page).open_home()
+    with allure.step("Main Menu > Councils, Committees & Partnerships > Sectoral Committees and Business Councils"):
+        sc.open_via_main_menu()
+        assert sc.box(sc.HERO) and sc.box(sc.CRUMBS) and sc.box(sc.SECTOR)
+        assert not sc.lead_expanded(), "Head card is not collapsed on load"
+    with allure.step("Open the Head card, read the grid, close it"):
+        sc.toggle_lead()
+        assert sc.visible_count(sc.LEADER) == 12
+        sc.toggle_lead()
+        assert sc.visible_count(sc.LEADER) == 0
+    with allure.step("Search 'Health', expand Health Committee, clear the search"):
+        sc.search("Health")
+        assert sc.visible_row_titles() == [HEALTH]
+        i = sc.row_index(HEALTH)
+        sc.toggle_row(i)
+        assert sc.row_expanded(i) and sc.row_mandate_visible(i) > 0
+        sc.clear_search()
+        assert len(sc.visible_row_titles()) == 12
+    _assert_cta_lands(sc, CTA_JOIN)
+
+
+@_meta("146858", "The Committee Joining Request card navigates to the Committee Joining Request page", "CTA", C)
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.tc_146858
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_cta_committee_joining_request(page):
+    """Azure TC 146858 | PBI 130716 — card hover/pointer, same-site navigation, no 404, lands on the configured
+    Target URL (the Committee Joining Request webform)."""
+    _assert_cta_lands(SectoralCommitteesPage(page).open_page(), CTA_JOIN)
+
+
+@_meta("146859", "The Business Council Joining Request card navigates to the Business Council Joining Request page", "CTA", C)
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.tc_146859
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_cta_business_council_joining_request(page):
+    """Azure TC 146859 | PBI 130716 — card titled 'Business Council Joining Request' (Figma differs, A-6)."""
+    _assert_cta_lands(SectoralCommitteesPage(page).open_page(), CTA_BCMR)
+
+
+@_meta("146860", "The Suggestions and Complaints card navigates to the Suggestions and Complaints page", "CTA", C)
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.tc_146860
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_cta_suggestions_and_complaints(page):
+    """Azure TC 146860 | PBI 130716."""
+    _assert_cta_lands(SectoralCommitteesPage(page).open_page(), CTA_SUGGEST)
+
+
+@_meta("147033", "The breadcrumb Home link navigates to the site home page", "Hero")
+@pytest.mark.functional_low
+@pytest.mark.tc_147033
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_breadcrumb_home_link(page):
+    """Azure TC 147033 | PBI 130716 — pointer on hover; same tab; home page HTTP 200."""
+    sc = SectoralCommitteesPage(page).open_page()
+    assert sc.crumb_home_cursor() == "pointer"
+    pages_before = len(page.context.pages)
+    url = sc.click_crumb_home()
+    assert len(page.context.pages) == pages_before, "the Home link opened a new tab"
+    assert "sectoral-committees" not in url, f"still on the page: {url}"
+    assert sc.status_of(url) == 200, f"home page {url} did not answer HTTP 200"
+    sc.wait_for(sc.HEADER)
+
+
+@_meta("147034", "Clicking the Head of Sectoral committees card expands it to show the leader grid", "Leadership")
+@pytest.mark.functional_low
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.tc_147034
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_head_card_expands(page):
+    """Azure TC 147034 | PBI 130716 — collapsed (+, no grid) -> click -> aria-expanded=true, x icon, 12 leaders."""
+    sc = SectoralCommitteesPage(page).open_page()
+    assert not sc.lead_expanded() and not sc.lead_icon_open() and sc.visible_count(sc.LEADER) == 0
+    sc.toggle_lead()
+    assert sc.lead_expanded(), "aria-expanded did not become true"
+    assert sc.lead_icon_open(), "toggle did not change to the close (x) state"
+    assert sc.visible_count(sc.LEADER) == 12
+
+
+@_meta("147035", "The close control collapses the Head card again; collapsed on reload", "Leadership")
+@pytest.mark.functional_low
+@pytest.mark.tc_147035
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_head_card_collapses(page):
+    """Azure TC 147035 | PBI 130716 — expand, click x: grid gone, + icon, aria-expanded=false; reload: collapsed."""
+    sc = SectoralCommitteesPage(page).open_page()
+    sc.toggle_lead()
+    assert sc.visible_count(sc.LEADER) > 0
+    sc.toggle_lead()
+    assert sc.visible_count(sc.LEADER) == 0 and not sc.lead_expanded() and not sc.lead_icon_open()
+    sc.reload_page()
+    assert not sc.lead_expanded() and sc.visible_count(sc.LEADER) == 0
+
+
+@_meta("147036", "Clicking a committee row expands it to show the mandate panel", "Directory")
+@pytest.mark.functional_low
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.tc_147036
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_row_expands(page):
+    """Azure TC 147036 | PBI 130716 — row 01 collapsed (+, name + description only) -> expanded with
+    'Committee competencies', 'Mandate and responsibilities' and the checklist."""
+    sc = SectoralCommitteesPage(page).open_page()
+    assert sc.row_index(BANKING) == 0, f"row 01 is not {BANKING!r}: {sc.visible_row_titles()[:2]!r}"
+    assert not sc.row_expanded(0) and not sc.row_icon_open(0) and not sc.row_panel_visible(0)
+    assert sc.row_text(0, sc.ROW_TITLE) and sc.row_text(0, sc.ROW_DESC)
+    sc.toggle_row(0)
+    assert sc.row_expanded(0) and sc.row_icon_open(0)
+    assert sc.row_text(0, sc.MANDATE_EYEBROW) == "Committee competencies"
+    assert sc.row_text(0, sc.MANDATE_HEADING) == "Mandate and responsibilities"
+    assert sc.row_mandate_visible(0) > 0
+
+
+@_meta("147037", "Clicking an expanded committee row again collapses it; collapsed on reload", "Directory")
+@pytest.mark.functional_low
+@pytest.mark.tc_147037
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_row_collapses(page):
+    """Azure TC 147037 | PBI 130716."""
+    sc = SectoralCommitteesPage(page).open_page()
+    sc.toggle_row(0)
+    assert sc.row_panel_visible(0)
+    sc.toggle_row(0)
+    assert not sc.row_panel_visible(0) and not sc.row_icon_open(0) and not sc.row_expanded(0)
+    sc.reload_page()
+    assert not sc.row_expanded(0) and not sc.row_panel_visible(0)
+
+
+@_meta("147038", "Typing a committee name in the search field filters the list to that committee", "Search")
+@pytest.mark.functional_low
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.tc_147038
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_search_by_name(page):
+    """Azure TC 147038 | PBI 130716 — focus state; type 'Health' (filters as you type); only 'Health Committee' (05)."""
+    sc = SectoralCommitteesPage(page).open_page()
+    unfocused = sc.search_focus_ring()
+    sc.focus_search()
+    assert sc.search_is_focused()
+    assert sc.search_focus_ring() != unfocused, "no visible focus state on the search field"
+    sc.type_search("Health")
+    assert sc.visible_row_titles() == [HEALTH]
+    assert sc.visible_row_nums() == ["05"]
+
+
+@_meta("147039", "Clearing the search restores all 12 committees", "Search")
+@pytest.mark.functional_low
+@pytest.mark.tc_147039
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_search_clear_restores(page):
+    """Azure TC 147039 | PBI 130716 — 'Health' lists one row; cleared field shows the placeholder; 12 rows 01-12."""
+    sc = SectoralCommitteesPage(page).open_page()
+    sc.search("Health")
+    assert len(sc.visible_row_titles()) == 1
+    sc.clear_search()
+    assert sc.search_value() == "" and sc.search_placeholder() != ""
+    assert sc.visible_row_nums() == NUMBERS_01_12
+
+
+@_meta("147040", "The expanded Head card grid shows 12 leader cards in the CMS display order", "Leadership")
+@pytest.mark.functional_low
+@pytest.mark.tc_147040
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_leaders_in_cms_order(page):
+    """Azure TC 147040 | PBI 130716 — 12 cards, Number/Name/Sector none blank; order = CMS Display Order (read
+    from the same anonymous /o/c/committeeleadercards source the page uses, numeric ascending)."""
+    sc = SectoralCommitteesPage(page).open_page()
+    sc.toggle_lead()
+    cards = sc.leaders()
+    assert len(cards) == 12
+    blank = [c for c in cards if not (c["num"] and c["name"] and c["sector"])]
+    assert not blank, f"blank leader card fields: {blank!r}"
+    assert [c["num"] for c in cards] == NUMBERS_01_12
+    cms = sc.api_active_leaders()
+    assert [c["name"] for c in cards] == [c["name"] for c in cms], (
+        f"grid order {[c['name'] for c in cards]!r} != CMS Display Order {[(c['order'], c['name']) for c in cms]!r}")
+
+
+@_meta("147041", "An expanded committee shows that committee's own mandate content", "Directory")
+@pytest.mark.functional_low
+@pytest.mark.tc_147041
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_mandate_per_committee(page):
+    """Azure TC 147041 | PBI 130716 — Banking & Investment 11 bullets; QCTEST-Committee-B 1 bullet
+    'QCTEST mandate item 2 edited'; lists differ, eyebrow/heading identical.
+    PRECONDITION: the QCTEST-Committee-B record (a CMS write) must be published; gated on its presence."""
+    sc = SectoralCommitteesPage(page).open_page()
+    b = sc.row_index(BANKING)
+    sc.toggle_row(b)
+    banking = sc.row_mandate_texts(b)
+    assert len(banking) == 11, f"{BANKING} shows {len(banking)} bullets"
+    eyebrow, heading = sc.row_text(b, sc.MANDATE_EYEBROW), sc.row_text(b, sc.MANDATE_HEADING)
+    sc.toggle_row(b)
+    q = sc.row_index("QCTEST-Committee-B")
+    if q < 0:
+        pytest.skip("PRECONDITION UNAVAILABLE: no published 'QCTEST-Committee-B' committee with its mandate item "
+                    "'QCTEST mandate item 2 edited' is on the page. Step 1 (Banking, 11 bullets) ran for real above.")
+    sc.toggle_row(q)
+    other = sc.row_mandate_texts(q)
+    assert other == ["QCTEST mandate item 2 edited"], f"QCTEST-Committee-B bullets {other!r}"
+    assert other != banking
+    assert (sc.row_text(q, sc.MANDATE_EYEBROW), sc.row_text(q, sc.MANDATE_HEADING)) == (eyebrow, heading)
+
+
+@_meta("147042", "Searching by a sector keyword returns the committees whose sector text matches", "Search")
+@pytest.mark.functional_low
+@pytest.mark.tc_147042
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_search_by_sector_keyword(page):
+    """Azure TC 147042 | PBI 130716 — 'insurance' -> only 'Insurance Committee' (07); clear -> 12."""
+    sc = SectoralCommitteesPage(page).open_page()
+    sc.type_search("insurance")
+    assert sc.visible_row_titles() == [INSURANCE]
+    assert sc.visible_row_nums() == ["07"]
+    sc.clear_search()
+    assert len(sc.visible_row_titles()) == 12
+
+
+@_meta("147043", "A keyword matching no committee shows the empty/no-results state", "Search")
+@pytest.mark.functional_low
+@pytest.mark.tc_147043
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_search_no_results_state(page):
+    """Azure TC 147043 | PBI 130716 — 'zzzz123': zero rows and an empty/no-results state (text not quoted, A-10)."""
+    sc = SectoralCommitteesPage(page).open_page()
+    sc.type_search("zzzz123")
+    assert sc.visible_row_titles() == []
+    assert sc.empty_state_visible() and sc.empty_state_text(), "no empty/no-results state shown"
+    sc.clear_search()
+    assert len(sc.visible_row_titles()) == 12
+    assert not sc.empty_state_visible()
+
+
+@_meta("147045", "Two committee rows can be expanded at the same time", "Directory")
+@pytest.mark.edge
+@pytest.mark.tc_147045
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_two_rows_open(page):
+    """Azure TC 147045 | PBI 130716 — row 01 (Banking) and row 02 (Contracting) open together, own checklists,
+    no overlap."""
+    sc = SectoralCommitteesPage(page).open_page()
+    assert sc.row_index(CONTRACTING) == 1, f"row 02 is not {CONTRACTING!r}"
+    sc.toggle_row(0)
+    sc.toggle_row(1)
+    assert sc.row_expanded(0) and sc.row_expanded(1), "opening row 02 closed row 01"
+    a, b = sc.row_mandate_texts(0), sc.row_mandate_texts(1)
+    assert a and b and a != b
+    assert not _overlap(sc.row_panel_box(0), sc.row_panel_box(1))
+
+
+@_meta("147046", "The search filter applies regardless of whether a committee row is expanded", "Search")
+@pytest.mark.edge
+@pytest.mark.tc_147046
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_search_independent_of_expand(page):
+    """Azure TC 147046 | PBI 130716 — row 01 open, search 'Health' -> only Health; clear -> 12 rows."""
+    sc = SectoralCommitteesPage(page).open_page()
+    sc.toggle_row(0)
+    sc.search("Health")
+    assert sc.visible_row_titles() == [HEALTH], "the expanded row 01 stayed in the filtered list"
+    sc.clear_search()
+    assert sc.visible_row_nums() == NUMBERS_01_12
+
+
+@_meta("147055", "A rapid double-click on the Head card toggle leaves it in a consistent collapsed state", "Leadership")
+@pytest.mark.edge
+@pytest.mark.tc_147055
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_head_card_double_click(page):
+    """Azure TC 147055 | PBI 130716 — two clicks < 200 ms; after animations: collapsed, + icon, no grid."""
+    sc = SectoralCommitteesPage(page).open_page()
+    sc.double_click_lead()
+    assert not sc.lead_expanded() and not sc.lead_icon_open() and sc.visible_count(sc.LEADER) == 0, (
+        f"aria-expanded={sc.lead_expanded()}, icon open={sc.lead_icon_open()}, leaders={sc.visible_count(sc.LEADER)}")
+
+
+@_meta("147056", "A whitespace-only search keyword is treated as empty and lists all committees", "Search")
+@pytest.mark.edge
+@pytest.mark.tc_147056
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_search_whitespace_only(page):
+    """Azure TC 147056 | PBI 130716 — '   ' -> 12 rows, no no-results state; clear -> empty field, 12 rows."""
+    sc = SectoralCommitteesPage(page).open_page()
+    sc.type_search("   ")
+    assert sc.search_value() == "   "
+    assert len(sc.visible_row_titles()) == 12 and not sc.empty_state_visible()
+    sc.clear_search()
+    assert sc.search_value() == "" and len(sc.visible_row_titles()) == 12
+
+
+@_meta("147057", "Markup characters typed in the search field are treated as plain text", "Search")
+@pytest.mark.edge
+@pytest.mark.tc_147057
+@pytest.mark.parametrize("page", [D1920], indirect=True)
+def test_search_markup_plain_text(page):
+    """Azure TC 147057 | PBI 130716 — keyword entered as typed; no alert executed; no-results with zero rows;
+    clear -> 12. The case's keyword was stripped in Azure; MARKUP_KEYWORD substitutes a script tag."""
+    sc = SectoralCommitteesPage(page).open_page()
+    dialogs = sc.dialog_watch()
+    sc.type_search(MARKUP_KEYWORD)
+    assert sc.search_value() == MARKUP_KEYWORD
+    assert dialogs == [], f"a dialog was executed: {dialogs!r}"
+    assert sc.visible_row_titles() == [] and sc.empty_state_visible()
+    sc.clear_search()
+    assert len(sc.visible_row_titles()) == 12

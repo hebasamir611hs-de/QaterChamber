@@ -1,0 +1,624 @@
+[
+ {
+  "id": 133646,
+  "title": "Verify that a Site Content Editor can access the Media Center module and publish media items",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "MEDIA"
+  ],
+  "description": "Logged in as a user with the Site Content Editor role, verifies access to the Media Center module's Create/Edit Video and Album screens and the ability to publish.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as a Site Content Editor",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Navigate to the Media Center module",
+    "expected": "Media Center module is accessible"
+   },
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create Video screen opens with all fields editable and a Publish action available"
+   },
+   {
+    "action": "Open Create Album screen",
+    "expected": "Create Album screen opens with all fields editable and a Publish action available"
+   }
+  ]
+ },
+ {
+  "id": 133647,
+  "title": "Verify that forced browsing to the Media Center admin edit screen is blocked for an unauthenticated user",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "MEDIA"
+  ],
+  "description": "Verifies that directly navigating to a Media Center Create/Edit Video URL without an authenticated admin session is blocked (redirected to login / access denied), rather than exposing the admin editor.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log out of any Liferay CMS session",
+    "expected": "No active admin session"
+   },
+   {
+    "action": "Directly navigate to the Media Center Create Video admin URL",
+    "expected": "Access is denied; user is redirected to the login page (or shown an access-denied message) and the Create Video editor is never rendered"
+   }
+  ]
+ },
+ {
+  "id": 133654,
+  "title": "Verify that publishing a video in the Media Center module makes it automatically appear on the Home Page Media Gallery",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "MEDIA",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Site Content Editor creates a new video with all mandatory fields valid (Title EN = &quot;Q3 Board Update&quot;, Title AR filled, Thumbnail = valid JPG, Embed URL = a valid YouTube link, Publication Date = today, Active = True) and publishes it.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor and navigate to Media Center",
+    "expected": "Media Center accessible"
+   },
+   {
+    "action": "Create a new Video with valid Title EN/AR, Thumbnail, Embed URL, Publication Date, Active=True",
+    "expected": "All fields accepted, no validation errors"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "A Liferay generic success toast is shown; video status becomes Published"
+   },
+   {
+    "action": "Navigate to the Home Page and check the Media Gallery section",
+    "expected": "The new video card appears in the Media Gallery section under All Media and Videos"
+   }
+  ]
+ },
+ {
+  "id": 133655,
+  "title": "Verify that publishing an album (with Flickr-imported photos) makes it automatically appear on the Home Page Media Gallery",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Flickr",
+   "Functional-High",
+   "MEDIA",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Site Content Editor creates a new album with all mandatory fields valid (Title EN = &quot;Annual Gala 2026&quot;, Title AR filled, cover Thumbnail = valid JPG, photos selected from an already Flickr-imported set, Publication Date = today, Active = True) and publishes it.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor and navigate to Media Center",
+    "expected": "Media Center accessible"
+   },
+   {
+    "action": "Create a new Album with valid Title EN/AR, cover Thumbnail, photos from the Flickr-imported set, Publication Date, Active=True",
+    "expected": "All fields accepted, no validation errors"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "A Liferay generic success toast is shown; album status becomes Published"
+   },
+   {
+    "action": "Navigate to the Home Page and check the Media Gallery section",
+    "expected": "The new album card appears in the Media Gallery section under All Media and Albums"
+   }
+  ]
+ },
+ {
+  "id": 133656,
+  "title": "Verify that a video/album saved as Draft does not appear on the Home Page Media Gallery",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "MEDIA",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Site Content Editor creates a valid video and saves it as Draft (does not publish). Verifies it never surfaces on the Home Page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor and create a new Video with all valid fields",
+    "expected": "Video creation form accepts all fields"
+   },
+   {
+    "action": "Click Save as Draft (do not publish)",
+    "expected": "Video is saved with status Draft"
+   },
+   {
+    "action": "Navigate to the Home Page and check the Media Gallery section",
+    "expected": "The Draft video does not appear anywhere in the Media Gallery section, in any tab"
+   }
+  ]
+ },
+ {
+  "id": 133657,
+  "title": "Verify that deactivating (Active Status = False) a previously visible video removes it from the Home Page Media Gallery",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "MEDIA",
+   "Regression"
+  ],
+  "description": "A published video is currently visible in the Media Gallery. Admin edits it and sets Active Status = False, then saves. Verifies the video disappears from the section on the visitor's next page load.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Confirm the target video currently appears in the Media Gallery section on the Home Page",
+    "expected": "Video card is visible before the change"
+   },
+   {
+    "action": "Log in as Site Content Editor, edit the video, set Active Status = False, and save",
+    "expected": "Active Status is saved as False; video remains Published"
+   },
+   {
+    "action": "Reload the Home Page and check the Media Gallery section",
+    "expected": "The video card no longer appears in any tab of the Media Gallery section"
+   }
+  ]
+ },
+ {
+  "id": 133658,
+  "title": "Verify that unpublishing a previously visible album removes it from the Home Page Media Gallery",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "MEDIA",
+   "Regression"
+  ],
+  "description": "A published album is currently visible in the Media Gallery. Admin unpublishes it. Verifies it disappears from the section.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Confirm the target album currently appears in the Media Gallery section on the Home Page",
+    "expected": "Album card is visible before the change"
+   },
+   {
+    "action": "Log in as Site Content Editor and unpublish the album",
+    "expected": "Album status changes to Unpublished"
+   },
+   {
+    "action": "Reload the Home Page and check the Media Gallery section",
+    "expected": "The album card no longer appears in any tab of the Media Gallery section"
+   }
+  ]
+ },
+ {
+  "id": 133659,
+  "title": "Verify that album photos can only be managed through the Flickr-integrated import flow, not a generic upload control",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Flickr",
+   "Functional-High",
+   "MEDIA",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Per project convention (Flickr is asset-import only, album management happens in Liferay after import), verifies the Album creation/edit screen in the Media Center module offers photo selection only from the already Flickr-imported Documents &amp; Media set, with no generic &quot;upload new photo file&quot; control.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor and open Create/Edit Album screen",
+    "expected": "Album screen opens"
+   },
+   {
+    "action": "Inspect the photo-selection control for the album",
+    "expected": "Photo selection presents only assets already imported from Flickr into Liferay Documents & Media (no raw drag-and-drop upload of new photo files for the album body)"
+   },
+   {
+    "action": "Attempt to locate any generic direct photo-file upload control on this screen",
+    "expected": "No generic photo-upload control is present on the Album form for adding new photos directly"
+   }
+  ]
+ },
+ {
+  "id": 133661,
+  "title": "Verify that Media Title (EN) cannot be left empty",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "Title AR is filled (&quot;إطلاق الخدمات الرقمية لفرفة قطر&quot;), Title EN is left blank. Verifies the save is blocked.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Leave Title EN empty; enter Title AR",
+    "expected": "Title EN field is empty; Title AR entered"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Save is blocked with a validation error indicating Media Title (EN) is mandatory; item is not saved"
+   }
+  ]
+ },
+ {
+  "id": 133662,
+  "title": "Verify that Media Title (AR) cannot be left empty",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "Title EN is filled (&quot;Qatar Chamber Digital Services Launch&quot;), Title AR is left blank. Verifies the save is blocked.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Enter Title EN; leave Title AR empty",
+    "expected": "Title EN entered; Title AR field is empty"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Save is blocked with a validation error indicating Media Title (AR) is mandatory; item is not saved"
+   }
+  ]
+ },
+ {
+  "id": 133666,
+  "title": "Verify that special/script-tag characters entered in Media Title (EN) are handled safely",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "Title EN entered as ``. Verifies the value is either rejected or safely escaped/sanitized, and does not execute or break the public-facing page rendering.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Enter `<script>alert(1)</script>` in Title EN",
+    "expected": "Script-tag string entered"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Item either saves with the value safely HTML-escaped, or the save is blocked with a validation error"
+   },
+   {
+    "action": "If saved, view the item's card on the Home Page Media Gallery section",
+    "expected": "No script executes and the card title renders as plain, escaped text (no broken layout)"
+   }
+  ]
+ },
+ {
+  "id": 133671,
+  "title": "Verify that a video/album cannot be saved without a Thumbnail Image",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "All fields valid except Thumbnail Image is left empty. Verifies save is blocked (mandatory field).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Fill all mandatory fields except leave Thumbnail Image empty",
+    "expected": "All other fields valid; no thumbnail uploaded"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked with a validation error indicating Thumbnail Image is mandatory; item is not saved"
+   }
+  ]
+ },
+ {
+  "id": 133672,
+  "title": "Verify that an invalid file type is rejected for Thumbnail Image",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "A .pdf file is selected for upload as the Thumbnail Image. Verifies the upload is rejected with a file-type error.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Attempt to upload a .pdf file as Thumbnail Image",
+    "expected": "Upload is rejected with a file-type validation error ('Only JPG/PNG files are allowed')"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Item is not saved with the .pdf file as thumbnail"
+   }
+  ]
+ },
+ {
+  "id": 133674,
+  "title": "Verify that a thumbnail file exceeding 2MB is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "A JPG file of 2.1MB is uploaded as Thumbnail Image. Verifies the upload is rejected with a max-size error.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Attempt to upload a 2.1MB JPG file as Thumbnail Image",
+    "expected": "Upload is rejected with a max-file-size validation error ('Maximum file size is 2MB')"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Item is not saved with the oversized thumbnail"
+   }
+  ]
+ },
+ {
+  "id": 133676,
+  "title": "Verify that a Video item saves successfully when only a Video File is uploaded (no Embed URL)",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "For a Video-type item, only a Video File (valid .mp4, 20MB) is uploaded; Embed URL is left empty. Verifies the either/or requirement is satisfied and save succeeds.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Upload a valid .mp4 Video File; leave Embed URL empty",
+    "expected": "Video File uploads; Embed URL field remains empty"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Item saves successfully — the either/or condition is satisfied by the file alone"
+   }
+  ]
+ },
+ {
+  "id": 133677,
+  "title": "Verify that a Video item saves successfully when only an Embed URL is provided (no Video File)",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "For a Video-type item, only an Embed URL (e.g. `https://www.youtube.com/watch?v=abc123`) is entered; Video File is left empty. Verifies the either/or requirement is satisfied and save succeeds.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Enter a valid Embed URL; leave Video File empty",
+    "expected": "Embed URL entered; no file uploaded"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Item saves successfully — the either/or condition is satisfied by the URL alone"
+   }
+  ]
+ },
+ {
+  "id": 133678,
+  "title": "Verify that a Video item cannot be saved with neither Video File nor Embed URL provided",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "For a Video-type item, both Video File and Embed URL are left empty, all other fields valid. Verifies the conditional-mandatory rule blocks the save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Leave both Video File and Embed URL empty",
+    "expected": "Both Video File and Embed URL remain empty"
+   },
+   {
+    "action": "Fill remaining mandatory fields and click Save",
+    "expected": "Save is blocked with a validation error indicating either a Video File or an Embed URL is required for Video-type items; item is not saved"
+   }
+  ]
+ },
+ {
+  "id": 133680,
+  "title": "Verify that the Video File/Embed URL field is not required for an Album-type item",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "For an Album-type item, no Video File/Embed URL is provided (and the control is not applicable to albums). Verifies the album saves successfully and the field is either hidden or not enforced as mandatory on the Album form.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Album screen",
+    "expected": "Create Album screen opens"
+   },
+   {
+    "action": "Inspect the form for a Video File/Embed URL control",
+    "expected": "The Video File/Embed URL control is either absent from the Album form or present but not enforced as mandatory"
+   },
+   {
+    "action": "Fill all album-mandatory fields (title, thumbnail, Flickr-sourced photos, date, active status) and click Save",
+    "expected": "Album saves successfully with no validation error related to a video file or embed URL"
+   }
+  ]
+ },
+ {
+  "id": 133684,
+  "title": "Verify that a video/album cannot be saved without a Publication Date",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "All fields valid except Publication Date is left empty. Verifies save is blocked (mandatory field).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Create Video screen",
+    "expected": "Create screen opens"
+   },
+   {
+    "action": "Leave Publication Date empty; fill all other mandatory fields",
+    "expected": "Publication Date left empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked with a validation error indicating Publication Date is mandatory; item is not saved"
+   }
+  ]
+ },
+ {
+  "id": 133688,
+  "title": "Verify that an item with Active Status = True but still in Draft/Pending Review does not appear in the Media Gallery",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "MEDIA"
+  ],
+  "description": "A video has Active Status = True but its workflow status is Draft (not yet Published). Verifies Active Status alone does not override the underlying publish-workflow requirement.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Create a video with Active Status = True and save as Draft (do not publish)",
+    "expected": "Video saves as Draft with Active Status = True"
+   },
+   {
+    "action": "Navigate to the Home Page and check the Media Gallery section",
+    "expected": "The video does not appear in any tab of the Media Gallery section — both Published status AND Active=True are required together"
+   }
+  ]
+ }
+]

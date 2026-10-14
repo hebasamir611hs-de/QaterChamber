@@ -1,0 +1,2 @@
+ERROR: D:\MCP servers\QaterChamper\pytest.ini:30: unexpected line: '<<<<<<< HEAD'
+

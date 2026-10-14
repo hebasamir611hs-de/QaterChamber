@@ -1,114 +1,60 @@
 """
 cms/tests/publications/test_publications_control_panel.py —
 Control_Panel-tagged cases for PBI 130711 ("QC - Insights & Media - 003 -
-Publications"), sourced from `.claude/qa-baselines/130711_automation_batch.json`
-(99 cases, pre-filtered to `Tag=Automation`).
+Publications"). Migrated 2026-10-01 to the 7-state editorial workflow
+(standards.md -> "Content Editorial Workflow — Seven States, and the
+Account Decides the Path"). Azure: Test Plan 137724, suite 140370.
 
-Holds every case whose `tags` include `Control_Panel` (53 Control_Panel-only
-cases) PLUS the Control_Panel-side test for every case that carries BOTH
-`Web` and `Control_Panel` (9 cases: 144004, 144005, 144006, 144007, 144011,
-144012, 144071, 144072, 144075) — the Web-side test for those 9 lives in
-web/tests/publications/test_publications_web.py under the SAME `tc_<id>`
-marker.
+OBJECT — `Publication` (cms/Content-Admin-Guide.docx §12, slug
+`manage-publication`). Guide-listed fields: publicationTitle /
+publicationDescription (bilingual), publicationType, publicationDate,
+coverImage, fileAttachment, activeStatus, downloadCount / viewCount (auto).
+`Page Count` and `Publication Status` are NOT in §12, so no test sets them
+and the Page Count cases (tc_144040/144041/144042, plus P4 tc_144043) are
+BLOCKED. A separately managed "Publication Types" object is not in the guide
+either (§12 says publicationType is a fixed picklist), so the Type-management
+cases stay skipped.
 
-CMS reachability (2026-09-22): `.auth/state.json` reused this session, every
-Object Authoring surface this module touches (`manage-publication`)
-rendered normally. The **Publication** entry object is NOT a singleton — 9
-real, shared entries exist (8 Published, 1 real pre-existing Draft
-"Arbitration Best Practices" not created by this session) — brand-new
-`QCTEST-`-prefixed entries are created and deleted freely without ever
-touching them (DISPOSABLE per cms-profile.md). Every mutating test carries
-the shared `publications_cms` xdist group (mirrors the Web module's own
-group) so pytest-xdist never runs two of them concurrently against the same
-object's entries table.
+ACCOUNT — every lifecycle/create test below runs as **QC Site Content
+Editor** (`cms_role_credentials("Site Content Editor")`), never the
+super-admin TEST_USER. As Editor, "Submit for Review" goes straight to
+`Published` (privileged bypass); as Author it would land on `Pending Review`.
+Teardown deletes the disposable record by exact QCTEST title; if the Editor
+cannot delete it, teardown retries as TEST_USER (setup/cleanup use only).
 
-CONFIRMED LIVE 2026-09-22 — no UUID-column defect on this object (explicitly
-checked, per the task's own instruction): the entries-list Entry column
-renders the REAL Publication Title on every one of the 9 real rows — unlike
-`export_report_admin_page.py`'s manage-strategic-pillar-card-class finding.
-Title-based lookup (`open_entry_by_edit_link`, `delete_entry_by_title`, etc.)
-is used directly throughout, no `_resolve_code()` workaround needed.
+TWO VISIBILITY GATES — every disposable record is created with `Active
+Status` TICKED (it defaults to unticked). A public-visible assertion
+therefore checks both gates (Published + Active Status), and a not-visible
+assertion on a Draft/Unpublished record isolates the workflow gate, because
+Active Status is already on. Every public read uses a fresh logged-out
+context (`new_context(browser, use_auth_state=False)`), never the CMS `page`.
 
-CONFIRMED LIVE 2026-09-22 — **Save as Draft on this object enforces FULL
-field validation**, not a lenient partial save: a live probe attempting
-Save as Draft with only Title EN/AR filled (Page Count left at its default
-blank state) was BLOCKED with the inline message "Page count must be a
-positive whole number (1 or greater)." — every "valid save" test below
-therefore fills Type/Cover/Date/File/Page Count via `_fill_all_mandatory_fields()`
-even for a plain Draft save, not only for Submit for Review/Publish.
+DISPOSABLE DATA ONLY — every mutation targets a brand-new `QCTEST-<tc_id>-*`
+Publication, deleted in `finally` by exact title. No real shared Publication
+row is opened for edit, saved or deleted.
 
-**No "Manage Publication Types" admin surface exists — see
-publication_admin_page.py's module docstring for the full evidence trail
-(exhaustive Objects Home nav search).** Every case assuming that surface is
-SKIPPED below with that finding.
+Previously reported "Submit clears Type/Status" defect (2026-09-22): observed
+through TEST_USER with Active Status never ticked — UNVERIFIED under this
+flow; see publication_admin_page.py.
 
-**CONFIRMED PRODUCT DEFECT, discovered while verifying this batch (2026-09-22,
-reproduced twice) — Submit for Review clears the Publication Type AND
-Publication Status field values it just had.** A disposable entry with
-Type="Research Paper"/Status="Published" was confirmed correctly persisted
-immediately after Save as Draft (read back via `.input_value()` on reopen),
-then confirmed **both empty** on the very next reopen after Submit for
-Review — even though the entries-list row itself still shows
-"PUBLISHED...ON THE WEBSITE" (the workflow state, unaffected). See
-`publication_admin_page.py`'s module docstring for the full reproduction.
-Every test below that publishes a disposable entry and checks the delivery
-surface (tc_144004/144005/144006/144072 and the tc_144027/144030/144040/
-144044 cross-surface checks) is scripted against the documented, intended
-publish sequence and is expected to legitimately FAIL that public-surface
-half against this real defect when actually run — the CMS-side status
-assertions in these same tests are unaffected and should pass. Not a
-locator/script bug, not routed around here; flagged for the QA Manager/
-human to file as a bug (Phase 3b), not filed by this agent.
-
-SKIPPED (confirmed precondition/product gaps, reused known blockers, or
-budget-bounded verification, not locator gaps):
-  - tc_143997/tc_143998 (Site Content Author role cases): this project's own
-    `pytest.ini` already records `CMS_SITE_CONTENT_AUTHOR_EMAIL/PASSWORD`
-    does NOT authenticate against qcdev (confirmed 2026-09-17 for
-    tc_131154/131155/131163/131200) — reused here rather than re-attempting
-    a known-blocked login live.
-  - tc_144001: no Cancel/discard control exists anywhere on this form
-    (confirmed live — a full `a,button` sweep for "cancel"/"discard" text
-    found none), mirroring the same class of finding this project's
-    Footer/Social-Media-Icon object already documents (tc_131174).
-  - tc_144008/144009/144010/144016/144047/144048/144049/144050/144051/144052:
-    all assume the non-existent "Manage Publication Types" surface.
-  - tc_144011/144012 (Control_Panel-side): same Types-surface gap.
-  - tc_144071 (Control_Panel-side): same Types-surface gap (deactivating a
-    Type value has no admin action to invoke).
-  - tc_144015/144080: no confirmed-live generic success-toast element was
-    captured within this session's probe budget (Save as Draft/Submit
-    redirects the page immediately; two live probes — one blocked by a
-    validation error, one against a fully valid entry — did not surface a
-    distinct, persistent toast in either case). Scripting an assertion
-    against unconfirmed wording would risk a false pass/fail; recorded
-    honestly as unverified rather than guessed. tc_144080 additionally
-    needs the Control Panel's own UI language switched to Arabic, which was
-    not exercised live this session.
-  - tc_144081: same unconfirmed-Arabic-CP-locale gap as tc_144080 (the
-    underlying English validation message itself IS confirmed reachable,
-    see tc_144031, but the Arabic-locale variant of it was not verified
-    this session).
-  - tc_144073: needs a controlled mid-upload network interruption — no
-    reliable, repeatable technique for this was exercised this session
-    (same class of gap this project's Advertisements/Export Reports batches
-    already document for equivalent scenarios).
-
-DISPOSABLE entries: every mutating test below creates its own
-`QCTEST-<tc_id>`-prefixed Publication entry via
-`cms.pages.publications.publication_admin_page.PublicationAdminPage` and
-deletes it in a `finally` block. A few cases whose own expected result
-explicitly names the PUBLIC Publications page (tc_144030, tc_144040,
-tc_144044) additionally import `web.pages.publications.publications_page.PublicationsPage`
-to verify that delivery-surface outcome — mirrors
-`cms/tests/export_reports/test_export_reports_control_panel.py`'s own
-precedent for a Control_Panel-tagged case whose narrative still names the
-public page.
+Skips kept from the previous batch (not two-state-model reasons):
+  - tc_143997/143998: the skip cites the retired Author credentials. The
+    accounts were re-provisioned 2026-09-27; left as-is per the migration
+    brief and raised as an open question.
+  - tc_144001 (no Cancel control), Publication Types cases, tc_144015/
+    144080/144081 (toast / Arabic CP locale), tc_144073 (interrupted upload).
 """
 
 import allure
 import pytest
 
+from cms.pages.components.object_authoring_page import (
+    STATUS_DRAFT,
+    STATUS_PUBLISHED,
+    STATUS_UNPUBLISHED,
+    normalize_status,
+)
+from cms.pages.control_panel.login_page import CmsLoginPage
 from cms.pages.publications.publication_admin_page import (
     PublicationAdminPage,
     FIELD_COVER_IMAGE,
@@ -120,18 +66,42 @@ from cms.pages.publications.publication_admin_page import (
     FIELD_PUBLICATION_TITLE_EN,
 )
 from config.settings import cms_role_credentials
+from core.utils.waits import WaitTimeoutError, wait_until
+from core.web.browser import new_context
 from web.pages.publications.publications_page import PublicationsPage
 
 PUBLICATIONS_CMS_XDIST_GROUP = pytest.mark.xdist_group("publications_cms")
 FIXTURES = "cms/tests/publications/fixtures"
+EDITOR_ROLE = "Site Content Editor"
+PUBLIC_PROPAGATION_TIMEOUT_S = 60
+
+_PAGE_COUNT_BLOCKED = (
+    "BLOCKED: 'Page Count' is not a field of the Publication object in "
+    "cms/Content-Admin-Guide.docx §12 (guide lists publicationTitle/"
+    "publicationDescription, publicationType, publicationDate, coverImage, "
+    "fileAttachment, activeStatus, download/viewCount). Guide-vs-case "
+    "conflict for the QA Manager/BA — not scripted against a guessed field."
+)
+
+
+def _as_editor(page) -> PublicationAdminPage:
+    """Signs the page in as QC Site Content Editor (replacing the fixture's
+    pre-loaded TEST_USER session) and returns the Page Object."""
+    email, password = cms_role_credentials(EDITOR_ROLE)
+    CmsLoginPage(page).ensure_signed_in_as(email, password)
+    return PublicationAdminPage(page)
+
+
+def _status(admin: PublicationAdminPage, title: str) -> str:
+    return normalize_status(admin.status_for(title))
 
 
 def _fill_all_mandatory_fields(admin: PublicationAdminPage, prefix: str, **overrides) -> dict:
-    """Fills every mandatory Publication field with a safe default (see
-    module docstring: Save as Draft itself enforces full validation on this
-    object). `skip_type`/`skip_cover`/`skip_date`/`skip_file`/
-    `skip_page_count` omit that one field to reach an empty/missing
-    precondition; every other override is a literal FIELD_* key."""
+    """Fills the guide-listed Publication fields with safe defaults and
+    ticks Active Status (see module docstring). `skip_type`/`skip_cover`/
+    `skip_date`/`skip_file` omit that one field; `active_status=False`
+    leaves the checkbox unticked. Page Count is filled only when a caller
+    passes `page_count` explicitly (P4 tc_144043 only — excluded from runs)."""
     values = {
         FIELD_PUBLICATION_TITLE_EN: f"QCTEST-{prefix} Publication",
         FIELD_PUBLICATION_TITLE_AR: f"QCTEST-{prefix} منشور",
@@ -139,7 +109,7 @@ def _fill_all_mandatory_fields(admin: PublicationAdminPage, prefix: str, **overr
         FIELD_PUBLICATION_DESCRIPTION_AR: f"QCTEST-{prefix} وصف منشور تجريبي تم إنشاؤه تلقائيًا.",
         "publication_type": "Report",
         "publication_date": "01/01/2026",
-        "page_count": "3",
+        "active_status": True,
     }
     values.update(overrides)
     admin.open_new_entry_form()
@@ -155,9 +125,75 @@ def _fill_all_mandatory_fields(admin: PublicationAdminPage, prefix: str, **overr
         admin.set_publication_date(values["publication_date"])
     if not values.get("skip_file"):
         admin.upload_file(FIELD_FILE_ATTACHMENT, values.get("file_path", f"{FIXTURES}/valid_pdf_4mb.pdf"))
-    if not values.get("skip_page_count"):
+    if values.get("page_count") and not values.get("skip_page_count"):
         admin.fill_number(FIELD_PAGE_COUNT, values["page_count"])
+    admin.set_active_status(bool(values["active_status"]))
     return values
+
+
+def _submit_as_editor(admin: PublicationAdminPage, title: str) -> str:
+    """Reopen the saved Draft and Submit for Review as Editor. Returns the
+    normalized row status — Published is expected for this account."""
+    admin.open_entry_by_edit_link(title)
+    admin.submit_for_review()
+    return _status(admin, title)
+
+
+def _assert_published_with_history(admin: PublicationAdminPage, title: str) -> None:
+    """Gate 1 via the badge AND the History trail (a recorded transition,
+    not just a badge), then gate 2 by reopening and reading Active Status."""
+    assert _status(admin, title) == STATUS_PUBLISHED, (
+        f"Editor's Submit for Review should land {title!r} on Published"
+    )
+    history = admin.history_entries(title)
+    assert history, f"no History trail recorded for {title!r} after publishing"
+    admin.open_entry_by_edit_link(title)
+    assert admin.active_status_checked(), f"Active Status is not ticked on {title!r}"
+
+
+def _teardown(admin: PublicationAdminPage, *titles: str) -> None:
+    """Delete disposable records by EXACT QCTEST title; retry as TEST_USER
+    (cleanup only) if the Editor's delete leaves the row in place."""
+    for title in titles:
+        if not title or not title.startswith("QCTEST-"):
+            continue  # never delete anything not provably disposable
+        admin.open_entries_list()
+        if not admin.row_visible(title):
+            continue
+        admin.delete_entry_by_title(title)
+        admin.open_entries_list()
+        if admin.row_visible(title):
+            CmsLoginPage(admin.page).ensure_signed_in_as()
+            admin.open_entries_list()
+            admin.delete_entry_by_title(title)
+
+
+def _public_page(browser, query):
+    """Run `query(PublicationsPage)` in a fresh LOGGED-OUT context."""
+    ctx = new_context(browser, use_auth_state=False)
+    try:
+        pub = PublicationsPage(ctx.new_page())
+        return query(pub)
+    finally:
+        ctx.close()
+
+
+def _public_titles(browser, title: str) -> list:
+    def _q(pub):
+        pub.open_publications()
+        pub.search(title)
+        return pub.card_titles()
+    return _public_page(browser, _q)
+
+
+def _wait_public_visible(browser, title: str) -> bool:
+    try:
+        wait_until(lambda: title in _public_titles(browser, title),
+                   timeout=PUBLIC_PROPAGATION_TIMEOUT_S, poll=5)
+        return True
+    except WaitTimeoutError:
+        return False
+
 
 
 # ===========================================================================
@@ -176,16 +212,18 @@ def _fill_all_mandatory_fields(admin: PublicationAdminPage, prefix: str, **overr
 @pytest.mark.tc_143996
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_editor_full_record_lifecycle(page):
-    # Azure TC 143996 | PBI 130711 — the "manage Publication Types" half of
-    # this case is NOT exercised: no such admin surface exists (see module
-    # docstring); only the record-lifecycle half is scripted/asserted.
-    admin = PublicationAdminPage(page)
+    """Azure TC 143996 | PBI 130711. Account: QC Site Content Editor.
+    Create -> edit -> preview -> Submit for Review (Editor: straight to
+    Published) -> unpublish (row action: lands on Unpublished, not Draft)
+    -> delete. The "manage Publication Types" half is not exercised — no
+    such object is listed in Content-Admin-Guide §12."""
+    admin = _as_editor(page)
     title = "QCTEST-143996 Editor Lifecycle"
     try:
-        with allure.step("Create"):
+        with allure.step("Create (Active Status ticked) and save as Draft"):
             _fill_all_mandatory_fields(admin, "143996", **{FIELD_PUBLICATION_TITLE_EN: title})
             admin.save_as_draft()
-            assert admin.status_for(title) == "Draft"
+            assert _status(admin, title) == STATUS_DRAFT
 
         with allure.step("Edit"):
             admin.open_entry_by_edit_link(title)
@@ -193,27 +231,25 @@ def test_editor_full_record_lifecycle(page):
             admin.save_as_draft()
 
         with allure.step("Preview"):
-            preview_url = admin.row_preview_url(title)
-            assert preview_url
+            admin.open_entries_list()
+            assert admin.row_preview_url(title)
 
-        with allure.step("Publish"):
-            admin.open_entry_by_edit_link(title)
-            admin.set_publication_status("Published")
-            admin.submit_for_review()
-            assert admin.status_for(title) == "Published"
+        with allure.step("Submit for Review as Editor -> Published"):
+            _submit_as_editor(admin, title)
+            _assert_published_with_history(admin, title)
 
-        with allure.step("Unpublish"):
-            admin.open_entry_by_edit_link(title)
-            admin.unpublish_to_edit_as_draft()
-            assert admin.status_for(title) != "Published"
+        with allure.step("Unpublish via the row action -> Unpublished"):
+            admin.open_entries_list()
+            admin.unpublish_entry(title)
+            assert _status(admin, title) == STATUS_UNPUBLISHED
 
         with allure.step("Delete"):
             admin.open_entries_list()
             admin.delete_entry_by_title(title)
+            admin.open_entries_list()
             assert not admin.row_visible(title)
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 # ===========================================================================
@@ -272,22 +308,20 @@ def test_author_denied_publish_delete_manage_types(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144000
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_editor_create_save_as_draft(page):
-    # Azure TC 144000 | PBI 130711
-    admin = PublicationAdminPage(page)
+def test_editor_create_save_as_draft(page, browser):
+    """Azure TC 144000 | PBI 130711. Account: QC Site Content Editor.
+    Saved Draft (Active Status ticked) is not visible to a logged-out
+    visitor — the workflow gate alone hides it."""
+    admin = _as_editor(page)
     title = "QCTEST-144000 Create Draft"
     try:
         _fill_all_mandatory_fields(admin, "144000", **{FIELD_PUBLICATION_TITLE_EN: title})
         admin.save_as_draft()
 
-        assert admin.status_for(title) == "Draft"
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search(title)
-        assert title not in pub.card_titles()
+        assert _status(admin, title) == STATUS_DRAFT
+        assert title not in _public_titles(browser, title)
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 # ===========================================================================
@@ -326,9 +360,9 @@ def test_cancel_create_form_discards_data(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144002
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_editor_resave_existing_as_draft(page):
-    # Azure TC 144002 | PBI 130711
-    admin = PublicationAdminPage(page)
+def test_editor_resave_existing_as_draft(page, browser):
+    """Azure TC 144002 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144002 Resave Draft"
     try:
         _fill_all_mandatory_fields(admin, "144002", **{FIELD_PUBLICATION_TITLE_EN: title})
@@ -336,14 +370,10 @@ def test_editor_resave_existing_as_draft(page):
         admin.open_entry_by_edit_link(title)
         admin.save_as_draft()
 
-        assert admin.status_for(title) == "Draft"
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search(title)
-        assert title not in pub.card_titles()
+        assert _status(admin, title) == STATUS_DRAFT
+        assert title not in _public_titles(browser, title)
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 # ===========================================================================
@@ -360,24 +390,22 @@ def test_editor_resave_existing_as_draft(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144003
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_editor_preview_draft_record(page):
-    # Azure TC 144003 | PBI 130711
-    admin = PublicationAdminPage(page)
+def test_editor_preview_draft_record(page, browser):
+    """Azure TC 144003 | PBI 130711. Account: QC Site Content Editor.
+    Preview is a staff surface; public invisibility is checked logged-out."""
+    admin = _as_editor(page)
     title = "QCTEST-144003 Preview Draft"
     try:
         _fill_all_mandatory_fields(admin, "144003", **{FIELD_PUBLICATION_TITLE_EN: title})
         admin.save_as_draft()
+        admin.open_entries_list()
         preview_url = admin.row_preview_url(title)
 
         assert preview_url
-        assert admin.status_for(title) == "Draft"
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search(title)
-        assert title not in pub.card_titles()
+        assert _status(admin, title) == STATUS_DRAFT
+        assert title not in _public_titles(browser, title)
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 # ===========================================================================
@@ -396,24 +424,21 @@ def test_editor_preview_draft_record(page):
 @pytest.mark.tc_144004
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_publish_updates_status_cms(page):
-    # Azure TC 144004 | PBI 130711 — Control_Panel-side half; Web-side in
-    # test_publications_web.py under the SAME marker.
-    admin = PublicationAdminPage(page)
+    """Azure TC 144004 | PBI 130711 — Control_Panel half. Account: QC Site
+    Content Editor (Submit for Review -> Published). The case's "Page Count
+    = 5" data point is BLOCKED (field not in guide §12) and not set."""
+    admin = _as_editor(page)
     title = "QCTEST-144004-CMS Publish Flow"
     try:
         _fill_all_mandatory_fields(admin, "144004-cms", **{FIELD_PUBLICATION_TITLE_EN: title},
-                                    publication_type="Guides", page_count="5")
+                                    publication_type="Guides")
         admin.save_as_draft()
-        admin.open_entry_by_edit_link(title)
-        admin.set_publication_status("Published")
-        admin.submit_for_review()
+        _submit_as_editor(admin, title)
 
-        assert admin.status_for(title) == "Published"
-        admin.open_entry_by_edit_link(title)
+        _assert_published_with_history(admin, title)
         assert admin.field_value(FIELD_PUBLICATION_TITLE_EN).strip() == title
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -428,28 +453,28 @@ def test_publish_updates_status_cms(page):
 @pytest.mark.tc_144005
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_republish_updates_record_cms(page):
-    # Azure TC 144005 | PBI 130711 — Control_Panel-side half.
-    admin = PublicationAdminPage(page)
+    """Azure TC 144005 | PBI 130711 — Control_Panel half. Account: QC Site
+    Content Editor. A Published record is unpublished (row action), edited,
+    then republished with Submit for Review."""
+    admin = _as_editor(page)
     original_title = "QCTEST-144005-CMS-Original"
     updated_title = "QCTEST-144005-CMS-Updated"
     try:
         _fill_all_mandatory_fields(admin, "144005-cms", **{FIELD_PUBLICATION_TITLE_EN: original_title})
         admin.save_as_draft()
-        admin.open_entry_by_edit_link(original_title)
-        admin.set_publication_status("Published")
-        admin.submit_for_review()
+        assert _submit_as_editor(admin, original_title) == STATUS_PUBLISHED
 
+        admin.open_entries_list()
+        admin.unpublish_entry(original_title)
         admin.open_entry_by_edit_link(original_title)
         admin.fill_text(FIELD_PUBLICATION_TITLE_EN, updated_title)
         admin.submit_for_review()
 
-        assert admin.status_for(updated_title) == "Published"
+        _assert_published_with_history(admin, updated_title)
+        admin.open_entries_list()
         assert not admin.row_visible(original_title)
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(updated_title)
-        admin.open_entries_list()
-        admin.delete_entry_by_title(original_title)
+        _teardown(admin, updated_title, original_title)
 
 
 @allure.epic("Insights & Media")
@@ -464,25 +489,29 @@ def test_republish_updates_record_cms(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144006
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_unpublish_updates_status_cms(page):
-    # Azure TC 144006 | PBI 130711 — Control_Panel-side half.
-    admin = PublicationAdminPage(page)
+def test_unpublish_updates_status_cms(page, browser):
+    """Azure TC 144006 | PBI 130711 — Control_Panel half. Account: QC Site
+    Content Editor. Published (+Active Status) -> Unpublish row action ->
+    Unpublished; a logged-out visitor no longer sees it."""
+    admin = _as_editor(page)
     title = "QCTEST-144006-CMS Unpublish Flow"
     try:
         _fill_all_mandatory_fields(admin, "144006-cms", **{FIELD_PUBLICATION_TITLE_EN: title})
         admin.save_as_draft()
-        admin.open_entry_by_edit_link(title)
-        admin.set_publication_status("Published")
-        admin.submit_for_review()
-        assert admin.status_for(title) == "Published"
+        _submit_as_editor(admin, title)
+        _assert_published_with_history(admin, title)
 
-        admin.open_entry_by_edit_link(title)
-        admin.unpublish_to_edit_as_draft()
-
-        assert admin.status_for(title) != "Published"
-    finally:
         admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        admin.unpublish_entry(title)
+
+        assert _status(admin, title) == STATUS_UNPUBLISHED
+        try:
+            wait_until(lambda: title not in _public_titles(browser, title),
+                       timeout=PUBLIC_PROPAGATION_TIMEOUT_S, poll=5)
+        except WaitTimeoutError:
+            pytest.fail(f"Unpublished {title!r} still visible to a logged-out visitor")
+    finally:
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -497,19 +526,22 @@ def test_unpublish_updates_status_cms(page):
 @pytest.mark.tc_144007
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_delete_record_cms(page):
-    # Azure TC 144007 | PBI 130711 — Control_Panel-side half.
-    admin = PublicationAdminPage(page)
+    """Azure TC 144007 | PBI 130711 — Control_Panel half. Account: QC Site
+    Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144007-CMS Delete Flow"
-    _fill_all_mandatory_fields(admin, "144007-cms", **{FIELD_PUBLICATION_TITLE_EN: title})
-    admin.save_as_draft()
-    admin.open_entry_by_edit_link(title)
-    admin.set_publication_status("Published")
-    admin.submit_for_review()
+    try:
+        _fill_all_mandatory_fields(admin, "144007-cms", **{FIELD_PUBLICATION_TITLE_EN: title})
+        admin.save_as_draft()
+        assert _submit_as_editor(admin, title) == STATUS_PUBLISHED
 
-    admin.open_entries_list()
-    admin.delete_entry_by_title(title)
+        admin.open_entries_list()
+        admin.delete_entry_by_title(title)
+        admin.open_entries_list()
 
-    assert not admin.row_visible(title)
+        assert not admin.row_visible(title)
+    finally:
+        _teardown(admin, title)
 
 
 # ===========================================================================
@@ -609,12 +641,9 @@ def test_reactivate_manuals_type_cms(page):
 @pytest.mark.tc_144013
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_new_record_gets_unique_system_id(page):
-    # Azure TC 144013 | PBI 130711 — this object has no user-facing
-    # "Publication ID" field (confirmed via the accessibility-tree field
-    # list); the real system-generated identity is the entry's own
-    # `editEntry` code in its edit-form URL, resolved here purely from the
-    # UI (never guessed/read via an API call).
-    admin = PublicationAdminPage(page)
+    """Azure TC 144013 | PBI 130711. Account: QC Site Content Editor. The
+    system identity is the entry's own `editEntry` code in its edit URL."""
+    admin = _as_editor(page)
     title1 = "QCTEST-144013-A Publication"
     title2 = "QCTEST-144013-B Publication"
     try:
@@ -631,10 +660,7 @@ def test_new_record_gets_unique_system_id(page):
         assert id1 and id2
         assert id1 != id2
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title1)
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title2)
+        _teardown(admin, title1, title2)
 
 
 # ===========================================================================
@@ -652,30 +678,29 @@ def test_new_record_gets_unique_system_id(page):
 @pytest.mark.tc_144014
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_edit_published_updates_last_modified(page):
-    # Azure TC 144014 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144014 | PBI 130711. Account: QC Site Content Editor.
+    Published record -> unpublish (row action) -> edit Description EN ->
+    Submit for Review; the row's Last modified value changes."""
+    admin = _as_editor(page)
     title = "QCTEST-144014 Last Modified Check"
     try:
         _fill_all_mandatory_fields(admin, "144014", **{FIELD_PUBLICATION_TITLE_EN: title})
         admin.save_as_draft()
-        admin.open_entry_by_edit_link(title)
-        admin.set_publication_status("Published")
-        admin.submit_for_review()
+        assert _submit_as_editor(admin, title) == STATUS_PUBLISHED
         admin.open_entries_list()
-        before = admin.row_last_modified(title) if hasattr(admin, "row_last_modified") else ""
+        before = admin.row_last_modified(title)
 
-        page.wait_for_timeout(1500)
+        admin.unpublish_entry(title)
         admin.open_entry_by_edit_link(title)
         admin.fill_text(FIELD_PUBLICATION_DESCRIPTION_EN, "QCTEST-144014 updated description.")
         admin.submit_for_review()
         admin.open_entries_list()
-        after = admin.row_last_modified(title) if hasattr(admin, "row_last_modified") else ""
+        after = admin.row_last_modified(title)
 
         assert before and after
-        assert before != after
+        assert before != after, f"Last modified did not change: {before!r}"
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 # ===========================================================================
@@ -731,8 +756,8 @@ def test_add_type_shows_toast_and_audit_entry(page):
 @pytest.mark.tc_144017
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_title_en_valid_saved(page):
-    # Azure TC 144017 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144017 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144017 Qatar Economic Outlook 2026"
     try:
         _fill_all_mandatory_fields(admin, "144017", **{FIELD_PUBLICATION_TITLE_EN: title})
@@ -741,8 +766,7 @@ def test_title_en_valid_saved(page):
 
         assert admin.field_value(FIELD_PUBLICATION_TITLE_EN).strip() == title
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -757,12 +781,16 @@ def test_title_en_valid_saved(page):
 @pytest.mark.tc_144018
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_title_en_empty_rejected(page):
-    # Azure TC 144018 | PBI 130711
-    admin = PublicationAdminPage(page)
-    _fill_all_mandatory_fields(admin, "144018", **{FIELD_PUBLICATION_TITLE_EN: ""})
-    admin.submit_for_review()
+    """Azure TC 144018 | PBI 130711. Account: QC Site Content Editor. Submit
+    for Review enforces required fields and writes nothing."""
+    admin = _as_editor(page)
+    try:
+        _fill_all_mandatory_fields(admin, "144018", **{FIELD_PUBLICATION_TITLE_EN: ""})
+        admin.submit_for_review()
 
-    assert admin.submit_blocked()
+        assert admin.submit_blocked()
+    finally:
+        _teardown(admin, "QCTEST-144018 منشور")
 
 
 @allure.epic("Insights & Media")
@@ -777,12 +805,9 @@ def test_title_en_empty_rejected(page):
 @pytest.mark.tc_144019
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_title_en_200_boundary(page):
-    # Azure TC 144019 | PBI 130711 — same KNOWN LIMITATION noted on
-    # ObjectAuthoringPage.field_length_rejected()'s own docstring: the
-    # submit-time fallback branch calls submit_for_publishing(), whose
-    # button wording doesn't match this object's real "Submit for Review" —
-    # only the immediate-readback truncation branch is independently sound.
-    admin = PublicationAdminPage(page)
+    """Azure TC 144019 | PBI 130711. Account: QC Site Content Editor.
+    Nothing is saved: the length check reads the field back."""
+    admin = _as_editor(page)
     attempted = "Q" * 201
     admin.open_new_entry_form()
 
@@ -801,12 +826,15 @@ def test_title_en_200_boundary(page):
 @pytest.mark.tc_144020
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_title_en_whitespace_only_rejected(page):
-    # Azure TC 144020 | PBI 130711
-    admin = PublicationAdminPage(page)
-    _fill_all_mandatory_fields(admin, "144020", **{FIELD_PUBLICATION_TITLE_EN: "   "})
-    admin.submit_for_review()
+    """Azure TC 144020 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
+    try:
+        _fill_all_mandatory_fields(admin, "144020", **{FIELD_PUBLICATION_TITLE_EN: "   "})
+        admin.submit_for_review()
 
-    assert admin.submit_blocked()
+        assert admin.submit_blocked()
+    finally:
+        _teardown(admin, "QCTEST-144020 منشور")
 
 
 # ===========================================================================
@@ -826,8 +854,8 @@ def test_title_en_whitespace_only_rejected(page):
 @pytest.mark.tc_144021
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_title_ar_valid_saved(page):
-    # Azure TC 144021 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144021 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144021 Publication"
     title_ar = "توقعات الاقتصاد القطري 2026"
     try:
@@ -837,8 +865,7 @@ def test_title_ar_valid_saved(page):
 
         assert admin.field_value(FIELD_PUBLICATION_TITLE_AR).strip() == title_ar
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -854,12 +881,15 @@ def test_title_ar_valid_saved(page):
 @pytest.mark.tc_144022
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_title_ar_empty_rejected(page):
-    # Azure TC 144022 | PBI 130711
-    admin = PublicationAdminPage(page)
-    _fill_all_mandatory_fields(admin, "144022", **{FIELD_PUBLICATION_TITLE_AR: ""})
-    admin.submit_for_review()
+    """Azure TC 144022 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
+    try:
+        _fill_all_mandatory_fields(admin, "144022", **{FIELD_PUBLICATION_TITLE_AR: ""})
+        admin.submit_for_review()
 
-    assert admin.submit_blocked()
+        assert admin.submit_blocked()
+    finally:
+        _teardown(admin, "QCTEST-144022 Publication")
 
 
 @allure.epic("Insights & Media")
@@ -875,8 +905,8 @@ def test_title_ar_empty_rejected(page):
 @pytest.mark.tc_144023
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_title_ar_200_boundary(page):
-    # Azure TC 144023 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144023 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     attempted = "ت" * 201
     admin.open_new_entry_form()
 
@@ -896,12 +926,15 @@ def test_title_ar_200_boundary(page):
 @pytest.mark.tc_144024
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_title_ar_whitespace_only_rejected(page):
-    # Azure TC 144024 | PBI 130711
-    admin = PublicationAdminPage(page)
-    _fill_all_mandatory_fields(admin, "144024", **{FIELD_PUBLICATION_TITLE_AR: "   "})
-    admin.submit_for_review()
+    """Azure TC 144024 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
+    try:
+        _fill_all_mandatory_fields(admin, "144024", **{FIELD_PUBLICATION_TITLE_AR: "   "})
+        admin.submit_for_review()
 
-    assert admin.submit_blocked()
+        assert admin.submit_blocked()
+    finally:
+        _teardown(admin, "QCTEST-144024 Publication")
 
 
 # ===========================================================================
@@ -920,8 +953,8 @@ def test_title_ar_whitespace_only_rejected(page):
 @pytest.mark.tc_144025
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_publication_type_valid_saved(page):
-    # Azure TC 144025 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144025 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144025 Publication"
     try:
         _fill_all_mandatory_fields(admin, "144025", **{FIELD_PUBLICATION_TITLE_EN: title},
@@ -931,8 +964,7 @@ def test_publication_type_valid_saved(page):
 
         assert "Research Paper" in admin.publication_type_value()
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -947,12 +979,15 @@ def test_publication_type_valid_saved(page):
 @pytest.mark.tc_144026
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_publication_type_empty_rejected(page):
-    # Azure TC 144026 | PBI 130711
-    admin = PublicationAdminPage(page)
-    _fill_all_mandatory_fields(admin, "144026", skip_type=True)
-    admin.submit_for_review()
+    """Azure TC 144026 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
+    try:
+        _fill_all_mandatory_fields(admin, "144026", skip_type=True)
+        admin.submit_for_review()
 
-    assert admin.submit_blocked()
+        assert admin.submit_blocked()
+    finally:
+        _teardown(admin, "QCTEST-144026 Publication")
 
 
 # ===========================================================================
@@ -970,27 +1005,31 @@ def test_publication_type_empty_rejected(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144027
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_cover_image_valid_uploads_and_displays(page):
-    # Azure TC 144027 | PBI 130711
-    admin = PublicationAdminPage(page)
+def test_cover_image_valid_uploads_and_displays(page, browser):
+    """Azure TC 144027 | PBI 130711. Account: QC Site Content Editor.
+    Published + Active Status ticked (both gates asserted), then the card's
+    cover is read by a logged-out visitor."""
+    admin = _as_editor(page)
     title = "QCTEST-144027 Cover Upload Check"
     try:
         _fill_all_mandatory_fields(admin, "144027", **{FIELD_PUBLICATION_TITLE_EN: title})
         admin.save_as_draft()
+        admin.open_entry_by_edit_link(title)
         assert admin.uploaded_filename(FIELD_COVER_IMAGE)
 
-        admin.open_entry_by_edit_link(title)
-        admin.set_publication_status("Published")
-        admin.submit_for_review()
+        _submit_as_editor(admin, title)
+        _assert_published_with_history(admin, title)
+        assert _wait_public_visible(browser, title), (
+            f"{title!r} is Published with Active Status ticked but not visible logged-out"
+        )
 
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search(title)
-        index = pub.card_index(title)
-        assert pub.card_has_img_cover(index)
+        def _q(pub):
+            pub.open_publications()
+            pub.search(title)
+            return pub.card_has_img_cover(pub.card_index(title))
+        assert _public_page(browser, _q)
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -1005,17 +1044,16 @@ def test_cover_image_valid_uploads_and_displays(page):
 @pytest.mark.tc_144028
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_cover_image_empty_rejected(page):
-    # Azure TC 144028 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144028 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144028 No Cover"
     try:
         _fill_all_mandatory_fields(admin, "144028", **{FIELD_PUBLICATION_TITLE_EN: title}, skip_cover=True)
         admin.submit_for_review()
 
-        assert admin.submit_blocked() or admin.status_for(title) != "Published"
+        assert admin.submit_blocked() or _status(admin, title) != STATUS_PUBLISHED
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -1030,8 +1068,8 @@ def test_cover_image_empty_rejected(page):
 @pytest.mark.tc_144029
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_cover_image_unsupported_format_rejected(page):
-    # Azure TC 144029 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144029 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     admin.open_new_entry_form()
 
     assert admin.upload_file_expect_rejected(FIELD_COVER_IMAGE, f"{FIXTURES}/unsupported_cover.gif")
@@ -1052,31 +1090,30 @@ def test_cover_image_unsupported_format_rejected(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144030
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_file_attachment_valid_drives_meta(page):
-    # Azure TC 144030 | PBI 130711 — this case's own expected result names
-    # the public page directly, so the public card is checked here despite
-    # this test's Control_Panel-only Platform tag (mirrors
-    # export_reports_control_panel.py's own precedent).
-    admin = PublicationAdminPage(page)
+def test_file_attachment_valid_drives_meta(page, browser):
+    """Azure TC 144030 | PBI 130711. Account: QC Site Content Editor.
+    Both gates asserted; the public meta line is read logged-out."""
+    admin = _as_editor(page)
     title = "QCTEST-144030 File Meta Check"
     try:
         _fill_all_mandatory_fields(admin, "144030", **{FIELD_PUBLICATION_TITLE_EN: title})
         admin.save_as_draft()
+        admin.open_entry_by_edit_link(title)
         assert admin.uploaded_filename(FIELD_FILE_ATTACHMENT)
 
-        admin.open_entry_by_edit_link(title)
-        admin.set_publication_status("Published")
-        admin.submit_for_review()
+        _submit_as_editor(admin, title)
+        _assert_published_with_history(admin, title)
+        assert _wait_public_visible(browser, title), (
+            f"{title!r} is Published with Active Status ticked but not visible logged-out"
+        )
 
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search(title)
-        index = pub.card_index(title)
-        meta = pub.card_meta(index)
-        assert "PDF" in meta
+        def _q(pub):
+            pub.open_publications()
+            pub.search(title)
+            return pub.card_meta(pub.card_index(title))
+        assert "PDF" in _public_page(browser, _q)
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -1092,17 +1129,16 @@ def test_file_attachment_valid_drives_meta(page):
 @pytest.mark.tc_144031
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_file_attachment_empty_blocks_publish(page):
-    # Azure TC 144031 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144031 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144031 No File"
     try:
         _fill_all_mandatory_fields(admin, "144031", **{FIELD_PUBLICATION_TITLE_EN: title}, skip_file=True)
         admin.submit_for_review()
 
-        assert admin.submit_blocked() or admin.status_for(title) != "Published"
+        assert admin.submit_blocked() or _status(admin, title) != STATUS_PUBLISHED
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -1117,8 +1153,8 @@ def test_file_attachment_empty_blocks_publish(page):
 @pytest.mark.tc_144032
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_file_attachment_unsupported_format_rejected(page):
-    # Azure TC 144032 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144032 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     admin.open_new_entry_form()
 
     assert admin.upload_file_expect_rejected(FIELD_FILE_ATTACHMENT, f"{FIXTURES}/report.exe")
@@ -1136,8 +1172,8 @@ def test_file_attachment_unsupported_format_rejected(page):
 @pytest.mark.tc_144033
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_file_attachment_oversized_rejected(page):
-    # Azure TC 144033 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144033 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     admin.open_new_entry_form()
 
     assert admin.upload_file_expect_rejected(FIELD_FILE_ATTACHMENT, f"{FIXTURES}/oversized_pdf_6mb.pdf")
@@ -1158,8 +1194,8 @@ def test_file_attachment_oversized_rejected(page):
 @pytest.mark.tc_144034
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_description_en_valid_saved(page):
-    # Azure TC 144034 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144034 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144034 Description Check"
     desc = "D" * 480
     try:
@@ -1169,8 +1205,7 @@ def test_description_en_valid_saved(page):
 
         assert admin.field_value(FIELD_PUBLICATION_DESCRIPTION_EN) == desc
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -1186,13 +1221,13 @@ def test_description_en_valid_saved(page):
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_description_en_empty_accepted(page):
     # Azure TC 144035 | PBI 130711
-    admin = PublicationAdminPage(page)
+    admin = _as_editor(page)
     title = "QCTEST-144035 No Description"
     try:
         _fill_all_mandatory_fields(admin, "144035", **{FIELD_PUBLICATION_TITLE_EN: title, FIELD_PUBLICATION_DESCRIPTION_EN: ""})
         admin.save_as_draft()
 
-        assert admin.status_for(title) == "Draft"
+        assert _status(admin, title) == STATUS_DRAFT
     finally:
         admin.open_entries_list()
         admin.delete_entry_by_title(title)
@@ -1210,8 +1245,8 @@ def test_description_en_empty_accepted(page):
 @pytest.mark.tc_144036
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_description_en_500_boundary(page):
-    # Azure TC 144036 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144036 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     attempted = "D" * 501
     admin.open_new_entry_form()
 
@@ -1234,8 +1269,8 @@ def test_description_en_500_boundary(page):
 @pytest.mark.tc_144037
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_description_ar_valid_saved(page):
-    # Azure TC 144037 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144037 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144037 Description AR Check"
     desc_ar = "د" * 480
     try:
@@ -1245,8 +1280,7 @@ def test_description_ar_valid_saved(page):
 
         assert admin.field_value(FIELD_PUBLICATION_DESCRIPTION_AR) == desc_ar
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -1263,13 +1297,13 @@ def test_description_ar_valid_saved(page):
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_description_ar_empty_accepted(page):
     # Azure TC 144038 | PBI 130711
-    admin = PublicationAdminPage(page)
+    admin = _as_editor(page)
     title = "QCTEST-144038 No Description AR"
     try:
         _fill_all_mandatory_fields(admin, "144038", **{FIELD_PUBLICATION_TITLE_EN: title, FIELD_PUBLICATION_DESCRIPTION_AR: ""})
         admin.save_as_draft()
 
-        assert admin.status_for(title) == "Draft"
+        assert _status(admin, title) == STATUS_DRAFT
     finally:
         admin.open_entries_list()
         admin.delete_entry_by_title(title)
@@ -1288,8 +1322,8 @@ def test_description_ar_empty_accepted(page):
 @pytest.mark.tc_144039
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_description_ar_500_boundary(page):
-    # Azure TC 144039 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144039 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     attempted = "د" * 501
     admin.open_new_entry_form()
 
@@ -1311,26 +1345,13 @@ def test_description_ar_500_boundary(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144040
 @PUBLICATIONS_CMS_XDIST_GROUP
+@pytest.mark.skip(reason=_PAGE_COUNT_BLOCKED)
 def test_page_count_valid_displayed(page):
-    # Azure TC 144040 | PBI 130711 — this case's own expected result names
-    # the public page directly (see tc_144030's own note on this pattern).
-    admin = PublicationAdminPage(page)
-    title = "QCTEST-144040 Page Count Check"
-    try:
-        _fill_all_mandatory_fields(admin, "144040", **{FIELD_PUBLICATION_TITLE_EN: title}, page_count="42")
-        admin.save_as_draft()
-        admin.open_entry_by_edit_link(title)
-        admin.set_publication_status("Published")
-        admin.submit_for_review()
-
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search(title)
-        index = pub.card_index(title)
-        assert "42" in pub.card_meta(index)
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    """Azure TC 144040 | PBI 130711 — BLOCKED (Page Count not in guide §12).
+    Title: Verify that entering a valid positive integer in Page Count is accepted and displayed.
+    Steps: Fill all fields with Page Count = 42, publish, check the public card shows 42.
+    """
+    ...
 
 
 @allure.epic("Insights & Media")
@@ -1344,18 +1365,13 @@ def test_page_count_valid_displayed(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144041
 @PUBLICATIONS_CMS_XDIST_GROUP
+@pytest.mark.skip(reason=_PAGE_COUNT_BLOCKED)
 def test_page_count_empty_rejected(page):
-    # Azure TC 144041 | PBI 130711
-    admin = PublicationAdminPage(page)
-    title = "QCTEST-144041 No Page Count"
-    try:
-        _fill_all_mandatory_fields(admin, "144041", **{FIELD_PUBLICATION_TITLE_EN: title}, skip_page_count=True)
-        admin.submit_for_review()
-
-        assert admin.submit_blocked() or admin.status_for(title) != "Published"
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    """Azure TC 144041 | PBI 130711 — BLOCKED (Page Count not in guide §12).
+    Title: Verify that leaving Page Count empty is rejected with a validation error.
+    Steps: Fill all fields except Page Count, Submit for Review, expect a validation error.
+    """
+    ...
 
 
 @allure.epic("Insights & Media")
@@ -1369,31 +1385,13 @@ def test_page_count_empty_rejected(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144042
 @PUBLICATIONS_CMS_XDIST_GROUP
+@pytest.mark.skip(reason=_PAGE_COUNT_BLOCKED)
 def test_page_count_zero_negative_rejected(page):
-    # Azure TC 144042 | PBI 130711 — CONFIRMED LIVE (see module docstring's
-    # probe log) a blank/zero Page Count is rejected with an inline "Page
-    # count must be a positive whole number (1 or greater)." message. Two
-    # independent attempts (zero, then negative), each its own disposable
-    # entry — self-contained, not chained off one shared draft row.
-    admin = PublicationAdminPage(page)
-    title_zero = "QCTEST-144042-ZERO Bad Page Count"
-    title_negative = "QCTEST-144042-NEG Bad Page Count"
-    try:
-        _fill_all_mandatory_fields(admin, "144042-zero", **{FIELD_PUBLICATION_TITLE_EN: title_zero}, page_count="0")
-        admin.submit_for_review()
-        rejected_zero = admin.submit_blocked() or admin.status_for(title_zero) != "Published"
-
-        _fill_all_mandatory_fields(admin, "144042-neg", **{FIELD_PUBLICATION_TITLE_EN: title_negative}, page_count="-5")
-        admin.submit_for_review()
-        rejected_negative = admin.submit_blocked() or admin.status_for(title_negative) != "Published"
-
-        assert rejected_zero
-        assert rejected_negative
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title_zero)
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title_negative)
+    """Azure TC 144042 | PBI 130711 — BLOCKED (Page Count not in guide §12).
+    Title: Verify that entering 0 or a negative number in Page Count is rejected.
+    Steps: Submit with Page Count = 0, then -5; expect each rejected.
+    """
+    ...
 
 
 @allure.epic("Insights & Media")
@@ -1412,14 +1410,14 @@ def test_page_count_whitespace_only_rejected(page):
     # hold literal whitespace text; scripted per the case's own literal
     # attempt via fill(), asserting the same rejection signal as the
     # empty-field case.
-    admin = PublicationAdminPage(page)
+    admin = _as_editor(page)
     title = "QCTEST-144043 Whitespace Page Count"
     try:
         _fill_all_mandatory_fields(admin, "144043", **{FIELD_PUBLICATION_TITLE_EN: title}, skip_page_count=True)
         admin.page.get_by_role("spinbutton", name=FIELD_PAGE_COUNT, exact=True).fill("   ")
         admin.submit_for_review()
 
-        assert admin.submit_blocked() or admin.status_for(title) != "Published"
+        assert admin.submit_blocked() or _status(admin, title) != STATUS_PUBLISHED
     finally:
         admin.open_entries_list()
         admin.delete_entry_by_title(title)
@@ -1440,26 +1438,26 @@ def test_page_count_whitespace_only_rejected(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144044
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_publication_date_valid_drives_sort(page):
-    # Azure TC 144044 | PBI 130711 — this case's own expected result names
-    # the public page directly (see tc_144030's own note on this pattern).
-    admin = PublicationAdminPage(page)
+def test_publication_date_valid_drives_sort(page, browser):
+    """Azure TC 144044 | PBI 130711. Account: QC Site Content Editor.
+    Both gates asserted; Latest First is read by a logged-out visitor."""
+    admin = _as_editor(page)
     title = "QCTEST-144044 Date Sort Check"
     try:
         _fill_all_mandatory_fields(admin, "144044", **{FIELD_PUBLICATION_TITLE_EN: title}, publication_date="22/09/2026")
         admin.save_as_draft()
-        admin.open_entry_by_edit_link(title)
-        admin.set_publication_status("Published")
-        admin.submit_for_review()
+        _submit_as_editor(admin, title)
+        _assert_published_with_history(admin, title)
+        assert _wait_public_visible(browser, title)
 
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.select_sort("Latest First")
-        pub.search(title)
-        assert title in pub.card_titles()
+        def _q(pub):
+            pub.open_publications()
+            pub.select_sort("Latest First")
+            pub.search(title)
+            return pub.card_titles()
+        assert title in _public_page(browser, _q)
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -1474,17 +1472,16 @@ def test_publication_date_valid_drives_sort(page):
 @pytest.mark.tc_144045
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_publication_date_empty_rejected(page):
-    # Azure TC 144045 | PBI 130711
-    admin = PublicationAdminPage(page)
+    """Azure TC 144045 | PBI 130711. Account: QC Site Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144045 No Date"
     try:
         _fill_all_mandatory_fields(admin, "144045", **{FIELD_PUBLICATION_TITLE_EN: title}, skip_date=True)
         admin.submit_for_review()
 
-        assert admin.submit_blocked() or admin.status_for(title) != "Published"
+        assert admin.submit_blocked() or _status(admin, title) != STATUS_PUBLISHED
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 @allure.epic("Insights & Media")
@@ -1500,14 +1497,14 @@ def test_publication_date_empty_rejected(page):
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_publication_date_invalid_string_rejected(page):
     # Azure TC 144046 | PBI 130711
-    admin = PublicationAdminPage(page)
+    admin = _as_editor(page)
     title = "QCTEST-144046 Invalid Date"
     try:
         _fill_all_mandatory_fields(admin, "144046", **{FIELD_PUBLICATION_TITLE_EN: title}, skip_date=True)
         admin.set_publication_date("32/13/2026")
         admin.submit_for_review()
 
-        assert admin.submit_blocked() or admin.status_for(title) != "Published"
+        assert admin.submit_blocked() or _status(admin, title) != STATUS_PUBLISHED
     finally:
         admin.open_entries_list()
         admin.delete_entry_by_title(title)
@@ -1642,20 +1639,18 @@ def test_badge_persists_after_type_deactivated_cms(page):
 @pytest.mark.tc_144072
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_future_publication_date_publishes_immediately_cms(page):
-    # Azure TC 144072 | PBI 130711 — Control_Panel-side half.
-    admin = PublicationAdminPage(page)
+    """Azure TC 144072 | PBI 130711 — Control_Panel half. Account: QC Site
+    Content Editor. A future Publication Date does not route to Scheduled."""
+    admin = _as_editor(page)
     title = "QCTEST-144072-CMS Future Date"
     try:
-        _fill_all_mandatory_fields(admin, "144072-cms", **{FIELD_PUBLICATION_TITLE_EN: title}, publication_date="20/10/2026")
+        _fill_all_mandatory_fields(admin, "144072-cms", **{FIELD_PUBLICATION_TITLE_EN: title}, publication_date="31/10/2026")
         admin.save_as_draft()
-        admin.open_entry_by_edit_link(title)
-        admin.set_publication_status("Published")
-        admin.submit_for_review()
+        _submit_as_editor(admin, title)
 
-        assert admin.status_for(title) == "Published"
+        _assert_published_with_history(admin, title)
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        _teardown(admin, title)
 
 
 # ===========================================================================
@@ -1694,21 +1689,22 @@ def test_interrupted_file_upload_blocks_publish(page):
 @pytest.mark.tc_144075
 @PUBLICATIONS_CMS_XDIST_GROUP
 def test_delete_removes_from_admin_grid_cms(page):
-    # Azure TC 144075 | PBI 130711 — Control_Panel-side half; the shared
-    # public Download-link-graceful-response check lives in the Web-side
-    # test under the same marker.
-    admin = PublicationAdminPage(page)
+    """Azure TC 144075 | PBI 130711 — Control_Panel half. Account: QC Site
+    Content Editor."""
+    admin = _as_editor(page)
     title = "QCTEST-144075-CMS Delete Reference"
-    _fill_all_mandatory_fields(admin, "144075-cms", **{FIELD_PUBLICATION_TITLE_EN: title})
-    admin.save_as_draft()
-    admin.open_entry_by_edit_link(title)
-    admin.set_publication_status("Published")
-    admin.submit_for_review()
+    try:
+        _fill_all_mandatory_fields(admin, "144075-cms", **{FIELD_PUBLICATION_TITLE_EN: title})
+        admin.save_as_draft()
+        assert _submit_as_editor(admin, title) == STATUS_PUBLISHED
 
-    admin.open_entries_list()
-    admin.delete_entry_by_title(title)
+        admin.open_entries_list()
+        admin.delete_entry_by_title(title)
+        admin.open_entries_list()
 
-    assert not admin.row_visible(title)
+        assert not admin.row_visible(title)
+    finally:
+        _teardown(admin, title)
 
 
 # ===========================================================================

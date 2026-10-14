@@ -1,0 +1,6 @@
+suite=140371 tc=143830 point_id=48730 title=التحقق من أنه يتم الرجوع تلقائيًا إلى اللغة النشطة عند عرض تقرير لا تتوفر له ترجمة عربية
+suite=140371 tc=143577 point_id=48622 title=Verify that the Load More button renders its default state per Figma tokens
+suite=140371 tc=143603 point_id=48639 title=Verify that Load More reveals additional reports and hides once exhausted
+suite=140371 tc=143791 point_id=48716 title=Verify that double-clicking Load More does not duplicate cards in the grid
+suite=140369 tc=144195 point_id=49041 title=Verify that a missing Arabic translation falls back to the active language
+suite=140370 tc=144070 point_id=48952 title=Verify that a publication with a missing Arabic translation falls back to displaying the active language content

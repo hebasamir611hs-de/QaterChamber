@@ -1,0 +1,1542 @@
+{
+ "pbi": 129390,
+ "suite": 134461,
+ "plan": 133534,
+ "date": "2026-10-07/08",
+ "engineer": "B-129390",
+ "cases": [
+  {
+   "tc_id": 136472,
+   "title": "Verify that the Contact Us section renders correctly on the Home Page (EN, desktop)",
+   "priority": 1,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Manual",
+   "nodeid": "manual: .claude/qa-runs/manual_129390.py",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "EXECUTED (manual)",
+   "verdict": "Figma findings G5 + CAPTCHA",
+   "note": "send QC-INQ-2026-0031 succeeded"
+  },
+  {
+   "tc_id": 136473,
+   "title": "Verify that the Contact Us section is responsive at mobile width (375px, EN)",
+   "priority": 3,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_contact_us_responsive_at_mobile_375[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "NEEDS USER (PBI silent)",
+   "note": "directions icon 32x32 < 44px",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136474,
+   "title": "Verify that the Contact Us section is responsive at tablet width (768px, EN)",
+   "priority": 3,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_contact_us_responsive_at_tablet_768[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136475,
+   "title": "Verify that the Inquiry Category dropdown shows the correct placeholder and full option list",
+   "priority": 3,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_inquiry_category_dropdown_placeholder_and_options[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136476,
+   "title": "Verify that each form field shows the correct focus state",
+   "priority": 4,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_form_fields_show_visible_focus_state[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": "DEFERRED (P4, user 2026-10-08)",
+   "note": "ran once in batch 1 before the deferral: passed",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136477,
+   "title": "Verify that inline validation error state is visually distinct on empty required fields",
+   "priority": 3,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_empty_required_fields_show_distinct_error_state[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136478,
+   "title": "Verify that the Send Message button shows a disabled/loading state during submission",
+   "priority": 3,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_send_message_button_disabled_during_submission[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136479,
+   "title": "Verify that the embedded map renders the Qatar Chamber location pin correctly",
+   "priority": 3,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_embedded_map_renders_location_pin[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136480,
+   "title": "Verify that the CMS Contact Us Section Management screen renders all configuration fields",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_management_screen_renders_all_configuration_fields_136480[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136481,
+   "title": "Verify that the Figma-designed Mobile Number field is not present on the live public form (flagged spec discrepancy)",
+   "priority": 4,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Manual",
+   "nodeid": "manual: .claude/qa-runs/manual_129390.py",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "EXECUTED (manual)",
+   "verdict": "DEFERRED (P4, user 2026-10-08)",
+   "note": "Mobile Number field present (optional); PBI ambiguous"
+  },
+  {
+   "tc_id": 136482,
+   "title": "Verify that Arabic/mobile/dark-mode Figma variants are not pixel-verified and render is assumption-based",
+   "priority": 4,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Manual",
+   "nodeid": "manual: .claude/qa-runs/manual_129390.py",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PARTIAL (manual)",
+   "verdict": "DEFERRED (P4, user 2026-10-08)",
+   "note": "AR/mobile/contrast rendered; dark not run"
+  },
+  {
+   "tc_id": 136483,
+   "title": "Verify that a Site Content Editor can access Contact Us Section Management",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_site_content_editor_can_access_management_136483[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "PRODUCT_BUG candidate G1 (+ automation wait heal not rerun)",
+   "note": "Editor gets no-role message on article 53012",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136484,
+   "title": "Verify that a user without Content Editor role is denied access to Contact Us Section Management",
+   "priority": 1,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_user_without_editor_role_denied_136484[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136485,
+   "title": "Verify that an unauthenticated Public Visitor can view and submit the Contact Us section",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_public_visitor_can_view_and_submit_136485[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136486,
+   "title": "Verify that a Public Visitor cannot reach the CMS Contact Us Section Management via forced browsing",
+   "priority": 1,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_public_visitor_forced_browsing_denied_136486[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136487,
+   "title": "Verify that Full Name empty submission is blocked with the correct bilingual message",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_full_name_empty_blocked_136487[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136488,
+   "title": "Verify that Email Address empty submission shows the correct message",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_email_empty_blocked_136488[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136489,
+   "title": "Verify that an invalid Email Address format is rejected",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_email_invalid_format_blocked_136489[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136490,
+   "title": "Verify that submitting with Inquiry Category not selected is blocked",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_category_not_selected_blocked_136490[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136491,
+   "title": "Verify that submitting with Message empty is blocked",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_message_empty_blocked_136491[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136492,
+   "title": "Verify that the Inquiry Category dropdown shows a placeholder with no selectable items when zero categories are active",
+   "priority": 3,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "NOT RUN",
+   "verdict": "NEEDS USER",
+   "note": "needs all 11 real categories inactive"
+  },
+  {
+   "tc_id": 136493,
+   "title": "Verify that the location address still displays as plain text when the embedded map fails to load",
+   "priority": 3,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_location_text_shown_when_map_fails_136493[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136494,
+   "title": "Verify that a submission failing due to a backend error shows the correct message and does not falsely confirm success",
+   "priority": 1,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_backend_error_shows_failure_message_136494[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136495,
+   "title": "Verify that a double-click on Send Message does not create duplicate stored submissions or duplicate emails",
+   "priority": 1,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_double_click_sends_once_136495[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136496,
+   "title": "Verify that the User Acknowledgement Email (English) matches the specified template",
+   "priority": 1,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Manual",
+   "nodeid": "manual: .claude/qa-runs/manual_129390.py",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "SENT, awaiting user inbox check",
+   "verdict": "NEEDS USER",
+   "note": "ack to heba.samir611.hs@gmail.com, 00:54 UTC"
+  },
+  {
+   "tc_id": 136497,
+   "title": "Verify that the Admin Notification Email (English) matches the specified template",
+   "priority": 1,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Manual",
+   "nodeid": "manual: .claude/qa-runs/manual_129390.py",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "SENT",
+   "verdict": "NEEDS USER",
+   "note": "admin inbox not readable"
+  },
+  {
+   "tc_id": 136498,
+   "title": "Verify that the CMS end-to-end configuration flow saves and publishes correctly",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_contact_us_section_full_admin_configuration_flow_136498[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136499,
+   "title": "Verify that a visitor's valid form submission is routed to the currently configured recipient address(es)",
+   "priority": 1,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Manual",
+   "nodeid": "manual: .claude/qa-runs/manual_129390.py",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "SENT",
+   "verdict": "NEEDS USER",
+   "note": "recipient info@qcci.org not readable"
+  },
+  {
+   "tc_id": 136500,
+   "title": "Verify that Full Name whitespace-only is rejected",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_full_name_whitespace_blocked_136500[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136501,
+   "title": "Verify that Full Name valid value is accepted",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_full_name_valid_accepted_136501[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136502,
+   "title": "Verify that Email whitespace-only is rejected",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_email_whitespace_blocked_136502[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136503,
+   "title": "Verify that valid Email is accepted",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_email_valid_accepted_136503[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136504,
+   "title": "Verify that Message whitespace-only is rejected",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_message_whitespace_blocked_136504[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136505,
+   "title": "Verify that valid Message is accepted",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_message_valid_accepted_136505[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136506,
+   "title": "Verify that Captcha missing blocks submission",
+   "priority": 1,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Manual",
+   "nodeid": "manual: .claude/qa-runs/manual_129390.py",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAIL (manual)",
+   "verdict": "NEEDS USER (CAPTCHA disabled on qcdev)",
+   "note": "config enabled:false siteKey:''; empty token accepted"
+  },
+  {
+   "tc_id": 136507,
+   "title": "Verify that Captcha solved allows submission to proceed",
+   "priority": 1,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Manual",
+   "nodeid": "manual: .claude/qa-runs/manual_129390.py",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "N/E (no captcha to solve)",
+   "verdict": "NEEDS USER",
+   "note": "same as 136506"
+  },
+  {
+   "tc_id": 136508,
+   "title": "Verify that Section Tag (EN) valid value saves",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_tag_en_valid_136508[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136509,
+   "title": "Verify that Section Tag (EN) empty is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_tag_en_empty_136509[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136510,
+   "title": "Verify that Section Tag (EN) at 51 characters is rejected",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_tag_en_51_136510[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136511,
+   "title": "Verify that Section Tag (EN) whitespace-only is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_tag_en_ws_136511[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136512,
+   "title": "Verify that Section Heading (EN) valid value saves",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_heading_en_valid_136512[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136513,
+   "title": "Verify that Section Heading (EN) empty is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_heading_en_empty_136513[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136514,
+   "title": "Verify that Section Heading (EN) at 101 characters is rejected",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_heading_en_101_136514[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136515,
+   "title": "Verify that Section Heading (EN) whitespace-only is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_heading_en_ws_136515[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136516,
+   "title": "Verify that Section Description (EN) valid value saves",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_desc_en_valid_136516[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136517,
+   "title": "Verify that Section Description (EN) at 501 characters is rejected",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_desc_en_501_136517[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136518,
+   "title": "Verify that Email Support Address valid value saves",
+   "priority": 1,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_email_support_valid_136518[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136519,
+   "title": "Verify that Email Support Address empty is rejected",
+   "priority": 1,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_email_support_empty_136519[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136520,
+   "title": "Verify that Email Support Address invalid format is rejected",
+   "priority": 1,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_email_support_invalid_136520[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136521,
+   "title": "Verify that Email Support Address at 151 characters is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_email_support_151_136521[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136522,
+   "title": "Verify that Email Support Address whitespace-only is rejected",
+   "priority": 1,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_email_support_ws_136522[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136523,
+   "title": "Verify that Telephone Number valid value saves",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_telephone_valid_136523[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136524,
+   "title": "Verify that Telephone Number empty is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_telephone_empty_136524[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136525,
+   "title": "Verify that Telephone Number at 21 characters is rejected",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_telephone_21_136525[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136526,
+   "title": "Verify that Telephone Number whitespace-only is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_telephone_ws_136526[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136527,
+   "title": "Verify that Location Address (EN) valid value saves",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_location_en_valid_136527[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136528,
+   "title": "Verify that Location Address (EN) empty is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_location_en_empty_136528[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136529,
+   "title": "Verify that Location Address (EN) at 301 characters is rejected",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_location_en_301_136529[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136530,
+   "title": "Verify that Location Address (EN) whitespace-only is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_location_en_ws_136530[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136531,
+   "title": "Verify that Map Embed URL valid value saves",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_map_url_valid_136531[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136532,
+   "title": "Verify that Map Embed URL invalid format is rejected",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_map_url_invalid_136532[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136533,
+   "title": "Verify that Map Embed URL at 501 characters is rejected",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_map_url_501_136533[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136534,
+   "title": "Verify that Inquiry Category Label (EN) valid value saves",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_inquiry_category_label_en_valid_value_saves_136534[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (pager; healed, rerun not run)",
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136535,
+   "title": "Verify that Inquiry Category Label (EN) empty is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_inquiry_category_label_en_empty_rejected_136535[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (pager locator; healed, rerun not run)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136536,
+   "title": "Verify that Inquiry Category Label (EN) at 101 characters is rejected",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_inquiry_category_label_en_101_chars_136536[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (pager; healed, rerun not run)",
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136537,
+   "title": "Verify that Inquiry Category Label (EN) whitespace-only is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_inquiry_category_label_en_whitespace_rejected_136537[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (pager; healed, rerun not run)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136538,
+   "title": "Verify that Inquiry Category Display Order valid value saves",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_inquiry_category_display_order_valid_value_saves_136538[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (pager; healed, rerun not run)",
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136539,
+   "title": "Verify that Inquiry Category Display Order empty is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_inquiry_category_display_order_empty_rejected_136539[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (pager; healed, rerun not run)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136540,
+   "title": "Verify that Inquiry Category Display Order rejects zero, negative, and non-numeric values",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_inquiry_category_display_order_invalid_values_rejected_136540[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136541,
+   "title": "Verify that Form Recipient Email(s) valid multi-value saves",
+   "priority": 1,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_recipients_valid_136541[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136542,
+   "title": "Verify that Form Recipient Email(s) empty is rejected",
+   "priority": 1,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_recipients_empty_136542[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136543,
+   "title": "Verify that Form Recipient Email(s) invalid format is rejected",
+   "priority": 1,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_recipients_invalid_136543[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "PRODUCT_BUG candidate G4",
+   "note": "'contact@qcci.org;;bad-email' passed validation (permissions modal opened); possible orphan draft",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136544,
+   "title": "Verify that Form Recipient Email(s) at 301 characters is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_recipients_301_136544[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136545,
+   "title": "Verify that Form Recipient Email(s) whitespace-only is rejected",
+   "priority": 1,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_recipients_ws_136545[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136546,
+   "title": "Verify that Send Message Button Label (EN) valid value saves",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_send_message_button_label_en_valid_136546[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136547,
+   "title": "Verify that Send Message Button Label (EN) empty is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_button_label_en_empty_136547[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136548,
+   "title": "Verify that Send Message Button Label (EN) at 51 characters is rejected",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_button_label_en_51_136548[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136549,
+   "title": "Verify that Send Message Button Label (EN) whitespace-only is rejected",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_button_label_en_ws_136549[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136550,
+   "title": "التحقق من أنه يتم عرض قسم تواصل معنا بشكل صحيح في الصفحة الرئيسية باللغة العربية (سطح المكتب، من اليمين إلى اليسار)",
+   "priority": 3,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_contact_us_renders_correctly_in_arabic_rtl_desktop[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (healed, rerun not run)",
+   "note": "email placeholder flagged as English",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136551,
+   "title": "التحقق من أنه يتم عرض شاشة إدارة قسم تواصل معنا في نظام إدارة المحتوى بشكل صحيح باللغة العربية",
+   "priority": 4,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_management_screen_renders_in_arabic_136551[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": "DEFERRED (P4, user 2026-10-08)",
+   "note": "ran once in batch 1: passed",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136552,
+   "title": "التحقق من أنه تظهر رسالة 'الاسم الكامل مطلوب.' بشكل صحيح باللغة العربية",
+   "priority": 2,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Automation",
+   "nodeid": "web/tests/home_quick_contact/test_home_quick_contact_web.py::test_full_name_required_message_arabic_136552[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "PASSED",
+   "verdict": null,
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136553,
+   "title": "التحقق من أنه رسالة الشكر الإلكترونية للمستخدم (بالعربية) تطابق القالب المحدد",
+   "priority": 1,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Manual",
+   "nodeid": "manual: .claude/qa-runs/manual_129390.py",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "SENT, awaiting user inbox check",
+   "verdict": "NEEDS USER",
+   "note": "AR ack, QC-INQ-2026-0032, 00:56 UTC"
+  },
+  {
+   "tc_id": 136554,
+   "title": "التحقق من أنه رسالة إشعار المسؤول الإلكترونية (بالعربية) تطابق القالب المحدد",
+   "priority": 1,
+   "platform": [
+    "Web"
+   ],
+   "execution": "Manual",
+   "nodeid": "manual: .claude/qa-runs/manual_129390.py",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "SENT",
+   "verdict": "NEEDS USER",
+   "note": "admin inbox not readable"
+  },
+  {
+   "tc_id": 136555,
+   "title": "التحقق من أنه يتم حفظ قيمة صحيحة لعلامة القسم (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_tag_ar_valid_136555[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136556,
+   "title": "التحقق من أنه يتم رفض علامة القسم الفارغة (بالعربية)",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_tag_ar_empty_136556[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (AR Map Embed URL fill; healed, rerun not run)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136557,
+   "title": "التحقق من أنه يتم رفض علامة القسم عند 51 حرفًا (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_tag_ar_51_136557[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136558,
+   "title": "التحقق من أنه يتم رفض علامة القسم المكوّنة من مسافات فقط (بالعربية)",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_tag_ar_ws_136558[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (AR fill; healed)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136559,
+   "title": "التحقق من أنه يتم حفظ قيمة صحيحة لعنوان القسم (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_heading_ar_valid_136559[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136560,
+   "title": "التحقق من أنه يتم رفض عنوان القسم الفارغ (بالعربية)",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_heading_ar_empty_136560[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (AR fill; healed)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136561,
+   "title": "التحقق من أنه يتم رفض عنوان القسم عند 101 حرف (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_heading_ar_101_136561[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136562,
+   "title": "التحقق من أنه يتم رفض عنوان القسم المكوّن من مسافات فقط (بالعربية)",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_heading_ar_ws_136562[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (AR fill; healed)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136563,
+   "title": "التحقق من أنه يتم حفظ قيمة صحيحة لوصف القسم (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_desc_ar_valid_136563[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136564,
+   "title": "التحقق من أنه يتم رفض وصف القسم عند 501 حرف (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_desc_ar_501_136564[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136565,
+   "title": "التحقق من أنه يتم حفظ قيمة صحيحة لعنوان الموقع (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_location_ar_valid_136565[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136566,
+   "title": "التحقق من أنه يتم رفض عنوان الموقع الفارغ (بالعربية)",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_location_ar_empty_136566[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (AR fill; healed)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136567,
+   "title": "التحقق من أنه يتم رفض عنوان الموقع عند 301 حرف (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_location_ar_301_136567[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136568,
+   "title": "التحقق من أنه يتم رفض عنوان الموقع المكوّن من مسافات فقط (بالعربية)",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_location_ar_ws_136568[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (AR fill; healed)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136569,
+   "title": "التحقق من أنه يتم حفظ قيمة صحيحة لتصنيف فئة الاستفسار (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_inquiry_category_label_ar_valid_value_saves_136569[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (pager; healed, rerun not run)",
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136570,
+   "title": "التحقق من أنه يتم رفض تصنيف فئة الاستفسار الفارغ (بالعربية)",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_inquiry_category_label_ar_empty_rejected_136570[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (pager; healed, rerun not run)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136571,
+   "title": "التحقق من أنه يتم رفض تصنيف فئة الاستفسار عند 101 حرف (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_inquiry_category_label_ar_101_chars_136571[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (pager; healed, rerun not run)",
+   "note": "",
+   "log": "reports/pbi_129390_p34.log"
+  },
+  {
+   "tc_id": 136572,
+   "title": "التحقق من أنه يتم حفظ قيمة صحيحة لنص زر إرسال الرسالة (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_send_message_button_label_ar_valid_136572[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136573,
+   "title": "التحقق من أنه يتم رفض نص زر إرسال الرسالة الفارغ (بالعربية)",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_button_label_ar_empty_136573[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (AR fill; healed)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  },
+  {
+   "tc_id": 136574,
+   "title": "التحقق من أنه يتم رفض نص زر إرسال الرسالة عند 51 حرفًا (بالعربية)",
+   "priority": 3,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_button_label_ar_51_136574[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": null,
+   "verdict": null,
+   "note": ""
+  },
+  {
+   "tc_id": 136575,
+   "title": "التحقق من أنه يتم رفض نص زر إرسال الرسالة المكوّن من مسافات فقط (بالعربية)",
+   "priority": 2,
+   "platform": [
+    "Control_Panel"
+   ],
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_button_label_ar_ws_136575[page0]",
+   "currently_skipped": "n (all @skip / skipif removed 2026-10-08)",
+   "result": "FAILED",
+   "verdict": "AUTOMATION_BUG (AR fill; healed)",
+   "note": "",
+   "log": "reports/pbi_129390_p12.log"
+  }
+ ],
+ "stale_flags_found": {
+  "cms/tests/home_contact_us": "11 @skip (Fields panel 'blocked' — panel renders now); 3 tests wrote the LIVE Inquiry Category 52706 as TEST_USER via Content & Data; publish_article on live 53012 in teardown; fixed wait_for_timeout(2000)",
+  "cms/tests/home_quick_contact": "2 tests behind collection-time skipif (TODO placeholder locators) + TEST_USER login",
+  "web/tests/home_quick_contact": "every public read on the TEST_USER-authenticated page; no tc_ markers; 136478 made a real submission with example.com; spinner check looked for a class the fragment does not use",
+  "cms/pages/home_contact_us": "Content & Data navigation; TEST_USER fallback login; TODO(locator) placeholders"
+ },
+ "findings_so_far": {
+  "G1": "QC Site Content Editor gets 'You do not have the roles required to access this portlet.' on article 53012 / Web Content (same as site member). reports/recon-129390-editor_article_53012.png",
+  "G3": "Fragment 'QC Home Contact Us' hardcodes section copy in JS (setText overwrites), map from fragment configuration; no code reads article 53012. Live: article Map Embed URL != rendered iframe src. reports/recon2-129390-fragment.js",
+  "CAPTCHA": "/o/qc-recaptcha-api/config -> enabled:false siteKey:'' ; widget hidden; NEEDS USER (dev config?)",
+  "ENV": "Web Content admin list: 'Web Content is temporarily unavailable.' (TEST_USER) reports/probe4-129390-list.png",
+  "probe_article": "QCTEST-129390-PROBE possibly created as Draft 03:05 (save navigated); not locatable via UI list; gate_129390.py looks it up via JSONWS"
+ }
+}

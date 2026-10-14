@@ -28,7 +28,7 @@ submitted) create/edit form:
     textbox "Redirect URL"
     combobox "Open Behavior"
     checkbox "Active Status"
-    button "Save as Draft" / "Submit for Publishing"
+    button "Save as Draft" / "Submit for Review"
 
 Note this object has NO separate page-level "Status"/"Display Order" pair
 (unlike the Hero object) — only "Active Status" governs this card's own

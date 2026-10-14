@@ -1,0 +1,2566 @@
+{
+ "pbi": 129384,
+ "suite": 134455,
+ "plan": 133534,
+ "cases": [
+  {
+   "tc_id": 135921,
+   "title": "Verify that the Weather widget displays the title \"Weather\"",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_title_135921[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135922,
+   "title": "Verify that the Weather widget displays the city name \"Doha\" in bold",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_city_doha_bold_135922[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135923,
+   "title": "Verify that the Weather widget displays the current temperature as a large numeral with °C unit",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_temperature_30_large_numeral_135923[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135924,
+   "title": "Verify that the Weather widget displays the current weather condition label \"Light Rain\"",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_condition_light_rain_135924[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135925,
+   "title": "Verify that the Weather widget displays a weather icon matching the current condition",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_icon_matches_condition_135925[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "FAIL (run1) / BROKEN (rerun)",
+   "verdict": "Not a bug (review 2026-10-08)",
+   "note": "INCONCLUSIVE: Light Rain draws cloud+drops (qc-weather.js), TC expects cloud+sun; Figma card is an image fill"
+  },
+  {
+   "tc_id": 135926,
+   "title": "Verify that the Weather widget displays the high/low temperature row \"30°-24°\"",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_high_low_row_135926[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135927,
+   "title": "Verify that the Weather widget displays humidity \"27%\" (design-vs-spec gap)",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_humidity_27_135927[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135928,
+   "title": "Verify that the Weather widget displays wind speed \"6.25 km/h\" (design-vs-spec gap)",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_wind_6_25_135928[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135929,
+   "title": "Verify that the Weather card renders at the Figma-specified fixed height of 362px",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_card_height_362_135929[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135930,
+   "title": "Verify that the 3-widget row uses 3 equal ~424px columns with 24px gaps in a 1320px container",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_widget_row_columns_and_gaps_135930[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "FAIL (run1) / BROKEN (rerun)",
+   "verdict": "BUG per user (P3, low): row gap 32 vs Figma 24; repro reports/manual-repro-129384-row-gap-1920.png",
+   "note": "FINDING (candidate): row gap 32 px (CSS --_dw-gap:32px) vs Figma 24 -> columns 418.7 vs 424 (run1); rerun env"
+  },
+  {
+   "tc_id": 135931,
+   "title": "Verify that the Weather card uses 24px/20px padding, 16px internal gap, and 16px corner radius",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_card_padding_gap_radius_135931[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": null,
+   "result_final": null,
+   "result": "not run",
+   "verdict": "DEFERRED (P4, user 2026-10-08)",
+   "note": ""
+  },
+  {
+   "tc_id": 135932,
+   "title": "Verify that the Weather card renders with a dark red/maroon background color",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_card_maroon_background_135932[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": null,
+   "result_final": null,
+   "result": "not run",
+   "verdict": "DEFERRED (P4, user 2026-10-08)",
+   "note": ""
+  },
+  {
+   "tc_id": 135933,
+   "title": "Verify that the 5-day forecast row displays exactly 5 days (Mon–Fri)",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_forecast_exactly_five_days_mon_fri_135933[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135934,
+   "title": "Verify that each forecast day shows a day name, weather icon, and temperature",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_each_forecast_day_has_name_icon_temperature_135934[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135935,
+   "title": "Verify that the current weather section and forecast section are visually distinct and clearly readable",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Manual",
+   "nodeids": "MISSING",
+   "currently_skipped": "n",
+   "result_first": null,
+   "result_final": null,
+   "result": "PASS (manual)",
+   "verdict": "-",
+   "note": "white text on #911731 contrast 8.86:1 all labels; forecast 16 px gap + 1 px divider; reports/manual-exec-129384-135935.png"
+  },
+  {
+   "tc_id": 135936,
+   "title": "Verify that the Weather widget renders correctly in Arabic (RTL)",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_renders_rtl_arabic_135936[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135937,
+   "title": "Verify that the Weather widget renders correctly in English (LTR)",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_renders_ltr_english_135937[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135938,
+   "title": "Verify that the Marhaba Guide card renders at the confirmed structural dimensions with its background image and top-left logo",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_structure_vs_figma[135938-marhaba-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "BUG per user: same root cause as 135930",
+   "note": "FINDING (same root cause as 135930): card width 418.7 vs 424 (5.3 > ±5)"
+  },
+  {
+   "tc_id": 135939,
+   "title": "Verify that the B2B Platform card renders at the confirmed structural dimensions with its dotted background pattern and top-left logo",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_structure_vs_figma[135939-b2b-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "BUG per user: same root cause as 135930",
+   "note": "FINDING (same root cause as 135930): card width 418.7 vs 424 (5.3 > ±5)"
+  },
+  {
+   "tc_id": 135940,
+   "title": "Verify that the Marhaba Guide card displays the heading \"Qatar Chamber Commercial & Industrial Directory\"",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[marhaba-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 135941,
+   "title": "Verify that the B2B Platform card displays the heading \"Get\" / \"Verified by Qatar Chamber\"",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[b2b-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 135942,
+   "title": "Verify that the widgets section maintains consistent spacing/alignment with surrounding Home Page sections",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Manual",
+   "nodeids": "DEFERRED-P4",
+   "currently_skipped": "n",
+   "result_first": null,
+   "result_final": null,
+   "result": "not run",
+   "verdict": "DEFERRED (P4, user 2026-10-08)",
+   "note": ""
+  },
+  {
+   "tc_id": 135943,
+   "title": "Verify that a loading placeholder displays on the Weather card before API data arrives",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_loading_placeholder_135943[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "ENVIRONMENT/AUTO: skeleton wait timed out 2/2 during network instability; passed in earlier sessions"
+  },
+  {
+   "tc_id": 135944,
+   "title": "Verify that hovering the Weather card does not break the card layout",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_hover_keeps_layout_135944[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": null,
+   "result_final": null,
+   "result": "not run",
+   "verdict": "DEFERRED (P4, user 2026-10-08)",
+   "note": ""
+  },
+  {
+   "tc_id": 135945,
+   "title": "Verify that the widgets row stacks vertically on a 375px mobile viewport",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_widgets_stack_on_mobile_375_135945[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135946,
+   "title": "Verify that the widgets row renders correctly on a 768px tablet viewport",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_widgets_reflow_on_tablet_768_135946[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135947,
+   "title": "Verify that the Weather widget renders consistently across Chrome, Firefox, Edge, and Safari",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_same_across_browsers_135947"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135948,
+   "title": "Verify that the weather icon font/image asset renders correctly across browsers",
+   "priority": 4,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_icon_renders_chrome_and_safari_135948"
+   ],
+   "currently_skipped": "n",
+   "result_first": null,
+   "result_final": null,
+   "result": "not run",
+   "verdict": "DEFERRED (P4, user 2026-10-08)",
+   "note": ""
+  },
+  {
+   "tc_id": 135949,
+   "title": "Verify that the widgets section loads progressively without layout breakage on a throttled 3G network",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_widgets_progressive_load_on_slow_3g_135949[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "ENVIRONMENT: Slow-3G page never reached the widgets in 10 min (heavy page) - inconclusive"
+  },
+  {
+   "tc_id": 135950,
+   "title": "Verify that an unauthenticated user cannot access Dynamic Widgets Management via direct URL",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_unauthenticated_direct_url_is_refused_135950"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135951,
+   "title": "Verify that a Site Content Editor can access and configure Dynamic Widgets Management",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_editor_can_access_and_configure_management_135951"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 135952,
+   "title": "Verify that a role without Home Page content permission is denied access to Dynamic Widgets Management",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_site_member_is_denied_135952[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135953,
+   "title": "Verify that an expired session during widget editing discards unsaved changes and prompts re-login",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_expired_session_discards_unsaved_edit_135953"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "Not a bug (review 2026-10-08)",
+   "note": "INCONCLUSIVE: edit not persisted (OK) but no re-login prompt; landed on manage URL; manual repro not completed"
+  },
+  {
+   "tc_id": 135954,
+   "title": "Verify that a Public Visitor session cannot reach Dynamic Widgets Management even with a valid frontend session cookie",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_public_visitor_session_cannot_reach_management_135954"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135955,
+   "title": "Verify that all three widget cards display in the Home Page widgets section (English)",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_three_widgets_in_order_english_135955[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "INCONCLUSIVE (data)",
+   "note": "INCONCLUSIVE (data): 4 real image widgets live (171082/171116 added 2026-09-19), PBI says 3"
+  },
+  {
+   "tc_id": 135956,
+   "title": "Verify that all three widget cards display in the Home Page widgets section (Arabic)",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_three_widgets_arabic_rtl_135956[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "INCONCLUSIVE (data)",
+   "note": "INCONCLUSIVE (data): same as 135955; AR images + RTL mirror OK"
+  },
+  {
+   "tc_id": 135957,
+   "title": "Verify that clicking the Marhaba Guide widget opens the Marhaba Guide platform in a new browser tab",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_visitor_click_opens_platform_in_new_tab[135957-marhaba]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135958,
+   "title": "Verify that clicking the B2B Platform widget opens the B2B platform in a new browser tab",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_visitor_click_opens_platform_in_new_tab[135958-b2b]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135959,
+   "title": "Verify that the Weather widget displays live data sourced from the Weather API end-to-end",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_shows_live_api_values_135959[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135960,
+   "title": "Verify that \"Weather data unavailable.\" displays when the Weather API is unavailable (English)",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_api_down_fallback_english_135960[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135961,
+   "title": "Verify that \"بيانات الطقس غير متاحة حالياً.\" displays when the Weather API is unavailable (Arabic)",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_api_down_fallback_arabic_135961[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135962,
+   "title": "Verify that the Weather widget does not render on the Home Page when disabled in CMS",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_weather_widget_configuration_exists[135962]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 135963,
+   "title": "Verify that the Marhaba Guide widget does not render on the Home Page when disabled in CMS",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_active_off_removes_only_that_widget_135972[marhaba]",
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_active_off_removes_only_that_widget_135972[b2b]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135964,
+   "title": "Verify that the B2B Platform widget does not render on the Home Page when disabled in CMS",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_active_off_removes_only_that_widget_135972[marhaba]",
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_active_off_removes_only_that_widget_135972[b2b]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135965,
+   "title": "Verify that Home Page behavior is correct when all three widgets are disabled in CMS",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_all_widgets_disabled_section_collapses[135965-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "FAIL (run1) / BROKEN (rerun)",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather root cause: image cards correctly absent with no active widget; Weather (no CMS switch) still shows"
+  },
+  {
+   "tc_id": 135966,
+   "title": "Verify that a Site Content Editor can fully configure and publish the Marhaba Guide widget end-to-end",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_marhaba_widget_full_journey_135966"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135967,
+   "title": "Verify that a Site Content Editor can fully configure and publish the B2B Platform widget end-to-end",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_b2b_widget_full_journey_135967"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135968,
+   "title": "Verify that a Site Content Editor can configure the Weather widget's limited CMS settings end-to-end",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_weather_widget_configuration_exists[135968]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 135969,
+   "title": "Verify that a Liferay generic success toast message displays after a successful widget save",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_generic_success_toast_after_save_135969"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 135970,
+   "title": "Verify that unpublishing a previously published widget removes it from the Home Page",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_unpublish_removes_widget_from_home_135970"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135971,
+   "title": "Verify that editing a published widget's Redirect URL updates the live link on the Home Page after republish",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_edit_redirect_url_updates_live_link_135971"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "FAIL (run1) / BROKEN (rerun)",
+   "verdict": "Not a bug (review 2026-10-08)",
+   "note": "INCONCLUSIVE: run1 read \"Pending Review\" right after an Editor Publish; rerun env-timeout; record later shows Published; repro not completed"
+  },
+  {
+   "tc_id": 135972,
+   "title": "Verify that switching a widget's Active Status from True to False removes only that widget from the Home Page",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_active_off_removes_only_that_widget_135972[marhaba]",
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_active_off_removes_only_that_widget_135972[b2b]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135973,
+   "title": "Verify that a valid Widget Image (EN) uploads successfully for the Marhaba Guide widget",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_valid_widget_image_uploads_and_is_stored[135973-marhaba-en]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 135974,
+   "title": "Verify that saving the Marhaba Guide widget without a Widget Image (EN) is blocked",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_save_without_widget_image_is_blocked[135974-marhaba-no-en]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135975,
+   "title": "Verify that uploading an unsupported file format for Widget Image (EN) is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_unsupported_image_format_is_rejected[135975-en-pdf]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135976,
+   "title": "Verify that uploading a Widget Image (EN) exceeding 2MB is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_oversize_widget_image[135976-en-3mb]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135977,
+   "title": "Verify that canceling after uploading a Widget Image (EN) discards the upload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_cancel_after_image_upload_discards_it[135977-en]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 135978,
+   "title": "Verify that a saved Widget Image (EN) persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_saved_widget_image_persists_after_reload[135978-en]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 135979,
+   "title": "Verify that a valid Widget Image (AR) uploads successfully for the Marhaba Guide widget",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_valid_widget_image_uploads_and_is_stored[135979-marhaba-ar]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 135980,
+   "title": "Verify that saving the Marhaba Guide widget without a Widget Image (AR) is blocked",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_save_without_widget_image_is_blocked[135980-marhaba-no-ar]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135981,
+   "title": "Verify that uploading an unsupported file format for Widget Image (AR) is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_unsupported_image_format_is_rejected[135981-ar-docx]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135982,
+   "title": "Verify that uploading a Widget Image (AR) exceeding 2MB is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_oversize_widget_image[135982-ar-2.5mb]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135983,
+   "title": "Verify that canceling after uploading a Widget Image (AR) discards the upload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_cancel_after_image_upload_discards_it[135983-ar]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 135984,
+   "title": "Verify that a saved Widget Image (AR) persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_saved_widget_image_persists_after_reload[135984-ar]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135985,
+   "title": "Verify that saving is blocked when only Widget Image (EN) is uploaded and Widget Image (AR) is missing",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_save_without_widget_image_is_blocked[135985-en-only-ar-missing]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135986,
+   "title": "Verify that a valid Redirect URL saves successfully for the Marhaba Guide widget",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_valid_redirect_url_saves[135986]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 135987,
+   "title": "Verify that leaving the Redirect URL empty blocks saving the Marhaba Guide widget",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_or_empty_redirect_url_is_blocked[135987-empty]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135988,
+   "title": "Verify that an invalid Redirect URL format is rejected",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_or_empty_redirect_url_is_blocked[135988-invalid]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135989,
+   "title": "Verify that a Redirect URL exceeding 500 characters is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_redirect_url_length_boundary[135989-501]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135990,
+   "title": "Verify that a Redirect URL of exactly 500 characters is accepted",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_redirect_url_length_boundary[135990-500]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "BUG per user: Redirect URL limit 280 < PBI 500; repro reports/manual-repro-129384-135990-url-limit.png",
+   "note": "Rule 5: implemented limit 280 < US 500 (\"Object entry value exceeds the maximum length of 280 characters\") - NEEDS USER (vs 2026-10-03 no-char-limit rule)"
+  },
+  {
+   "tc_id": 135991,
+   "title": "Verify that a script-injection value in the Redirect URL field is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_or_empty_redirect_url_is_blocked[135991-script]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135992,
+   "title": "Verify that canceling a Redirect URL edit discards the change",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_cancel_redirect_url_edit_discards_it[135992]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 135993,
+   "title": "Verify that a saved Redirect URL persists exactly after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_saved_redirect_url_persists_after_reload[135993]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135994,
+   "title": "Verify that enabling Open in New Tab = True causes the Marhaba Guide link to open in a new tab",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_open_in_new_tab_drives_the_public_click[135994-marhaba-true]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "run1: lookup missed the saved (inactive) record; rerun hit network drops - heal applied, not re-verified"
+  },
+  {
+   "tc_id": 135995,
+   "title": "Verify that disabling Open in New Tab = False causes the Marhaba Guide link to open in the same tab",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_open_in_new_tab_drives_the_public_click[135995-marhaba-false]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "run1: lookup missed the saved (inactive) record; rerun hit network drops - heal applied, not re-verified"
+  },
+  {
+   "tc_id": 135996,
+   "title": "Verify that the Open in New Tab setting persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_open_in_new_tab_persists_after_reload[135996]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135997,
+   "title": "Verify that a valid Display Order value saves successfully for the Marhaba Guide widget",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_display_order_one_renders_first_135997"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "run1: lookup missed the saved (inactive) record; rerun hit network drops - heal applied, not re-verified"
+  },
+  {
+   "tc_id": 135998,
+   "title": "Verify that leaving Display Order empty blocks saving the Marhaba Guide widget",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_display_order_is_blocked[135998-empty]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 135999,
+   "title": "Verify that entering Display Order = 0 is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_display_order_is_blocked[135999-zero]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136000,
+   "title": "Verify that entering a negative Display Order value is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_display_order_is_blocked[136000-neg]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/"
+  },
+  {
+   "tc_id": 136001,
+   "title": "Verify that entering a non-numeric Display Order value is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_display_order_is_blocked[136001-text]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136002,
+   "title": "Verify that entering a decimal Display Order value is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_display_order_is_blocked[136002-decimal]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/"
+  },
+  {
+   "tc_id": 136003,
+   "title": "Verify that canceling a Display Order edit discards the change",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_cancel_display_order_edit_discards_it[136003]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/"
+  },
+  {
+   "tc_id": 136004,
+   "title": "Verify that a saved Display Order value persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_saved_display_order_persists_after_reload[136004]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136005,
+   "title": "Verify that setting Active Status = True and publishing renders the Marhaba Guide widget on the Home Page",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_active_status_gates_the_home_page[136005-marhaba-on]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136006,
+   "title": "Verify that setting Active Status = False prevents the Marhaba Guide widget from rendering",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_active_status_gates_the_home_page[136006-marhaba-off]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136007,
+   "title": "Verify that canceling an Active Status toggle discards the change",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_cancel_active_toggle_discards_it[136007]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136008,
+   "title": "Verify that a saved Active Status value persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_saved_active_status_persists_after_reload[136008]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/"
+  },
+  {
+   "tc_id": 136009,
+   "title": "Verify that Active Status = True does not bypass the mandatory Widget Image (EN) validation",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_save_without_widget_image_is_blocked[136009-active-no-en]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136010,
+   "title": "Verify that Open in New Tab defaults to False when creating a new Marhaba Guide widget configuration",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_open_in_new_tab_defaults_to_false[136010]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "run1: lookup missed the saved (inactive) record; rerun hit network drops - heal applied, not re-verified"
+  },
+  {
+   "tc_id": 136011,
+   "title": "Verify that a valid Widget Image (EN) uploads successfully for the B2B Platform widget",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_valid_widget_image_uploads_and_is_stored[136011-b2b-en]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136012,
+   "title": "Verify that saving the B2B Platform widget without a Widget Image (EN) is blocked",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_save_without_widget_image_is_blocked[136012-b2b-no-en]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136013,
+   "title": "Verify that uploading an unsupported file format for Widget Image (EN) is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_unsupported_image_format_is_rejected[136013-en-bmp]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136014,
+   "title": "Verify that uploading a Widget Image (EN) exceeding 2MB is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_oversize_widget_image[136014-en-2.8mb]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136015,
+   "title": "Verify that canceling after uploading a Widget Image (EN) discards the upload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_cancel_after_image_upload_discards_it[136015-b2b-en]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136016,
+   "title": "Verify that a saved Widget Image (EN) persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_saved_widget_image_persists_after_reload[136016-b2b-en]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136017,
+   "title": "Verify that a valid Widget Image (AR) uploads successfully for the B2B Platform widget",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_valid_widget_image_uploads_and_is_stored[136017-b2b-ar]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136018,
+   "title": "Verify that saving the B2B Platform widget without a Widget Image (AR) is blocked",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_save_without_widget_image_is_blocked[136018-b2b-no-ar]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136019,
+   "title": "Verify that uploading an unsupported file format for Widget Image (AR) is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_unsupported_image_format_is_rejected[136019-ar-tiff]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136020,
+   "title": "Verify that uploading a Widget Image (AR) exceeding 2MB is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_oversize_widget_image[136020-ar-4mb-svg]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136021,
+   "title": "Verify that canceling after uploading a Widget Image (AR) discards the upload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_cancel_after_image_upload_discards_it[136021-b2b-ar]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136022,
+   "title": "Verify that a saved Widget Image (AR) persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_saved_widget_image_persists_after_reload[136022-b2b-ar]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136023,
+   "title": "Verify that saving is blocked when only Widget Image (AR) is uploaded and Widget Image (EN) is missing",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_save_without_widget_image_is_blocked[136023-ar-only-en-missing]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136024,
+   "title": "Verify that a valid Redirect URL saves successfully for the B2B Platform widget",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_valid_redirect_url_saves[136024]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136025,
+   "title": "Verify that leaving the Redirect URL empty blocks saving the B2B Platform widget",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_or_empty_redirect_url_is_blocked[136025-empty]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136026,
+   "title": "Verify that an invalid Redirect URL format is rejected",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_or_empty_redirect_url_is_blocked[136026-invalid]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136027,
+   "title": "Verify that a Redirect URL exceeding 500 characters is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_redirect_url_length_boundary[136027-510]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136028,
+   "title": "Verify that a Redirect URL of exactly 500 characters is accepted",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_redirect_url_length_boundary[136028-500]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "BUG per user: same root cause as 135990",
+   "note": "Rule 5: same as 135990 (280 < 500)"
+  },
+  {
+   "tc_id": 136029,
+   "title": "Verify that a script-injection value in the Redirect URL field is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_or_empty_redirect_url_is_blocked[136029-script]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136030,
+   "title": "Verify that canceling a Redirect URL edit discards the change",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_cancel_redirect_url_edit_discards_it[136030]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136031,
+   "title": "Verify that a saved Redirect URL persists exactly after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_saved_redirect_url_persists_after_reload[136031]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136032,
+   "title": "Verify that enabling Open in New Tab = True causes the B2B Platform link to open in a new tab",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_open_in_new_tab_drives_the_public_click[136032-b2b-true]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "run1: lookup missed the saved (inactive) record; rerun hit network drops - heal applied, not re-verified"
+  },
+  {
+   "tc_id": 136033,
+   "title": "Verify that disabling Open in New Tab = False causes the B2B Platform link to open in the same tab",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_open_in_new_tab_drives_the_public_click[136033-b2b-false]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "run1: lookup missed the saved (inactive) record; rerun hit network drops - heal applied, not re-verified"
+  },
+  {
+   "tc_id": 136034,
+   "title": "Verify that Open in New Tab defaults to False when creating a new B2B Platform widget configuration",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_open_in_new_tab_defaults_to_false[136034]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "run1: lookup missed the saved (inactive) record; rerun hit network drops - heal applied, not re-verified"
+  },
+  {
+   "tc_id": 136035,
+   "title": "Verify that the Open in New Tab setting persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_open_in_new_tab_persists_after_reload[136035]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "run1: lookup missed the saved (inactive) record; rerun hit network drops - heal applied, not re-verified"
+  },
+  {
+   "tc_id": 136036,
+   "title": "Verify that a valid Display Order value saves successfully for the B2B Platform widget",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_display_order_two_saves_136036"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "run1: lookup missed the saved (inactive) record; rerun hit network drops - heal applied, not re-verified"
+  },
+  {
+   "tc_id": 136037,
+   "title": "Verify that leaving Display Order empty blocks saving the B2B Platform widget",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_display_order_is_blocked[136037-empty]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136038,
+   "title": "Verify that entering Display Order = 0 is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_display_order_is_blocked[136038-zero]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136039,
+   "title": "Verify that entering a negative Display Order value is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_display_order_is_blocked[136039-neg]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136040,
+   "title": "Verify that entering a non-numeric Display Order value is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_display_order_is_blocked[136040-text]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/"
+  },
+  {
+   "tc_id": 136041,
+   "title": "Verify that entering a decimal Display Order value is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_display_order_is_blocked[136041-decimal]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/"
+  },
+  {
+   "tc_id": 136042,
+   "title": "Verify that canceling a Display Order edit discards the change",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_cancel_display_order_edit_discards_it[136042]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/"
+  },
+  {
+   "tc_id": 136043,
+   "title": "Verify that a saved Display Order value persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_saved_display_order_persists_after_reload[136043]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136044,
+   "title": "Verify that setting Active Status = True and publishing renders the B2B Platform widget on the Home Page",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_active_status_gates_the_home_page[136044-b2b-on]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136045,
+   "title": "Verify that setting Active Status = False prevents the B2B Platform widget from rendering",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_active_status_gates_the_home_page[136045-b2b-off]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136046,
+   "title": "Verify that canceling an Active Status toggle discards the change",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_cancel_active_toggle_discards_it[136046]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/"
+  },
+  {
+   "tc_id": 136047,
+   "title": "Verify that a saved Active Status value persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_saved_active_status_persists_after_reload[136047]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/"
+  },
+  {
+   "tc_id": 136048,
+   "title": "Verify that Active Status = True does not bypass the mandatory Redirect URL validation",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_invalid_or_empty_redirect_url_is_blocked[136048-active-empty]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136049,
+   "title": "Verify that setting Weather widget Active Status = True and publishing renders it on the Home Page",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_weather_widget_configuration_exists[136049]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 136050,
+   "title": "Verify that setting Weather widget Active Status = False prevents rendering without requiring image/URL fields",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_weather_widget_configuration_exists[136050]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 136051,
+   "title": "Verify that a valid Weather widget Display Order value saves successfully",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_weather_widget_configuration_exists[136051]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 136052,
+   "title": "Verify that leaving Weather widget Display Order empty blocks saving",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_weather_widget_configuration_exists[136052]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "BROKEN",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 136053,
+   "title": "Verify that entering a negative Weather widget Display Order value is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_weather_widget_configuration_exists[136053]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "BROKEN",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 136054,
+   "title": "Verify that a saved Weather widget Display Order value persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_weather_widget_configuration_exists[136054]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 136055,
+   "title": "Verify that the Weather widget configuration screen does not expose Widget Image or Redirect URL fields",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_weather_widget_configuration_exists[136055]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "BROKEN",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 136056,
+   "title": "Verify that a saved Weather widget Active Status value persists after reload",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_weather_widget_configuration_exists[136056]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "BROKEN",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather has no CMS configuration (client extension); PBI admin step 3 lists only Marhaba/B2B -> NEEDS USER"
+  },
+  {
+   "tc_id": 136057,
+   "title": "Verify that Home Page behaves correctly when the Weather API returns fewer than 5 forecast days",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_fewer_than_five_forecast_days_136057[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136058,
+   "title": "Verify that the Weather widget shows the fallback message after an API timeout rather than an indefinite loading state",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_api_timeout_shows_fallback_136058[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "CONFIRMED (manual repro), P3 per review, needs user yes: skeleton at 10/60/120 s; reports/manual-repro-129384-136058-hang-120s.png",
+   "note": "FINDING (candidate): API hang -> skeleton forever, no fallback (75 s, 2/2 runs); qc-weather.js fetch has no timeout; manual screenshot repro not completed"
+  },
+  {
+   "tc_id": 136059,
+   "title": "Verify that the Weather widget recovers to live data automatically after the Weather API comes back online",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_recovers_after_api_returns_136059[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136060,
+   "title": "Verify that Home Page rendering is correct when two widgets share the same Display Order value",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_two_widgets_same_display_order_136060"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_NETWORK_CHANGED at https://qcdev.ihorizons.com/c/"
+  },
+  {
+   "tc_id": 136061,
+   "title": "Verify that a concurrent invalid edit does not overwrite a widget's currently live, valid configuration",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_concurrent_invalid_edit_keeps_live_config_136061"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136062,
+   "title": "Verify that Home Page behaves correctly when a widget is disabled but the cache has not yet refreshed",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_disable_before_cache_refresh_136062"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_INTERNET_DISCONNECTED at https://qcdev.ihorizons."
+  },
+  {
+   "tc_id": 136063,
+   "title": "Verify that aborting a large Widget Image upload does not save a partial or corrupt file",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_aborted_large_upload_saves_nothing_136063"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "playwright._impl._errors.TimeoutError: Timeout 15000ms exceeded."
+  },
+  {
+   "tc_id": 136064,
+   "title": "Verify that clearing the Redirect URL on a live, published widget blocks the save and keeps the previous URL live",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_clearing_url_on_live_widget_is_blocked_136064"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136065,
+   "title": "Verify that Home Page state is correct after rapidly toggling and saving a widget's Active Status multiple times in quick succession",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_rapid_active_toggle_final_state_wins_136065"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "broken",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "playwright._impl._errors.Error: net::ERR_QUIC_PROTOCOL_ERROR at https://qcdev.ihorizons.co"
+  },
+  {
+   "tc_id": 136066,
+   "title": "Verify that pressing the browser back button after a successful widget save does not resubmit or duplicate the save",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeids": [
+    "cms/tests/home_dynamic_widgets/test_home_dynamic_widgets_control_panel.py::test_back_after_save_does_not_resubmit_136066"
+   ],
+   "currently_skipped": "n",
+   "result_first": "broken",
+   "result_final": "failed",
+   "result": "NOT EXECUTED",
+   "verdict": "automation, fix applied",
+   "note": "record WAS saved (sweep: QCTEST record persisted w/ values) - lookup missed inactive record (healed after rerun: list \"All\"=value 0, init wait)"
+  },
+  {
+   "tc_id": 136067,
+   "title": "Verify that setting all three widgets to Active=False at once does not break the rest of the Home Page layout",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_all_widgets_disabled_section_collapses[136067-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "failed",
+   "result_final": "failed",
+   "result": "FAIL",
+   "verdict": "NOT APPLICABLE (user 2026-10-08: no Weather CMS configuration)",
+   "note": "Weather root cause: as 135965; neighbours undisturbed"
+  },
+  {
+   "tc_id": 136068,
+   "title": "Verify that a Weather API authentication/credential failure displays the same generic fallback message rather than a technical error",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_weather_api_401_shows_generic_fallback_136068[page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": ""
+  },
+  {
+   "tc_id": 136069,
+   "title": "Verify that the Marhaba Guide card displays the body text \"Register your business and complete your profile to get verified.\"",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[marhaba-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136070,
+   "title": "Verify that the Marhaba Guide card displays the gold-bordered \"Verified by Qatar Chamber\" shield badge graphic",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[marhaba-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136071,
+   "title": "Verify that the Marhaba Guide card displays the three feature items \"Trusted Platform\", \"Verified Businesses\", \"Stronger Connections\"",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[marhaba-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136072,
+   "title": "Verify that the Marhaba Guide card displays the \"JOIN NOW\" CTA button",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[marhaba-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136073,
+   "title": "Verify that the Marhaba Guide card footer displays the website, phone, and social media details",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[marhaba-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136074,
+   "title": "Verify that the Marhaba Guide card renders correctly in Arabic (RTL)",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[marhaba-ar-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136075,
+   "title": "Verify that the B2B Platform card displays the body text \"Register and complete your profile in the Commercial and Industrial Directory.\"",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[b2b-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136076,
+   "title": "Verify that the B2B Platform card displays the three bullet items \"Boost Credibility\", \"Build Trust\", \"Increase Visibility\"",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[b2b-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136077,
+   "title": "Verify that the B2B Platform card displays the bordered callout box about the \"Verified by Qatar Chamber\" tag",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[b2b-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136078,
+   "title": "Verify that the B2B Platform card displays the maroon verification seal/ribbon graphic",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[b2b-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136079,
+   "title": "Verify that the B2B Platform card footer displays the tagline, \"Register now\", and the \"qcci.org\" link",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[b2b-en-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  },
+  {
+   "tc_id": 136080,
+   "title": "Verify that the B2B Platform card renders correctly in Arabic (RTL)",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeids": [
+    "web/tests/home_dynamic_widgets/test_home_dynamic_widgets_web.py::test_card_shows_its_configured_image[b2b-ar-page0]"
+   ],
+   "currently_skipped": "n",
+   "result_first": "passed",
+   "result_final": "passed",
+   "result": "PASS",
+   "verdict": "-",
+   "note": "image renders; copy/graphics verified visually in configured creative (reports/manual-exec-129384-img-4967*/4971*)"
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_section_tag_en_valid_136508[page0]
+cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_email_support_valid_136518[page0]
+cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_telephone_valid_136523[page0]
+cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_map_url_valid_136531[page0]
+cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_recipients_valid_136541[page0]
+cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_send_message_button_label_en_valid_136546[page0]
+cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_send_message_button_label_ar_valid_136572[page0]
+cms/tests/home_contact_us/test_home_contact_us_control_panel.py::test_contact_us_section_full_admin_configuration_flow_136498[page0]
+cms/tests/home_contact_us/test_zz_live53012_tmp.py::test_live_53012

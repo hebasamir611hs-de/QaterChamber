@@ -1,0 +1,978 @@
+[
+ {
+  "id": 135975,
+  "title": "Verify that uploading an unsupported file format for Widget Image (EN) is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Attempt to upload marhaba.pdf as Widget Image (EN)",
+    "expected": "Upload is rejected with a file-format validation error; the field remains empty"
+   }
+  ]
+ },
+ {
+  "id": 135976,
+  "title": "Verify that uploading a Widget Image (EN) exceeding 2MB is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Attempt to upload marhaba_en_3mb.jpg (3MB) as Widget Image (EN)",
+    "expected": "Upload is rejected with a file-size validation error; the field remains empty"
+   }
+  ]
+ },
+ {
+  "id": 135977,
+  "title": "Verify that canceling after uploading a Widget Image (EN) discards the upload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Upload marhaba_en.jpg in Widget Image (EN)",
+    "expected": "Image previews"
+   },
+   {
+    "action": "Click Cancel",
+    "expected": "Configuration form closes without saving; the previous saved image (or empty state) is unchanged"
+   }
+  ]
+ },
+ {
+  "id": 135978,
+  "title": "Verify that a saved Widget Image (EN) persists after reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save Marhaba Guide widget with Widget Image (EN) = marhaba_en.jpg",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Reload Dynamic Widgets Management",
+    "expected": "Page reloads"
+   },
+   {
+    "action": "Open Marhaba Guide widget again",
+    "expected": "Widget Image (EN) still shows marhaba_en.jpg"
+   }
+  ]
+ },
+ {
+  "id": 135981,
+  "title": "Verify that uploading an unsupported file format for Widget Image (AR) is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Attempt to upload marhaba.docx as Widget Image (AR)",
+    "expected": "Upload is rejected with a file-format validation error; field remains empty"
+   }
+  ]
+ },
+ {
+  "id": 135982,
+  "title": "Verify that uploading a Widget Image (AR) exceeding 2MB is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Attempt to upload marhaba_ar_2_5mb.png (2.5MB) as Widget Image (AR)",
+    "expected": "Upload is rejected with a file-size validation error; field remains empty"
+   }
+  ]
+ },
+ {
+  "id": 135983,
+  "title": "Verify that canceling after uploading a Widget Image (AR) discards the upload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Upload marhaba_ar.png in Widget Image (AR)",
+    "expected": "Image previews"
+   },
+   {
+    "action": "Click Cancel",
+    "expected": "Form closes without saving; previous saved AR image (or empty state) unchanged"
+   }
+  ]
+ },
+ {
+  "id": 135984,
+  "title": "Verify that a saved Widget Image (AR) persists after reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save Marhaba Guide widget with Widget Image (AR) = marhaba_ar.png",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Reload Dynamic Widgets Management",
+    "expected": "Page reloads"
+   },
+   {
+    "action": "Open Marhaba Guide widget again",
+    "expected": "Widget Image (AR) still shows marhaba_ar.png"
+   }
+  ]
+ },
+ {
+  "id": 135991,
+  "title": "Verify that a script-injection value in the Redirect URL field is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Redirect URL <script>alert(1)</script>",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked as an invalid URL; the value is not stored or executed"
+   }
+  ]
+ },
+ {
+  "id": 135992,
+  "title": "Verify that canceling a Redirect URL edit discards the change",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens showing the current saved URL"
+   },
+   {
+    "action": "Change Redirect URL to https://example.com/temp",
+    "expected": "New value entered"
+   },
+   {
+    "action": "Click Cancel",
+    "expected": "Form closes without saving; URL remains https://marhabaguide.qa/qatar-chamber"
+   }
+  ]
+ },
+ {
+  "id": 135993,
+  "title": "Verify that a saved Redirect URL persists exactly after reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save Marhaba Guide widget with Redirect URL https://marhabaguide.qa/qatar-chamber",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Reload Dynamic Widgets Management",
+    "expected": "Page reloads"
+   },
+   {
+    "action": "Open Marhaba Guide widget again",
+    "expected": "Redirect URL field still shows https://marhabaguide.qa/qatar-chamber exactly"
+   }
+  ]
+ },
+ {
+  "id": 135997,
+  "title": "Verify that a valid Display Order value saves successfully for the Marhaba Guide widget",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = 1",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Save succeeds; widget appears first among active widgets on the Home Page"
+   }
+  ]
+ },
+ {
+  "id": 135998,
+  "title": "Verify that leaving Display Order empty blocks saving the Marhaba Guide widget",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Leave Display Order empty",
+    "expected": "Field is empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Display Order is required.' validation error is displayed"
+   }
+  ]
+ },
+ {
+  "id": 135999,
+  "title": "Verify that entering Display Order = 0 is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = 0",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Display Order must be a positive number.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 136000,
+  "title": "Verify that entering a negative Display Order value is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = -3",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Display Order must be a positive number.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 136001,
+  "title": "Verify that entering a non-numeric Display Order value is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = 'first'",
+    "expected": "Value entered/rejected at input"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked with a numeric-input validation error; field is not saved"
+   }
+  ]
+ },
+ {
+  "id": 136002,
+  "title": "Verify that entering a decimal Display Order value is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = 1.5",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked with an integer-required validation error"
+   }
+  ]
+ },
+ {
+  "id": 136003,
+  "title": "Verify that canceling a Display Order edit discards the change",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Marhaba Guide widget configuration (Display Order = 1)",
+    "expected": "Form opens showing 1"
+   },
+   {
+    "action": "Change value to 5",
+    "expected": "Value changed to 5"
+   },
+   {
+    "action": "Click Cancel",
+    "expected": "Form closes without saving; Display Order remains 1"
+   }
+  ]
+ },
+ {
+  "id": 136004,
+  "title": "Verify that a saved Display Order value persists after reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save Marhaba Guide widget with Display Order = 2",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Reload Dynamic Widgets Management",
+    "expected": "Page reloads"
+   },
+   {
+    "action": "Open Marhaba Guide widget again",
+    "expected": "Display Order field still shows 2"
+   }
+  ]
+ },
+ {
+  "id": 136013,
+  "title": "Verify that uploading an unsupported file format for Widget Image (EN) is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Attempt to upload b2b.bmp as Widget Image (EN)",
+    "expected": "Upload is rejected with a file-format validation error"
+   }
+  ]
+ },
+ {
+  "id": 136014,
+  "title": "Verify that uploading a Widget Image (EN) exceeding 2MB is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Attempt to upload b2b_en_2_8mb.jpg (2.8MB) as Widget Image (EN)",
+    "expected": "Upload is rejected with a file-size validation error"
+   }
+  ]
+ },
+ {
+  "id": 136015,
+  "title": "Verify that canceling after uploading a Widget Image (EN) discards the upload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Upload b2b_en.jpg in Widget Image (EN)",
+    "expected": "Image previews"
+   },
+   {
+    "action": "Click Cancel",
+    "expected": "Form closes without saving; previous state unchanged"
+   }
+  ]
+ },
+ {
+  "id": 136016,
+  "title": "Verify that a saved Widget Image (EN) persists after reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save B2B Platform widget with Widget Image (EN) = b2b_en.jpg",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Reload Dynamic Widgets Management",
+    "expected": "Page reloads"
+   },
+   {
+    "action": "Open B2B Platform widget again",
+    "expected": "Widget Image (EN) still shows b2b_en.jpg"
+   }
+  ]
+ },
+ {
+  "id": 136019,
+  "title": "Verify that uploading an unsupported file format for Widget Image (AR) is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Attempt to upload b2b.tiff as Widget Image (AR)",
+    "expected": "Upload is rejected with a file-format validation error"
+   }
+  ]
+ },
+ {
+  "id": 136020,
+  "title": "Verify that uploading a Widget Image (AR) exceeding 2MB is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Attempt to upload b2b_ar_4mb.svg (4MB) as Widget Image (AR)",
+    "expected": "Upload is rejected with a file-size validation error"
+   }
+  ]
+ },
+ {
+  "id": 136021,
+  "title": "Verify that canceling after uploading a Widget Image (AR) discards the upload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Upload b2b_ar.svg in Widget Image (AR)",
+    "expected": "Image previews"
+   },
+   {
+    "action": "Click Cancel",
+    "expected": "Form closes without saving; previous state unchanged"
+   }
+  ]
+ },
+ {
+  "id": 136022,
+  "title": "Verify that a saved Widget Image (AR) persists after reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save B2B Platform widget with Widget Image (AR) = b2b_ar.svg",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Reload Dynamic Widgets Management",
+    "expected": "Page reloads"
+   },
+   {
+    "action": "Open B2B Platform widget again",
+    "expected": "Widget Image (AR) still shows b2b_ar.svg"
+   }
+  ]
+ },
+ {
+  "id": 136029,
+  "title": "Verify that a script-injection value in the Redirect URL field is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Redirect URL <script>alert('x')</script>",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked as an invalid URL; the value is not stored or executed"
+   }
+  ]
+ },
+ {
+  "id": 136030,
+  "title": "Verify that canceling a Redirect URL edit discards the change",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens showing current saved URL"
+   },
+   {
+    "action": "Change Redirect URL to https://example.com/temp",
+    "expected": "New value entered"
+   },
+   {
+    "action": "Click Cancel",
+    "expected": "Form closes without saving; URL remains https://b2b.qatarchamber.com/platform"
+   }
+  ]
+ },
+ {
+  "id": 136031,
+  "title": "Verify that a saved Redirect URL persists exactly after reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save B2B Platform widget with Redirect URL https://b2b.qatarchamber.com/platform",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Reload Dynamic Widgets Management",
+    "expected": "Page reloads"
+   },
+   {
+    "action": "Open B2B Platform widget again",
+    "expected": "Redirect URL field still shows https://b2b.qatarchamber.com/platform exactly"
+   }
+  ]
+ },
+ {
+  "id": 136036,
+  "title": "Verify that a valid Display Order value saves successfully for the B2B Platform widget",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = 2",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Save succeeds; order stored"
+   }
+  ]
+ },
+ {
+  "id": 136037,
+  "title": "Verify that leaving Display Order empty blocks saving the B2B Platform widget",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Leave Display Order empty",
+    "expected": "Field empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Display Order is required.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 136038,
+  "title": "Verify that entering Display Order = 0 is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = 0",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; 'Display Order must be a positive number.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 136039,
+  "title": "Verify that entering a negative Display Order value is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = -5",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; positive-number validation error displayed"
+   }
+  ]
+ },
+ {
+  "id": 136040,
+  "title": "Verify that entering a non-numeric Display Order value is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = 'second'",
+    "expected": "Value rejected at input or on save"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked with a numeric-input validation error"
+   }
+  ]
+ },
+ {
+  "id": 136041,
+  "title": "Verify that entering a decimal Display Order value is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = 2.5",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked with an integer-required validation error"
+   }
+  ]
+ },
+ {
+  "id": 136042,
+  "title": "Verify that canceling a Display Order edit discards the change",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open B2B Platform widget configuration (Display Order = 2)",
+    "expected": "Form opens showing 2"
+   },
+   {
+    "action": "Change value to 9",
+    "expected": "Value changed to 9"
+   },
+   {
+    "action": "Click Cancel",
+    "expected": "Form closes without saving; Display Order remains 2"
+   }
+  ]
+ },
+ {
+  "id": 136043,
+  "title": "Verify that a saved Display Order value persists after reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save B2B Platform widget with Display Order = 3",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Reload Dynamic Widgets Management",
+    "expected": "Page reloads"
+   },
+   {
+    "action": "Open B2B Platform widget again",
+    "expected": "Display Order field still shows 3"
+   }
+  ]
+ },
+ {
+  "id": 136051,
+  "title": "Verify that a valid Weather widget Display Order value saves successfully",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Weather widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = 1",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Save succeeds; Weather widget appears first among active widgets"
+   }
+  ]
+ },
+ {
+  "id": 136052,
+  "title": "Verify that leaving Weather widget Display Order empty blocks saving",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Weather widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Leave Display Order empty",
+    "expected": "Field empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked with a required-field validation error"
+   }
+  ]
+ },
+ {
+  "id": 136053,
+  "title": "Verify that entering a negative Weather widget Display Order value is rejected",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Weather widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Enter Display Order = -1",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save is blocked; positive-number validation error displayed"
+   }
+  ]
+ },
+ {
+  "id": 136054,
+  "title": "Verify that a saved Weather widget Display Order value persists after reload",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save Weather widget with Display Order = 3",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Reload Dynamic Widgets Management",
+    "expected": "Page reloads"
+   },
+   {
+    "action": "Open Weather widget again",
+    "expected": "Display Order field still shows 3"
+   }
+  ]
+ },
+ {
+  "id": 136055,
+  "title": "Verify that the Weather widget configuration screen does not expose Widget Image or Redirect URL fields",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Open Weather widget configuration",
+    "expected": "Form opens"
+   },
+   {
+    "action": "Inspect the available fields",
+    "expected": "Only Active Status and Display Order fields are present; no Widget Image or Redirect URL fields are shown"
+   }
+  ]
+ },
+ {
+  "id": 136060,
+  "title": "Verify that Home Page rendering is correct when two widgets share the same Display Order value",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Set Marhaba Guide Display Order = 1 and save",
+    "expected": "Save succeeds (no cross-widget uniqueness enforced)"
+   },
+   {
+    "action": "Set B2B Platform Display Order = 1 and save",
+    "expected": "Save succeeds"
+   },
+   {
+    "action": "Load the Home Page",
+    "expected": "Both widgets render in a consistent, deterministic order (e.g., stable tie-break by creation order) with no layout error or overlapping cards"
+   }
+  ]
+ },
+ {
+  "id": 136063,
+  "title": "Verify that aborting a large Widget Image upload does not save a partial or corrupt file",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Begin uploading a large Widget Image (EN) file for Marhaba Guide",
+    "expected": "Upload begins"
+   },
+   {
+    "action": "Navigate away from the page before the upload completes",
+    "expected": "Navigation interrupts the upload"
+   },
+   {
+    "action": "Return to the Marhaba Guide widget configuration",
+    "expected": "Widget Image (EN) field shows no image (or the previous valid image), never a partial/corrupt file"
+   }
+  ]
+ },
+ {
+  "id": 136066,
+  "title": "Verify that pressing the browser back button after a successful widget save does not resubmit or duplicate the save",
+  "priority": 3,
+  "importance": "medium",
+  "has_test": false,
+  "stub": false,
+  "steps": [
+   {
+    "action": "Save a valid B2B Platform widget configuration (success toast confirmed)",
+    "expected": "Save succeeds; toast displays once"
+   },
+   {
+    "action": "Press the browser back button",
+    "expected": "Browser navigates back to the previous form state"
+   },
+   {
+    "action": "Observe the form and any resulting action",
+    "expected": "No form resubmission occurs; no duplicate save or duplicate success toast is triggered"
+   }
+  ]
+ }
+]

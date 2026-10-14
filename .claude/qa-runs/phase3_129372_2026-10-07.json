@@ -1,0 +1,675 @@
+{
+ "pbi": 129372,
+ "suite": 134450,
+ "plan": 133534,
+ "date": "2026-10-07",
+ "total": 57,
+ "cases": [
+  {
+   "tc_id": 135272,
+   "title": "Verify that a public visitor can view and navigate the Latest News section end to end",
+   "priority": 1,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "web/tests/home_latest_news/test_home_latest_news_web.py::test_visitor_views_and_navigates_latest_news_end_to_end",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "FAIL/INCONCLUSIVE"
+  },
+  {
+   "tc_id": 135273,
+   "title": "Verify that publishing a news article surfaces it in the Latest News section with a success toast",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_publishing_news_article_surfaces_it_newest_first",
+   "currently_skipped": "n",
+   "stale_flags": [
+    "TEST_USER (implicit page fixture) on lifecycle case",
+    "submit_for_publishing() deprecated alias",
+    "'Draft' string literal",
+    "docstring claims no Pending Review / Approved (withdrawn findings)",
+    "teardown leaves record (restore-not-delete) instead of delete every run"
+   ],
+   "result_2026_10_07": "BROKEN/AUTOMATION"
+  },
+  {
+   "tc_id": 135274,
+   "title": "Verify that unpublishing a news article removes it from the Latest News section with a success toast",
+   "priority": 1,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_unpublishing_news_article_removes_it_from_latest_news",
+   "currently_skipped": "n",
+   "stale_flags": [
+    "TEST_USER on lifecycle case",
+    "Unpublish polled as 'Draft' (form unpublish_to_edit_as_draft)",
+    "submit_for_publishing() alias",
+    "teardown leaves record"
+   ],
+   "result_2026_10_07": "BROKEN/AUTOMATION"
+  },
+  {
+   "tc_id": 135275,
+   "title": "Verify that the Latest News section sorts cards by publication date descending",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_latest_news_sorts_by_publication_date_descending",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "BROKEN/AUTOMATION"
+  },
+  {
+   "tc_id": 135276,
+   "title": "Verify that View All redirects to the News listing page when the listing page is published",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "web/tests/home_latest_news/test_home_latest_news_web.py::test_view_all_redirects_to_news_listing_page",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "FAIL/INCONCLUSIVE"
+  },
+  {
+   "tc_id": 135277,
+   "title": "Verify that the View All CTA does not appear when the News listing page is unpublished",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "NOT SCRIPTED/NEEDS USER"
+  },
+  {
+   "tc_id": 135278,
+   "title": "Verify that clicking a news card navigates to the correct full article page",
+   "priority": 1,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_clicking_news_card_opens_matching_article",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "BROKEN/AUTOMATION"
+  },
+  {
+   "tc_id": 135279,
+   "title": "Verify that saving an article as Draft does not surface it in the Latest News section",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_save_article_as_draft_not_in_latest_news",
+   "currently_skipped": "n",
+   "stale_flags": [
+    "TEST_USER on lifecycle case",
+    "Content & Data navigation (open_news_articles_list) + TEST_USER login fallback",
+    "'Draft' string literal",
+    "Active Status not ticked (absence would pass for the wrong reason)"
+   ],
+   "result_2026_10_07": "BROKEN/AUTOMATION"
+  },
+  {
+   "tc_id": 135280,
+   "title": "Verify that Section Tag (EN) accepts a valid value within 50 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135281,
+   "title": "Verify that Section Tag (EN) can be left empty since it is optional",
+   "priority": 4,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135282,
+   "title": "Verify that Section Tag (EN) rejects input exceeding 50 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135283,
+   "title": "Verify that Section Tag (AR) accepts a valid Arabic value within 50 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135284,
+   "title": "Verify that Section Tag (AR) can be left empty since it is optional",
+   "priority": 4,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135285,
+   "title": "Verify that Section Tag (AR) rejects input exceeding 50 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135286,
+   "title": "Verify that Section Heading (EN) accepts a valid value within 200 characters",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_section_heading_en_accepts_valid_value",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135287,
+   "title": "Verify that Section Heading (EN) rejects an empty value",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_section_heading_en_rejects_empty",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "FAIL/PRODUCT_BUG G1"
+  },
+  {
+   "tc_id": 135288,
+   "title": "Verify that Section Heading (EN) rejects whitespace-only input",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135289,
+   "title": "Verify that Section Heading (EN) rejects input exceeding 200 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135290,
+   "title": "Verify that Section Heading (AR) accepts a valid value within 200 characters",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_section_heading_ar_accepts_valid_value",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135291,
+   "title": "Verify that Section Heading (AR) rejects an empty value",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_section_heading_ar_rejects_empty",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "FAIL/PRODUCT_BUG G1"
+  },
+  {
+   "tc_id": 135292,
+   "title": "Verify that Section Heading (AR) rejects whitespace-only input",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135293,
+   "title": "Verify that Section Heading (AR) rejects input exceeding 200 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135294,
+   "title": "Verify that Section Description (EN) accepts a valid rich-text value within 1000 characters",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_section_description_en_accepts_rich_text",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "FAIL/PRODUCT_BUG G2"
+  },
+  {
+   "tc_id": 135295,
+   "title": "Verify that Section Description (EN) rejects an empty value",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_section_description_en_rejects_empty",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "FAIL/PRODUCT_BUG G1"
+  },
+  {
+   "tc_id": 135296,
+   "title": "Verify that Section Description (EN) rejects whitespace-only input",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135297,
+   "title": "Verify that Section Description (EN) rejects input exceeding 1000 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135298,
+   "title": "Verify that Section Description (AR) accepts a valid rich-text value within 1000 characters",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_section_description_ar_accepts_rich_text",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135299,
+   "title": "Verify that Section Description (AR) rejects an empty value",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_section_description_ar_rejects_empty",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "FAIL/PRODUCT_BUG G1"
+  },
+  {
+   "tc_id": 135300,
+   "title": "Verify that Section Description (AR) rejects whitespace-only input",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135301,
+   "title": "Verify that Section Description (AR) rejects input exceeding 1000 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135302,
+   "title": "Verify that News Article Title (EN) accepts a valid value within 200 characters",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_news_title_en_accepts_valid_value",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135303,
+   "title": "Verify that News Article Title (EN) rejects an empty value",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_news_title_en_rejects_empty",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "BROKEN/AUTOMATION"
+  },
+  {
+   "tc_id": 135304,
+   "title": "Verify that News Article Title (EN) rejects whitespace-only input",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135305,
+   "title": "Verify that News Article Title (EN) rejects input exceeding 200 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135306,
+   "title": "Verify that News Article Title (AR) accepts a valid value within 200 characters",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_news_title_ar_accepts_valid_value",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135307,
+   "title": "Verify that News Article Title (AR) rejects an empty value",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_news_title_ar_rejects_empty",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "BROKEN/ENV"
+  },
+  {
+   "tc_id": 135308,
+   "title": "Verify that News Article Title (AR) rejects whitespace-only input",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135309,
+   "title": "Verify that News Article Title (AR) rejects input exceeding 200 characters",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135310,
+   "title": "Verify that a valid JPG thumbnail under 2MB uploads successfully",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_news_thumbnail_valid_jpg_uploads",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135311,
+   "title": "Verify that saving an article without a thumbnail is rejected",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_news_missing_thumbnail_rejected",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "BROKEN/ENV"
+  },
+  {
+   "tc_id": 135312,
+   "title": "Verify that an oversized thumbnail exceeding 2MB is rejected",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135313,
+   "title": "Verify that a valid Publication Date is accepted and displayed on the card",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_news_publication_date_accepted",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "BROKEN/AUTOMATION"
+  },
+  {
+   "tc_id": 135314,
+   "title": "Verify that Publication Date rejects an empty value",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_news_publication_date_rejects_empty",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135315,
+   "title": "Verify that Publication Date rejects an invalid/malformed date value",
+   "priority": 3,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135316,
+   "title": "Verify that View Count displays as a system-generated positive integer on the news card",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135317,
+   "title": "Verify that each news card renders all four required elements",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "web/tests/home_latest_news/test_home_latest_news_web.py::test_news_card_renders_all_four_required_elements",
+   "currently_skipped": "n",
+   "stale_flags": [
+    "public read on authenticated page (TEST_USER storageState)",
+    "no tc_ marker"
+   ],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135318,
+   "title": "Verify that the Latest News section renders correctly on desktop viewport (1920x1080)",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "web/tests/home_latest_news/test_home_latest_news_web.py::test_news_section_renders_correctly_on_desktop_viewport",
+   "currently_skipped": "n",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker"
+   ],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135319,
+   "title": "Verify that the Latest News section renders correctly on tablet viewport (768x1024)",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "web/tests/home_latest_news/test_home_latest_news_web.py::test_news_section_renders_correctly_on_tablet_viewport",
+   "currently_skipped": "n",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker"
+   ],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135320,
+   "title": "Verify that the Latest News section renders correctly on mobile viewport (375x667)",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "web/tests/home_latest_news/test_home_latest_news_web.py::test_news_section_renders_correctly_on_mobile_viewport",
+   "currently_skipped": "n",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker"
+   ],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135321,
+   "title": "Verify that the Latest News section renders in English LTR correctly",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "web/tests/home_latest_news/test_home_latest_news_web.py::test_news_section_renders_in_english_ltr_correctly",
+   "currently_skipped": "n",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker"
+   ],
+   "result_2026_10_07": "FAIL/INCONCLUSIVE"
+  },
+  {
+   "tc_id": 135322,
+   "title": "Verify that the Latest News section renders in Arabic RTL correctly",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "web/tests/home_latest_news/test_home_latest_news_web.py::test_news_section_renders_in_arabic_rtl_correctly",
+   "currently_skipped": "n",
+   "stale_flags": [
+    "public read on authenticated page",
+    "no tc_ marker",
+    "AR description literal typo (التحديات vs التحديثات)"
+   ],
+   "result_2026_10_07": "FAIL/INCONCLUSIVE"
+  },
+  {
+   "tc_id": 135323,
+   "title": "Verify that the Latest News section displays only available cards when fewer than the configured count are published",
+   "priority": 2,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "web/tests/home_latest_news/test_home_latest_news_web.py::test_news_section_displays_only_available_cards_when_fewer_than_configured",
+   "currently_skipped": "n",
+   "stale_flags": [
+    "@pytest.mark.skip",
+    "public read on authenticated page",
+    "no tc_ marker"
+   ],
+   "result_2026_10_07": "NOT RUN/NEEDS USER"
+  },
+  {
+   "tc_id": 135324,
+   "title": "Verify that the Latest News section degrades gracefully when zero articles are published",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Manual",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135325,
+   "title": "Verify that the Latest News section renders correctly in Chrome (latest stable)",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135326,
+   "title": "Verify that the Latest News section renders correctly in Safari (latest stable)",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Automation",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  },
+  {
+   "tc_id": 135327,
+   "title": "Verify that a user without News module permissions cannot publish/unpublish articles",
+   "priority": 2,
+   "platform": "Control_Panel",
+   "execution": "Automation",
+   "nodeid": "cms/tests/home_latest_news/test_home_latest_news_control_panel.py::test_user_without_news_permission_cannot_publish",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "PASS"
+  },
+  {
+   "tc_id": 135328,
+   "title": "Verify that an article remains visible on a card the visitor already opened after it is unpublished mid-session",
+   "priority": 3,
+   "platform": "Web",
+   "execution": "Manual",
+   "nodeid": "MISSING",
+   "currently_skipped": "n",
+   "stale_flags": [],
+   "result_2026_10_07": "not scripted (Rule-4 table)"
+  }
+ ]
+}

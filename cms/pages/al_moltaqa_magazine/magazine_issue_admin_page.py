@@ -277,7 +277,7 @@ class MagazineIssueAdminPage(BasePage):
         Publishing" wording), which does not exist on this object's real
         form ("Submit for Review") — a live run against
         `test_issue_title_en_200_boundary` reproduced this exactly (30s
-        `TimeoutError` on `button:has-text("Submit for Publishing")` after
+        `TimeoutError` on `button:has-text("Submit for Review")` after
         the 201-character input was accepted without client-side
         truncation). Reimplemented here with the identical two-branch logic
         but calling THIS object's own `submit_for_review()` in the
@@ -339,7 +339,7 @@ class MagazineIssueAdminPage(BasePage):
 
     def submit_for_review(self) -> "MagazineIssueAdminPage":
         """This object's own confirmed-live wording — "Submit for Review",
-        not ObjectAuthoringPage's default "Submit for Publishing"."""
+        not ObjectAuthoringPage's default "Submit for Review"."""
         self.click(SUBMIT_FOR_REVIEW_BUTTON)
         self.authoring._wait_for_settle()
         return self

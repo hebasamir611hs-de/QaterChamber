@@ -1,0 +1,983 @@
+{
+ "generated": "2026-10-04",
+ "source_dirs": [
+  "reports/allure-results-phase3-b7-130947-20261004",
+  "reports/allure-results-phase3-b7-130949-20261004"
+ ],
+ "note": "Latest result per tc_id by stop time. partners_offers (130720) has no b7 results beyond 2 passes; its skips are taken from the current code markers. tc_141268 was FAILED in b7 but is now skip-marked CONDITIONAL in code, so it is classed (c) and not rerun.",
+ "classes": {
+  "a_char_limit_NA": [
+   {
+    "tc_id": "141009",
+    "pbi": "130947",
+    "test": "test_141009_the_hero_eyebrow_accepts_exactly_60_characters_and_rejects_61",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141013",
+    "pbi": "130947",
+    "test": "test_141013_the_page_title_accepts_exactly_100_characters_and_rejects_101",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141027",
+    "pbi": "130947",
+    "test": "test_141027_the_cta_label_accepts_exactly_100_characters_and_rejects_101",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141039",
+    "pbi": "130947",
+    "test": "test_141039_the_quick_fact_label_accepts_exactly_60_characters_and_rejects_61",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141043",
+    "pbi": "130947",
+    "test": "test_141043_the_quick_fact_value_accepts_exactly_120_characters_and_rejects_12",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141051",
+    "pbi": "130947",
+    "test": "test_141051_the_section_title_accepts_exactly_100_characters_and_rejects_101",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141062",
+    "pbi": "130947",
+    "test": "test_141062_the_card_title_accepts_exactly_100_characters_and_rejects_101",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141079",
+    "pbi": "130947",
+    "test": "test_141079_the_document_requirement_item_title_accepts_exactly_200_characters",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141082",
+    "pbi": "130947",
+    "test": "test_141082_the_optional_document_requirement_item_subtitle_accepts_exactly_20",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141092",
+    "pbi": "130947",
+    "test": "test_141092_the_step_title_accepts_exactly_150_characters_and_rejects_151",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141102",
+    "pbi": "130947",
+    "test": "test_141102_the_card_subtitle_accepts_exactly_200_characters_and_rejects_201",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141104",
+    "pbi": "130947",
+    "test": "test_141104_the_download_button_label_accepts_exactly_40_characters_and_reject",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141111",
+    "pbi": "130947",
+    "test": "test_141111_the_banner_eyebrow_accepts_exactly_60_characters_and_rejects_61",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141114",
+    "pbi": "130947",
+    "test": "test_141114_the_banner_heading_accepts_exactly_150_characters_and_rejects_151",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141148",
+    "pbi": "130947",
+    "test": "test_141148_the_section_badge_accepts_exactly_100_characters_and_rejects_101",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141163",
+    "pbi": "130947",
+    "test": "test_141163_the_pdf_button_label_accepts_exactly_80_characters_and_rejects_81",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141218",
+    "pbi": "130949",
+    "test": "test_141218_a_hero_eyebrow_of_exactly_60_characters_is_accepted_and_rendered_i",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141219",
+    "pbi": "130949",
+    "test": "test_141219_a_hero_eyebrow_longer_than_60_characters_is_not_accepted",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141223",
+    "pbi": "130949",
+    "test": "test_141223_a_page_title_of_exactly_100_characters_is_accepted_and_rendered_in",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141224",
+    "pbi": "130949",
+    "test": "test_141224_a_page_title_longer_than_100_characters_is_not_accepted",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141228",
+    "pbi": "130949",
+    "test": "test_141228_a_quick_fact_label_of_exactly_60_characters_is_accepted_and_render",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141229",
+    "pbi": "130949",
+    "test": "test_141229_a_quick_fact_label_longer_than_60_characters_is_not_accepted",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141233",
+    "pbi": "130949",
+    "test": "test_141233_a_quick_fact_value_of_exactly_120_characters_is_accepted_and_rende",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141234",
+    "pbi": "130949",
+    "test": "test_141234_a_quick_fact_value_longer_than_120_characters_is_not_accepted",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141238",
+    "pbi": "130949",
+    "test": "test_141238_a_section_title_of_exactly_100_characters_is_accepted_and_rendered",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141239",
+    "pbi": "130949",
+    "test": "test_141239_a_section_title_longer_than_100_characters_is_not_accepted",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141243",
+    "pbi": "130949",
+    "test": "test_141243_an_info_card_title_of_exactly_100_characters_is_accepted_and_rende",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141244",
+    "pbi": "130949",
+    "test": "test_141244_an_info_card_title_longer_than_100_characters_is_not_accepted",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141248",
+    "pbi": "130949",
+    "test": "test_141248_an_information_group_label_of_exactly_120_characters_is_accepted_a",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141249",
+    "pbi": "130949",
+    "test": "test_141249_an_information_group_label_longer_than_120_characters_is_not_accep",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141253",
+    "pbi": "130949",
+    "test": "test_141253_a_group_item_bullet_label_of_exactly_300_characters_is_accepted_an",
+    "skip_reason": "N/A: no character limit is applied to rich-text fields (team decision 2026-10-01)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141254",
+    "pbi": "130949",
+    "test": "test_141254_a_group_item_bullet_label_longer_than_300_characters_is_not_accept",
+    "skip_reason": "N/A: no character limit is applied to rich-text fields (team decision 2026-10-01)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141258",
+    "pbi": "130949",
+    "test": "test_141258_a_resource_title_of_exactly_200_characters_is_accepted_and_rendere",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141259",
+    "pbi": "130949",
+    "test": "test_141259_a_resource_title_longer_than_200_characters_is_not_accepted",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141263",
+    "pbi": "130949",
+    "test": "test_141263_a_resource_download_label_of_exactly_40_characters_is_accepted_and",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141264",
+    "pbi": "130949",
+    "test": "test_141264_a_resource_download_label_longer_than_40_characters_is_not_accepte",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141355",
+    "pbi": "130949",
+    "test": "test_141355_a_section_badge_of_exactly_100_characters_is_accepted_and_rendered",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   },
+   {
+    "tc_id": "141356",
+    "pbi": "130949",
+    "test": "test_141356_a_section_badge_longer_than_100_characters_is_not_accepted",
+    "skip_reason": "N/A: no character limit on this project (user decision 2026-10-03)",
+    "outcome": "Not Applicable: no character limit on this project"
+   }
+  ],
+  "b_blocked_editor_permission": [
+   {
+    "tc_id": "144363",
+    "pbi": "130720",
+    "test": "test_144363_a_site_content_editor_can_perform_the_full_crud_lifecycle_on_a_par",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144364",
+    "pbi": "130720",
+    "test": "test_144364_a_site_content_author_can_view_and_update_only_assigned_partner_of",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144366",
+    "pbi": "130720",
+    "test": "test_144366_a_role_without_partner_offer_permission_sees_access_denied_when_at",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144404",
+    "pbi": "130720",
+    "test": "test_144404_a_site_content_editor_can_create_a_full_partner_offer_record_end_t",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144405",
+    "pbi": "130720",
+    "test": "test_144405_a_newly_added_active_partner_category_auto_appears_in_the_public_f",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144406",
+    "pbi": "130720",
+    "test": "test_144406_deactivating_a_category_with_published_offers_still_assigned_is_bl",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144408",
+    "pbi": "130720",
+    "test": "test_144408_unpublishing_a_partner_offer_removes_it_from_the_public_listing_an",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144409",
+    "pbi": "130720",
+    "test": "test_144409_deleting_a_partner_offer_removes_it_from_the_listing_and_the_modal",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144410",
+    "pbi": "130720",
+    "test": "test_144410_the_hero_and_offers_section_content_fields_save_and_render_correct",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144411",
+    "pbi": "130720",
+    "test": "test_144411_publishing_hero_content_with_a_missing_arabic_hero_title_is_blocke",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144412",
+    "pbi": "130720",
+    "test": "test_144412_a_valid_hero_illustration_image_uploads_and_displays_on_the_public",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144413",
+    "pbi": "130720",
+    "test": "test_144413_publishing_the_hero_with_no_illustration_selected_is_blocked",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144414",
+    "pbi": "130720",
+    "test": "test_144414_a_partner_category_saves_successfully_with_valid_en_ar_names",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144415",
+    "pbi": "130720",
+    "test": "test_144415_saving_a_partner_category_with_missing_arabic_name_is_blocked",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144418",
+    "pbi": "130720",
+    "test": "test_144418_a_membership_tier_saves_successfully_with_valid_en_ar_names",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144419",
+    "pbi": "130720",
+    "test": "test_144419_saving_a_membership_tier_with_missing_arabic_name_is_blocked",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144422",
+    "pbi": "130720",
+    "test": "test_144422_partner_name_en_ar_saves_and_displays_correctly_on_the_card",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144423",
+    "pbi": "130720",
+    "test": "test_144423_publishing_an_offer_with_a_missing_partner_name_in_arabic_is_block",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144424",
+    "pbi": "130720",
+    "test": "test_144424_a_valid_png_jpg_partner_logo_uploads_successfully",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144425",
+    "pbi": "130720",
+    "test": "test_144425_an_unsupported_partner_logo_file_type_is_rejected",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144426",
+    "pbi": "130720",
+    "test": "test_144426_an_oversized_partner_logo_file_is_rejected",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144427",
+    "pbi": "130720",
+    "test": "test_144427_assigning_a_valid_active_partner_category_to_an_offer_saves_and_th",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144428",
+    "pbi": "130720",
+    "test": "test_144428_publishing_an_offer_with_no_partner_category_selected_is_blocked",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144429",
+    "pbi": "130720",
+    "test": "test_144429_partner_location_en_ar_saves_and_displays_correctly_on_the_card",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144430",
+    "pbi": "130720",
+    "test": "test_144430_an_offer_publishes_successfully_when_partner_location_is_left_empt",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144431",
+    "pbi": "130720",
+    "test": "test_144431_offer_description_en_ar_saves_and_displays_correctly_within_the_10",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144432",
+    "pbi": "130720",
+    "test": "test_144432_publishing_an_offer_with_an_empty_offer_description_is_blocked",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144433",
+    "pbi": "130720",
+    "test": "test_144433_an_offer_description_of_exactly_1000_characters_is_accepted",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144604",
+    "pbi": "130720",
+    "test": "test_144604_an_offer_description_exceeding_1000_characters_is_rejected",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144605",
+    "pbi": "130720",
+    "test": "test_144605_a_whitespace_only_offer_description_is_rejected_as_effectively_emp",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144606",
+    "pbi": "130720",
+    "test": "test_144606_offer_terms_en_ar_saves_and_displays_correctly_in_the_modal_within",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144607",
+    "pbi": "130720",
+    "test": "test_144607_publishing_an_offer_with_empty_offer_terms_is_blocked",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144608",
+    "pbi": "130720",
+    "test": "test_144608_offer_terms_of_exactly_2000_characters_is_accepted",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144609",
+    "pbi": "130720",
+    "test": "test_144609_offer_terms_exceeding_2000_characters_is_rejected",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144610",
+    "pbi": "130720",
+    "test": "test_144610_whitespace_only_offer_terms_is_rejected_as_effectively_empty",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144611",
+    "pbi": "130720",
+    "test": "test_144611_a_validity_start_date_before_a_later_end_date_saves_successfully",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144612",
+    "pbi": "130720",
+    "test": "test_144612_an_end_date_before_the_start_date_is_blocked",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144613",
+    "pbi": "130720",
+    "test": "test_144613_publishing_an_offer_with_empty_validity_dates_is_blocked",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144614",
+    "pbi": "130720",
+    "test": "test_144614_assigning_a_valid_membership_tier_to_an_offer_saves_and_the_correc",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144615",
+    "pbi": "130720",
+    "test": "test_144615_publishing_an_offer_with_no_membership_tier_selected_is_blocked",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144616",
+    "pbi": "130720",
+    "test": "test_144616_a_valid_pdf_contract_document_uploads_and_opens_correctly_from_bot",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144617",
+    "pbi": "130720",
+    "test": "test_144617_a_valid_contract_url_saves_and_opens_correctly_instead_of_an_uploa",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144618",
+    "pbi": "130720",
+    "test": "test_144618_uploading_a_non_pdf_file_as_the_contract_document_is_rejected",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   },
+   {
+    "tc_id": "144627",
+    "pbi": "130720",
+    "test": "test_144627_attempting_to_deactivate_a_category_that_still_has_published_offer",
+    "skip_reason": "BLOCKED (pending user): Site Content Editor sees 0 rows and no authoring form on manage-partner-offer/-partner-category/-membership-tier/-partners-offers-page, 2026-10-01",
+    "outcome": "Blocked (stays skipped) - Site Content Editor has no authoring access to the Partners & Offers objects"
+   }
+  ],
+  "c_conditional_shared_mutation": [
+   {
+    "tc_id": "140993",
+    "pbi": "130947",
+    "test": "test_140993_a_site_content_editor_can_run_the_full_certificate_of_origin_conte",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (COO Page Content) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141001",
+    "pbi": "130947",
+    "test": "test_141001_editing_the_shared_cta_component_updates_both_the_hero_and_the_nex",
+    "skip_reason": "CONDITIONAL - COO Call To Action is keyed by CTA Key and the live page binds exactly two keys ('login coo', 'verify certificate'): the case edits/publishes the shared live CTA, and a QCTEST CTA would have to reuse a live key, which may displace the CTA visitors see - automate only once it is confirmed live that a QCTEST-keyed CTA does not; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live COO Call To Action entries keyed 'login coo' and 'verify certificate' (CTA Key) - edit/publish of the shared CTA, or a QCTEST CTA reusing a live key",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141003",
+    "pbi": "130947",
+    "test": "test_141003_publishing_the_certificate_of_origin_page_makes_it_publicly_reacha",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (COO Page Content) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141004",
+    "pbi": "130947",
+    "test": "test_141004_unpublishing_the_certificate_of_origin_page_removes_it_from_the_pu",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (COO Page Content) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141022",
+    "pbi": "130947",
+    "test": "test_141022_a_valid_cta_key_saves_and_binds_the_shared_cta_into_both_the_hero",
+    "skip_reason": "CONDITIONAL - COO Call To Action is keyed by CTA Key and the live page binds exactly two keys ('login coo', 'verify certificate'): the case edits/publishes the shared live CTA, and a QCTEST CTA would have to reuse a live key, which may displace the CTA visitors see - automate only once it is confirmed live that a QCTEST-keyed CTA does not; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live COO Call To Action entries keyed 'login coo' and 'verify certificate' (CTA Key) - edit/publish of the shared CTA, or a QCTEST CTA reusing a live key",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141029",
+    "pbi": "130947",
+    "test": "test_141029_a_valid_cta_redirect_url_saves_and_is_applied_to_the_rendered_butt",
+    "skip_reason": "CONDITIONAL - COO Call To Action is keyed by CTA Key and the live page binds exactly two keys ('login coo', 'verify certificate'): the case edits/publishes the shared live CTA, and a QCTEST CTA would have to reuse a live key, which may displace the CTA visitors see - automate only once it is confirmed live that a QCTEST-keyed CTA does not; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live COO Call To Action entries keyed 'login coo' and 'verify certificate' (CTA Key) - edit/publish of the shared CTA, or a QCTEST CTA reusing a live key",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141031",
+    "pbi": "130947",
+    "test": "test_141031_an_empty_cta_redirect_url_blocks_publishing_the_shared_cta",
+    "skip_reason": "CONDITIONAL - COO Call To Action is keyed by CTA Key and the live page binds exactly two keys ('login coo', 'verify certificate'): the case edits/publishes the shared live CTA, and a QCTEST CTA would have to reuse a live key, which may displace the CTA visitors see - automate only once it is confirmed live that a QCTEST-keyed CTA does not; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live COO Call To Action entries keyed 'login coo' and 'verify certificate' (CTA Key) - edit/publish of the shared CTA, or a QCTEST CTA reusing a live key",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141032",
+    "pbi": "130947",
+    "test": "test_141032_a_whitespace_only_cta_redirect_url_blocks_publishing_the_shared_ct",
+    "skip_reason": "CONDITIONAL - COO Call To Action is keyed by CTA Key and the live page binds exactly two keys ('login coo', 'verify certificate'): the case edits/publishes the shared live CTA, and a QCTEST CTA would have to reuse a live key, which may displace the CTA visitors see - automate only once it is confirmed live that a QCTEST-keyed CTA does not; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live COO Call To Action entries keyed 'login coo' and 'verify certificate' (CTA Key) - edit/publish of the shared CTA, or a QCTEST CTA reusing a live key",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141033",
+    "pbi": "130947",
+    "test": "test_141033_a_cta_with_open_behavior_set_to_same_tab_navigates_in_the_current",
+    "skip_reason": "CONDITIONAL - COO Call To Action is keyed by CTA Key and the live page binds exactly two keys ('login coo', 'verify certificate'): the case edits/publishes the shared live CTA, and a QCTEST CTA would have to reuse a live key, which may displace the CTA visitors see - automate only once it is confirmed live that a QCTEST-keyed CTA does not; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live COO Call To Action entries keyed 'login coo' and 'verify certificate' (CTA Key) - edit/publish of the shared CTA, or a QCTEST CTA reusing a live key",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141034",
+    "pbi": "130947",
+    "test": "test_141034_a_cta_with_open_behavior_set_to_new_tab_opens_the_destination_in_a",
+    "skip_reason": "CONDITIONAL - COO Call To Action is keyed by CTA Key and the live page binds exactly two keys ('login coo', 'verify certificate'): the case edits/publishes the shared live CTA, and a QCTEST CTA would have to reuse a live key, which may displace the CTA visitors see - automate only once it is confirmed live that a QCTEST-keyed CTA does not; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live COO Call To Action entries keyed 'login coo' and 'verify certificate' (CTA Key) - edit/publish of the shared CTA, or a QCTEST CTA reusing a live key",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141035",
+    "pbi": "130947",
+    "test": "test_141035_an_active_shared_cta_renders_in_both_the_hero_and_the_next_step_ba",
+    "skip_reason": "CONDITIONAL - COO Call To Action is keyed by CTA Key and the live page binds exactly two keys ('login coo', 'verify certificate'): the case edits/publishes the shared live CTA, and a QCTEST CTA would have to reuse a live key, which may displace the CTA visitors see - automate only once it is confirmed live that a QCTEST-keyed CTA does not; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live COO Call To Action entries keyed 'login coo' and 'verify certificate' (CTA Key) - edit/publish of the shared CTA, or a QCTEST CTA reusing a live key",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141036",
+    "pbi": "130947",
+    "test": "test_141036_an_inactive_shared_cta_is_hidden_in_both_the_hero_and_the_next_ste",
+    "skip_reason": "CONDITIONAL - COO Call To Action is keyed by CTA Key and the live page binds exactly two keys ('login coo', 'verify certificate'): the case edits/publishes the shared live CTA, and a QCTEST CTA would have to reuse a live key, which may displace the CTA visitors see - automate only once it is confirmed live that a QCTEST-keyed CTA does not; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live COO Call To Action entries keyed 'login coo' and 'verify certificate' (CTA Key) - edit/publish of the shared CTA, or a QCTEST CTA reusing a live key",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141113",
+    "pbi": "130947",
+    "test": "test_141113_an_empty_banner_heading_blocks_publishing",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (COO Page Content) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141115",
+    "pbi": "130947",
+    "test": "test_141115_a_whitespace_only_banner_heading_blocks_publishing",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (COO Page Content) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141117",
+    "pbi": "130947",
+    "test": "test_141117_an_active_next_step_banner_renders_at_the_end_of_the_page_content",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (COO Page Content) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141118",
+    "pbi": "130947",
+    "test": "test_141118_an_inactive_next_step_banner_is_hidden_with_no_layout_gap",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (COO Page Content) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141143",
+    "pbi": "130947",
+    "test": "test_141143_the_documents_required_section_renders_without_an_empty_accordion",
+    "skip_reason": "needs a real shared record mutated: the state (live 'Documents Required' section Active with every one of its accordion items Inactive) can only be built by deactivating the live QCDEMO accordion items - the COO Document Requirement form has no relationship field that would let QCTEST items hang under a QCTEST section",
+    "would_touch": "live QCDEMO COO Document Requirement accordion items under the live 'Documents Required' section (deactivating every one of them)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141145",
+    "pbi": "130947",
+    "test": "test_141145_the_download_breaks_visibly_when_the_application_form_file_is_dele",
+    "skip_reason": "needs a real shared record mutated: the case deletes a file from Documents & Media, and Documents & Media deletion is off-limits to automation (engineer brief Step 2)",
+    "would_touch": "a file in Documents & Media (deleting the application-form / resource file the published page references) - D&M deletion is off-limits to automation",
+    "outcome": "FORBIDDEN, not just conditional: Documents & Media deletion is off-limits to automation (engineer brief Step 2) - do not ask for approval to automate; manual-only"
+   },
+   {
+    "tc_id": "141172",
+    "pbi": "130947",
+    "test": "test_141172_the_next_step_banner_publishes_with_an_empty_banner_eyebrow_and_re",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (COO Page Content) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141173",
+    "pbi": "130947",
+    "test": "test_141173_the_next_step_banner_publishes_with_an_empty_banner_body_and_rende",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (COO Page Content) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141177",
+    "pbi": "130947",
+    "test": "test_141177_an_inactive_call_to_action_publishes_successfully_with_an_empty_re",
+    "skip_reason": "CONDITIONAL - COO Call To Action is keyed by CTA Key and the live page binds exactly two keys ('login coo', 'verify certificate'): the case edits/publishes the shared live CTA, and a QCTEST CTA would have to reuse a live key, which may displace the CTA visitors see - automate only once it is confirmed live that a QCTEST-keyed CTA does not; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live COO Call To Action entries keyed 'login coo' and 'verify certificate' (CTA Key) - edit/publish of the shared CTA, or a QCTEST CTA reusing a live key",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141205",
+    "pbi": "130949",
+    "test": "test_141205_a_site_content_editor_can_publish_the_proposal_for_research_page",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (Proposal for Research page) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141209",
+    "pbi": "130949",
+    "test": "test_141209_publishing_the_fully_authored_page_renders_every_active_component",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (Proposal for Research page) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141212",
+    "pbi": "130949",
+    "test": "test_141212_unpublishing_the_page_removes_it_from_public_view_while_the_conten",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (Proposal for Research page) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141268",
+    "pbi": "130949",
+    "test": "test_141268_a_valid_section_body_is_saved_in_both_languages_and_rendered_on_th",
+    "skip_reason": "CONDITIONAL: page renders only the first Overview entry (pageSize=1); asserting a QCTEST entry requires displacing live shared content",
+    "would_touch": "the live first Proposal for Research Overview entry (page renders pageSize=1) - a QCTEST overview entry would have to displace it",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141283",
+    "pbi": "130949",
+    "test": "test_141283_setting_the_page_status_to_published_makes_the_page_publicly_reach",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (Proposal for Research page) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141284",
+    "pbi": "130949",
+    "test": "test_141284_setting_the_page_status_back_to_draft_removes_the_page_from_public",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (Proposal for Research page) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141310",
+    "pbi": "130949",
+    "test": "test_141310_the_hero_banner_image_can_be_replaced_on_a_published_page_and_the",
+    "skip_reason": "CONDITIONAL - publishing/unpublishing an entry of a page-level configuration object (SINGLETON) may displace or hide the live QCDEMO entry every visitor sees - automate only once it is confirmed live that a QCTEST entry renders without replacing it; otherwise skip: needs a real shared record mutated",
+    "would_touch": "live QCDEMO page-level configuration entry (Proposal for Research page) - the one entry every visitor sees; publish/unpublish of a QCTEST entry may displace or hide it (record ID not yet resolved - resolve read-only by exact title before approval)",
+    "outcome": "Conditional - needs explicit ID-named user approval (CLAUDE.md rule 8)"
+   },
+   {
+    "tc_id": "141344",
+    "pbi": "130949",
+    "test": "test_141344_the_published_page_reports_a_broken_download_when_a_resource_pdf_i",
+    "skip_reason": "needs a real shared record mutated: the case deletes a file from Documents & Media, and Documents & Media deletion is off-limits to automation (engineer brief Step 2)",
+    "would_touch": "a file in Documents & Media (deleting the application-form / resource file the published page references) - D&M deletion is off-limits to automation",
+    "outcome": "FORBIDDEN, not just conditional: Documents & Media deletion is off-limits to automation (engineer brief Step 2) - do not ask for approval to automate; manual-only"
+   }
+  ],
+  "d_reason_no_longer_holds_rerun": [],
+  "other_reason_still_holds": [
+   {
+    "tc_id": "141075",
+    "pbi": "130947",
+    "test": "test_141075_the_documents_required_action_button_opens_in_the_same_tab_when_op",
+    "skip_reason": "CONDITIONAL - the Action Button Behavior picklist option labels (Same Tab / New Tab / Download) and the rendered button's target/download attribute have not been read live yet - automate once read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141076",
+    "pbi": "130947",
+    "test": "test_141076_the_documents_required_action_button_opens_in_a_new_tab_when_open",
+    "skip_reason": "CONDITIONAL - the Action Button Behavior picklist option labels (Same Tab / New Tab / Download) and the rendered button's target/download attribute have not been read live yet - automate once read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141164",
+    "pbi": "130947",
+    "test": "test_141164_the_documents_required_action_button_downloads_the_file_when_open",
+    "skip_reason": "CONDITIONAL - the Action Button Behavior picklist option labels (Same Tab / New Tab / Download) and the rendered button's target/download attribute have not been read live yet - automate once read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141174",
+    "pbi": "130947",
+    "test": "test_141174_the_created_and_last_modified_audit_dates_are_populated_automatica",
+    "skip_reason": "CONDITIONAL - COO Page Content has no Created Date / Last Modified Date field on the live form (read 2026-10-01) - needs a BA ruling on where the audit dates are shown before it can be asserted",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141213",
+    "pbi": "130949",
+    "test": "test_141213_a_downloadable_document_can_be_replaced_without_unpublishing_the_p",
+    "skip_reason": "CONDITIONAL - the case expects File Type / File Size to be re-captured on a live document swap, but both are free-text required fields on the live Resource Item form (read 2026-10-01) - needs a BA ruling, and the held-open-visitor half needs a second session across a publish",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141250",
+    "pbi": "130949",
+    "test": "test_141250_a_valid_group_item_bullet_label_is_saved_in_both_languages_and_ren",
+    "skip_reason": "CONDITIONAL - a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141293",
+    "pbi": "130949",
+    "test": "test_141293_an_active_information_group_item_renders_as_a_bullet_on_the_publis",
+    "skip_reason": "CONDITIONAL - a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141294",
+    "pbi": "130949",
+    "test": "test_141294_an_inactive_information_group_item_is_hidden_on_the_published_page",
+    "skip_reason": "CONDITIONAL - a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141305",
+    "pbi": "130949",
+    "test": "test_141305_information_group_items_render_as_bullets_in_the_order_set_by_thei",
+    "skip_reason": "CONDITIONAL - a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141331",
+    "pbi": "130949",
+    "test": "test_141331_a_new_bullet_can_be_added_to_an_information_group_and_appears_on_t",
+    "skip_reason": "CONDITIONAL - a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141332",
+    "pbi": "130949",
+    "test": "test_141332_an_existing_bullet_can_be_edited_and_the_change_appears_on_the_pub",
+    "skip_reason": "CONDITIONAL - a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141333",
+    "pbi": "130949",
+    "test": "test_141333_a_bullet_can_be_deleted_and_disappears_from_the_published_page",
+    "skip_reason": "CONDITIONAL - a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141334",
+    "pbi": "130949",
+    "test": "test_141334_reordering_bullets_within_an_information_group_changes_their_order",
+    "skip_reason": "CONDITIONAL - a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141341",
+    "pbi": "130949",
+    "test": "test_141341_an_audit_log_record_is_written_for_a_content_change_on_the_proposa",
+    "skip_reason": "CONDITIONAL - the audit-log surface is not located yet - automate once it is found on the live CMS (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141343",
+    "pbi": "130949",
+    "test": "test_141343_an_active_information_group_renders_without_an_empty_bullet_list_w",
+    "skip_reason": "CONDITIONAL - a Group Item (bullet) renders only inside an Information Group; the relationship field on the live Group Item form ('Group Items') has not been read live yet, so a QCTEST bullet cannot be attached to a QCTEST group - automate once that picker is read (read only)",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141345",
+    "pbi": "130949",
+    "test": "test_141345_a_visitor_holding_the_page_open_receives_the_replacement_document",
+    "skip_reason": "CONDITIONAL - the case expects File Type / File Size to be re-captured on a live document swap, but both are free-text required fields on the live Resource Item form (read 2026-10-01) - needs a BA ruling, and the held-open-visitor half needs a second session across a publish",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141362",
+    "pbi": "130949",
+    "test": "test_141362_the_hero_description_rich_text_supports_headings_bullets_and_inlin",
+    "skip_reason": "CONDITIONAL - headings / bullets / inline hyperlinks are entered through the CKEditor toolbar, which this suite does not drive yet - automate once the toolbar path is scripted",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   },
+   {
+    "tc_id": "141363",
+    "pbi": "130949",
+    "test": "test_141363_the_overview_body_rich_text_supports_headings_paragraphs_bullets_a",
+    "skip_reason": "CONDITIONAL - headings / bullets / inline hyperlinks are entered through the CKEditor toolbar, which this suite does not drive yet - automate once the toolbar path is scripted",
+    "outcome": "Stays skipped - the precondition (live read-only probe / BA ruling / CKEditor toolbar scripting) has not been met; flag in code is still False"
+   }
+  ]
+ },
+ "counts": {
+  "a_char_limit_NA": 38,
+  "b_blocked_editor_permission": 44,
+  "c_conditional_shared_mutation": 29,
+  "d_reason_no_longer_holds_rerun": 0,
+  "other_reason_still_holds": 18
+ },
+ "counts_by_pbi": {
+  "130947": {
+   "a_char_limit_NA": 16,
+   "b_blocked_editor_permission": 0,
+   "c_conditional_shared_mutation": 21,
+   "d_reason_no_longer_holds_rerun": 0,
+   "other_reason_still_holds": 4
+  },
+  "130949": {
+   "a_char_limit_NA": 22,
+   "b_blocked_editor_permission": 0,
+   "c_conditional_shared_mutation": 8,
+   "d_reason_no_longer_holds_rerun": 0,
+   "other_reason_still_holds": 14
+  },
+  "130720": {
+   "a_char_limit_NA": 0,
+   "b_blocked_editor_permission": 44,
+   "c_conditional_shared_mutation": 0,
+   "d_reason_no_longer_holds_rerun": 0,
+   "other_reason_still_holds": 0
+  }
+ },
+ "other_bucket_note": "'other_reason_still_holds' (18) is not one of classes a-d: each depends on a precondition (live read-only probe of picklist labels / Group Item relation / audit-log surface, a BA ruling on audit dates or File Type/Size, or CKEditor toolbar scripting) whose gate flag in code is still False (BEHAVIOR_OPTIONS_READ, COO_AUDIT_DATES_RULED, GROUP_ITEM_RELATION_READ, ...). None was shown to no longer hold, so class (d) = 0.",
+ "live_ids_note": "Live QCDEMO singleton/CTA record IDs were NOT resolved in b8 (no read-only lookup was run); rule 8 requires ID-named approval, so resolve them read-only by exact title before asking."
+}

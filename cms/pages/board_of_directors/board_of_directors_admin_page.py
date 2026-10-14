@@ -1,5 +1,5 @@
 """
-web/pages/board_of_directors/board_of_directors_admin_page.py —
+cms/pages/board_of_directors/board_of_directors_admin_page.py —
 BoardOfDirectorsAdminPage.
 
 Control_Panel Page Object for PBI 129398 (QC-ABOUT-006 — Board of Directors &

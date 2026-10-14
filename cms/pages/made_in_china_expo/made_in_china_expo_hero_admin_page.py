@@ -52,7 +52,7 @@ row `QCDEMO-130953-MIC-hero`):
     checkbox "Active Status"
     spinbutton "Display Order"
     (read-only) "Created Date" / "Last Modified Date"
-    button "Save as Draft" / "Submit for Publishing" (standard
+    button "Save as Draft" / "Submit for Review" (standard
         ObjectAuthoringPage state machine — confirmed live, same shape as
         every other project singleton)
 
@@ -168,7 +168,7 @@ class MadeInChinaExpoHeroAdminPage(BasePage):
         real field's accessible name additionally includes "(Read Only)"
         for Status, a real, confirmed-live finding that this object's own
         Status control is NOT independently settable (it mirrors the
-        workflow Draft/Approved state), disclosed on the case's own test
+        workflow Draft/Published state), disclosed on the case's own test
         rather than assumed. `.input_value()` first (native <select>),
         falling back to the rendered text of the widget's own display
         element for a custom-rendered combobox."""
