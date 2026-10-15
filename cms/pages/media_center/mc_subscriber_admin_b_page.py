@@ -291,9 +291,17 @@ class McSubscriberAdminPage(BasePage):
 
     # ---- session -----------------------------------------------------------------
     def login_admin(self) -> str:
+        # Healed 2026-10-14 (ready32 N): post-reset qcdev takes ~13-20 s to land a login,
+        # past the 15 s sign-in wait; one retry when the session did land / was slow.
         login = CmsLoginPage(self.page)
-        login.open_login()
-        login.login(settings.test_user, settings.test_password)
+        try:
+            login.open_login()
+            login.login(settings.test_user, settings.test_password)
+        except Exception:  # noqa: BLE001
+            self.page.wait_for_load_state("load")
+            if not self.signed_in_user()[0]:
+                login.open_login()
+                login.login(settings.test_user, settings.test_password)
         self.role = ROLE_ADMIN
         return "ok"
 

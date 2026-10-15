@@ -51,7 +51,7 @@ from core.web.overlays import dismiss_overlays
 
 logger = get_logger("photo_gallery_pb")
 
-PB_QCTEST_PREFIX = "QCTEST-130714-PB-"
+PB_QCTEST_PREFIX = os.environ.get("QCTEST_PREFIX", "").strip() or "QCTEST-130714-PB-"
 PB_ROLE_EDITOR = "Site Content Editor"
 PB_ROLE_USER_IDS = {PB_ROLE_EDITOR: "156488"}
 

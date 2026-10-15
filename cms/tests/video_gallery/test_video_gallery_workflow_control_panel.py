@@ -57,6 +57,7 @@ import allure
 import pytest
 
 from cms.pages.components.object_authoring_page import (
+    shows_message,
     STATUS_DRAFT,
     STATUS_PENDING_REVIEW,
     STATUS_PUBLISHED,
@@ -266,7 +267,7 @@ def _create(admin, disposable, data: dict, publish: bool, role: str, kind: str =
 
 
 def _has(banners: list[str], expected: str) -> bool:
-    return any(expected in b for b in banners)
+    return any(shows_message(b, expected) for b in banners)
 
 
 def _publish_open_record(admin, entry: VideoGalleryEntry, role: str = ROLE_EDITOR) -> list[str]:
@@ -590,7 +591,8 @@ def test_preview_draft_not_public(page, disposable, anon_pages):
     assert "PREVIEW" in text, "the Preview frame carries no PREVIEW banner"
 
     state = _details(anon_pages, entry)
-    assert state["not_found"] and state["title"] != entry.title, (
+    # ADO 148247: the draft's logged-out Details URL "answers not-found" = HTTP 404
+    assert (state["not_found"] or state.get("status") == 404) and state["title"] != entry.title, (
         f"PRODUCT: the draft is reachable on its logged-out details URL: {state}")
     _assert_video_not_public(anon_pages, entry)
 

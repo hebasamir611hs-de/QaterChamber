@@ -297,6 +297,12 @@ class VideoLibraryPublicViewVB(VideoLibraryPublicView):
     def overflow_report(self, selectors: list[str]) -> list[dict]:
         return self.page.evaluate(_OVERFLOW_JS, selectors)
 
+    def tooltips(self, selector: str) -> list[dict]:
+        """[{text, title}] of every node matching `selector` (title = its hover tooltip)."""
+        return self.page.eval_on_selector_all(
+            selector, """els => els.map(e => { const t = e.closest('[title]');
+                return {text: (e.innerText || '').trim(), title: t ? (t.getAttribute('title') || '').trim() : ''}; })""")
+
     def hero_state(self) -> dict:
         return {"title": self.hero_title_text().strip(), "background": self.hero_bg_style()}
 
@@ -321,3 +327,159 @@ class VideoDetailsPublicViewVB(VideoDetailsPublicView):
     def category_tag_text(self) -> str:
         tag = self.page.locator(self.TAG)
         return tag.first.inner_text().strip() if tag.count() else ""
+
+
+# ---- Video Library Page (ADO 148186 fix, commits c6680ca6 / d641c80c) ----------------------
+from cms.pages.components.object_authoring_page import normalize_status  # noqa: E402
+from cms.pages.video_gallery.video_record_admin_page import VideoGalleryAdminPage  # noqa: E402
+
+VIDEO_LIBRARY_PAGE_SLUG = "video-library-page"
+VIDEO_LIBRARY_PAGE_CODE = "QCDEMO-130715-VIDEO-LIBRARY-PAGE-main"
+K_PAGE_TITLE = "pageTitle"
+K_DETAIL_PAGE_TITLE = "detailPageTitle"
+K_HERO_IMAGE = "heroImage"
+PAGE_TITLE_LIMIT = 100
+HERO_IMAGE_HELP = "Upload a .jpg,.jpeg,.png no larger than 2 MB."
+R32_PREFIX = "QCTEST-130715-R32V-"
+
+
+class VideoLibraryPageAdmin(VideoGalleryAdminPage):
+    """`/web/qatar-chamber/manage-video-library-page` — ONE real record
+    (QCDEMO-130715-VIDEO-LIBRARY-PAGE-main, Published), no Add New.
+
+    LIVE 2026-10-13 (Site Content Editor): pageTitle* + qc-ar-pageTitle*
+    (counter /100), heroImage (optional, accept .jpg,.jpeg,.png, help "Upload a
+    .jpg,.jpeg,.png no larger than 2 MB."), activeStatus, detailPageTitle* +
+    qc-ar-detailPageTitle* (counter /100); Save as Draft / Publish. The list
+    under the form shows ENTRY / STATUS / LAST MODIFIED.
+
+    SAFETY: no delete / unpublish / save-as-draft helper exists here. Every
+    change goes through snapshot() -> change -> restore() -> differences().
+    """
+
+    TITLE_KEY = K_PAGE_TITLE
+    ROW = "table tbody tr:has(a[href*='editEntry='])"
+
+    def __init__(self, page):
+        super().__init__(page, VIDEO_LIBRARY_PAGE_SLUG, R32_PREFIX)
+
+    # ---- open / read ---------------------------------------------------------------
+    def open_real(self) -> "VideoLibraryPageAdmin":
+        self.open_entry_en(VIDEO_LIBRARY_PAGE_CODE)
+        try:
+            wait_until(lambda: self.ar_value(K_PAGE_TITLE) != "" and self.ar_value(K_DETAIL_PAGE_TITLE) != "",
+                       timeout=20.0, poll=0.5)
+        except WaitTimeoutError:
+            _logger.warning("Arabic titles did not hydrate on the Video Library Page form")
+        return self
+
+    def read_form(self) -> dict:
+        return {"title": self.text_value(K_PAGE_TITLE), "title_ar": self.ar_value(K_PAGE_TITLE),
+                "detail": self.text_value(K_DETAIL_PAGE_TITLE), "detail_ar": self.ar_value(K_DETAIL_PAGE_TITLE),
+                "active": self.active_status_stored(), "image": self.stored_file_name(K_HERO_IMAGE)}
+
+    def real_row(self) -> dict:
+        """{title, status, last_modified, rows} of the list under the form."""
+        rows = self.page.locator(self.ROW)
+        rows.first.wait_for(timeout=90000)
+        cells = [c.strip() for c in rows.first.locator("td").all_inner_texts()]
+        return {"title": cells[0] if cells else "",
+                "status": normalize_status(cells[1]) if len(cells) > 1 else "",
+                "last_modified": cells[2] if len(cells) > 2 else "", "rows": str(rows.count())}
+
+    def snapshot(self) -> dict:
+        self.open_real()
+        snap = self.read_form()
+        row = self.real_row()
+        snap.update(row_status=row["status"], last_modified=row["last_modified"], row_count=row["rows"])
+        return snap
+
+    @staticmethod
+    def differences(baseline: dict, current: dict) -> list[str]:
+        keys = ("title", "title_ar", "detail", "detail_ar", "active", "image", "row_status", "row_count")
+        return [k for k in keys if str(current.get(k) or "").strip() != str(baseline.get(k) or "").strip()]
+
+    def has_add_new(self) -> bool:
+        return self.page.get_by_text("+ Add New").locator("visible=true").count() > 0
+
+    # ---- edit helpers (form only; nothing is saved until publish()) ------------------------
+    def set_title(self, value: str, ar: bool = False, key: str = K_PAGE_TITLE) -> "VideoLibraryPageAdmin":
+        control = self._ar(key) if ar else self._en(key)
+        control.fill(value)
+        control.dispatch_event("input")
+        control.dispatch_event("change")
+        return self
+
+    def title_maxlength(self, key: str = K_PAGE_TITLE, ar: bool = False) -> int:
+        control = self._ar(key) if ar else self._en(key)
+        return int(control.evaluate("e => e.maxLength"))
+
+    def hero_help_text(self) -> str:
+        return self.upload_block_text(K_HERO_IMAGE)
+
+    def hero_accept(self) -> str:
+        return self._form().locator(f'[name="ObjectField_{K_HERO_IMAGE}"]').first.get_attribute("accept") or ""
+
+    def hero_required(self) -> bool:
+        return bool(self._form().locator(f'[name="ObjectField_{K_HERO_IMAGE}"]').first.evaluate("e => e.required"))
+
+    def remove_hero_image(self) -> bool:
+        """Form only. Persisted file -> the "Remove file" link (then "Undo remove"
+        shows); freshly picked file -> Liferay's "Remove Item" button."""
+        node = self._form().locator(f'[name="ObjectField_{K_HERO_IMAGE}"]').first
+        node.evaluate("""el => { let c = el.parentElement;
+            let d = c;
+            for (let i = 0; i < 8 && d && !d.querySelector('.qc-oel__current-file-remove'); i++) d = d.parentElement;
+            for (let i = 0; i < 8 && c && !c.querySelector('[title="Remove Item"]'); i++) c = c.parentElement;
+            document.querySelectorAll('[data-qc-vl-hero-block]').forEach(n => n.removeAttribute('data-qc-vl-hero-block'));
+            (d || c).setAttribute('data-qc-vl-hero-block', '1'); }""")
+        block = self.page.locator('[data-qc-vl-hero-block="1"]')
+        persisted = block.locator("button.qc-oel__current-file-remove", has_text="Remove file")
+        undo = block.locator("button.qc-oel__current-file-remove", has_text="Undo remove")
+        if persisted.count() and persisted.first.is_visible():
+            persisted.first.click()
+            try:
+                wait_until(lambda: undo.count() > 0 and undo.first.is_visible(), timeout=10.0, poll=0.5)
+                return True
+            except WaitTimeoutError:
+                return False
+        item = block.locator('button[title="Remove Item"]')
+        if item.count() == 0:
+            return False
+        item.first.evaluate("b => b.click()")
+        try:
+            wait_until(lambda: self.stored_file_name(K_HERO_IMAGE) == "", timeout=10.0, poll=0.5)
+        except WaitTimeoutError:
+            return False
+        return True
+
+    def publish(self) -> bool:
+        self.click_publish()
+        return self.save_went_through()
+
+    # ---- restore ---------------------------------------------------------------------
+    def restore(self, baseline: dict) -> dict:
+        """Writes back whatever differs, publishes, verifies from a fresh open."""
+        current = self.snapshot()
+        diffs = self.differences(baseline, current)
+        report = {"changed": diffs, "remaining": [], "final": current}
+        if not diffs:
+            return report
+        self.open_real()
+        for k, key, ar in (("title", K_PAGE_TITLE, False), ("title_ar", K_PAGE_TITLE, True),
+                           ("detail", K_DETAIL_PAGE_TITLE, False), ("detail_ar", K_DETAIL_PAGE_TITLE, True)):
+            if k in diffs:
+                self.set_title(baseline[k], ar=ar, key=key)
+        if "active" in diffs:
+            self.set_active_status(baseline["active"] == "true")
+        if "image" in diffs:
+            if baseline["image"]:
+                raise AssertionError("baseline hero image is not empty; byte restore is not supported here")
+            if not self.remove_hero_image():
+                raise AssertionError("could not remove the test hero image during restore")
+        if not self.publish():
+            raise AssertionError(f"restore Publish was refused: {self.refusal_evidence()}")
+        final = self.snapshot()
+        report["final"] = final
+        report["remaining"] = self.differences(baseline, final)
+        return report

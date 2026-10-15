@@ -287,7 +287,8 @@ def _create(admin, disposable, data: dict, publish: bool, role: str = A_ROLE_EDI
 
 
 def _has(banners: list[str], expected: str) -> bool:
-    return any(expected in b for b in banners)
+    from cms.pages.components.object_authoring_page import shows_message  # noqa: PLC0415
+    return any(shows_message(b, expected) for b in banners)
 
 
 def _history(admin, entry: TenderEntryC) -> list[dict]:
@@ -302,7 +303,7 @@ def _require_active_status(admin, entry: TenderEntryC) -> None:
     ANY public check (re-opens the record)."""
     admin.open_entry_en(entry.code)
     stored = admin.active_status_stored()
-    page_status = admin.picklist_value("pageStatus")
+    page_status = "retired (ADO 148125)"
     allure.attach(f"stored Active Status: {stored!r}\nstored Status: {page_status!r}",
                   name="public-visibility preconditions")
     if stored != "true":
@@ -463,11 +464,10 @@ def test_lifecycle_actions_recorded_in_history(page, role_pages, disposable):
     # (Active Status stays ticked: an unticked record's badge reads INACTIVE).
     author = _login(page, A_ROLE_AUTHOR)
     _, author_name = author.signed_in_user()
-    first = _create(author, disposable, _data("146134", "Approve then unpublish", ref_suffix="1",
-                                              pageStatus="Submitted"),
+    first = _create(author, disposable, _data("146134", "Approve then unpublish", ref_suffix="1"),
                     publish=True, role=A_ROLE_AUTHOR)
     assert _has(author.create_banners, A_MSG_SUBMITTED_FOR_REVIEW), author.create_banners
-    second = _create(author, disposable, _data("146134", "Reject", ref_suffix="2", pageStatus="Submitted"),
+    second = _create(author, disposable, _data("146134", "Reject", ref_suffix="2"),
                      publish=True, role=A_ROLE_AUTHOR)
     for entry in (first, second):
         status = author.wait_status(entry, (STATUS_PENDING_REVIEW,), timeout=60.0)
@@ -636,7 +636,7 @@ def test_manual_tender_values_persist_after_reload(page, disposable):
     data = _data("146283", "Persistence", tenderCategory="Works", tenderType="Limited",
                  tenderClassification="Multi-stage", productCategory="Marine Works", tenderLocation="Oman",
                  tenderFeeExemptionAllowed="Yes", paymentMode="Offline", generalTechnicalEvaluationAllowed="No",
-                 itemWiseTechnicalEvaluationAllowed="Yes", pageStatus="Approved", tenderFee="750",
+                 itemWiseTechnicalEvaluationAllowed="Yes", tenderFee="750",
                  emdAmount="15000", active_status=True)
     entry = _create(admin, disposable, data, publish=False)
     assert _has(admin.create_banners, A_MSG_DRAFT_SAVED), admin.create_banners
@@ -678,7 +678,7 @@ def test_duplicate_reference_number_blocked(page, disposable):
     reference = _ref("146293", "QC-ET-2026-041")
     first = _create(admin, disposable,
                     TenderPublishAdminPage.c_tender_data(reference, _title("146293", "Path 1 stand-in"),
-                                                         pageStatus="Approved", active_status=False),
+                                                         active_status=False),
                     publish=True)
     assert first.reference == reference
 

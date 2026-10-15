@@ -55,7 +55,7 @@ STAMP = datetime.now().strftime("%m%d%H%M%S")
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 IMAGE = str(FIXTURES / "b_qctest_banner.jpg")
 PDF = str(FIXTURES / "b_qctest_document.pdf")
-QCTEST_EMAIL = "qctest-r30-c@example.com"
+QCTEST_EMAIL = "qctest-r32-n@example.com"
 # A real, Active opportunity used only as the target of the inquiry modal (never edited).
 INQUIRY_TARGET_CODE = "QC-BIZOPP-130697-04"
 
@@ -106,7 +106,7 @@ def qctest_intake(browser):
         data["submission"] = {"name": sub_name, "outcome": sub,
                               "public_evidence": OpportunityReviewAdminPage(page).evidence("intake_public_submission")}
         inq = (PublicOpportunityInquiryForm(page).open_modal(INQUIRY_TARGET_CODE)
-               .fill_qctest(inq_name, QCTEST_EMAIL, inq_company, "QCTEST R30 agent C inquiry.").submit())
+               .fill_qctest(inq_name, QCTEST_EMAIL, inq_company, "QCTEST R32 agent N inquiry.").submit())
         data["inquiry"] = {"name": inq_name, "company": inq_company, "outcome": inq,
                            "public_evidence": OpportunityReviewAdminPage(page).evidence("intake_public_inquiry")}
     finally:
@@ -162,10 +162,10 @@ def extra_intake(browser):
         name = f"{QCTEST_PREFIX}SUBA-{STAMP}"
         res = PublicOpportunitySubmissionForm(page).open_form().fill_qctest(name, IMAGE, PDF, QCTEST_EMAIL).submit()
         out["sub_approve"] = {"name": name, "outcome": res, "id": res.get("id")}
-        for n in (1, 2, 3):
+        for n in (1, 2, 3, 4, 5):  # inq4: 143282 (Administrator), inq5: 143280 (own inquiry)
             name = f"{QCTEST_PREFIX}INQ{n}-{STAMP}"
             res = (PublicOpportunityInquiryForm(page).open_modal(INQUIRY_TARGET_CODE)
-                   .fill_qctest(name, QCTEST_EMAIL, f"{QCTEST_PREFIX}Company-{STAMP}", f"QCTEST R30 C inquiry {n}.")
+                   .fill_qctest(name, QCTEST_EMAIL, f"{QCTEST_PREFIX}Company-{STAMP}", f"QCTEST R32 N inquiry {n}.")
                    .submit())
             out[f"inq{n}"] = {"name": name, "outcome": res, "id": res.get("id")}
     finally:
@@ -332,7 +332,7 @@ def test_inquiry_list_columns(qctest_intake):
 # ===========================================================================
 # Submission review (live since the fix for bug 149526, 2026-10-13)
 # ===========================================================================
-REJECT_REASON = "QCTEST R30 C Duplicate submission"
+REJECT_REASON = "QCTEST R32 N Duplicate submission"
 MSG_REASON_REQUIRED = "A rejection reason is required."
 MSG_APPROVED = "The opportunity submission has been approved."
 MSG_REJECTED = "The opportunity submission has been rejected."
@@ -411,18 +411,26 @@ def test_reject_without_reason_blocked(rejected_sub):
 @pytest.mark.uat
 @pytest.mark.tc_143285
 def test_approve_publishes_business_opportunity(browser, approved_sub):
+    """Healed 2026-10-14 (ready32 N, bug 150023 fix): Approve (Form Manager) is followed by the
+    Editor's "Publish as Opportunity", which creates the Business Opportunity pre-filled from the
+    submission as a Draft. The final Publish -> public Active tab step needs the editor to add
+    the investment range / hero banner / archive date by hand and is not automated here."""
     assert OpportunityReviewAdminPage.row_status(approved_sub["approve"]["row"]) == "APPROVED", "Precondition: not Approved"
     name = approved_sub["item"]["name"]
-    ctx, admin, _ = _signed_in(browser, ROLE_ADMIN)  # read-only look at the records list
+    ctx, admin, _ = _signed_in(browser, ROLE_EDITOR)
     try:
-        records = admin.opportunity_record_titles()
-        ev = admin.evidence("143285_business_opportunity_records_after_approve")
+        res = admin.publish_as_opportunity(approved_sub["item"]["id"], name)
+        ev = admin.evidence("143285_business_opportunity_from_submission")
     finally:
         ctx.close()
-    actions = approved_sub["approve"]["row"]["actions"]
-    assert name in records or "Publish as Opportunity" in actions, (
-        f"Step 4: after Approve, no Business Opportunity record named {name!r} exists in manage-business-opportunity "
-        f"and the Approved row offers no 'Publish as Opportunity' (row actions {actions}). Evidence: {ev}")
+    allure.attach(json.dumps({k: v for k, v in res.items() if k != "body"}, indent=2, ensure_ascii=False),
+                  name="publish as opportunity (live)", attachment_type=allure.attachment_type.JSON)
+    assert "editEntry=QC-BO-FROM-" in res["url"], (
+        f"Step 4: 'Publish as Opportunity' did not open a Business Opportunity created from the submission "
+        f"(url {res['url']!r}, dialogs {res['dialogs']}, POST {res['posts']}, actions {res.get('actions')}). Evidence: {ev}")
+    assert res["title_value"] == name, (
+        f"Step 4: the new Business Opportunity is not pre-filled with the submission title "
+        f"(Opportunity Title {res['title_value']!r}, expected {name!r}). Evidence: {ev}")
 
 
 @allure.epic(EPIC)
@@ -446,20 +454,25 @@ def test_rejected_submission_kept(rejected_sub, reviewer):
 @pytest.mark.functional_low
 @pytest.mark.tc_143400
 def test_rejected_submission_creates_no_record(browser, rejected_sub):
-    """NOTE: "no record after Reject" only means something if Approve DOES create one. Live,
-    Approve creates no Business Opportunity record either (see 143285), so absence after
-    Reject cannot be distinguished from "nothing ever creates a record": not provable."""
+    """Implemented 2026-10-15 (ready32 N): Approve -> "Publish as Opportunity" now exists (bug 150023),
+    so absence after Reject is meaningful. Checked as the Editor (who is offered the action):
+    the Rejected row offers no "Publish as Opportunity" and no QC-BO-FROM-<erc> record exists."""
     assert OpportunityReviewAdminPage.row_status(rejected_sub["with_reason"]["row"]) == "REJECTED", "Precondition"
-    ctx, admin, _ = _signed_in(browser, ROLE_ADMIN)
+    ctx, admin, _ = _signed_in(browser, ROLE_EDITOR)
     try:
+        admin.open_manage(SUBMISSION_SLUG)
+        row = admin.row_by_id(rejected_sub["item"]["id"])
+        ev1 = admin.evidence("143400_rejected_row_actions_editor")
         records = admin.opportunity_record_titles()
-        admin.evidence("143400_records_after_reject")
+        ev2 = admin.evidence("143400_records_after_reject")
     finally:
         ctx.close()
-    assert rejected_sub["item"]["name"] not in records, "Step 3: a Business Opportunity record exists for the rejected submission"
-    pytest.skip("NOT PROVABLE — no record exists for the rejected submission, but Approve creates no Business "
-                "Opportunity record either (tc_143285 fails), so this absence does not show that Reject is what "
-                "prevents one. Re-judge once Approve -> publish exists.")
+    assert row, f"Precondition: the rejected submission is not listed for the Editor. Evidence: {ev1}"
+    erc = row["cells"][0]
+    assert "Publish as Opportunity" not in row["actions"], (
+        f"Step 2: the Rejected submission offers 'Publish as Opportunity' (row actions {row['actions']}). Evidence: {ev1}")
+    assert f"QC-BO-FROM-{erc}" not in records and rejected_sub["item"]["name"] not in records, (
+        f"Step 3: a Business Opportunity record exists for the rejected submission ({erc}). Evidence: {ev2}")
 
 
 @allure.epic(EPIC)
@@ -468,8 +481,11 @@ def test_rejected_submission_creates_no_record(browser, rejected_sub):
 @allure.title("Rejecting an already Approved submission is blocked as an invalid transition")
 @pytest.mark.edge
 @pytest.mark.tc_143243
+@pytest.mark.xfail(strict=False, reason="USER DECISION (2026-10-13): an Approved row offering Reject is NOT a bug; "
+                   "kept as written for traceability, expected to fail while the product allows Approved -> Rejected.")
 def test_reject_approved_submission_blocked(approved_sub, reviewer):
-    """Read-only check: the Approved row must not offer Reject (nothing is clicked)."""
+    """Read-only check: the Approved row must not offer Reject (nothing is clicked).
+    NOTE: the QA owner decided the Approved -> Reject offer is acceptable (not a bug), hence xfail."""
     reviewer.open_manage(SUBMISSION_SLUG)
     row = reviewer.row_by_id(approved_sub["item"]["id"])
     assert OpportunityReviewAdminPage.row_status(row) == "APPROVED", f"Precondition: row {row}"
@@ -486,13 +502,19 @@ def test_reject_approved_submission_blocked(approved_sub, reviewer):
 @pytest.mark.functional_low
 @pytest.mark.regression
 @pytest.mark.tc_143397
-def test_publish_approved_submission(approved_sub, reviewer):
-    reviewer.open_manage(SUBMISSION_SLUG)
-    row = reviewer.row_by_id(approved_sub["item"]["id"])
-    ev = reviewer.evidence("143397_approved_row_actions")
-    assert "Publish as Opportunity" in row["actions"], (
-        f"Step 2: the Approved submission offers no 'Publish as Opportunity' action (row actions {row['actions']}). "
-        f"Evidence: {ev}")
+def test_publish_approved_submission(browser, approved_sub):
+    """Healed 2026-10-14 (ready32 N, bug 150023 fix): the action is offered to the Editor /
+    Administrator (who publish site content), not to the Form Manager; checked as the Administrator."""
+    ctx, admin, _ = _signed_in(browser, ROLE_ADMIN)
+    try:
+        admin.open_manage(SUBMISSION_SLUG)
+        row = admin.row_by_id(approved_sub["item"]["id"])
+        ev = admin.evidence("143397_approved_row_actions_admin")
+    finally:
+        ctx.close()
+    assert row and "Publish as Opportunity" in row["actions"], (
+        f"Step 2: the Approved submission offers no 'Publish as Opportunity' action to the Administrator "
+        f"(row {row}). Evidence: {ev}")
 
 
 @allure.epic(EPIC)
@@ -617,10 +639,8 @@ def test_qc_admin_reviewer_access(reviewer, approved_sub, extra_intake):
         assert reviewer.signed_in_user()[0] == ROLE_USER_IDS[ROLE_FORM_MANAGER], "not signed in as the Form Manager"
         assert reviewer.list_heading_visible(), f"Step 3: the Form Manager cannot open manage-{slug}"
     assert OpportunityReviewAdminPage.row_status(approved_sub["approve"]["row"]) == "APPROVED", "Step 4: Approve failed"
-    item = extra_intake["inq1"]
-    reviewer.open_manage(INQUIRY_SLUG)
-    if OpportunityReviewAdminPage.row_status(reviewer.row_by_id(item["id"])) == "PENDING":
-        _inquiry_step(reviewer, item, "Mark In Progress", "IN-PROGRESS", "Step 2")
+    item = extra_intake["inq5"]  # its own Pending inquiry, stepped here (not relying on 143392)
+    _inquiry_step(reviewer, item, "Mark In Progress", "IN-PROGRESS", "Step 2")
 
 
 @allure.epic(EPIC)
@@ -639,7 +659,7 @@ def test_administrator_full_access(browser, qctest_intake, extra_intake):
         authoring = admin.authoring_access()
         admin.evidence("Administrator_manage_business_opportunity")
         admin.open_manage(INQUIRY_SLUG)
-        inq_row = admin.row_by_id(extra_intake["inq3"]["id"]) or {}
+        inq_row = admin.row_by_id(extra_intake["inq4"]["id"]) or {}  # own Pending inquiry (not shared with 143287)
         admin.evidence("Administrator_manage_opportunity_inquiry")
         admin.open_manage(SUBMISSION_SLUG)
         sub_ids = admin.entry_ids()

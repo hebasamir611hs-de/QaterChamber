@@ -136,7 +136,8 @@ SOURCE_FLICKR = "Flickr"
 SOURCE_EXTERNAL_URL = "External URL"
 SOURCE_DIRECT_UPLOAD = "Direct Upload"
 
-UPLOAD_LABELS = {K_THUMBNAIL: "Video Thumbnail", K_VIDEO_FILE: "Video File"}
+UPLOAD_LABELS = {K_THUMBNAIL: "Video Thumbnail", K_VIDEO_FILE: "Video File",
+                 "heroImage": "Hero Background Image"}
 
 FIXTURES_DIR = os.path.join(str(PROJECT_ROOT), "cms", "tests", "video_gallery", "fixtures")
 DEFAULT_THUMBNAIL = os.path.join(FIXTURES_DIR, "va_qctest_thumb.png")
@@ -611,6 +612,18 @@ class VideoGalleryAdminPage(ObjectAuthoringPage):
 
     def ar_value(self, key: str) -> str:
         return self._ar(key).input_value()
+
+    def has_field(self, key: str) -> bool:
+        """True when the open form carries any ObjectField_<key> control."""
+        return self._form().locator(f'[name="ObjectField_{key}"]').count() > 0
+
+    def field_editable(self, key: str) -> bool:
+        """True when ObjectField_<key> is a visible, enabled, non-readonly input."""
+        box = self._form().locator(f'[name="ObjectField_{key}"]:not([type="hidden"])')
+        if box.count() == 0:
+            return False
+        box = box.first
+        return box.is_visible() and box.is_enabled() and box.get_attribute("readonly") is None
 
     def fill_number_key(self, key: str, value: str) -> "VideoGalleryAdminPage":
         self._en(key).fill(value)
@@ -1134,11 +1147,16 @@ class VideoRecordAdminPage(VideoGalleryAdminPage):
             self.fill_ar(K_TITLE, data[f"{K_TITLE}_ar"])
         for key in (K_SOURCE_TYPE, K_CATEGORY_REL, K_VIDEO_STATUS, K_FLICKR_FOLDER_REL):
             if data.get(key):
+                if key == K_VIDEO_STATUS and not self.has_field(key):
+                    # ADO 148187: the duplicate Status dropdown was retired; the
+                    # workflow status (Save as Draft / Publish) is the status.
+                    continue
                 self.pick(key, data[key])
         for key in (K_VIDEO_URL, K_FLICKR_VIDEO_ID, K_DURATION, K_FLICKR_SOURCE_FOLDER):
             if data.get(key) is not None:
                 self.fill_en(key, data[key])
-        if data.get(K_VIEW_COUNT) is not None:
+        if data.get(K_VIEW_COUNT) is not None and self.field_editable(K_VIEW_COUNT):
+            # ADO 148184/148190: View Count is system-calculated (read-only) now.
             self.fill_number_key(K_VIEW_COUNT, data[K_VIEW_COUNT])
         if data.get(K_PUBLISHED_DATE) is not None:
             self.set_date(K_PUBLISHED_DATE, data[K_PUBLISHED_DATE])
@@ -1161,8 +1179,11 @@ class VideoRecordAdminPage(VideoGalleryAdminPage):
         """Stored values of the open record, keyed like the fill data."""
         values = {K_TITLE: self.text_value(K_TITLE), f"{K_TITLE}_ar": self.ar_value(K_TITLE)}
         for key in (K_VIDEO_URL, K_FLICKR_VIDEO_ID, K_DURATION, K_VIEW_COUNT, K_FLICKR_SOURCE_FOLDER):
-            values[key] = self.text_value(key)
+            values[key] = self.text_value(key) if self.has_field(key) else ""
         for key in (K_SOURCE_TYPE, K_VIDEO_STATUS, K_CATEGORY_REL, K_FLICKR_FOLDER_REL):
+            if not self.has_field(key):
+                values[key] = values[f"{key}-label"] = ""
+                continue
             values[key] = self.picklist_value(key)
             values[f"{key}-label"] = self.picklist_label(key)
         values[K_PUBLISHED_DATE] = self.date_stored(K_PUBLISHED_DATE)

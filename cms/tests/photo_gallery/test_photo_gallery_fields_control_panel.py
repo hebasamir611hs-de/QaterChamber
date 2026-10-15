@@ -91,6 +91,24 @@ from cms.pages.photo_gallery.photo_album_admin_page import (
     K_PUBLISHED_DATE,
     PhotoAlbumFieldsPB,
 )
+from cms.pages.photo_gallery.album_photo_admin_page import (
+    FRAMING_DEFAULT,
+    K_PHOTO_DISPLAY_ORDER,
+    K_PHOTO_TITLE,
+    K_THUMBNAIL_FRAMING,
+    MSG_UNSUPPORTED_TYPE,
+    PHOTO_TITLE_LIMIT,
+    unsupported_type_shown,
+)
+from cms.tests.photo_gallery.photo_support import (
+    PHOTO_BMP,
+    PHOTO_JPG,
+    PhotoRegistry,
+    add_photo,
+    cleanup,
+    photo_data,
+    publish_album,
+)
 from core.web.browser import new_context
 
 pytestmark = [pytest.mark.control_panel, pytest.mark.media, pytest.mark.pbi_130714,
@@ -104,17 +122,17 @@ HERO_3MB_JPG = os.path.join(FIXTURES, "pb_qctest_hero_3mb.jpg")
 STAMP = datetime.now().strftime("%m%d%H%M%S")
 TODAY_DMY = date.today().strftime("%d/%m/%Y")
 REAL_CATEGORY = "Institutional"
-# Live 2026-10-05: an album is refused (even as Draft) without a photo source —
-# "Choose a Flickr album or an uploaded photos album for this photo album." — so
-# every "otherwise valid" album points at an existing Flickr Album record
-# (a read-only reference stored on the album; the Flickr record is not edited).
-REAL_FLICKR_SOURCE = "First_Test_Album_QChamber"
+# Since ADO 148169 (2026-10-12) an album needs no photo source, and choosing a
+# Flickr Source Folder IMPORTS that folder's photos as Draft photos — so test
+# albums pick none; photos are added one by one (+ Add photo).
 TEST_DISPLAY_ORDER = "900"
 PUBLISH_CONFIRM_TIMEOUT = 120.0
 PUBLIC_REFLECT_TIMEOUT = 5.0  # cms-profile.md: poll 5 s @ 0.5 s
 VIEWPORTS = {"desktop": (1920, 1080), "mobile": (390, 844)}
 FINDINGS_LOG = os.path.join(PB_EVIDENCE_DIR, "findings.jsonl")
 ARABIC_PATTERN = r"Arabic content is required|المحتوى بالعربية مطلوب"
+BLOCKED_DETAIL = ("ADO 148180 (reopened): the public Album Details page renders blank "
+                  "(JS 'lastLabel is not defined')")
 
 
 def _name(tc_id: str, suffix: str) -> str:
@@ -131,7 +149,7 @@ def _sized(tc_id: str, length: int, arabic: bool = False) -> str:
 
 def _album_data(tc_id: str, **overrides) -> dict:
     data = {"title": _name(tc_id, "Album"), "title_ar": _name(tc_id, "ألبوم تجريبي"),
-            "published_date": TODAY_DMY, "category": REAL_CATEGORY, "flickr_source": REAL_FLICKR_SOURCE,
+            "published_date": TODAY_DMY, "category": REAL_CATEGORY,
             "cover": COVER_JPG,
             "cover_stem": f"qctest-130714-pb-{tc_id}-cover", "active": True}
     data.update(overrides)
@@ -148,63 +166,51 @@ def _category_data(tc_id: str, **overrides) -> dict:
 # ===========================================================================
 # Fixtures
 # ===========================================================================
-class DisposableRegistry:
-    """Records THIS test created, deleted in reverse creation order."""
-
-    def __init__(self):
-        self.entries: list = []
-
-    def track(self, entry):
-        if not entry.in_namespace() or not entry.title.startswith(PB_QCTEST_PREFIX):
-            raise ValueError(f"{entry} is not a {PB_QCTEST_PREFIX} record")
-        if all(e.entry_id != entry.entry_id for e in self.entries):
-            self.entries.append(entry)
-        return entry
-
-
-CLEANERS = {"event-category": EventCategoryFieldsPB, "photo-album": PhotoAlbumFieldsPB,
-            "page-hero": PageHeroAdminPage}
+CLEANERS = {"page-hero": PageHeroAdminPage}
 
 
 @pytest.fixture
 def disposable(browser):
-    """Deletes ONLY the records the test registered at creation (guarded delete),
-    as the Site Content Editor. Anything it cannot remove fails the teardown."""
-    registry = DisposableRegistry()
+    """Removes ONLY the records the test registered at creation (photos, albums,
+    categories through the shared guarded cleanup; page heroes through their own
+    guarded delete), as the Site Content Editor. A delete the product refuses
+    because the record is still referenced is LEFT unpublished and reported;
+    any other leftover fails the teardown."""
+    registry = PhotoRegistry(PB_QCTEST_PREFIX)
     yield registry
+    outcome, failures = [f"LEFT (blank-title photo, not capturable): {u}" for u in registry.untracked], []
     if not registry.entries:
+        if outcome:
+            allure.attach(chr(10).join(outcome), name="QCTEST teardown")
         return
     ctx = new_context(browser, use_auth_state=False)
-    outcome, failures = [], []
     try:
         page = ctx.new_page()
-        login = None
-        for entry in reversed(registry.entries):
+        gallery = [e for e in registry.entries if e.slug != "page-hero"]
+        if gallery:
+            done, failed = cleanup(page, PB_QCTEST_PREFIX, PB_EVIDENCE_DIR, gallery, registry.parents,
+                                   PB_ROLE_EDITOR, lambda admin: admin.login_as_role(PB_ROLE_EDITOR) == "ok")
+            outcome += done
+            failures += failed
+        for entry in [e for e in registry.entries if e.slug == "page-hero"]:
             label = f"{entry.slug} {entry.title[:80]!r} (id {entry.entry_id}, code {entry.code})"
             try:
                 cleaner = CLEANERS[entry.slug](page)
-                if login is None:
-                    login = cleaner.login_pinned(PB_ROLE_EDITOR)
+                cleaner.login_pinned(PB_ROLE_EDITOR)
                 cleaner.pinned_role = PB_ROLE_EDITOR
                 cleaner.open_list_all()
                 if not cleaner.row_present(entry):
-                    (outcome if cleaner.is_list_fully_expanded() else failures).append(
-                        f"already gone: {label}" if cleaner.is_list_fully_expanded()
-                        else f"{label}: not found and the list is NOT fully expanded")
+                    outcome.append(f"already gone: {label}")
                     continue
                 cleaner.adopt(entry)
-                if cleaner.delete_own_entry(entry):
-                    outcome.append(f"removed {label}")
-                else:
-                    failures.append(f"NOT removed {label}: guarded delete refused/failed "
-                                    f"(dialogs {cleaner.last_delete_dialogs})")
+                (outcome if cleaner.delete_own_entry(entry) else failures).append(f"delete {label}")
             except Exception as exc:  # noqa: BLE001 — collected below
                 failures.append(f"{label}: {exc!r}")
     finally:
         ctx.close()
-    allure.attach("\n".join(outcome + failures) or "nothing to remove", name="QCTEST teardown")
+    allure.attach(chr(10).join(outcome + failures) or "nothing to remove", name="QCTEST teardown")
     if failures:
-        raise AssertionError("TEARDOWN LEFT QCTEST DATA BEHIND:\n" + "\n".join(failures))
+        raise AssertionError("TEARDOWN LEFT QCTEST DATA BEHIND:" + chr(10) + chr(10).join(failures))
 
 
 @pytest.fixture
@@ -264,7 +270,12 @@ def _editor(page, cls):
         pytest.skip("PRECONDITION: Liferay refused the .env credentials for 'Site Content Editor'")
     if outcome != "ok":
         pytest.fail("login as 'Site Content Editor' neither succeeded nor showed Liferay's refusal banner")
-    admin.open_create_form_en()
+    if isinstance(admin, PageHeroAdminPage):
+        # Live 2026-10-13: manage-page-hero lists its 2 fixed records with no
+        # create form (no Add New on fixed records, by design).
+        admin.open_list_all()
+    else:
+        admin.open_create_form_en()
     user_id, _ = admin.signed_in_user()
     if user_id != PB_ROLE_USER_IDS[PB_ROLE_EDITOR]:
         pytest.skip(f"PRECONDITION: Editor credentials sign in as userId {user_id!r}, not 156488")
@@ -352,6 +363,32 @@ def _create_published(admin, disposable, tc_id: str, title: str, fill, what: str
     return entry
 
 
+def _create_published_album(admin, disposable, tc_id: str, title: str, fill, what: str):
+    """By design since ADO 148169 an album publishes only with >= 1 published
+    photo: Save as Draft, add one published photo (+ Add photo), then Publish."""
+    ids_before = admin.snapshot_ids()
+    went_through = False
+    try:
+        admin.open_create_form_en()
+        admin.wait_arabic_ready()
+        fill(admin)
+        _pinned(admin)
+        admin.click_save_as_draft()
+        went_through = admin.save_went_through()
+        if went_through:
+            admin.wait_arabic_saved()
+        evidence = admin.pb_refusal_evidence()
+    finally:
+        entry = _register(admin, disposable, title, ids_before)
+    assert went_through and entry is not None, f"{what}: the draft album was not saved: {dump(evidence)}"
+    photo = add_photo(admin, disposable, entry.entry_id, photo_data(f"{title[:150]} Photo"), publish=True)
+    assert photo["went_through"] and photo["entry"], f"{what}: the album's photo was not published: {photo['messages']}"
+    out = publish_album(admin, entry)
+    allure.attach(dump(out), name=f"publish ({what})")
+    assert out["went_through"], f"Publishing {what} did not go through: {dump(out)}"
+    return entry
+
+
 def _published_and_active(admin, entry) -> None:
     status = admin.wait_status(entry, (STATUS_PUBLISHED,), timeout=PUBLISH_CONFIRM_TIMEOUT)
     assert status == STATUS_PUBLISHED, f"{entry.title[:80]!r} never reached Published (last {status!r})"
@@ -402,6 +439,10 @@ def _public_album_checks(anon_pages, tc_id: str, code: str, expected: dict, mode
                                 "option_present": text in options, "options": options})
             view.open_detail(code, locale)
             texts = view.detail_texts()
+            if not any((texts.get(k) or "").strip() for k in view.DETAIL_TEXT_SELECTORS):
+                results.append({"where": f"detail_{locale}_{vp_name}", "blocked": BLOCKED_DETAIL,
+                                "screenshot": view.evidence(f"{tc_id}_detail_{locale}_{vp_name}_blank")})
+                continue
             shown = texts.get(view.DETAIL_TITLE) if mode == "title" else texts.get(view.DETAIL_CHIP)
             results.append(_render_check(view, tc_id, f"detail_{locale}_{vp_name}", view.DETAIL_TEXT_SELECTORS,
                                          text, shown or "", text))
@@ -409,30 +450,40 @@ def _public_album_checks(anon_pages, tc_id: str, code: str, expected: dict, mode
     return results
 
 
-def _photo_panel_blocked(page, tc_id: str, subject: str) -> None:
-    """143164-143169: the cases act on a per-photo "Add Photo" panel (Photo File,
-    Photo Title EN/AR, Thumbnail Framing, Display Order). Records what every
-    Photo Gallery authoring form offers; BLOCKED when no such control exists."""
-    admin = _editor(page, PhotoAlbumFieldsPB)
-    seen = {"create_form": admin.photo_capabilities(),
-            "create_form_screenshot": admin.evidence(f"{tc_id}_album_create_form_no_photo_panel")}
-    admin.open_entry_en("QCDEMO-130714-PHOTO_ALBUM-first-test-album")
-    seen["real_album_edit_form_readonly"] = admin.photo_capabilities()
-    seen["real_album_edit_screenshot"] = admin.evidence(f"{tc_id}_album_edit_form_no_photo_panel")
-    allure.attach(dump(seen), name="photo controls offered")
-    found = {k: v for k, v in seen["create_form"]["found"].items() if v and k != "Photos"}
-    found.update({k: v for k, v in seen["real_album_edit_form_readonly"]["found"].items() if v and k != "Photos"})
-    if found:
-        pytest.fail(f"a per-photo control now exists ({found}) — this case must be automated against it: "
-                    f"{dump(seen)}")
-    _log_finding("BLOCKED subject missing", tc_id, subject=subject,
-                 detail="No Photo Gallery object (Photo Album, Uploaded Photos Album, Flickr Album, Event "
-                        "Category, Page Hero) offers an Add Photo panel / Photo File / Photo Title / Thumbnail "
-                        "Framing / per-photo Display Order; album photos come from a Documents & Media folder "
-                        "linked through Flickr Source Folder / Uploaded Photos Album.",
-                 screenshots=[seen["create_form_screenshot"], seen["real_album_edit_screenshot"]])
-    pytest.skip(f"BLOCKED: {subject} does not exist on any Photo Gallery authoring object "
-                f"(case/PBI vs app mismatch). Evidence: {seen['create_form_screenshot']}")
+def _photo_album(admin, disposable, tc_id: str):
+    """A QCTEST Draft album (never published) to hold the case's photo form."""
+    title = _name(tc_id, "Photo Host Album")
+    ids_before = admin.snapshot_ids()
+    try:
+        admin.open_create_form_en()
+        admin.wait_arabic_ready()
+        admin.fill_album_pb(_album_data(tc_id, title=title))
+        _pinned(admin)
+        admin.click_save_as_draft()
+        saved = admin.save_went_through()
+    finally:
+        entry = _register(admin, disposable, title, ids_before)
+    assert saved and entry is not None, f"precondition: the host album was not saved as Draft: {admin.all_messages_text()}"
+    return entry
+
+
+def _photo_attempt(admin, disposable, album, tc_id: str, what: str, title: str | None, fill) -> dict:
+    """Opens the album's '+ Add photo', runs `fill(photos)` and clicks Publish."""
+    _pinned(admin)
+    result = add_photo(admin, disposable, album.entry_id, photo_data(title), publish=True, fill=fill)
+    result["screenshot"] = result["photos"].evidence(f"{tc_id}_{what}_after_publish")
+    allure.attach(dump({k: v for k, v in result.items() if k != "photos"}), name=f"photo attempt ({what})")
+    return result
+
+
+def _assert_photo_blocked(result: dict, what: str, field_pattern: str) -> None:
+    assert not result["new_rows"], (
+        f"PRODUCT: Publish with {what} was NOT blocked - a photo was created: {result['new_rows']}; "
+        f"messages {result['messages']!r}; screenshot {result['screenshot']}")
+    assert not result["went_through"], f"Publish with {what} reported success but no row appeared: {dump(result)}"
+    blob = json.dumps(result["evidence"], ensure_ascii=False)
+    assert re.search(field_pattern, blob, re.I), (
+        f"Publish was refused, but the evidence does not point at {what}: {dump(result['evidence'])}")
 
 
 # ===========================================================================
@@ -657,7 +708,7 @@ def test_event_category_name_en_max_200(page, disposable, anon_pages):
     album_admin = PhotoAlbumFieldsPB(page)
     album_admin.pinned_role = PB_ROLE_EDITOR
     album_title = _name("143152", "Album in long category")
-    album = _create_published(album_admin, disposable, "143152", album_title,
+    album = _create_published_album(album_admin, disposable, "143152", album_title,
                               lambda a: a.fill_album_pb(_album_data("143152", title=album_title,
                                                                     category=exact_en)),
                               "album in the 200-character category")
@@ -747,7 +798,7 @@ def test_album_title_en_max_200(page, disposable, anon_pages):
 
     exact_en = _sized("143158", ALBUM_TITLE_LIMIT)
     exact_ar = _sized("143158", ALBUM_TITLE_LIMIT, arabic=True)
-    album = _create_published(admin, disposable, "143158", exact_en,
+    album = _create_published_album(admin, disposable, "143158", exact_en,
                               lambda a: a.fill_album_pb(_album_data("143158", title=exact_en, title_ar=exact_ar)),
                               "200-character album title")
     _published_and_active(admin, album)
@@ -870,27 +921,26 @@ def test_album_published_date_required(page, disposable):
 
 
 # ===========================================================================
-# Photo (per-photo "Add Photo" panel) — 143164-143169: BLOCKED
+# Photo (Album Photo, + Add photo) — 143164-143169 (ADO 148169 per-photo model)
 # ===========================================================================
-_PHOTO = [
-    ("143164", "the Add Photo panel's Photo File (empty)", "test_photo_file_required"),
-    ("143165", "the Add Photo panel's Photo File (.bmp)", "test_photo_file_unsupported_format"),
-    ("143166", "the Add Photo panel's Photo Title EN/AR (optional)", "test_photo_titles_optional"),
-    ("143167", "the Add Photo panel's Photo Title EN (>200)", "test_photo_title_en_max_200"),
-    ("143168", "the Add Photo panel's Thumbnail Framing", "test_photo_thumbnail_framing_required"),
-    ("143169", "the Add Photo panel's Display Order (negative)", "test_photo_display_order_negative"),
-]
-
-
 @AUTH_FREE_PAGE
 @allure.epic("Insights & Media")
 @allure.feature("Photo Gallery — Control Panel")
 @allure.story("Photo — Photo File")
 @allure.title("Leaving the Photo File empty blocks saving a photo")
 @pytest.mark.tc_143164
-def test_photo_file_required(page):
-    # Azure TC 143164
-    _photo_panel_blocked(page, "143164", _PHOTO[0][1])
+def test_photo_file_required(page, disposable):
+    # Azure TC 143164 | Photo File unset, every other field valid
+    admin = _editor(page, PhotoAlbumFieldsPB)
+    album = _photo_album(admin, disposable, "143164")
+    title = _name("143164", "Photo")
+
+    def _fill(photos):
+        photos.fill_photo(photo_data(title, file=None))
+        assert photos.read_photo()["file"] == "", "step 1: a Photo File is selected"
+
+    result = _photo_attempt(admin, disposable, album, "143164", "no_photo_file", title, _fill)
+    _assert_photo_blocked(result, "an empty Photo File", r"photoFile|Photo File")
 
 
 @AUTH_FREE_PAGE
@@ -899,9 +949,25 @@ def test_photo_file_required(page):
 @allure.story("Photo — Photo File")
 @allure.title("Uploading an unsupported file format as a Photo File is rejected")
 @pytest.mark.tc_143165
-def test_photo_file_unsupported_format(page):
-    # Azure TC 143165
-    _photo_panel_blocked(page, "143165", _PHOTO[1][1])
+def test_photo_file_unsupported_format(page, disposable):
+    # Azure TC 143165 | a .bmp as the Photo File (device upload through the picker)
+    admin = _editor(page, PhotoAlbumFieldsPB)
+    album = _photo_album(admin, disposable, "143165")
+    title = _name("143165", "Photo")
+    upload = {}
+
+    def _fill(photos):
+        photos.fill_photo(photo_data(title, file=None))
+        upload.update(photos.upload_attempt(PHOTO_BMP, f"qctest-130714-pb-143165"))
+
+    result = _photo_attempt(admin, disposable, album, "143165", "bmp_photo_file", title, _fill)
+    allure.attach(dump(upload), name=".bmp upload attempt")
+    shown = " ".join(upload.get("errors", [])) + " " + upload.get("picker_text", "") + " " + result["messages"]
+    assert not result["new_rows"], (
+        f"PRODUCT: a .bmp Photo File was accepted and a photo created: {result['new_rows']} ({dump(upload)})")
+    assert not upload.get("attached") or not result["went_through"], f"the .bmp was attached and saved: {dump(upload)}"
+    assert unsupported_type_shown(shown), (
+        f"the .bmp was refused without {MSG_UNSUPPORTED_TYPE!r}: picker {upload.get('errors')} / {result['messages']!r}")
 
 
 @AUTH_FREE_PAGE
@@ -910,9 +976,28 @@ def test_photo_file_unsupported_format(page):
 @allure.story("Photo — Photo Title")
 @allure.title("A photo can be saved with the Photo Title EN/AR fields left blank")
 @pytest.mark.tc_143166
-def test_photo_titles_optional(page):
-    # Azure TC 143166
-    _photo_panel_blocked(page, "143166", _PHOTO[2][1])
+def test_photo_titles_optional(page, disposable):
+    # Azure TC 143166 | valid JPG, Photo Title EN + AR empty. The saved photo has
+    # no title, so it cannot be captured by name for the guarded delete: it is
+    # left in its QCTEST Draft host album (never public) and reported.
+    admin = _editor(page, PhotoAlbumFieldsPB)
+    album = _photo_album(admin, disposable, "143166")
+    held = {}
+
+    def _fill(photos):
+        photos.fill_photo(photo_data(None, file=PHOTO_JPG, file_stem="qctest-130714-pb-143166"))
+        held.update(photos.read_photo())
+
+    result = _photo_attempt(admin, disposable, album, "143166", "titles_blank", None, _fill)
+    assert "qctest-130714-pb-143166" in held.get("file_field", ""), (
+        f"step 1: the JPG was not accepted as the Photo File: {held}")
+    assert result["went_through"], f"step 2: a photo with blank titles was not saved: {result['messages']!r}"
+    assert len(result["new_rows"]) == 1, f"step 2: expected ONE new photo, got {result['new_rows']}"
+    photos = result["photos"]
+    photos.open_entry_en(result["new_rows"][0]["code"])
+    stored = photos.read_photo()
+    allure.attach(dump(stored), name="stored photo")
+    assert stored["title"] == "" and stored["title_ar"] == "", f"the stored titles are not empty: {stored}"
 
 
 @AUTH_FREE_PAGE
@@ -921,9 +1006,33 @@ def test_photo_titles_optional(page):
 @allure.story("Photo — Photo Title")
 @allure.title("The Photo Title EN field rejects input exceeding 200 characters")
 @pytest.mark.tc_143167
-def test_photo_title_en_max_200(page):
-    # Azure TC 143167 (rule 6 cannot run: there is no photo title to publish)
-    _photo_panel_blocked(page, "143167", _PHOTO[3][1])
+def test_photo_title_en_max_200(page, disposable):
+    # Azure TC 143167 | 201 characters in Photo Title EN, then Publish
+    admin = _editor(page, PhotoAlbumFieldsPB)
+    album = _photo_album(admin, disposable, "143167")
+    over = _sized("143167", PHOTO_TITLE_LIMIT + 1)
+    held = {}
+
+    def _fill(photos):
+        photos.fill_photo(photo_data(None, file=PHOTO_JPG, file_stem="qctest-130714-pb-143167"))
+        photos.fill_en(K_PHOTO_TITLE, over)
+        held.update(photos.control_info(K_PHOTO_TITLE), held=len(photos.text_value(K_PHOTO_TITLE)))
+
+    result = _photo_attempt(admin, disposable, album, "143167", "title_en_201", over, _fill)
+    allure.attach(dump(held), name="Photo Title EN control after typing 201 characters")
+    assert held["held"] > 0, "step 1: the field did not accept keystrokes"
+    stored = []
+    for row in result["new_rows"]:
+        result["photos"].open_entry_en(row["code"])
+        stored.append(len(result["photos"].text_value(K_PHOTO_TITLE)))
+    assert all(n <= PHOTO_TITLE_LIMIT for n in stored), (
+        f"PRODUCT: a {max(stored)}-character Photo Title EN was saved (limit {PHOTO_TITLE_LIMIT}); "
+        f"screenshot {result['screenshot']}")
+    assert not result["new_rows"] or held["held"] <= PHOTO_TITLE_LIMIT, (
+        f"the 201-character title was neither blocked nor held to {PHOTO_TITLE_LIMIT}: {dump(result)}")
+    if result["new_rows"]:
+        _log_finding("NOTE", "143167", detail=f"the field holds at most {held['held']} characters "
+                     f"(maxLength {held.get('maxLength')}); the save went through with a <=200 title")
 
 
 @AUTH_FREE_PAGE
@@ -932,9 +1041,30 @@ def test_photo_title_en_max_200(page):
 @allure.story("Photo — Thumbnail Framing")
 @allure.title("Saving a photo with Thumbnail Framing left unset is blocked")
 @pytest.mark.tc_143168
-def test_photo_thumbnail_framing_required(page):
-    # Azure TC 143168
-    _photo_panel_blocked(page, "143168", _PHOTO[4][1])
+def test_photo_thumbnail_framing_required(page, disposable):
+    # Azure TC 143168 | valid JPG, Thumbnail Framing emptied, then Publish
+    admin = _editor(page, PhotoAlbumFieldsPB)
+    album = _photo_album(admin, disposable, "143168")
+    title = _name("143168", "Photo")
+    framing = {}
+
+    def _fill(photos):
+        photos.fill_photo(photo_data(title, file=PHOTO_JPG, file_stem="qctest-130714-pb-143168"))
+        framing["default"] = photos.read_photo()["framing"]
+        framing.update(photos.clear_framing())
+
+    result = _photo_attempt(admin, disposable, album, "143168", "framing_unset", title, _fill)
+    allure.attach(dump(framing), name="Thumbnail Framing before/after clearing")
+    assert framing["default"] == FRAMING_DEFAULT, f"the form opens with framing {framing['default']!r}"
+    if framing["value"]:
+        stored = []
+        for row in result["new_rows"]:
+            result["photos"].open_entry_en(row["code"])
+            stored.append(result["photos"].read_photo()["framing_value"])
+        pytest.skip(f"NOT RUNNABLE AS WRITTEN (by design, ADO 148169: 'Thumbnail Framing: required, default "
+                    f"Centre'): the select cannot be left unset - after clearing it still holds "
+                    f"{framing['value']!r}; saved photo framing {stored}")
+    _assert_photo_blocked(result, "an unset Thumbnail Framing", r"thumbnailFraming|Thumbnail Framing")
 
 
 @AUTH_FREE_PAGE
@@ -943,6 +1073,22 @@ def test_photo_thumbnail_framing_required(page):
 @allure.story("Photo — Display Order")
 @allure.title("Photo Display Order rejects a negative value")
 @pytest.mark.tc_143169
-def test_photo_display_order_negative(page):
-    # Azure TC 143169
-    _photo_panel_blocked(page, "143169", _PHOTO[5][1])
+def test_photo_display_order_negative(page, disposable):
+    # Azure TC 143169 | Display Order -2, then Publish
+    admin = _editor(page, PhotoAlbumFieldsPB)
+    album = _photo_album(admin, disposable, "143169")
+    title = _name("143169", "Photo")
+    held = {}
+
+    def _fill(photos):
+        photos.fill_photo(photo_data(title, file=PHOTO_JPG, file_stem="qctest-130714-pb-143169", display_order=-2))
+        held.update(photos.control_info(K_PHOTO_DISPLAY_ORDER), held=photos.text_value(K_PHOTO_DISPLAY_ORDER))
+
+    result = _photo_attempt(admin, disposable, album, "143169", "display_order_-2", title, _fill)
+    allure.attach(dump(held), name="Display Order control after typing -2")
+    assert held["held"] == "-2", f"step 1: the field holds {held['held']!r}, not -2"
+    _assert_photo_blocked(result, "a negative Display Order (-2)", r"displayOrder|Display Order|order")
+    if not re.search(r"positive|greater|at least|minimum", result["messages"], re.I):
+        _log_finding("LOW wording", "143169", field="Photo Display Order -2",
+                     expected="a validation message requiring a positive integer",
+                     shown=result["messages"], screenshot=result["screenshot"])

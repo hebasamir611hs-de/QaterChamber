@@ -46,6 +46,7 @@ import allure
 import pytest
 
 from cms.pages.components.object_authoring_page import (
+    shows_message,
     STATUS_DRAFT,
     STATUS_PENDING_REVIEW,
     STATUS_PUBLISHED,
@@ -434,7 +435,7 @@ def _banner(driver: BGAdminPage, expected: str) -> list[str]:
 
 
 def _has(texts: list[str], expected: str) -> bool:
-    return any(expected in t for t in texts)
+    return any(shows_message(t, expected) for t in texts)
 
 
 def _publish_edit(driver: BGAdminPage, entry: BGEntry, changes: dict) -> float:
@@ -523,7 +524,8 @@ def test_140328_author_view_and_update_content(page, own, base_section):
     real.evidence("140328 author opens real page")
     allure.attach(f"edit bar: {bar}\nbuttons: {buttons}", name="Author on the real page")
     failures: list[str] = []
-    _soft(failures, "Access denied" not in bar,
+    # Healed 2026-10-14: the message now reads "Access Denied." (capital D) — compare case-insensitively.
+    _soft(failures, "access denied" not in bar.casefold(),
           f"PRODUCT vs CASE (step 2): the Author cannot update the Visas & Immigration record — {bar!r}")
     _soft(failures, False,
           "PRODUCT vs CASE (step 2): the page record does not list its four sections (sections are separate "
@@ -624,8 +626,15 @@ HISTORY_LABELS = {"draft": ("Created", "edit-as-draft", "Edited", "Saved as draf
                   "unpublish": ("Unpublished",)}
 
 
-def _has_action(trail: list[dict], kind: str, who: str = "Test Editor") -> bool:
-    labels = HISTORY_LABELS[kind]
+# Bug 148932 fix (qc-object-status 1.48.26, 2026-10-12): new rows name the action as
+# performed. Rows written before that keep their old label, so only tests that
+# create a fresh record use these strict labels.
+HISTORY_LABELS_AS_PERFORMED = {"draft": ("Saved as draft",), "publish": ("Published",),
+                               "unpublish": ("Unpublished",)}
+
+
+def _has_action(trail: list[dict], kind: str, who: str = "Test Editor", strict: bool = False) -> bool:
+    labels = (HISTORY_LABELS_AS_PERFORMED if strict else HISTORY_LABELS)[kind]
     return any(h["action"].strip() in labels and who in (h["who"] or h["text"]) and h["when"] for h in trail)
 
 
@@ -710,7 +719,8 @@ def test_140338_save_as_draft_keeps_content_off_public(page, own, anon_pages):
     _soft(failures, author.rich_text("sectionBody") == marker, f"stored body {author.rich_text('sectionBody')!r}")
     author.open_list_all()
     trail = _history(author, entry)
-    _soft(failures, _has_action(trail, "draft", who="Test Author"), f"History has no draft save by Test Author: {trail}")
+    _soft(failures, _has_action(trail, "draft", who="Test Author", strict=True),
+          f"History has no 'Saved as draft' row by Test Author: {trail}")
     _public_hold(anon_pages, lambda m: marker not in str(m) and title not in str(m),
                  f"'{marker}' never reaches visitors")
     _finish(failures)
@@ -1170,13 +1180,13 @@ def test_140537_every_action_in_audit_log(page, own):
     admin.evidence("140537 history")
     actions = [h["action"] for h in trail]
     for kind in ("draft", "publish", "unpublish"):
-        _soft(failures, _has_action(trail, kind),
-              f"no {kind} entry ({HISTORY_LABELS[kind]}) with actor Test Editor and a time in History: {trail!r}")
+        _soft(failures, _has_action(trail, kind, strict=True),
+              f"no {kind} entry ({HISTORY_LABELS_AS_PERFORMED[kind]}) with actor Test Editor and a time in "
+              f"History: {trail!r}")
     order = [h["action"] for h in trail if any(h["action"] in v for v in HISTORY_LABELS.values())]
-    _soft(failures, order[:3] == ["Unpublished", "Approved", "Created"],
-          f"History order (newest first) {order}, expected Unpublished, Approved, Created")
-    allure.attach("History labels the actions 'Created' (save as draft) and 'Approved' (publish) — wording only",
-                  name="LOW wording note")
+    # Healed 2026-10-14 (bug 148932 fixed): History names each action as performed.
+    _soft(failures, order[:3] == ["Unpublished", "Published", "Saved as draft"],
+          f"History order (newest first) {order}, expected Unpublished, Published, Saved as draft")
     # The Control Panel audit-log screen named by step 4.
     audit = BGAdminPage(page, SLUG_SECTION, "A")
     audit.open(control_panel_url("/group/control_panel/manage?p_p_id=com_liferay_portal_security_audit_web_portlet_AuditPortlet"))

@@ -69,6 +69,15 @@ _logger = get_logger("gallery_admin_base")
 
 # ---- namespace / roles ------------------------------------------------------
 GALLERY_PREFIX_ROOT = "QCTEST-130714-"
+# A retest batch may run under its own record namespace (env QCTEST_PREFIX,
+# e.g. "QCTEST-R32-P-"); it must still be a QCTEST-<run>- prefix.
+RUN_PREFIX = os.environ.get("QCTEST_PREFIX", "").strip()
+
+
+def gallery_prefix_ok(prefix: str) -> bool:
+    if prefix.startswith(GALLERY_PREFIX_ROOT) and len(prefix) > len(GALLERY_PREFIX_ROOT):
+        return True
+    return bool(RUN_PREFIX) and RUN_PREFIX.startswith("QCTEST-") and prefix == RUN_PREFIX
 REAL_CODE_PREFIXES = ("QCDEMO-",)
 ROLE_EDITOR = "Site Content Editor"
 ROLE_AUTHOR = "Site Content Author"
@@ -96,7 +105,7 @@ class GalleryEntry:
     slug: str
 
     def in_namespace(self) -> bool:
-        return (self.prefix.startswith(GALLERY_PREFIX_ROOT) and len(self.prefix) > len(GALLERY_PREFIX_ROOT)
+        return (gallery_prefix_ok(self.prefix)
                 and self.title.startswith(self.prefix)
                 and not any(self.code.startswith(p) for p in REAL_CODE_PREFIXES))
 
@@ -131,7 +140,7 @@ class GalleryAdminPage(ObjectAuthoringPage):
 
     def __init__(self, page, slug: str, prefix: str, evidence_dir: str):
         super().__init__(page, slug)
-        if not prefix.startswith(GALLERY_PREFIX_ROOT) or len(prefix) <= len(GALLERY_PREFIX_ROOT):
+        if not gallery_prefix_ok(prefix):
             raise ValueError(f"prefix {prefix!r} is not a {GALLERY_PREFIX_ROOT}<agent>- namespace")
         self.prefix = prefix
         self.evidence_dir = evidence_dir if os.path.isabs(evidence_dir) else os.path.join(

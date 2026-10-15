@@ -39,7 +39,7 @@ from datetime import datetime
 import allure
 import pytest
 
-from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED, shows_message
 from cms.pages.visas_immigration.bg_admin_page import (
     MSG_SAVED_AND_PUBLISHED,
     REAL_SECTIONS,
@@ -264,10 +264,10 @@ def save_attempt(driver: BGFieldsAdminPageB, publish: bool = True) -> dict:
     if result["went_through"]:
         expected = MSG_SAVED_AND_PUBLISHED if publish else "Draft saved."
         result["editbar"] = driver.success_messages(expected, 10.0)
-        result["success_message_shown"] = any(expected in t for t in result["editbar"])
+        result["success_message_shown"] = any(shows_message(t, expected) for t in result["editbar"])
     else:
         result["editbar"] = driver.editbar_texts()
-        result["success_message_shown"] = any(MSG_SAVED_AND_PUBLISHED in t for t in result["editbar"])
+        result["success_message_shown"] = any(shows_message(t, MSG_SAVED_AND_PUBLISHED) for t in result["editbar"])
     return result
 
 

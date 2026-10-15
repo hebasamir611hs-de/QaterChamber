@@ -1271,7 +1271,8 @@ def test_publish_blocked_when_arabic_missing(page, disposable):
     admin.open_list_all()
     assert admin.row_status(entry) == STATUS_DRAFT, f"step 1: status {admin.row_status(entry)!r}"
     admin.open_entry_en(entry.code)
-    admin.pick(K_VIDEO_STATUS, "Published")
+    if admin.has_field(K_VIDEO_STATUS):  # retired by ADO 148187; Publish is the status change
+        admin.pick(K_VIDEO_STATUS, "Published")
     _pinned(admin)
     admin.click_publish()
     png = admin.evidence("143073_publish_without_arabic")

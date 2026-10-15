@@ -38,7 +38,7 @@ import re
 import allure
 import pytest
 
-from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED, shows_message
 from cms.pages.visas_immigration.bg_admin_page import B_ORIGINAL_BANNER_NAME, MSG_SAVED_AND_PUBLISHED
 from cms.tests.visas_immigration.b_fields_support import (  # noqa: F401 — anon_pages is a fixture
     EVIDENCE_DIR,
@@ -135,7 +135,7 @@ def test_140355_eyebrow_valid_bilingual(browser, anon_pages):
         record_finding("140355", "case data", note=f"case expects counter 31 but {en!r} is {len(en)} characters; "
                        f"the counter correctly reads {facts['counters'][0][0]}")
     assert facts["result"]["went_through"], f"Publish did not go through: {facts['result']}"
-    assert any(MSG_SAVED_AND_PUBLISHED in t for t in facts["result"]["editbar"]), facts["result"]["editbar"]
+    assert any(shows_message(t, MSG_SAVED_AND_PUBLISHED) for t in facts["result"]["editbar"]), facts["result"]["editbar"]
     assert facts["status"] == STATUS_PUBLISHED, f"record status after the save: {facts['status']!r}"
     assert facts["poll_en"]["ok"], "EN hero eyebrow never showed the new value"
     assert facts["poll_en"]["within_budget"], f"EN eyebrow appeared after {facts['poll_en']['seen_at']} s (> 5 s)"
@@ -208,7 +208,7 @@ def test_140404_title_valid_bilingual(browser, anon_pages):
     assert facts["shown"] == (snap["pageTitle"], snap["pageTitle_ar"]), f"form shows {facts['shown']}"
     assert not facts["errors_before"], f"validation message on a valid value: {facts['errors_before']}"
     assert facts["result"]["went_through"], f"Publish did not go through: {facts['result']}"
-    assert any(MSG_SAVED_AND_PUBLISHED in t for t in facts["result"]["editbar"]), facts["result"]["editbar"]
+    assert any(shows_message(t, MSG_SAVED_AND_PUBLISHED) for t in facts["result"]["editbar"]), facts["result"]["editbar"]
     assert facts["status"] == STATUS_PUBLISHED, f"record status after the save: {facts['status']!r}"
     assert facts["poll_en"]["ok"], "EN hero title never showed the new value"
     assert facts["poll_en"]["within_budget"], f"EN title appeared after {facts['poll_en']['seen_at']} s (> 5 s)"
@@ -546,7 +546,7 @@ def _boundary_text_case(browser, anon_pages, tc: str, key: str, value: str, limi
     attach(facts, f"{tc} facts")
     assert facts["result_max"]["went_through"], f"Publish with the {limit}-character value failed: {facts['result_max']}"
     assert not facts["errors_max"], f"validation message on {limit} characters: {facts['errors_max']}"
-    assert any(MSG_SAVED_AND_PUBLISHED in t for t in facts["result_max"]["editbar"]), facts["result_max"]["editbar"]
+    assert any(shows_message(t, MSG_SAVED_AND_PUBLISHED) for t in facts["result_max"]["editbar"]), facts["result_max"]["editbar"]
     assert facts["counter"] == (limit, limit), f"character counter reads {facts['counter']} (expected {limit}/{limit})"
     assert facts["poll"]["ok"], f"the public {model_key} never showed the full {limit}-character value"
     assert facts["poll"]["within_budget"], f"the public {model_key} appeared after {facts['poll']['seen_at']} s"

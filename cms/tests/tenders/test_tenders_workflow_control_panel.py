@@ -286,7 +286,8 @@ def _create(admin, disposable, data: dict, publish: bool, role: str = A_ROLE_EDI
 
 
 def _has(banners: list[str], expected: str) -> bool:
-    return any(expected in b for b in banners)
+    from cms.pages.components.object_authoring_page import shows_message  # noqa: PLC0415
+    return any(shows_message(b, expected) for b in banners)
 
 
 def _history(admin, entry: TenderEntryA) -> list[dict]:
@@ -301,7 +302,7 @@ def _require_active_status(admin, entry: TenderEntryA) -> None:
     ANY public check (re-opens the record)."""
     admin.open_entry_en(entry.code)
     stored = admin.active_status_stored()
-    page_status = admin.picklist_value("pageStatus")
+    page_status = "retired (ADO 148125)"
     allure.attach(f"stored Active Status: {stored!r}\nstored Status: {page_status!r}",
                   name="public-visibility preconditions")
     if stored != "true":

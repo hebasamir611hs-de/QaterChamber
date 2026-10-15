@@ -32,7 +32,7 @@ from datetime import datetime
 import allure
 import pytest
 
-from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED, shows_message
 from cms.pages.visas_immigration.bg_admin_page import (
     MSG_SAVED_AND_PUBLISHED,
     ROLE_EDITOR,
@@ -195,7 +195,7 @@ def save_attempt(driver: BGItemsAdminPageC, publish: bool = True) -> dict:
     if result["went_through"]:
         expected = MSG_SAVED_AND_PUBLISHED if publish else "Draft saved."
         result["editbar"] = driver.success_messages(expected, 10.0)
-        result["success_message_shown"] = any(expected in t for t in result["editbar"])
+        result["success_message_shown"] = any(shows_message(t, expected) for t in result["editbar"])
         driver.wait_arabic_saved(15.0)
     return result
 
@@ -305,7 +305,7 @@ def edit(driver: BGItemsAdminPageC, entry: BGEntry, tc: str, what: str, data: di
     result["screenshot"] = driver.evidence(f"{tc}_{what}_after_publish")
     if result["went_through"]:
         result["editbar"] = driver.success_messages(MSG_SAVED_AND_PUBLISHED, 10.0)
-        result["success_message_shown"] = any(MSG_SAVED_AND_PUBLISHED in t for t in result["editbar"])
+        result["success_message_shown"] = any(shows_message(t, MSG_SAVED_AND_PUBLISHED) for t in result["editbar"])
     allure.attach(json.dumps(result, ensure_ascii=False, indent=1, default=str), name=f"edit {what}")
     _log_save(tc, f"edit {what}", result)
     return result

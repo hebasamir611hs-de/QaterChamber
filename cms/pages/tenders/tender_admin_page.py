@@ -346,7 +346,9 @@ K_TENDER_DOCUMENT = "tenderDocument"
 K_BOQ = "billOfQuantities"
 K_PICKLISTS = ("tenderCategory", "tenderType", "tenderClassification", "productCategory", "tenderLocation",
                "tenderFeeExemptionAllowed", "paymentMode", "generalTechnicalEvaluationAllowed",
-               "itemWiseTechnicalEvaluationAllowed", "pageStatus")
+               "itemWiseTechnicalEvaluationAllowed")
+# "pageStatus" removed: the custom Status picklist was retired by the ADO 148125 fix
+# (qcdev 2026-10-13) - the record's state is its workflow status only.
 B_UPLOAD_LABELS = {K_TENDER_DOCUMENT: "Upload Tender Documents", K_BOQ: "Bill of Quantities (BOQ)"}
 
 
@@ -727,6 +729,9 @@ class TenderFieldsAdminPage(TenderAdminPage):
         return self
 
     def picklist_value(self, key: str) -> str:
+        box = self._form().locator(f'input[type="hidden"][name="ObjectField_{key}-label"]')
+        if not box.count():
+            return "(field not on form)"
         return self._form().locator(f'input[type="hidden"][name="ObjectField_{key}-label"]').first.input_value()
 
     def fill_number_key(self, key: str, value: str) -> "TenderFieldsAdminPage":
@@ -1041,7 +1046,8 @@ class TenderFieldsAdminPage(TenderAdminPage):
 
     def success_messages(self, expected: str, timeout: float = 15.0) -> list[str]:
         def _done() -> bool:
-            return any(expected in t for t in self.editbar_texts())
+            from cms.pages.components.object_authoring_page import shows_message  # noqa: PLC0415
+            return any(shows_message(t, expected) for t in self.editbar_texts())
         try:
             _wait_until(_done, timeout=timeout, poll=0.5)
         except _WaitTimeoutError:
@@ -1060,6 +1066,9 @@ class TenderFieldsAdminPage(TenderAdminPage):
         for key in (K_OVERVIEW, K_FEE_PAYABLE, K_EMD_PAYABLE):
             if data.get(key):
                 self.fill_rich(key, data[key])
+            # qcdev 2026-10-13: Publish now requires the Arabic body of each rich-text field.
+            if data.get(f"{key}_ar"):
+                self.fill_iframe_editor(f'[id="cke_qc-ar-{key}"] iframe[title="editor"]', data[f"{key}_ar"])
         for key in (K_TENDER_FEE, K_EMD_AMOUNT):
             if data.get(key) is not None:
                 self.fill_number_key(key, data[key])
@@ -1090,6 +1099,9 @@ class TenderFieldsAdminPage(TenderAdminPage):
             K_PUBLICATION: "05/10/2026",
             K_PREBID_DATE: "10/11/2026",
             K_OVERVIEW: "QCTEST disposable automated-test tender overview.",
+            f"{K_OVERVIEW}_ar": "نظرة عامة على مناقصة تجريبية.",
+            f"{K_FEE_PAYABLE}_ar": "حساب رسوم تجريبي",
+            f"{K_EMD_PAYABLE}_ar": "حساب تأمين تجريبي",
             K_WORK_DESCRIPTION: "QCTEST disposable work description.",
             f"{K_WORK_DESCRIPTION}_ar": "وصف عمل تجريبي.",
             K_ORG_ADDRESS: "QCTEST Address, Doha",
@@ -1110,7 +1122,6 @@ class TenderFieldsAdminPage(TenderAdminPage):
             "paymentMode": "Online",
             "generalTechnicalEvaluationAllowed": "Yes",
             "itemWiseTechnicalEvaluationAllowed": "No",
-            "pageStatus": "Published",
             K_TENDER_DOCUMENT: pdf_path,
             K_BOQ: pdf_path,
             "active_status": True,

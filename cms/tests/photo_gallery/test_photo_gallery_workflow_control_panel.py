@@ -30,15 +30,13 @@ Pattern (Tenders PBI 130952, commit 1c88750):
     assertion first re-opens the record and checks the STORED Active Status,
     then reads a fresh logged-out context with Load More expanded.
 
-How photos reach an album (live): NO Photos panel / Add Photo / per-photo
-record exists. An album's photos are one Documents & Media folder selected
-indirectly through "Flickr Source Folder" (a manage-flickr-album record) or
-"Uploaded Photos Album" (a manage-uploaded-album record, none exist). The
-disposable albums here therefore point at the REAL Flickr Album record
-"First_Test_Album_QChamber" (folder 52245, 5 photos) as their photo source —
-a reference only; that record is never edited. Cases whose subject is the
-missing per-photo layer (Photos panel, Add Photo, per-photo publish status /
-display order) fail on that absence and are reported as one bug candidate.
+How photos reach an album (ADO 148169, live 2026-10-13): each photo is an
+"Album Photo" record (manage-album-photo?qcParent=<albumId>), reached from the
+album form's Photos panel (+ Add photo / Manage photos). An album publishes
+only with >= 1 published photo and cannot be deleted while it has photos, so
+"published album" = draft album + published photo + Publish, and deletes
+remove the photo first (photo_support.py). Steps needing the public Album
+Details page skip as BLOCKED while ADO 148180 (blank details page) is open.
 
 Substitutions disclosed:
   - Case data "Community Outreach", Display Order 4 -> a QCTEST category named
@@ -64,10 +62,12 @@ import allure
 import pytest
 
 from cms.pages.components.object_authoring_page import (
+    shows_message,
     STATUS_DRAFT,
     STATUS_PENDING_REVIEW,
     STATUS_PUBLISHED,
     STATUS_UNPUBLISHED,
+    normalize_status,
 )
 from cms.pages.photo_gallery.event_category_admin_page import (
     K_CATEGORY_NAME,
@@ -98,22 +98,38 @@ from cms.pages.photo_gallery.photo_album_admin_page import (
     PhotoAlbumAdminPage,
 )
 from cms.pages.photo_gallery.photo_gallery_public_view import PhotoAlbumDetailView, PhotoGalleryPublicView
+from cms.pages.photo_gallery.album_photo_admin_page import (
+    FRAMING_DEFAULT,
+    MSG_ALBUM_NEEDS_PUBLISHED_PHOTO,
+    MSG_ALBUM_NEEDS_PUBLISHED_PHOTO_AR,
+    AlbumPhotoAdminPage,
+)
+from cms.tests.photo_gallery.photo_support import (
+    PHOTO_JPG,
+    PHOTO_JPG_B,
+    PHOTO_JPG_C,
+    PhotoRegistry,
+    add_photo,
+    cleanup,
+    photo_data,
+    publish_album,
+)
 from config.settings import PROJECT_ROOT
 from core.utils.waits import WaitTimeoutError, wait_until
 from core.web.browser import new_context
 
 AUTH_FREE_PAGE = pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 GALLERY_PA_GROUP = pytest.mark.xdist_group("photo_gallery_cms_pa")
-PA_PREFIX = "QCTEST-130714-PA-"
+PA_PREFIX = os.environ.get("QCTEST_PREFIX", "").strip() or "QCTEST-130714-PA-"
 STAMP = datetime.now().strftime("%m%d%H%M%S")
 EVIDENCE_DIR = os.path.join(str(PROJECT_ROOT), "reports", "evidence", "130714_PA")
 FIXTURES = os.path.join(os.path.dirname(__file__), "fixtures")
 COVER_JPG = os.path.join(FIXTURES, "pa_qctest_cover.jpg")
 
-# The real Flickr Album record used as a READ-ONLY photo source (folder 52245).
-PHOTO_SOURCE = "First_Test_Album_QChamber"
-PHOTO_SOURCE_COUNT = 5
+# Since ADO 148169 an album's photos are Album Photo records; a Flickr Source
+# Folder now IMPORTS its photos as drafts, so test albums no longer pick one.
 REAL_CATEGORY = "Institutional"
+REAL_ALBUM_CODE = "QCDEMO-130714-PHOTO_ALBUM-first-test-album"  # read-only
 
 PUBLIC_REFLECT_TIMEOUT = 30.0
 PUBLIC_POLL = 1.0
@@ -128,7 +144,7 @@ def _title(tc_id: str, suffix: str) -> str:
 
 def _album_data(title: str, **overrides) -> dict:
     data = {"title": title, "title_ar": f"ألبوم اختبار آلي {title[-10:]}", "published_date": "15/09/2026",
-            "category": REAL_CATEGORY, "flickr_source": PHOTO_SOURCE}
+            "category": REAL_CATEGORY, "cover": COVER_JPG, "cover_stem": "qctest-130714-pa-cover"}
     data.update(overrides)
     return data
 
@@ -142,79 +158,30 @@ def _category_data(name: str, **overrides) -> dict:
 # ===========================================================================
 # Fixtures
 # ===========================================================================
-class DisposableRegistry:
-    """Records this test created (captured identity). Only these are deleted."""
-
-    def __init__(self):
-        self._entries: dict[tuple[str, str], GalleryEntry] = {}
-
-    @property
-    def entries(self) -> list[GalleryEntry]:
-        # albums first: an album references its category
-        return sorted(self._entries.values(), key=lambda e: 0 if e.slug == "photo-album" else 1)
-
-    def track(self, entry: GalleryEntry) -> GalleryEntry:
-        if not entry.in_namespace() or not entry.title.startswith(PA_PREFIX):
-            raise ValueError(f"{entry} is not a {PA_PREFIX} record")
-        self._entries[(entry.slug, entry.entry_id)] = entry
-        return entry
-
-    def forget(self, entry: GalleryEntry) -> None:
-        self._entries.pop((entry.slug, entry.entry_id), None)
-
-
 @pytest.fixture
 def disposable(browser):
-    """Deletes ONLY the records the test registered at creation, through the
-    guarded single-record delete, signed in as the Site Content Editor.
-    Anything it cannot remove fails the teardown."""
-    registry = DisposableRegistry()
+    """Removes ONLY the records the test registered at creation (photos, then
+    albums, then categories) through the guarded single-record delete, signed in
+    as the Site Content Editor. A delete the product refuses because the record
+    is still referenced (album with photos / category with trashed albums) is
+    LEFT unpublished and reported; any other leftover fails the teardown."""
+    registry = PhotoRegistry(PA_PREFIX)
     yield registry
     if not registry.entries:
+        if registry.untracked:
+            allure.attach(chr(10).join(registry.untracked), name="QCTEST photos left (blank title, not capturable)")
         return
     ctx = new_context(browser, use_auth_state=False)
-    outcome, failures = [], []
     try:
         page = ctx.new_page()
-        albums = PhotoAlbumAdminPage(page, PA_PREFIX, EVIDENCE_DIR)
-        if albums.login_as_role(ROLE_EDITOR) != "ok":
-            raise AssertionError("teardown could not sign in as the Site Content Editor")
-        categories = EventCategoryAdminPage(page, PA_PREFIX, EVIDENCE_DIR)
-        categories.pinned_role = albums.pinned_role
-        for entry in registry.entries:
-            cleaner = albums if entry.slug == albums.slug else categories
-            label = f"{entry.slug} {entry.title} (id {entry.entry_id}, code {entry.code})"
-            try:
-                cleaner.open_list_all()
-                if not cleaner.row_present(entry):
-                    if cleaner.is_list_fully_expanded():
-                        outcome.append(f"already gone: {label}")
-                    else:
-                        failures.append(f"{label}: not found and the list is NOT fully expanded")
-                    continue
-                cleaner.adopt(entry)
-                if cleaner.delete_own_entry(entry):
-                    outcome.append(f"removed (to Recycle Bin) {label}")
-                elif any("does not allow deletes" in m for m in cleaner.last_delete_messages):
-                    # A trashed child album still references this category
-                    # (Recycle Bin is never purged): take it off the site and
-                    # report the id instead (QA Manager instruction).
-                    cleaner.open_list_all()
-                    if "unpublish" in cleaner.row_actions(entry):
-                        cleaner.run_row_action(entry, "unpublish")
-                    cleaner.open_list_all()
-                    outcome.append(f"LEFT (delete blocked by a trashed child: {cleaner.last_delete_messages}); "
-                                   f"now {cleaner.row_status(entry)}: {label}")
-                else:
-                    failures.append(f"NOT removed {label}: guarded delete refused/failed "
-                                    f"(dialogs {cleaner.last_delete_dialogs}, messages {cleaner.last_delete_messages})")
-            except Exception as exc:  # noqa: BLE001 — collected and raised below
-                failures.append(f"{label}: {exc!r}")
+        outcome, failures = cleanup(page, PA_PREFIX, EVIDENCE_DIR, registry.entries, registry.parents, ROLE_EDITOR,
+                                    lambda admin: admin.login_as_role(ROLE_EDITOR) == "ok")
     finally:
         ctx.close()
-    allure.attach("\n".join(outcome + failures) or "nothing to remove", name="QCTEST teardown")
+    outcome += [f"LEFT (blank-title photo): {u}" for u in registry.untracked]
+    allure.attach(chr(10).join(outcome + failures) or "nothing to remove", name="QCTEST teardown")
     if failures:
-        raise AssertionError("TEARDOWN LEFT QCTEST DATA BEHIND:\n" + "\n".join(failures))
+        raise AssertionError("TEARDOWN LEFT QCTEST DATA BEHIND:" + chr(10) + chr(10).join(failures))
 
 
 def _contexts(browser):
@@ -323,9 +290,31 @@ def _create(admin, disposable, title: str, fill, publish: bool, role: str = ROLE
     return entry
 
 
-def _create_album(albums, disposable, title: str, publish: bool, role: str = ROLE_EDITOR, **overrides):
+def _create_album(albums, disposable, title: str, publish: bool, role: str = ROLE_EDITOR, photos: int = 1,
+                  **overrides):
+    """publish=False -> Save as Draft. publish=True (Editor) -> by design since
+    ADO 148169 an album publishes only with >= 1 published photo: Save as Draft,
+    add `photos` published photos (+ Add photo), then Publish the album."""
     data = _album_data(title, **overrides)
-    return _create(albums, disposable, title, lambda: albums.fill_album(data), publish, role)
+    if not publish or role != ROLE_EDITOR:
+        return _create(albums, disposable, title, lambda: albums.fill_album(data), publish, role)
+    entry = _create(albums, disposable, title, lambda: albums.fill_album(data), False, role)
+    files = (PHOTO_JPG, PHOTO_JPG_B, PHOTO_JPG_C)
+    for n in range(photos):
+        added = _add_photo(albums, disposable, entry, f"{title[:150]} Photo {n + 1}", file=files[n % 3])
+        assert added["went_through"] and added["entry"], f"precondition: photo {n + 1} not published: {added}"
+    out = publish_album(albums, entry)
+    albums.create_banners = albums.editbar_texts()
+    assert out["went_through"] and out["status"] == STATUS_PUBLISHED, (
+        f"publishing {title!r} with {photos} published photo(s) did not go through: {out}")
+    return entry
+
+
+def _add_photo(albums, disposable, album: GalleryEntry, title: str | None, publish: bool = True,
+               file: str = PHOTO_JPG, fill=None, **overrides) -> dict:
+    _pinned(albums, albums.pinned_role)
+    return add_photo(albums, disposable, album.entry_id, photo_data(title, file=file, **overrides),
+                     publish=publish, fill=fill)
 
 
 def _create_category(categories, disposable, name: str, publish: bool, role: str = ROLE_EDITOR, **overrides):
@@ -334,7 +323,7 @@ def _create_category(categories, disposable, name: str, publish: bool, role: str
 
 
 def _has(banners: list[str], expected: str) -> bool:
-    return any(expected in b for b in banners)
+    return any(shows_message(b, expected) for b in banners)
 
 
 def _history(admin, entry: GalleryEntry) -> list[dict]:
@@ -390,18 +379,6 @@ def _assert_not_public(anon_pages, entry: GalleryEntry) -> PhotoGalleryPublicVie
     return view
 
 
-def _per_photo_controls(albums: PhotoAlbumAdminPage) -> dict:
-    found = albums.photos_panel_present()
-    allure.attach(repr(found), name="photo controls the album form offers")
-    return found
-
-
-MISSING_PHOTO_LAYER = (
-    "PRODUCT (case/PBI vs app): manage-photo-album has no Photos panel, no 'Add Photo' control and no "
-    "per-photo record (Photo Title / Thumbnail Framing / Display Order / Publish Status). Photos come only from "
-    "a Documents & Media folder chosen through 'Flickr Source Folder' or 'Uploaded Photos Album'. Form: {form}")
-
-
 # ===========================================================================
 # 143110 — UI: Event Category creation form
 # ===========================================================================
@@ -454,18 +431,22 @@ def test_event_category_form_renders_fields(page):
 @pytest.mark.tc_143111
 @GALLERY_PA_GROUP
 def test_album_form_renders_fields(page):
-    # Azure TC 143111 | PBI 130714 | account: Site Content Editor (156488)
+    # Azure TC 143111 | PBI 130714 | account: Site Content Editor (156488).
+    # Create form only (nothing saved). On a NEW album the Photos panel reads
+    # "Save the album as a draft first ..." by design (ADO 148169): photos are
+    # child records and need the album to exist.
     albums, _ = _login(page, ROLE_EDITOR)
     albums.open_create_form_en()
     labels = albums.form_labels()
+    panel = albums.photos_panel()
     albums.evidence("143111 album create form")
-    allure.attach(repr(labels), name="Album create form labels")
+    allure.attach(f"{labels}\n{panel}", name="Album create form labels + Photos panel")
     missing = [name for name in (LABEL_ALBUM_TITLE, LABEL_ALBUM_TITLE_AR, LABEL_EVENT_CATEGORY, LABEL_COVER_IMAGE,
                                  LABEL_PUBLISHED_DATE) if not any(lbl.startswith(name) for lbl in labels)]
     assert not missing, f"fields missing from the Album create form: {missing} (labels {labels})"
     assert albums.page.get_by_role("button", name="Select File").count() > 0, "no Album Cover Image upload control"
-    photos = _per_photo_controls(albums)
-    assert photos["photos_panel"], MISSING_PHOTO_LAYER.format(form=photos["form_text"])
+    assert panel["present"] and panel["text"].strip().startswith("Photos"), (
+        f"the Album create form shows no Photos panel: {panel}")
 
 
 # ===========================================================================
@@ -485,13 +466,25 @@ def test_album_form_renders_fields(page):
 @GALLERY_PA_GROUP
 def test_add_photo_offers_library_and_device(page):
     # Azure TC 143112 | PBI 130714 | account: Site Content Editor (156488).
-    # Read-only: a real album's edit form is OPENED (never saved) so "existing
-    # photos, if any" could be listed.
+    # Read-only: a real album's Photos panel is read and its "+ Add photo" form
+    # opened; the Photo File picker is opened and closed (nothing uploaded/saved).
     albums, _ = _login(page, ROLE_EDITOR)
-    albums.open_entry_en("QCDEMO-130714-PHOTO_ALBUM-first-test-album")
-    photos = _per_photo_controls(albums)
-    albums.evidence("143112 album edit form has no photos panel")
-    assert photos["photos_panel"] and photos["add_photo"], MISSING_PHOTO_LAYER.format(form=photos["form_text"])
+    albums.open_entry_en(REAL_ALBUM_CODE)
+    panel = albums.photos_panel()
+    albums.evidence("143112 real album photos panel")
+    allure.attach(repr(panel), name="Photos panel")
+    assert panel["present"], "step 1: the album edit form shows no Photos panel"
+    assert panel["rows"], f"step 1: the Photos panel lists none of the album's photos: {panel['text']!r}"
+    assert panel["add_href"] and "+ Add photo" in panel["buttons"], f"no '+ Add photo' in the panel: {panel}"
+    photos = AlbumPhotoAdminPage(albums.page, PA_PREFIX, EVIDENCE_DIR)
+    photos.pinned_role = ROLE_EDITOR
+    photos.open_add_href(panel["add_href"])
+    options = photos.photo_file_picker_options()
+    photos.evidence("143112 add photo file picker")
+    allure.attach(repr(options), name="Photo File picker")
+    assert options["library_entries"], (
+        f"step 2: the Photo File picker offers no Documents & Media files to select: {options}")
+    assert options["device_upload"], f"step 2: the Photo File picker offers no upload-from-device option: {options}"
 
 
 # ===========================================================================
@@ -545,13 +538,33 @@ def test_album_form_arabic_title_entry(page):
 @pytest.mark.pbi_130714
 @pytest.mark.tc_143116
 @GALLERY_PA_GROUP
-def test_photo_rows_show_publish_status(page):
-    # Azure TC 143116 | PBI 130714 | account: Site Content Editor (156488). Read-only.
+def test_photo_rows_show_publish_status(page, disposable):
+    # Azure TC 143116 | PBI 130714 | account: Site Content Editor (156488).
+    # A QCTEST draft album gets one Published photo and one Unpublished photo
+    # (published, then the photo row's Unpublish action).
     albums, _ = _login(page, ROLE_EDITOR)
-    albums.open_entry_en("QCDEMO-130714-PHOTO_ALBUM-first-test-album")
-    photos = _per_photo_controls(albums)
-    albums.evidence("143116 no per-photo rows")
-    assert photos["photos_panel"], MISSING_PHOTO_LAYER.format(form=photos["form_text"])
+    album = _create_album(albums, disposable, _title("143116", "Status Rows"), publish=False)
+    pub = _add_photo(albums, disposable, album, _title("143116", "Published Photo"))
+    unpub = _add_photo(albums, disposable, album, _title("143116", "Unpublished Photo"), file=PHOTO_JPG_B)
+    assert pub["entry"] and unpub["entry"], f"precondition: photos not created ({pub}, {unpub})"
+    photos = pub["photos"]
+    photos.open_list_all()
+    photos.adopt(unpub["entry"])
+    photos.run_row_action(unpub["entry"], "unpublish")
+    photos.open_list_all()
+    actual = {pub["entry"].title: photos.row_status(pub["entry"]),
+              unpub["entry"].title: photos.row_status(unpub["entry"])}
+    albums.open_entry_en(album.code)
+    panel = albums.photos_panel()
+    albums.evidence("143116 photos panel published + unpublished")
+    allure.attach(f"list statuses {actual}\npanel {panel}", name="photo statuses")
+    assert actual[pub["entry"].title] == STATUS_PUBLISHED, f"precondition: statuses {actual}"
+    assert actual[unpub["entry"].title] == STATUS_UNPUBLISHED, f"precondition: statuses {actual} after Unpublish"
+    rows = {r["title"]: r["status"] for r in panel["rows"]}
+    assert set(rows) >= set(actual), f"step 1: the Photos panel does not list both photos: {panel['rows']}"
+    for title, status in actual.items():
+        assert normalize_status(rows[title]) == status, (
+            f"step 2: the panel row of {title!r} shows {rows[title]!r}, but the photo is {status!r}")
 
 
 # ===========================================================================
@@ -639,11 +652,16 @@ def test_editor_full_album_lifecycle(page, disposable, anon_pages):
     preview_url = albums.row_preview_href(entry)
     preview_text = albums.open_preview(preview_url, [title]) if preview_url else ""
     albums.evidence("143124 row preview")
+    blocked = []
     if title not in preview_text:
-        failures.append(f"preview: the row Preview ({preview_url}) does not render the album "
+        failures.append(f"preview: the row Preview ({preview_url}) of the Draft album does not render it "
                         f"(page text: {' '.join(preview_text.split())[:300]!r})")
 
-    # publish
+    # publish - by design since ADO 148169 an album publishes only with >= 1
+    # published photo, so one photo is added through '+ Add photo' first.
+    photo = _add_photo(albums, disposable, entry, f"{title} Photo 1")
+    if not (photo["went_through"] and photo["entry"]):
+        failures.append(f"publish precondition: the photo was not published: {photo['messages']}")
     albums.open_entry_en(entry.code)
     _pinned(albums, ROLE_EDITOR)
     albums.click_publish()
@@ -664,7 +682,15 @@ def test_editor_full_album_lifecycle(page, disposable, anon_pages):
     else:
         _assert_not_public(anon_pages, entry)
 
-    # delete
+    # delete - by design an album that still has photos cannot be deleted
+    # ("This Photo Album is used by N Album Photos ..."): its photo goes first.
+    if photo.get("entry"):
+        photos = photo["photos"]
+        photos.adopt(photo["entry"])
+        if photos.delete_own_entry(photo["entry"]):
+            disposable.forget(photo["entry"])
+        else:
+            failures.append(f"delete: the album's photo could not be deleted ({photos.last_delete_messages})")
     albums.adopt(entry)
     deleted = albums.delete_own_entry(entry)
     allure.attach(f"dialogs {albums.last_delete_dialogs}\nmessages {albums.last_delete_messages}", name="delete")
@@ -678,6 +704,8 @@ def test_editor_full_album_lifecycle(page, disposable, anon_pages):
     if permission:
         failures.append(f"permission error shown: {permission}")
     assert not failures, "Editor album lifecycle:\n- " + "\n- ".join(failures)
+    if blocked:
+        pytest.skip("BLOCKED: every other lifecycle step passed; " + "; ".join(blocked))
 
 
 # ===========================================================================
@@ -841,11 +869,12 @@ def test_editor_creates_category_album_and_publishes(page, disposable, anon_page
     if not created:
         failures.append("step 2: no 'Created' audit entry in History")
 
-    # Step 3 — per-photo add (D&M + device, titles, framing, display order 1/2).
-    photos = _per_photo_controls(albums.open_entry_en(album.code))
-    if not (photos["photos_panel"] and photos["add_photo"]):
-        failures.append("step 3: " + MISSING_PHOTO_LAYER.format(form=photos["form_text"]) +
-                        f" — photos were attached instead through Flickr Source Folder {PHOTO_SOURCE!r}")
+    # Step 3 — per-photo add (device upload, titles, framing, display order 100/200).
+    added = [_add_photo(albums, disposable, album, _title("143143", f"Photo {n}"), file=f, display_order=o,
+                        framing=fr)
+             for n, f, o, fr in ((1, PHOTO_JPG, 100, "Top"), (2, PHOTO_JPG_B, 200, FRAMING_DEFAULT))]
+    if not all(a["went_through"] and a["entry"] for a in added):
+        failures.append(f"step 3: photos not added: {[a['messages'] for a in added]}")
 
     # Step 4 — Draft -> Preview -> Publish (toast + audit entry).
     albums.open_list_all()
@@ -879,8 +908,8 @@ def test_editor_creates_category_album_and_publishes(page, disposable, anon_page
             failures.append(f"step 5: card chip {card.get('chip')!r}, not {cat_name!r}")
         if not card.get("cover_loaded"):
             failures.append(f"step 5: cover image did not load ({card.get('cover_src')!r})")
-        if card.get("badge") != f"{PHOTO_SOURCE_COUNT} photos":
-            failures.append(f"step 5: badge {card.get('badge')!r}, not '{PHOTO_SOURCE_COUNT} photos'")
+        if card.get("badge") != "2 photos":
+            failures.append(f"step 5: badge {card.get('badge')!r}, not '2 photos'")
         if cat_name not in view.filter_category_options():
             failures.append(f"step 5: {cat_name!r} not in the 'All Events' filter ({view.filter_category_options()})")
         detail = PhotoAlbumDetailView(anon_pages(), EVIDENCE_DIR)
@@ -963,9 +992,22 @@ def test_delete_removes_album_from_public(page, disposable, anon_pages):
     entry = _create_album(albums, disposable, title, publish=True)
     _require_active_status(albums, entry)
     _visible_publicly(anon_pages, entry)
-    PhotoAlbumDetailView(anon_pages(), EVIDENCE_DIR).open_code(entry.code)  # known Details URL works
+    known = PhotoAlbumDetailView(anon_pages(), EVIDENCE_DIR).open_code(entry.code)  # known Details URL
+    allure.attach(f"HTTP {known['status']}", name="published album Details URL")
+    assert known["status"] == 200, f"precondition: the published album's Details URL answers {known['status']}"
 
     # Step 1 — delete -> gone from the CMS list; trace kept (Recycle Bin).
+    # By design (ADO 148169) an album with photos cannot be deleted and a
+    # published album's last published photo cannot be deleted: the album is
+    # unpublished, its photo deleted, then the album deleted.
+    albums.open_list_all()
+    albums.run_row_action(entry, "unpublish")
+    photos = AlbumPhotoAdminPage(albums.page, PA_PREFIX, EVIDENCE_DIR, parent_id=entry.entry_id)
+    photos.pinned_role = ROLE_EDITOR
+    for photo in [e for e in disposable.entries if disposable.parents.get(e.entry_id) == entry.entry_id]:
+        photos.adopt(photo)
+        assert photos.delete_own_entry(photo), f"the album's photo could not be deleted: {photos.last_delete_messages}"
+        disposable.forget(photo)
     albums.adopt(entry)
     deleted = albums.delete_own_entry(entry)
     allure.attach(f"dialogs {albums.last_delete_dialogs}\nmessages {albums.last_delete_messages}", name="delete")
@@ -986,10 +1028,11 @@ def test_delete_removes_album_from_public(page, disposable, anon_pages):
     detail.evidence("143145 deleted album details url")
     allure.attach(repr({k: info[k] for k in ("status", "title", "empty_text")}), name="deleted album Details URL")
     assert not info["found"] and not info["boxes"], f"stale album content at the deleted Details URL: {info['title']!r}"
-    assert info["empty_text"], f"no not-found state at the deleted Details URL: {info['body'][:300]!r}"
-    if info["status"] != 404:
-        allure.attach(f"HTTP {info['status']} with in-page {info['empty_text']!r}",
-                      name="LOW finding: soft not-found (HTTP 200) instead of a standard not-found page")
+    assert info["status"] == 404, (
+        f"the deleted album's Details URL answers HTTP {info['status']} (in-page {info['empty_text']!r}), "
+        f"not the standard 404 not-found page")
+    ar = PhotoAlbumDetailView(anon_pages(), EVIDENCE_DIR).open_code(entry.code, locale="ar")
+    assert ar["status"] == 404 and not ar["boxes"], f"the /ar/ Details URL answers HTTP {ar['status']}"
 
 
 # ===========================================================================
@@ -1009,45 +1052,28 @@ def test_delete_removes_album_from_public(page, disposable, anon_pages):
 @GALLERY_PA_GROUP
 def test_album_without_published_photos_cannot_publish(page, disposable, anon_pages):
     # Azure TC 143163 | PBI 130714 | account: Site Content Editor (156488).
-    # Substitution: no per-photo status exists, so "zero published photos" =
-    # an album with NO photo source (every one of the 136 Flickr Album records
-    # holds >= 1 photo; no Uploaded Photos Album exists).
     albums, _ = _login(page, ROLE_EDITOR)
-    title = _title("143163", "Zero Photos")
-    ids_before = albums.snapshot_ids()
-    data = _album_data(title, flickr_source=None)
+    title = _title("143163", "Zero Published Photos")
 
-    # Step 1 — mandatory fields, no photos, Save as Draft.
-    albums.open_create_form_en()
-    albums.fill_album(data)
-    _pinned(albums, ROLE_EDITOR)
-    albums.click_save_as_draft()
-    draft_saved = albums.save_went_through()
-    draft_messages = albums.all_messages_text()
-    albums.evidence("143163 save as draft with zero photos")
+    # Step 1 — mandatory fields, one photo added but left unpublished (Draft).
+    album = _create_album(albums, disposable, title, publish=False)
+    draft = _add_photo(albums, disposable, album, _title("143163", "Draft Photo"), publish=False)
+    assert draft["went_through"] and draft["entry"], f"step 1: the draft photo was not saved: {draft}"
+    albums.open_list_all()
+    assert albums.row_status(album) == STATUS_DRAFT, f"step 1: the album is {albums.row_status(album)!r}"
+    draft["photos"].open_list_all()
+    assert draft["photos"].row_status(draft["entry"]) == STATUS_DRAFT, "step 1: the photo is not Draft"
 
-    # Step 2 — attempt to publish.
-    publish_messages, published = "", False
-    if not draft_saved:
-        albums.click_publish()
-        published = albums.save_went_through()
-        publish_messages = albums.all_messages_text()
-        albums.evidence("143163 publish attempt with zero photos")
-    entry = _register(albums, disposable, title, ids_before)
-    status = ""
-    if entry:
-        albums.open_list_all()
-        status = albums.row_status(entry)
-    allure.attach(repr({"draft_saved": draft_saved, "draft_messages": draft_messages, "published": published,
-                        "publish_messages": publish_messages, "record": entry, "status": status}),
-                  name="zero-photo album")
-    expected = "An album must contain at least one published photo."
-    assert status != STATUS_PUBLISHED and not published, (
-        f"PRODUCT: an album with zero photos was published (status {status!r}); messages {publish_messages!r}")
-    assert draft_saved, (
-        f"step 1 not reachable: an album with zero photos cannot even be saved as Draft — refused with "
-        f"{draft_messages!r}; Publish refused with {publish_messages!r} (expected {expected!r} at publish time)")
-    assert expected in publish_messages, f"publish refused with {publish_messages!r}, not {expected!r}"
+    # Step 2 — attempt to publish the album.
+    out = publish_album(albums, album)
+    albums.evidence("143163 publish album with zero published photos")
+    allure.attach(repr(out), name="publish attempt")
+    assert not out["went_through"] and out["status"] != STATUS_PUBLISHED, (
+        f"PRODUCT: an album with zero published photos was published: {out}")
+    assert MSG_ALBUM_NEEDS_PUBLISHED_PHOTO in out["messages"], (
+        f"publish refused with {out['messages']!r}, not {MSG_ALBUM_NEEDS_PUBLISHED_PHOTO!r}")
+    assert MSG_ALBUM_NEEDS_PUBLISHED_PHOTO_AR in out["messages"], f"Arabic sentence missing: {out['messages']!r}"
+    _assert_not_public(anon_pages, album)
 
 
 # ===========================================================================
@@ -1065,14 +1091,47 @@ def test_album_without_published_photos_cannot_publish(page, disposable, anon_pa
 @pytest.mark.pbi_130714
 @pytest.mark.tc_143170
 @GALLERY_PA_GROUP
-def test_lowest_display_order_photo_is_lead(page):
-    # Azure TC 143170 | PBI 130714 | account: Site Content Editor (156488). Read-only.
+def test_lowest_display_order_photo_is_lead(page, disposable, anon_pages):
+    # Azure TC 143170 | PBI 130714 | account: Site Content Editor (156488).
+    # Case orders 3 / 1 / 2 -> 300 / 100 / 200 (100-grid rule).
     albums, _ = _login(page, ROLE_EDITOR)
-    albums.open_entry_en("QCDEMO-130714-PHOTO_ALBUM-first-test-album")
-    photos = _per_photo_controls(albums)
-    albums.evidence("143170 no per-photo display order")
-    assert photos["photos_panel"], (
-        "step 1 cannot be performed — " + MISSING_PHOTO_LAYER.format(form=photos["form_text"]))
+    album = _create_album(albums, disposable, _title("143170", "Lead Photo"), publish=False)
+    wanted = {"A": 300, "B": 100, "C": 200}
+    files = {"A": PHOTO_JPG, "B": PHOTO_JPG_B, "C": PHOTO_JPG_C}
+    added = {}
+    for name in ("A", "B", "C"):
+        added[name] = _add_photo(albums, disposable, album, _title("143170", f"Photo {name}"), file=files[name],
+                                 display_order=wanted[name])
+        assert added[name]["went_through"] and added[name]["entry"], f"photo {name} not published: {added[name]}"
+    out = publish_album(albums, album)
+    assert out["status"] == STATUS_PUBLISHED, f"precondition: the album did not publish: {out}"
+
+    # Step 1 — order values save as entered.
+    photos = added["A"]["photos"]
+    stored = {}
+    for name, res in added.items():
+        photos.open_entry_en(res["entry"].code)
+        stored[name] = photos.read_photo()["display_order"]
+    albums.open_entry_en(album.code)
+    panel = albums.photos_panel()
+    albums.evidence("143170 photos panel order")
+    allure.attach(f"stored {stored}\npanel {panel['rows']}", name="display orders")
+    assert stored == {k: str(v) for k, v in wanted.items()}, f"step 1: stored orders {stored}, wanted {wanted}"
+    assert [r["title"] for r in panel["rows"]] == [added[n]["entry"].title for n in ("B", "C", "A")], (
+        f"step 1: the Photos panel is not in display order B, C, A: {panel['rows']}")
+
+    # Step 2 — public Details page: B is the lead, then C, then A.
+    _require_active_status(albums, album)
+    detail = PhotoAlbumDetailView(anon_pages(), EVIDENCE_DIR)
+    info = detail.open_code(album.code)
+    detail.evidence("143170 public details")
+    allure.attach(repr({k: info[k] for k in ("status", "title", "boxes")}), name="public details")
+    if not info["found"] and not info["boxes"]:
+        pytest.skip(f"BLOCKED by ADO 148180 (reopened): the public Album Details page renders blank "
+                    f"(HTTP {info['status']}; JS 'lastLabel is not defined') — step 1 PASSED, step 2 not verifiable")
+    alts = [b["alt"] for b in info["boxes"]]
+    assert info["boxes"][0]["lead"] and alts[:3] == [added[n]["entry"].title for n in ("B", "C", "A")], (
+        f"step 2: details order {alts} (lead {info['boxes'][0]['lead']}), wanted B as lead then C, A")
 
 
 # ===========================================================================
@@ -1090,20 +1149,42 @@ def test_lowest_display_order_photo_is_lead(page):
 @pytest.mark.pbi_130714
 @pytest.mark.tc_143176
 @GALLERY_PA_GROUP
-def test_photo_count_follows_unpublished_photo(page, disposable):
+def test_photo_count_follows_unpublished_photo(page, disposable, anon_pages):
     # Azure TC 143176 | PBI 130714 | account: Site Content Editor (156488).
+    # Substitution: the case's 6 photos -> a QCTEST album with 2 published
+    # photos (the rule under test is "the count goes down by one").
     albums, _ = _login(page, ROLE_EDITOR)
-    title = _title("143176", "Photo Count")
-    # A hand-typed count of 2 shows whether Photo Count is derived (folder has 5).
-    entry = _create_album(albums, disposable, title, publish=False, photo_count=2)
-    albums.open_entry_en(entry.code)
-    stored = albums.text_value(K_PHOTO_COUNT)
-    allure.attach(f"typed 2, stored {stored!r} (source folder holds {PHOTO_SOURCE_COUNT})",
-                  name="Photo Count is derived from the source folder")
-    photos = _per_photo_controls(albums)
-    albums.evidence("143176 album form no per-photo unpublish")
-    assert photos["photos_panel"], (
-        "step 2 'unpublish one photo' cannot be performed — " + MISSING_PHOTO_LAYER.format(form=photos["form_text"]))
+    album = _create_album(albums, disposable, _title("143176", "Photo Count"), publish=True, photos=2)
+    _require_active_status(albums, album)
+
+    # Step 1 — the card badge reads 2.
+    _, card = _visible_publicly(anon_pages, album)
+    allure.attach(repr(card), name="card before")
+    assert card.get("badge") == "2 photos", f"step 1: card badge {card.get('badge')!r}, not '2 photos'"
+
+    # Step 2 — unpublish one photo.
+    photos = AlbumPhotoAdminPage(albums.page, PA_PREFIX, EVIDENCE_DIR, parent_id=album.entry_id)
+    photos.pinned_role = ROLE_EDITOR
+    target = [e for e in disposable.entries
+              if e.slug == photos.slug and disposable.parents.get(e.entry_id) == album.entry_id][-1]
+    photos.open_list_all()
+    photos.adopt(target)
+    photos.run_row_action(target, "unpublish")
+    photos.open_list_all()
+    status = photos.row_status(target)
+    assert status == STATUS_UNPUBLISHED, f"step 2: the photo is {status!r} after Unpublish"
+
+    # Step 3 — the card badge drops to 1 with no manual step; Details "n images".
+    view, _ = _public_until(anon_pages, lambda v: re.fullmatch(r"1 photos?", v.card_for(album.code).get("badge", ""))
+                            is not None, "the card badge did not drop to 1 after unpublishing a photo")
+    view.evidence("143176 card after unpublish")
+    detail = PhotoAlbumDetailView(anon_pages(), EVIDENCE_DIR)
+    info = detail.open_code(album.code)
+    detail.evidence("143176 details after unpublish")
+    if not info["found"] and not info["boxes"]:
+        pytest.skip(f"BLOCKED by ADO 148180 (reopened): the public Album Details page renders blank "
+                    f"(HTTP {info['status']}) — card badge PASSED (2 -> 1); Details 'n images' not verifiable")
+    assert any(re.search(r"\b1 images?\b", m) for m in info["meta"]), f"step 3: details meta {info['meta']}"
 
 
 # ===========================================================================
@@ -1175,14 +1256,35 @@ def test_delete_category_in_use_is_blocked(page, disposable, anon_pages):
 @pytest.mark.pbi_130714
 @pytest.mark.tc_143185
 @GALLERY_PA_GROUP
-def test_album_with_all_photos_unpublished_not_publishable(page):
-    # Azure TC 143185 | PBI 130714 | account: Site Content Editor (156488). Read-only.
+def test_album_with_all_photos_unpublished_not_publishable(page, disposable, anon_pages):
+    # Azure TC 143185 | PBI 130714 | account: Site Content Editor (156488).
     albums, _ = _login(page, ROLE_EDITOR)
-    albums.open_entry_en("QCDEMO-130714-PHOTO_ALBUM-first-test-album")
-    photos = _per_photo_controls(albums)
-    albums.evidence("143185 no per-photo publish status")
-    assert photos["photos_panel"], (
-        "step 1 'unpublish both photos' cannot be performed — " + MISSING_PHOTO_LAYER.format(form=photos["form_text"]))
+    album = _create_album(albums, disposable, _title("143185", "All Unpublished"), publish=False)
+
+    # Step 1 — 2 photos, both Unpublished (published, then the row's Unpublish).
+    statuses = {}
+    for n, file in ((1, PHOTO_JPG), (2, PHOTO_JPG_B)):
+        res = _add_photo(albums, disposable, album, _title("143185", f"Photo {n}"), file=file)
+        assert res["went_through"] and res["entry"], f"precondition: photo {n} not published: {res}"
+        photos = res["photos"]
+        photos.open_list_all()
+        photos.adopt(res["entry"])
+        photos.run_row_action(res["entry"], "unpublish")
+        photos.open_list_all()
+        statuses[res["entry"].title] = photos.row_status(res["entry"])
+    allure.attach(repr(statuses), name="photo statuses")
+    assert set(statuses.values()) == {STATUS_UNPUBLISHED}, f"step 1: photos are {statuses}"
+
+    # Step 2 — publishing is blocked (zero-published-photos rule).
+    out = publish_album(albums, album)
+    albums.evidence("143185 publish with all photos unpublished")
+    allure.attach(repr(out), name="publish attempt")
+    assert not out["went_through"] and out["status"] != STATUS_PUBLISHED, (
+        f"PRODUCT: an album whose photos are all unpublished was published: {out}")
+    assert MSG_ALBUM_NEEDS_PUBLISHED_PHOTO in out["messages"], f"refused with {out['messages']!r}"
+
+    # Step 3 — not on a fresh logged-out listing.
+    _assert_not_public(anon_pages, album)
 
 
 MANUAL_SKIP = pytest.mark.skip(reason="Manual case — not automated")

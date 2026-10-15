@@ -579,6 +579,7 @@ def test_destination_link_message_in_arabic_ui(qac, real_cards, real_guard):
     bar = " || ".join(result["form"]["bar"])
     if "رابط الوجهة مطلوب." not in bar:
         record_finding("149278", "WORDING", context="AR red bar", expected="رابط الوجهة مطلوب.", shown=bar)
+    assert "رابط الوجهة مطلوب." in bar, f"PRODUCT: the AR red bar does not name «رابط الوجهة مطلوب.»: {bar!r}"
     assert message_check("149278", "رابط الوجهة مطلوب.", result, "AR UI, link missing"), \
         f"PRODUCT: 'رابط الوجهة مطلوب.' not shown: {result.get('messages')!r}"
     admin.open_entry(ref.code)

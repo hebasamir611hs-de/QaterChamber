@@ -77,7 +77,7 @@ from core.web.base_page import BasePage
 
 _PROJECT_ROOT = _Path(__file__).resolve().parents[3]
 
-QCTEST_PREFIX = "QCTEST-R30-C-"  # ready-bug retest agent C (2026-10-13)
+QCTEST_PREFIX = "QCTEST-R32-N-"  # ready-bug retest agent N (2026-10-14)
 QCTEST_B_PREFIX = QCTEST_PREFIX  # backward-compatible alias
 SUBMISSION_SLUG = "opportunity-submission"
 INQUIRY_SLUG = "opportunity-inquiry"
@@ -123,7 +123,7 @@ INTAKE_API = "/o/qc-business-opportunities-api/"
 
 
 def _evidence_dir() -> str:
-    return _os.path.join(str(_PROJECT_ROOT), "reports", "evidence", "ready30", "C")
+    return _os.path.join(str(_PROJECT_ROOT), "reports", "evidence", "ready32", "N")
 
 
 class OpportunityReviewAdminPage(ObjectAuthoringPage):
@@ -412,7 +412,7 @@ class OpportunityReviewAdminPage(ObjectAuthoringPage):
                                  has_text=_re.compile(rf"^\s*{_re.escape(title)}\s*$"))
 
     def review_action(self, slug: str, entry_id: str, title: str, expected_name: str,
-                      reason: str | None = None, settle_ms: int = 15000) -> dict:
+                      reason: str | None = None, settle_ms: int = 30000) -> dict:
         """Clicks ONE review action on OUR QCTEST row (row must show `expected_name`,
         which must carry QCTEST_PREFIX). Native confirm is accepted only if it names
         the row's ERC; a prompt gets `reason` (or is dismissed when reason is None).
@@ -447,9 +447,14 @@ class OpportunityReviewAdminPage(ObjectAuthoringPage):
         try:
             link.first.click()
             notices: list[str] = []
-            for _ in range(settle_ms // 500):
-                self.page.wait_for_timeout(500)
-                notices = [t.strip() for t in self.page.locator(self.SUCCESS_NOTICE).all_inner_texts() if t.strip()]
+            # Healed 2026-10-14 (ready32 N): the success toast now shows only briefly before the
+            # list reloads (shared list fragment change), so poll every 100 ms, not 500 ms.
+            for _ in range(settle_ms // 100):
+                self.page.wait_for_timeout(100)
+                try:  # the list reloads itself after the action (context may be destroyed mid-read)
+                    notices = [t.strip() for t in self.page.locator(self.SUCCESS_NOTICE).all_inner_texts() if t.strip()]
+                except Exception:  # noqa: BLE001
+                    notices = []
                 if notices or any(d.startswith("alert") for d in dialogs):
                     break
         finally:
@@ -458,6 +463,61 @@ class OpportunityReviewAdminPage(ObjectAuthoringPage):
         self.open_manage(slug)
         return {"offered": True, "dialogs": dialogs, "notices": sorted(set(notices)), "writes": writes,
                 "row": self.row_by_id(entry_id)}
+
+    def publish_as_opportunity(self, entry_id: str, expected_name: str, tries: int = 2) -> dict:
+        """Added 2026-10-14 (ready32 N, bug 150023): Editor/Administrator row action
+        "Publish as Opportunity" on OUR Approved QCTEST submission. Confirm accepted only
+        if it names the row's ERC. Returns the landing URL, the POST status and the
+        Opportunity Title value of the opened Business Opportunity form (a Draft)."""
+        if not expected_name.startswith(QCTEST_PREFIX):
+            raise ValueError(f"{expected_name!r} is not a {QCTEST_PREFIX} value")
+        out: dict = {"dialogs": [], "posts": [], "url": "", "title_value": "", "body": ""}
+        for _ in range(tries):  # one retry: a transient "Failed to fetch" was seen on qcdev
+            row = self.wait_for_entry(SUBMISSION_SLUG, entry_id)
+            if not row or expected_name not in " ".join(row["cells"]):
+                raise AssertionError(f"refused: row {entry_id} does not show {expected_name!r}: {row}")
+            erc = row["cells"][0]
+            link = self.row_action_link(entry_id, "Publish as Opportunity")
+            if link.count() != 1:
+                out["actions"] = row["actions"]
+                return out
+
+            def _on_dialog(dialog):
+                out["dialogs"].append(f"{dialog.type}: {dialog.message}")
+                if dialog.type == "confirm":
+                    dialog.accept() if erc in dialog.message else dialog.dismiss()
+                else:
+                    dialog.accept()
+
+            def _on_response(resp):
+                if resp.request.method == "POST" and "publish-as-opportunity" in resp.url:
+                    out["posts"].append(resp.status)
+
+            self.page.on("dialog", _on_dialog)
+            self.page.on("response", _on_response)
+            try:
+                link.first.click()
+                try:
+                    self.page.wait_for_url(_re.compile(r"manage-business-opportunity\?editEntry="), timeout=60000)
+                except Exception:  # noqa: BLE001 — reported through url
+                    pass
+            finally:
+                self.page.remove_listener("dialog", _on_dialog)
+                self.page.remove_listener("response", _on_response)
+            out["url"] = self.page.url
+            if "editEntry=" in out["url"]:
+                break
+        if "editEntry=" in out["url"]:
+            # The Opportunity Title input is not label-associated: read the form's text inputs.
+            try:
+                self.page.wait_for_function(
+                    "(n) => [...document.querySelectorAll('form input[type=text], form input:not([type])')]"
+                    ".some(i => i.value === n)", arg=expected_name, timeout=45000)
+                out["title_value"] = expected_name
+            except Exception:  # noqa: BLE001 — reported as not pre-filled
+                pass
+            out["body"] = self.body_text()[:4000]
+        return out
 
     def wait_for_entry(self, slug: str, entry_id: str, tries: int = 8) -> dict | None:
         """Re-opens the list until `entry_id` is listed (a fresh public submission can

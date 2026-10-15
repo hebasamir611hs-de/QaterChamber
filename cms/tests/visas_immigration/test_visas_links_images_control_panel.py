@@ -68,7 +68,7 @@ from cms.pages.visas_immigration.bg_admin_page import (
     BGEntry,
     bg_data,
 )
-from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED, shows_message
 from config.settings import PROJECT_ROOT
 from core.utils.waits import WaitTimeoutError, wait_until
 from core.web.browser import new_context
@@ -155,7 +155,7 @@ def _has(pattern: str, texts) -> bool:
 
 
 def _published_message(save: dict) -> bool:
-    return any(MSG_SAVED_AND_PUBLISHED in t for t in save.get("messages", []))
+    return any(shows_message(t, MSG_SAVED_AND_PUBLISHED) for t in save.get("messages", []))
 
 
 def _refusal_texts(save: dict) -> list[str]:
@@ -505,7 +505,7 @@ def test_140317_arabic_overview_card_nav_path_and_toast(page, browser, anon, dis
     _admin_shot(drv, "140317_ar_cms_after_save")
     c.check(save["went_through"], f"AR save did not go through: {save}")
     msgs = [m for m in save["messages"] if not m.startswith("Editing")]
-    c.check(any(ARABIC.search(m) for m in msgs) and not any(MSG_SAVED_AND_PUBLISHED in m for m in msgs),
+    c.check(any(ARABIC.search(m) for m in msgs) and not any(shows_message(m, MSG_SAVED_AND_PUBLISHED) for m in msgs),
             f"the success message is not in Arabic: {msgs}")
     c.check(drv.stored(entry)["highlightCardEyebrow_ar"] == new_eyebrow, "Card Eyebrow AR not stored")
     s.require_live(entry)

@@ -35,6 +35,8 @@ the public detail is `/web/qatar-chamber/photo-album-details?erc=<code>`.
 
 from __future__ import annotations
 
+import re
+
 from cms.pages.photo_gallery.gallery_admin_base import GalleryAdminPage
 from config.settings import web_url
 
@@ -111,17 +113,78 @@ class PhotoAlbumAdminPage(GalleryAdminPage):
             "active": self.active_status_stored(),
         }
 
+    PHOTOS_PANEL = "[data-qc-oel-child-panel]"
+    PHOTOS_PANEL_NOTE = "[data-qc-oel-child-count]"
+    PHOTOS_PANEL_ADD = "a[data-qc-oel-child-add]"
+    PHOTOS_PANEL_MANAGE = "a[data-qc-oel-child-manage]"
+    PHOTOS_PANEL_ROW = 'a[href*="manage-album-photo"][href*="editEntry="]'
+
+    _PANEL_JS = r"""(sel) => {
+        const panel = document.querySelector(sel.panel);
+        if (!panel) return null;
+        const q = (s) => panel.querySelector(s);
+        const rows = [...panel.querySelectorAll(sel.row)].map(a => {
+            const lines = a.innerText.split('\n').map(t => t.trim()).filter(Boolean);
+            const head = lines[0] || ''; const m = head.match(/^(\d+)\s+(.*)$/);
+            const code = (a.getAttribute('href').match(/editEntry=([^&#]+)/) || [])[1] || '';
+            const img = a.querySelector('img');
+            return {order: m ? m[1] : '', title: m ? m[2] : head, status: (lines[1] || '').trim(),
+                    code: decodeURIComponent(code), thumb: img ? img.getAttribute('src') : ''};
+        });
+        return {text: panel.innerText, note: q(sel.note) ? q(sel.note).innerText.trim() : '',
+                add_href: q(sel.add) ? q(sel.add).getAttribute('href') : '',
+                manage_href: q(sel.manage) ? q(sel.manage).getAttribute('href') : '',
+                buttons: [...panel.querySelectorAll('a, button')].map(e => e.innerText.trim()).filter(Boolean),
+                rows};
+    }"""
+
+    def photos_panel(self, timeout: float = 20.0) -> dict:
+        """The album edit form's Photos panel: {present, note, add_href, manage_href,
+        buttons, rows: [{order, title, status, code, thumb}]} (read-only)."""
+        try:
+            self.page.locator(self.PHOTOS_PANEL).first.wait_for(timeout=int(timeout * 1000))
+        except Exception:  # noqa: BLE001 — absence is an answer
+            pass
+        data = self.page.evaluate(self._PANEL_JS, {"panel": self.PHOTOS_PANEL, "note": self.PHOTOS_PANEL_NOTE,
+                                                   "add": self.PHOTOS_PANEL_ADD, "manage": self.PHOTOS_PANEL_MANAGE,
+                                                   "row": self.PHOTOS_PANEL_ROW})
+        if not data:
+            return {"present": False, "note": "", "add_href": "", "manage_href": "", "buttons": [], "rows": [],
+                    "text": ""}
+        data["present"] = True
+        return data
+
+    def click_panel_button(self, name: str) -> list[str]:
+        """Clicks a Photos-panel button (e.g. 'Publish all drafts (n)'), accepting
+        confirm() dialogs; returns the dialog texts."""
+        messages: list[str] = []
+
+        def _accept(dialog):
+            messages.append(dialog.message)
+            try:
+                dialog.accept()
+            except Exception:  # noqa: BLE001
+                pass
+
+        self.page.on("dialog", _accept)
+        try:
+            self.page.locator(self.PHOTOS_PANEL).first.get_by_role(
+                "button", name=re.compile(name)).first.click()
+            self.page.wait_for_load_state("load")
+        finally:
+            self.page.remove_listener("dialog", _accept)
+        return messages
+
     def photos_panel_present(self) -> dict:
-        """What the form offers for adding photos: an explicit Photos panel /
-        Add Photo control, or only the indirect folder-source pickers."""
-        text = self.form_text()
+        """What the form offers for adding photos (legacy shape used by older cases)."""
+        panel = self.photos_panel(timeout=10.0)
         return {
-            "photos_panel": self._form().get_by_text("Photos", exact=True).count() > 0,
-            "add_photo": (self.page.get_by_role("button", name="Add Photo").count()
-                          + self.page.get_by_role("link", name="Add Photo").count()) > 0,
+            "photos_panel": panel["present"],
+            "add_photo": bool(panel["add_href"]),
             "flickr_source_field": self.has_field(K_FLICKR_SOURCE),
             "uploaded_source_field": self.has_field(K_UPLOADED_SOURCE),
-            "form_text": " | ".join(t.strip() for t in text.split("\n") if t.strip()),
+            "form_text": " | ".join(t.strip() for t in self.form_text().split(chr(10)) if t.strip()),
+            "panel": panel,
         }
 
     @staticmethod

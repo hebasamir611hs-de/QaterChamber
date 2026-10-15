@@ -356,7 +356,8 @@ def test_valid_unique_reference_number_accepted(page, disposable):
     admin.open_entry_en(entry.code)
     stored = admin.text_value(K_REF)
     assert stored == reference, f"Reference Number stored as {stored!r}, not {reference!r}"
-    assert any(B_MSG_SAVED_AND_PUBLISHED in m for m in admin.create_messages), (
+    from cms.pages.components.object_authoring_page import shows_message  # noqa: PLC0415
+    assert any(shows_message(m, B_MSG_SAVED_AND_PUBLISHED) for m in admin.create_messages), (
         f"no {B_MSG_SAVED_AND_PUBLISHED!r} after the save: {admin.create_messages}")
 
 

@@ -6,12 +6,9 @@ Gallery"), Azure plan 137724 / suite 140374, Agent VB.
 Covers:
   - 143018-143025, 143028, 143029 — Video Library page content settings (Page
     Title, Hero Background Image, Page Status, Created / Last Modified).
-    LIVE 2026-10-05 there is NO authoring object behind the Video Library page
-    hero (see cms/pages/video_gallery/video_page_admin_page.py): the only
-    "page hero" object, `manage-page-hero` (Photo Gallery Page Hero), renders on
-    the Photo pages only. Each case runs a read-only discovery first and is
-    reported BLOCKED (with evidence) while that holds — one bug candidate,
-    the same pattern as the Tenders review-panel cases (PBI 130952).
+    Blocked until ADO 148186 was fixed; since 2026-10-13 they run against the
+    singleton "Video Library Page" object (manage-video-library-page) under
+    snapshot -> change -> restore -> diff (see the section header below).
   - 143030-143040 — `manage-video-category` (Category Name EN/AR, Display
     Order, Active Status, workflow status).
 
@@ -61,15 +58,19 @@ from datetime import datetime
 import allure
 import pytest
 
-from cms.pages.components.object_authoring_page import STATUS_DRAFT, STATUS_PUBLISHED
+from cms.pages.components.object_authoring_page import STATUS_DRAFT, STATUS_PUBLISHED, shows_message
 from cms.pages.video_gallery.video_category_admin_page import KC_DISPLAY_ORDER, KC_NAME
 from cms.pages.video_gallery.video_page_admin_page import (
     VB_EVIDENCE_DIR,
     VB_PREFIX,
     VideoCategoryFieldsVB,
     VideoDetailsPublicViewVB,
+    HERO_IMAGE_HELP,
+    K_HERO_IMAGE,
+    K_PAGE_TITLE,
+    PAGE_TITLE_LIMIT,
+    VideoLibraryPageAdmin,
     VideoLibraryPublicViewVB,
-    VideoPageSettingsLookupVB,
 )
 from cms.pages.video_gallery.video_record_admin_page import (
     DEFAULT_THUMBNAIL,
@@ -394,115 +395,235 @@ def _public_categories(anon_pages, locale: str, expected: str, tc_id: str) -> di
 # ===========================================================================
 # 143018-143025, 143028, 143029 — Video Library page content settings
 # ===========================================================================
-_PAGE_SETTINGS_LOOKUP: dict = {}
+#
+# ADO 148186 is fixed: the page settings live in the singleton Object "Video
+# Library Page" (/web/qatar-chamber/manage-video-library-page, one record
+# QCDEMO-130715-VIDEO-LIBRARY-PAGE-main, no Add New). The record is REAL
+# content: every case goes snapshot -> change -> restore -> diff through the
+# `library_page` fixture (teardown fails loudly if any field differs). It is
+# never unpublished / saved as draft / deleted.
+#
+# Substitutions disclosed (case literal -> what runs):
+#   - 143018 "Page Title = 'Video Library'" is the stored value already, so a
+#     distinct valid value "Video Library QCTEST-R32" is published and checked
+#     on the form and on the public hero, then restored.
+#   - 143024 "3.5 MB JPG" -> a 3.46 MB JPG fixture.
+#   - 143028 only the Published leg can run on the real record (the
+#     Draft/Unpublished legs would unpublish the live page — forbidden); the
+#     test checks the Published leg + the lifecycle actions and then reports
+#     the rest BLOCKED (data safety).
+VL_FIXTURES = os.path.join(os.path.dirname(__file__), "fixtures")
+VL_PNG_500KB = os.path.join(VL_FIXTURES, "vl_qctest_hero_500kb.png")
+VL_JPG_3_5MB = os.path.join(VL_FIXTURES, "vl_qctest_hero_3_5mb.jpg")
+VL_GIF = os.path.join(VL_FIXTURES, "vl_qctest_hero.gif")
+VL_VALID_TITLE = "Video Library QCTEST-R32"
+VL_PUBLIC_TIMEOUT = 30.0
 
 
-def _video_page_settings(page, anon_pages) -> dict:
-    """One read-only discovery per module run (cached): is there an authoring
-    object behind the Video Library page title / hero image / status?"""
-    if _PAGE_SETTINGS_LOOKUP:
-        return _PAGE_SETTINGS_LOOKUP
-    lookup = _editor_session(page, VideoPageSettingsLookupVB)
-    found = {"video_page_objects": lookup.video_page_objects()}
-    found["index_screenshot"] = lookup.evidence("video_page_settings_object_index")
-    found["page_hero_rows"] = [{"title": r["title"], "code": r["code"]} for r in lookup.page_hero_rows()]
-    found["page_hero_fields"] = lookup.page_hero_form_fields()
-    found["page_hero_preview_tabs"] = lookup.preview_panel_text("page-hero")
-    found["page_hero_screenshot"] = lookup.evidence("video_page_settings_manage_page_hero")
-    found["video_category_preview_tabs"] = lookup.preview_panel_text("video-category")
-    public = VideoLibraryPublicViewVB(anon_pages(DESKTOP))
-    public.open_video_library("en")
-    found["public_hero_en"] = public.hero_state()
-    found["public_screenshot"] = public.evidence("video_page_settings_public_video_library_hero", full_page=False)
-    found["blocked"] = (not found["video_page_objects"]
-                        and "video" not in found["page_hero_preview_tabs"].lower())
-    _PAGE_SETTINGS_LOOKUP.update(found)
-    return found
+@pytest.fixture
+def library_page(page):
+    """(admin, baseline) for the real Video Library Page record; restores and
+    diffs it afterwards."""
+    admin = VideoLibraryPageAdmin(page)
+    page.on("dialog", lambda d: d.accept())
+    outcome = admin.login_as_role(ROLE_EDITOR)
+    if outcome != "ok":
+        pytest.skip(f"PRECONDITION: Site Content Editor login outcome {outcome!r}")
+    baseline = admin.snapshot()
+    user_id, _ = admin.signed_in_user()
+    if user_id != ROLE_USER_IDS[ROLE_EDITOR]:
+        pytest.skip(f"PRECONDITION: Editor credentials sign in as userId {user_id!r}, not 156488")
+    allure.attach(json.dumps(baseline, ensure_ascii=False, indent=1), name="Video Library Page baseline")
+    assert baseline["row_count"] == "1" and baseline["row_status"] == STATUS_PUBLISHED, (
+        f"PRECONDITION: expected one Published Video Library Page record, got {baseline}")
+    yield admin, baseline
+    report = admin.restore(baseline)
+    allure.attach(json.dumps(report, ensure_ascii=False, indent=1), name="Video Library Page restore + diff")
+    assert not report["remaining"], f"RESTORE INCOMPLETE on the real Video Library Page: {report}"
 
 
-def _blocked_without_page_object(page, anon_pages, tc_id: str, subject: str) -> None:
-    found = _video_page_settings(page, anon_pages)
-    allure.attach(json.dumps(found, ensure_ascii=False, indent=1), name="Video Library page settings lookup")
-    if found["blocked"]:
-        pytest.skip(
-            f"BLOCKED ({tc_id}) — no Video Library page content settings exist to test {subject}: the "
-            f"Object Authoring index has no Video page/hero object; the only page-hero object "
-            f"(manage-page-hero 'Photo Gallery Page Hero', rows {[r['title'] for r in found['page_hero_rows']]}) "
-            f"previews on {found['page_hero_preview_tabs']!r}; the public hero "
-            f"{found['public_hero_en'].get('title')!r} is fixed in the page fragment. "
-            f"Evidence: {found['index_screenshot']}, {found['page_hero_screenshot']}, {found['public_screenshot']}")
-    pytest.fail(f"A Video Library page-settings object now exists ({found['video_page_objects']}); "
-                f"this case must be automated against it")
+def _vl_refused(admin: VideoLibraryPageAdmin, baseline: dict, tc_id: str, what: str) -> dict:
+    """Publish an invalid value; asserts the refusal and that nothing was stored."""
+    admin.click_publish()
+    went = admin.save_went_through()
+    evidence = {"went_through": went, "refusal": admin.refusal_evidence(),
+                "screenshot": admin.evidence(f"{tc_id}_vl_page_refusal")}
+    after = admin.snapshot()
+    evidence["diff_after"] = admin.differences(baseline, after)
+    allure.attach(json.dumps(evidence, ensure_ascii=False, indent=1, default=str), name=f"{tc_id} refusal")
+    assert not went, f"{tc_id}: Publish with {what} went through. Evidence: {evidence}"
+    assert not evidence["diff_after"], f"{tc_id}: the refused Publish still changed {evidence['diff_after']}"
+    return evidence
+
+
+def _public_hero(anon_pages, expected_title: str | None = None, locale: str = "en") -> dict:
+    view = VideoLibraryPublicViewVB(anon_pages(DESKTOP))
+    state = {}
+
+    def _read() -> bool:
+        view.open_video_library(locale)
+        state.update(view.hero_state())
+        return expected_title is None or state["title"] == expected_title
+
+    try:
+        wait_until(_read, timeout=VL_PUBLIC_TIMEOUT, poll=3.0)
+    except WaitTimeoutError:
+        pass
+    state["screenshot"] = view.evidence(f"vl_page_public_hero_{locale}", full_page=False)
+    return state
 
 
 @AUTH_FREE_PAGE
 @pytest.mark.tc_143018
 @allure.title("143018 — Page Title accepts a valid value within 100 characters")
-def test_143018_page_title_accepts_valid_value(page, anon_pages):
-    _blocked_without_page_object(page, anon_pages, "143018", "Page Title = 'Video Library'")
+def test_143018_page_title_accepts_valid_value(library_page, anon_pages):
+    admin, baseline = library_page
+    assert not admin.has_add_new(), "the singleton Video Library Page offers Add New"
+    admin.open_real().set_title(VL_VALID_TITLE)
+    assert admin.publish(), f"Publish of a valid Page Title was refused: {admin.refusal_evidence()}"
+    stored = admin.snapshot()
+    assert stored["title"] == VL_VALID_TITLE, f"stored Page Title {stored['title']!r}"
+    assert stored["row_status"] == STATUS_PUBLISHED
+    hero = _public_hero(anon_pages, VL_VALID_TITLE)
+    allure.attach(json.dumps(hero, ensure_ascii=False, indent=1), name="public hero after edit")
+    assert hero["title"] == VL_VALID_TITLE, f"public /video-library hero reads {hero['title']!r}"
 
 
 @AUTH_FREE_PAGE
 @pytest.mark.tc_143019
 @allure.title("143019 — Page Title rejects an empty value")
-def test_143019_page_title_rejects_empty(page, anon_pages):
-    _blocked_without_page_object(page, anon_pages, "143019", "an empty Page Title")
+def test_143019_page_title_rejects_empty(library_page):
+    admin, baseline = library_page
+    admin.open_real().set_title("")
+    _vl_refused(admin, baseline, "143019", "an empty Page Title")
 
 
 @AUTH_FREE_PAGE
 @pytest.mark.tc_143020
 @allure.title("143020 — Page Title enforces the 100-character maximum")
-def test_143020_page_title_max_length(page, anon_pages):
-    _blocked_without_page_object(page, anon_pages, "143020", "the 100/101-character Page Title")
+def test_143020_page_title_max_length(library_page):
+    admin, baseline = library_page
+    title_100 = _exact_length("Video Library QCTEST-R32 max", 100, " Lorem")
+    assert len(title_100) == 100
+    admin.open_real().set_title(title_100)
+    assert admin.publish(), f"a 100-character Page Title was refused: {admin.refusal_evidence()}"
+    assert admin.snapshot()["title"] == title_100, "the 100-character Page Title was not stored intact"
+    title_101 = title_100 + "X"
+    admin.open_real().set_title(title_101)
+    typed = admin.text_value(K_PAGE_TITLE)
+    if len(typed) <= PAGE_TITLE_LIMIT:
+        assert typed == title_100, f"the box capped 101 characters to {typed!r}"
+        return
+    admin.click_publish()
+    went = admin.save_went_through()
+    stored = admin.snapshot()["title"]
+    allure.attach(json.dumps({"went_through": went, "stored_len": len(stored),
+                              "refusal": admin.refusal_evidence()}, ensure_ascii=False, default=str),
+                  name="143020 101-character attempt")
+    assert not went and stored == title_100, (
+        f"a 101-character Page Title was accepted (stored {len(stored)} chars)")
 
 
 @AUTH_FREE_PAGE
 @pytest.mark.tc_143021
 @allure.title("143021 — Page Title rejects a whitespace-only value")
-def test_143021_page_title_rejects_whitespace(page, anon_pages):
-    _blocked_without_page_object(page, anon_pages, "143021", "a whitespace-only Page Title")
+def test_143021_page_title_rejects_whitespace(library_page):
+    admin, baseline = library_page
+    admin.open_real().set_title("     ")
+    _vl_refused(admin, baseline, "143021", "a whitespace-only Page Title")
 
 
 @AUTH_FREE_PAGE
 @pytest.mark.tc_143022
 @allure.title("143022 — Hero Background Image accepts a valid PNG under 2 MB")
-def test_143022_hero_image_accepts_valid_png(page, anon_pages):
-    _blocked_without_page_object(page, anon_pages, "143022", "a 500 KB PNG Hero Background Image")
+def test_143022_hero_image_accepts_valid_png(library_page, anon_pages):
+    admin, baseline = library_page
+    assert os.path.getsize(VL_PNG_500KB) < 2 * 1024 * 1024
+    admin.open_real()
+    assert ".png" in admin.hero_accept() and HERO_IMAGE_HELP in admin.hero_help_text()
+    result = admin.attempt_upload(K_HERO_IMAGE, VL_PNG_500KB, "qctest-r32v-hero")
+    allure.attach(json.dumps(result, ensure_ascii=False, indent=1, default=str), name="143022 upload")
+    assert result["attached"] and not result["errors"], f"the 500 KB PNG was not attached: {result}"
+    assert admin.publish(), f"Publish with a valid PNG hero was refused: {admin.refusal_evidence()}"
+    stored = admin.snapshot()
+    assert stored["image"].startswith("qctest-r32v-hero"), f"stored hero image {stored['image']!r}"
+    hero = _public_hero(anon_pages)
+    allure.attach(json.dumps(hero, ensure_ascii=False, indent=1), name="public hero after image")
+    assert "qctest-r32v-hero" in hero["background"], (
+        f"public hero background does not use the uploaded image: {hero['background']!r}")
 
 
 @AUTH_FREE_PAGE
 @pytest.mark.tc_143023
 @allure.title("143023 — Hero Background Image is required")
-def test_143023_hero_image_required(page, anon_pages):
-    _blocked_without_page_object(page, anon_pages, "143023", "an empty Hero Background Image")
+def test_143023_hero_image_required(library_page):
+    admin, baseline = library_page
+    admin.open_real()
+    if baseline["image"]:
+        assert admin.remove_hero_image(), "could not clear the hero image on the form"
+    if admin.hero_required():
+        return
+    # Not marked required on the form: Publish must still be refused (case expectation).
+    _vl_refused(admin, baseline, "143023", "no Hero Background Image")
 
 
 @AUTH_FREE_PAGE
 @pytest.mark.tc_143024
 @allure.title("143024 — Hero Background Image rejects a file over 2 MB")
-def test_143024_hero_image_rejects_oversize(page, anon_pages):
-    _blocked_without_page_object(page, anon_pages, "143024", "a 3.5 MB JPG Hero Background Image")
+def test_143024_hero_image_rejects_oversize(library_page):
+    admin, baseline = library_page
+    assert os.path.getsize(VL_JPG_3_5MB) > 3 * 1024 * 1024
+    admin.open_real()
+    result = admin.attempt_upload(K_HERO_IMAGE, VL_JPG_3_5MB, "qctest-r32v-oversize")
+    allure.attach(json.dumps(result, ensure_ascii=False, indent=1, default=str), name="143024 upload")
+    # the size error itself names the file, so "attached" is judged on the field's own file name
+    assert not admin.stored_file_name(K_HERO_IMAGE).startswith("qctest-r32v-oversize") and result["success"] is not True, (
+        f"a 3.5 MB JPG was attached to the hero: {result}")
+    assert any(re.search(r"2\s*MB", e) for e in result["errors"]), f"no 2 MB size message: {result['errors']}"
 
 
 @AUTH_FREE_PAGE
 @pytest.mark.tc_143025
 @allure.title("143025 — Hero Background Image rejects an unsupported format")
-def test_143025_hero_image_rejects_gif(page, anon_pages):
-    _blocked_without_page_object(page, anon_pages, "143025", "a GIF Hero Background Image")
+def test_143025_hero_image_rejects_gif(library_page):
+    admin, baseline = library_page
+    admin.open_real()
+    result = admin.attempt_upload(K_HERO_IMAGE, VL_GIF, "qctest-r32v-gif")
+    allure.attach(json.dumps(result, ensure_ascii=False, indent=1, default=str), name="143025 upload")
+    assert not result["attached"], f"a GIF was attached to the hero: {result}"
+    assert any(re.search(r"valid extension|\.jpg", e) for e in result["errors"]), (
+        f"no file-type message: {result['errors']}")
 
 
 @AUTH_FREE_PAGE
 @pytest.mark.tc_143028
 @allure.title("143028 — Page Status persists each selectable value")
-def test_143028_page_status_persists(page, anon_pages):
-    _blocked_without_page_object(page, anon_pages, "143028", "the page Status Draft/Published/Unpublished")
+def test_143028_page_status_persists(library_page):
+    admin, baseline = library_page
+    admin.open_real()
+    bar = admin.editing_bar_text()
+    assert "(Published)" in bar, f"edit bar does not report Published: {bar!r}"
+    assert baseline["row_status"] == STATUS_PUBLISHED
+    labels = " ".join(admin.page.locator(admin.ROW).first.locator("td").last.all_inner_texts())
+    assert "Unpublish" in labels, f"the record offers no Unpublish lifecycle action: {labels!r}"
+    pytest.skip("BLOCKED (data safety) — 143028: Published persists; the Draft / Unpublished legs would "
+                "unpublish the REAL Video Library Page (never allowed on real content). Page Status is the "
+                "record's workflow status (dev, ADO 148186).")
 
 
 @AUTH_FREE_PAGE
 @pytest.mark.tc_143029
 @allure.title("143029 — Page Created / Last Modified date updates on edit")
-def test_143029_page_last_modified_updates(page, anon_pages):
-    _blocked_without_page_object(page, anon_pages, "143029", "the page's Last Modified timestamp")
+def test_143029_page_last_modified_updates(library_page):
+    admin, baseline = library_page
+    before = datetime.strptime(baseline["last_modified"], "%m/%d/%Y, %I:%M:%S %p")
+    admin.open_real().set_title(VL_VALID_TITLE)
+    assert admin.publish(), f"Publish was refused: {admin.refusal_evidence()}"
+    after_raw = admin.snapshot()["last_modified"]
+    after = datetime.strptime(after_raw, "%m/%d/%Y, %I:%M:%S %p")
+    allure.attach(f"before {baseline['last_modified']} -> after {after_raw}", name="143029 Last Modified")
+    assert after > before, f"Last Modified did not move forward: {baseline['last_modified']} -> {after_raw}"
+    assert "Created" in admin.editing_bar_text(), "the edit bar no longer reports the Created date"
 
 
 # ===========================================================================
@@ -535,7 +656,7 @@ def test_143031_category_name_valid(page, disposable, anon_pages):
     admin = _editor_session(page)
     name, name_ar = _name("143031", "Community Outreach"), "التواصل المجتمعي"
     entry, created = _create(admin, disposable, "143031", name, name_ar)
-    assert any(MSG_SAVED_AND_PUBLISHED in t for t in created.get("success_bar", [])), created
+    assert any(shows_message(t, MSG_SAVED_AND_PUBLISHED) for t in created.get("success_bar", [])), created
     stored = _reopen(admin, entry)
     if created.get("arabic") != MSG_ARABIC_SAVED:
         allure.attach(f"Arabic save notice seen: {created.get('arabic')!r}", name="Arabic notice (informational)")
@@ -654,6 +775,7 @@ def test_143033_max_length_category_on_public_pages(page, disposable, anon_pages
             report[key] = {"card": state["card"], "chips": listing.chip_texts(),
                            "listing_layout": listing.overflow_report([".qc-vll-tag", "a.qc-vll-card", ".qc-vll-grid",
                                                                       ".qc-vll-chip"]),
+                           "tooltips": listing.tooltips(".qc-vll-tag, .qc-vll-chip"),
                            "listing_png": listing.evidence(f"143033_charlimit_listing_{key}")}
             details = VideoDetailsPublicViewVB(anon_pages(viewport))
             report[key]["details"] = details.details_state(video.code, locale)
@@ -673,9 +795,14 @@ def test_143033_max_length_category_on_public_pages(page, disposable, anon_pages
                     if item.get("page_hscroll"):
                         findings.append(f"{key} {where}: horizontal page scroll (scrollWidth {item['scrollWidth']} > "
                                         f"{item['vw']})")
+                    if item.get("beyond_viewport") and item["sel"] == ".qc-vll-chip":
+                        continue  # ADO 148189: the quick-filter strip scrolls sideways by design (page_hscroll checked above)
                     if item.get("beyond_viewport"):
                         findings.append(f"{key} {where}: {item['sel']} extends beyond the viewport "
                                         f"({item['width']}px of {item['vw']})")
+                    if (item.get("clipped") and item["sel"] in (".qc-vll-tag", ".qc-vll-chip")
+                            and _documented_truncation(item, expected, report[key]["tooltips"])):
+                        continue  # ADO 148189: intentional, documented truncation with full-name tooltip
                     if item.get("clipped") and item["sel"] in (".qc-vll-tag", ".qc-vdt-tag", ".qc-vll-chip"):
                         findings.append(f"{key} {where}: {item['sel']} text is clipped "
                                         f"(ellipsis={item['ellipsis']}, clamp={item['line_clamp']})")
@@ -683,6 +810,17 @@ def test_143033_max_length_category_on_public_pages(page, disposable, anon_pages
     with open(os.path.join(VB_EVIDENCE_DIR, "143033_charlimit_report.json"), "w", encoding="utf-8") as handle:
         json.dump({"findings": findings, "report": report}, handle, ensure_ascii=False, indent=1, default=str)
     assert not findings, "PRODUCT (char-limit frontend): " + " || ".join(findings)
+
+
+def _documented_truncation(item: dict, full_name: str, tooltips: list[dict]) -> bool:
+    """ADO 148189 (dev, documented): the card tag wraps to 2 lines then ellipsis; a
+    quick-filter chip is one line capped with an ellipsis; both carry the FULL
+    name as tooltip. Only a clip matching that design is accepted."""
+    if not any(t["title"] == full_name for t in tooltips):
+        return False
+    if item["sel"] == ".qc-vll-tag":
+        return str(item.get("line_clamp")) == "2"
+    return bool(item.get("ellipsis"))
 
 
 @AUTH_FREE_PAGE
