@@ -485,6 +485,13 @@ class MemberServicesPage(BasePage):
     @allure.step("Switch the site language to English")
     def switch_to_english(self) -> "MemberServicesPage":
         self.header.switch_to_english()
+        # The old AR URL already satisfies the path marker, so wait for the
+        # reload to actually land on the English document first.
+        try:
+            self.page.wait_for_function(
+                "() => document.documentElement.lang.startsWith('en')", timeout=30000)
+        except Exception:
+            pass
         self._wait_for_member_services_after_language_switch()
         return self
 
