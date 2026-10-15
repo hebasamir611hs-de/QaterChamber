@@ -886,7 +886,14 @@ class MagazineIssueAdminPage(ObjectAuthoringPage):
     def set_active_status(self, active) -> "MagazineIssueAdminPage":
         """Ticks/sets Active Status. Accepts True/False or an option label.
         Raises AssertionError(ACTIVE_STATUS_UNAVAILABLE + this attempt's probe)
-        when the list offers no matching option — never fakes a value."""
+        when the list offers no matching option — never fakes a value.
+        Since the 2026-10 fix (#148014) Active Status renders as a checkbox."""
+        box = self._active_status_checkbox()
+        if box.count():
+            if isinstance(active, str):
+                active = active.strip().lower() in ("true", "yes", "active")
+            box.check() if active else box.uncheck()
+            return self
         options = self.active_status_options(keep_open=True)
         if isinstance(active, str):
             wanted = [active]
@@ -927,13 +934,22 @@ class MagazineIssueAdminPage(ObjectAuthoringPage):
                 pass
             return False
 
+    def _active_status_checkbox(self):
+        return self.page.get_by_role("checkbox", name=self.label_pattern(FIELD_ACTIVE_STATUS))
+
     def active_status_value(self) -> str:
         """What the Active Status control shows on the open form."""
+        box = self._active_status_checkbox()
+        if box.count():
+            return "true" if box.is_checked() else "false"
         return self._active_status_combobox().input_value()
 
     def active_status_stored(self) -> str:
         """The stored value the form loaded (hidden ObjectField_activeStatus,
-        falling back to the combobox text): "true" for the 7 real issues."""
+        falling back to the combobox text): "true" for the 7 real issues.
+        Checkbox form (post-#148014): the box's checked state is the value."""
+        if self._active_status_checkbox().count():
+            return self.active_status_value()
         hidden = self._form().locator('input[name="ObjectField_activeStatus"]')
         value = hidden.input_value() if hidden.count() else ""
         return value or self.active_status_value()

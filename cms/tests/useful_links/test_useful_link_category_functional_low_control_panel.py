@@ -324,7 +324,13 @@ def test_valid_positive_integer_display_order_saves(page, browser):
         assert saved, f"Display Order 3 was refused: {admin.last_submit}"
         with anonymous_public_view(browser) as public:
             assert public.wait_for_category(title)
-            assert public.category_titles().index(title) == 2, "Category is not rendered at position 3"
+            # Public order is ascending Display Order. Real categories sit on the
+            # 100-grid (100, 200, ...), so Display Order 3 must render FIRST — the
+            # old "index 2" read "3" as a slot number, not as an order value.
+            titles = public.category_titles()
+            assert titles.index(title) == 0, (
+                f"Display Order 3 category is not rendered before the 100-grid categories: {titles}"
+            )
     finally:
         admin.safe_cleanup(title)
 
