@@ -854,7 +854,7 @@ def test_webform_hero_banner_tokens(page):
     assert weight_matches(style["fontWeight"], "Bold")
     assert px_close(style["fontSize"], "30px")
     assert px_close(style["lineHeight"], "38px")
-    hero_bg = form.style_of("section.qc-etf", ["backgroundImage"])["backgroundImage"]
+    hero_bg = form.style_of(".qc-etf__hero", ["backgroundImage"])["backgroundImage"]
     assert "gradient" in hero_bg, "hero band must render a gradient background"
 
 
