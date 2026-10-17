@@ -821,7 +821,8 @@ def test_risk_profile_selection_and_required(page, fx):
       story="Opportunity Details", prio=2)
 def test_industry_pool_multi_select(page, fx):
     sp = guarded_form(page)
-    options = sp.option_labels("industry_pool")[1:]
+    # The multi-select (fix of bug 149678) has no "Select…" placeholder; drop one only if present.
+    options = [o for o in sp.option_labels("industry_pool") if o.strip() and not o.strip().lower().startswith("select")]
     assert options == ["Technology", "Energy", "Infrastructure", "Finance", "Trade"], options
     sp.fill_valid(valid_values(fx), skip=("industry_pool",)).click_submit()
     assert_blocked(sp, "industry_pool", MSG["en"]["required"])

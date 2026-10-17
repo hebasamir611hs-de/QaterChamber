@@ -1491,7 +1491,8 @@ class MagazineIssueAdminPage(ObjectAuthoringPage):
             "title": title, "title_ar": f"QCTEST-{prefix} عدد المجلة",
             "description": f"QCTEST-{prefix} disposable automated-test issue description.",
             "description_ar": f"QCTEST-{prefix} وصف عدد تجريبي تم إنشاؤه تلقائيًا.",
-            "issue_number": f"QCTEST-{prefix}", "cover_path": self.DEFAULT_COVER,
+            "issue_number": f"QCTEST-{prefix}", "page_count": "10", "article_count": "5",
+            "issue_date": "01/01/2026", "cover_path": self.DEFAULT_COVER,
             "pdf_path": self.DEFAULT_PDF, "active_status": True,
         }
         data.update(mapped)

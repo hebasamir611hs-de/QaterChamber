@@ -1106,6 +1106,40 @@ def _fill_disposable_member(
     admin.upload_member_photo(photo_path or _unique_photo_fixture())
 
 
+def _filter_list_by_name(admin, name: str) -> None:
+    """HEALED 2026-10-17: the Board Member list now holds 34+ rows over 4 pages, so a
+    disposable row (high Display Order) is not on page 1. Narrow the list with the
+    "Search entries" box before reading the row's workflow status."""
+    page = admin.page
+    row = page.locator("table tbody tr", has_text=name).first
+    for _ in range(6):   # list load / search index can lag a just-saved row: re-apply, up to ~60 s
+        box = page.locator('input[placeholder^="Search entries"]').first
+        box.wait_for(timeout=30000)
+        page.wait_for_timeout(1500)
+        box.fill(name)
+        box.press("Enter")
+        try:
+            row.wait_for(timeout=8000)
+            return
+        except Exception:
+            page.reload()
+    row.wait_for(timeout=5000)
+
+
+def _wait_save_settled(admin, timeout_ms: int = 30000) -> None:
+    """HEALED 2026-10-17: Publish now runs async (spinner on Save as Draft/Publish);
+    wait until the buttons are no longer busy before reading the outcome."""
+    page = admin.page
+    waited = 0
+    while waited < timeout_ms:
+        busy = page.locator("button:has-text('Publish')[disabled], button:has-text('Publish') .spinner-border, "
+                            "button:has-text('Publish') .loading-animation").count()
+        if not busy and page.locator("button:has-text('Publish')").count():
+            break
+        page.wait_for_timeout(500); waited += 500
+    page.wait_for_timeout(1500)
+
+
 def _poll_public(check_fn, reload_fn, timeout: float = 5.0, interval: float = 0.5) -> bool:
     """Reload-and-check loop against cms-profile.md's measured propagation
     budget (poll 5s, 0.5s interval) — never a bare sleep. Checks once before
@@ -1143,7 +1177,9 @@ def test_create_board_member_end_to_end_draft_through_publish(page, browser):
     appears on the public Board Members grid — a real delivery-surface
     assertion, not just a CMS-side status read (cms-testing.md R1)."""
     admin = BoardMembersAdminPage(page)
-    qctest_name = "QCTEST-133470 Board Member E2E"
+    # HEALED 2026-10-17: per-run unique title; a fixed title collided with a leftover
+    # published row whose teardown delete had failed (row read as Published after Save as Draft).
+    qctest_name = f"QCTEST-133470 Board Member E2E {time.strftime('%m%d%H%M%S')}"
 
     anon_context = new_context(browser, use_auth_state=False)
     anon_page = anon_context.new_page()
@@ -1156,7 +1192,9 @@ def test_create_board_member_end_to_end_draft_through_publish(page, browser):
             admin.open_new_member_form()
 
         with allure.step("Fill mandatory fields and Save as Draft"):
-            _fill_disposable_member(admin, qctest_name, category="Board Member", active=True, display_order="970")
+            # HEALED 2026-10-17: Display Order is now unique per section; use a per-run 100-grid value.
+            _fill_disposable_member(admin, qctest_name, category="Board Member", active=True,
+                                    display_order=str(9500 + (int(time.time()) // 60 % 40) * 100))
             admin.save_as_draft()
 
         # A fresh re-navigation before reading row_status_text is required —
@@ -1168,6 +1206,7 @@ def test_create_board_member_end_to_end_draft_through_publish(page, browser):
         # the true, persisted status. Same fix applied at every such check
         # below in this batch.
         admin.open_entries_list()
+        _filter_list_by_name(admin, qctest_name)  # HEALED 2026-10-17: list paginates (34+ rows)
         assert admin.row_status_text(qctest_name) == "Draft", (
             f"expected {qctest_name!r} to show Status 'Draft' in the entries "
             f"list immediately after Save as Draft"
@@ -1178,6 +1217,7 @@ def test_create_board_member_end_to_end_draft_through_publish(page, browser):
             admin.submit_for_publishing()
 
         admin.open_entries_list()
+        _filter_list_by_name(admin, qctest_name)  # HEALED 2026-10-17: list paginates (34+ rows)
         assert admin.row_status_text(qctest_name) == STATUS_PUBLISHED, (
             f"expected {qctest_name!r} to show Status 'Approved' in the "
             f"entries list immediately after Submit for Publishing"
@@ -4146,10 +4186,13 @@ def test_professional_experience_empty_role_title_rejected(disposable_member):
         name, category="Board Member", active=True, display_order="915",
         professional_experience_entries='[{"role":"","org":"Qatar Chamber"}]',
     )
+    _wait_save_settled(admin)
     assert admin.is_save_error_shown(), (
         "a Professional Experience entry with an empty Role/Title was "
         "accepted — CONFIRMED LIVE this field has no per-key validation"
     )
+    # HEALED 2026-10-17: the refusal must be THIS rule, not an unrelated required field.
+    assert 'Each Professional Experience entry needs a Role/Title.' in admin.page.locator("body").inner_text(), admin.save_error_text()
 
 
 @allure.epic("About Us")
@@ -4172,10 +4215,13 @@ def test_professional_experience_empty_organization_rejected(disposable_member):
         name, category="Board Member", active=True, display_order="916",
         professional_experience_entries='[{"role":"Board Member","org":""}]',
     )
+    _wait_save_settled(admin)
     assert admin.is_save_error_shown(), (
         "a Professional Experience entry with an empty Organization was "
         "accepted — CONFIRMED LIVE this field has no per-key validation"
     )
+    # HEALED 2026-10-17: the refusal must be THIS rule, not an unrelated required field.
+    assert 'Each Professional Experience entry needs an Organization.' in admin.page.locator("body").inner_text(), admin.save_error_text()
 
 
 @allure.epic("About Us")

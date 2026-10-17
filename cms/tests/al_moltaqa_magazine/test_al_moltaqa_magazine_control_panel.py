@@ -91,6 +91,7 @@ from cms.pages.al_moltaqa_magazine.magazine_issue_admin_page import (
     MagazinePublicView,
 )
 from cms.pages.components.object_authoring_page import (
+    shows_message,
     STATUS_DRAFT,
     STATUS_PUBLISHED,
     STATUS_UNPUBLISHED,
@@ -122,6 +123,24 @@ OUTAGE_APPROVED = os.getenv("QC_ALLOW_MAGAZINE_PAGE_OUTAGE", "") == PUBLIC_PAGE_
 def _title(tc_id: str, suffix: str = "") -> str:
     """`QCTEST-130710-<tc>-<stamp>[ suffix]` — the only namespace any delete accepts."""
     return f"{QCTEST_PREFIX}{tc_id}-{STAMP}" + (f" {suffix}" if suffix else "")
+
+
+def _liferay_alerts(admin, timeout: float = 15.0) -> list[str]:
+    """Row lifecycle actions report in Liferay's own alert ("Success:Your request
+    completed successfully. "<code>" was unpublished; ..."), not the edit bar."""
+    texts: list[str] = []
+
+    def _seen() -> bool:
+        try:
+            texts[:] = [t.strip() for t in admin.page.locator(".alert, [role='alert']").all_inner_texts() if t.strip()]
+        except Exception:  # noqa: BLE001 — page settling
+            return False
+        return bool(texts)
+    try:
+        wait_until(_seen, timeout=timeout, poll=0.5)
+    except WaitTimeoutError:
+        pass
+    return texts
 
 
 def _data(title: str, **overrides) -> dict:
@@ -892,7 +911,7 @@ def test_publish_updates_status_cms(page, disposable, anon_pages):
     allure.attach("\n".join(admin.feedback_banners()) or "(none)", name="banners after Publish")
     _assert_published(admin, entry)
     assert _history_has(admin, entry, editor_name, r"publish|approv"), "History records no Publish by the Editor"
-    assert any(MSG_SAVED_AND_PUBLISHED in b for b in banners), f"no 'Saved and published.' message: {banners}"
+    assert any(shows_message(b, MSG_SAVED_AND_PUBLISHED) for b in banners), f"no 'Saved and published.' message: {banners}"
 
     # Step 3 — Latest Issue card on the public page.
     _require_active_status(admin, entry)
@@ -934,14 +953,16 @@ def test_unpublish_updates_status_cms(page, disposable, anon_pages):
     admin.open_entries_list()
     _pinned(admin, ROLE_EDITOR)
     dialogs = admin.run_row_action(entry, "unpublish")
-    banners = admin.top_messages(evidence="144109")
+    alerts = _liferay_alerts(admin)
+    banners = admin.top_messages(evidence="144109") + alerts
     allure.attach(f"dialogs {dialogs}\ntop-of-page message {banners}", name="Unpublish feedback")
     assert _wait_status(admin, entry, STATUS_UNPUBLISHED, 60.0) == STATUS_UNPUBLISHED
     assert _history_has(admin, entry, editor_name, r"unpublish"), "History records no Unpublish by the Editor"
 
     # Step 3 — gone from the public page within the budget.
     _assert_not_public_within_budget(anon_pages, title)
-    assert banners, f"no success message after Unpublish (dialogs {dialogs})"
+    assert any(shows_message(b, "was unpublished") for b in banners), (
+        f"no success message after Unpublish (dialogs {dialogs}, messages {banners})")
 
 
 @AUTH_FREE_PAGE
