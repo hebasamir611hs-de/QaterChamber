@@ -235,8 +235,6 @@ Manager, not silently corrected here):
     what is observed on each run.
 """
 
-from axe_playwright_python.sync_playwright import Axe
-
 from core.web.base_page import BasePage
 from config.settings import web_url
 from web.pages.components.header_component import HeaderComponent
@@ -554,6 +552,28 @@ class AccessibilityToolsComponent(BasePage):
         self.click(self.HIGH_CONTRAST_SWITCH)
         return self
 
+    def open_panel(self) -> "AccessibilityToolsComponent":
+        """Opens the widget and waits for the panel to be present."""
+        self.click_accessibility_button()
+        self.wait_for(self.PANEL)
+        return self
+
+    def is_high_contrast_switch_checked(self) -> bool:
+        return self.high_contrast_toggle_state() == "true"
+
+    def enable_high_contrast(self) -> "AccessibilityToolsComponent":
+        """Opens the panel, flips High Contrast only if not already on, waits
+        for the product's own `<html class="qc-a11y-contrast">` signal, then
+        closes the panel. Idempotent -- mirrors enable_dark_mode()."""
+        self.open_panel()
+        if not self.is_high_contrast_switch_checked():
+            self.activate_high_contrast()
+        self.page.wait_for_function(
+            "() => document.documentElement.classList.contains('qc-a11y-contrast')"
+        )
+        self.close_panel()
+        return self
+
     def is_high_contrast_active(self) -> bool:
         """True if `<html>` carries the `qc-a11y-contrast` class -- the real,
         CLI-confirmed mechanism the toggle uses (NOT a body/data attribute;
@@ -574,6 +594,11 @@ class AccessibilityToolsComponent(BasePage):
         an empty list is a genuine, observed 0-violations result, never
         assumed (confirmed live: 0 violations on the EN homepage with High
         Contrast active -- see module docstring)."""
+        # Imported lazily: axe-playwright-python is not in requirements.txt
+        # (removed 2026-08-18), so a module-level import would break
+        # collection for every page that composes this component.
+        from axe_playwright_python.sync_playwright import Axe
+
         axe = Axe()
         results = axe.run(self.page, options={"runOnly": {"type": "rule", "values": ["color-contrast"]}})
         return results.response["violations"]

@@ -95,6 +95,7 @@ import re
 
 from config.settings import web_url
 from core.web.base_page import BasePage
+from web.pages.components.accessibility_tools_component import AccessibilityToolsComponent
 
 TIR_CARNET_PATH = "/our-services/tir-carnet"
 
@@ -510,3 +511,159 @@ class TirCarnetPage(BasePage):
 
     def file_titles(self) -> list:
         return self.texts(self.FILE_TITLE)
+
+    # ---- Global chrome / extra regions (batch 2, confirmed live 2026-09-24) --
+    # Header language toggle routes through /c/portal/update_language and
+    # lands on the other locale's canonical URL. Dark mode is reached only via
+    # the site-wide Accessibility tools widget.
+    PAGE_BODY = "body"
+    HEADER = "header.qc-global-site-header"
+    HEADER_NAV_LINK = "header.qc-global-site-header a.qc-nav-link"
+    LANG_TOGGLE = "header.qc-global-site-header a.qc-lang-switcher"
+    HERO_COPY = ".qc-tir-hero-copy"
+    HERO_ART = ".qc-tir-hero-art"
+    # Rich-text body copy inside content sections only (the hero description
+    # is also `.qc-tir-rt`, white on the gradient, and must not stand in).
+    SECTION_RT = "section.qc-tir-section .qc-tir-rt"
+    # Section prose only — SECTION_RT minus the card/step/FAQ rich text that
+    # the language case checks under their own slots (avoids double-counting).
+    SECTION_PROSE = ("section.qc-tir-section .qc-tir-rt:not(.qc-tir-card-desc)"
+                     ":not(.qc-tir-step-desc):not(.qc-tir-faq-a)")
+
+    def toggle_language(self) -> "TirCarnetPage":
+        """Click the header language toggle and wait for the real navigation
+        (URL changed) plus the page root — never read state straight after
+        click(), which still sees the previous locale."""
+        before = self.page.url
+        self.click(self.LANG_TOGGLE)
+        self.wait_for_url(lambda url: url != before, timeout=20000)
+        self.wait_for(self.SECTION)
+        self.wait_for(self.HERO_TITLE)
+        return self
+
+    def enable_dark_mode(self) -> "TirCarnetPage":
+        """Flip the real Dark mode switch, then wait for the theme's CSS
+        colour transitions to finish — computed colours read mid-transition
+        are interpolated values (confirmed live: index labels measured
+        rgb(199,199,199) mid-fade vs rgb(237,237,237) settled)."""
+        AccessibilityToolsComponent(self.page).enable_dark_mode()
+        self.page.wait_for_function(
+            "() => document.getAnimations().every((a) => a.playState !== 'running')", timeout=10000
+        )
+        return self
+
+    def wait_for_fonts(self) -> "TirCarnetPage":
+        """Wait for web fonts (Cairo) so text-driven sizes are final."""
+        self.page.wait_for_function("() => document.fonts.status === 'loaded'", timeout=15000)
+        return self
+
+    def scroll_to(self, locator: str, index: int = 0) -> None:
+        self.page.locator(locator).nth(index).scroll_into_view_if_needed()
+
+    def language_toggle_label(self) -> str:
+        return self.text(self.LANG_TOGGLE).strip()
+
+    def theme(self):
+        return self.page.evaluate("() => document.documentElement.getAttribute('data-theme')")
+
+    def is_displayed(self, locator: str, index: int = 0) -> bool:
+        return self.page.locator(locator).nth(index).is_visible()
+
+    def text_contents(self, locator: str) -> list:
+        """textContent of every match — reads collapsed (hidden) FAQ answers
+        too, which inner_text() reports as ''."""
+        return [" ".join((t or "").split()) for t in self.page.locator(locator).all_text_contents()]
+
+    def resolved_text_align(self, locator: str, index: int = 0) -> str:
+        """Computed text-align resolved to a physical side (start/end are
+        logical: start == right under direction: rtl)."""
+        return self.page.locator(locator).nth(index).evaluate(
+            """(el) => { const s = getComputedStyle(el), rtl = s.direction === 'rtl', a = s.textAlign;
+                if (a === 'start') return rtl ? 'right' : 'left';
+                if (a === 'end') return rtl ? 'left' : 'right';
+                return a; }"""
+        )
+
+    def computed_styles_all(self, locator: str, props: list) -> list:
+        return self.page.locator(locator).evaluate_all(
+            "(els, props) => els.map((el) => { const s = getComputedStyle(el); const o = {};"
+            " for (const p of props) o[p] = s[p]; return o; })",
+            props,
+        )
+
+    def section_in_view(self):
+        return self.page.evaluate(
+            """(sel) => { const s = [...document.querySelectorAll(sel)].find((e) => {
+                    const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; });
+                return s ? (s.id || (s.querySelector('h2') || {}).textContent || null) : null; }""",
+            self.SECTION_BLOCK,
+        )
+
+    def horizontal_overflow_px(self) -> int:
+        return self.page.evaluate(
+            "() => document.documentElement.scrollWidth - document.documentElement.clientWidth"
+        )
+
+    def overflowing_elements(self) -> list:
+        return self.page.evaluate(
+            """() => [...document.querySelectorAll("body *")]
+                .filter((e) => { const r = e.getBoundingClientRect();
+                    return r.width > 0 && r.right > innerWidth + 1 && getComputedStyle(e).visibility !== "hidden"; })
+                .slice(0, 5).map((e) => e.tagName.toLowerCase() + "." + String(e.className).trim()
+                    + " (right=" + Math.round(e.getBoundingClientRect().right) + "px)")"""
+        )
+
+    def clipped_text_elements(self) -> list:
+        return self.page.evaluate(
+            """() => [...document.querySelectorAll("header.qc-tir-hero *, .qc-tir-content *")]
+                .filter((e) => e.offsetParent !== null && e.children.length === 0
+                    && e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).overflowX !== "visible")
+                .map((e) => String(e.className) || e.tagName)"""
+        )
+
+    def text_contrast(self, locator: str, index: int = 0) -> dict:
+        """WCAG contrast of the nth match's text against the first solid
+        ancestor background (text alpha blended). ratio=None when a gradient
+        or image background is reached first (not measurable)."""
+        return self.page.locator(locator).nth(index).evaluate(
+            """
+            (el) => {
+                const parse = (c) => { const m = c.match(/[0-9.]+/g) || [0, 0, 0, 0];
+                    return [+m[0], +m[1], +m[2], m.length > 3 ? +m[3] : 1]; };
+                const lum = (rgb) => { const f = (v) => { v /= 255;
+                    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+                    return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]); };
+                const s = getComputedStyle(el);
+                let node = el, bg = null, blocker = null;
+                while (node && node.nodeType === 1) {
+                    const cs = getComputedStyle(node);
+                    if (cs.backgroundImage && cs.backgroundImage !== "none") { blocker = cs.backgroundImage; break; }
+                    const c = parse(cs.backgroundColor);
+                    if (c[3] > 0) { bg = c; break; }
+                    node = node.parentElement;
+                }
+                if (!bg && !blocker) bg = [255, 255, 255, 1];
+                const fg = parse(s.color);
+                const out = {color: s.color, fontSize: parseFloat(s.fontSize), fontWeight: +s.fontWeight,
+                             text: (el.textContent || "").trim().slice(0, 40)};
+                if (!bg) return Object.assign(out, {ratio: null, background: blocker});
+                const a = fg[3];
+                const mix = [0, 1, 2].map((i) => fg[i] * a + bg[i] * (1 - a));
+                const l1 = lum(mix), l2 = lum(bg);
+                return Object.assign(out, {ratio: Math.round((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05) * 100) / 100,
+                                           background: "rgb(" + bg.slice(0, 3).join(", ") + ")"});
+            }
+            """
+        )
+
+    def relative_luminance(self, css_colour: str) -> float:
+        return self.page.evaluate(
+            """(c) => { const m = (c.match(/[0-9.]+/g) || [0, 0, 0]).map(Number);
+                const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+                return 0.2126 * f(m[0]) + 0.7152 * f(m[1]) + 0.0722 * f(m[2]); }""",
+            css_colour,
+        )
+
+    def child_box(self, parent: str, child: str, index: int = 0):
+        """bounding_box() of the first `child` inside the index-th `parent`."""
+        return self.page.locator(parent).nth(index).locator(child).first.bounding_box()

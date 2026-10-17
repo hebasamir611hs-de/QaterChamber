@@ -83,6 +83,7 @@ import pytest
 from cms.pages.control_panel.login_page import CmsLoginPage
 from cms.pages.vision_mission_objectives.vmo_admin_page import ENTRY_TITLE, VmoAdminPage
 from web.pages.vision_mission_objectives.vmo_page import VmoPage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 # ---------------------------------------------------------------------------
 # UNBLOCKED 2026-09-07 (this session): the "developer mode connection limit"/
@@ -136,9 +137,7 @@ def _cms_admin(page) -> VmoAdminPage:
 
     login = CmsLoginPage(page)
     page.goto(control_panel_url("/home"))
-    already_authenticated = (
-        page.locator(login.LOGIN_SUCCESS_INDICATOR).first.is_visible()
-    )
+    already_authenticated = login.login_succeeded()
     if not already_authenticated:
         login.open_login()
         user = os.environ.get("TEST_USER") or os.environ.get("CMS_USERNAME")
@@ -352,7 +351,7 @@ def test_vmo_cp_136177_verify_that_a_site_content_editor_can_create_full_bilingu
                 admin.fill_text(label, value)
             admin.submit_for_publishing()
 
-        assert admin.current_status() == "Approved"
+        assert admin.current_status() == STATUS_PUBLISHED
 
         with allure.step("Anonymous visitor sees the new EN content live"):
             vmo_en = _anon_vmo_page(browser).open_vmo("en")
@@ -471,7 +470,7 @@ def test_vmo_cp_136180_verify_that_publishing_the_page_displays_a_bilingual_succ
             except Exception:
                 toast_text = ""
 
-        assert admin.current_status() == "Approved"
+        assert admin.current_status() == STATUS_PUBLISHED
         if not toast_text:
             allure.attach(
                 "No toast/status/alert element rendered after Submit for Publishing on manage-vmo-section "
@@ -508,7 +507,7 @@ def test_vmo_cp_136181_verify_that_unpublishing_a_previously_published_page_make
     with allure.step("Capture baseline"):
         admin.open_entry("objectives")
         baseline = admin.snapshot("objectives")
-        assert baseline["status"] == "Approved"
+        assert baseline["status"] == STATUS_PUBLISHED
 
     try:
         with allure.step("Unpublish the Objectives entry"):
@@ -730,7 +729,7 @@ def test_vmo_cp_136188_verify_that_publish_is_blocked_when_a_mandatory_field_is_
 
         with allure.step("Publish is blocked -- status is unchanged, a validation message is shown"):
             status_after = admin.current_status()
-            assert status_after != "Approved", (
+            assert status_after != STATUS_PUBLISHED, (
                 f"TC 136188: expected Publish to be blocked with Section Label empty, "
                 f"but status moved to {status_after!r}"
             )
@@ -774,7 +773,7 @@ def test_vmo_cp_136189_verify_that_the_full_draft_preview_publish_unpublish_life
     with allure.step("Capture baseline"):
         admin.open_entry("objectives")
         baseline = admin.snapshot("objectives")
-        assert baseline["status"] == "Approved"
+        assert baseline["status"] == STATUS_PUBLISHED
 
     try:
         with allure.step("Step 1: Unpublish to edit, change Headline, Save as Draft"):
@@ -799,7 +798,7 @@ def test_vmo_cp_136189_verify_that_the_full_draft_preview_publish_unpublish_life
         with allure.step("Step 3: Publish -- now public"):
             if admin.is_save_as_draft_disabled() is False:
                 admin.submit_for_publishing()
-            assert admin.current_status() == "Approved"
+            assert admin.current_status() == STATUS_PUBLISHED
             vmo2 = _anon_vmo_page(browser).open_vmo("en")
             assert marker in vmo2.section_headline("Objectives")
 

@@ -8,7 +8,7 @@ bare asserts (Page Objects expose state; tests assert).
 from core.utils.logger import get_logger, log_action
 from core.utils.reporting import attach_screenshot
 from core.web.license_gate import clear_license_gate, is_gate_showing, remember_target
-from core.web.overlays import MOUNT_GRACE_MS, dismiss_overlays, is_overlay_showing
+from core.web.overlays import ANNOUNCEMENT_ROOT, MOUNT_GRACE_MS, dismiss_overlays, is_overlay_showing
 from core.web.session_guard import is_login_form_showing, reauthenticate
 from config.settings import settings
 
@@ -75,7 +75,7 @@ class BasePage:
         dismiss_overlays(self.page, grace_ms=MOUNT_GRACE_MS)
         log_action(logger, "open", url)
 
-    def click(self, locator: str) -> None:
+    def click(self, locator: str, position: dict | None = None) -> None:
         # The session can drop between two calls on this page (open_x() then
         # click(), no wait_for() in between) — check before spending the
         # click's own timeout on a page that's actually the license gate or
@@ -91,7 +91,7 @@ class BasePage:
         if not on_login_flow and is_login_form_showing(self.page):
             reauthenticate(self.page)
         try:
-            self.page.locator(locator).click()
+            self.page.locator(locator).click(**({"position": position} if position else {}))
         except Exception:
             # An overlay that mounted late (or reappeared after a click-driven
             # navigation) intercepts the click, OR the session dropped mid-
@@ -103,7 +103,7 @@ class BasePage:
                 recovered = reauthenticate(self.page) or recovered
             if not recovered:
                 raise
-            self.page.locator(locator).click()
+            self.page.locator(locator).click(**({"position": position} if position else {}))
         log_action(logger, "click", locator)
 
     def type(self, locator: str, text: str) -> None:
@@ -328,6 +328,21 @@ class BasePage:
         in the iframe on the open form."""
         return self.page.frame_locator(iframe_locator).locator("body").inner_text()
 
+    def computed_style(self, locator: str, properties: list, first: bool = False) -> dict:
+        """Reads a subset of getComputedStyle() properties off `locator` (or its
+        first match when `first=True`) — the shared read used by every Figma
+        design-token assertion across Page Objects (see
+        core/web/design_tokens.py for the hex/weight/px comparison helpers
+        that consume this dict). Returns a dict keyed by the exact
+        getComputedStyle property name requested (camelCase, e.g.
+        'backgroundColor', 'fontFamily')."""
+        target = self.page.locator(locator).first if first else self.page.locator(locator)
+        return target.evaluate(
+            "(el, props) => { const s = getComputedStyle(el); const out = {}; "
+            "props.forEach(p => out[p] = s[p]); return out; }",
+            properties,
+        )
+
     def screenshot(self, test_case_id: str = "NO-TC") -> bytes:
         png = self.page.screenshot()
         attach_screenshot(png, test_case_id, settings.project_name)
@@ -343,3 +358,198 @@ class BasePage:
         if actual != expected:
             self.screenshot(test_case_id)
             raise AssertionError(f"expected text {expected!r} at {locator}, got {actual!r}")
+
+    # ---- restored 2026-10-15: dropped by the origin/main merges (31f9463 / 69fd5bd); web page objects rely on them ----
+    def open_anonymous(self, url: str) -> None:
+        """Navigate a genuinely anonymous/logged-out context (e.g. a
+        `new_context(browser, use_auth_state=False)` public-visibility
+        check) without ever calling `reauthenticate()`. `open()` above
+        unconditionally reauthenticates on any non-login-flow URL if it
+        detects a login form — correct for the normal authenticated flow,
+        but on an intentionally anonymous context that would silently log
+        the shared TEST_USER/TEST_PASSWORD back in the moment a login form
+        rendered, defeating the whole point of an anonymous read and
+        producing a false result on a public-visibility/draft/unpublish
+        check (see standards.md's "Draft/Unpublish Public-Visibility
+        Checks — Mandatory Logged-Out Context"). Only clears the
+        credential-free interstitial (license gate) and the site-wide
+        announcement overlay — neither of which authenticates anything.
+        Callers still do their own post-navigation waits (e.g. for their
+        own page's heading) since what to wait for is page-specific."""
+        self.page.goto(url, timeout=NAV_TIMEOUT_MS)
+        clear_license_gate(self.page, url)
+        dismiss_overlays(self.page, grace_ms=MOUNT_GRACE_MS)
+        log_action(logger, "open_anonymous", url)
+    def open_anonymous_keeping_overlays(self, url: str, grace_ms: int = MOUNT_GRACE_MS) -> None:
+        """Anonymous navigation that deliberately does NOT dismiss the
+        site-wide overlay registry — for the handful of cases whose SUBJECT
+        is the announcement modal itself (focus trap, close-returns-focus,
+        mid-sequence interruption; PBI 131054). Every other test must keep
+        using `open()` / `open_anonymous()`, which dismiss it, so an
+        unrelated test never has its clicks intercepted.
+
+        Still clears the credential-free license interstitial (it is not an
+        overlay under test and would replace the whole page), then waits up
+        to `grace_ms` for the client-rendered overlay to mount — the same
+        grace `dismiss_overlays()` pays — so the caller's own
+        "is the modal showing?" read does not race the mount."""
+        self.page.goto(url, timeout=NAV_TIMEOUT_MS)
+        clear_license_gate(self.page, url)
+        try:
+            self.page.locator(ANNOUNCEMENT_ROOT).first.wait_for(
+                state="visible", timeout=grace_ms
+            )
+        except Exception:  # noqa: BLE001 — absent overlay is a state the caller asserts on
+            pass
+        log_action(logger, "open_anonymous_keeping_overlays", url)
+    def double_click(self, locator: str) -> None:
+        """Two near-simultaneous clicks on one element — the wrapper form of
+        Playwright's `dblclick()`. Added 2026-09-23 for the rapid
+        double-activation edge cases (a control that must not append its
+        payload twice); it exists here, not in a Page Object, so no feature
+        object or test ever touches raw Playwright for it. Same gate/session
+        pre-check and single overlay-recovery retry as `click()` above."""
+        on_login_flow = _is_login_flow_url(self.page.url)
+        if is_gate_showing(self.page):
+            clear_license_gate(self.page)
+        if not on_login_flow and is_login_form_showing(self.page):
+            reauthenticate(self.page)
+        try:
+            self.page.locator(locator).dblclick()
+        except Exception:
+            recovered = dismiss_overlays(self.page)
+            recovered = clear_license_gate(self.page) or recovered
+            if not on_login_flow:
+                recovered = reauthenticate(self.page) or recovered
+            if not recovered:
+                raise
+            self.page.locator(locator).dblclick()
+        log_action(logger, "double_click", locator)
+    def active_element(self) -> dict | None:
+        """Descriptor of the currently focused element — identity, geometry
+        and the computed styles a focus-indicator assertion needs. `None`
+        only when there is no activeElement at all."""
+        return self.page.evaluate(self._ACTIVE_ELEMENT_JS)
+    def active_element_key(self) -> str | None:
+        """Stable identity string for the focused element (`None` when focus
+        rests on `<body>`, i.e. nothing is really focused)."""
+        descriptor = self.active_element()
+        return descriptor.get("key") if descriptor else None
+    def blur_active_element(self) -> None:
+        """Reset focus to the document start so a tab walk begins from a
+        known state — the keyboard-only equivalent of a fresh load, without
+        re-navigating (and without re-showing dismissed overlays)."""
+        self.page.evaluate(
+            "() => { if (document.activeElement && document.activeElement.blur) "
+            "document.activeElement.blur(); document.body.focus(); }"
+        )
+        log_action(logger, "blur_active_element", "document.body")
+    def tab_sequence(self, presses: int, key: str = "Tab") -> list:
+        """Press `key` `presses` times, returning the active-element
+        descriptor after EACH press (index 0 = after the first press)."""
+        sequence = []
+        for _ in range(presses):
+            self.press_key(key)
+            sequence.append(self.active_element())
+        return sequence
+    def focus_walk(self, max_presses: int, key: str = "Tab") -> dict:
+        """Walk the whole focus ring: press `key` up to `max_presses` times,
+        collecting one descriptor per stop and stopping EARLY once focus
+        cycles back to the first element reached (a completed loop). Stops
+        where focus rests on `<body>` (the wrap point in Chromium) are
+        recorded but do not terminate the walk.
+
+        Returns a REPORT, not a bare list::
+
+            {"stops": [...], "completed": bool,
+             "presses": int, "max_presses": int}
+
+        `completed` is True only when the ring actually closed — focus came
+        back to the first element the walk reached. When the press budget ran
+        out first, `completed` is False and `stops` holds a PARTIAL, prefix-
+        only view of the page's focusable set.
+
+        FALSE-GREEN GUARD (added 2026-09-28, ADO-141835). This used to return
+        the bare list, so a caller had no way to tell a whole-page walk from a
+        truncated one. The homepage grew from 154 to 185 mouse-clickable
+        elements, the 200-press budget stopped the walk short of the footer,
+        and `test_focus_indicator_never_becomes_invisible_while_tabbing`
+        PASSED — certifying a real, filed focus-visibility defect
+        (`input.qc-footer-input`, Azure bug #147180) as working, because the
+        offending element was simply never reached. Any test that asserts a
+        property "across every focusable element" MUST now fail loudly when
+        `completed` is False instead of silently judging a partial set.
+
+        Bounded by `max_presses` on purpose — an unbounded walk on a page
+        whose focusable set changes underneath it (an auto-rotating carousel)
+        would never terminate."""
+        stops = []
+        first = None
+        completed = False
+        for _ in range(max_presses):
+            self.press_key(key)
+            descriptor = self.active_element()
+            stops.append(descriptor)
+            k = descriptor.get("key") if descriptor else None
+            if k is None:
+                continue
+            if first is None:
+                first = k
+            elif k == first:
+                completed = True
+                break
+        return {
+            "stops": stops,
+            "completed": completed,
+            "presses": len(stops),
+            "max_presses": max_presses,
+        }
+    def clickable_element_keys(self) -> list:
+        """Identity strings of every mouse-clickable element currently
+        rendered — the comparison set for "nothing is mouse-only"."""
+        return self.page.evaluate(self._CLICKABLE_SNAPSHOT_JS)
+    def focus_style(self, locator: str) -> dict:
+        """Computed focus-relevant styles of a specific element (whether or
+        not it is currently focused)."""
+        return self.page.locator(locator).evaluate(
+            "el => { const cs = getComputedStyle(el); return {"
+            "outlineStyle: cs.outlineStyle, outlineWidth: cs.outlineWidth,"
+            "outlineColor: cs.outlineColor, boxShadow: cs.boxShadow,"
+            "borderStyle: cs.borderStyle, borderWidth: cs.borderWidth,"
+            "borderColor: cs.borderColor, backgroundColor: cs.backgroundColor}; }"
+        )
+    def wait_for_computed_style(self, locator: str, expected: dict,
+                                timeout: int = 5000) -> bool:
+        """Wait until every named computed-style property of `locator`
+        matches `expected`. Focus rings on this site are CSS-TRANSITIONED, so
+        the instant focus moves away the old element still reports a decaying
+        box-shadow — a same-tick "is it back to its default rendering?" read
+        is a guaranteed flake. Bounded and condition-based (no `sleep`).
+
+        Takes the element as a JSHandle rather than re-querying by selector
+        inside the page, because this framework's locators use Playwright's
+        `>>` chaining and `:has-text()` pseudo-classes, which
+        `document.querySelector` cannot parse.
+
+        Returns True if the styles settled, False on timeout — the caller
+        asserts; a Page Object never does."""
+        handle = self.page.locator(locator).first.element_handle()
+        try:
+            self.page.wait_for_function(
+                "([el, want]) => { const cs = getComputedStyle(el); "
+                "return Object.keys(want).every(k => cs[k] === want[k]); }",
+                arg=[handle, expected],
+                timeout=timeout,
+            )
+            settled = True
+        except Exception:  # noqa: BLE001 — a timeout is an observation, not an error
+            settled = False
+        log_action(logger, "wait_for_computed_style", locator, str(settled))
+        return settled
+    def wait_for_condition(self, js_expression: str, arg=None, timeout: int = 10000) -> None:
+        """Condition-based wait on an arbitrary page predicate — the
+        no-`sleep()` escape hatch for state with no DOM/network signal of its
+        own (e.g. a CSS transition finishing). Wraps Playwright's
+        `page.wait_for_function`."""
+        self.page.wait_for_function(js_expression, arg=arg, timeout=timeout)
+        log_action(logger, "wait_for_condition", js_expression[:60])

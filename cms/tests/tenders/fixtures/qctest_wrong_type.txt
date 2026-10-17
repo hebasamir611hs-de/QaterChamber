@@ -1,0 +1,1 @@
+QCTEST-WRONGTYPE not a pdf

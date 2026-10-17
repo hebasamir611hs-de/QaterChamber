@@ -1,1077 +1,919 @@
 """
 web/tests/business_opportunities/test_business_opportunities_listing_web.py
-— Web-platform cases for PBI 130697 (INVEST — Business Opportunities), the
-Business Opportunities Listing page (hero, search, trending chips, sidebar
-filters, Sort By, Active/Archive tabs, card grid, Load More).
 
-Source: the injected Azure DevOps suite (plan 137724, suite 140361), filtered
-to the `Automation`-tagged Web cases whose subject is this page. Scripted
-here (47): 143207-143212, 143215, 143221, 143232-143234, 143236, 143238,
-143244-143250, 143252, 143262, 143263, 143265, 143267, 143291-143307,
-143314-143318 (Opportunity Card rendering).
+Web cases for PBI 130697 (INVEST — Business Opportunities), public LISTING
+page: hero, search, trending chips, sidebar filters, sort, Active/Archive
+tabs, card grid, Load More, theme, language, responsive.
+Azure plan 137724 / suite 140361. Phase-3 W3 run, re-verified live on qcdev
+2026-10-12.
 
-NO LIVE LOCATOR EXTRACTION THIS BATCH — every `BusinessOpportunitiesListingPage`
-locator is a `TODO(locator)` placeholder — see that module's docstring.
-
-Seeded-dataset preconditions (143232, 143234, 143299) and the scheduled
-Archive-Date boundary transition (143236) assume the environment carries the
-exact test data each case names in its own description; this batch cannot
-create or time-travel that data without live CMS/clock access, so each test
-below asserts the case's own expected values directly (per that case's test
-data) rather than inventing a substitute.
+Rules applied (web_rules.md):
+- Every test runs in a fresh UNAUTHENTICATED context (`{"auth": False}`).
+- Read-only: expected values come from the real records via the public
+  `/o/qc-business-opportunities-api` (see the Page Object), never from
+  seeded data the cases assume but qcdev does not have.
+- UI tokens are compared to the PBI's Figma frames (file J3e1thav8NIu6a3XhC6Wcl):
+    4964:222584 listing desktop 1920 LIGHT   4964:229379 listing desktop 1920 DARK
+    4964:222630 listing mobile 390 LIGHT     4964:229425 listing mobile 390 DARK
+  No AR and no tablet listing frame exists — AR is checked for mirroring and
+  AR copy, 768 against the case text.
+  Tolerances (bug-rules Rule 1): text/colour exact, layout +-2 px, images +-5 px.
+  UI tests collect every mismatch and fail once with the full list.
+- Not scripted: 143251 (Manual — checked visually, see report).
+  Blocked (state not creatable read-only): 143211, 143304, 143252 (only 4
+  Active < page size 6, Load More never shows), 143236 (Archive Date
+  boundary), 143238 (zero opportunities site-wide).
 """
 
-import pytest
-import allure
+import re
 
-from web.pages.business_opportunities.listing_page import BusinessOpportunitiesListingPage
+import allure
+import pytest
+
+from web.pages.business_opportunities.listing_page import BusinessOpportunitiesListingPage, PATH
+from web.pages.components.accessibility_tools_component import AccessibilityToolsComponent
+from web.pages.components.header_component import HeaderComponent
+from config.settings import web_url
 
 EPIC = "Business Opportunities"
 FEATURE = "Listing Page"
 
+ANON = {"auth": False}
+DESKTOP = {"viewport": (1920, 1080), "auth": False}
+MOBILE_390 = {"viewport": (390, 844), "auth": False}
+MOBILE_375 = {"viewport": (375, 812), "auth": False}
+TABLET_768 = {"viewport": (768, 1024), "auth": False}
 
-def _sev(priority: int):
-    return {
-        1: allure.severity_level.BLOCKER,
-        2: allure.severity_level.CRITICAL,
-        3: allure.severity_level.NORMAL,
-        4: allure.severity_level.MINOR,
-    }[priority]
+# ---- Figma tokens (extracted 2026-10-12 via the Figma MCP) -------------------
+FIGMA_LIGHT = {  # 4964:222584
+    "eyebrow": ("#911731", "12px", "400", "18px"),
+    "title": ("#1D1D1B", "48px", "700", "60px"),
+    "desc": ("#6C6C6B", "16px", "400", "24px"),
+    "cta": ("#FFFFFF", "#911731", "16px", "600"),
+    "crumb": "#6C6C6B",  # both "Home" and "Business Gateway"
+    "hero_h": 408, "hero_img": (424, 322), "desc_w": 648,
+    "search_card_radius": "18px", "search_card_border": "#EDEDED",
+    "search_card_shadow": "rgba(29, 29, 27, 0.05) 0px 16px 46px 0px",
+    "field": (1074, 44, "8px", "#EDEDED"), "placeholder": "#A8A8A7", "search_btn": (180, 44),
+    "trending_label": "#4A4A49", "chip_bg": "#F6F0EC", "chip_fg": "#A66F43",
+    "tab_active": ("#911731", "700"), "tab_inactive": ("#343432", "500"), "tab_base": "#A8A8A7",
+    "tabs_w": 342,
+    "card": (312, 335, "12px", "#FFFFFF", "#EDEDED"), "band_h": 180,
+    "cat": "#6C6C6B", "cat2": "#6C6467", "dot": "·", "card_title": "#1D1D1B",
+    "cell": "#7C7B7B", "rule": "#F6F6F6", "view": "#911731", "arrow_bg": "#F4E7EA",
+    "body_bg": "#FFFFFF",
+}
+FIGMA_DARK = {  # 4964:229379
+    "eyebrow": "#C44561", "title": "#FFFFFF", "desc": "#DEDEDD", "crumb": "#DEDEDD",
+    "hero_stop0": "#360711", "body_bg": "#1D1D1B",
+    "card_bg": "#1D1D1B", "card_border": "#4A4A49", "search_border": "#4A4A49",
+    "trending_label": "#EDEDED", "chip_bg": "#422C1B", "chip_fg": "#A66F43",
+    "tab_active": "#C44561", "tab_inactive": "#F6F6F6", "tab_base": "#A8A8A7",
+    "side_heading": "#C44561", "filter_label": "#F6F6F6",
+    "cat": "#DEDEDD", "cat2": "#6C6467", "card_title": "#FFFFFF", "cell": "#D0D0D0",
+    "rule": "#343432", "view": "#C44561", "arrow_bg": "#360711",
+}
+FIGMA_MOBILE = {  # 4964:222630
+    "title": ("24px", "700", "32px"), "hero_h": 546, "hero_img": (350, 246),
+    "side_bar_h": 50, "side_heading": ("#911731", "16px", "600"),
+    "tab_w": 175, "card_w": 350, "card_gap": 16, "cta_w": 350,
+}
+
+
+def _hex(css: str) -> str:
+    m = re.match(r"rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)", css or "")
+    if not m:
+        return css
+    r, g, b, a = m.groups()
+    out = "#%02X%02X%02X" % (int(r), int(g), int(b))
+    return out if a in (None, "1") else f"{out}/{a}"
+
+
+class Diff:
+    """Soft-assert collector: every Figma/case mismatch is recorded, the test
+    fails once at the end with all of them (one test = one case)."""
+
+    def __init__(self):
+        self.items = []
+
+    def eq(self, label, actual, expected):
+        if actual != expected:
+            self.items.append(f"{label}: expected {expected!r}, actual {actual!r}")
+
+    def near(self, label, actual, expected, tol):
+        if actual is None or abs(actual - expected) > tol:
+            self.items.append(f"{label}: expected {expected}+-{tol}, actual {actual}")
+
+    def true(self, label, cond, detail=""):
+        if not cond:
+            self.items.append(f"{label} {detail}".strip())
+
+    def check(self):
+        assert not self.items, "Mismatches:\n- " + "\n- ".join(self.items)
 
 
 def _open(page, locale: str = "en") -> BusinessOpportunitiesListingPage:
-    lp = BusinessOpportunitiesListingPage(page)
-    lp.open_listing(locale=locale)
-    return lp
+    return BusinessOpportunitiesListingPage(page).open_listing(locale=locale)
 
 
-# ===========================================================================
-# 143207/143300 — multiple sidebar filters combine with AND logic
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Sidebar filters")
-@allure.severity(_sev(3))
-@allure.title("Applying multiple sidebar filters together narrows the listing to opportunities matching all selected criteria")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143207
-@pytest.mark.traceability("143207")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143207")
-def test_listing_multiple_filters_apply_with_and_logic(page):
+def _active_ercs(lp, items=None):
+    items = items or lp.api_opportunities()
+    return {i["externalReferenceCode"] for i in items if lp.is_public_active(i)}
+
+
+def _archived_ercs(lp, items=None):
+    items = items or lp.api_opportunities()
+    return {i["externalReferenceCode"] for i in items if lp.is_public_archived(i)}
+
+
+def _label(item, key):
+    v = item.get(key)
+    return v.get("label") if isinstance(v, dict) else v
+
+
+def _amount_in_bucket(amount: float, bucket: str) -> bool:
+    lo, hi = {"u1": (0, 1e6), "1-5": (1e6, 5e6), "5-10": (5e6, 1e7), "10-25": (1e7, 2.5e7),
+              "25-50": (2.5e7, 5e7), "50-100": (5e7, 1e8), "100p": (1e8, float("inf"))}[bucket]
+    return lo < amount <= hi or (bucket == "100p" and amount >= lo)
+
+
+def _expected(lp, items, tab="active", **crit):
+    """Expected ERC set for a filter combination, computed from the API."""
+    pool = [i for i in items if (lp.is_public_active(i) if tab == "active" else lp.is_public_archived(i))]
+    out = set()
+    for i in pool:
+        ok = True
+        for k, v in crit.items():
+            if k == "investment_amount":
+                ok &= _amount_in_bucket(float(i.get("investmentAmount") or 0), v)
+            elif k == "country":
+                ok &= i.get("country") == v
+            else:
+                ok &= _label(i, {"sector": "sector", "investment_type": "investmentType",
+                                 "timeline": "timeline", "risk_profile": "riskProfile"}[k]) == v
+        if ok:
+            out.add(i["externalReferenceCode"])
+    return out
+
+
+def _dash(s: str) -> str:
+    return s.replace("–", "-").replace("—", "-")
+
+
+def _common(story, sev, tc, *extra):
+    def deco(fn):
+        for m in (allure.epic(EPIC), allure.feature(FEATURE), allure.story(story), allure.severity(sev),
+                  pytest.mark.web, pytest.mark.invest, pytest.mark.pbi_130697,
+                  getattr(pytest.mark, f"tc_{tc}"), pytest.mark.traceability(str(tc)),
+                  allure.label("pbi", "130697"), allure.label("testcase", str(tc))) + extra:
+            fn = m(fn)
+        return fn
+    return deco
+
+
+P2 = allure.severity_level.CRITICAL
+P3 = allure.severity_level.NORMAL
+P4 = allure.severity_level.MINOR
+FL = pytest.mark.functional_low
+REG = pytest.mark.regression
+
+
+# =============================================================================
+# P2 — tabs, search, filters (AND), reset, CTA, view details, published record
+# =============================================================================
+@_common("Status tabs", P2, 143209, FL, REG, pytest.mark.tc_143302)
+@allure.title("Active tab (default) shows only Published + Active opportunities")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_active_tab_shows_only_published_active(page):
     lp = _open(page)
-    lp.select_filter("sector", "Technology")
-    lp.select_filter("country", "Qatar")
-    lp.select_filter("risk_profile", "Low")
-    lp.apply_filters()
-    assert set(lp.card_tags()) <= {t for t in lp.card_tags() if "Technology" in t}
-    for country in lp.card_countries():
-        assert "Qatar" in country
-
-
-# ===========================================================================
-# 143300 — Apply combines the selected filters with AND logic
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Sidebar filters")
-@allure.severity(_sev(2))
-@allure.title("Clicking Apply after selecting multiple filters combines them with AND logic")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.regression
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143300
-@pytest.mark.traceability("143300")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143300")
-def test_listing_apply_combines_filters_with_and_logic(page):
-    lp = _open(page)
-    lp.select_filter("sector", "Energy")
-    lp.select_filter("country", "Qatar")
-    lp.select_filter("investment_type", "Equity")
-    lp.apply_filters()
-    for tag in lp.card_tags():
-        assert "Energy" in tag and "Equity" in tag
-    for country in lp.card_countries():
-        assert "Qatar" in country
-
-
-# ===========================================================================
-# 143208/143301 — Reset clears all filters
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Sidebar filters")
-@allure.severity(_sev(3))
-@allure.title("Clicking Reset clears all applied sidebar filters and restores the full listing")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143208
-@pytest.mark.traceability("143208")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143208")
-def test_listing_reset_restores_full_grid(page):
-    lp = _open(page)
-    before = lp.card_count()
-    lp.select_filter("sector", "Technology")
-    lp.select_filter("country", "Qatar")
-    lp.apply_filters()
-    lp.reset_filters()
-    assert lp.selected_filter_value("sector").lower().startswith("all")
-    assert lp.card_count() == before
-
-
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Sidebar filters")
-@allure.severity(_sev(2))
-@allure.title("Clicking Reset clears all applied filters back to their default values")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.regression
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143301
-@pytest.mark.traceability("143301")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143301")
-def test_listing_reset_clears_all_filter_dropdowns(page):
-    lp = _open(page)
-    lp.select_filter("sector", "Energy")
-    lp.select_filter("investment_amount", "$1M-$5M")
-    lp.apply_filters()
-    lp.reset_filters()
-    for key, expected_prefix in (
-        ("sector", "all"), ("country", "all"), ("investment_type", "all"),
-        ("investment_amount", "any"), ("timeline", "any"), ("risk_profile", "all"),
-    ):
-        assert lp.selected_filter_value(key).lower().startswith(expected_prefix)
-
-
-# ===========================================================================
-# 143209/143302 — Active tab shows only Published/Active opportunities
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Status tabs")
-@allure.severity(_sev(2))
-@allure.title("The Active tab displays only Published and Active opportunities")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.regression
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143209
-@pytest.mark.traceability("143209")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143209")
-def test_listing_active_tab_default_selected_shows_only_active(page):
-    lp = _open(page)
+    items = lp.api_opportunities()
+    assert lp.is_tab_active("active") and lp.tab_aria_selected("active") == "true"
+    assert set(lp.card_ercs()) == _active_ercs(lp, items)
+    # 143302: explicit click back onto Active after visiting Archive
+    lp.switch_tab("archive").switch_tab("active")
     assert lp.is_tab_active("active")
-    assert lp.card_count() >= 0
+    ercs = set(lp.card_ercs())
+    assert ercs == _active_ercs(lp, items) and not (ercs & _archived_ercs(lp, items))
 
 
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Status tabs")
-@allure.severity(_sev(2))
-@allure.title("Switching to the Active tab displays only Published/Active opportunities")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.regression
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143302
-@pytest.mark.traceability("143302")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143302")
-def test_listing_switching_to_active_tab_shows_only_active(page):
+@_common("Status tabs", P2, 143210, FL, pytest.mark.tc_143303)
+@allure.title("Archive tab shows only Archived opportunities")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_archive_tab_shows_only_archived(page):
     lp = _open(page)
-    lp.switch_tab("archive")
-    lp.switch_tab("active")
+    items = lp.api_opportunities()
     assert lp.is_tab_active("active")
-
-
-# ===========================================================================
-# 143210/143303 — Archive tab shows only Archived opportunities
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Status tabs")
-@allure.severity(_sev(2))
-@allure.title("The Archive tab displays only Archived opportunities")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143210
-@pytest.mark.traceability("143210")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143210")
-def test_listing_archive_tab_shows_only_archived(page):
-    lp = _open(page)
     lp.switch_tab("archive")
-    assert lp.is_tab_active("archive")
-    assert not lp.is_tab_active("active")
+    assert lp.is_tab_active("archive") and not lp.is_tab_active("active")
+    ercs = set(lp.card_ercs())
+    assert ercs == _archived_ercs(lp, items) and not (ercs & _active_ercs(lp, items))
 
 
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Status tabs")
-@allure.severity(_sev(2))
-@allure.title("Switching to the Archive tab displays only Archived opportunities")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143303
-@pytest.mark.traceability("143303")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143303")
-def test_listing_switching_to_archive_tab_updates_grid(page):
+@_common("Hero", P2, 143215, FL)
+@allure.title("Hero Submit Opportunity CTA opens the Submit a Business Opportunity webform")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_hero_cta_opens_submit_form(page):
     lp = _open(page)
-    before_titles = lp.card_titles()
-    lp.switch_tab("archive")
-    assert lp.card_titles() != before_titles or lp.is_tab_active("archive")
+    cfg = lp.api_page()
+    assert lp.hero_cta_label() == cfg["ctaLabel"] == "Submit Opportunity"
+    expect_new_tab = (cfg.get("ctaOpenBehavior") or {}).get("key") == "newTab"
+    assert (lp.get_attribute(lp.HERO_CTA, "target") == "_blank") == expect_new_tab
+    lp.click_hero_cta()
+    page.wait_for_url(re.compile(r"/submit-business-opportunity"), timeout=30000)
+    page.wait_for_selector("form", timeout=30000)
+    assert "submit-business-opportunity" in page.url
 
 
-# ===========================================================================
-# 143211/143304 — Load More appends the next page
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Load More")
-@allure.severity(_sev(3))
-@allure.title("Clicking Load More appends the next page of Active opportunities to the grid")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143211
-@pytest.mark.traceability("143211")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143211")
-def test_listing_load_more_appends_next_page(page):
+@_common("Published visibility", P2, 143232, FL)
+@allure.title("A Published + Active opportunity is visible on the Active tab with its authored fields")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_published_active_record_visible_with_fields(page):
     lp = _open(page)
-    initial_count = lp.card_count()
-    lp.click_load_more()
-    assert lp.card_count() >= initial_count
-    assert len(set(lp.card_titles())) == len(lp.card_titles())
+    rec = next(i for i in lp.api_opportunities() if i["externalReferenceCode"] == "QC-BIZOPP-130697-01")
+    assert lp.is_public_active(rec)
+    idx = lp.card_index_by_erc("QC-BIZOPP-130697-01")
+    assert lp.card_titles()[idx] == rec["opportunityTitle"]
+    tag = lp.card_tags()[idx]
+    assert tag[0] == _label(rec, "sector") and tag[-1] == _label(rec, "investmentType")
+    assert lp.card_cells(idx) == [rec["country"], rec["investmentAmountRange"]]
+    assert lp.card_banner_loaded(idx)
 
 
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Load More")
-@allure.severity(_sev(3))
-@allure.title("Clicking Load More appends the next set of opportunity cards without reloading the page")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143304
-@pytest.mark.traceability("143304")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143304")
-def test_listing_load_more_appends_without_full_reload(page):
+@_common("Search", P2, 143291, FL)
+@allure.title("A keyword matching an opportunity title returns the matching opportunities")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_search_keyword_matches_title(page):
+    # Case data 'Solar Energy' / 'Solar Energy Grid Expansion' does not exist on
+    # qcdev; the real title keyword 'Smart City' is used (brief: real data).
     lp = _open(page)
-    initial_count = lp.card_count()
-    url_before = page.url
-    lp.click_load_more()
-    assert page.url == url_before
-    assert lp.card_count() >= initial_count
+    items = lp.api_opportunities()
+    lp.search("Smart City")
+    assert lp.search_input_value() == "Smart City"
+    want = {i["externalReferenceCode"] for i in items
+            if lp.is_public_active(i) and "smart city" in i["opportunityTitle"].lower()}
+    assert want and set(lp.card_ercs()) == want
+    # Search button gives the same result as Enter
+    lp.search("Green Energy", use_button=True)
+    assert lp.card_titles() == ["Green Energy Investment Programme"]
 
 
-# ===========================================================================
-# 143212/143305 — Load More hidden once all results are loaded
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Load More")
-@allure.severity(_sev(4))
-@allure.title("The Load More button is hidden or disabled once all Active opportunities have been loaded")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143212
-@pytest.mark.traceability("143212")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143212")
-def test_listing_load_more_hides_once_all_loaded(page):
+@_common("Search", P2, 143292, FL)
+@allure.title("A keyword with no matches shows the 'No results found' message")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_search_no_match_shows_no_results(page):
     lp = _open(page)
-    for _ in range(10):
-        if not lp.is_load_more_visible():
-            break
-        lp.click_load_more()
+    lp.search("xyzNonExistent999")
+    assert lp.card_count() == 0
+    assert lp.is_no_results_message_visible()
+    assert lp.no_results_message_text().rstrip(".") == "No results found"
     assert not lp.is_load_more_visible()
 
 
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Load More")
-@allure.severity(_sev(3))
-@allure.title("The Load More button is hidden once all matching opportunities are already displayed")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143305
-@pytest.mark.traceability("143305")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143305")
-def test_listing_load_more_hidden_for_small_result_set(page):
+@_common("Sidebar filters", P2, 143300, FL, REG)
+@allure.title("Apply combines Sector + Country + Investment Type with AND logic")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_apply_combines_filters_with_and_logic(page):
     lp = _open(page)
-    lp.select_filter("investment_type", "PPP")
+    items = lp.api_opportunities()
+    for crit in ({"sector": "Energy", "country": "Qatar", "investment_type": "Equity"},   # case data
+                 {"sector": "Infrastructure", "country": "Kenya", "investment_type": "Equity"}):
+        lp.reset_filters()
+        for k, v in crit.items():
+            lp.select_filter(k, v)
+            assert lp.selected_filter_value(k) == v
+        lp.apply_filters()
+        want = _expected(lp, items, **crit)
+        assert set(lp.card_ercs()) == want, crit
+        assert lp.is_no_results_message_visible() == (not want)
+
+
+@_common("Sidebar filters", P2, 143301, FL, REG)
+@allure.title("Reset restores all six filters to their defaults and reloads the full grid")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_reset_clears_all_filter_dropdowns(page):
+    # Default labels per Figma 4964:222584 (case wording 'All country/All Types/
+    # Any Amount/Any Timeline/All' needs correction).
+    lp = _open(page)
+    full = lp.card_ercs()
+    defaults = lp.selected_filter_values()
+    assert defaults == {"sector": "All Sectors", "country": "All Countries", "investment_type": "Investment Type",
+                        "investment_amount": "Investment Amount", "timeline": "Timeline", "risk_profile": "Risk Profile"}
+    lp.select_filter("sector", "Energy")
+    lp.select_filter("investment_amount", "$1M–$5M")
     lp.apply_filters()
-    if lp.card_count() <= 12:
-        assert not lp.is_load_more_visible()
+    assert lp.card_ercs() != full
+    lp.reset_filters()
+    assert lp.selected_filter_values() == defaults
+    assert lp.card_ercs() == full
 
 
-# ===========================================================================
-# 143215 — hero CTA opens the Submit webform
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Hero")
-@allure.severity(_sev(2))
-@allure.title("Clicking the hero Submit Opportunity CTA opens the Submit a Business Opportunity webform")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143215
-@pytest.mark.traceability("143215")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143215")
-def test_listing_hero_cta_opens_submit_webform(page):
+@_common("Opportunity card", P2, 143307, FL)
+@allure.title("View Details on a card opens that opportunity's detail page")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_view_details_opens_detail_page(page):
+    # Case card 'Solar Energy Grid Expansion' does not exist; real card used.
     lp = _open(page)
-    lp.click_hero_cta()
-    page.wait_for_url("**/submit**", timeout=15000)
-    assert "submit" in page.url.lower()
+    title = "Qatar Smart City Infrastructure Fund"
+    lp.click_view_details_by_title(title)
+    page.wait_for_url(re.compile(r"business-opportunity\?opportunity=QC-BIZOPP-130697-01"), timeout=30000)
+    page.wait_for_selector("h1.qc-bod-title", timeout=30000)
+    assert page.inner_text("h1.qc-bod-title").strip() == title
+    for sec in ("#qc-bod-overview", "#qc-bod-investment", "#qc-bod-gallery"):
+        assert page.locator(sec).count() == 1, sec
 
 
-# ===========================================================================
-# 143221/143306 — trending chip applies the corresponding filter
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Trending chips")
-@allure.severity(_sev(3))
-@allure.title("Clicking a trending chip applies the corresponding filter to the listing")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143221
-@pytest.mark.traceability("143221")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143221")
-def test_listing_trending_chip_applies_filter(page):
+# =============================================================================
+# P3/P4 — filters
+# =============================================================================
+@_common("Sidebar filters", P3, 143207, FL)
+@allure.title("Sector + Country + Risk Profile together narrow the grid with AND logic")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_multiple_filters_and_logic(page):
     lp = _open(page)
-    lp.click_trending_chip("Technology")
-    assert lp.active_trending_chip_label() == "Technology"
-    for tag in lp.card_tags():
-        assert "Technology" in tag
+    items = lp.api_opportunities()
+    for crit in ({"sector": "Technology", "country": "Qatar", "risk_profile": "Low"},  # case data
+                 {"sector": "Technology", "country": "Qatar"}):
+        lp.reset_filters()
+        for k, v in crit.items():
+            lp.select_filter(k, v)
+        lp.apply_filters()
+        assert set(lp.card_ercs()) == _expected(lp, items, **crit), crit
 
 
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Trending chips")
-@allure.severity(_sev(3))
-@allure.title("Clicking a Trending chip applies the corresponding quick filter to the listing")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143306
-@pytest.mark.traceability("143306")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143306")
-def test_listing_trending_chip_infrastructure_filters_grid(page):
+@_common("Sidebar filters", P3, 143208, FL)
+@allure.title("Reset clears applied Sector + Country and restores the full Active grid")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_reset_restores_full_grid(page):
     lp = _open(page)
-    lp.click_trending_chip("Infrastructure")
-    for tag in lp.card_tags():
-        assert "Infrastructure" in tag
+    full = lp.card_ercs()
+    lp.select_filter("sector", "Technology")
+    lp.select_filter("country", "Qatar")
+    lp.apply_filters()
+    assert set(lp.card_ercs()) == _expected(lp, lp.api_opportunities(), sector="Technology", country="Qatar")
+    lp.reset_filters()
+    assert lp.selected_filter_value("sector") == "All Sectors"
+    assert lp.selected_filter_value("country") == "All Countries"
+    assert lp.card_ercs() == full and lp.is_tab_active("active")
 
 
-# ===========================================================================
-# 143232 — Published/Active opportunity visible on the public Active tab
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Publish visibility")
-@allure.severity(_sev(2))
-@allure.title("A Published opportunity with Active status is visible on the public Active tab")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143232
-@pytest.mark.traceability("143232")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143232")
-def test_listing_published_active_record_visible_on_active_tab(page):
-    """CMS-side confirmation of the record's Published/Active status is a
-    Control_Panel-surface precondition assumed already satisfied by the
-    seeded test data — this test asserts only the public rendering."""
+def _single_filter(page, key, label, bucket=None, case_options=None):
     lp = _open(page)
-    assert lp.is_tab_active("active")
-    assert lp.card_count() > 0
+    items = lp.api_opportunities()
+    d = Diff()
+    if case_options is not None:
+        d.eq(f"{key} options (dash-normalised, Figma default label)",
+             [_dash(o) for o in lp.filter_options(key)], [_dash(o) for o in case_options])
+    lp.select_filter(key, label)
+    d.eq(f"{key} selected", lp.selected_filter_value(key), label)
+    lp.apply_filters()
+    crit_val = bucket or label
+    want = _expected(lp, items, **{key: crit_val})
+    d.eq(f"{key}={label} Active grid", set(lp.card_ercs()), want)
+    d.eq("empty state when no match", lp.is_no_results_message_visible(), not want)
+    if not want:  # case value matches no Active record — prove the filter on Archive
+        lp.switch_tab("archive")
+        d.eq(f"{key}={label} Archive grid", set(lp.card_ercs()), _expected(lp, items, "archive", **{key: crit_val}))
+    d.check()
 
 
-# ===========================================================================
-# 143233 — zero-match filter combination shows the empty-results state
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Sidebar filters")
-@allure.severity(_sev(3))
-@allure.title("A filter combination matching zero opportunities shows the empty-results state, not a broken grid")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143233
-@pytest.mark.traceability("143233")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143233")
-def test_listing_zero_match_filters_show_empty_state(page):
+@_common("Sidebar filters", P3, 143293, FL)
+@allure.title("Sector = Energy narrows the grid to Energy opportunities")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_filter_sector_energy(page):
+    _single_filter(page, "sector", "Energy", case_options=[
+        "All Sectors", "Technology", "Energy", "Infrastructure", "Finance", "Agriculture",
+        "Tourism", "Healthcare", "Manufacturing", "Real Estate"])
+
+
+@_common("Sidebar filters", P3, 143294, FL)
+@allure.title("Country = United Arab Emirates narrows the grid to that country")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_filter_country_uae(page):
+    _single_filter(page, "country", "United Arab Emirates")
+
+
+@_common("Sidebar filters", P3, 143295, FL)
+@allure.title("Investment Type = Equity narrows the grid to Equity opportunities")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_filter_investment_type_equity(page):
+    _single_filter(page, "investment_type", "Equity", case_options=[
+        "Investment Type", "Equity", "Debt", "Joint Venture", "Public-Private Partnership", "Grant", "Other"])
+
+
+@_common("Sidebar filters", P3, 143296, FL)
+@allure.title("Investment Amount = $1M-$5M narrows the grid to that range")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_filter_investment_amount_1_5m(page):
+    _single_filter(page, "investment_amount", "$1M–$5M", bucket="1-5", case_options=[
+        "Investment Amount", "Under $1M", "$1M-$5M", "$5M-$10M", "$10M-$25M", "$25M-$50M", "$50M-$100M", "$100M+"])
+
+
+@_common("Sidebar filters", P3, 143297, FL)
+@allure.title("Timeline = Immediate narrows the grid to that timeline")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_filter_timeline_immediate(page):
+    _single_filter(page, "timeline", "Immediate", case_options=[
+        "Timeline", "Immediate", "1-3 months", "3-6 months", "6-12 months", "12+ months"])
+
+
+@_common("Sidebar filters", P3, 143298, FL)
+@allure.title("Risk Profile = Low narrows the grid to that risk profile")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_filter_risk_low(page):
+    _single_filter(page, "risk_profile", "Low", case_options=["Risk Profile", "Low", "Medium", "High"])
+
+
+@_common("Empty state", P3, 143233, FL)
+@allure.title("A zero-match filter combination shows the empty-results state, not a broken grid")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_zero_match_filters_show_empty_state(page):
     lp = _open(page)
     lp.select_filter("sector", "Agriculture")
     lp.select_filter("investment_amount", "$100M+")
     lp.select_filter("timeline", "Immediate")
     lp.apply_filters()
+    assert _expected(lp, lp.api_opportunities(), sector="Agriculture", investment_amount="100p",
+                     timeline="Immediate") == set()
     assert lp.card_count() == 0
     assert lp.is_no_results_message_visible()
+    assert lp.no_results_message_text().rstrip(".") == "No results found"
     assert not lp.is_load_more_visible()
+    assert lp.page.locator(".qc-bol-grid [class*='skeleton']").count() == 0
 
 
-# ===========================================================================
-# 143234/143299 — tab counts / sort order match the seeded dataset
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Status tabs")
-@allure.severity(_sev(3))
-@allure.title("The Active and Archive tab counts accurately reflect the number of opportunities in each status")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143234
-@pytest.mark.traceability("143234")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143234")
-def test_listing_tab_counts_match_seeded_dataset(page):
-    """Assumes the seeded dataset the case names (8 Active, 3 Archived)."""
+# =============================================================================
+# P3 — tabs, counts, load more, chips, sort
+# =============================================================================
+@_common("Status tabs", P3, 143234, FL)
+@allure.title("Active / Archive tab counts match the number of records in each status")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_tab_counts_match_records(page):
+    # Case assumes a seeded 8 / 3 dataset; qcdev's real records are compared.
     lp = _open(page)
-    assert "8" in lp.tab_count("active")
-    assert "3" in lp.tab_count("archive")
+    items = lp.api_opportunities()
+    assert lp.tab_count("active") == len(_active_ercs(lp, items)) == lp.card_count()
+    assert lp.tab_count("archive") == len(_archived_ercs(lp, items))
 
 
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Sort By")
-@allure.severity(_sev(3))
-@allure.title("The Sort By dropdown reorders results between 'Most Recent' and 'Oldest by Publish Date'")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143299
-@pytest.mark.traceability("143299")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143299")
-def test_listing_sort_by_reorders_grid(page):
+@_common("Load More", P4, 143212, FL, pytest.mark.tc_143305)
+@allure.title("Load More is not rendered once every matching opportunity is displayed")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_load_more_hidden_when_all_loaded(page):
     lp = _open(page)
-    assert lp.selected_sort_value() == "Most Recent"
-    most_recent_first_title = lp.card_titles()[0]
-    lp.select_sort("Oldest by Publish Date")
-    assert lp.selected_sort_value() == "Oldest by Publish Date"
-    assert lp.card_titles()[0] != most_recent_first_title
-
-
-# ===========================================================================
-# 143236 — Archive Date boundary transition (Edge)
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Archive scheduling")
-@allure.severity(_sev(2))
-@allure.title("An opportunity does not appear in the Archive tab before its Archive Date boundary and appears at/after it")
-@pytest.mark.web
-@pytest.mark.edge
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143236
-@pytest.mark.traceability("143236")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143236")
-def test_listing_archive_date_boundary_transition(page):
-    """This case's real precondition is a wall-clock boundary crossing on a
-    CMS-scheduled record — a controllable clock/CMS to force that transition
-    does not exist in this batch. `boundary_title` is a placeholder for a
-    real opportunity whose Archive Date is known to have just passed; until
-    that test-data fixture exists this test is skipped with a concrete
-    reason (per automation-standards.md: skip only for a genuinely
-    unavailable precondition, never a trivially-true assertion to fake a
-    pass). Both assertions below run unweakened once the fixture exists."""
-    boundary_title = "Archive Boundary Test Opportunity"  # TODO: real fixture with a just-passed Archive Date
-    lp = _open(page)
-    if boundary_title not in lp.card_titles():
-        pytest.skip(
-            f"PRECONDITION UNAVAILABLE — no opportunity titled {boundary_title!r} with a "
-            "known just-passed Archive Date exists in this environment; a wall-clock-"
-            "controllable CMS fixture is required to exercise this boundary for real."
-        )
-    lp.switch_tab("archive")
-    assert boundary_title in lp.card_titles()
-
-
-# ===========================================================================
-# 143238 — zero opportunities site-wide shows a clean empty state (Edge)
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Empty state")
-@allure.severity(_sev(3))
-@allure.title("The listing page shows a clean empty state when zero opportunities are published site-wide")
-@pytest.mark.web
-@pytest.mark.edge
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143238
-@pytest.mark.traceability("143238")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143238")
-def test_listing_zero_opportunities_shows_clean_empty_state(page):
-    """Requires a zero-data environment/state, which this batch cannot force
-    without a CMS wipe; asserted against whatever the reachable environment
-    shows so the shape of the check is correct once run against such an env."""
-    lp = _open(page)
-    if lp.card_count() == 0:
-        assert lp.is_no_results_message_visible()
-        assert not lp.is_load_more_visible()
-
-
-# ===========================================================================
-# 143291/143292 — search
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Search")
-@allure.severity(_sev(2))
-@allure.title("Entering a keyword matching an opportunity title returns matching results")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.regression
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143291
-@pytest.mark.traceability("143291")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143291")
-def test_listing_search_returns_matching_results(page):
-    lp = _open(page)
-    lp.search("Solar Energy")
-    assert lp.search_input_value() == "Solar Energy"
-    for title in lp.card_titles():
-        assert "Solar Energy" in title
-
-
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Search")
-@allure.severity(_sev(2))
-@allure.title("A keyword with no matching opportunities displays the 'No results found' message")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143292
-@pytest.mark.traceability("143292")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143292")
-def test_listing_search_no_matches_shows_empty_state(page):
-    lp = _open(page)
-    lp.search("xyzNonExistent999")
-    assert lp.card_count() == 0
-    assert lp.is_no_results_message_visible()
-
-
-# ===========================================================================
-# 143293-143298 — single sidebar filter narrows the grid, family
-# ===========================================================================
-SINGLE_FILTER_CASES = [
-    pytest.param("sector", "Energy", 143293, marks=(pytest.mark.tc_143293, pytest.mark.traceability("143293"))),
-    pytest.param("country", "United Arab Emirates", 143294, marks=(pytest.mark.tc_143294, pytest.mark.traceability("143294"))),
-    pytest.param("investment_type", "Equity", 143295, marks=(pytest.mark.tc_143295, pytest.mark.traceability("143295"))),
-    pytest.param("investment_amount", "$1M-$5M", 143296, marks=(pytest.mark.tc_143296, pytest.mark.traceability("143296"))),
-    pytest.param("timeline", "Immediate", 143297, marks=(pytest.mark.tc_143297, pytest.mark.traceability("143297"))),
-    pytest.param("risk_profile", "Low", 143298, marks=(pytest.mark.tc_143298, pytest.mark.traceability("143298"))),
-]
-
-
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Sidebar filters")
-@allure.severity(_sev(3))
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.parametrize("filter_key,value,tc_id", SINGLE_FILTER_CASES)
-def test_listing_single_filter_narrows_grid(page, filter_key, value, tc_id):
-    allure.dynamic.title(f"Selecting the {filter_key} filter value '{value}' and applying it narrows results to that value")
-    allure.dynamic.label("testcase", str(tc_id))
-    allure.dynamic.label("pbi", "130697")
-    lp = _open(page)
-    assert value in lp.filter_options(filter_key)
-    lp.select_filter(filter_key, value)
-    assert lp.selected_filter_value(filter_key) == value
-    lp.apply_filters()
-
-
-# ===========================================================================
-# 143307 — View Details link navigates to the correct detail page
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Card grid")
-@allure.severity(_sev(2))
-@allure.title("The View Details link on a card navigates to that opportunity's detail page")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.regression
-@pytest.mark.uat
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143307
-@pytest.mark.traceability("143307")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143307")
-def test_listing_view_details_navigates_to_correct_detail_page(page):
-    lp = _open(page)
-    title = "Solar Energy Grid Expansion"
-    assert title in lp.card_titles()
-    lp.click_view_details_by_title(title)
-    page.wait_for_url("**/business-opportunities/**", timeout=15000)
-
-
-# ===========================================================================
-# 143244/143245 — hero renders EN desktop / AR RTL
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Hero — UI")
-@allure.severity(_sev(3))
-@allure.title("The Opportunities Listing page hero section renders all elements correctly (EN, desktop)")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.bilingual
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143244
-@pytest.mark.traceability("143244")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143244")
-def test_listing_hero_renders_en_desktop(page):
-    lp = _open(page)
-    assert lp.hero_eyebrow_text()
-    assert lp.hero_title_text()
-    assert lp.hero_description_text()
-    assert lp.hero_image_loaded()
-    assert lp.document_direction() == "ltr"
-
-
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Hero — UI")
-@allure.severity(_sev(3))
-@allure.title("The Opportunities Listing page hero section renders correctly in Arabic with RTL layout")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.bilingual
-@pytest.mark.rtl
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143245
-@pytest.mark.traceability("143245")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143245")
-def test_listing_hero_renders_arabic_rtl(page):
-    lp = _open(page, locale="ar")
-    assert lp.document_direction() == "rtl"
-    assert lp.hero_title_text()
-
-
-# ===========================================================================
-# 143246 — search bar element states
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Search — UI")
-@allure.severity(_sev(3))
-@allure.title("The Listing page search bar shows correct element states")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143246
-@pytest.mark.traceability("143246")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143246")
-def test_listing_search_bar_element_states(page):
-    lp = _open(page)
-    assert lp.search_input_value() == ""
-    lp.search("Smart City")
-    assert lp.search_input_value() == "Smart City"
-    assert lp.is_search_clear_icon_visible()
-    lp.clear_search()
-    assert lp.search_input_value() == ""
-
-
-# ===========================================================================
-# 143247 — trending chips render and are clickable
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Trending chips — UI")
-@allure.severity(_sev(3))
-@allure.title("Trending chips render and are clickable on the Listing page")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143247
-@pytest.mark.traceability("143247")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143247")
-def test_listing_trending_chips_render_and_clickable(page):
-    lp = _open(page)
-    labels = lp.trending_chip_labels()
-    assert len(labels) >= 2
-    lp.click_trending_chip(labels[0])
-    assert lp.active_trending_chip_label() == labels[0]
-
-
-# ===========================================================================
-# 143248 — Active/Archive tab control renders and switches
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Status tabs — UI")
-@allure.severity(_sev(3))
-@allure.title("The Active/Archive tab control renders and switches correctly")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143248
-@pytest.mark.traceability("143248")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143248")
-def test_listing_tab_control_renders_and_switches(page):
-    lp = _open(page)
-    assert lp.is_tab_active("active")
-    active_count = lp.tab_count("active")
-    lp.switch_tab("archive")
-    assert lp.is_tab_active("archive")
-    assert not lp.is_tab_active("active")
-    assert lp.tab_count("archive")
-    assert active_count
-
-
-# ===========================================================================
-# 143249 — sidebar filters panel on mobile viewport
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Sidebar filters — UI")
-@allure.severity(_sev(3))
-@allure.title("The sidebar filters panel renders correctly on mobile viewport")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.compatibility
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143249
-@pytest.mark.traceability("143249")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143249")
-@pytest.mark.parametrize("page", [(375, 812)], indirect=True)
-def test_listing_filters_panel_on_mobile_viewport(page):
-    lp = _open(page)
-    assert not lp.is_filters_panel_open()
-    lp.open_filters_panel()
-    assert lp.is_filters_panel_open()
-    for key in ("sector", "country", "investment_type", "investment_amount", "timeline", "risk_profile"):
-        assert lp.filter_options(key)
-
-
-# ===========================================================================
-# 143250 — Sort By dropdown element states
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Sort By — UI")
-@allure.severity(_sev(3))
-@allure.title("The Sort By dropdown renders correct element states")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143250
-@pytest.mark.traceability("143250")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143250")
-def test_listing_sort_by_element_states(page):
-    lp = _open(page)
-    assert lp.selected_sort_value() == "Most Recent"
-    assert set(lp.sort_options()) >= {"Most Recent", "Oldest"}
-    lp.select_sort("Oldest")
-    assert lp.selected_sort_value() == "Oldest"
-
-
-# ===========================================================================
-# 143252 — Load More default/loading/hidden states
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Load More — UI")
-@allure.severity(_sev(3))
-@allure.title("The Load More button shows correct default, loading and hidden states")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143252
-@pytest.mark.traceability("143252")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143252")
-def test_listing_load_more_default_loading_hidden_states(page):
-    lp = _open(page)
-    assert lp.is_load_more_visible()
-    lp.click_load_more()
-    for _ in range(10):
-        if not lp.is_load_more_visible():
-            break
-        lp.click_load_more()
+    assert lp.card_count() == lp.tab_count("active") <= lp.page_size()
     assert not lp.is_load_more_visible()
-
-
-# ===========================================================================
-# 143262/143263 — responsive viewports
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Responsive layout")
-@allure.severity(_sev(3))
-@allure.title("The Listing page layout adapts correctly to a 375px mobile viewport")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.compatibility
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143262
-@pytest.mark.traceability("143262")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143262")
-@pytest.mark.parametrize("page", [(375, 812)], indirect=True)
-def test_listing_layout_at_375px_mobile_viewport(page):
-    lp = _open(page)
-    assert lp.hero_title_text()
-    assert lp.card_count() >= 0
-
-
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Responsive layout")
-@allure.severity(_sev(3))
-@allure.title("The Listing page layout adapts correctly to a 768px tablet viewport")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.compatibility
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143263
-@pytest.mark.traceability("143263")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143263")
-@pytest.mark.parametrize("page", [(768, 1024)], indirect=True)
-def test_listing_layout_at_768px_tablet_viewport(page):
-    lp = _open(page)
-    assert lp.hero_title_text()
-    assert lp.card_count() >= 0
-
-
-# ===========================================================================
-# 143265 — Dark mode
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Accessibility & theming")
-@allure.severity(_sev(4))
-@allure.title("The Listing page renders correctly in Dark mode")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.accessibility
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143265
-@pytest.mark.traceability("143265")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143265")
-def test_listing_renders_in_dark_mode(page):
-    lp = _open(page)
-    assert not lp.is_dark_mode()
-    lp.open_accessibility_tray()
-    lp.toggle_dark_mode()
-    assert lp.is_dark_mode()
-    page.reload()
-    assert lp.is_dark_mode()
-
-
-# ===========================================================================
-# 143267 — language switching persists across Listing and Detail
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Bilingual")
-@allure.severity(_sev(3))
-@allure.title("Switching the language between EN and AR persists correctly across the Listing and Detail pages")
-@pytest.mark.web
-@pytest.mark.ui
-@pytest.mark.bilingual
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143267
-@pytest.mark.traceability("143267")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143267")
-def test_listing_language_switch_persists_across_pages(page):
-    lp = _open(page, locale="en")
-    assert lp.document_direction() == "ltr"
-    lp_ar = _open(page, locale="ar")
-    assert lp_ar.document_direction() == "rtl"
-
-
-# ===========================================================================
-# 143314-143318 — Opportunity Card rendering
-# ===========================================================================
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Card grid — UI")
-@allure.severity(_sev(3))
-@allure.title("The Opportunity Card banner image displays with the opportunity title overlaid")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143314
-@pytest.mark.traceability("143314")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143314")
-def test_listing_card_banner_image_with_title_overlaid(page):
-    lp = _open(page)
-    title = "Solar Energy Grid Expansion"
-    titles = lp.card_titles()
-    assert title in titles
-    assert lp.card_banner_loaded(titles.index(title))
-
-
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Card grid — UI")
-@allure.severity(_sev(3))
-@allure.title("The Opportunity Card displays the combined Sector · Investment Type tag")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143315
-@pytest.mark.traceability("143315")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143315")
-def test_listing_card_displays_sector_investment_type_tag(page):
-    lp = _open(page)
-    lp.select_filter("sector", "Energy")
+    # 143305: a filter matching fewer cards than one page
     lp.select_filter("investment_type", "Equity")
     lp.apply_filters()
-    tags = lp.card_tags()
-    assert tags
-    assert all(tag == "Energy · Equity" for tag in tags)
+    assert 0 < lp.card_count() < lp.page_size()
+    assert not lp.is_load_more_visible()
 
 
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Card grid — UI")
-@allure.severity(_sev(3))
-@allure.title("The Opportunity Card title displays correctly in both English and Arabic")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.bilingual
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143316
-@pytest.mark.traceability("143316")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143316")
-def test_listing_card_title_renders_en_and_ar(page):
-    lp = _open(page, locale="en")
-    assert "Solar Energy Grid Expansion" in lp.card_titles()
-    lp_ar = _open(page, locale="ar")
-    assert "توسعة شبكة الطاقة الشمسية" in lp_ar.card_titles()
-
-
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Card grid — UI")
-@allure.severity(_sev(3))
-@allure.title("The Opportunity Card displays the Country with its location icon")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143317
-@pytest.mark.traceability("143317")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143317")
-def test_listing_card_displays_country_with_location_icon(page):
+@_common("Trending chips", P3, 143221, FL, pytest.mark.tc_143306)
+@allure.title("Clicking a trending chip applies the matching Sector filter")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+@pytest.mark.parametrize("chip", ["Technology", "Infrastructure"])
+def test_trending_chip_applies_sector_filter(page, chip):
+    # 143221 = Technology, 143306 = Infrastructure (also expects a selected chip state)
     lp = _open(page)
-    lp.select_filter("country", "Qatar")
-    lp.apply_filters()
-    countries = lp.card_countries()
-    assert countries
-    for country in countries:
-        assert "Qatar" in country
-    assert lp.card_country_icon_visible(0)
+    lp.click_trending_chip(chip)
+    d = Diff()
+    d.eq("grid = Sector filter result", set(lp.card_ercs()), _expected(lp, lp.api_opportunities(), sector=chip))
+    d.eq("sidebar Sector reflects chip", lp.selected_filter_value("sector"), chip)
+    st = lp.chip_state(chip)
+    d.true("chip shows selected/active state",
+           "active" in st["cls"] or st["pressed"] == "true" or st["current"] is not None, f"(actual {st})")
+    d.check()
 
 
-@allure.epic(EPIC)
-@allure.feature(FEATURE)
-@allure.story("Card grid — UI")
-@allure.severity(_sev(3))
-@allure.title("The Opportunity Card displays the Investment Amount in the configured currency format")
-@pytest.mark.web
-@pytest.mark.functional_low
-@pytest.mark.invest
-@pytest.mark.pbi_130697
-@pytest.mark.tc_143318
-@pytest.mark.traceability("143318")
-@allure.label("pbi", "130697")
-@allure.label("testcase", "143318")
-def test_listing_card_displays_investment_amount(page):
+@_common("Sort", P3, 143299, FL)
+@allure.title("Sort By reorders cards between Most Recent and Oldest by Publish Date")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_sort_by_publish_date(page):
+    # Case dates (2026-09-01 / 09-15) do not exist; real publish dates used.
+    # Sort Order is ignored by the listing — known bug 149519 (not asserted).
     lp = _open(page)
-    title = "Solar Energy Grid Expansion"
-    titles = lp.card_titles()
-    assert title in titles
-    amounts = lp.card_amounts()
-    assert amounts[titles.index(title)] == "$2M - $5M"
+    items = {i["externalReferenceCode"]: i for i in lp.api_opportunities()}
+    newest = sorted(_active_ercs(lp, list(items.values())), key=lambda e: items[e]["publishDate"], reverse=True)
+    lp.select_sort("Most Recent")
+    assert lp.selected_sort_value() == "Most Recent" and lp.card_ercs() == newest
+    lp.select_sort("Oldest")
+    assert lp.selected_sort_value() == "Oldest" and lp.card_ercs() == list(reversed(newest))
+
+
+@_common("Sort", P3, 143250, FL)
+@allure.title("Sort By shows Most Recent by default, offers Most Recent / Oldest and keeps Oldest selected")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_sort_dropdown_states(page):
+    lp = _open(page)
+    d = Diff()
+    d.eq("default", lp.selected_sort_value(), "Most Recent")
+    d.eq("options", lp.sort_options(), ["Most Recent", "Oldest"])
+    fld = lp.box(lp.SORT_FIELD)
+    d.near("sort field width (Figma 200)", fld["width"], 200, 2)
+    d.near("sort field height (Figma 44)", fld["height"], 44, 2)
+    before = lp.card_ercs()
+    lp.select_sort("Oldest")
+    d.eq("selected after choose", lp.selected_sort_value(), "Oldest")
+    d.eq("grid reversed oldest-first", lp.card_ercs(), list(reversed(before)))
+    d.eq("checked option on reopen", lp.page.locator(f"{lp.SORT_DROPDOWN} option:checked").inner_text().strip(), "Oldest")
+    d.check()
+
+
+@_common("Status tabs", P3, 143248, FL)
+@allure.title("Active/Archive tab control renders per Figma and switches correctly")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_tab_control_renders_and_switches(page):
+    lp = _open(page)
+    items = lp.api_opportunities()
+    d = Diff()
+    f = FIGMA_LIGHT
+    act = lp.style(lp.TAB + ".is-active", ["color", "fontWeight", "fontSize", "boxShadow"])
+    ina = lp.style(lp.TAB + ":not(.is-active)", ["color", "fontWeight", "fontSize"])
+    base = lp.style(lp.TABS, ["boxShadow"])
+    d.eq("active tab colour", _hex(act["color"]), f["tab_active"][0])
+    d.eq("active tab weight", act["fontWeight"], f["tab_active"][1])
+    d.true("active tab 2px underline #911731", "rgb(145, 23, 49) 0px -2px" in act["boxShadow"], act["boxShadow"])
+    d.eq("inactive tab colour", _hex(ina["color"]), f["tab_inactive"][0])
+    d.eq("inactive tab weight", ina["fontWeight"], f["tab_inactive"][1])
+    d.true("tab base line 1px #A8A8A7", "rgb(168, 168, 167) 0px -1px" in base["boxShadow"], base["boxShadow"])
+    d.near("tab row width (Figma 342, 2 x 171)", lp.box(lp.TABS)["width"], f["tabs_w"], 2)
+    d.eq("Active count = Published/Active records", lp.tab_count("active"), len(_active_ercs(lp, items)))
+    lp.switch_tab("archive")
+    d.eq("archive selected", (lp.is_tab_active("archive"), lp.is_tab_active("active")), (True, False))
+    d.eq("archive grid", set(lp.card_ercs()), _archived_ercs(lp, items))
+    d.eq("Archive count", lp.tab_count("archive"), len(_archived_ercs(lp, items)))
+    d.check()
+
+
+# =============================================================================
+# P3 — hero / search / chips UI (Figma)
+# =============================================================================
+@_common("Hero", P3, 143244, FL)
+@allure.title("Listing hero renders eyebrow, title, description, image and CTA per Figma (EN, 1920)")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_hero_en_desktop(page):
+    lp = _open(page)
+    cfg = lp.api_page()
+    f = FIGMA_LIGHT
+    d = Diff()
+    d.eq("dir", lp.document_direction(), "ltr")
+    d.eq("eyebrow copy (PBI)", lp.hero_eyebrow_text(), "Global opportunity gateway")
+    d.eq("title copy (PBI)", lp.hero_title_text(), "Global Business Opportunities")
+    d.eq("description = CMS copy", lp.hero_description_text(), re.sub(r"<[^>]+>", "", cfg["heroDescription"]).strip())
+    d.eq("CTA label", lp.hero_cta_label(), "Submit Opportunity")
+    props = ["color", "fontSize", "fontWeight", "lineHeight", "fontFamily", "textAlign"]
+    for key, loc in (("eyebrow", lp.HERO_EYEBROW), ("title", lp.HERO_TITLE), ("desc", f"{lp.HERO_DESCRIPTION} p")):
+        s = lp.style(loc, props)
+        d.eq(f"{key} font", (_hex(s["color"]), s["fontSize"], s["fontWeight"], s["lineHeight"]), f[key])
+        d.true(f"{key} Cairo", s["fontFamily"].startswith("Cairo"), s["fontFamily"])
+        d.true(f"{key} left-aligned", s["textAlign"] in ("start", "left"), s["textAlign"])
+    c = lp.style(lp.HERO_CTA, ["color", "backgroundColor", "fontSize", "fontWeight", "borderRadius"])
+    d.eq("CTA tokens", (_hex(c["color"]), _hex(c["backgroundColor"]), c["fontSize"], c["fontWeight"]), f["cta"])
+    d.near("CTA height", lp.box(lp.HERO_CTA)["height"], 44, 2)
+    d.near("hero height", lp.box(lp.HERO)["height"], f["hero_h"], 2)
+    d.near("description width", lp.box(f"{lp.HERO_DESCRIPTION} p")["width"], f["desc_w"], 2)
+    img = lp.box(lp.HERO_IMAGE)
+    d.true("hero image loaded", lp.hero_image_loaded())
+    d.near("hero image width", img["width"], f["hero_img"][0], 5)
+    d.near("hero image height", img["height"], f["hero_img"][1], 5)
+    for i in range(page.locator(lp.BREADCRUMB_LINK).count()):
+        d.eq(f"breadcrumb[{i}] colour", _hex(lp.style(f"{lp.BREADCRUMB_LINK} span", ["color"], i)["color"]), f["crumb"])
+    d.check()
+
+
+@_common("Hero", P3, 143245, FL)
+@allure.title("Listing hero renders the AR copy right-to-left with a mirrored CTA")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_hero_ar_rtl(page):
+    lp = _open(page, locale="ar")
+    cfg = lp.api_page("ar_SA")
+    d = Diff()
+    d.eq("dir", lp.document_direction(), "rtl")
+    d.true("lang ar", lp.document_lang().startswith("ar"), lp.document_lang())
+    d.eq("eyebrow = AR CMS copy", lp.hero_eyebrow_text(), cfg["eyebrowLabel"])
+    d.eq("title = AR CMS copy", lp.hero_title_text(), cfg["pageTitle"])
+    d.eq("CTA = AR CMS copy", lp.hero_cta_label(), cfg["ctaLabel"])
+    for loc in (lp.HERO_EYEBROW, lp.HERO_TITLE, f"{lp.HERO_DESCRIPTION} p"):
+        s = lp.style(loc, ["direction", "textAlign"])
+        d.eq(f"{loc} direction", s["direction"], "rtl")
+        r = lp.box(loc)
+        d.near(f"{loc} right edge (shell 1620)", r["x"] + r["width"], 1620, 2)
+        d.true(f"{loc} no Latin text", not re.search(r"[A-Za-z]{3,}", lp.text(loc)), lp.text(loc))
+    cta, img = lp.box(lp.HERO_CTA), lp.box(lp.HERO_IMAGE)
+    d.near("CTA right-aligned", cta["x"] + cta["width"], 1620, 2)
+    d.true("image mirrored to the left", img["x"] < cta["x"], f"img.x={img['x']} cta.x={cta['x']}")
+    d.check()
+
+
+@_common("Search", P3, 143246, FL)
+@allure.title("Search bar default / focus / typed / clear states per Figma")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_search_bar_states(page):
+    lp = _open(page)
+    f = FIGMA_LIGHT
+    d = Diff()
+    d.eq("placeholder", lp.search_placeholder(), "Search..")
+    d.eq("value empty", lp.search_input_value(), "")
+    d.true("search icon visible", page.locator(lp.SEARCH_ICON).is_visible())
+    d.eq("placeholder colour", _hex(lp.placeholder_color()), f["placeholder"])
+    fb = lp.box(lp.SEARCH_FIELD)
+    d.near("field width", fb["width"], f["field"][0], 2)
+    d.near("field height", fb["height"], f["field"][1], 2)
+    fs = lp.style(lp.SEARCH_FIELD, ["borderRadius", "boxShadow"])
+    d.eq("field radius", fs["borderRadius"], f["field"][2])
+    d.true("field border #EDEDED", "rgb(237, 237, 237) 0px 0px 0px 1px" in fs["boxShadow"], fs["boxShadow"])
+    bb = lp.box(lp.SEARCH_BUTTON)
+    d.near("Search button width", bb["width"], f["search_btn"][0], 2)
+    d.near("Search button height", bb["height"], f["search_btn"][1], 2)
+    cs = lp.style(lp.SEARCH_CARD, ["borderRadius", "boxShadow"])
+    d.eq("search card radius", cs["borderRadius"], f["search_card_radius"])
+    d.true("search card shadow", f["search_card_shadow"] in cs["boxShadow"], cs["boxShadow"])
+    page.locator(lp.SEARCH_INPUT).click()
+    focus = lp.style(lp.SEARCH_FIELD, ["boxShadow"])["boxShadow"]
+    d.true("focus highlight on field", focus != fs["boxShadow"], focus)
+    page.locator(lp.SEARCH_INPUT).type("Smart City")
+    d.eq("typed value", lp.search_input_value(), "Smart City")
+    d.true("clear (x) control appears after typing", lp.search_clear_control_count() > 0,
+           "(no clear control rendered; native cancel button suppressed)")
+    d.check()
+
+
+@_common("Trending chips", P3, 143247, FL)
+@allure.title("Trending chips render per Figma, show a hover state and apply on click")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_trending_chips_render_and_click(page):
+    lp = _open(page)
+    f = FIGMA_LIGHT
+    d = Diff()
+    d.eq("chip labels (PBI order)", lp.trending_chip_labels(), ["Energy", "Infrastructure", "Technology", "Licensing route", "Qatar"])
+    d.eq("'Trending:' colour", _hex(lp.style(lp.TRENDING_LABEL, ["color"])["color"]), f["trending_label"])
+    s = lp.style(lp.TRENDING_CHIP, ["backgroundColor", "color", "fontSize", "fontWeight", "borderRadius"])
+    d.eq("chip bg", _hex(s["backgroundColor"]), f["chip_bg"])
+    d.eq("chip text", _hex(s["color"]), f["chip_fg"])
+    d.eq("chip font", (s["fontSize"], s["fontWeight"]), ("12px", "400"))
+    d.near("chip height", lp.box(lp.TRENDING_CHIP)["height"], 24, 2)
+    boxes = [page.locator(lp.TRENDING_CHIP).nth(i).bounding_box() for i in range(5)]
+    d.true("one row, no overlap", all(b["y"] == boxes[0]["y"] for b in boxes)
+           and all(boxes[i]["x"] + boxes[i]["width"] <= boxes[i + 1]["x"] for i in range(4)))
+    page.locator(lp.TRENDING_CHIP).first.hover()
+    page.wait_for_timeout(300)  # CSS transition on hover; no DOM signal
+    d.true("hover changes chip background", lp.style(lp.TRENDING_CHIP, ["backgroundColor"])["backgroundColor"] != s["backgroundColor"])
+    before = lp.card_ercs()
+    lp.click_trending_chip("Energy")
+    d.true("click updates the grid", lp.card_ercs() != before)
+    d.eq("chip keyword applied", lp.search_input_value(), "Energy")
+    d.check()
+
+
+# =============================================================================
+# P3 — cards
+# =============================================================================
+@_common("Opportunity card", P3, 143314, FL)
+@allure.title("Card banner image renders with the opportunity title overlaid")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_card_banner_image(page):
+    # The overlay title is part of the banner artwork in Figma and on qcdev
+    # (no text node) — checked: image loads at the Figma band size.
+    lp = _open(page)
+    d = Diff()
+    for i in range(lp.card_count()):
+        d.true(f"banner[{i}] loaded", lp.card_banner_loaded(i))
+        b = lp.box(lp.CARD_BANNER_IMG, i)
+        d.near(f"banner[{i}] height", b["height"], FIGMA_LIGHT["band_h"], 5)
+        d.near(f"banner[{i}] width", b["width"], FIGMA_LIGHT["card"][0], 5)
+    d.check()
+
+
+@_common("Opportunity card", P3, 143315, FL)
+@allure.title("Card shows the combined 'Sector · Investment Type' tag")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_card_sector_type_tag(page):
+    lp = _open(page)
+    items = {i["externalReferenceCode"]: i for i in lp.api_opportunities()}
+    d = Diff()
+    for erc, tag in zip(lp.card_ercs(), lp.card_tags()):
+        it = items[erc]
+        d.eq(f"{erc} tag", " ".join(tag), f"{_label(it, 'sector')} {FIGMA_LIGHT['dot']} {_label(it, 'investmentType')}")
+    d.check()
+
+
+@_common("Opportunity card", P3, 143316, FL)
+@allure.title("Card title renders the EN title in English and the AR title in Arabic")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_card_title_en_ar(page):
+    lp = _open(page)
+    en = {i["externalReferenceCode"]: i["opportunityTitle"] for i in lp.api_opportunities("en_US")}
+    ar = {i["externalReferenceCode"]: i["opportunityTitle"] for i in lp.api_opportunities("ar_SA")}
+    assert [en[e] for e in lp.card_ercs()] == lp.card_titles()
+    lp.open_listing(locale="ar")
+    assert lp.document_direction() == "rtl"
+    assert [ar[e] for e in lp.card_ercs()] == lp.card_titles()
+    s = lp.style(lp.CARD_TITLE, ["direction"])
+    assert s["direction"] == "rtl"
+
+
+@_common("Opportunity card", P3, 143317, FL)
+@allure.title("Card shows the Country preceded by a location pin icon")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_card_country_with_pin(page):
+    lp = _open(page)
+    items = {i["externalReferenceCode"]: i for i in lp.api_opportunities()}
+    d = Diff()
+    for idx, erc in enumerate(lp.card_ercs()):
+        d.eq(f"{erc} country", lp.card_cells(idx)[0], items[erc]["country"])
+        icon = page.locator(lp.CARD).nth(idx).locator(f"{lp.CARD_CELL} svg").first.bounding_box()
+        txt = page.locator(lp.CARD).nth(idx).locator(lp.CARD_CELL_TEXT).first.bounding_box()
+        d.true(f"{erc} pin icon before text", icon and icon["x"] + icon["width"] <= txt["x"])
+        d.near(f"{erc} icon size", icon["width"], 18, 5)
+    d.eq("country text fully visible (not truncated)", lp.truncated_cell_texts(), [])
+    d.check()
+
+
+@_common("Opportunity card", P3, 143318, FL)
+@allure.title("Card shows the Investment Amount exactly as authored")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_card_investment_amount(page):
+    # Case value '$2M - $5M' does not exist; every real card is compared.
+    lp = _open(page)
+    items = {i["externalReferenceCode"]: i for i in lp.api_opportunities()}
+    d = Diff()
+    for idx, erc in enumerate(lp.card_ercs()):
+        d.eq(f"{erc} amount (EN)", lp.card_cells(idx)[1], items[erc]["investmentAmountRange"])
+    # AR: the LTR amount must keep its visual order inside the RTL card
+    lp.open_listing(locale="ar")
+    flipped = page.evaluate("""() => [...document.querySelectorAll('.qc-bol-card-cell:nth-child(2) .qc-bol-card-cell-text')].filter(e => {
+        const t = e.firstChild; if (!t || !/[+]$/.test(t.textContent)) return false;
+        const r = document.createRange(); r.setStart(t, 0); r.setEnd(t, 1); const first = r.getBoundingClientRect();
+        r.setStart(t, t.length - 1); r.setEnd(t, t.length); const last = r.getBoundingClientRect();
+        return last.x < first.x; }).map(e => e.textContent)""")
+    d.eq("AR amounts rendered in authored order (no bidi flip of '+')", flipped, [])
+    d.check()
+
+
+# =============================================================================
+# P3/P4 — responsive, theme, language
+# =============================================================================
+@_common("Responsive", P3, 143249, FL)
+@allure.title("Sidebar filters collapse on mobile and expand on tap showing all six defaults")
+@pytest.mark.parametrize("page", [MOBILE_375], indirect=True)
+def test_mobile_filters_panel(page):
+    lp = _open(page)
+    d = Diff()
+    d.eq("collapsed by default", (lp.is_filters_panel_open(), lp.filters_toggle_expanded()), (False, "false"))
+    t = lp.box(lp.FILTERS_TOGGLE)
+    d.true("toggle tappable inside viewport", t["width"] >= 44 and t["x"] >= 0 and t["x"] + t["width"] <= 375)
+    tabs = lp.box(lp.TABS)
+    d.true("toggle does not overlap tabs", t["y"] + t["height"] <= tabs["y"])
+    lp.open_filters_panel()
+    d.true("panel open", lp.is_filters_panel_open())
+    d.eq("six filters visible", lp.visible_filter_count(), 6)
+    d.eq("defaults (Figma labels)", list(lp.selected_filter_values().values()),
+         ["All Sectors", "All Countries", "Investment Type", "Investment Amount", "Timeline", "Risk Profile"])
+    # Figma mobile frame is 390 wide — compare tokens there.
+    page.set_viewport_size({"width": 390, "height": 844})
+    lp.open_listing()
+    fm = FIGMA_MOBILE
+    d.near("collapsed bar height (390)", lp.box(lp.FILTERS_SIDE)["height"], fm["side_bar_h"], 2)
+    h = lp.style(lp.FILTERS_HEADING, ["color", "fontSize", "fontWeight"])
+    d.eq("collapsed heading font (390)", (_hex(h["color"]), h["fontSize"], h["fontWeight"]), fm["side_heading"])
+    d.check()
+
+
+@_common("Responsive", P3, 143262, FL)
+@allure.title("Listing reflows to a single-column mobile layout (375 + Figma 390)")
+@pytest.mark.parametrize("page", [MOBILE_375], indirect=True)
+def test_mobile_layout(page):
+    lp = _open(page)
+    d = Diff()
+    hero_copy, img = lp.box(lp.HERO_TITLE), lp.box(lp.HERO_IMAGE)
+    d.true("hero stacks vertically (Figma: image below copy)", img["y"] >= hero_copy["y"] + hero_copy["height"])
+    sc = lp.box(lp.SEARCH_CARD)
+    d.near("search card full width (375-2x20)", sc["width"], 335, 2)
+    d.eq("grid single column", lp.grid_column_count(), 1)
+    d.near("card full width", lp.box(lp.CARD)["width"], 335, 2)
+    tb = lp.box(lp.TAB, 1)
+    d.true("tabs visible/tappable", tb["height"] >= 40 and tb["x"] + tb["width"] <= 375)
+    d.true("no horizontal overflow (375)", not lp.has_horizontal_overflow())
+    page.set_viewport_size({"width": 390, "height": 844})
+    lp.open_listing()
+    fm = FIGMA_MOBILE
+    t = lp.style(lp.HERO_TITLE, ["fontSize", "fontWeight", "lineHeight"])
+    d.eq("hero title font (Figma 390)", (t["fontSize"], t["fontWeight"], t["lineHeight"]), fm["title"])
+    d.near("hero height (Figma 390)", lp.box(lp.HERO)["height"], fm["hero_h"], 2)
+    hi = lp.box(lp.HERO_IMAGE)
+    d.near("hero image w", hi["width"], fm["hero_img"][0], 5)
+    d.near("hero image h", hi["height"], fm["hero_img"][1], 5)
+    d.near("CTA full width", lp.box(lp.HERO_CTA)["width"], fm["cta_w"], 2)
+    for i in range(2):
+        d.near(f"tab[{i}] width (Figma 175)", lp.box(lp.TAB, i)["width"], fm["tab_w"], 2)
+    c0, c1 = lp.box(lp.CARD, 0), lp.box(lp.CARD, 1)
+    d.near("card width (390)", c0["width"], fm["card_w"], 2)
+    d.near("card gap", c1["y"] - (c0["y"] + c0["height"]), fm["card_gap"], 2)
+    d.true("no horizontal overflow (390)", not lp.has_horizontal_overflow())
+    d.check()
+
+
+@_common("Responsive", P3, 143263, FL)
+@allure.title("Listing reflows to a 2-column card grid at 768 px")
+@pytest.mark.parametrize("page", [TABLET_768], indirect=True)
+def test_tablet_layout(page):
+    lp = _open(page)
+    d = Diff()
+    d.true("no horizontal overflow", not lp.has_horizontal_overflow())
+    side, grid = lp.box(lp.FILTERS_SIDE), lp.box(lp.CARD_GRID)
+    d.true("filters panel does not overlap grid", side["y"] + side["height"] <= grid["y"] or side["x"] + side["width"] <= grid["x"])
+    d.eq("card grid columns (case: 2 per row)", lp.grid_column_count(), 2)
+    d.check()
+
+
+@_common("Theme", P4, 143265, FL)
+@allure.title("Dark mode recolours the listing per the Figma dark frame and persists after reload")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_dark_mode(page):
+    lp = _open(page)
+    assert lp.theme() == "light"
+    assert _hex(lp.style("body", ["backgroundColor"])["backgroundColor"]) == FIGMA_LIGHT["body_bg"]
+    AccessibilityToolsComponent(page).enable_dark_mode()
+    page.wait_for_function("() => document.documentElement.getAttribute('data-theme') === 'dark'")
+    f = FIGMA_DARK
+    d = Diff()
+
+    def col(loc, prop="color", i=0):
+        return _hex(lp.style(loc, [prop], i)[prop])
+
+    def check_all(tag):
+        d.eq(f"{tag} page bg", col(".qc-bol-body", "backgroundColor"), f["body_bg"])
+        d.eq(f"{tag} eyebrow", col(lp.HERO_EYEBROW), f["eyebrow"])
+        d.eq(f"{tag} title", col(lp.HERO_TITLE), f["title"])
+        d.eq(f"{tag} desc", col(f"{lp.HERO_DESCRIPTION} p"), f["desc"])
+        for i in range(page.locator(lp.BREADCRUMB_LINK).count()):
+            d.eq(f"{tag} breadcrumb[{i}]", col(f"{lp.BREADCRUMB_LINK} span", i=i), f["crumb"])
+        stop0 = re.search(r"linear-gradient\([^,]+,\s*(rgba?\([^)]+\))", lp.style(lp.HERO, ["backgroundImage"])["backgroundImage"])
+        d.eq(f"{tag} hero gradient first stop", _hex(stop0.group(1)) if stop0 else None, f["hero_stop0"])
+        d.true(f"{tag} search card border", "rgb(74, 74, 73) 0px 0px 0px 1px" in lp.style(lp.SEARCH_CARD, ["boxShadow"])["boxShadow"])
+        d.eq(f"{tag} 'Trending:'", col(lp.TRENDING_LABEL), f["trending_label"])
+        d.eq(f"{tag} chip bg", col(lp.TRENDING_CHIP, "backgroundColor"), f["chip_bg"])
+        d.eq(f"{tag} chip text", col(lp.TRENDING_CHIP), f["chip_fg"])
+        d.eq(f"{tag} side heading", col(lp.FILTERS_HEADING), f["side_heading"])
+        d.eq(f"{tag} Filter label", col(lp.FILTER_LABEL), f["filter_label"])
+        d.eq(f"{tag} active tab", col(lp.TAB + ".is-active"), f["tab_active"])
+        d.eq(f"{tag} inactive tab", col(lp.TAB + ":not(.is-active)"), f["tab_inactive"])
+        d.true(f"{tag} tab base line {f['tab_base']}", "rgb(168, 168, 167) 0px -1px" in lp.style(lp.TABS, ["boxShadow"])["boxShadow"],
+               lp.style(lp.TABS, ["boxShadow"])["boxShadow"])
+        d.eq(f"{tag} card bg", col(lp.CARD, "backgroundColor"), f["card_bg"])
+        d.eq(f"{tag} card border", col(lp.CARD, "borderTopColor"), f["card_border"])
+        d.eq(f"{tag} card sector", col(f"{lp.CARD_TAG} span:first-child"), f["cat"])
+        d.eq(f"{tag} card type", col(f"{lp.CARD_TAG} span:last-child"), f["cat2"])
+        d.eq(f"{tag} card title", col(lp.CARD_TITLE), f["card_title"])
+        d.eq(f"{tag} card cell", col(lp.CARD_CELL_TEXT), f["cell"])
+        d.eq(f"{tag} card rule", col(lp.CARD_RULE, "backgroundColor"), f["rule"])
+        d.eq(f"{tag} View Details", col(lp.CARD_VIEW_DETAILS_LINK), f["view"])
+        d.eq(f"{tag} arrow bg", col(lp.CARD_ARROW, "backgroundColor"), f["arrow_bg"])
+
+    check_all("dark")
+    page.reload(wait_until="domcontentloaded")
+    d.eq("theme applied at DOMContentLoaded after reload (no light flash)", lp.theme(), "dark")
+    lp.wait_for_ready()
+    d.eq("dark persists after reload", lp.theme(), "dark")
+    d.check()
+
+
+@_common("Language", P3, 143267, FL)
+@allure.title("EN/AR switch persists across the Listing and Detail pages")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
+def test_language_persists_listing_detail(page):
+    lp = _open(page)
+    sw = HeaderComponent.LANGUAGE_SWITCHER
+    page.locator(sw).click()
+    page.wait_for_url(re.compile(r"/ar/"), timeout=30000)
+    lp.wait_for_ready()
+    assert lp.document_direction() == "rtl"
+    ar_title = lp.api_page("ar_SA")["pageTitle"]
+    assert lp.hero_title_text() == ar_title
+    page.locator(lp.CARD).first.click()
+    page.wait_for_selector("h1.qc-bod-title", timeout=30000)
+    assert "/ar/" in page.url and lp.document_direction() == "rtl"
+    page.locator(sw).click()
+    page.wait_for_function("() => document.documentElement.dir === 'ltr'", timeout=30000)
+    page.wait_for_selector("h1.qc-bod-title", timeout=30000)
+    assert lp.document_lang().startswith("en")
+    lp.open(web_url(PATH))
+    lp.wait_for_ready()
+    assert lp.document_direction() == "ltr" and lp.hero_title_text() == "Global Business Opportunities"
+
+
+# =============================================================================
+# Blocked — required state cannot be created read-only (brief rule 3)
+# =============================================================================
+@pytest.mark.parametrize("tc, reason", [
+    pytest.param("143211", "only 4 Active opportunities vs page size 6 - Load More never renders", marks=pytest.mark.tc_143211),
+    pytest.param("143304", "case needs 24 Active / 12 per page; qcdev has 4 Active, page size 6", marks=pytest.mark.tc_143304),
+    pytest.param("143252", "Load More loading/default states need >1 page of Active results; 4 < 6", marks=pytest.mark.tc_143252),
+    pytest.param("143236", "needs a record whose Archive Date is tomorrow and a clock boundary; none exists, no CMS writes allowed", marks=pytest.mark.tc_143236),
+    pytest.param("143238", "needs zero Published/Archived opportunities site-wide; real records exist", marks=pytest.mark.tc_143238),
+])
+@pytest.mark.web
+@pytest.mark.pbi_130697
+def test_blocked_listing_cases(tc, reason):
+    pytest.skip(f"BLOCKED tc_{tc}: {reason}")

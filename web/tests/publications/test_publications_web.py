@@ -98,8 +98,11 @@ SKIPPED (real precondition/product gaps, not locator gaps):
     either unpublishing real shared entries (destructive) or an unverified
     exact-count coincidence; skipped rather than guessed.
 
-DISPOSABLE entries: every mutating test in this module creates its own
-`QCTEST-<tc_id>`-prefixed Publication entry via
+DISPOSABLE entries (review B1, 2026-10-01): every mutating test creates its own
+`QCTEST-130711-<tc_id>-…` entry through pub_support.create() (pre-action id
+snapshot, registered with the `disposable` fixture) and is torn down ONLY by
+the guarded delete (QCTEST-130711- prefix + captured entry id + exact title).
+Historical note — previously each test created a `QCTEST-<tc_id>` entry via
 cms.pages.publications.publication_admin_page.PublicationAdminPage (this
 module imports it directly, mirroring
 web/tests/export_reports/test_export_reports_web.py's own precedent for a
@@ -112,6 +115,8 @@ object's entries table (mirrors the Export Reports/Annual Reports modules'
 own convention).
 """
 
+import re
+
 import allure
 import pytest
 
@@ -122,11 +127,21 @@ from cms.pages.publications.publication_admin_page import (
     FIELD_PUBLICATION_DESCRIPTION_EN,
     FIELD_PUBLICATION_TITLE_EN,
 )
+# Review B1 (2026-10-01): every record this module creates goes through the
+# shared CreatedEntry / guarded-teardown pattern of the Control_Panel module —
+# the `disposable` fixture is imported here so pytest registers it for these
+# tests (no deletes by title alone, ever).
+from cms.tests.publications.conftest import disposable  # noqa: F401 — pytest fixture
+from cms.tests.publications.pub_support import create, require_no_leftovers, title_for
 from web.pages.components.accessibility_tools_component import AccessibilityToolsComponent
 from web.pages.publications.publications_page import PublicationsPage
 
 PUBLICATIONS_CMS_XDIST_GROUP = pytest.mark.xdist_group("publications_cms")
 FIXTURES = "cms/tests/publications/fixtures"
+
+
+def _data(title: str, **overrides) -> dict:
+    return PublicationAdminPage.default_data(title, **overrides)
 
 
 # ===========================================================================
@@ -313,28 +328,26 @@ def test_chip_active_inactive_styling(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_143987
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_load_more_typography(page):
-    # Azure TC 143987 | PBI 130711 — the current 8 real Published entries
-    # exactly fill the page size (Load More confirmed hidden). One
-    # disposable entry is published to push the count past it.
+def test_load_more_typography(page, disposable):
+    # Azure TC 143987 | PBI 130711 — one disposable entry is published to
+    # push the count past the page size. Review B1: QCTEST-130711- title,
+    # created via create() (pre-action id snapshot), removed only by the
+    # guarded `disposable` teardown.
     admin = PublicationAdminPage(page)
-    title = "QCTEST-143987 Publication"
-    try:
-        admin.publish_disposable_entry("143987", **{FIELD_PUBLICATION_TITLE_EN: title},
-                                        publication_type="Guides", publication_date="01/01/2026", page_count="1")
-        pub = PublicationsPage(page)
-        pub.open_publications()
+    title = title_for("143987", "Load-More")
+    require_no_leftovers(admin, title)
+    create(admin, disposable, _data(title, publication_type="Guides", publication_date="01/01/2026",
+                                    page_count="1"), publish=True)
+    pub = PublicationsPage(page)
+    pub.open_publications()
 
-        assert pub.is_load_more_visible()
-        style = pub.load_more_style()
-        assert "Cairo" in style["fontFamily"]
-        assert style["fontWeight"] == "600"
-        assert style["fontSize"] == "16px"
-        assert style["color"] == "rgb(74, 74, 73)"  # #4A4A49
-        assert pub.page_background_color() == "rgb(255, 255, 255)"
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    assert pub.is_load_more_visible()
+    style = pub.load_more_style()
+    assert "Cairo" in style["fontFamily"]
+    assert style["fontWeight"] == "600"
+    assert style["fontSize"] == "16px"
+    assert style["color"] == "rgb(74, 74, 73)"  # #4A4A49
+    assert pub.page_background_color() == "rgb(255, 255, 255)"
 
 
 # ===========================================================================
@@ -352,30 +365,24 @@ def test_load_more_typography(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_143988
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_published_card_element_inventory(page):
-    # Azure TC 143988 | PBI 130711 — DISPOSABLE entry (QCTEST-prefixed, not
-    # the case's own literal title, to stay collision-safe under parallel
-    # runs against a title-matched admin lookup).
+def test_published_card_element_inventory(page, disposable):
+    # Azure TC 143988 | PBI 130711 — DISPOSABLE entry (review B1 namespace).
     admin = PublicationAdminPage(page)
-    title = "QCTEST-143988 Qatar Economic Outlook 2026"
-    try:
-        admin.publish_disposable_entry("143988", **{FIELD_PUBLICATION_TITLE_EN: title},
-                                        publication_type="Research Paper", publication_date="01/03/2026",
-                                        page_count="42")
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search(title)
-        index = pub.card_index(title)
+    title = title_for("143988", "Qatar Economic Outlook 2026")
+    require_no_leftovers(admin, title)
+    create(admin, disposable, _data(title, publication_type="Research Paper", publication_date="01/03/2026",
+                                    page_count="42"), publish=True)
+    pub = PublicationsPage(page)
+    pub.open_publications()
+    pub.search(title)
+    index = pub.card_index(title)
 
-        assert index >= 0
-        assert pub.card_badge(index) == "Research Paper"
-        assert pub.card_has_img_cover(index)
-        meta = pub.card_meta(index)
-        assert "42" in meta
-        assert pub.card_action_labels(index) == ["View Details", "Download"]
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    assert index >= 0
+    assert pub.card_badge(index) == "Research Paper"
+    assert pub.card_has_img_cover(index)
+    meta = pub.card_meta(index)
+    assert "42" in meta
+    assert pub.card_action_labels(index) == ["View Details", "Download"]
 
 
 # ===========================================================================
@@ -557,35 +564,29 @@ def test_public_visitor_e2e_unauthenticated(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_143995
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_draft_not_accessible_via_direct_link(page):
-    # Azure TC 143995 | PBI 130711 — the real numeric detail-page id is
-    # resolved off the admin row's own "Preview" link href (never guessed,
-    # never fetched via an API call — see
-    # PublicationAdminPage.row_entry_numeric_id()).
+def test_draft_not_accessible_via_direct_link(page, disposable):
+    # Azure TC 143995 | PBI 130711 — the numeric detail-page id is read off
+    # the captured row's own Preview link (never guessed, no API call).
     admin = PublicationAdminPage(page)
-    title = "QCTEST-143995 Draft Publication"
-    try:
-        with allure.step("Create as Draft (no submit) and resolve its real entry id"):
-            admin.create_disposable_entry(
-                "143995", **{FIELD_PUBLICATION_TITLE_EN: title},
-                publication_type="Manuals", publication_date="01/01/2026", page_count="1",
-            )
-            admin.save_as_draft()
-            entry_id = admin.row_entry_numeric_id(title)
-
-        with allure.step("Open the direct detail URL in a fresh logged-out context"):
-            anon_ctx = page.context.browser.new_context()
-            anon_page = anon_ctx.new_page()
-            pub = PublicationsPage(anon_page)
-            pub.open_detail_by_id_anonymous(entry_id)
-            body_text = pub.detail_page_text()
-            anon_ctx.close()
-
-        assert entry_id, "could not resolve a real entry id off the admin Preview link"
-        assert title not in body_text
-    finally:
+    title = title_for("143995", "Draft Publication")
+    require_no_leftovers(admin, title)
+    with allure.step("Create as Draft (no submit) and resolve its real entry id"):
+        entry = create(admin, disposable, _data(title, publication_type="Manuals", publication_date="01/01/2026",
+                                                page_count="1"), publish=False)
         admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        match = re.search(r"qcPreview=publications%3A(\d+)", admin.row_preview_href(entry))
+        entry_id = match.group(1) if match else ""
+
+    with allure.step("Open the direct detail URL in a fresh logged-out context"):
+        anon_ctx = page.context.browser.new_context()
+        anon_page = anon_ctx.new_page()
+        pub = PublicationsPage(anon_page)
+        pub.open_detail_by_id_anonymous(entry_id)
+        body_text = pub.detail_page_text()
+        anon_ctx.close()
+
+    assert entry_id, "could not resolve a real entry id off the admin Preview link"
+    assert title not in body_text
 
 
 # ===========================================================================
@@ -603,34 +604,27 @@ def test_draft_not_accessible_via_direct_link(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_143999
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_only_published_appear_with_correct_fields(page):
+def test_only_published_appear_with_correct_fields(page, disposable):
     # Azure TC 143999 | PBI 130711
     admin = PublicationAdminPage(page)
-    published_title = "QCTEST-143999-Published-A"
-    draft_title = "QCTEST-143999-Draft-B"
-    try:
-        admin.publish_disposable_entry("143999-pub", **{FIELD_PUBLICATION_TITLE_EN: published_title},
-                                        publication_type="Research Paper", publication_date="01/01/2026",
-                                        page_count="10")
-        admin.create_disposable_entry("143999-draft", **{FIELD_PUBLICATION_TITLE_EN: draft_title},
-                                       publication_type="Guides", publication_date="01/01/2026", page_count="5")
-        admin.save_as_draft()
+    published_title = title_for("143999", "Published-A")
+    draft_title = title_for("143999", "Draft-B")
+    require_no_leftovers(admin, published_title, draft_title)
+    create(admin, disposable, _data(published_title, publication_type="Research Paper",
+                                    publication_date="01/01/2026", page_count="10"), publish=True)
+    create(admin, disposable, _data(draft_title, publication_type="Guides", publication_date="01/01/2026",
+                                    page_count="5"), publish=False)
 
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search("QCTEST-143999")
+    pub = PublicationsPage(page)
+    pub.open_publications()
+    pub.search(title_for("143999", ""))
 
-        titles = pub.card_titles()
-        assert published_title in titles
-        assert draft_title not in titles
-        index = titles.index(published_title)
-        assert "10" in pub.card_meta(index)
-        assert pub.card_action_labels(index) == ["View Details", "Download"]
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(published_title)
-        admin.open_entries_list()
-        admin.delete_entry_by_title(draft_title)
+    titles = pub.card_titles()
+    assert published_title in titles
+    assert draft_title not in titles
+    index = titles.index(published_title)
+    assert "10" in pub.card_meta(index)
+    assert pub.card_action_labels(index) == ["View Details", "Download"]
 
 
 # ===========================================================================
@@ -648,26 +642,23 @@ def test_only_published_appear_with_correct_fields(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144004
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_publish_makes_visible_with_correct_fields_web(page):
+def test_publish_makes_visible_with_correct_fields_web(page, disposable):
     # Azure TC 144004 | PBI 130711 — Web-side half; Control_Panel-side in
     # test_publications_control_panel.py under the SAME marker.
     admin = PublicationAdminPage(page)
-    title = "QCTEST-144004 Publish Flow"
-    try:
-        admin.publish_disposable_entry("144004", **{FIELD_PUBLICATION_TITLE_EN: title},
-                                        publication_type="Guides", publication_date="01/01/2026", page_count="5")
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search(title)
-        titles = pub.card_titles()
+    title = title_for("144004", "Publish-Flow-Web")
+    require_no_leftovers(admin, title)
+    create(admin, disposable, _data(title, publication_type="Guides", publication_date="01/01/2026",
+                                    page_count="5"), publish=True)
+    pub = PublicationsPage(page)
+    pub.open_publications()
+    pub.search(title)
+    titles = pub.card_titles()
 
-        assert title in titles
-        index = titles.index(title)
-        assert pub.card_badge(index) == "Guides"
-        assert "5" in pub.card_meta(index)
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    assert title in titles
+    index = titles.index(title)
+    assert pub.card_badge(index) == "Guides"
+    assert "5" in pub.card_meta(index)
 
 
 # ===========================================================================
@@ -684,35 +675,30 @@ def test_publish_makes_visible_with_correct_fields_web(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144005
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_republish_updates_not_stale_web(page):
+def test_republish_updates_not_stale_web(page, disposable):
     # Azure TC 144005 | PBI 130711 — Web-side half.
     admin = PublicationAdminPage(page)
-    original_title = "QCTEST-144005-Original"
-    updated_title = "QCTEST-144005-Updated"
-    try:
-        admin.publish_disposable_entry("144005", **{FIELD_PUBLICATION_TITLE_EN: original_title},
-                                        publication_type="Report",
-                                        publication_date="01/01/2026", page_count="1")
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search(original_title)
-        assert original_title in pub.card_titles()
+    original_title = title_for("144005", "Original-Web")
+    updated_title = title_for("144005", "Updated-Web")
+    require_no_leftovers(admin, original_title, updated_title)
+    entry = create(admin, disposable, _data(original_title, publication_type="Report",
+                                            publication_date="01/01/2026", page_count="1"), publish=True)
+    pub = PublicationsPage(page)
+    pub.open_publications()
+    pub.search(original_title)
+    assert original_title in pub.card_titles()
 
-        admin.open_entry_by_edit_link(original_title)
-        admin.fill_text(FIELD_PUBLICATION_TITLE_EN, updated_title)
-        admin.submit_for_review()
+    admin.open_entry(entry)
+    admin.fill_text(FIELD_PUBLICATION_TITLE_EN, updated_title)
+    disposable.add_title(entry, updated_title)  # teardown knows the rename BEFORE it is sent
+    admin.publish()
 
-        pub.open_publications()
-        pub.search(updated_title)
-        titles = pub.card_titles()
+    pub.open_publications()
+    pub.search(updated_title)
+    titles = pub.card_titles()
 
-        assert updated_title in titles
-        assert original_title not in titles
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(updated_title)
-        admin.open_entries_list()
-        admin.delete_entry_by_title(original_title)
+    assert updated_title in titles
+    assert original_title not in titles
 
 
 # ===========================================================================
@@ -730,28 +716,25 @@ def test_republish_updates_not_stale_web(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144006
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_unpublish_removes_from_public_page_web(page):
+def test_unpublish_removes_from_public_page_web(page, disposable):
     # Azure TC 144006 | PBI 130711 — Web-side half.
     admin = PublicationAdminPage(page)
-    title = "QCTEST-144006 Unpublish Flow"
-    try:
-        admin.publish_disposable_entry("144006", **{FIELD_PUBLICATION_TITLE_EN: title},
-                                        publication_type="Manuals", publication_date="01/01/2026", page_count="1")
-        admin.open_entry_by_edit_link(title)
-        admin.unpublish_to_edit_as_draft()
+    title = title_for("144006", "Unpublish-Flow-Web")
+    require_no_leftovers(admin, title)
+    entry = create(admin, disposable, _data(title, publication_type="Manuals", publication_date="01/01/2026",
+                                            page_count="1"), publish=True)
+    admin.open_entries_list()
+    admin.run_row_action(entry, "unpublish")
 
-        anon_ctx = page.context.browser.new_context()
-        anon_page = anon_ctx.new_page()
-        pub = PublicationsPage(anon_page)
-        pub.open_publications_anonymous()
-        pub.search(title)
-        titles = pub.card_titles()
-        anon_ctx.close()
+    anon_ctx = page.context.browser.new_context()
+    anon_page = anon_ctx.new_page()
+    pub = PublicationsPage(anon_page)
+    pub.open_publications_anonymous()
+    pub.search(title)
+    titles = pub.card_titles()
+    anon_ctx.close()
 
-        assert title not in titles
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    assert title not in titles
 
 
 # ===========================================================================
@@ -768,16 +751,20 @@ def test_unpublish_removes_from_public_page_web(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144007
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_delete_removes_from_grid_and_public_page_web(page):
-    # Azure TC 144007 | PBI 130711 — Web-side half.
+def test_delete_removes_from_grid_and_public_page_web(page, disposable):
+    # Azure TC 144007 | PBI 130711 — Web-side half. The delete IS the case's
+    # step: it goes through the guarded path with the id captured at creation.
     admin = PublicationAdminPage(page)
-    title = "QCTEST-144007 Delete Flow"
-    admin.publish_disposable_entry("144007", **{FIELD_PUBLICATION_TITLE_EN: title},
-                                    publication_type="Report", publication_date="01/01/2026", page_count="1")
+    title = title_for("144007", "Delete-Flow-Web")
+    require_no_leftovers(admin, title)
+    entry = create(admin, disposable, _data(title, publication_type="Report", publication_date="01/01/2026",
+                                            page_count="1"), publish=True)
 
+    deleted = admin.delete_disposable_entry(entry)
+    if deleted:
+        disposable.mark_removed(entry)
     admin.open_entries_list()
-    admin.delete_entry_by_title(title)
-    grid_gone = not admin.row_visible(title)
+    grid_gone = deleted and not admin.row_present(entry)
 
     pub = PublicationsPage(page)
     pub.open_publications()
@@ -861,22 +848,18 @@ def test_badge_persists_after_type_deactivated(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144072
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_future_publication_date_appears_immediately_web(page):
+def test_future_publication_date_appears_immediately_web(page, disposable):
     # Azure TC 144072 | PBI 130711 — Web-side half.
     admin = PublicationAdminPage(page)
-    title = "QCTEST-144072 Future Date"
-    try:
-        admin.publish_disposable_entry("144072", **{FIELD_PUBLICATION_TITLE_EN: title},
-                                        publication_type="Report",
-                                        publication_date="20/10/2026", page_count="1")
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        pub.search(title)
+    title = title_for("144072", "Future-Date-Web")
+    require_no_leftovers(admin, title)
+    create(admin, disposable, _data(title, publication_type="Report", publication_date="20/10/2026",
+                                    page_count="1"), publish=True)
+    pub = PublicationsPage(page)
+    pub.open_publications()
+    pub.search(title)
 
-        assert title in pub.card_titles()
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    assert title in pub.card_titles()
 
 
 # ===========================================================================
@@ -893,22 +876,22 @@ def test_future_publication_date_appears_immediately_web(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144075
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_deleted_record_download_link_graceful_web(page):
-    # Azure TC 144075 | PBI 130711 — Web-side half. Verifies the observable
-    # surface only: the old link does not resolve to the same file/500
-    # error after delete. A byte-level content check was not performed.
+def test_deleted_record_download_link_graceful_web(page, disposable):
+    # Azure TC 144075 | PBI 130711 — Web-side half. The delete is the case's
+    # step and goes through the guarded path with the captured id.
     admin = PublicationAdminPage(page)
-    title = "QCTEST-144075 Delete Reference"
-    admin.publish_disposable_entry("144075", **{FIELD_PUBLICATION_TITLE_EN: title},
-                                    publication_type="Guides", publication_date="01/01/2026", page_count="1")
+    title = title_for("144075", "Delete-Reference-Web")
+    require_no_leftovers(admin, title)
+    entry = create(admin, disposable, _data(title, publication_type="Guides", publication_date="01/01/2026",
+                                            page_count="1"), publish=True)
     pub = PublicationsPage(page)
     pub.open_publications()
     pub.search(title)
     index = pub.card_index(title)
     old_download_href = pub.card_download_href(index)
 
-    admin.open_entries_list()
-    admin.delete_entry_by_title(title)
+    if admin.delete_disposable_entry(entry):
+        disposable.mark_removed(entry)
 
     response = page.request.get(old_download_href)
     assert response.status in (404, 410, 400) or response.status >= 400 or "not found" in response.text().lower()
@@ -1132,25 +1115,21 @@ def test_all_publications_chip_restores_default(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_144062
 @PUBLICATIONS_CMS_XDIST_GROUP
-def test_load_more_reveals_additional_records(page):
+def test_load_more_reveals_additional_records(page, disposable):
     # Azure TC 144062 | PBI 130711 — one disposable entry is published to
-    # push the count past the current 8-card page size (confirmed hidden
-    # otherwise, see module docstring).
+    # push the count past the page size.
     admin = PublicationAdminPage(page)
-    title = "QCTEST-144062 Load More"
-    try:
-        admin.publish_disposable_entry("144062", **{FIELD_PUBLICATION_TITLE_EN: title},
-                                        publication_type="Manuals", publication_date="01/01/2026", page_count="1")
-        pub = PublicationsPage(page)
-        pub.open_publications()
-        before = pub.card_count()
-        assert pub.is_load_more_visible()
-        pub.click_load_more()
+    title = title_for("144062", "Load-More")
+    require_no_leftovers(admin, title)
+    create(admin, disposable, _data(title, publication_type="Manuals", publication_date="01/01/2026",
+                                    page_count="1"), publish=True)
+    pub = PublicationsPage(page)
+    pub.open_publications()
+    before = pub.card_count()
+    assert pub.is_load_more_visible()
+    pub.click_load_more()
 
-        assert pub.card_count() > before
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    assert pub.card_count() > before
 
 
 @allure.epic("Insights & Media")

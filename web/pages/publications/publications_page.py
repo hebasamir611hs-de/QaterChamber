@@ -182,6 +182,15 @@ class PublicationsPage(BasePage):
         self.wait_for(self.HERO_TITLE)
         return self
 
+    def wait_for_results(self, timeout_ms: int = 30000) -> "PublicationsPage":
+        """ADDED 2026-09-30 (PBI 130711 heal): the grid is filled by a client
+        fetch after the hero renders, so a card read straight after
+        open_publications() can see an EMPTY grid — which makes an
+        "is absent" check pass vacuously. Waits until the grid shows at least
+        one card OR the empty state."""
+        self.page.locator(f"{self.CARD}, {self.EMPTY}").first.wait_for(state="visible", timeout=timeout_ms)
+        return self
+
     # ---- Hero / breadcrumb queries -------------------------------------------
     def hero_title_text(self) -> str:
         return self.text(self.HERO_TITLE)

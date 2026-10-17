@@ -134,6 +134,7 @@ BasePage.open()'s global dismissal covers it for free if it returns.
 
 from config.settings import web_url
 from core.web.base_page import BasePage
+from web.pages.components.accessibility_tools_component import AccessibilityToolsComponent
 
 # The canonical path — identical for both locales; web_url(locale="ar")
 # prepends ARABIC_PATH_PREFIX. See the module docstring for why the /en/<slug>
@@ -808,3 +809,225 @@ class LegalConsultationPage(BasePage):
 
     def category_options(self) -> list:
         return [t.strip() for t in self.page.locator(f"{self.FORM} select option").all_inner_texts()]
+
+    # ---- Batch 2 (2026-09-24, suite 138499): language toggle, theme, viewports
+    # Confirmed live: the header toggle routes through
+    # /c/portal/update_language (redirect param carries the path only, no
+    # scroll/hash) and dark mode is reached only via the Accessibility tools
+    # widget; the attachment control is a visually-hidden <input type=file>
+    # (#qc-lc-attachment) behind the <label class="qc-lc-drop"> drop zone.
+    PAGE_BODY = "body"
+    HEADER = "header.qc-global-site-header"
+    HEADER_NAV_LINK = "header.qc-global-site-header a.qc-nav-link"
+    LANG_TOGGLE = "header.qc-global-site-header a.qc-lang-switcher"
+    ATTACHMENT_DROP = "label.qc-lc-drop"
+
+    def toggle_language(self) -> "LegalConsultationPage":
+        """Click the header toggle, wait for the real navigation (URL change)
+        and for the client-rendered content to arrive in the new locale."""
+        before = self.page.url
+        self.click(self.LANG_TOGGLE)
+        self.wait_for_url(lambda url: url != before, timeout=30000)
+        self.wait_for(self.TITLE, state="visible", timeout=30000)
+        self.wait_for(self.FAQ_QUESTION, state="visible", timeout=30000, first=True)
+        return self
+
+    def enable_dark_mode(self) -> "LegalConsultationPage":
+        """Flip the real Dark mode switch, then wait for the theme's colour
+        transitions to settle (colours read mid-fade are interpolated)."""
+        AccessibilityToolsComponent(self.page).enable_dark_mode()
+        self.page.wait_for_function(
+            "() => document.getAnimations().every((a) => a.playState !== 'running')", timeout=10000
+        )
+        return self
+
+    def scroll_to(self, locator: str, index: int = 0) -> None:
+        self.page.locator(locator).nth(index).scroll_into_view_if_needed()
+
+    def go_to_section_via_index(self, index: int) -> "LegalConsultationPage":
+        """Click the nth section-index entry and wait until that section is
+        the one in view (smooth scroll settles asynchronously)."""
+        target = self.page.locator(self.SECTION).nth(index).get_attribute("id")
+        self.page.locator(self.INDEX_ITEM).nth(index).click()
+        # Smooth scroll: wait until the section's top has reached the top band
+        # AND scrollY has stopped moving between two polls (settled).
+        self.page.wait_for_function(
+            """(id) => { const e = document.getElementById(id); if (!e) return false;
+                const r = e.getBoundingClientRect();
+                const settled = window.__qcLcY === scrollY; window.__qcLcY = scrollY;
+                return settled && r.top >= -2 && r.top <= innerHeight * 0.25; }""",
+            arg=target, polling=150, timeout=10000,
+        )
+        return self
+
+    def section_in_view(self):
+        """id of the content section spanning the reading line (25% down the
+        viewport), or None when no section is there (e.g. hero at the top)."""
+        return self.page.evaluate(
+            """(sel) => { const y = innerHeight * 0.25; const s = [...document.querySelectorAll(sel)].find((e) => {
+                    const r = e.getBoundingClientRect(); return r.top <= y && r.bottom > y; });
+                return s ? s.id : null; }""",
+            self.SECTION,
+        )
+
+    def language_toggle_label(self) -> str:
+        return self.text(self.LANG_TOGGLE).strip()
+
+    def theme(self):
+        return self.page.evaluate("() => document.documentElement.getAttribute('data-theme')")
+
+    def is_displayed(self, locator: str, index: int = 0) -> bool:
+        return self.page.locator(locator).nth(index).is_visible()
+
+    def text_contents(self, locator: str) -> list:
+        """textContent of every match (reads collapsed/hidden nodes too)."""
+        return [" ".join((t or "").split()) for t in self.page.locator(locator).all_text_contents()]
+
+    def boxes(self, locator: str) -> list:
+        loc = self.page.locator(locator)
+        return [loc.nth(i).bounding_box() for i in range(loc.count())]
+
+    def computed_styles_all(self, locator: str, props: list) -> list:
+        return self.page.locator(locator).evaluate_all(
+            "(els, props) => els.map((el) => { const s = getComputedStyle(el); const o = {};"
+            " for (const p of props) o[p] = s[p]; return o; })",
+            props,
+        )
+
+    def effective_background(self, locator: str, index: int = 0) -> str:
+        """Background this element visually sits on: its own solid colour or
+        the nearest painted ancestor's; a gradient reached first is returned
+        as the gradient string."""
+        return self.page.locator(locator).nth(index).evaluate(
+            """(el) => { let n = el; while (n && n.nodeType === 1) { const s = getComputedStyle(n);
+                if (s.backgroundImage && s.backgroundImage !== 'none') return s.backgroundImage;
+                if (s.backgroundColor && s.backgroundColor !== 'rgba(0, 0, 0, 0)') return s.backgroundColor;
+                n = n.parentElement; } return 'rgb(255, 255, 255)'; }"""
+        )
+
+    def horizontal_overflow_px(self) -> int:
+        return self.page.evaluate(
+            "() => document.documentElement.scrollWidth - document.documentElement.clientWidth"
+        )
+
+    def overflowing_elements(self) -> list:
+        """Up to 5 VISIBLE elements whose right edge passes the viewport
+        (visibility:hidden nodes such as the parked invisible-reCAPTCHA badge
+        are excluded — they paint nothing)."""
+        return self.page.evaluate(
+            """() => [...document.querySelectorAll("body *")]
+                .filter((e) => { const r = e.getBoundingClientRect();
+                    return r.width > 0 && r.right > innerWidth + 1 && getComputedStyle(e).visibility !== "hidden"; })
+                .slice(0, 5).map((e) => e.tagName.toLowerCase() + "." + String(e.className).trim()
+                    + " (right=" + Math.round(e.getBoundingClientRect().right) + "px)")"""
+        )
+
+    def clipped_text_elements(self, scope: str = ".qc-lc-hero, .qc-lc-content, .qc-lc-banner") -> list:
+        return self.page.evaluate(
+            """(scope) => [...document.querySelectorAll(scope.split(",").map((s) => s.trim() + " *").join(","))]
+                .filter((e) => e.offsetParent !== null && e.children.length === 0
+                    && e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).overflowX !== "visible")
+                .map((e) => String(e.className) || e.tagName)""",
+            scope,
+        )
+
+    def text_contrast(self, locator: str, index: int = 0) -> dict:
+        """WCAG contrast of the nth match's text against the first solid
+        ancestor background (text alpha blended); ratio=None when a gradient
+        or image background is reached first (not measurable)."""
+        return self.page.locator(locator).nth(index).evaluate(
+            """
+            (el) => {
+                const parse = (c) => { const m = c.match(/[0-9.]+/g) || [0, 0, 0, 0];
+                    return [+m[0], +m[1], +m[2], m.length > 3 ? +m[3] : 1]; };
+                const lum = (rgb) => { const f = (v) => { v /= 255;
+                    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+                    return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]); };
+                const s = getComputedStyle(el);
+                let node = el, bg = null, blocker = null;
+                while (node && node.nodeType === 1) {
+                    const cs = getComputedStyle(node);
+                    if (cs.backgroundImage && cs.backgroundImage !== "none") { blocker = cs.backgroundImage; break; }
+                    const c = parse(cs.backgroundColor);
+                    if (c[3] > 0) { bg = c; break; }
+                    node = node.parentElement;
+                }
+                if (!bg && !blocker) bg = [255, 255, 255, 1];
+                const fg = parse(s.color);
+                const out = {color: s.color, fontSize: parseFloat(s.fontSize), fontWeight: +s.fontWeight,
+                             text: (el.textContent || "").trim().slice(0, 40)};
+                if (!bg) return Object.assign(out, {ratio: null, background: blocker});
+                const a = fg[3];
+                const mix = [0, 1, 2].map((i) => fg[i] * a + bg[i] * (1 - a));
+                const l1 = lum(mix), l2 = lum(bg);
+                return Object.assign(out, {ratio: Math.round((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05) * 100) / 100,
+                                           background: "rgb(" + bg.slice(0, 3).join(", ") + ")"});
+            }
+            """
+        )
+
+    def relative_luminance(self, css_colour: str) -> float:
+        return self.page.evaluate(
+            """(c) => { const m = (c.match(/[0-9.]+/g) || [0, 0, 0]).map(Number);
+                const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+                return 0.2126 * f(m[0]) + 0.7152 * f(m[1]) + 0.0722 * f(m[2]); }""",
+            css_colour,
+        )
+
+    def collapse_faq(self, index: int = 0) -> None:
+        """Click an expanded question again and wait for its answer to hide."""
+        self.page.locator(self.FAQ_QUESTION).nth(index).click()
+        self.page.locator(self.FAQ_ANSWER).nth(index).wait_for(state="hidden", timeout=10000)
+
+    def request_form_field_geometry(self) -> list:
+        """Per VISIBLE form field, after scrolling it into view inside the
+        modal: label/control boxes (viewport px), label clipping, and the
+        control's value — for the mobile usability case."""
+        out = []
+        fields = self.page.locator(self.FIELD)
+        for i in range(fields.count()):
+            field = fields.nth(i)
+            if not field.is_visible():
+                continue
+            field.scroll_into_view_if_needed()
+            out.append(field.evaluate(
+                """(f) => {
+                    const l = f.querySelector('.qc-lc-label');
+                    const c = f.querySelector('input:not([type=hidden]):not([type=file]), select, textarea, label.qc-lc-drop');
+                    const bb = (e) => { if (!e) return null; const r = e.getBoundingClientRect();
+                        return {x: r.x, y: r.y, width: r.width, height: r.height}; };
+                    return {label: l ? l.textContent.trim() : null, labelBox: bb(l), controlBox: bb(c),
+                            control: c ? c.tagName.toLowerCase() + (c.id ? '#' + c.id : '') : null,
+                            labelClipped: !!l && l.scrollWidth > l.clientWidth + 1};
+                }"""
+            ))
+        return out
+
+    def field_value(self, control_id: str) -> str:
+        return self.page.locator(f"#{control_id}").input_value()
+
+    def attachment_opens_file_chooser(self) -> bool:
+        """Click the attachment drop zone and report whether the browser
+        raised a real file chooser (nothing is uploaded)."""
+        self.scroll_to(self.ATTACHMENT_DROP)
+        try:
+            with self.page.expect_file_chooser(timeout=5000) as info:
+                self.page.locator(self.ATTACHMENT_DROP).click()
+            return info.value is not None
+        except Exception:  # noqa: BLE001 — a timeout means no chooser opened
+            return False
+
+    def visible_recaptcha_boxes(self) -> list:
+        """Boxes of reCAPTCHA elements that actually paint (visibility not
+        hidden, non-zero size) — the invisible-Enterprise badge parks
+        off-canvas with visibility:hidden until it is needed."""
+        return self.page.evaluate(
+            """() => [...document.querySelectorAll('.grecaptcha-badge, iframe[src*="recaptcha"]')]
+                .filter((e) => { const r = e.getBoundingClientRect();
+                    return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; })
+                .map((e) => { const r = e.getBoundingClientRect();
+                    return {x: r.x, width: r.width, right: r.right}; })"""
+        )
+
+    def count_of(self, locator: str) -> int:
+        return self.page.locator(locator).count()

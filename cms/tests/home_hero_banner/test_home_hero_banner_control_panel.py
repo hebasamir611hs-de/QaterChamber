@@ -113,6 +113,7 @@ from cms.pages.home_hero_banner.home_hero_banner_admin_page import (
 )
 from core.web.browser import new_context
 from web.pages.home_hero_banner.home_hero_banner_page import HomeHeroBannerPage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 HERO_SLIDE_FINGERPRINT_TITLE_EN = "QCTEST-135024 Hero Slide Probe"
 
@@ -238,7 +239,7 @@ def test_republishing_previously_unpublished_slide_restores_it(page, browser):
     admin.open_entry_by_code(HERO_SLIDE_02_ERC)
     baseline_title_en = admin.banner_title_en_value()
     baseline_status = admin.current_status()
-    assert baseline_status == "Approved", (
+    assert baseline_status == STATUS_PUBLISHED, (
         f"expected {HERO_SLIDE_02_ERC!r}'s baseline status to be Approved, got "
         f"{baseline_status!r} — confirm the real baseline before running this test"
     )
@@ -250,7 +251,7 @@ def test_republishing_previously_unpublished_slide_restores_it(page, browser):
             admin.submit_for_publishing()
 
         admin.open_entry_by_code(HERO_SLIDE_02_ERC)
-        assert admin.current_status() == "Approved", "fingerprint publish did not persist as Approved"
+        assert admin.current_status() == STATUS_PUBLISHED, "fingerprint publish did not persist as Approved"
 
         with allure.step("Confirm the fingerprinted slide is visible on the live Home Page (arrange baseline)"):
             assert home.reload_until_title_in_carousel(HERO_SLIDE_FINGERPRINT_TITLE_EN, expected_visible=True), (
@@ -271,7 +272,7 @@ def test_republishing_previously_unpublished_slide_restores_it(page, browser):
             admin.submit_for_publishing()
 
         admin.open_entry_by_code(HERO_SLIDE_02_ERC)
-        assert admin.current_status() == "Approved", (
+        assert admin.current_status() == STATUS_PUBLISHED, (
             f"expected Approved (Published) after re-publishing, got {admin.current_status()!r}"
         )
 
@@ -282,7 +283,7 @@ def test_republishing_previously_unpublished_slide_restores_it(page, browser):
     finally:
         with allure.step("Teardown: restore the baseline Banner Title (EN) and Approved status, re-verified"):
             admin.open_entry_by_code(HERO_SLIDE_02_ERC)
-            if admin.current_status() == "Approved":
+            if admin.current_status() == STATUS_PUBLISHED:
                 admin.unpublish_to_edit_as_draft()
             admin.set_banner_title_en(baseline_title_en)
             admin.submit_for_publishing()
@@ -923,7 +924,7 @@ def test_delete_slide_removes_from_cms_and_public_site(page, browser):
             "Submit for Publishing did not create a persisted, resolvable record"
         )
         admin.open_entry_by_code(entry_code)
-        assert admin.current_status() == "Approved", (
+        assert admin.current_status() == STATUS_PUBLISHED, (
             f"expected {title_en!r} to show status Approved immediately after Submit for Publishing"
         )
 
@@ -1158,7 +1159,7 @@ def test_edit_existing_published_slide_title(page):
     admin.open_entry_by_code(HERO_SLIDE_02_ERC)
     baseline_title_en = admin.banner_title_en_value()
     baseline_status = admin.current_status()
-    assert baseline_status == "Approved", (
+    assert baseline_status == STATUS_PUBLISHED, (
         f"expected {HERO_SLIDE_02_ERC!r}'s baseline status to be Approved, got "
         f"{baseline_status!r} — confirm the real baseline before running this test"
     )
@@ -1184,11 +1185,11 @@ def test_edit_existing_published_slide_title(page):
         with allure.step("Confirm the slide title updated and persisted"):
             admin.open_entry_by_code(HERO_SLIDE_02_ERC)
             assert admin.banner_title_en_value() == new_title_en, "Title EN did not persist as the new value"
-            assert admin.current_status() == "Approved", "slide did not return to Approved after re-Submit"
+            assert admin.current_status() == STATUS_PUBLISHED, "slide did not return to Approved after re-Submit"
     finally:
         with allure.step("Teardown: restore the baseline title and Approved status, re-verified"):
             admin.open_entry_by_code(HERO_SLIDE_02_ERC)
-            if admin.current_status() == "Approved":
+            if admin.current_status() == STATUS_PUBLISHED:
                 admin.unpublish_to_edit_as_draft()
             admin.set_banner_title_en(baseline_title_en)
             admin.submit_for_publishing()
@@ -1240,7 +1241,7 @@ def test_enabling_slide_active_status_makes_it_eligible(page, browser):
         entry_code = admin.find_entry_code_by_field(BANNER_TITLE_EN_LABEL, title_en)
         assert entry_code, f"could not resolve the just-created entry {title_en!r}"
         admin.open_entry_by_code(entry_code)
-        assert admin.current_status() == "Approved", "arranged slide did not reach Approved status"
+        assert admin.current_status() == STATUS_PUBLISHED, "arranged slide did not reach Approved status"
         assert admin.is_slide_active() is False, "arranged slide's baseline Active Status was not False"
 
         with allure.step("Confirm precondition: the slide is not eligible/visible on the Home Page while Active=False"):
@@ -1305,7 +1306,7 @@ def test_disabling_slide_active_status_removes_it(page, browser):
         entry_code = admin.find_entry_code_by_field(BANNER_TITLE_EN_LABEL, title_en)
         assert entry_code, f"could not resolve the just-created entry {title_en!r}"
         admin.open_entry_by_code(entry_code)
-        assert admin.current_status() == "Approved", "arranged slide did not reach Approved status"
+        assert admin.current_status() == STATUS_PUBLISHED, "arranged slide did not reach Approved status"
         assert admin.is_slide_active() is True, "arranged slide's baseline Active Status was not True"
 
         visible_before = home.reload_until_title_in_carousel(title_en, expected_visible=True)
@@ -1387,7 +1388,7 @@ def test_publishing_slide_makes_it_visible_after_cache_refresh(page, browser):
         assert toast_seen, "no Liferay success toast/keyword was observed within 6 seconds of Publish"
 
         admin.open_entry_by_code(entry_code)
-        assert admin.current_status() == "Approved", "status did not change to Published/Approved"
+        assert admin.current_status() == STATUS_PUBLISHED, "status did not change to Published/Approved"
 
         with allure.step("Trigger/await cache refresh, Load Home Page: the published slide now appears"):
             visible = home.reload_until_title_in_carousel(title_en, expected_visible=True)
@@ -1442,7 +1443,7 @@ def test_unpublishing_slide_removes_it_from_home_page(page, browser):
         entry_code = admin.find_entry_code_by_field(BANNER_TITLE_EN_LABEL, title_en)
         assert entry_code, f"could not resolve the just-created entry {title_en!r}"
         admin.open_entry_by_code(entry_code)
-        assert admin.current_status() == "Approved", "arranged slide did not reach Approved status"
+        assert admin.current_status() == STATUS_PUBLISHED, "arranged slide did not reach Approved status"
 
         visible_before = home.reload_until_title_in_carousel(title_en, expected_visible=True)
         assert visible_before, (
@@ -1553,7 +1554,7 @@ def test_add_new_achievement_counter_item(page, browser):
             f"(EN) value (toast keyword observed: {toast_seen}) — Save/Publish did not persist a resolvable record"
         )
         admin.open_entry_by_code(entry_code)
-        assert admin.current_status() == "Approved", (
+        assert admin.current_status() == STATUS_PUBLISHED, (
             f"counter did not save/publish successfully (toast keyword observed: {toast_seen})"
         )
         assert admin.counter_title_en_value() == title_en, "Counter Title (EN) was not saved with the entered value"
