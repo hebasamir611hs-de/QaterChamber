@@ -1,0 +1,326 @@
+[
+{
+"id": 130961,
+"p": 1,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the footer renders all sections on every page"
+},
+{
+"id": 130962,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking the footer logo redirects to the Home Page"
+},
+{
+"id": 130963,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an internal footer navigation link opens in the same tab"
+},
+{
+"id": 130964,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an external footer navigation link opens in a new tab"
+},
+{
+"id": 130965,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Quick Links column renders its heading and active quick links"
+},
+{
+"id": 130966,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Quick Links column is hidden when no quick links are active"
+},
+{
+"id": 130967,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking a quick link redirects to its configured URL"
+},
+{
+"id": 130968,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking a social media icon opens the official channel in a new tab"
+},
+{
+"id": 130969,
+"p": 1,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that subscribing with a valid email shows a success confirmation"
+},
+{
+"id": 130970,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that submitting an empty or invalid email shows an inline validation error"
+},
+{
+"id": 130971,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a newsletter backend error displays the appropriate error message"
+},
+{
+"id": 130972,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the copyright bar displays copyright text and bottom bar links correctly"
+},
+{
+"id": 130973,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking the Back to Top icon scrolls the page to the top"
+},
+{
+"id": 130974,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the footer layout mirrors RTL when Arabic language is selected"
+},
+{
+"id": 130975,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the footer falls back to the default language when a translation is missing"
+},
+{
+"id": 130976,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that disabling an individual footer element hides only that element"
+},
+{
+"id": 130977,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that admin can upload footer logo with alt text and redirect URL"
+},
+{
+"id": 130978,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that saving the footer logo without an image shows a required-field error"
+},
+{
+"id": 130979,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that admin can create, edit, and reorder footer navigation columns"
+},
+{
+"id": 130980,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a missing column heading shows a required-field error"
+},
+{
+"id": 130981,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a missing Quick Link Title (EN) shows a required-field error"
+},
+{
+"id": 130982,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that an invalid Quick Link URL shows a validation error"
+},
+{
+"id": 130983,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that admin can add a social media icon entry"
+},
+{
+"id": 130984,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that saving a social icon without an image shows a required-field error"
+},
+{
+"id": 130985,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a missing platform name shows a required-field error"
+},
+{
+"id": 130986,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that admin can configure the newsletter section fields"
+},
+{
+"id": 130987,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that admin can manage copyright text and bottom bar links"
+},
+{
+"id": 130988,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Passed",
+"title": "Verify that an admin without permission cannot publish footer configuration"
+},
+{
+"id": 130989,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Passed",
+"title": "Verify that the draft, preview, and publish lifecycle works for footer records"
+},
+{
+"id": 130990,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that admin can add a quick link via the Useful Links Manager"
+},
+{
+"id": 130991,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "التحقق من أنه يتم عرض تخطيط التذييل من اليمين إلى اليسار عند اختيار اللغة العربية"
+},
+{
+"id": 130992,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "التحقق من أنه يتم عرض اللغة الافتراضية في التذييل عند عدم توفر ترجمة عربية"
+},
+{
+"id": 130993,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "التحقق من أنه تظهر رسالة التحقق عند إدخال بريد إلكتروني فارغ أو غير صالح في قسم النشرة الإخبارية"
+},
+{
+"id": 130994,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "التحقق من أنه تظهر رسالة الخطأ عند فشل خادم الاشتراك في النشرة الإخبارية"
+},
+{
+"id": 130995,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "التحقق من أنه تظهر رسالة الحقل المطلوب عند إغفال عنوان العمود باللغة العربية"
+},
+{
+"id": 130996,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Passed",
+"title": "التحقق من أنه تظهر رسالة رفض الوصول باللغة العربية عند محاولة مستخدم غير مصرح له نشر إعدادات التذييل"
+}
+]

@@ -1,0 +1,785 @@
+[
+{
+"id": 135329,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Our Services section renders correctly in English (LTR)"
+},
+{
+"id": 135330,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Our Services section renders correctly in Arabic (RTL)"
+},
+{
+"id": 135331,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that All Services tab is active by default on section load"
+},
+{
+"id": 135332,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Public Visitor can view the published Our Services section without authentication"
+},
+{
+"id": 135333,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Site Content Editor can access Our Services Section Management in Liferay CMS"
+},
+{
+"id": 135334,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a user without Site Content Editor rights is denied access to Our Services Section Management"
+},
+{
+"id": 135335,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking a filter tab displays only cards assigned to that tab"
+},
+{
+"id": 135336,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking back to All Services after a filter restores the full card set"
+},
+{
+"id": 135337,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking Read More on a service card redirects to the detailed service page"
+},
+{
+"id": 135338,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking View All Services CTA redirects to the Our Services listing page"
+},
+{
+"id": 135339,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section is fully responsive at mobile width"
+},
+{
+"id": 135340,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section is fully responsive at tablet width"
+},
+{
+"id": 135341,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section is fully responsive at desktop width"
+},
+{
+"id": 135342,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Membership tab filter shows only Membership-assigned cards"
+},
+{
+"id": 135343,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Legal tab filter shows only Legal-assigned cards"
+},
+{
+"id": 135344,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that E-Services tab filter shows only E-Services-assigned cards"
+},
+{
+"id": 135345,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Information Services tab filter shows only Information-assigned cards"
+},
+{
+"id": 135346,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving the section as Draft in CMS keeps it hidden from the live Home Page"
+},
+{
+"id": 135347,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Preview shows the section as it will appear before publishing"
+},
+{
+"id": 135348,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that Publish makes the configured section live on the Home Page"
+},
+{
+"id": 135349,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Applicable",
+"title": "Verify that submitting the section for review moves it to Pending Review status"
+},
+{
+"id": 135350,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Blocked",
+"title": "Verify that Unpublish removes the section from the live Home Page"
+},
+{
+"id": 135351,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that assigning a service card to a filter tab makes it appear under that tab"
+},
+{
+"id": 135352,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that reassigning a service card to a different tab moves it out of the original tab"
+},
+{
+"id": 135353,
+"p": 1,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Our Services section does not render on the Home Page when no service card is published"
+},
+{
+"id": 135354,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Tag (EN) saves and displays"
+},
+{
+"id": 135355,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Section Tag (EN) empty is rejected"
+},
+{
+"id": 135356,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Tag (EN) rejects input exceeding 20 characters"
+},
+{
+"id": 135357,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Tag (EN) with only whitespace is rejected"
+},
+{
+"id": 135358,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Tag (AR) saves and displays"
+},
+{
+"id": 135359,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Section Tag (AR) empty is rejected"
+},
+{
+"id": 135360,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Tag (AR) rejects input exceeding 20 characters"
+},
+{
+"id": 135361,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Tag (AR) with only whitespace is rejected"
+},
+{
+"id": 135362,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Heading (EN) saves and displays"
+},
+{
+"id": 135363,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Section Heading (EN) empty is rejected"
+},
+{
+"id": 135364,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Heading (EN) rejects input exceeding 200 characters"
+},
+{
+"id": 135365,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Heading (EN) with only whitespace is rejected"
+},
+{
+"id": 135366,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Heading (AR) saves and displays"
+},
+{
+"id": 135367,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Section Heading (AR) empty is rejected"
+},
+{
+"id": 135368,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Heading (AR) rejects input exceeding 200 characters"
+},
+{
+"id": 135369,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Heading (AR) with only whitespace is rejected"
+},
+{
+"id": 135370,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Description (EN) saves and displays"
+},
+{
+"id": 135371,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Description (EN) can be saved empty since it is optional"
+},
+{
+"id": 135372,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Description (EN) rejects input exceeding 500 characters"
+},
+{
+"id": 135373,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Description (AR) saves and displays"
+},
+{
+"id": 135374,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Description (AR) can be saved empty since it is optional"
+},
+{
+"id": 135375,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Description (AR) rejects input exceeding 500 characters"
+},
+{
+"id": 135376,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid PNG thumbnail under 2MB uploads and displays on the card"
+},
+{
+"id": 135377,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an unsupported image format is rejected for the thumbnail"
+},
+{
+"id": 135378,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a thumbnail exceeding 2MB is rejected"
+},
+{
+"id": 135379,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with no thumbnail uploaded is rejected since it is mandatory"
+},
+{
+"id": 135380,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid View All Label (EN) saves and displays on the CTA"
+},
+{
+"id": 135381,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving View All Label (EN) empty is rejected"
+},
+{
+"id": 135382,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that View All Label (EN) rejects input exceeding 50 characters"
+},
+{
+"id": 135383,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that View All Label (EN) with only whitespace is rejected"
+},
+{
+"id": 135384,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid View All Label (AR) saves and displays on the CTA"
+},
+{
+"id": 135385,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving View All Label (AR) empty is rejected"
+},
+{
+"id": 135386,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that View All Label (AR) rejects input exceeding 50 characters"
+},
+{
+"id": 135387,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that View All Label (AR) with only whitespace is rejected"
+},
+{
+"id": 135388,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid View All URL saves and the CTA redirects correctly"
+},
+{
+"id": 135389,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an invalid View All URL is rejected"
+},
+{
+"id": 135390,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that View All URL rejects input exceeding 500 characters"
+},
+{
+"id": 135391,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving View All URL empty is rejected since it is mandatory"
+},
+{
+"id": 135392,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Tab Label (EN) saves and displays on the tab bar"
+},
+{
+"id": 135393,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Tab Label (EN) empty is rejected"
+},
+{
+"id": 135394,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Tab Label (EN) rejects input exceeding 50 characters"
+},
+{
+"id": 135395,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Tab Label (EN) with only whitespace is rejected"
+},
+{
+"id": 135396,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Tab Label (AR) saves and displays on the tab bar"
+},
+{
+"id": 135397,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Tab Label (AR) empty is rejected"
+},
+{
+"id": 135398,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Tab Label (AR) rejects input exceeding 50 characters"
+},
+{
+"id": 135399,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Tab Label (AR) with only whitespace is rejected"
+},
+{
+"id": 135400,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Service Card Redirect URL saves and Read More navigates correctly"
+},
+{
+"id": 135401,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an invalid Service Card Redirect URL is rejected"
+},
+{
+"id": 135402,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Service Card Redirect URL rejects input exceeding 500 characters"
+},
+{
+"id": 135403,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Service Card Redirect URL empty is rejected since it is mandatory"
+},
+{
+"id": 135404,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid positive Display Order saves and controls card sort position"
+},
+{
+"id": 135405,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a negative Display Order is rejected"
+},
+{
+"id": 135406,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Display Order of zero is rejected"
+},
+{
+"id": 135407,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a non-numeric Display Order is rejected"
+},
+{
+"id": 135408,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that setting a Service Card's Active Status to True displays it on the live page"
+},
+{
+"id": 135409,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that setting a Service Card's Active Status to False hides it from the live page"
+},
+{
+"id": 135410,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid card icon uploads and displays on the card"
+},
+{
+"id": 135411,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving a service card with no icon uploaded is rejected since it is mandatory"
+},
+{
+"id": 135412,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that discarding unsaved changes to the Our Services section restores the last saved values"
+},
+{
+"id": 135413,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a saved View All URL persists correctly after reload and does not affect the Tab Label fields"
+},
+{
+"id": 135414,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the View All Services CTA does not appear when the Our Services listing page is unpublished"
+},
+{
+"id": 135415,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the service cards display as a carousel when the published card count is large"
+}
+]

@@ -1,0 +1,1087 @@
+{
+"135009": {
+"status": "passed",
+"stop": 1792052560536,
+"name": "Site Content Editor creates a new Hero Banner slide with all mandatory fields",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t3"
+},
+"135034": {
+"status": "failed",
+"stop": 1792050235640,
+"name": "Banner Image over 2 MB (3.5 MB) is refused",
+"msg": "AssertionError: image: C:\\Users\\HEBA~1.SAM\\AppData\\Local\\Temp\\QCTEST-135034-banner-large-big.jpg was accepted by the upload picker",
+"dir": "reports/allure-20261015-runA\\t10"
+},
+"135035": {
+"status": "passed",
+"stop": 1792050303984,
+"name": "Valid Hero Banner field value is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t11"
+},
+"135039": {
+"status": "passed",
+"stop": 1792050375971,
+"name": "Valid Hero Banner field value is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t12"
+},
+"135049": {
+"status": "passed",
+"stop": 1792050462812,
+"name": "Valid Hero Banner field value is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t13"
+},
+"135053": {
+"status": "passed",
+"stop": 1792050531269,
+"name": "Valid Hero Banner field value is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t14"
+},
+"135057": {
+"status": "passed",
+"stop": 1792050591221,
+"name": "Valid Hero Banner field value is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t15"
+},
+"135062": {
+"status": "passed",
+"stop": 1792050655607,
+"name": "Valid Hero Banner field value is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t16"
+},
+"135066": {
+"status": "passed",
+"stop": 1792050733905,
+"name": "Valid Hero Banner field value is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t17"
+},
+"135070": {
+"status": "passed",
+"stop": 1792050803284,
+"name": "Valid Hero Banner field value is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t18"
+},
+"135036": {
+"status": "passed",
+"stop": 1792052433593,
+"name": "Empty mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t1"
+},
+"135013": {
+"status": "failed",
+"stop": 1792052667080,
+"name": "Site Content Editor edits a published slide's title",
+"msg": "AssertionError: 'QCTEST-135013-Growth-f3ab35': Editor Publish left it 'Pending Review'\nassert 'Pending Review' == 'Published'\n  \n  - Published\n  + Pending Review",
+"dir": "reports/allure-20261015-runA2\\t4"
+},
+"135040": {
+"status": "passed",
+"stop": 1792050967917,
+"name": "Empty mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t20"
+},
+"135050": {
+"status": "passed",
+"stop": 1792051034215,
+"name": "Empty mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t21"
+},
+"135054": {
+"status": "passed",
+"stop": 1792051130098,
+"name": "Empty mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t22"
+},
+"135058": {
+"status": "passed",
+"stop": 1792051196078,
+"name": "Empty mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t23"
+},
+"135063": {
+"status": "passed",
+"stop": 1792051279331,
+"name": "Empty mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t24"
+},
+"135067": {
+"status": "passed",
+"stop": 1792051363456,
+"name": "Empty mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t25"
+},
+"135071": {
+"status": "passed",
+"stop": 1792051441974,
+"name": "Empty mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t26"
+},
+"135059": {
+"status": "passed",
+"stop": 1792051525066,
+"name": "Invalid URL format for a button link is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t27"
+},
+"135072": {
+"status": "passed",
+"stop": 1792051607544,
+"name": "Invalid URL format for a button link is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t28"
+},
+"135078": {
+"status": "passed",
+"stop": 1792051689202,
+"name": "Slide Active Status = True is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t29"
+},
+"135022": {
+"status": "failed",
+"stop": 1792052820824,
+"name": "Publishing a slide makes it visible on the Home Page",
+"msg": "AssertionError: published slide 'QCTEST-135022-live-4facdb' is not in the Home Page slider\nassert 0 > 0\n +  where 0 = count()\n +    where count = <Locator frame=<Frame name= url='https://qcdev.ihorizons.com/en/en/home'> selector='text=QCTEST-135022-live-4facdb'>.count\n +      where <Locator frame=<F",
+"dir": "reports/allure-20261015-runA2\\t5"
+},
+"135079": {
+"status": "passed",
+"stop": 1792051783682,
+"name": "Slide Active Status = False is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t30"
+},
+"135086": {
+"status": "passed",
+"stop": 1792051845398,
+"name": "Counter Value is accepted with a Counter Title set",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t31"
+},
+"135087": {
+"status": "failed",
+"stop": 1792051887596,
+"name": "Counter Value is required once Counter Title is set",
+"msg": "AssertionError: Counter Value empty with Counter Title set: Submit for Review raised no refusal (list status 'Published')",
+"dir": "reports/allure-20261015-runA\\t32"
+},
+"135089": {
+"status": "passed",
+"stop": 1792052492676,
+"name": "Slide with no counter title or value saves",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t2"
+},
+"135002": {
+"status": "passed",
+"stop": 1792050003331,
+"name": "Site Content Editor can open Hero Banner management with the add form enabled",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t5"
+},
+"135003": {
+"status": "passed",
+"stop": 1792050021531,
+"name": "User without Hero Banner permission is denied Hero Banner management",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t6"
+},
+"135031": {
+"status": "passed",
+"stop": 1792050089684,
+"name": "Banner Image within size and format limits is accepted",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t7"
+},
+"135032": {
+"status": "passed",
+"stop": 1792050156877,
+"name": "Slide without a Banner Image is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA\\t8"
+},
+"135033": {
+"status": "failed",
+"stop": 1792050184761,
+"name": "Banner Image in an unsupported format (.gif) is refused",
+"msg": "AssertionError: image: C:\\Users\\HEBA~1.SAM\\AppData\\Local\\Temp\\QCTEST-135033-banner.gif was accepted by the upload picker",
+"dir": "reports/allure-20261015-runA\\t9"
+},
+"131170": {
+"status": "passed",
+"stop": 1792051057673,
+"name": "Verify that leaving the English Platform Name empty blocks save with a mandatory-field err",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t1"
+},
+"131156": {
+"status": "passed",
+"stop": 1792051254737,
+"name": "Verify that an unauthenticated user forced-browsing directly to the CMS Social Media Icons",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t8"
+},
+"131167": {
+"status": "broken",
+"stop": 1792051363452,
+"name": "Verify that a CMS user without permission cannot persist changes to a social icon entry ev",
+"msg": "playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.",
+"dir": "reports/allure-20261015-runB2\\t9"
+},
+"131197": {
+"status": "passed",
+"stop": 1792050069426,
+"name": "Verify that a Draft-status icon with Active Status = True is not displayed on the frontend",
+"msg": "",
+"dir": "reports/allure-20261015-runB\\t12"
+},
+"131200": {
+"status": "failed",
+"stop": 1792051401352,
+"name": "Verify that a Rejected icon entry does not appear on the frontend (ADO-131200)",
+"msg": "AssertionError: assert ''",
+"dir": "reports/allure-20261015-runB2\\t10"
+},
+"135663": {
+"status": "passed",
+"stop": 1792050117818,
+"name": "Logged out: the Pin configuration URL redirects to the Liferay login",
+"msg": "",
+"dir": "reports/allure-20261015-runB\\t14"
+},
+"135664": {
+"status": "passed",
+"stop": 1792050137758,
+"name": "A Site Content Author cannot change the live Pin configuration",
+"msg": "",
+"dir": "reports/allure-20261015-runB\\t15"
+},
+"135670": {
+"status": "broken",
+"stop": 1792055131587,
+"name": "Unpinning the featured event hides the Upcoming Events section",
+"msg": "playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.",
+"dir": "reports/allure-20261015-runC\\t1"
+},
+"135705": {
+"status": "passed",
+"stop": 1792055379773,
+"name": "Active Status off hides the section while an event stays pinned",
+"msg": "",
+"dir": "reports/allure-20261015-runC\\t3"
+},
+"135673": {
+"status": "passed",
+"stop": 1792055379773,
+"name": "Active Status off hides the section while an event stays pinned",
+"msg": "",
+"dir": "reports/allure-20261015-runC\\t3"
+},
+"135701": {
+"status": "passed",
+"stop": 1792055518598,
+"name": "Active Status on with no Pinned Event is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runC\\t4"
+},
+"135333": {
+"status": "passed",
+"stop": 1792050181904,
+"name": "Site Content Editor can access Our Services management",
+"msg": "",
+"dir": "reports/allure-20261015-runB\\t19"
+},
+"131178": {
+"status": "passed",
+"stop": 1792049606364,
+"name": "Verify that leaving Icon Image empty blocks save with a mandatory-field error (ADO-131178)",
+"msg": "",
+"dir": "reports/allure-20261015-runB\\t2"
+},
+"135334": {
+"status": "passed",
+"stop": 1792050200419,
+"name": "User without Site Content Editor rights is denied Our Services management",
+"msg": "",
+"dir": "reports/allure-20261015-runB\\t20"
+},
+"135346": {
+"status": "passed",
+"stop": 1792051676341,
+"name": "Saving the section as Draft keeps the change off the live Home Page",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t14"
+},
+"135348": {
+"status": "passed",
+"stop": 1792050355697,
+"name": "Publish makes the configured section live on the Home Page",
+"msg": "",
+"dir": "reports/allure-20261015-runB\\t22"
+},
+"135350": {
+"status": "failed",
+"stop": 1792050509516,
+"name": "Unpublish removes the section from the live Home Page",
+"msg": "AssertionError: the Our Services section is still visible after Unpublish\nassert False",
+"dir": "reports/allure-20261015-runB\\t23"
+},
+"135351": {
+"status": "passed",
+"stop": 1792050596661,
+"name": "Card assigned to a filter tab appears under that tab",
+"msg": "",
+"dir": "reports/allure-20261015-runB\\t24"
+},
+"135352": {
+"status": "passed",
+"stop": 1792051785697,
+"name": "Reassigning a card to another tab moves it out of the original tab",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t15"
+},
+"135376": {
+"status": "passed",
+"stop": 1792051866136,
+"name": "Valid PNG thumbnail under 2 MB uploads and shows on the card",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t16"
+},
+"135400": {
+"status": "failed",
+"stop": 1792050884798,
+"name": "Valid Service Card Redirect URL saves and Read More navigates to it",
+"msg": "AssertionError: Read More points to '/web/qatar-chamber/service-detail?id=770593', not 'https://qatarchamber.com/en/services/qctest-135400'\nassert ('/web/qatar-chamber/service-detail?id=770593' and '/web/qatar-c...ail?id=770593' == 'https://qata...qctest-135400'\n  \n  - https://qatarchamber.com/en/se",
+"dir": "reports/allure-20261015-runB\\t27"
+},
+"135388": {
+"status": "failed",
+"stop": 1792050907586,
+"name": "Valid View All URL saves and the CTA redirects to it",
+"msg": "Failed: NEEDS USER — no 'View All URL' field on Our Services Section (nor on Service Card / Filter Tab / Tab Mapping); the CTA is not authorable",
+"dir": "reports/allure-20261015-runB\\t28"
+},
+"131183": {
+"status": "passed",
+"stop": 1792051094327,
+"name": "Verify that leaving Platform URL empty blocks save with a mandatory-field error (ADO-13118",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t2"
+},
+"131184": {
+"status": "passed",
+"stop": 1792051120796,
+"name": "Verify that an invalid URL format is rejected with the configured error message (ADO-13118",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t3"
+},
+"131187": {
+"status": "passed",
+"stop": 1792049696080,
+"name": "Verify that an icon cannot be published while Active=True but its Platform URL is invalid ",
+"msg": "",
+"dir": "reports/allure-20261015-runB\\t5"
+},
+"131196": {
+"status": "failed",
+"stop": 1792051151459,
+"name": "Verify that Active Status = True has no frontend effect while the entry's workflow status ",
+"msg": "AssertionError: assert ''",
+"dir": "reports/allure-20261015-runB2\\t4"
+},
+"131153": {
+"status": "failed",
+"stop": 1792051194379,
+"name": "Verify that a Site Content Editor can access and publish the Social Media Icons section di",
+"msg": "AssertionError: created entry was not found back by its own Icon Alt Text (EN)\nassert ''",
+"dir": "reports/allure-20261015-runB2\\t5"
+},
+"131154": {
+"status": "failed",
+"stop": 1792051229262,
+"name": "Verify that a Site Content Author can access the section but cannot publish directly (ADO-",
+"msg": "AssertionError: assert ''",
+"dir": "reports/allure-20261015-runB2\\t6"
+},
+"131155": {
+"status": "passed",
+"stop": 1792051245003,
+"name": "Verify that a user without Site Content Editor/Author role is denied access to the Social ",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t7"
+},
+"135021": {
+"status": "failed",
+"stop": 1792055780969,
+"name": "Preview shows the draft slide as it will appear, without publishing",
+"msg": "AssertionError: Preview does not render 'QCTEST-135021-preview-faf141'\nassert 'QCTEST-135021-preview-faf141' in 'Skip to main content\\nPREVIEW — this record is Draft. Visitors do not see it.\\nSkip to Main Content\\nOpen Accessibili...ail address\\nSubscribe\\n\\n©2026 Qatar Chamber. All Rights Reserved.",
+"dir": "reports/allure-20261015-runC\\t9"
+},
+"135038": {
+"status": "passed",
+"stop": 1792053166390,
+"name": "Whitespace-only mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t11"
+},
+"135042": {
+"status": "passed",
+"stop": 1792053265874,
+"name": "Whitespace-only mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t12"
+},
+"135052": {
+"status": "passed",
+"stop": 1792053368520,
+"name": "Whitespace-only mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t13"
+},
+"135056": {
+"status": "passed",
+"stop": 1792053457692,
+"name": "Whitespace-only mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t14"
+},
+"135061": {
+"status": "passed",
+"stop": 1792053546858,
+"name": "Whitespace-only mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t15"
+},
+"135065": {
+"status": "passed",
+"stop": 1792053655275,
+"name": "Whitespace-only mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t16"
+},
+"135069": {
+"status": "passed",
+"stop": 1792053743485,
+"name": "Whitespace-only mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t17"
+},
+"135074": {
+"status": "passed",
+"stop": 1792053858983,
+"name": "Whitespace-only mandatory Hero Banner field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t18"
+},
+"135043": {
+"status": "passed",
+"stop": 1792053964615,
+"name": "Valid Banner Subtitle within the limit is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t19"
+},
+"135046": {
+"status": "passed",
+"stop": 1792054040569,
+"name": "Valid Banner Subtitle within the limit is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t20"
+},
+"135075": {
+"status": "passed",
+"stop": 1792054092635,
+"name": "Valid positive Display Order is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t21"
+},
+"135076": {
+"status": "passed",
+"stop": 1792054173251,
+"name": "Empty Display Order is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t22"
+},
+"135077": {
+"status": "passed",
+"stop": 1792054321703,
+"name": "Negative and zero Display Order are refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t24"
+},
+"135080": {
+"status": "passed",
+"stop": 1792054381420,
+"name": "Valid Counter Title (EN) is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t25"
+},
+"135083": {
+"status": "passed",
+"stop": 1792054422793,
+"name": "Valid Counter Title (AR) is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t26"
+},
+"135090": {
+"status": "passed",
+"stop": 1792054476906,
+"name": "Valid Counter Icon upload is accepted",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t27"
+},
+"135091": {
+"status": "passed",
+"stop": 1792054505731,
+"name": "Counter Icon in an unsupported format is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t28"
+},
+"135094": {
+"status": "passed",
+"stop": 1792054546305,
+"name": "Counter Display Order is accepted with a Counter Title set",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t29"
+},
+"135095": {
+"status": "passed",
+"stop": 1792054606309,
+"name": "Counter Display Order is required once Counter Title is set",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t30"
+},
+"135097": {
+"status": "passed",
+"stop": 1792054658817,
+"name": "Counter Active Status = True is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t31"
+},
+"135098": {
+"status": "passed",
+"stop": 1792054703663,
+"name": "Counter Active Status = False is saved",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t32"
+},
+"135671": {
+"status": "passed",
+"stop": 1792055258291,
+"name": "Pinning a different event replaces the featured one with no duplicate section",
+"msg": "",
+"dir": "reports/allure-20261015-runC\\t2"
+},
+"135025": {
+"status": "passed",
+"stop": 1792052872373,
+"name": "Editor adds a new Achievement Counter item with valid data",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t6"
+},
+"134995": {
+"status": "passed",
+"stop": 1792052906564,
+"name": "Hero Banner admin form renders all fields of the field table",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t7"
+},
+"134996": {
+"status": "passed",
+"stop": 1792052933903,
+"name": "Achievement Counter admin form renders all counter fields",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t8"
+},
+"135020": {
+"status": "passed",
+"stop": 1792053039000,
+"name": "Author submitting a draft slide lands on Pending Review, not public",
+"msg": "",
+"dir": "reports/allure-20261015-runA2\\t9"
+},
+"135347": {
+"status": "passed",
+"stop": 1792051906005,
+"name": "Preview shows the section as it will appear, without affecting the live page",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t17"
+},
+"135354": {
+"status": "passed",
+"stop": 1792051977793,
+"name": "Valid section field value saves and persists",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t18"
+},
+"135358": {
+"status": "passed",
+"stop": 1792052050407,
+"name": "Valid section field value saves and persists",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t19"
+},
+"135362": {
+"status": "passed",
+"stop": 1792052129172,
+"name": "Valid section field value saves and persists",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t20"
+},
+"135366": {
+"status": "passed",
+"stop": 1792052195624,
+"name": "Valid section field value saves and persists",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t21"
+},
+"135370": {
+"status": "passed",
+"stop": 1792052270047,
+"name": "Valid section field value saves and persists",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t22"
+},
+"135373": {
+"status": "passed",
+"stop": 1792052333573,
+"name": "Valid section field value saves and persists",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t23"
+},
+"135355": {
+"status": "passed",
+"stop": 1792052391387,
+"name": "Empty or whitespace-only mandatory section field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t24"
+},
+"135357": {
+"status": "passed",
+"stop": 1792052449251,
+"name": "Empty or whitespace-only mandatory section field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t25"
+},
+"135359": {
+"status": "passed",
+"stop": 1792052515342,
+"name": "Empty or whitespace-only mandatory section field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t26"
+},
+"135361": {
+"status": "passed",
+"stop": 1792052571229,
+"name": "Empty or whitespace-only mandatory section field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t27"
+},
+"135363": {
+"status": "passed",
+"stop": 1792052639197,
+"name": "Empty or whitespace-only mandatory section field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t28"
+},
+"135365": {
+"status": "passed",
+"stop": 1792052699966,
+"name": "Empty or whitespace-only mandatory section field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t29"
+},
+"135367": {
+"status": "passed",
+"stop": 1792052769361,
+"name": "Empty or whitespace-only mandatory section field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t30"
+},
+"135369": {
+"status": "passed",
+"stop": 1792052830783,
+"name": "Empty or whitespace-only mandatory section field is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t31"
+},
+"135377": {
+"status": "passed",
+"stop": 1792052882777,
+"name": "Unsupported image format is refused for the thumbnail",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t32"
+},
+"135379": {
+"status": "passed",
+"stop": 1792052964461,
+"name": "Card without a thumbnail is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t33"
+},
+"135401": {
+"status": "passed",
+"stop": 1792053042476,
+"name": "Invalid Service Card Redirect URL is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t34"
+},
+"135403": {
+"status": "passed",
+"stop": 1792053135284,
+"name": "Empty Service Card Redirect URL is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t35"
+},
+"135404": {
+"status": "passed",
+"stop": 1792053270276,
+"name": "Valid positive Display Order saves and controls card sort position",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t36"
+},
+"135405": {
+"status": "passed",
+"stop": 1792053352655,
+"name": "Invalid card Display Order is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t37"
+},
+"135406": {
+"status": "passed",
+"stop": 1792053434950,
+"name": "Invalid card Display Order is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t38"
+},
+"135407": {
+"status": "passed",
+"stop": 1792053485829,
+"name": "Invalid card Display Order is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t39"
+},
+"135410": {
+"status": "passed",
+"stop": 1792055583514,
+"name": "Valid card icon uploads and displays on the live card",
+"msg": "",
+"dir": "reports/allure-20261015-runC\\t5"
+},
+"135411": {
+"status": "passed",
+"stop": 1792053671391,
+"name": "Card without an icon is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t41"
+},
+"135392": {
+"status": "passed",
+"stop": 1792055635667,
+"name": "Valid Tab Label (EN) saves and shows on the live tab bar",
+"msg": "",
+"dir": "reports/allure-20261015-runC\\t6"
+},
+"135396": {
+"status": "passed",
+"stop": 1792055707370,
+"name": "Valid Tab Label (AR) saves and shows on the live tab bar",
+"msg": "",
+"dir": "reports/allure-20261015-runC\\t7"
+},
+"135393": {
+"status": "passed",
+"stop": 1792053871571,
+"name": "Empty or whitespace-only Tab Label is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t44"
+},
+"135395": {
+"status": "passed",
+"stop": 1792053902322,
+"name": "Empty or whitespace-only Tab Label is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t45"
+},
+"135397": {
+"status": "passed",
+"stop": 1792053958676,
+"name": "Empty or whitespace-only Tab Label is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t46"
+},
+"135399": {
+"status": "passed",
+"stop": 1792054004249,
+"name": "Empty or whitespace-only Tab Label is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t47"
+},
+"131168": {
+"status": "failed",
+"stop": 1792054036584,
+"name": "Verify that a valid English Platform Name saves correctly (ADO-131168)",
+"msg": "AssertionError: created entry was not found back by its own Icon Alt Text (EN)\nassert ''",
+"dir": "reports/allure-20261015-runB2\\t48"
+},
+"131175": {
+"status": "failed",
+"stop": 1792054075281,
+"name": "Verify that a saved Platform Name persists after reload (ADO-131175)",
+"msg": "AssertionError: assert ''",
+"dir": "reports/allure-20261015-runB2\\t49"
+},
+"131176": {
+"status": "failed",
+"stop": 1792054111735,
+"name": "Verify that uploading a valid PNG icon image within the size limit saves correctly (ADO-13",
+"msg": "AssertionError: assert ''",
+"dir": "reports/allure-20261015-runB2\\t50"
+},
+"131181": {
+"status": "failed",
+"stop": 1792054145443,
+"name": "Verify that a saved icon image persists after reload (ADO-131181)",
+"msg": "AssertionError: assert ''",
+"dir": "reports/allure-20261015-runB2\\t51"
+},
+"131182": {
+"status": "failed",
+"stop": 1792054176410,
+"name": "Verify that a valid Platform URL saves correctly (ADO-131182)",
+"msg": "AssertionError: assert ''",
+"dir": "reports/allure-20261015-runB2\\t52"
+},
+"131188": {
+"status": "failed",
+"stop": 1792054208475,
+"name": "Verify that a valid positive Display Order value saves and reflects the icon's frontend po",
+"msg": "AssertionError: assert ''",
+"dir": "reports/allure-20261015-runB2\\t53"
+},
+"131189": {
+"status": "passed",
+"stop": 1792054237322,
+"name": "Verify that a Display Order value of zero is rejected (ADO-131189)",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t54"
+},
+"131190": {
+"status": "passed",
+"stop": 1792054263858,
+"name": "Verify that a negative Display Order value is rejected (ADO-131190)",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t55"
+},
+"131193": {
+"status": "failed",
+"stop": 1792054310467,
+"name": "Verify that setting Active Status = True on a new entry saves correctly (ADO-131193)",
+"msg": "AssertionError: assert ''",
+"dir": "reports/allure-20261015-runB2\\t56"
+},
+"131194": {
+"status": "failed",
+"stop": 1792054339088,
+"name": "Verify that setting Active Status = False on a new entry saves correctly and excludes it o",
+"msg": "AssertionError: assert ''",
+"dir": "reports/allure-20261015-runB2\\t57"
+},
+"131157": {
+"status": "failed",
+"stop": 1792054393868,
+"name": "Verify that an Editor's expired session during editing prompts re-authentication without s",
+"msg": "AssertionError: expected a re-authentication prompt after the dropped session's Save click — see the confirmed-different 'Coming Soon' mechanism in the module docstring if this fails for that reason instead\nassert 0 > 0\n +  where 0 = count()\n +    where count = <Locator frame=<Frame name= url='https",
+"dir": "reports/allure-20261015-runB2\\t58"
+},
+"131148": {
+"status": "passed",
+"stop": 1792054424855,
+"name": "CMS preview of the Social Media Icons section matches the published Home Page render",
+"msg": "",
+"dir": "reports/allure-20261015-runB2\\t59"
+},
+"135092": {
+"status": "passed",
+"stop": 1792055798259,
+"name": "Counter Icon over the size limit is refused",
+"msg": "",
+"dir": "reports/allure-20261015-runC\\t10"
+},
+"135378": {
+"status": "failed",
+"stop": 1792055738150,
+"name": "Thumbnail over the size limit is refused",
+"msg": "AssertionError: thumbnail: C:\\Users\\HEBA~1.SAM\\AppData\\Local\\Temp\\QCTEST-135378-thumb-big.png was accepted by the upload picker",
+"dir": "reports/allure-20261015-runC\\t8"
+},
+"135037": {
+"status": "failed",
+"stop": 1792062386881,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Banner Title (EN): 101 characters were accepted (status 'Inactive', stored length 101; PBI limit 100)\nassert (101 <= 100)\n +  where 101 = len('QCTEST-135037-max-4cb43aQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t1"
+},
+"135073": {
+"status": "passed",
+"stop": 1792063210843,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "",
+"dir": "reports/allure-20261015-runL\\t10"
+},
+"135082": {
+"status": "failed",
+"stop": 1792063262940,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Counter Title (EN): 31 characters were accepted (status 'Published', stored length 31; PBI limit 30)\nassert (31 <= 30)\n +  where 31 = len('QCTEST-135082-max-4e26e9QQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t11"
+},
+"135085": {
+"status": "failed",
+"stop": 1792063309524,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Counter Title (AR): 31 characters were accepted (status 'Published', stored length 31; PBI limit 30)\nassert (31 <= 30)\n +  where 31 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t12"
+},
+"135088": {
+"status": "failed",
+"stop": 1792063374338,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Counter Value: 11 characters were accepted (status 'Published', stored length 11; PBI limit 10)\nassert (11 <= 10)\n +  where 11 = len('QQQQQQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t13"
+},
+"135402": {
+"status": "passed",
+"stop": 1792063420537,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "",
+"dir": "reports/allure-20261015-runL\\t14"
+},
+"135394": {
+"status": "failed",
+"stop": 1792063453258,
+"name": "Tab Label over 50 characters is cut or refused",
+"msg": "AssertionError: Tab Label (en): 51 characters were accepted and published\nassert 'Published' != 'Published'",
+"dir": "reports/allure-20261015-runL\\t15"
+},
+"135398": {
+"status": "failed",
+"stop": 1792063488816,
+"name": "Tab Label over 50 characters is cut or refused",
+"msg": "AssertionError: Tab Label (ar): 51 characters were accepted and published\nassert 'Published' != 'Published'",
+"dir": "reports/allure-20261015-runL\\t16"
+},
+"135356": {
+"status": "failed",
+"stop": 1792063560772,
+"name": "Our Services Section field over the PBI limit is cut or refused",
+"msg": "AssertionError: section_tag (en): 21 characters stored (PBI limit 20)\nassert 21 <= 20\n +  where 21 = len('QQQQQQQQQQQQQQQQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t17"
+},
+"135360": {
+"status": "failed",
+"stop": 1792063629631,
+"name": "Our Services Section field over the PBI limit is cut or refused",
+"msg": "AssertionError: section_tag (ar): 21 characters stored (PBI limit 20)\nassert 21 <= 20\n +  where 21 = len('QQQQQQQQQQQQQQQQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t18"
+},
+"135364": {
+"status": "failed",
+"stop": 1792063710322,
+"name": "Our Services Section field over the PBI limit is cut or refused",
+"msg": "AssertionError: section_heading (en): 201 characters stored (PBI limit 200)\nassert 201 <= 200\n +  where 201 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ",
+"dir": "reports/allure-20261015-runL\\t19"
+},
+"135041": {
+"status": "failed",
+"stop": 1792062512758,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Banner Title (AR): 101 characters were accepted (status 'Inactive', stored length 101; PBI limit 100)\nassert (101 <= 100)\n +  where 101 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t2"
+},
+"135368": {
+"status": "failed",
+"stop": 1792063779103,
+"name": "Our Services Section field over the PBI limit is cut or refused",
+"msg": "AssertionError: section_heading (ar): 201 characters stored (PBI limit 200)\nassert 201 <= 200\n +  where 201 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ",
+"dir": "reports/allure-20261015-runL\\t20"
+},
+"135372": {
+"status": "failed",
+"stop": 1792063856108,
+"name": "Our Services Section field over the PBI limit is cut or refused",
+"msg": "AssertionError: section_description (en): 501 characters stored (PBI limit 500)\nassert 501 <= 500\n +  where 501 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ...QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ",
+"dir": "reports/allure-20261015-runL\\t21"
+},
+"135375": {
+"status": "failed",
+"stop": 1792063929169,
+"name": "Our Services Section field over the PBI limit is cut or refused",
+"msg": "AssertionError: section_description (ar): 501 characters stored (PBI limit 500)\nassert 501 <= 500\n +  where 501 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ...QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ",
+"dir": "reports/allure-20261015-runL\\t22"
+},
+"135045": {
+"status": "failed",
+"stop": 1792062611530,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Banner Subtitle (Description) (EN): 301 characters were accepted (status 'Inactive', stored length 301; PBI limit 300)\nassert (301 <= 300)\n +  where 301 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ...QQQQ",
+"dir": "reports/allure-20261015-runL\\t3"
+},
+"135048": {
+"status": "failed",
+"stop": 1792062707003,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Banner Subtitle (Description) (AR): 301 characters were accepted (status 'Inactive', stored length 301; PBI limit 300)\nassert (301 <= 300)\n +  where 301 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ...QQQQ",
+"dir": "reports/allure-20261015-runL\\t4"
+},
+"135051": {
+"status": "failed",
+"stop": 1792062804695,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Button 1 Label (EN): 51 characters were accepted (status 'Inactive', stored length 51; PBI limit 50)\nassert (51 <= 50)\n +  where 51 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t5"
+},
+"135055": {
+"status": "failed",
+"stop": 1792062900405,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Button 1 Label (AR): 51 characters were accepted (status 'Inactive', stored length 51; PBI limit 50)\nassert (51 <= 50)\n +  where 51 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t6"
+},
+"135060": {
+"status": "passed",
+"stop": 1792062980985,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "",
+"dir": "reports/allure-20261015-runL\\t7"
+},
+"135064": {
+"status": "failed",
+"stop": 1792063076873,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Button 2 Label (EN): 51 characters were accepted (status 'Inactive', stored length 51; PBI limit 50)\nassert (51 <= 50)\n +  where 51 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t8"
+},
+"135068": {
+"status": "failed",
+"stop": 1792063167854,
+"name": "Field over the PBI character limit is cut or refused",
+"msg": "AssertionError: Button 2 Label (AR): 51 characters were accepted (status 'Inactive', stored length 51; PBI limit 50)\nassert (51 <= 50)\n +  where 51 = len('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')",
+"dir": "reports/allure-20261015-runL\\t9"
+}
+}

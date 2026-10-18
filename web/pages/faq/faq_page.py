@@ -1147,11 +1147,17 @@ class FaqPage(BasePage):
         self.page.on("console", lambda msg: self._console_messages.append(msg))
         return self
 
+    # Browser-permission noise from an embedded third-party frame, not from the
+    # FAQ script (seen 2026-10-18: "requestStorageAccess: Permission denied."
+    # fires asynchronously, unrelated to the search being asserted).
+    THIRD_PARTY_CONSOLE_NOISE = ("requestStorageAccess",)
+
     def console_error_texts(self) -> list:
         return [
             message.text
             for message in self._console_messages
             if message.type in ("error",)
+            and not any(n in message.text for n in self.THIRD_PARTY_CONSOLE_NOISE)
         ]
 
     def start_dialog_capture(self) -> "FaqPage":

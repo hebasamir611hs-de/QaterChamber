@@ -1,0 +1,59 @@
+{
+ "home_slides": [
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  ""
+ ],
+ "home_counters": [
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  ""
+ ],
+ "counter_links": [
+  "About Us Counter -> /en/manage-about-us-counter",
+  "Achievement Counter -> /en/manage-achievement-counter"
+ ],
+ "manage-hero-banner-slide": [
+  "QCDEMO-129367-HERO_BANNER_SLIDE-01\tPUBLISHED\t10/1/2026, 9:11:08 AM\tEdit Preview Control panel Unpublish History Delete",
+  "QCDEMO-129367-HERO_BANNER_SLIDE-02\tPUBLISHED\t10/15/2026, 1:45:13 PM\tEdit Preview Control panel Unpublish History Delete",
+  "dcec133b-0cae-a689-d72e-554a97ae4665\tPUBLISHED\t9/19/2026, 5:32:44 AM\tEdit Preview Control panel Unpublish History Delete",
+  "c5f0718a-15fc-9723-6bc8-6c8af62ef106\tPUBLISHED\t9/19/2026, 5:32:52 AM\tEdit Preview Control panel Unpublish History Delete",
+  "c96bde36-2ff6-012b-b2bf-8130b1d4a483\tPUBLISHED\t9/19/2026, 5:32:59 AM\tEdit Preview Control panel Unpublish History Delete",
+  "e3db10f0-7c70-ae06-d89c-a3ec0018a3e2\tPUBLISHED\t9/19/2026, 5:33:06 AM\tEdit Preview Control panel Unpublish History Delete",
+  "5fa3277c-b7e9-9d2b-ba90-6e79bdf0a34b\tPUBLISHED\t9/19/2026, 5:33:13 AM\tEdit Preview Control panel Unpublish History Delete",
+  "addb3c87-34a5-ddbb-8774-c129151cc80d\tPUBLISHED\t9/19/2026, 5:33:20 AM\tEdit Preview Control panel Unpublish History Delete",
+  "1efe5520-552f-95a8-dffb-51e320f1d3e6\tPUBLISHED\t9/19/2026, 5:33:27 AM\tEdit Preview Control panel Unpublish History Delete",
+  "f232cf8a-dd1d-bbb4-c6f2-1cf142393f5e\tDRAFT\t10/15/2026, 10:10:10 AM\tEdit Preview Control panel History Delete"
+ ],
+ "manage-about-us-counter": [
+  "QCDEMO-129389-ABOUT_US_COUNTER-01\tPUBLISHED\t10/1/2026, 9:43:49 AM\tEdit Preview Control panel Unpublish History Delete",
+  "QCDEMO-129389-ABOUT_US_COUNTER-02\tPUBLISHED\t10/1/2026, 9:43:50 AM\tEdit Preview Control panel Unpublish History Delete",
+  "QCDEMO-129389-ABOUT_US_COUNTER-03\tPUBLISHED\t10/1/2026, 9:43:51 AM\tEdit Preview Control panel Unpublish History Delete",
+  "QCDEMO-129389-ABOUT_US_COUNTER-04\tPUBLISHED\t10/1/2026, 9:43:52 AM\tEdit Preview Control panel Unpublish History Delete",
+  "51c3aa92-4a6e-4378-17bc-fb63e557f8f5\tPUBLISHED\t9/13/2026, 8:18:06 AM\tEdit Preview Control panel Unpublish History Delete"
+ ],
+ "manage-achievement-counter": [
+  "QCDEMO-129367-ACHIEVEMENT_COUNTER-01\tPUBLISHED\t10/1/2026, 9:43:41 AM\tEdit Preview Control panel Unpublish History Delete",
+  "QCDEMO-129367-ACHIEVEMENT_COUNTER-02\tPUBLISHED\t10/1/2026, 9:43:42 AM\tEdit Preview Control panel Unpublish History Delete",
+  "QCDEMO-129367-ACHIEVEMENT_COUNTER-03\tPUBLISHED\t10/1/2026, 9:43:43 AM\tEdit Preview Control panel Unpublish History Delete",
+  "f00201f9-4231-f7c6-9c5c-5eed9e327b1e\tDRAFT\t10/15/2026, 11:10:22 AM\tEdit Preview Control panel History Delete",
+  "af62e259-6f1f-e3d3-9486-ed850a3a7d36\tPUBLISHED\t10/15/2026, 11:11:11 AM\tEdit Preview Control panel Unpublish History Delete",
+  "3146afe1-3b0b-1742-acf0-795600b9de6f\tDRAFT\t10/15/2026, 11:27:26 AM\tEdit Preview Control panel History Delete",
+  "088567ae-5043-0c85-8cdc-ee2a31cac208\tDRAFT\t10/15/2026, 11:52:32 AM\tEdit Preview Control panel History Delete",
+  "b0cf625f-bdcf-b341-7060-f8eab6a86d46\tDRAFT\t10/15/2026, 11:53:21 AM\tEdit Preview Control panel History Delete",
+  "e5a0f554-368c-ae3e-2325-0a13e4082e68\tDRAFT\t10/15/2026, 11:54:14 AM\tEdit Preview Control panel History Delete",
+  "7347d897-4857-5838-6677-04fa62934a3d\tDRAFT\t10/15/2026, 11:55:25 AM\tEdit Preview Control panel History Delete"
+ ]
+}

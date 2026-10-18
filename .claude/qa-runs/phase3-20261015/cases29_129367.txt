@@ -1,0 +1,110 @@
+﻿## 134988 P2 Verify that the Hero Banner background image renders below the header on the Home Page
+  D: Home Page has one published, active slide with image `hero-building.jpg`. Verifies image element renders full-width.
+  - Load Home Page => Hero section visible below global header
+  - Observe banner image => Full-width background image `hero-building.jpg` displayed, no broken-image icon, dark overlay gradient visible per Figma
+## 134989 P2 Verify that the headline title renders in the correct position and style
+  D: Active slide has Title EN &quot;Qatar Chamber Welcomes You&quot;.
+  - Load Home Page (EN) => Headline visible, large bold white text, left-aligned, 2-3 line wrap max
+## 134990 P3 Verify that the subtitle renders below the headline in correct style
+  D: Active slide has Subtitle EN &quot;Driving Qatar's economic growth since 1963.&quot;
+  - Load Home Page => Subtitle visible below headline, smaller light-gray text, max 4-line wrap
+## 134991 P2 Verify that the Achievement Counters row renders with icon, animated number, and text
+  D: Three active counters: &quot;50K+ Active Members&quot;, &quot;100+ Countries Served&quot;, &quot;24/7 Support&quot;.
+  - Load Home Page => wait for counter section to enter viewport
+  - Observe counters => 3 items in a horizontal row, each with icon above an animating number that settles at 50K+/100+/24/7 with its label text
+## 134992 P3 Verify that the slide-progress dot/pill indicator renders and the active pill visually fills during auto-play
+  D: 2 active slides configured.
+  - Load Home Page => row of dots + one elongated active pill visible bottom-left of image
+  - Wait through one auto-play cycle => active pill visually fills/animates, then indicator shifts to next dot on slide change
+## 134993 P3 Verify that the next/previous arrows render with hover state
+  D: 2 active slides configured, desktop viewport.
+  - Load Home Page => left/right semi-transparent square arrow buttons visible, vertically centered on image
+  - Hover over next arrow => visible hover state (background/opacity change) per Figma
+## 134994 P3 Verify that the CTA button renders as a solid maroon pill with a diagonal arrow icon
+  D: Slide has Button 1 configured &quot;Read More&quot; with a URL.
+  - Load Home Page (EN) => CTA button visible: maroon pill shape, white bold Read More label, diagonal arrow icon to the right of the label
+## 134997 P2 Verify that the Home Page layout mirrors correctly for Arabic (RTL) across nav, headline, subtitle, CTA icon, 
+  D: Active slide has bilingual content; site language switched to Arabic.
+  - Switch site language to Arabic => Language switched to Arabic
+  - Reload Home Page => Header logo moves to the right, headline right-aligned, subtitle right-aligned RTL, CTA icon appears left of the Arabic label, dot/pill indicator shifts to bottom-right, arrows mirror position, all consistent RTL mirrori
+## 134998 P3 Verify that the Hero Banner and Achievement Counters render correctly at desktop viewport width
+  D: Desktop viewport 1920x1080.
+  - Resize browser to 1920x1080 => Viewport resized
+  - Load Home Page => Banner full-width, counters in a single horizontal row, no overlap/overflow
+## 134999 P3 Verify that the Hero Banner and Achievement Counters render correctly at tablet viewport width
+  D: Tablet viewport 768x1024.
+  - Resize browser to 768px width => Viewport resized
+  - Load Home Page => Banner scales proportionally, headline/subtitle wrap adjusts, counters remain readable without horizontal scroll
+## 135000 P3 Verify that the Achievement Counters stack correctly below the banner at mobile viewport width
+  D: Mobile viewport 375x667.
+  - Resize browser to 375px width => Viewport resized
+  - Load Home Page => Banner content stacks vertically, Achievement Counters render below the hero content in a row of 3, no clipped text/icons
+## 135001 P2 Verify that an unauthenticated public visitor can view the Hero Banner without login
+  D: No credentials, incognito session.
+  - Navigate to Home Page as anonymous visitor => Home Page loads
+  - Observe Hero Banner => Banner and counters render fully; no login prompt shown
+## 135004 P3 Verify that repeatedly clicking the next arrow cycles through all active slides and loops back to the first
+  D: 3 active slides A, B, C.
+  - Load Home Page (Slide A) => Slide A shown
+  - Click next arrow 3 times consecutively => After 3rd click, slider returns to Slide A (loop); no error/blank slide at any step
+## 135005 P2 Verify that clicking the previous arrow manually goes back to the previous slide
+  D: 2 active slides, Slide B currently shown.
+  - On Slide B, click previous arrow => Slide A displays
+## 135006 P3 Verify that repeatedly clicking previous arrow cycles backward through all slides and loops to the last
+  D: 3 active slides A, B, C, Slide A shown.
+  - Click previous arrow 3 times => After 3rd click, slider is on Slide C (loop backward)
+## 135007 P2 Verify that clicking Button 1 navigates to its configured target URL
+  D: Slide's Button 1 Link = `/about-us`.
+  - Load Home Page => Home Page loads
+  - Click Button 1 Read More => Browser navigates to /about-us
+## 135008 P2 Verify that clicking Button 2 navigates to its configured target URL
+  D: Slide's Button 2 Link = `/our-services`.
+  - Load Home Page => Home Page loads
+  - Click Button 2 Our Services => Browser navigates to /our-services
+## 135011 P2 Verify that auto-play advances the slider to the next active slide without user interaction
+  D: 2 active published slides: Slide A order=1, Slide B order=2.
+  - Load Home Page => Slide A visible
+  - Wait for one auto-play interval without interacting => Slider transitions automatically to Slide B; indicator updates
+## 135012 P2 Verify that clicking the next arrow manually advances to the next slide
+  D: 2 active slides.
+  - Load Home Page, Slide A shown => Slide A shown
+  - Click next arrow => Slide B displays immediately, indicator updates
+## 135044 P3 Verify that leaving Subtitle (EN) empty is accepted since the field is optional
+  D: Subtitle EN field left blank, other mandatory fields valid.
+  - Leave Subtitle EN empty => Field left empty
+  - Save => Slide saves successfully; frontend renders with no subtitle text/empty region
+## 135047 P3 Verify that leaving Subtitle (AR) empty is accepted since the field is optional
+  D: Subtitle AR field left blank.
+  - Leave Subtitle AR empty => Field left empty
+  - Save => Slide saves successfully
+## 135081 P3 Verify that leaving Counter Title (EN) empty is accepted since the field is optional
+  D: Counter Title EN and all counter fields left blank.
+  - Leave all counter fields empty => Fields left empty
+  - Save slide => Slide saves successfully; no counter item created for this row
+## 135084 P3 Verify that leaving Counter Title (AR) empty is accepted since the field is optional
+  D: Counter Title AR left blank.
+  - Leave Counter Title AR empty => Field left empty
+  - Save => Slide saves successfully
+## 135093 P3 Verify that leaving Counter Icon empty is accepted since the field is optional
+  D: Icon left unattached, other counter fields valid.
+  - Leave Icon empty => Field left empty
+  - Save => Counter saves; frontend renders without an icon or with default placeholder
+## 135096 P3 Verify that leaving Counter Title and Counter Display Order both empty saves successfully
+  D: Title and Order both blank.
+  - Leave both empty => Fields left empty
+  - Save slide => Slide saves successfully
+## 135099 P2 Verify that with exactly one active published slide the slider displays statically without auto-play, arrows, 
+  D: Only 1 slide is active+published.
+  - Load Home Page => Single slide displays
+  - Wait through a full auto-play interval => No transition occurs
+  - Observe UI => No next/previous arrows and no dot/pill indicator rendered
+## 135100 P3 Verify that a CTA button with no URL configured is not rendered on the frontend
+  D: Slide's Button 2 Link left empty at the data layer.
+  - Load Home Page for this slide => Button 2 does not render; layout does not show an empty/broken button slot; Button 1 (if configured) still renders normally
+## 135101 P2 Verify that a background image load failure displays a fallback background color instead of a broken image
+  D: Slide's image asset URL is broken/unreachable.
+  - Load Home Page for the affected slide => Slide renders with a solid fallback background color; no broken-image icon shown; headline/subtitle/CTAs still readable over the fallback color
+## 135102 P2 Verify that Home Page behaves correctly when zero slides are active and published
+  D: All Hero Banner slides are Draft or Unpublished/Inactive.
+  - Ensure no slide is Active+Published => Preconditions verified
+  - Load Home Page => No slide/broken-layout renders in the banner section (verify against actual system behavior; flag as defect if a blank/broken region appears)

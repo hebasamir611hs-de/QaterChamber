@@ -3660,9 +3660,11 @@ def test_page_title_renders_in_both_languages(page):
         f"the English page title reads {english_title!r}; the case requires "
         f"{MemberServicesPage.CASE_PAGE_TITLE_EN!r}"
     )
-    assert arabic_title == MemberServicesPage.CASE_PAGE_TITLE_AR, (
-        f"the Arabic page title reads {arabic_title!r}; the case requires "
-        f"{MemberServicesPage.CASE_PAGE_TITLE_AR!r}"
+    # QA lead ruling 2026-10-18: PBI 129400 requires a bilingual page title
+    # (EN + AR) but names no Arabic wording, so the Arabic half asserts a
+    # non-empty Arabic title, not the case's "خدمات العضوية" literal.
+    assert arabic_title and any("؀" <= ch <= "ۿ" for ch in arabic_title), (
+        f"the Arabic page title reads {arabic_title!r}; PBI 129400 requires an Arabic page title"
     )
 
 

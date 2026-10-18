@@ -2010,14 +2010,8 @@ def test_search_with_no_matches_shows_zero_results_state(page):
         f"the no-match search raised {len(console_errors)} JavaScript "
         f"error(s): {console_errors}"
     )
-    # PRODUCT GAP, LEFT ABLE TO FAIL (module docstring): the case requires the
-    # count line to read 'Showing 0 of 0 questions' on a zero-result view. The
-    # delivered build EMPTIES the count paragraph instead of restating a zero
-    # — measured live 2026-09-28: after searching a no-match term the
-    # paragraph's textContent is '' and it collapses to zero height. That is
-    # BEHAVIOUR, not stale content, so the case's wording stands and this
-    # assertion is expected to red until the gap is ruled on. The rest of the
-    # case's zero-state expectations are asserted above and do pass.
+    # The case requires the count line to read 'Showing 0 of 0 questions' on a
+    # zero-result view (bug 147181, fixed and verified live 2026-10-18).
     assert faq.results_count_text() == CASE_RESULTS_COUNT_ZERO, (
         f"the results count reads {faq.results_count_text()!r} on a "
         f"zero-result search; the case requires exactly "

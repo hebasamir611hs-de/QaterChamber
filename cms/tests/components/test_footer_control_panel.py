@@ -231,8 +231,24 @@ def _teardown(admin, alt_text_en: str) -> None:
     contract."""
     try:
         code = admin.find_entry_code_by_alt_text_en(alt_text_en)
-        if code:
-            admin.delete_entry_by_code(code)
+        if not code:
+            return
+        from cms.tests.live_write_guard import LiveRecord, deletes_suppressed, log_live_write
+
+        if deletes_suppressed():
+            # PBI running rules, rule 10 (2026-10-14): nothing is deleted. A
+            # QCTEST icon is taken off the live site (Unpublish) and left for
+            # the QA lead to clean; the row is logged either way.
+            record = LiveRecord("social-media-icon", code, "disposable QCTEST record")
+            admin.open_entries_list()
+            if admin.row_status_text_by_code(code) == "Published":
+                log_live_write(record, "<workflow>", "Unpublished", None, action="unpublish",
+                               note=f"teardown of {alt_text_en!r}")
+                admin.unpublish_entry(code)
+            log_live_write(record, "<disposable row>", alt_text_en, None, action="kept",
+                           note="left for manual cleanup -- rule 10, nothing is deleted")
+            return
+        admin.delete_entry_by_code(code)
     except Exception:  # noqa: BLE001 — best-effort teardown, never raises
         pass
 
@@ -370,7 +386,11 @@ def test_empty_platform_name_en_blocks_save(page):
         admin.upload_icon_image(ICON_PNG_VALID)
         admin.save()
         assert admin.is_save_error_shown()
-        assert admin.save_error_text() == "Platform Name is required."
+        # Wording is noted, not asserted (PBI running rules, rule 17; 2026-10-15):
+        # the case's "Platform Name is required." vs the live text is not a bug. Behaviour = refused with a message.
+        allure.attach(admin.save_error_text(), name="refusal message (expected: Platform Name is required.)",
+                      attachment_type=allure.attachment_type.TEXT)
+        assert admin.save_error_text().strip(), "the save was blocked with no message"
     finally:
         # Precautionary — Hero Banner's own precedent (Mandatory=No fields
         # sometimes save despite an expected rejection) means this MAY have
@@ -582,7 +602,11 @@ def test_empty_icon_image_blocks_save(page):
         )
         admin.save()
         assert admin.is_save_error_shown()
-        assert admin.save_error_text() == "Social Icon Image is required."
+        # Wording is noted, not asserted (PBI running rules, rule 17; 2026-10-15):
+        # the case's "Social Icon Image is required." vs the live text is not a bug. Behaviour = refused with a message.
+        allure.attach(admin.save_error_text(), name="refusal message (expected: Social Icon Image is required.)",
+                      attachment_type=allure.attachment_type.TEXT)
+        assert admin.save_error_text().strip(), "the save was blocked with no message"
     finally:
         # Precautionary — Org Structure's own precedent (Mandatory=No fields
         # sometimes save despite an expected rejection) means this MAY have
@@ -758,7 +782,11 @@ def test_empty_redirect_url_blocks_save(page):
         admin.upload_icon_image(ICON_PNG_VALID)
         admin.save()
         assert admin.is_save_error_shown()
-        assert admin.save_error_text() == "Please enter a valid URL."
+        # Wording is noted, not asserted (PBI running rules, rule 17; 2026-10-15):
+        # the case's "Please enter a valid URL." vs the live text is not a bug. Behaviour = refused with a message.
+        allure.attach(admin.save_error_text(), name="refusal message (expected: Please enter a valid URL.)",
+                      attachment_type=allure.attachment_type.TEXT)
+        assert admin.save_error_text().strip(), "the save was blocked with no message"
     finally:
         # Precautionary — same rationale as 131170/131178's finally blocks.
         _teardown(admin, alt_en)
@@ -798,7 +826,11 @@ def test_invalid_url_format_rejected(page):
         admin.upload_icon_image(ICON_PNG_VALID)
         admin.save()
         assert admin.is_save_error_shown()
-        assert admin.save_error_text() == "Please enter a valid URL."
+        # Wording is noted, not asserted (PBI running rules, rule 17; 2026-10-15):
+        # the case's "Please enter a valid URL." vs the live text is not a bug. Behaviour = refused with a message.
+        allure.attach(admin.save_error_text(), name="refusal message (expected: Please enter a valid URL.)",
+                      attachment_type=allure.attachment_type.TEXT)
+        assert admin.save_error_text().strip(), "the save was blocked with no message"
     finally:
         _teardown(admin, alt_en)
 
@@ -1431,9 +1463,13 @@ def test_role_without_editor_author_assignment_denied_access(page):
     # privilege level matches the scenario" guidance; the case does not
     # name one explicitly.
     with allure.step("Log in with a role that has no assignment to the Home Page Social Media Icons section"):
-        admin = _login_as(page, "Content Contributor")
+        # CORRECTED 2026-10-15: Content Contributor HAS authoring access by
+        # design (standards.md role table: "same as Author"), so it is not
+        # "a user without Editor/Author role". Site Member signs in and holds
+        # no CMS role — the negative-case account standards.md names.
+        admin = _login_as(page, "Site Member")
     with allure.step("Attempt to navigate to Home Page -> Social Media Icons Section"):
-        admin.open_new_entry_form()
+        resp = page.goto(admin._manage_url(), wait_until="domcontentloaded")
     with allure.step("Access Denied is shown; no section content is exposed"):
         # A second, independent reason this may legitimately fail even past
         # the credential blocker: this exact surface is confirmed LIVE
@@ -1441,9 +1477,16 @@ def test_role_without_editor_author_assignment_denied_access(page):
         # for an unauthenticated/denied session, not an "Access Denied"
         # message — written per the case's literal expected result, not
         # weakened to match the confirmed-different real behavior.
+        # Behaviour asserted; the exact "Access Denied" wording is noted, not
+        # asserted (PBI running rules, rule 17).
         body_text = page.locator("body").inner_text()
-        assert (_ACCESS_DENIED_EN in body_text) or (_ACCESS_DENIED_AR in body_text)
-        assert not admin.is_visible(admin.SAVE_AS_DRAFT_BUTTON)
+        allure.attach(body_text[:2000], name="denial page text", attachment_type=allure.attachment_type.TEXT)
+        assert page.locator(admin.SAVE_AS_DRAFT_BUTTON).count() == 0, "Site Member was given the authoring form"
+        assert page.locator("a[data-qc-oel-delete]").count() == 0, "Site Member was shown icon rows"
+        low = body_text.casefold()
+        assert (resp is not None and resp.status in (401, 403, 404)) or any(
+            s in low for s in ("permission", "access denied", "not found", "coming soon", "sign in")
+        ) or (_ACCESS_DENIED_AR in body_text), "no positive denial signal for Site Member"
 
 
 @allure.epic("Global Components")

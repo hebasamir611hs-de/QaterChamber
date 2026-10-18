@@ -1,0 +1,2757 @@
+[
+ {
+  "id": 135634,
+  "title": "Verify that the \"Upcoming Events\" badge renders with the Figma-specified colors",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the badge text color #A66F43, pill background #F6F0EC, and 1px border #D7BEAA render exactly as specified.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Home Page loads with the Upcoming Event section visible."
+   },
+   {
+    "action": "Locate the 'Upcoming Events' badge above the section heading.",
+    "expected": "Badge is visible directly above the heading."
+   },
+   {
+    "action": "Inspect the badge's text color, background color, and border.",
+    "expected": "Text color = #A66F43, background = #F6F0EC, border = 1px #D7BEAA."
+   }
+  ]
+ },
+ {
+  "id": 135635,
+  "title": "Verify that the section heading \"What's Coming Up\" renders with the Figma-specified typography and color",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the heading uses Cairo Bold 30px/38px in color #1D1D1B.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Locate the section heading text 'What's Coming Up'.",
+    "expected": "Heading text visible."
+   },
+   {
+    "action": "Inspect font family, weight, size, line-height, and color.",
+    "expected": "Font = Cairo Bold, 30px/38px, color = #1D1D1B."
+   }
+  ]
+ },
+ {
+  "id": 135636,
+  "title": "Verify that the section description renders with the exact copy and Figma-specified typography",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the description text matches the exact EN copy and uses Cairo Regular 18px/28px in color #7C7B7B.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Locate the section description below the heading.",
+    "expected": "Description block visible."
+   },
+   {
+    "action": "Compare text content against the specified copy.",
+    "expected": "Text reads exactly &quot;Explore Qatar Chamber's upcoming events, business delegations, forums, and meetings designed to connect companies, investors, and partners across Qatar's business community.&quot;"
+   },
+   {
+    "action": "Inspect font family, weight, size, line-height, and color.",
+    "expected": "Font = Cairo Regular, 18px/28px, color = #7C7B7B."
+   }
+  ]
+ },
+ {
+  "id": 135637,
+  "title": "Verify that the \"View All\" CTA button renders per the Figma pill-button spec",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the button uses maroon #911731 background, white text, full pill shape, an arrow-up-right icon, and 12px/18px padding.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Locate the 'View All' button.",
+    "expected": "'View All' button visible."
+   },
+   {
+    "action": "Inspect background color, text color, border-radius, icon, and padding.",
+    "expected": "Background = #911731, text = white, border-radius = 9999px, arrow-up-right icon present, padding = 12px/18px."
+   }
+  ]
+ },
+ {
+  "id": 135638,
+  "title": "Verify that the event category badges render with the Figma-specified pill style",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Pinned event has categories &quot;Chamber Events&quot; and &quot;Business&quot;. Verifies both badges use gray background #F6F6F6, gray text #6C6C6B, and 1px border #DEDEDD.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event tagged 'Chamber Events' and 'Business'.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Locate the two category badges above the event title.",
+    "expected": "Two badges visible reading 'Chamber Events' and 'Business'."
+   },
+   {
+    "action": "Inspect background, text color, and border of each badge.",
+    "expected": "Both badges: background = #F6F6F6, text = #6C6C6B, border = 1px #DEDEDD, pill shape."
+   }
+  ]
+ },
+ {
+  "id": 135639,
+  "title": "Verify that the pinned event title renders with the Figma-specified typography",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the event title uses Cairo Bold 24px/32px in color #1D1D1B.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event titled 'Meeting business delegation of the Novgorod Region's government'.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Locate the event title text.",
+    "expected": "Title text visible below the category badges."
+   },
+   {
+    "action": "Inspect font family, weight, size, line-height, and color.",
+    "expected": "Font = Cairo Bold, 24px/32px, color = #1D1D1B."
+   }
+  ]
+ },
+ {
+  "id": 135640,
+  "title": "Verify that the Date, Time, and Location icon-buttons render as maroon 48px circles per Figma",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies all three icon-buttons are circular, 48px diameter, filled #911731.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Locate the Date, Time, and Location icon-buttons.",
+    "expected": "Three circular icon-buttons visible."
+   },
+   {
+    "action": "Measure diameter and inspect fill color of each.",
+    "expected": "Each is 48px diameter with fill color #911731."
+   }
+  ]
+ },
+ {
+  "id": 135641,
+  "title": "Verify that the Date/Time/Location labels and values render with the Figma-specified colors and fonts",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies labels use Cairo Regular 14px/22px #A8A8A7, and values use Cairo Semibold 16px/24px #4A4A49.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event dated 19 November 2025, 09:30 A.M.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Locate the Date label and value text.",
+    "expected": "Label 'Date' and value '19 November 2025' both visible."
+   },
+   {
+    "action": "Inspect font, size, and color of the label vs. the value.",
+    "expected": "Label = Cairo Regular 14px/22px #A8A8A7; value = Cairo Semibold 16px/24px #4A4A49."
+   }
+  ]
+ },
+ {
+  "id": 135642,
+  "title": "Verify that the section layout matches the Figma two-column spacing spec",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies section padding of 64px/300px, 48px content gap, and 48px gap between columns at desktop width.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event at desktop resolution 1920x1080.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Measure the section's outer padding.",
+    "expected": "Section padding = 64px vertical / 300px horizontal."
+   },
+   {
+    "action": "Measure the gap between the image column and the details column.",
+    "expected": "Column gap = 48px."
+   }
+  ]
+ },
+ {
+  "id": 135643,
+  "title": "Verify that the event image renders at the Figma-specified height within a 16px-rounded container",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the image column renders at 350px height with a 16px border-radius container.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Locate the event image container.",
+    "expected": "Image container visible on the left/right column."
+   },
+   {
+    "action": "Measure image height and container corner radius.",
+    "expected": "Image height = 350px, container border-radius = 16px."
+   }
+  ]
+ },
+ {
+  "id": 135644,
+  "title": "Verify that the divider line between event detail rows renders with the Figma-specified color and thickness",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "DesignVerified",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the divider uses color #E9DBD0 at 1px thickness.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Locate the divider line separating the event details.",
+    "expected": "Divider line visible between detail rows."
+   },
+   {
+    "action": "Inspect its color and thickness.",
+    "expected": "Color = #E9DBD0, thickness = 1px."
+   }
+  ]
+ },
+ {
+  "id": 135645,
+  "title": "Verify that the Upcoming Event section does not render on the Home Page when no event is pinned",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "No event is currently pinned in the CMS. Verifies the section is absent from the DOM.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Ensure no event is pinned in Pin Configuration.",
+    "expected": "Pin Configuration is empty."
+   },
+   {
+    "action": "Load the Home Page.",
+    "expected": "Home Page loads."
+   },
+   {
+    "action": "Inspect the area where the Upcoming Event section would appear.",
+    "expected": "The Upcoming Event section is not present in the page (no empty placeholder, no broken layout gap)."
+   }
+  ]
+ },
+ {
+  "id": 135646,
+  "title": "Verify that the Upcoming Event section renders correctly in Arabic (RTL) layout",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Site language is set to Arabic with a pinned published event.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set the site language to Arabic.",
+    "expected": "Site renders in Arabic."
+   },
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Inspect column order, text alignment, and icon mirroring.",
+    "expected": "Layout mirrors to RTL: text right-aligned, column order flipped, no visual overlap or clipping."
+   }
+  ]
+ },
+ {
+  "id": 135647,
+  "title": "Verify that the Upcoming Event section renders correctly in English (LTR) layout",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Site language is set to English with a pinned published event.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set the site language to English.",
+    "expected": "Site renders in English."
+   },
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Inspect column order and text alignment.",
+    "expected": "Layout is LTR: text left-aligned, column order as designed."
+   }
+  ]
+ },
+ {
+  "id": 135648,
+  "title": "Verify that the Upcoming Event section is fully responsive at a 375px mobile viewport",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the two-column layout stacks into a single column without overlap at mobile width.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set the browser viewport to 375px width.",
+    "expected": "Viewport set to 375px."
+   },
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Inspect the layout of the image and details columns.",
+    "expected": "Image and details stack vertically with no overlapping or clipped content."
+   }
+  ]
+ },
+ {
+  "id": 135649,
+  "title": "Verify that the Upcoming Event section is fully responsive at a 768px tablet viewport",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies layout integrity at tablet breakpoint.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set the browser viewport to 768px width.",
+    "expected": "Viewport set to 768px."
+   },
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible."
+   },
+   {
+    "action": "Inspect the layout of the image and details columns.",
+    "expected": "Layout adapts without overlap, truncation, or horizontal scroll."
+   }
+  ]
+ },
+ {
+  "id": 135650,
+  "title": "Verify that a loading placeholder displays while the pinned event data is being fetched",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Simulates a slow network to observe the transient loading state before content renders.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Throttle network to slow 3G.",
+    "expected": "Network throttled."
+   },
+   {
+    "action": "Load the Home Page.",
+    "expected": "Home Page begins loading."
+   },
+   {
+    "action": "Observe the Upcoming Event section area during the fetch.",
+    "expected": "A loading skeleton/placeholder is shown in the section area until the pinned event data arrives, then replaced by the real content."
+   }
+  ]
+ },
+ {
+  "id": 135651,
+  "title": "Verify that a fallback state displays gracefully if the pinned event's image fails to load",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "EVENT",
+   "HomePage",
+   "Manual",
+   "UI",
+   "Web"
+  ],
+  "description": "Pinned event's image URL is broken/unreachable. Verifies the layout does not break.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Configure a pinned event whose image source is unreachable.",
+    "expected": "Pin Configuration references an event with a broken image URL."
+   },
+   {
+    "action": "Load the Home Page.",
+    "expected": "Home Page loads."
+   },
+   {
+    "action": "Observe the image column.",
+    "expected": "A fallback placeholder/graceful empty state displays in the image column; layout and details column remain intact."
+   }
+  ]
+ },
+ {
+  "id": 135652,
+  "title": "Verify that the pagination indicator below the pinned event shows a single active state when only one event is pinned",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "HomePage",
+   "UI",
+   "Web"
+  ],
+  "description": "Only one event can be pinned per the spec, yet the Figma design includes a carousel-style pagination indicator.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with exactly one pinned event.",
+    "expected": "Section visible with one pinned event."
+   },
+   {
+    "action": "Locate the pagination indicator below the event card.",
+    "expected": "Indicator shows only a single active pill and no additional inactive dots (or is hidden entirely) - no implication of additional unpinned items."
+   }
+  ]
+ },
+ {
+  "id": 135653,
+  "title": "Verify that the Upcoming Event Pin Configuration screen is accessible from Home Page management in the Liferay CMS",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "HomePage",
+   "UI"
+  ],
+  "description": "Logged in as Site Content Editor with permission.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as a Site Content Editor.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Navigate to Home Page management.",
+    "expected": "Home Page management screen loads."
+   },
+   {
+    "action": "Open Upcoming Event Pin Configuration.",
+    "expected": "Pin Configuration screen opens showing the Event Selector and Active Status control."
+   }
+  ]
+ },
+ {
+  "id": 135654,
+  "title": "Verify that the Event Selector displays a list of all published events",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "HomePage",
+   "UI"
+  ],
+  "description": "Multiple events exist in various statuses.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Pin Configuration screen.",
+    "expected": "Screen loads with the current configuration."
+   },
+   {
+    "action": "Click to open the Event Selector.",
+    "expected": "The selector opens showing all Published events in the Events module."
+   }
+  ]
+ },
+ {
+  "id": 135655,
+  "title": "Verify that a Liferay generic success toast displays in English after saving the Pin Configuration",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "HomePage",
+   "UI"
+  ],
+  "description": "Admin UI language is English.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set CMS UI language to English.",
+    "expected": "CMS language is English."
+   },
+   {
+    "action": "Select a published event and set Active Status to enabled.",
+    "expected": "Values entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves; the standard Liferay generic success toast appears in English."
+   }
+  ]
+ },
+ {
+  "id": 135656,
+  "title": "Verify that a Liferay generic success toast displays in Arabic after saving the Pin Configuration",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "EVENT",
+   "HomePage",
+   "UI"
+  ],
+  "description": "Admin UI language is Arabic.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set CMS UI language to Arabic.",
+    "expected": "CMS language is Arabic."
+   },
+   {
+    "action": "Select a published event and set Active Status to enabled.",
+    "expected": "Values entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves; the standard Liferay generic success toast appears in Arabic."
+   }
+  ]
+ },
+ {
+  "id": 135657,
+  "title": "Verify that the Pin Configuration screen renders correctly in RTL when the CMS language is Arabic",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "EVENT",
+   "HomePage",
+   "UI"
+  ],
+  "description": "Verifies the admin form layout mirrors correctly for Arabic-language CMS users.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set CMS UI language to Arabic.",
+    "expected": "CMS language is Arabic."
+   },
+   {
+    "action": "Open the Pin Configuration screen.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Inspect field label alignment and form layout direction.",
+    "expected": "Labels and controls render right-to-left with no overlap or clipping."
+   }
+  ]
+ },
+ {
+  "id": 135658,
+  "title": "Verify that the Upcoming Event section renders consistently across Chrome, Firefox, and Edge",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "EVENT",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Same pinned event, verified across the three browsers on desktop.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event in Chrome (latest).",
+    "expected": "Section renders in Chrome matching the design."
+   },
+   {
+    "action": "Repeat in Firefox (latest).",
+    "expected": "Section renders identically in Firefox."
+   },
+   {
+    "action": "Repeat in Edge (latest).",
+    "expected": "Section renders identically in Edge."
+   },
+   {
+    "action": "Compare layout and content across all three.",
+    "expected": "No layout or content discrepancy across browsers."
+   }
+  ]
+ },
+ {
+  "id": 135659,
+  "title": "Verify that the Upcoming Event section maintains layout integrity at 150% browser zoom",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "EVENT",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Verifies no text overlap or clipping under increased zoom.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with a pinned event.",
+    "expected": "Section visible at default zoom."
+   },
+   {
+    "action": "Set browser zoom to 150%.",
+    "expected": "Zoom applied."
+   },
+   {
+    "action": "Inspect the section layout.",
+    "expected": "All text and images remain readable and non-overlapping."
+   }
+  ]
+ },
+ {
+  "id": 135660,
+  "title": "Verify that the section maintains the two-column layout at 1920x1080 and collapses to single-column at mobile widths",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "EVENT",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Verifies the breakpoint transition behavior end to end.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page at 1920x1080 resolution.",
+    "expected": "Page loads at desktop resolution."
+   },
+   {
+    "action": "Inspect the column layout.",
+    "expected": "Two-column layout with 48px gap confirmed."
+   },
+   {
+    "action": "Resize the viewport down to 375px width.",
+    "expected": "Viewport resized."
+   },
+   {
+    "action": "Inspect the column layout again.",
+    "expected": "Layout collapses to a single stacked column with no overlap."
+   }
+  ]
+ },
+ {
+  "id": 135661,
+  "title": "Verify that a Site Content Editor with Home Page permission can access the Pin Configuration screen",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "HomePage"
+  ],
+  "description": "Confirms baseline positive access for the correctly permissioned role.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as a Site Content Editor with Home Page management permission.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Navigate to Upcoming Event Pin Configuration.",
+    "expected": "Screen opens with full read/write access to the Event Selector and Active Status."
+   }
+  ]
+ },
+ {
+  "id": 135662,
+  "title": "Verify that a user without Home Page permission is denied access when attempting to pin an event",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "HomePage",
+   "UAT"
+  ],
+  "description": "User lacks the required permission.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as a user without Home Page content management permission.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Attempt to open/save the Pin Configuration screen.",
+    "expected": "Action is blocked; message displays: &quot;Access Denied. You do not have permission to perform this action.&quot; (EN) / &quot;تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.&quot; (AR); no configuration change is saved."
+   }
+  ]
+ },
+ {
+  "id": 135663,
+  "title": "Verify that a logged-out admin directly accessing the Pin Configuration URL is redirected to the Liferay login page",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "HomePage"
+  ],
+  "description": "Forced-browsing check without an active session.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log out of the Liferay CMS.",
+    "expected": "Session ends."
+   },
+   {
+    "action": "Directly navigate to the Pin Configuration screen's URL.",
+    "expected": "User is redirected to the Liferay login page; the Pin Configuration screen is not rendered."
+   }
+  ]
+ },
+ {
+  "id": 135664,
+  "title": "Verify that a Site Content Author without publish rights on Home Page sees the Access Denied message when attempting to save",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "HomePage"
+  ],
+  "description": "Role has partial CMS access but not Home Page publish rights.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as a Site Content Author without Home Page publish rights.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Attempt to select an event and save the Pin Configuration.",
+    "expected": "Save action is blocked; bilingual Access Denied message displays; no configuration change is saved."
+   }
+  ]
+ },
+ {
+  "id": 135665,
+  "title": "Verify that a visitor can view the pinned event details and navigate to its detail page by clicking the event image",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "Functional-High",
+   "HomePage",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "A published event is pinned and active.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Ensure a published event is pinned with Active Status enabled.",
+    "expected": "Configuration is active."
+   },
+   {
+    "action": "Load the Home Page and scroll to the Upcoming Event section.",
+    "expected": "Section renders in the two-column layout."
+   },
+   {
+    "action": "Read the section tag, title, date, time, location, and short description.",
+    "expected": "All details display correctly and match the Events module record."
+   },
+   {
+    "action": "Click the event image.",
+    "expected": "Browser navigates to the event's detail page."
+   }
+  ]
+ },
+ {
+  "id": 135666,
+  "title": "Verify that the Upcoming Event section does not appear anywhere on the Home Page when no event is pinned",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "Functional-High",
+   "HomePage",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "End-to-end confirmation that the absence condition propagates to the live public page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Unpin any currently featured event in the CMS and save.",
+    "expected": "Configuration saved with no pinned event."
+   },
+   {
+    "action": "Wait for cache refresh.",
+    "expected": "Cache refreshes."
+   },
+   {
+    "action": "Load the public Home Page end to end.",
+    "expected": "The Upcoming Event section is entirely absent from the rendered Home Page."
+   }
+  ]
+ },
+ {
+  "id": 135667,
+  "title": "Verify that the Upcoming Event section stops appearing when the pinned event is unpublished from the Events module",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "Functional-High",
+   "HomePage",
+   "UAT",
+   "Web"
+  ],
+  "description": "Event was published and pinned; admin then unpublishes it directly in the Events module.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Pin a published event and confirm it displays on the Home Page.",
+    "expected": "Section displays with the pinned event."
+   },
+   {
+    "action": "In the Events module, unpublish that same event.",
+    "expected": "Event status changes to Unpublished."
+   },
+   {
+    "action": "Wait for cache refresh.",
+    "expected": "Cache refreshes."
+   },
+   {
+    "action": "Reload the Home Page.",
+    "expected": "The Upcoming Event section no longer appears on the Home Page."
+   }
+  ]
+ },
+ {
+  "id": 135668,
+  "title": "Verify that the pinned event continues to display after its date has passed until the admin unpins it",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "Functional-High",
+   "HomePage",
+   "UAT",
+   "Web"
+  ],
+  "description": "Pinned event's date is now in the past; per spec this is not an automatic unpin trigger.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Pin a published event with a future date and confirm it displays.",
+    "expected": "Section displays with the event as upcoming."
+   },
+   {
+    "action": "Advance time (or use an event whose date has since passed) without unpinning.",
+    "expected": "Event date is now in the past."
+   },
+   {
+    "action": "Reload the Home Page.",
+    "expected": "Section still displays the same event unchanged, since it has not been manually unpinned."
+   }
+  ]
+ },
+ {
+  "id": 135669,
+  "title": "Verify that an admin can pin a published event, enable Active Status, save, and see it appear on the Home Page after cache refresh",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-High",
+   "HomePage",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Full backend happy path from CMS action to public visibility.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Open Pin Configuration and select a published event.",
+    "expected": "Event selected in the Event Selector."
+   },
+   {
+    "action": "Set Active Status to enabled.",
+    "expected": "Active Status shows enabled."
+   },
+   {
+    "action": "Click Save and Publish.",
+    "expected": "Success toast displays; configuration is saved."
+   },
+   {
+    "action": "Wait for cache refresh and load the Home Page.",
+    "expected": "The selected event appears as the featured Upcoming Event on the Home Page."
+   }
+  ]
+ },
+ {
+  "id": 135670,
+  "title": "Verify that unpinning the currently featured event hides the Upcoming Events section on the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-High",
+   "HomePage",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Reverse of TC-036 - full unpin lifecycle.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Confirm an event is currently pinned and visible on the Home Page.",
+    "expected": "Section currently visible."
+   },
+   {
+    "action": "Open Pin Configuration and unpin the event (clear the Event Selector / disable Active Status per the unpin mechanism).",
+    "expected": "Unpin action performed in the UI."
+   },
+   {
+    "action": "Save.",
+    "expected": "Success toast displays; configuration saved."
+   },
+   {
+    "action": "Wait for cache refresh and reload the Home Page.",
+    "expected": "The Upcoming Events section is no longer present on the Home Page."
+   }
+  ]
+ },
+ {
+  "id": 135671,
+  "title": "Verify that pinning a different event replaces the previously featured event without a duplicate section appearing",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-High",
+   "HomePage"
+  ],
+  "description": "Confirms the pin is a single-slot replacement, not additive.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Confirm Event A is currently pinned and visible on the Home Page.",
+    "expected": "Event A displays."
+   },
+   {
+    "action": "In Pin Configuration, select Event B instead of Event A and save.",
+    "expected": "Configuration updated to Event B."
+   },
+   {
+    "action": "Wait for cache refresh and reload the Home Page.",
+    "expected": "The Home Page shows only Event B in the Upcoming Event section; Event A no longer appears and no duplicate section is rendered."
+   }
+  ]
+ },
+ {
+  "id": 135672,
+  "title": "Verify that the pinned event's displayed details are sourced automatically from the Events module record, not re-entered in Pin Configuration",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-High",
+   "HomePage",
+   "UAT"
+  ],
+  "description": "Confirms there is no duplicate manual data-entry path in the Pin Configuration screen.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration and select a published event.",
+    "expected": "Event selected."
+   },
+   {
+    "action": "Inspect the Pin Configuration form for any manual title/date/time/location/description/image entry fields.",
+    "expected": "Pin Configuration exposes only the Event Selector and Active Status - no manual content fields for event details."
+   },
+   {
+    "action": "Save the configuration and load the Home Page.",
+    "expected": "Home Page displays the event's title/date/time/location/description/image exactly as recorded in the Events module."
+   }
+  ]
+ },
+ {
+  "id": 135673,
+  "title": "Verify that setting Active Status to disabled hides the section even while an event remains pinned",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-High",
+   "HomePage",
+   "UAT"
+  ],
+  "description": "Confirms Active Status is an independent visibility gate.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Confirm an event is pinned with Active Status enabled and visible on the Home Page.",
+    "expected": "Section displays."
+   },
+   {
+    "action": "Set Active Status to disabled without changing the Pinned Event selection.",
+    "expected": "Active Status shows disabled; Pinned Event selection unchanged."
+   },
+   {
+    "action": "Save.",
+    "expected": "Success toast displays; configuration saved."
+   },
+   {
+    "action": "Reload the Home Page after cache refresh.",
+    "expected": "The Upcoming Events section is hidden from the Home Page."
+   }
+  ]
+ },
+ {
+  "id": 135674,
+  "title": "Verify that the pinned event's title displays correctly in English",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Site language = English. Event title = &quot;Meeting business delegation of the Novgorod Region's government&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set site language to English.",
+    "expected": "Site is in English."
+   },
+   {
+    "action": "Load the Home Page with the pinned event.",
+    "expected": "Section renders."
+   },
+   {
+    "action": "Read the displayed event title.",
+    "expected": "Title displays exactly &quot;Meeting business delegation of the Novgorod Region's government&quot;."
+   }
+  ]
+ },
+ {
+  "id": 135675,
+  "title": "Verify that the pinned event's title displays correctly in Arabic",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Site language = Arabic.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set site language to Arabic.",
+    "expected": "Site is in Arabic."
+   },
+   {
+    "action": "Load the Home Page with the pinned event.",
+    "expected": "Section renders."
+   },
+   {
+    "action": "Read the displayed event title.",
+    "expected": "The Arabic-language title from the Events module record displays (not blank, not the English string)."
+   }
+  ]
+ },
+ {
+  "id": 135676,
+  "title": "Verify that the pinned event's date displays as sourced from the Events module",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Event date = 19 November 2025.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with the pinned event dated 19 November 2025.",
+    "expected": "Section renders."
+   },
+   {
+    "action": "Read the Date value in the details column.",
+    "expected": "Date value displays as &quot;19 November 2025&quot;."
+   }
+  ]
+ },
+ {
+  "id": 135677,
+  "title": "Verify that the pinned event's time displays as sourced from the Events module",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Event time = 09:30 A.M.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with the pinned event timed 09:30 A.M.",
+    "expected": "Section renders."
+   },
+   {
+    "action": "Read the Time value in the details column.",
+    "expected": "Time value displays as &quot;09:30 A.M.&quot;."
+   }
+  ]
+ },
+ {
+  "id": 135678,
+  "title": "Verify that the pinned event's location displays correctly in English",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Event location EN = &quot;Qatar Chamber - Lusail (4th floor)&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set site language to English.",
+    "expected": "Site is in English."
+   },
+   {
+    "action": "Load the Home Page with the pinned event.",
+    "expected": "Section renders."
+   },
+   {
+    "action": "Read the Location value.",
+    "expected": "Location value displays as &quot;Qatar Chamber - Lusail (4th floor)&quot;."
+   }
+  ]
+ },
+ {
+  "id": 135679,
+  "title": "Verify that the pinned event's location displays correctly in Arabic",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Site language = Arabic.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set site language to Arabic.",
+    "expected": "Site is in Arabic."
+   },
+   {
+    "action": "Load the Home Page with the pinned event.",
+    "expected": "Section renders."
+   },
+   {
+    "action": "Read the Location value.",
+    "expected": "The Arabic-language location value from the Events module record displays correctly."
+   }
+  ]
+ },
+ {
+  "id": 135680,
+  "title": "Verify that the pinned event's short description displays correctly in English",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Verifies the short description field renders within the details column in English.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set site language to English.",
+    "expected": "Site is in English."
+   },
+   {
+    "action": "Load the Home Page with the pinned event.",
+    "expected": "Section renders."
+   },
+   {
+    "action": "Read the short description below the event title.",
+    "expected": "The English short description from the Events module record displays fully, un-truncated per design."
+   }
+  ]
+ },
+ {
+  "id": 135681,
+  "title": "Verify that the pinned event's short description displays correctly in Arabic",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Verifies the short description field renders in Arabic.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set site language to Arabic.",
+    "expected": "Site is in Arabic."
+   },
+   {
+    "action": "Load the Home Page with the pinned event.",
+    "expected": "Section renders."
+   },
+   {
+    "action": "Read the short description below the event title.",
+    "expected": "The Arabic short description from the Events module record displays fully."
+   }
+  ]
+ },
+ {
+  "id": 135682,
+  "title": "Verify that only the event image is the clickable navigation target to the event detail page",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Verifies text areas are not independently clickable link targets.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home Page with the pinned event.",
+    "expected": "Section renders."
+   },
+   {
+    "action": "Click directly on the event title text (not the image).",
+    "expected": "Clicking the title text does not navigate away from the Home Page."
+   },
+   {
+    "action": "Click directly on the event image.",
+    "expected": "Clicking the image navigates to the event detail page."
+   }
+  ]
+ },
+ {
+  "id": 135683,
+  "title": "Verify that the Section Tag field saves successfully with a valid value within 50 characters in both languages",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "EN = &quot;Upcoming Events&quot;, AR = &quot;الفعاليات القادمة&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens with current values."
+   },
+   {
+    "action": "Enter &quot;Upcoming Events&quot; in the EN Section Tag field and &quot;الفعاليات القادمة&quot; in the AR field.",
+    "expected": "Both values entered without truncation."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves; success toast displays; both values persist in the field."
+   }
+  ]
+ },
+ {
+  "id": 135684,
+  "title": "Verify that the Section Tag field can be saved empty since it is not mandatory",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Field is optional per the field table.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Clear the EN and AR Section Tag fields.",
+    "expected": "Both fields are empty."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves successfully with no validation error for Section Tag."
+   }
+  ]
+ },
+ {
+  "id": 135685,
+  "title": "Verify that the Section Tag field rejects input exceeding the 50-character limit",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "EN value = 51-character string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Enter a 51-character string in the EN Section Tag field.",
+    "expected": "51-character value entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "A validation error displays for exceeding the 50-character limit; the field is not saved beyond 50 characters."
+   }
+  ]
+ },
+ {
+  "id": 135686,
+  "title": "Verify that entering special/script characters in the Section Tag field is stored as plain text and not executed",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "EN value = a script injection string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Enter a script tag string in the EN Section Tag field.",
+    "expected": "Value entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves without executing any script."
+   },
+   {
+    "action": "Reload the Home Page to view the badge.",
+    "expected": "The badge on the Home Page renders the literal text without triggering a script alert."
+   }
+  ]
+ },
+ {
+  "id": 135687,
+  "title": "Verify that a Section Tag change is discarded when the admin clicks Cancel without saving",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Existing Section Tag = &quot;Upcoming Events&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration showing Section Tag = &quot;Upcoming Events&quot;.",
+    "expected": "Field shows &quot;Upcoming Events&quot;."
+   },
+   {
+    "action": "Change the field value to &quot;Test Tag&quot;.",
+    "expected": "Field shows &quot;Test Tag&quot; unsaved."
+   },
+   {
+    "action": "Click Cancel.",
+    "expected": "Configuration is discarded; reopening the screen still shows &quot;Upcoming Events&quot;."
+   }
+  ]
+ },
+ {
+  "id": 135688,
+  "title": "Verify that a saved Section Tag value persists after reloading the Pin Configuration screen",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Persistence check after a successful save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save Section Tag = &quot;Upcoming Events&quot;.",
+    "expected": "Save succeeds with success toast."
+   },
+   {
+    "action": "Navigate away from the Pin Configuration screen.",
+    "expected": "Navigation succeeds."
+   },
+   {
+    "action": "Navigate back to the Pin Configuration screen.",
+    "expected": "Section Tag still shows &quot;Upcoming Events&quot;."
+   }
+  ]
+ },
+ {
+  "id": 135689,
+  "title": "Verify that the Section Heading field saves successfully with a valid value within 200 characters in both languages",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "EN = &quot;What's Coming Up&quot;, AR = &quot;ماذا يستجد قريبا&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Enter &quot;What's Coming Up&quot; in the EN Section Heading field and &quot;ماذا يستجد قريبا&quot; in the AR field.",
+    "expected": "Both values entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves; success toast displays; both values persist."
+   }
+  ]
+ },
+ {
+  "id": 135690,
+  "title": "Verify that the Section Heading field displays a mandatory validation error when left empty on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Mandatory field per the field table.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Clear the EN Section Heading field.",
+    "expected": "Field is empty."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "A mandatory-field validation error displays; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 135691,
+  "title": "Verify that the Section Heading field rejects input exceeding the 200-character limit",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "EN value = 201-character string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Enter a 201-character string in the EN Section Heading field.",
+    "expected": "201-character value entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "A validation error displays for exceeding the 200-character limit; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 135692,
+  "title": "Verify that entering special characters in the Section Heading field is stored and rendered safely",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "EN value contains quotes and a bold tag.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Enter a special-character string in the EN Section Heading field.",
+    "expected": "Value entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves."
+   },
+   {
+    "action": "Reload the Home Page.",
+    "expected": "The heading renders the literal text on the Home Page without breaking the layout or executing markup."
+   }
+  ]
+ },
+ {
+  "id": 135693,
+  "title": "Verify that a saved Section Heading value persists after reloading the Pin Configuration screen",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Persistence check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save Section Heading = &quot;What's Coming Up&quot;.",
+    "expected": "Save succeeds."
+   },
+   {
+    "action": "Navigate away from the screen.",
+    "expected": "Navigation succeeds."
+   },
+   {
+    "action": "Navigate back to the screen.",
+    "expected": "Section Heading still shows &quot;What's Coming Up&quot;."
+   }
+  ]
+ },
+ {
+  "id": 135694,
+  "title": "Verify that the Section Description field saves successfully with a valid rich-text value within 1000 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "EN value = the exact spec copy with bold formatting applied to &quot;Qatar Chamber&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Enter the section description text in the EN Rich Text field with &quot;Qatar Chamber&quot; bolded.",
+    "expected": "Value entered with formatting applied."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves; success toast displays; formatting persists."
+   }
+  ]
+ },
+ {
+  "id": 135695,
+  "title": "Verify that the Section Description field displays a mandatory validation error when left empty on save",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Mandatory field per the field table.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Clear the EN Section Description field.",
+    "expected": "Field is empty."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "A mandatory-field validation error displays; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 135696,
+  "title": "Verify that the Section Description field rejects input exceeding the 1000-character limit",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "EN value = 1001-character string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Enter a 1001-character string in the EN Section Description field.",
+    "expected": "1001-character value entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "A validation error displays for exceeding the 1000-character limit; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 135697,
+  "title": "Verify that a saved Section Description value persists after reloading the Pin Configuration screen",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Persistence check including rich text formatting.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save a Section Description with bold formatting applied to part of the text.",
+    "expected": "Save succeeds."
+   },
+   {
+    "action": "Navigate away from the screen.",
+    "expected": "Navigation succeeds."
+   },
+   {
+    "action": "Navigate back to the screen.",
+    "expected": "Section Description text and its bold formatting are unchanged."
+   }
+  ]
+ },
+ {
+  "id": 135698,
+  "title": "Verify that selecting a published event and saving stores the Pinned Event reference successfully",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Baseline positive selection case.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Open the Event Selector and choose a currently Published event.",
+    "expected": "Event selected in the field."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves; success toast displays; the selected event is stored as the Pinned Event."
+   }
+  ]
+ },
+ {
+  "id": 135699,
+  "title": "Verify that selecting an unpublished event in the Pinned Event field displays the exact bilingual validation message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "UAT"
+  ],
+  "description": "If the underlying list somehow surfaces a non-published event, verifies the exact copy from the field table.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Attempt to select/save a reference to an event that is not in Published status.",
+    "expected": "Non-published event referenced."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Validation message displays: &quot;Pinned Event must be a published event.&quot; (EN) / &quot;يجب أن تكون الفعالية المثبتة منشورة.&quot; (AR); save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 135700,
+  "title": "Verify that the Pinned Event selector list excludes events that are not Published",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Multiple events exist in Draft, Pending Review, and Published states.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Create test events in Draft, Pending Review, and Published states.",
+    "expected": "Events exist in all three states."
+   },
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Open the Event Selector and review the listed events.",
+    "expected": "Only the Published event appears in the selector list; Draft and Pending Review events are excluded."
+   }
+  ]
+ },
+ {
+  "id": 135701,
+  "title": "Verify that leaving the Pinned Event field unselected while Active Status is enabled displays a conditional-mandatory validation message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Pinned Event is &quot;Conditional&quot; mandatory per the field table.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Leave the Pinned Event selector empty.",
+    "expected": "Field remains empty."
+   },
+   {
+    "action": "Set Active Status to enabled.",
+    "expected": "Active Status shows enabled."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "A conditional-mandatory validation error displays for the empty Pinned Event field; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 135702,
+  "title": "Verify that a change to the Pinned Event selection is discarded when the admin clicks Cancel without saving",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Existing pinned event = Event A.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration showing Event A pinned.",
+    "expected": "Field shows Event A."
+   },
+   {
+    "action": "Change the selection to Event B.",
+    "expected": "Field shows Event B unsaved."
+   },
+   {
+    "action": "Click Cancel.",
+    "expected": "Configuration is discarded; reopening the screen still shows Event A pinned."
+   }
+  ]
+ },
+ {
+  "id": 135703,
+  "title": "Verify that the previously saved Pinned Event selection persists after reloading the Pin Configuration screen",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Persistence check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save Event A as the Pinned Event.",
+    "expected": "Save succeeds."
+   },
+   {
+    "action": "Navigate away from the screen.",
+    "expected": "Navigation succeeds."
+   },
+   {
+    "action": "Navigate back to the screen.",
+    "expected": "The Pinned Event field still shows Event A selected."
+   }
+  ]
+ },
+ {
+  "id": 135704,
+  "title": "Verify that setting Active Status to True and saving enables the Upcoming Events section on the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Baseline positive toggle-on case.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration with a published event pinned and Active Status = False.",
+    "expected": "Screen opens showing Active Status = False."
+   },
+   {
+    "action": "Set Active Status to True.",
+    "expected": "Toggle set to True."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves with success toast."
+   },
+   {
+    "action": "Reload the Home Page after cache refresh.",
+    "expected": "The Upcoming Events section displays on the Home Page."
+   }
+  ]
+ },
+ {
+  "id": 135705,
+  "title": "Verify that setting Active Status to False and saving disables the Upcoming Events section on the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Baseline positive toggle-off case.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration with a published event pinned and Active Status = True.",
+    "expected": "Screen opens showing Active Status = True."
+   },
+   {
+    "action": "Set Active Status to False.",
+    "expected": "Toggle set to False."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves with success toast."
+   },
+   {
+    "action": "Reload the Home Page after cache refresh.",
+    "expected": "The Upcoming Events section no longer displays on the Home Page."
+   }
+  ]
+ },
+ {
+  "id": 135706,
+  "title": "Verify that the Active Status field displays a mandatory validation error if left unset on save",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "Manual"
+  ],
+  "description": "Mandatory boolean field per the field table.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Leave Active Status in an unset/indeterminate state (if the UI allows it).",
+    "expected": "Field remains unset."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "A mandatory-field validation error displays; save is blocked."
+   }
+  ]
+ },
+ {
+  "id": 135707,
+  "title": "Verify that the saved Active Status value persists after reloading the Pin Configuration screen",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Persistence check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save Active Status = True.",
+    "expected": "Save succeeds."
+   },
+   {
+    "action": "Navigate away from the screen.",
+    "expected": "Navigation succeeds."
+   },
+   {
+    "action": "Navigate back to the screen.",
+    "expected": "Active Status still shows True."
+   }
+  ]
+ },
+ {
+  "id": 135708,
+  "title": "Verify that toggling Active Status without changing the Pinned Event selection still triggers a successful save",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Field-dependency check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration with Event A pinned and Active Status = True.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Change only Active Status to False, leaving Event A selected.",
+    "expected": "Only Active Status changed."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves with success toast; Event A remains the stored Pinned Event and Active Status is now False."
+   }
+  ]
+ },
+ {
+  "id": 135709,
+  "title": "Verify that selecting an event whose date has passed displays the exact bilingual warning/confirmation message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage",
+   "UAT"
+  ],
+  "description": "Admin selects a published event whose date is already in the past.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Pin Configuration.",
+    "expected": "Screen opens."
+   },
+   {
+    "action": "Select a published event whose date has already passed.",
+    "expected": "Past-date event selected."
+   },
+   {
+    "action": "Observe the system response before saving.",
+    "expected": "A warning/confirm dialog displays: &quot;Warning: Selected event date has passed. Do you still want to pin this event?&quot; (EN) / &quot;تحذير: تاريخ الفعالية المحددة قد انتهى. هل تريد تثبيتها على أي حال؟&quot; (AR)."
+   }
+  ]
+ },
+ {
+  "id": 135710,
+  "title": "Verify that confirming the passed-date warning proceeds to pin the event successfully",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Admin acknowledges the warning and proceeds.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Select a published event whose date has passed.",
+    "expected": "Warning dialog displays."
+   },
+   {
+    "action": "When the warning dialog appears, click the confirm/proceed option.",
+    "expected": "Dialog is confirmed."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Configuration saves with success toast; the passed-date event is now the Pinned Event."
+   }
+  ]
+ },
+ {
+  "id": 135711,
+  "title": "Verify that cancelling the passed-date warning aborts the pin action and retains the previous configuration",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "EVENT",
+   "Functional-Low",
+   "HomePage"
+  ],
+  "description": "Admin declines the warning.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Confirm Event A (a valid future-dated event) is the currently saved Pinned Event.",
+    "expected": "Event A confirmed as pinned."
+   },
+   {
+    "action": "Select a passed-date event B instead.",
+    "expected": "Passed-date event B selected."
+   },
+   {
+    "action": "When the warning dialog appears, click Cancel.",
+    "expected": "The pin action is aborted; the Pinned Event field reverts to/remains Event A; no configuration change is saved."
+   }
+  ]
+ },
+ {
+  "id": 135712,
+  "title": "Verify that the Home Page shows the previously pinned event immediately after a Pin Configuration save, before cache refresh completes",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "EVENT",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Tests the stale-cache window between save and refresh.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Confirm Event A is currently pinned and cached on the Home Page.",
+    "expected": "Event A displays."
+   },
+   {
+    "action": "In Pin Configuration, pin Event B and save.",
+    "expected": "Configuration saved with success toast."
+   },
+   {
+    "action": "Immediately reload the Home Page before the cache refresh interval elapses.",
+    "expected": "Home Page may still show Event A (stale cache) without erroring."
+   },
+   {
+    "action": "Reload again after the cache refresh interval elapses.",
+    "expected": "After refresh, Home Page shows Event B correctly."
+   }
+  ]
+ },
+ {
+  "id": 135713,
+  "title": "Verify that a pinned event with a date equal to today is still treated as upcoming and displays normally",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Edge",
+   "EVENT",
+   "HomePage"
+  ],
+  "description": "Boundary case - today is neither clearly upcoming nor passed.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Pin a published event whose date is set to today's date.",
+    "expected": "Event with today's date selected."
+   },
+   {
+    "action": "Save the configuration.",
+    "expected": "Configuration saves successfully with no passed-date warning triggered."
+   },
+   {
+    "action": "Load the Home Page.",
+    "expected": "The section displays the event normally as an upcoming event."
+   }
+  ]
+ },
+ {
+  "id": 135714,
+  "title": "Verify that two admins saving different Pin Configurations in quick succession results in a single consistent final state",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Control_Panel",
+   "Edge",
+   "EVENT",
+   "HomePage",
+   "Manual"
+  ],
+  "description": "Concurrent-write scenario - confirms no duplicate/corrupted configuration record.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Admin 1 opens Pin Configuration and selects Event A.",
+    "expected": "Admin 1's session shows Event A selected."
+   },
+   {
+    "action": "Admin 2 opens Pin Configuration and selects Event B.",
+    "expected": "Admin 2's session shows Event B selected."
+   },
+   {
+    "action": "Admin 1 saves, immediately followed by Admin 2 saving.",
+    "expected": "Both saves complete without error."
+   },
+   {
+    "action": "Reload the Pin Configuration screen.",
+    "expected": "The Pin Configuration reflects exactly one final state (the last successful save), with no duplicate or corrupted record."
+   }
+  ]
+ },
+ {
+  "id": 135715,
+  "title": "Verify that unpinning an event while a visitor already has the Home Page open does not break their current page view",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "EVENT",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Confirms graceful behavior for an already-rendered page when the underlying configuration changes mid-session.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Visitor loads the Home Page with an event pinned and visible.",
+    "expected": "Section displays for the visitor."
+   },
+   {
+    "action": "Without the visitor refreshing, an admin unpins the event and saves.",
+    "expected": "Configuration is updated on the backend."
+   },
+   {
+    "action": "Observe the visitor's already-open page (no manual refresh).",
+    "expected": "The visitor's open page continues to show the previously loaded event without erroring."
+   },
+   {
+    "action": "Visitor manually refreshes the page.",
+    "expected": "After refresh, the section is no longer shown for the visitor."
+   }
+  ]
+ },
+ {
+  "id": 135716,
+  "title": "Verify that a user lacking permission cannot bypass the Access Denied restriction via a direct configuration save request",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Edge",
+   "EVENT",
+   "HomePage"
+  ],
+  "description": "Confirms the permission check is enforced server-side.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as a user without Home Page management permission.",
+    "expected": "Login succeeds with restricted permissions."
+   },
+   {
+    "action": "Attempt to submit a Pin Configuration save action directly (bypassing the normal UI flow).",
+    "expected": "The save attempt is rejected with the bilingual Access Denied message."
+   },
+   {
+    "action": "Check the Pin Configuration state afterward.",
+    "expected": "The Pin Configuration remains unchanged from before the attempt."
+   }
+  ]
+ },
+ {
+  "id": 135717,
+  "title": "Verify that a visitor can view the pinned event details and navigate to its detail page by clicking the event image",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "EVENT",
+   "Functional-High",
+   "HomePage",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "A published event is pinned and active.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Ensure a published event is pinned with Active Status enabled.",
+    "expected": "Configuration is active."
+   },
+   {
+    "action": "Load the Home Page and scroll to the Upcoming Event section.",
+    "expected": "Section renders in the two-column layout."
+   },
+   {
+    "action": "Read the section tag, title, date, time, location, and short description.",
+    "expected": "All details display correctly and match the Events module record."
+   },
+   {
+    "action": "Click the event image.",
+    "expected": "Browser navigates to the event's detail page."
+   }
+  ]
+ },
+ {
+  "id": 135718,
+  "title": "Verify that the Upcoming Events section stops rendering when the pinned event is deleted entirely from the Events module",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "EVENT",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Distinguishes hard deletion from unpublishing.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Pin a published event and confirm it displays on the Home Page.",
+    "expected": "Section displays."
+   },
+   {
+    "action": "Delete that event entirely from the Events module.",
+    "expected": "Event is deleted."
+   },
+   {
+    "action": "Wait for cache refresh.",
+    "expected": "Cache refreshes."
+   },
+   {
+    "action": "Reload the Home Page.",
+    "expected": "The Upcoming Events section does not render; no broken/blank card or error is shown."
+   }
+  ]
+ },
+ {
+  "id": 135719,
+  "title": "Verify that re-publishing a previously unpublished pinned event causes the section to reappear without re-pinning",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "EVENT",
+   "HomePage",
+   "Web"
+  ],
+  "description": "Recovery scenario following TC-034.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Pin a published event; unpublish it from the Events module and confirm the section disappears.",
+    "expected": "Section disappears after unpublish."
+   },
+   {
+    "action": "Re-publish the same event in the Events module without touching Pin Configuration.",
+    "expected": "Event status returns to Published."
+   },
+   {
+    "action": "Wait for cache refresh.",
+    "expected": "Cache refreshes."
+   },
+   {
+    "action": "Reload the Home Page.",
+    "expected": "The Upcoming Events section reappears showing the same event automatically."
+   }
+  ]
+ }
+]

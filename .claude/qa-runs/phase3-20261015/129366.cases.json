@@ -1,0 +1,998 @@
+[
+ {
+  "id": 130961,
+  "title": "Verify that the footer renders all sections on every page",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms the complete footer structure renders when a visitor scrolls to the bottom of any page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to any page of the Qatar Chamber website",
+    "expected": "Page loads successfully"
+   },
+   {
+    "action": "Scroll to the bottom of the page",
+    "expected": "Footer renders with Qatar Chamber logo + description, Social Media Label + icons, navigation columns, Quick Links column, newsletter section, and copyright bar"
+   }
+  ]
+ },
+ {
+  "id": 130962,
+  "title": "Verify that clicking the footer logo redirects to the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms the footer logo acts as a link back to the Home Page from any page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the footer on any non-home page",
+    "expected": "Footer logo is visible"
+   },
+   {
+    "action": "Click the Qatar Chamber footer logo",
+    "expected": "Visitor is redirected to the Home Page"
+   }
+  ]
+ },
+ {
+  "id": 130963,
+  "title": "Verify that an internal footer navigation link opens in the same tab",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms internal footer navigation links keep the visitor within the same browsing context.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the footer",
+    "expected": "Footer navigation column is visible with active links"
+   },
+   {
+    "action": "Click a footer navigation link configured as internal",
+    "expected": "Link opens in the same browser tab and navigates to the configured target"
+   }
+  ]
+ },
+ {
+  "id": 130964,
+  "title": "Verify that an external footer navigation link opens in a new tab",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms external footer navigation links open in a new tab so the visitor doesn't lose their place on the site.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the footer",
+    "expected": "Footer navigation column is visible"
+   },
+   {
+    "action": "Click a footer navigation link configured as external",
+    "expected": "Link opens the configured target URL in a new browser tab"
+   }
+  ]
+ },
+ {
+  "id": 130965,
+  "title": "Verify that the Quick Links column renders its heading and active quick links",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms the Quick Links column displays its configured heading and all active quick links beneath it.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the footer with at least one active quick link configured",
+    "expected": "Footer renders"
+   },
+   {
+    "action": "Observe the Quick Links column",
+    "expected": "Quick Links column heading (e.g. 'Quick Links') is displayed with all active quick links listed beneath it"
+   }
+  ]
+ },
+ {
+  "id": 130966,
+  "title": "Verify that the Quick Links column is hidden when no quick links are active",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms the entire Quick Links column and heading are omitted when there is no active quick link content.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Configure the CMS so that no quick links are active",
+    "expected": "CMS has zero active quick links"
+   },
+   {
+    "action": "Load any page and scroll to the footer",
+    "expected": "Quick Links column and its heading are not rendered in the footer"
+   }
+  ]
+ },
+ {
+  "id": 130967,
+  "title": "Verify that clicking a quick link redirects to its configured URL",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms quick links navigate visitors to their configured destination in the configured tab behavior.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the footer Quick Links column",
+    "expected": "Quick Links column is visible with active links"
+   },
+   {
+    "action": "Click an active quick link",
+    "expected": "Visitor is redirected to the configured URL in the configured tab (same/new)"
+   }
+  ]
+ },
+ {
+  "id": 130968,
+  "title": "Verify that clicking a social media icon opens the official channel in a new tab",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms social media icons in the footer link out to official Qatar Chamber channels in a new tab.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the footer social icons row",
+    "expected": "Social icons row is visible below the 'Follow Us on Social Media' label"
+   },
+   {
+    "action": "Click an active social media icon",
+    "expected": "The official Qatar Chamber channel opens in a new browser tab"
+   }
+  ]
+ },
+ {
+  "id": 130969,
+  "title": "Verify that subscribing with a valid email shows a success confirmation",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms the footer newsletter subscription flow succeeds and confirms success to the visitor for a valid email.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the footer newsletter section",
+    "expected": "Newsletter section is visible with heading, description, email input, and Subscribe button"
+   },
+   {
+    "action": "Enter a valid email address in the newsletter field",
+    "expected": "Email is accepted"
+   },
+   {
+    "action": "Click the Subscribe button",
+    "expected": "Success confirmation message is displayed"
+   }
+  ]
+ },
+ {
+  "id": 130970,
+  "title": "Verify that submitting an empty or invalid email shows an inline validation error",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms the newsletter field blocks submission and shows a validation message for empty or malformed emails.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the footer newsletter section",
+    "expected": "Newsletter section is visible"
+   },
+   {
+    "action": "Leave the email field empty or enter an invalid email format",
+    "expected": "Subscription is blocked"
+   },
+   {
+    "action": "Click the Subscribe button",
+    "expected": "Inline validation message 'Please enter a valid email address.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 130971,
+  "title": "Verify that a newsletter backend error displays the appropriate error message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms a subscription-service failure surfaces a clear error message rather than failing silently.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the footer newsletter section",
+    "expected": "Newsletter section accepts a valid email"
+   },
+   {
+    "action": "Enter a valid email address",
+    "expected": "Backend subscription call fails"
+   },
+   {
+    "action": "Trigger a backend subscription failure (e.g. simulate service outage) and click Subscribe",
+    "expected": "Error message 'Unable to process your subscription. Please try again later.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 130972,
+  "title": "Verify that the copyright bar displays copyright text and bottom bar links correctly",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms the bottom strip of the footer shows copyright text and the policy links in the correct layout.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the very bottom of the footer",
+    "expected": "Copyright bar is visible at the bottom"
+   },
+   {
+    "action": "Observe the copyright bar",
+    "expected": "Copyright text appears on the left; Accessibility, Privacy Policy, and Terms of Service links appear on the right"
+   }
+  ]
+ },
+ {
+  "id": 130973,
+  "title": "Verify that clicking the Back to Top icon scrolls the page to the top",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms the Back to Top affordance in the footer returns the visitor to the top of the page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to the bottom of any page to reveal the footer",
+    "expected": "Back to Top icon is visible in the footer"
+   },
+   {
+    "action": "Click the Back to Top icon",
+    "expected": "Page scrolls back to the top"
+   }
+  ]
+ },
+ {
+  "id": 130974,
+  "title": "Verify that the footer layout mirrors RTL when Arabic language is selected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Manual",
+   "Web"
+  ],
+  "description": "Confirms the footer layout mirrors right-to-left when the visitor switches the site to Arabic.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Switch the site language to Arabic",
+    "expected": "Language switches to Arabic"
+   },
+   {
+    "action": "Scroll to the footer",
+    "expected": "Footer layout mirrors right-to-left (RTL): logo/branding, nav columns, quick links, newsletter, and copyright bar are horizontally mirrored"
+   }
+  ]
+ },
+ {
+  "id": 130975,
+  "title": "Verify that the footer falls back to the default language when a translation is missing",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms footer content never renders blank when a bilingual field lacks a translation for the active language.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Configure a footer field (e.g. a nav link title) with no Arabic translation while other fields are translated",
+    "expected": "Field is missing an Arabic translation"
+   },
+   {
+    "action": "Switch the site language to Arabic and scroll to the footer",
+    "expected": "Footer displays the configured default language text for that field instead of a blank or broken value"
+   }
+  ]
+ },
+ {
+  "id": 130976,
+  "title": "Verify that disabling an individual footer element hides only that element",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "Confirms deactivating a single footer record (nav link, quick link, social icon, copyright, bottom bar link) hides only that item while other active content remains.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In the CMS, set one footer nav link, one quick link, one social icon, the copyright text, and one bottom bar link to inactive status",
+    "expected": "Elements are set to inactive in CMS"
+   },
+   {
+    "action": "Publish the change",
+    "expected": "Publish succeeds"
+   },
+   {
+    "action": "Load any page and scroll to the footer",
+    "expected": "Each disabled element is hidden from the footer while all other active elements remain visible and functional"
+   }
+  ]
+ },
+ {
+  "id": 130977,
+  "title": "Verify that admin can upload footer logo with alt text and redirect URL",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms a Site Content Editor can configure the footer logo, its bilingual alt text, and its redirect URL, and that the change publishes correctly.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as Site Content Editor",
+    "expected": "Admin is logged in with correct role"
+   },
+   {
+    "action": "Navigate to Global Components &gt; Footer Management",
+    "expected": "Footer Management module is accessible"
+   },
+   {
+    "action": "Upload a valid logo image (PNG/SVG, under 2MB), enter bilingual alt text, and enter a redirect URL",
+    "expected": "Logo, alt text (EN/AR), and redirect URL are saved"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Liferay success toast is displayed and footer reflects the new logo after cache refresh"
+   }
+  ]
+ },
+ {
+  "id": 130978,
+  "title": "Verify that saving the footer logo without an image shows a required-field error",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms the CMS blocks saving Footer Management if the logo image is missing.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Footer Management",
+    "expected": "Footer Management form is open"
+   },
+   {
+    "action": "Leave the Footer Logo Image field empty",
+    "expected": "Save is blocked"
+   },
+   {
+    "action": "Attempt to save",
+    "expected": "Error message displayed: EN 'Footer Logo Image is required.' / AR 'صورة شعار التذييل مطلوبة.'"
+   }
+  ]
+ },
+ {
+  "id": 130979,
+  "title": "Verify that admin can create, edit, and reorder footer navigation columns",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms footer navigation columns can be created, edited, and reordered via Footer Management.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Footer Management",
+    "expected": "Footer Management is accessible"
+   },
+   {
+    "action": "Add a new navigation column with heading (EN/AR), column number, display order, and active status",
+    "expected": "New column is created with all fields saved"
+   },
+   {
+    "action": "Edit the column's display order",
+    "expected": "Display order updates correctly"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Publish succeeds with success toast"
+   }
+  ]
+ },
+ {
+  "id": 130980,
+  "title": "Verify that a missing column heading shows a required-field error",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms the CMS blocks saving a navigation column if the English heading is missing.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Footer Management",
+    "expected": "Form is open"
+   },
+   {
+    "action": "Add a new navigation column and leave Column Heading (EN) empty",
+    "expected": "Save is blocked"
+   },
+   {
+    "action": "Attempt to save",
+    "expected": "Error message displayed: EN 'Column Heading (EN) is required.'"
+   }
+  ]
+ },
+ {
+  "id": 130981,
+  "title": "Verify that a missing Quick Link Title (EN) shows a required-field error",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms the CMS blocks saving a quick link if the English title is missing.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Useful Links Manager",
+    "expected": "Form is open"
+   },
+   {
+    "action": "Click Add Quick Link and leave Title (EN) empty",
+    "expected": "Save is blocked"
+   },
+   {
+    "action": "Attempt to save",
+    "expected": "Error message displayed: EN 'Quick Link Title (EN) is required.'"
+   }
+  ]
+ },
+ {
+  "id": 130982,
+  "title": "Verify that an invalid Quick Link URL shows a validation error",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms the CMS validates the Quick Link URL field format before allowing save.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Useful Links Manager",
+    "expected": "Form is open"
+   },
+   {
+    "action": "Click Add Quick Link and enter an invalid URL format (e.g. 'notaurl')",
+    "expected": "Save is blocked"
+   },
+   {
+    "action": "Attempt to save",
+    "expected": "Error message displayed: EN 'Please enter a valid URL.'"
+   }
+  ]
+ },
+ {
+  "id": 130983,
+  "title": "Verify that admin can add a social media icon entry",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms a new social media icon can be created with all required fields and appears in the frontend footer after publish.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Global Components &gt; Social Media Icons Management",
+    "expected": "Social Media Icons Management is accessible"
+   },
+   {
+    "action": "Add a new icon entry with platform name, icon image, bilingual alt text, redirect URL, open-in-new-tab, display order, and active status",
+    "expected": "New icon entry is saved with all fields"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Icon appears in the footer social icons row after publish"
+   }
+  ]
+ },
+ {
+  "id": 130984,
+  "title": "Verify that saving a social icon without an image shows a required-field error",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms the CMS blocks saving a social media icon entry if the icon image is missing.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Social Media Icons Management",
+    "expected": "Form is open"
+   },
+   {
+    "action": "Add a new entry and leave Social Icon Image empty",
+    "expected": "Save is blocked"
+   },
+   {
+    "action": "Attempt to save",
+    "expected": "Error message displayed: EN 'Social Icon Image is required.'"
+   }
+  ]
+ },
+ {
+  "id": 130985,
+  "title": "Verify that a missing platform name shows a required-field error",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms the CMS blocks saving a social media icon entry if the platform name is missing.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Social Media Icons Management",
+    "expected": "Form is open"
+   },
+   {
+    "action": "Add a new entry and leave Platform Name empty",
+    "expected": "Save is blocked"
+   },
+   {
+    "action": "Attempt to save",
+    "expected": "Error message displayed: EN 'Platform Name is required.'"
+   }
+  ]
+ },
+ {
+  "id": 130986,
+  "title": "Verify that admin can configure the newsletter section fields",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms all newsletter section fields (heading, description, placeholder, button label) can be configured bilingually and reflect on the frontend.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Footer Management",
+    "expected": "Footer Management is accessible"
+   },
+   {
+    "action": "Enter Newsletter Heading, Description, Email Placeholder, and Subscribe Button Label (EN/AR)",
+    "expected": "All newsletter fields are saved"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Newsletter section reflects the configured content on the frontend after publish"
+   }
+  ]
+ },
+ {
+  "id": 130987,
+  "title": "Verify that admin can manage copyright text and bottom bar links",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms copyright text and the bottom bar policy links can be configured and reflect correctly on the frontend.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Footer Management",
+    "expected": "Footer Management is accessible"
+   },
+   {
+    "action": "Enter Copyright Text (EN/AR) and set active status",
+    "expected": "Copyright text and bottom bar links are saved"
+   },
+   {
+    "action": "Add or edit bottom bar links (e.g. Accessibility, Privacy Policy, Terms of Service) with title, URL, open-in-new-tab, display order, and active status",
+    "expected": "Copyright bar reflects configured content and links on the frontend after publish"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Links are functional and correctly ordered"
+   }
+  ]
+ },
+ {
+  "id": 130988,
+  "title": "Verify that an admin without permission cannot publish footer configuration",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "CMS",
+   "Control_Panel",
+   "Functional-High",
+   "Manual"
+  ],
+  "description": "Confirms footer publish actions are permission-gated and blocked for users without the appropriate CMS role.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS with a user role lacking footer publish permission",
+    "expected": "User is logged in with insufficient permissions"
+   },
+   {
+    "action": "Navigate to Footer Management and attempt to publish a change",
+    "expected": "Publish action is blocked and error message displayed: EN 'Access Denied. You do not have permission to perform this action.'"
+   }
+  ]
+ },
+ {
+  "id": 130989,
+  "title": "Verify that the draft, preview, and publish lifecycle works for footer records",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "CMS",
+   "Control_Panel",
+   "Functional-High",
+   "Manual"
+  ],
+  "description": "Confirms footer configuration changes can move through draft, preview, and publish states, and reflect on the live frontend after cache refresh.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Footer Management and make a configuration change",
+    "expected": "Change is saved as draft without going live"
+   },
+   {
+    "action": "Save as draft",
+    "expected": "Preview shows the change accurately before publish"
+   },
+   {
+    "action": "Preview the change",
+    "expected": "Publish succeeds with success toast"
+   },
+   {
+    "action": "Publish the change",
+    "expected": "Frontend footer reflects the published change"
+   },
+   {
+    "action": "Wait for standard cache refresh and load the frontend footer",
+    "expected": "Change is visible after cache refresh"
+   }
+  ]
+ },
+ {
+  "id": 130990,
+  "title": "Verify that admin can add a quick link via the Useful Links Manager",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "Confirms a new quick link can be created with all required fields and appears in the frontend Quick Links column after publish.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Global Components &gt; Useful Links Manager",
+    "expected": "Useful Links Manager is accessible"
+   },
+   {
+    "action": "Set the Quick Links column heading (EN/AR)",
+    "expected": "New quick link is saved with all fields"
+   },
+   {
+    "action": "Click Add Quick Link and enter Title EN, Title AR, URL, Open in New Tab, Display Order, Active Status, then save and publish",
+    "expected": "Quick link appears in the Quick Links column on the frontend after publish"
+   }
+  ]
+ },
+ {
+  "id": 130991,
+  "title": "التحقق من أنه يتم عرض تخطيط التذييل من اليمين إلى اليسار عند اختيار اللغة العربية",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Manual",
+   "Web"
+  ],
+  "description": "يتحقق من أن تخطيط تذييل الصفحة ينعكس بشكل صحيح من اليمين إلى اليسار عند تبديل لغة الموقع إلى العربية.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "تبديل لغة الموقع إلى العربية",
+    "expected": "يتم تبديل اللغة إلى العربية بنجاح"
+   },
+   {
+    "action": "التمرير إلى تذييل الصفحة",
+    "expected": "يظهر تخطيط التذييل معكوسًا من اليمين إلى اليسار (RTL): الشعار، أعمدة التنقل، الروابط السريعة، النشرة الإخبارية، وشريط حقوق النشر"
+   }
+  ]
+ },
+ {
+  "id": 130992,
+  "title": "التحقق من أنه يتم عرض اللغة الافتراضية في التذييل عند عدم توفر ترجمة عربية",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "يتحقق من أن محتوى التذييل لا يظهر فارغًا عند عدم توفر ترجمة عربية لأحد الحقول ثنائية اللغة.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "إعداد أحد حقول التذييل (مثل عنوان رابط تنقل) بدون ترجمة عربية بينما باقي الحقول مترجمة",
+    "expected": "الحقل يفتقر إلى الترجمة العربية"
+   },
+   {
+    "action": "تبديل لغة الموقع إلى العربية والتمرير إلى التذييل",
+    "expected": "يعرض التذييل نص اللغة الافتراضية المُعدّة لهذا الحقل بدلاً من قيمة فارغة أو معطوبة"
+   }
+  ]
+ },
+ {
+  "id": 130993,
+  "title": "التحقق من أنه تظهر رسالة التحقق عند إدخال بريد إلكتروني فارغ أو غير صالح في قسم النشرة الإخبارية",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "يتحقق من أن حقل النشرة الإخبارية يمنع الإرسال ويعرض رسالة تحقق عند إدخال بريد إلكتروني فارغ أو بصيغة غير صحيحة، باللغة العربية.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "التمرير إلى قسم النشرة الإخبارية في التذييل مع تفعيل اللغة العربية",
+    "expected": "يظهر قسم النشرة الإخبارية باللغة العربية"
+   },
+   {
+    "action": "ترك حقل البريد الإلكتروني فارغًا أو إدخال بريد إلكتروني بصيغة غير صحيحة",
+    "expected": "يتم منع الاشتراك"
+   },
+   {
+    "action": "النقر على زر الاشتراك",
+    "expected": "تظهر رسالة التحقق: 'يرجى إدخال عنوان بريد إلكتروني صالح.'"
+   }
+  ]
+ },
+ {
+  "id": 130994,
+  "title": "التحقق من أنه تظهر رسالة الخطأ عند فشل خادم الاشتراك في النشرة الإخبارية",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Web"
+  ],
+  "description": "يتحقق من ظهور رسالة خطأ واضحة باللغة العربية عند فشل خدمة الاشتراك في الخادم.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "التمرير إلى قسم النشرة الإخبارية مع تفعيل اللغة العربية",
+    "expected": "يتم قبول البريد الإلكتروني الصالح"
+   },
+   {
+    "action": "إدخال بريد إلكتروني صالح",
+    "expected": "يفشل طلب الاشتراك في الخادم"
+   },
+   {
+    "action": "محاكاة فشل الخادم عند النقر على زر الاشتراك",
+    "expected": "تظهر رسالة الخطأ: 'لا يمكن معالجة اشتراكك. يرجى المحاولة مرة أخرى لاحقاً.'"
+   }
+  ]
+ },
+ {
+  "id": 130995,
+  "title": "التحقق من أنه تظهر رسالة الحقل المطلوب عند إغفال عنوان العمود باللغة العربية",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "CMS",
+   "Control_Panel",
+   "Functional-High"
+  ],
+  "description": "يتحقق من أن نظام إدارة المحتوى يمنع الحفظ عند إغفال عنوان عمود التنقل باللغة العربية، مع عرض رسالة الخطأ المناسبة.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "الدخول إلى نظام إدارة المحتوى Liferay CMS بصلاحية محرر المحتوى",
+    "expected": "نموذج إدارة التذييل مفتوح"
+   },
+   {
+    "action": "الانتقال إلى إدارة التذييل وإضافة عمود تنقل جديد",
+    "expected": "يتم منع الحفظ"
+   },
+   {
+    "action": "ترك حقل عنوان العمود (عربي) فارغًا ومحاولة الحفظ",
+    "expected": "تظهر رسالة الخطأ: 'عنوان العمود (عربي) مطلوب.'"
+   }
+  ]
+ },
+ {
+  "id": 130996,
+  "title": "التحقق من أنه تظهر رسالة رفض الوصول باللغة العربية عند محاولة مستخدم غير مصرح له نشر إعدادات التذييل",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "CMS",
+   "Control_Panel",
+   "Functional-High",
+   "Manual"
+  ],
+  "description": "يتحقق من أن إجراء نشر إعدادات التذييل مقيّد بالصلاحيات، ويتم حظره مع عرض رسالة رفض الوصول باللغة العربية للمستخدمين غير المصرح لهم.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "تسجيل الدخول إلى Liferay CMS بحساب لا يملك صلاحية نشر إعدادات التذييل",
+    "expected": "المستخدم مسجل الدخول بدون الصلاحيات الكافية"
+   },
+   {
+    "action": "الانتقال إلى إدارة التذييل ومحاولة نشر تغيير",
+    "expected": "يتم منع إجراء النشر وتظهر رسالة الخطأ: 'تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.'"
+   }
+  ]
+ }
+]

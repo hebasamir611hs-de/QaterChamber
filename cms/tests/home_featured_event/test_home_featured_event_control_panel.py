@@ -30,6 +30,7 @@ from cms.pages.home_featured_event.home_featured_event_admin_page import (  # no
     HomeFeaturedEventAdminPage,
     approved_49205_write,
 )
+from config.settings import control_panel_url
 from web.pages.home_featured_event.home_featured_event_page import HomeFeaturedEventPage
 
 EDITOR = "Site Content Editor"
@@ -192,6 +193,17 @@ def _published_event_href(browser) -> str:
         ctx.close()
 
 
+def _event_titles(page) -> list:
+    """Two real event titles from the Pinned Event picker (bug 149373 fixed:
+    it is a picker now, read live 2026-10-15). QCTEST events are skipped."""
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(EDITOR)
+    admin.open_live_pin_read_only()
+    titles = [t for t in admin.event_options() if not t.upper().startswith("QCTEST")]
+    assert len(titles) >= 2, f"the picker offers fewer than two real events: {titles}"
+    # The first option's detail page returned 404 on 2026-10-07 (report G1).
+    return titles[1:3]
+
+
 def _pin_and_check(page, browser, value: str, active: bool, visible_before: bool = False, expect_stored: bool = True):
     """Editor writes (value, active) to 49205, publishes, then hands back a
     fresh logged-out Home Page. Returns (admin, snapshot, home, ctx); the
@@ -210,7 +222,16 @@ def _pin_and_check(page, browser, value: str, active: bool, visible_before: bool
     if visible_before:
         home.open_home()
         assert home.is_section_visible(), "precondition: section must be visible to a visitor before the change"
-    admin.open_for_edit().set_pinned_event(value).set_active(active).publish()
+    try:
+        admin.open_for_edit().set_pinned_event(value).set_active(active).publish()
+    except BaseException:
+        # Healed 2026-10-15: a failure here used to skip every caller's
+        # finally, leaving 49205 Unpublished (135671, run A2). Restore first.
+        try:
+            admin.restore(snap)
+        finally:
+            ctx.close()
+        raise
     if expect_stored:
         admin.open_live_pin_read_only()
         stored = admin.snapshot()
@@ -247,10 +268,21 @@ def test_pin_published_event_shows_on_home(page, browser):
 @pytest.mark.usefixtures("approved_49205_write")
 @allure.title("Unpinning the featured event hides the Upcoming Events section")
 def test_unpin_hides_section(page, browser):
-    """ADO-135670. Account: Site Content Editor. Unpin = clear Pinned Event
-    and publish. WRITES 49205 — approval required."""
-    admin, snap, home, ctx = _pin_and_check(page, browser, "", True, visible_before=True)
+    """ADO-135670. Account: Site Content Editor. Pin a real event first, then
+    unpin. UPDATED 2026-10-18 to the bug-150519 fix design: unpin = untick
+    Active Status AND clear Pinned Event, then Publish; the stored pin must
+    hold no event and the section must be hidden. (Bug 150519 reopened: the
+    picker cannot be cleared, so the stored-event assertion is expected to
+    fail until it is fixed.) WRITES 49205 — restored in finally."""
+    title = _event_titles(page)[0]
+    admin, snap, home, ctx = _pin_and_check(page, browser, title, True)
     try:
+        assert home.reload_until(lambda p: p.is_section_visible()), "precondition: section not visible with the event pinned"
+        admin.open_for_edit().set_active(False).set_pinned_event("").publish()
+        admin.open_live_pin_read_only()
+        assert admin.pinned_event_value() == "", (
+            f"Pinned Event could not be cleared: it still holds {admin.pinned_event_value()!r} after unpin + Publish (bug 150519)"
+        )
         assert home.reload_until(lambda p: not p.is_section_visible()), "section still visible after unpinning"
     finally:
         admin.restore(snap)
@@ -264,14 +296,17 @@ def test_unpin_hides_section(page, browser):
 @pytest.mark.usefixtures("approved_49205_write")
 @allure.title("Pinning a different event replaces the featured one with no duplicate section")
 def test_repin_replaces_without_duplicate(page, browser):
-    """ADO-135671 (P3, previously scripted). Account: Site Content Editor.
-    WRITES 49205 — approval required."""
-    href = _published_event_href(browser)
-    admin, snap, home, ctx = _pin_and_check(page, browser, href, True)
+    """ADO-135671 (P3). Account: Site Content Editor. Pin event A, then
+    event B; one section, showing B. WRITES 49205 — restored in finally."""
+    first, second = _event_titles(page)
+    admin, snap, home, ctx = _pin_and_check(page, browser, first, True)
     try:
-        home.reload_until(lambda p: p.is_section_visible())
+        assert home.reload_until(lambda p: p.is_section_visible() and first in p.title_text()), f"{first!r} never shown"
+        admin.open_for_edit().set_pinned_event(second).set_active(True).publish()
+        assert home.reload_until(lambda p: p.is_section_visible() and second in p.title_text()), (
+            f"the card did not switch to {second!r}"
+        )
         assert home.page.locator(home.SECTION).count() == 1, "more than one Upcoming Event section rendered"
-        assert home.media_href().endswith(href.split("/")[-1]), "the card still shows the previous event"
     finally:
         admin.restore(snap)
         ctx.close()
@@ -285,14 +320,15 @@ def test_repin_replaces_without_duplicate(page, browser):
 @pytest.mark.usefixtures("approved_49205_write")
 @allure.title("Active Status off hides the section while an event stays pinned")
 def test_active_status_off_hides_section(page, browser):
-    """ADO-135673 / ADO-135705. Account: Site Content Editor. WRITES 49205."""
-    href = _published_event_href(browser)
-    admin, snap, home, ctx = _pin_and_check(page, browser, href, True)
+    """ADO-135673 / ADO-135705. Account: Site Content Editor. WRITES 49205 —
+    restored in finally."""
+    title = _event_titles(page)[0]
+    admin, snap, home, ctx = _pin_and_check(page, browser, title, True)
     try:
         assert home.reload_until(lambda p: p.is_section_visible()), "precondition: section not visible with the event pinned + active"
         admin.open_for_edit().set_active(False).publish()
         admin.open_live_pin_read_only()
-        assert admin.is_active() is False and admin.pinned_event_value() == href, "Active Status off did not persist (or the pin was lost)"
+        assert admin.is_active() is False and admin.pinned_event_value() == title, "Active Status off did not persist (or the pin was lost)"
         assert home.reload_until(lambda p: not p.is_section_visible()), "section visible with Active Status off"
     finally:
         admin.restore(snap)
@@ -347,12 +383,19 @@ def test_pinned_event_details_sourced_from_events_module(page, browser):
 @pytest.mark.usefixtures("approved_49205_write")
 @allure.title("Active Status on with no Pinned Event is refused")
 def test_active_without_pinned_event_refused(page, browser):
-    """ADO-135701. Account: Site Content Editor. WRITES 49205 if the product
-    accepts the save — approval required."""
-    admin, snap, home, ctx = _pin_and_check(page, browser, "", True, expect_stored=False)
+    """ADO-135701. Account: Site Content Editor. Pin an event, then try to
+    publish with Active Status on and the Pinned Event cleared: the save must
+    be refused and the pin kept. WRITES 49205 — restored in finally.
+    Note: the live record itself read Published + Active + EMPTY Pinned Event
+    on 2026-10-15 (last modified 2026-10-09)."""
+    title = _event_titles(page)[0]
+    admin, snap, home, ctx = _pin_and_check(page, browser, title, True)
     try:
+        admin.open_for_edit().set_pinned_event("").set_active(True).publish()
         admin.open_live_pin_read_only()
-        assert admin.pinned_event_value() == snap["pinnedEvent"], "an empty Pinned Event was saved with Active Status on"
+        assert admin.pinned_event_value() == title, (
+            f"an empty Pinned Event was saved with Active Status on (stored {admin.pinned_event_value()!r})"
+        )
     finally:
         admin.restore(snap)
         ctx.close()
@@ -385,3 +428,76 @@ def test_direct_save_request_rejected(page, browser):
     admin.open_live_pin_read_only()
     assert admin.snapshot() == snap, "49205 changed after the Site Member's direct request"
     assert status in (401, 403), f"direct save by Site Member returned HTTP {status}"
+
+
+# ═══════════════════ remaining Low cases (QA lead, 2026-10-15) ═══════════════════
+
+def _toast_after_save(page, locale: str) -> str:
+    """Re-saves 49205 with its CURRENT values (no data change) and returns the
+    text of any success toast/alert shown. Wording is noted, not asserted
+    (PBI running rules, rule 17)."""
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(EDITOR)
+    admin.open_live_pin_read_only()
+    snap = admin.snapshot()
+    if locale == "ar":
+        page.goto(control_panel_url(f"/ar/web/qatar-chamber/manage-{admin.SLUG}?editEntry={admin.LIVE_PIN_CODE}"),
+                  wait_until="domcontentloaded")
+        admin.wait_for(admin.PINNED_EVENT_INPUT, state="attached", timeout=30000, first=True)
+    if locale == "ar":
+        # Arabic labels: the workflow submit is the second name=status button
+        # (Save as Draft is the first) — structure, not localized text.
+        # Read live: the Publish button is name=status value=0 ("نشر").
+        before = page.locator("text=/Editing/").first.inner_text()
+        page.locator('button[type="submit"][name="status"][value="0"]').click()
+        page.wait_for_function(
+            "b => { const e=[...document.querySelectorAll('*')].find(x=>x.children.length===0 && /Editing|تحرير/.test(x.textContent)); "
+            "return !e || e.textContent !== b; }", arg=before, timeout=90000)
+    else:
+        admin.publish()
+    toast = page.locator('.alert-success, [role="alert"]:visible, .toast:visible')
+    try:
+        toast.first.wait_for(state="visible", timeout=10000)
+        text = " | ".join(t.strip() for t in toast.all_inner_texts() if t.strip())
+    except Exception:  # noqa: BLE001 — no toast is a recorded observation, not a failure
+        text = ""
+    admin.open_live_pin_read_only()
+    assert admin.snapshot() == snap, f"re-saving changed 49205: {admin.snapshot()} != {snap}"
+    allure.attach(text or "(no toast seen)", name=f"toast ({locale})", attachment_type=allure.attachment_type.TEXT)
+    return text
+
+
+@_marks
+@pytest.mark.tc_135655
+@pytest.mark.xdist_group("pin_event_49205")
+@pytest.mark.usefixtures("approved_49205_write")
+@allure.title("Saving the Pin Configuration in English succeeds (toast noted)")
+def test_pin_save_toast_en(page):
+    """ADO-135655. Re-saves 49205 unchanged. The save must succeed and the
+    record keep its values; the toast's presence/wording is noted only."""
+    _toast_after_save(page, "en")
+
+
+@_marks
+@pytest.mark.tc_135656
+@pytest.mark.xdist_group("pin_event_49205")
+@pytest.mark.usefixtures("approved_49205_write")
+@allure.title("Saving the Pin Configuration in Arabic succeeds (toast noted)")
+def test_pin_save_toast_ar(page):
+    """ADO-135656. As 135655, from the Arabic admin locale."""
+    _toast_after_save(page, "ar")
+
+
+@_marks
+@pytest.mark.tc_135657
+@allure.title("Pin Configuration screen renders RTL in Arabic")
+def test_pin_screen_rtl_arabic(page):
+    """ADO-135657. Read-only: the Arabic admin locale renders right-to-left
+    and the form mounts."""
+    admin = HomeFeaturedEventAdminPage(page).sign_in_as(EDITOR)
+    page.goto(control_panel_url(f"/ar/web/qatar-chamber/manage-{admin.SLUG}?editEntry={admin.LIVE_PIN_CODE}"),
+              wait_until="domcontentloaded")
+    admin.wait_for(admin.PINNED_EVENT_INPUT, state="attached", timeout=30000, first=True)
+    assert page.locator("html").get_attribute("dir") == "rtl", "Arabic admin locale is not RTL"
+    # The picker's accessible name is Arabic here (English-only locators rule):
+    # check the combobox that sits with the Pinned Event hidden input.
+    assert page.locator('[role="combobox"]').count(), "the Pinned Event picker did not render"

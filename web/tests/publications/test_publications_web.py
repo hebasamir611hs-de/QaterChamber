@@ -112,6 +112,8 @@ object's entries table (mirrors the Export Reports/Annual Reports modules'
 own convention).
 """
 
+from urllib.parse import urlparse
+
 import allure
 import pytest
 
@@ -204,9 +206,11 @@ def test_hero_title_typography(page):
 @pytest.mark.pbi_130711
 @pytest.mark.tc_143983
 def test_breadcrumb_typography_and_links(page):
-    # Azure TC 143983 | PBI 130711 — the "both links clickable" half is
-    # EXPECTED TO FAIL: "Insights & Media" is a real <span>, not a link
-    # (confirmed live, see module docstring) — scripted honestly.
+    # Azure TC 143983 | PBI 130711. UPDATED 2026-10-18 (bug 145397 closed):
+    # "Insights & Media" is now an <a>. Home links to the site root "/",
+    # which serves the Home page (read live) — so the Home check accepts the
+    # root as well as /web/qatar-chamber[/home]. The I&M target itself
+    # (/insights-media) returns 404: bug #150817, not asserted here.
     pub = PublicationsPage(page)
     pub.open_publications()
 
@@ -219,7 +223,10 @@ def test_breadcrumb_typography_and_links(page):
 
     with allure.step('Click "Home"'):
         pub.click_crumb_home()
-        assert pub.page.url.rstrip("/").endswith("qatar-chamber")
+        pub.page.wait_for_load_state("domcontentloaded")
+        path = urlparse(pub.page.url).path.rstrip("/")
+        assert path in ("", "/home", "/web/qatar-chamber", "/web/qatar-chamber/home"), pub.page.url
+        assert pub.page.title().startswith("Home"), pub.page.title()
 
     with allure.step('Return and check "Insights & Media" is clickable'):
         pub.open_publications()

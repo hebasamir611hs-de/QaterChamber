@@ -1668,3 +1668,25 @@ def test_134291_nav_label_ar_over_100(page, qctest_nav_items):
 def test_134295_nav_url_over_500(page, qctest_nav_items):
     _nav_over_limit(page, qctest_nav_items, 134295, NavItemAdminPage.FIELD_URL, 500,
                     ("/web/qatar-chamber/qctest-134295-" + "x" * 501)[:501])
+
+
+@allure.title("Verify that the CMS nav item list displays reorder controls (ADO-134248)")
+@_p3_marks(134248, "ui")
+def test_134248_nav_list_shows_reorder_controls(page):
+    """Read-only. Each nav item row should show a reorder control next to its
+    label and level. Rows, their cells and any drag/reorder control are read
+    off the fully expanded list."""
+    nav = _as_editor(page)
+    nav.open_full_list()
+    rows = page.locator(nav.ENTRY_ROW)
+    n = rows.count()
+    sel = ('[draggable="true"], .drag-handle, [data-qc-oel-reorder], .lexicon-icon-drag, '
+           '[aria-label*="Move" i], [title*="Move" i], [aria-label*="reorder" i], [title*="reorder" i]')
+    per_row = [rows.nth(i).locator(sel).count() for i in range(n)]
+    headers = page.locator("table.qc-oel__table thead th").all_inner_texts()
+    page.screenshot(path="reports/header-134248-nav-list.png", full_page=True)
+    allure.attach(json.dumps({"rows": n, "headers": headers, "controls_per_row": per_row}, ensure_ascii=False),
+                  "nav item list", allure.attachment_type.JSON)
+    assert n > 0, "the nav item list is empty"
+    missing = sum(1 for c in per_row if c == 0)
+    assert missing == 0, f"{missing} of {n} nav item rows show no reorder control (columns: {headers})"

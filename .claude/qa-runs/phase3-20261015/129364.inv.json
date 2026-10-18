@@ -1,0 +1,830 @@
+[
+{
+"id": 134481,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon is displayed in the site header on page load"
+},
+{
+"id": 134482,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking the accessibility icon opens the accessibility panel"
+},
+{
+"id": 134483,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking the accessibility icon a second time closes the panel"
+},
+{
+"id": 134484,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility panel does not produce broken UI if it fails to open"
+},
+{
+"id": 134485,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon is Figma-verified correctly positioned on desktop EN light theme"
+},
+{
+"id": 134486,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the High Contrast toggle control renders inside the accessibility panel"
+},
+{
+"id": 134487,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Zoom In (+) and Zoom Out (-) buttons render inside the accessibility panel"
+},
+{
+"id": 134488,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Reset/Normal View control renders inside the accessibility panel"
+},
+{
+"id": 134489,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon does not render when accessibility tools are disabled in CMS"
+},
+{
+"id": 134490,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that all header interactive elements including the accessibility icon are keyboard-focusable"
+},
+{
+"id": 134491,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the CMS Accessibility Settings page renders the Accessibility Tools Enabled toggle"
+},
+{
+"id": 134492,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the image upload dialog renders both Alt Text (EN) and Alt Text (AR) input fields"
+},
+{
+"id": 134493,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon renders correctly - EN, light theme, desktop"
+},
+{
+"id": 134494,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon renders correctly - EN, dark theme, desktop"
+},
+{
+"id": 134495,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon renders correctly - EN, light theme, mobile"
+},
+{
+"id": 134496,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon renders correctly - EN, dark theme, mobile"
+},
+{
+"id": 134497,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon renders correctly (RTL) - AR, light theme, desktop"
+},
+{
+"id": 134498,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon renders correctly (RTL) - AR, dark theme, desktop"
+},
+{
+"id": 134499,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon renders correctly (RTL) - AR, light theme, mobile"
+},
+{
+"id": 134500,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon renders correctly (RTL) - AR, dark theme, mobile"
+},
+{
+"id": 134501,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a CMS user without header-management permission cannot access Accessibility Settings"
+},
+{
+"id": 134502,
+"p": 1,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that activating High Contrast applies the high-contrast theme site-wide in real time"
+},
+{
+"id": 134503,
+"p": 1,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking Zoom In increases page text size by one increment without reload"
+},
+{
+"id": 134504,
+"p": 1,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking Zoom Out decreases page text size by one increment without reload"
+},
+{
+"id": 134505,
+"p": 1,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Reset/Normal View restores default font size and contrast"
+},
+{
+"id": 134506,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that accessibility settings persist across page navigation within the same browser session"
+},
+{
+"id": 134507,
+"p": 1,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that all interactive elements on a page are reachable and operable via Tab-key keyboard navigation (WCAG 2.1 AA)"
+},
+{
+"id": 134508,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that disabling the accessibility widget in CMS removes it from the frontend after cache refresh"
+},
+{
+"id": 134509,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an image published with valid bilingual alt text renders the correct alt attribute on the EN frontend page"
+},
+{
+"id": 134510,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the same image renders the correct Arabic alt attribute on the AR frontend page"
+},
+{
+"id": 134511,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that enabling Accessibility Tools Enabled = True saves and publishes successfully"
+},
+{
+"id": 134512,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that setting Accessibility Tools Enabled = False saves and publishes successfully"
+},
+{
+"id": 134513,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Accessibility Tools Enabled value persists after save, page reload, and re-navigation"
+},
+{
+"id": 134514,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that changing Accessibility Tools Enabled without saving can be discarded"
+},
+{
+"id": 134515,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that entering valid Alt Text (EN) and Alt Text (AR) allows successful publish"
+},
+{
+"id": 134516,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that publishing is blocked when Alt Text (EN) is left empty"
+},
+{
+"id": 134517,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that publishing is blocked when Alt Text (AR) is left empty"
+},
+{
+"id": 134518,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that publishing is blocked with the generic message when both Alt Text fields are empty"
+},
+{
+"id": 134519,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that Alt Text (EN) exceeding 150 characters is rejected"
+},
+{
+"id": 134520,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that Alt Text (AR) exceeding 150 characters is rejected"
+},
+{
+"id": 134521,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that Alt Text (EN) accepts special characters within the length limit"
+},
+{
+"id": 134522,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that saved Alt Text (EN/AR) values persist after publish and page reload"
+},
+{
+"id": 134523,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that entering only whitespace in Alt Text (EN) is treated as empty and blocks publish"
+},
+{
+"id": 134524,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that High Contrast can be toggled off after being toggled on (inverse control state)"
+},
+{
+"id": 134525,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that repeated Zoom In clicks stop increasing font size once the maximum zoom level is reached"
+},
+{
+"id": 134526,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that High Contrast mode falls back gracefully to the default theme when the browser does not support CSS variable overrides"
+},
+{
+"id": 134527,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that rapidly double-clicking the High Contrast toggle does not leave the UI in an inconsistent state"
+},
+{
+"id": 134528,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that enabling the keyboard navigation highlight shows a visible focus indicator on interactive elements"
+},
+{
+"id": 134529,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that disabling the keyboard navigation highlight reverts interactive elements to the default browser focus outline"
+},
+{
+"id": 134530,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Reset restores contrast and zoom to site defaults and clears the persisted session state"
+},
+{
+"id": 134531,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "التحقق من أنه يتم عرض أيقونة إمكانية الوصول بشكل صحيح في الترويسة على الواجهة العربية (RTL)"
+},
+{
+"id": 134628,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility tools icon appears in the site header on desktop"
+},
+{
+"id": 134629,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility tools icon renders correctly on a mobile viewport"
+},
+{
+"id": 134630,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking the accessibility icon opens a panel with all 4 required controls on desktop"
+},
+{
+"id": 134631,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility panel layout adapts correctly on a mobile viewport"
+},
+{
+"id": 134632,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the High Contrast theme meets WCAG 2.1 AA color contrast ratios"
+},
+{
+"id": 134633,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon shows a visible focus indicator when reached via keyboard Tab"
+},
+{
+"id": 134634,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Zoom In (+) and Zoom Out (−) buttons render enabled with correct icons/labels by default"
+},
+{
+"id": 134635,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Reset/Normal View button renders enabled regardless of current contrast/zoom state"
+},
+{
+"id": 134636,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the header icon-button row mirrors correctly in Arabic (RTL) layout"
+},
+{
+"id": 134637,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a visitor can open the accessibility panel, apply High Contrast, zoom in, zoom out, and reset — all in real time without a page reload"
+},
+{
+"id": 134638,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that accessibility settings persist across page navigation within the same browser session"
+},
+{
+"id": 134639,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a keyboard-only visitor can operate the entire accessibility panel using only Tab, Enter and Space"
+},
+{
+"id": 134640,
+"p": 2,
+"cp": true,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that enabling the Accessibility Tools widget in CMS makes the icon appear on the frontend after cache refresh"
+},
+{
+"id": 134641,
+"p": 2,
+"cp": true,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that disabling the Accessibility Tools widget in CMS hides the icon from the frontend after cache refresh"
+},
+{
+"id": 134642,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that publishing an image is blocked when both English and Arabic alt text are missing"
+},
+{
+"id": 134643,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that setting Accessibility Tools Enabled to True saves correctly with a success toast"
+},
+{
+"id": 134644,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that setting Accessibility Tools Enabled to False saves correctly with a success toast"
+},
+{
+"id": 134645,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a valid English alt text value saves and publishes successfully"
+},
+{
+"id": 134646,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that publish is blocked when the English alt text is left empty"
+},
+{
+"id": 134647,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the English alt text field accepts exactly 150 characters and rejects 151"
+},
+{
+"id": 134648,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that whitespace-only English alt text is treated as empty and blocks publish"
+},
+{
+"id": 134649,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a valid Arabic alt text value saves and publishes successfully"
+},
+{
+"id": 134650,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that publish is blocked when the Arabic alt text is left empty"
+},
+{
+"id": 134651,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Arabic alt text field accepts exactly 150 characters and rejects 151"
+},
+{
+"id": 134652,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that whitespace-only Arabic alt text is treated as empty and blocks publish"
+},
+{
+"id": 134653,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking the accessibility icon again while the panel is open closes the panel"
+},
+{
+"id": 134654,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking High Contrast again while active reverts the site to the default theme"
+},
+{
+"id": 134655,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking Zoom In (+) three times consecutively increases font size cumulatively by three increments"
+},
+{
+"id": 134656,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking Zoom Out (−) three times consecutively decreases font size cumulatively by three increments"
+},
+{
+"id": 134657,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Reset/Normal View reverts a combined High Contrast + multi-increment zoom state to default in a single click"
+},
+{
+"id": 134658,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a CMS user without Header Management permission is denied access when attempting to change Accessibility Settings"
+},
+{
+"id": 134659,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that High Contrast falls back gracefully to the default theme on a browser without CSS variable override support"
+},
+{
+"id": 134660,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility icon remains visible with no broken UI if the panel fails to open"
+},
+{
+"id": 134661,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the English site renders correctly while High Contrast is active"
+},
+{
+"id": 134662,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Arabic site renders correctly while High Contrast is active"
+},
+{
+"id": 134663,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that High Contrast changes colour only and does not alter page layout at desktop width"
+},
+{
+"id": 134664,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that High Contrast renders correctly at mobile viewport width in both languages"
+},
+{
+"id": 134665,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility tools icon and panel render correctly in dark mode in English"
+},
+{
+"id": 134666,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility tools icon and panel render correctly in dark mode in Arabic"
+},
+{
+"id": 134667,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the accessibility panel remains operable in dark mode at mobile viewport width"
+},
+{
+"id": 134668,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that requesting High Contrast while dark mode is active produces one deterministic, legible theme"
+}
+]

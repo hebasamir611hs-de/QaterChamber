@@ -90,6 +90,33 @@ COUNTER_VALUE = ".qc-hero-counter-value"
 ACTIVE_SLIDE_IMG = "li.qc-hero-slide-active img.qc-hero-slide-img"
 ENTRY_CODE_PATTERN = re.compile(r"objectEntryExternalReferenceCode=([^&]+)")
 
+# RE-READ LIVE 2026-10-18 (logged-out, EN/AR/375 px; reports in
+# .claude/qa-runs/phase3-20261015/hero_dom_1018.json). The overlay is now ONE
+# PANEL PER SLIDE, filled client-side by main.js after DOMContentLoaded and
+# stacked in one grid cell; only `.qc-hero-panel-active` is shown. Read the
+# active slide through it (or the dot with aria-current="true"), never through
+# the first `.qc-hero-title` in the DOM. Slides -01 and -02 share their title.
+PREV_SLIDE_BUTTON = 'button[aria-label="Previous slide"]'
+ARROW_NEXT = ".qc-hero-arrow-next"
+ARROW_PREV = ".qc-hero-arrow-prev"
+DOT = ".qc-hero-dot"
+ACTIVE_DOT = '.qc-hero-dot[aria-current="true"]'
+ACTIVE_PANEL = ".qc-hero-panel.qc-hero-panel-active"
+ACTIVE_TITLE = f"{ACTIVE_PANEL} .qc-hero-title"
+ACTIVE_SUBTITLE = f"{ACTIVE_PANEL} .qc-hero-subtitle"
+ACTIVE_CTA_PRIMARY = f"{ACTIVE_PANEL} .qc-hero-btn-primary"
+ACTIVE_CTA_SECONDARY = f"{ACTIVE_PANEL} a.qc-hero-btn:not(.qc-hero-btn-primary)"
+ACTIVE_SLIDE_LAYER = "li.qc-hero-slide-active"
+SCRIM = "li.qc-hero-slide-active .qc-hero-slide-scrim"
+PANEL_TITLE = ".qc-hero-panel .qc-hero-title"
+
+_BOX_JS = """e => { const b = e.getBoundingClientRect(); const c = getComputedStyle(e);
+  return {x: b.x, y: b.y, w: b.width, h: b.height, right: b.right, bottom: b.bottom,
+          color: c.color, bg: c.backgroundColor, bgImage: c.backgroundImage, fw: parseInt(c.fontWeight),
+          fs: parseFloat(c.fontSize), lh: parseFloat(c.lineHeight) || parseFloat(c.fontSize) * 1.2,
+          ta: c.textAlign, dir: c.direction, radius: c.borderTopLeftRadius, opacity: c.opacity,
+          visibility: c.visibility, display: c.display, text: (e.innerText || '').trim()}; }"""
+
 # Confirmed-live: the overlay swap on a Next-slide click is synchronous (no
 # extra network fetch observed), but still needs one CSS-transition frame to
 # settle before the new `.qc-hero-title` text is stable to read.
@@ -105,6 +132,78 @@ class HomeHeroBannerPage(BasePage):
         self.open(web_url("/home"))
         self.wait_for(HERO_TITLE, timeout=15000)
         return self
+
+    # ---- 2026-10-18 panel model (see the RE-READ note above) ----------------
+    def open_home_locale(self, locale: str = "en") -> "HomeHeroBannerPage":
+        """Fresh load of /<locale>/home; waits for main.js to mount the active
+        panel (the hero is client-rendered after DOMContentLoaded)."""
+        self.page.goto(web_url(f"/home?_={int(time.time())}", locale=locale), wait_until="domcontentloaded")
+        self.page.locator(ACTIVE_TITLE).first.wait_for(state="visible", timeout=30000)
+        return self
+
+    def box(self, selector: str) -> dict:
+        return self.page.locator(selector).first.evaluate(_BOX_JS)
+
+    def boxes(self, selector: str) -> list:
+        return self.page.locator(selector).evaluate_all(f"els => els.map({_BOX_JS})")
+
+    def pseudo(self, selector: str, which: str = "::after") -> dict:
+        return self.page.locator(selector).first.evaluate(
+            "(e, w) => { const c = getComputedStyle(e, w); return {content: c.content, bgImage: c.backgroundImage,"
+            " maskImage: c.maskImage || c.webkitMaskImage, width: c.width, animation: c.animationName,"
+            " transition: c.transitionDuration}; }", which)
+
+    def has_inline_icon(self, selector: str) -> bool:
+        return self.page.locator(selector).first.evaluate("e => !!e.querySelector('svg, img, i, [class*=icon]')")
+
+    def header_bottom(self) -> float:
+        return self.page.evaluate("() => { const h = document.querySelector('header'); "
+                                  "return h ? h.getBoundingClientRect().bottom : 0 }")
+
+    def header_logo_box(self) -> dict:
+        return self.box("header img, header [class*=logo]")
+
+    def viewport_width(self) -> int:
+        return self.page.evaluate("() => window.innerWidth")
+
+    def has_horizontal_scroll(self) -> bool:
+        return self.page.evaluate("() => document.documentElement.scrollWidth > window.innerWidth + 1")
+
+    def slide_count(self) -> int:
+        return self.page.locator(DOT).count()
+
+    def active_index(self) -> int:
+        """1-based index of the active slide, from the aria-current dot."""
+        label = self.page.locator(ACTIVE_DOT).first.get_attribute("aria-label") or ""
+        m = re.search(r"(\d+)", label)
+        return int(m.group(1)) if m else 0
+
+    def active_title(self) -> str:
+        return self.page.locator(ACTIVE_TITLE).first.inner_text().strip()
+
+    def click_prev_slide(self) -> "HomeHeroBannerPage":
+        self.click(PREV_SLIDE_BUTTON)
+        self.page.wait_for_timeout(SLIDE_TRANSITION_SETTLE_MS)
+        return self
+
+    def autoplay_interval_ms(self) -> int:
+        return int(self.page.locator(HERO_SECTION).first.get_attribute("data-autoplay-interval") or 0)
+
+    def active_image_loaded(self) -> bool:
+        return self.page.locator(f"{ACTIVE_SLIDE_LAYER} img").first.evaluate(
+            "i => i.complete && i.naturalWidth > 0")
+
+    def counter_values(self) -> list:
+        return [v.strip() for v in self.page.locator(f"{ACTIVE_PANEL} {COUNTER_VALUE}").all_inner_texts()]
+
+    def counter_boxes(self) -> list:
+        return self.boxes(f"{ACTIVE_PANEL} {COUNTER_BLOCK}")
+
+    def counter_icon_boxes(self) -> list:
+        return self.page.locator(f"{ACTIVE_PANEL} {COUNTER_BLOCK}").evaluate_all(
+            "els => els.map(c => { const i = c.querySelector('img'); const v = c.querySelector('.qc-hero-counter-value');"
+            " if (!i) return null; const a = i.getBoundingClientRect(), b = v.getBoundingClientRect();"
+            " return {icon_bottom: a.bottom, value_top: b.top, loaded: i.complete && i.naturalWidth > 0}; })")
 
     # ---- Slide carousel ---------------------------------------------------
     def current_slide_title(self) -> str:

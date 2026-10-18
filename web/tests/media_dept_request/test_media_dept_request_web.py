@@ -801,20 +801,19 @@ def test_field_rejects_text_exceeding_case_limit(page, tc_id, form_type, field_k
     data[field_key] = over_value
     _, modal = _open_modal(page, form_type)
     modal.fill_form(data)
-    # CONFIRMED LIVE (see module docstring's mismatch table): this control's
-    # real maxlength is looser than the case's own stated limit, so the typed
-    # value is accepted verbatim (not truncated). Asserting the case's own
-    # real expected result (a validation error) honestly — EXPECTED TO FAIL,
-    # a disclosed product/spec mismatch, not narrowed to match live behavior.
-    modal.submit()
-    live_cap = LOOSE_MAXLENGTH_FIELDS[field_key]
-    assert modal.is_field_error_visible(field_key), (
-        f"Case {tc_id} expects a validation error for {field_label} over "
-        f"{case_limit} chars, but the live control's real maxlength is "
-        f"{live_cap}, so {case_limit + 1} chars is accepted with no "
-        "business-rule validation error on this environment."
-    )
-    assert not modal.is_done_visible()
+    # UPDATED 2026-10-18 (bug 145384 fixed): the control's maxlength now equals
+    # the case limit, so the over-limit value is cut at the limit on entry —
+    # bug-rules accept "cut at the limit or refused". Either outcome passes;
+    # the over-limit value must never reach the server.
+    kept = len(modal.field_value(field_key))
+    if kept > case_limit:
+        modal.submit()
+        assert modal.is_field_error_visible(field_key), (
+            f"Case {tc_id}: {field_label} kept {kept} chars (limit {case_limit}) "
+            "and Submit raised no validation error"
+        )
+        assert not modal.is_done_visible()
+    assert kept <= case_limit or modal.is_field_error_visible(field_key)
 
 
 # ---- Over-length where the LIVE maxlength exactly matches the case's own -

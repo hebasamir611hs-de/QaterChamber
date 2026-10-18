@@ -1,0 +1,2376 @@
+[
+ {
+  "id": 135329,
+  "title": "Verify that the Our Services section renders correctly in English (LTR)",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "SVC",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "UI LTR rendering check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set site language to English",
+    "expected": "Site renders LTR"
+   },
+   {
+    "action": "Scroll to Our Services section",
+    "expected": "Section shows Tag, heading, description, filter tab bar left-aligned, and published service cards in a standard grid"
+   }
+  ]
+ },
+ {
+  "id": 135330,
+  "title": "Verify that the Our Services section renders correctly in Arabic (RTL)",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "SVC",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "UI RTL rendering check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set site language to Arabic",
+    "expected": "Site renders RTL, layout mirrored"
+   },
+   {
+    "action": "Scroll to Our Services section",
+    "expected": "Section shows Tag, heading, description and tab bar right-aligned, tabs mirrored in RTL order, cards render with AR content and no text truncation"
+   }
+  ]
+ },
+ {
+  "id": 135331,
+  "title": "Verify that All Services tab is active by default on section load",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Regression",
+   "SVC",
+   "UI",
+   "Web"
+  ],
+  "description": "UI default-state check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page",
+    "expected": "Page loads"
+   },
+   {
+    "action": "Scroll to Our Services section",
+    "expected": "All Services tab shows the active-tab visual indicator by default and all published service cards are displayed"
+   }
+  ]
+ },
+ {
+  "id": 135332,
+  "title": "Verify that a Public Visitor can view the published Our Services section without authentication",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Regression",
+   "SVC",
+   "Web"
+  ],
+  "description": "Auth: unauthenticated access check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Home Page without logging in",
+    "expected": "Page loads"
+   },
+   {
+    "action": "Scroll to Our Services section",
+    "expected": "Section is fully visible and interactive with no login prompt"
+   }
+  ]
+ },
+ {
+  "id": 135333,
+  "title": "Verify that a Site Content Editor can access Our Services Section Management in Liferay CMS",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "SVC",
+   "UAT"
+  ],
+  "description": "Auth: permitted CMS access check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS with Site Content Editor credentials",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Navigate to Home Page &gt; Our Services Section Management",
+    "expected": "Management screen loads with Tag, heading, description, tab, and card management controls editable"
+   }
+  ]
+ },
+ {
+  "id": 135334,
+  "title": "Verify that a user without Site Content Editor rights is denied access to Our Services Section Management",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "SVC"
+  ],
+  "description": "Auth: denied access check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS with a non-permitted role",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Attempt to navigate to Our Services Section Management directly via URL",
+    "expected": "Access is denied — permission-denied message shown; management screen is not rendered"
+   }
+  ]
+ },
+ {
+  "id": 135335,
+  "title": "Verify that clicking a filter tab displays only cards assigned to that tab",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "Regression",
+   "SVC",
+   "UAT",
+   "Web"
+  ],
+  "description": "Functional-High filter behavior.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to section",
+    "expected": "Section visible with All Services active"
+   },
+   {
+    "action": "Click 'Membership' tab",
+    "expected": "Only cards assigned to Membership display; other cards hidden"
+   }
+  ]
+ },
+ {
+  "id": 135336,
+  "title": "Verify that clicking back to All Services after a filter restores the full card set",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "SVC",
+   "Web"
+  ],
+  "description": "Functional-High filter reset behavior.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "With Membership tab active, click All Services tab",
+    "expected": "All Services tab becomes active and all published service cards display again"
+   }
+  ]
+ },
+ {
+  "id": 135337,
+  "title": "Verify that clicking Read More on a service card redirects to the detailed service page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "Regression",
+   "SVC",
+   "UAT",
+   "Web"
+  ],
+  "description": "Functional-High card navigation.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Locate the Legal Consulting card",
+    "expected": "Card visible with icon, title, short description, Read More link"
+   },
+   {
+    "action": "Click its Read More link",
+    "expected": "Browser redirects to the configured detailed service page URL"
+   }
+  ]
+ },
+ {
+  "id": 135338,
+  "title": "Verify that clicking View All Services CTA redirects to the Our Services listing page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "Regression",
+   "SVC",
+   "UAT",
+   "Web"
+  ],
+  "description": "Functional-High CTA navigation.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Scroll to section footer",
+    "expected": "CTA button visible with configured label"
+   },
+   {
+    "action": "Click View All Services CTA",
+    "expected": "Browser redirects to the configured listing page URL"
+   }
+  ]
+ },
+ {
+  "id": 135339,
+  "title": "Verify that the section is fully responsive at mobile width",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "SVC",
+   "Web"
+  ],
+  "description": "Functional-High responsive check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Resize viewport to 375px width",
+    "expected": "Layout re-flows to mobile"
+   },
+   {
+    "action": "Scroll to Our Services section",
+    "expected": "Tag, heading, description, tab bar and cards stack without overlap or horizontal scroll"
+   }
+  ]
+ },
+ {
+  "id": 135340,
+  "title": "Verify that the section is fully responsive at tablet width",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "SVC",
+   "Web"
+  ],
+  "description": "Functional-High responsive check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Resize viewport to 768px width",
+    "expected": "Layout adapts to tablet grid"
+   },
+   {
+    "action": "Scroll to Our Services section",
+    "expected": "All elements remain legible and tappable, no overlap"
+   }
+  ]
+ },
+ {
+  "id": 135341,
+  "title": "Verify that the section is fully responsive at desktop width",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "SVC",
+   "Web"
+  ],
+  "description": "Functional-High responsive check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set viewport to 1920px width",
+    "expected": "Full desktop grid layout renders"
+   },
+   {
+    "action": "Scroll to Our Services section",
+    "expected": "Cards, tabs, and CTA aligned per standard desktop layout"
+   }
+  ]
+ },
+ {
+  "id": 135342,
+  "title": "Verify that Membership tab filter shows only Membership-assigned cards",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "SVC",
+   "Web"
+  ],
+  "description": "Functional-High tab filter check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click Membership tab",
+    "expected": "Only cards with tab=Membership display"
+   }
+  ]
+ },
+ {
+  "id": 135343,
+  "title": "Verify that Legal tab filter shows only Legal-assigned cards",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "SVC",
+   "Web"
+  ],
+  "description": "Functional-High tab filter check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click Legal tab",
+    "expected": "Only cards with tab=Legal display"
+   }
+  ]
+ },
+ {
+  "id": 135344,
+  "title": "Verify that E-Services tab filter shows only E-Services-assigned cards",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "SVC",
+   "Web"
+  ],
+  "description": "Functional-High tab filter check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click E-Services tab",
+    "expected": "Only cards with tab=E-Services display"
+   }
+  ]
+ },
+ {
+  "id": 135345,
+  "title": "Verify that Information Services tab filter shows only Information-assigned cards",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "SVC",
+   "Web"
+  ],
+  "description": "Functional-High tab filter check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click Information Services tab",
+    "expected": "Only cards with tab=Information Services display"
+   }
+  ]
+ },
+ {
+  "id": 135346,
+  "title": "Verify that saving the section as Draft in CMS keeps it hidden from the live Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "SVC"
+  ],
+  "description": "Functional-High draft/visibility check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, enter valid Tag/Heading/Description",
+    "expected": "Fields populated"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Liferay generic success toast shown; section status = Draft"
+   },
+   {
+    "action": "Open the live Home Page in a new tab",
+    "expected": "Live Home Page does not show the drafted changes"
+   }
+  ]
+ },
+ {
+  "id": 135347,
+  "title": "Verify that Preview shows the section as it will appear before publishing",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "SVC"
+  ],
+  "description": "Functional-High preview check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, click Preview on the section",
+    "expected": "A preview render opens showing Tag, heading, description, tabs, and cards as configured, without affecting the live page"
+   }
+  ]
+ },
+ {
+  "id": 135348,
+  "title": "Verify that Publish makes the configured section live on the Home Page",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "SVC",
+   "UAT"
+  ],
+  "description": "Functional-High publish check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click Publish",
+    "expected": "Liferay generic success toast shown"
+   },
+   {
+    "action": "Refresh cache",
+    "expected": "Cache refreshed"
+   },
+   {
+    "action": "Open live Home Page",
+    "expected": "Home Page displays the published Tag/heading/description/tabs/cards exactly as configured"
+   }
+  ]
+ },
+ {
+  "id": 135349,
+  "title": "Verify that submitting the section for review moves it to Pending Review status",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "AI-Defect",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "SVC"
+  ],
+  "description": "Functional-High workflow check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click Submit for Review",
+    "expected": "Liferay generic success toast shown; section status changes to Pending Review, not visible live yet"
+   }
+  ]
+ },
+ {
+  "id": 135350,
+  "title": "Verify that Unpublish removes the section from the live Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "Regression",
+   "SVC"
+  ],
+  "description": "Functional-High unpublish check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click Unpublish",
+    "expected": "Liferay generic success toast shown"
+   },
+   {
+    "action": "Refresh cache",
+    "expected": "Cache refreshed"
+   },
+   {
+    "action": "Open live Home Page",
+    "expected": "Our Services section no longer appears on the Home Page"
+   }
+  ]
+ },
+ {
+  "id": 135351,
+  "title": "Verify that assigning a service card to a filter tab makes it appear under that tab",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "SVC"
+  ],
+  "description": "Functional-High card-to-tab assignment.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, assign card Halls Reservation to tab Information Services",
+    "expected": "Assignment saved"
+   },
+   {
+    "action": "Publish",
+    "expected": "Success toast shown"
+   },
+   {
+    "action": "On live Home Page, click Information Services tab",
+    "expected": "Halls Reservation card appears under Information Services tab"
+   }
+  ]
+ },
+ {
+  "id": 135352,
+  "title": "Verify that reassigning a service card to a different tab moves it out of the original tab",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "SVC"
+  ],
+  "description": "Functional-High card reassignment.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, reassign card to tab Membership",
+    "expected": "Reassignment saved, success toast shown"
+   },
+   {
+    "action": "Publish",
+    "expected": "Card no longer appears under Information Services"
+   },
+   {
+    "action": "On live Home Page, click Information Services then Membership",
+    "expected": "Card appears under Membership"
+   }
+  ]
+ },
+ {
+  "id": 135353,
+  "title": "Verify that the Our Services section does not render on the Home Page when no service card is published",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "Regression",
+   "SVC",
+   "UAT",
+   "Web"
+  ],
+  "description": "Functional-High zero-state check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set every service card's Active Status to False",
+    "expected": "Change saved"
+   },
+   {
+    "action": "Publish/save",
+    "expected": "Cache refreshed"
+   },
+   {
+    "action": "Open live Home Page",
+    "expected": "Our Services section is absent from the Home Page entirely"
+   }
+  ]
+ },
+ {
+  "id": 135354,
+  "title": "Verify that a valid Section Tag (EN) saves and displays",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter tag",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast shown"
+   },
+   {
+    "action": "Reload page",
+    "expected": "Value persists"
+   }
+  ]
+ },
+ {
+  "id": 135355,
+  "title": "Verify that leaving Section Tag (EN) empty is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave field empty",
+    "expected": "Field empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Section Tag (EN) is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135356,
+  "title": "Verify that Section Tag (EN) rejects input exceeding 20 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter a 39-character string",
+    "expected": "Input entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; value not saved beyond 20 chars"
+   }
+  ]
+ },
+ {
+  "id": 135357,
+  "title": "Verify that Section Tag (EN) with only whitespace is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low whitespace check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 4 spaces",
+    "expected": "Whitespace entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Section Tag (EN) is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135358,
+  "title": "Verify that a valid Section Tag (AR) saves and displays",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter tag",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "Reload",
+    "expected": "Value persists, rendered RTL"
+   }
+  ]
+ },
+ {
+  "id": 135359,
+  "title": "Verify that leaving Section Tag (AR) empty is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave field empty",
+    "expected": "Field empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135360,
+  "title": "Verify that Section Tag (AR) rejects input exceeding 20 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter oversized string",
+    "expected": "Input entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; value not saved beyond 20 chars"
+   }
+  ]
+ },
+ {
+  "id": 135361,
+  "title": "Verify that Section Tag (AR) with only whitespace is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low whitespace check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces",
+    "expected": "Whitespace entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135362,
+  "title": "Verify that a valid Section Heading (EN) saves and displays",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter heading",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "Reload",
+    "expected": "Value persists"
+   }
+  ]
+ },
+ {
+  "id": 135363,
+  "title": "Verify that leaving Section Heading (EN) empty is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave empty",
+    "expected": "Empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Section Heading (EN) is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135364,
+  "title": "Verify that Section Heading (EN) rejects input exceeding 200 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 201 chars",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; value not saved beyond 200 chars"
+   }
+  ]
+ },
+ {
+  "id": 135365,
+  "title": "Verify that Section Heading (EN) with only whitespace is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low whitespace check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter whitespace only",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Section Heading (EN) is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135366,
+  "title": "Verify that a valid Section Heading (AR) saves and displays",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter heading",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "Reload",
+    "expected": "Value persists, RTL rendered"
+   }
+  ]
+ },
+ {
+  "id": 135367,
+  "title": "Verify that leaving Section Heading (AR) empty is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave empty",
+    "expected": "Empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135368,
+  "title": "Verify that Section Heading (AR) rejects input exceeding 200 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 201 chars",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; not saved beyond 200 chars"
+   }
+  ]
+ },
+ {
+  "id": 135369,
+  "title": "Verify that Section Heading (AR) with only whitespace is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low whitespace check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135370,
+  "title": "Verify that a valid Section Description (EN) saves and displays",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter description",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "Reload",
+    "expected": "Value persists"
+   }
+  ]
+ },
+ {
+  "id": 135371,
+  "title": "Verify that Section Description (EN) can be saved empty since it is optional",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low optional-empty check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave empty",
+    "expected": "Empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save succeeds with no validation error; section renders without a description line"
+   }
+  ]
+ },
+ {
+  "id": 135372,
+  "title": "Verify that Section Description (EN) rejects input exceeding 500 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 501 chars",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; not saved beyond 500 chars"
+   }
+  ]
+ },
+ {
+  "id": 135373,
+  "title": "Verify that a valid Section Description (AR) saves and displays",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter description",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "Reload",
+    "expected": "Value persists, RTL rendered"
+   }
+  ]
+ },
+ {
+  "id": 135374,
+  "title": "Verify that Section Description (AR) can be saved empty since it is optional",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low optional-empty check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave empty",
+    "expected": "Empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Save succeeds with no validation error"
+   }
+  ]
+ },
+ {
+  "id": 135375,
+  "title": "Verify that Section Description (AR) rejects input exceeding 500 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 501 chars",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; not saved beyond 500 chars"
+   }
+  ]
+ },
+ {
+  "id": 135376,
+  "title": "Verify that a valid PNG thumbnail under 2MB uploads and displays on the card",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload file",
+    "expected": "File uploaded"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "View card on live page",
+    "expected": "Thumbnail displays correctly on the card"
+   }
+  ]
+ },
+ {
+  "id": 135377,
+  "title": "Verify that an unsupported image format is rejected for the thumbnail",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low invalid check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload .jpg file",
+    "expected": "Upload attempted"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Format validation error shown; upload rejected"
+   }
+  ]
+ },
+ {
+  "id": 135378,
+  "title": "Verify that a thumbnail exceeding 2MB is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload 2.3MB file",
+    "expected": "Upload attempted"
+   },
+   {
+    "action": "Click Save",
+    "expected": "File-size error shown; upload rejected"
+   }
+  ]
+ },
+ {
+  "id": 135379,
+  "title": "Verify that saving with no thumbnail uploaded is rejected since it is mandatory",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave thumbnail field empty",
+    "expected": "No file"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Image Thumbnail is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135380,
+  "title": "Verify that a valid View All Label (EN) saves and displays on the CTA",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter label",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "View live CTA",
+    "expected": "CTA button displays configured label"
+   }
+  ]
+ },
+ {
+  "id": 135381,
+  "title": "Verify that leaving View All Label (EN) empty is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave empty",
+    "expected": "Empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'View All Label (EN) is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135382,
+  "title": "Verify that View All Label (EN) rejects input exceeding 50 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 51 chars",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; not saved beyond 50 chars"
+   }
+  ]
+ },
+ {
+  "id": 135383,
+  "title": "Verify that View All Label (EN) with only whitespace is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low whitespace check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'View All Label (EN) is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135384,
+  "title": "Verify that a valid View All Label (AR) saves and displays on the CTA",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter label",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "View live CTA",
+    "expected": "CTA displays AR label, RTL"
+   }
+  ]
+ },
+ {
+  "id": 135385,
+  "title": "Verify that leaving View All Label (AR) empty is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave empty",
+    "expected": "Empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135386,
+  "title": "Verify that View All Label (AR) rejects input exceeding 50 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 51 chars",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; not saved beyond 50 chars"
+   }
+  ]
+ },
+ {
+  "id": 135387,
+  "title": "Verify that View All Label (AR) with only whitespace is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low whitespace check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135388,
+  "title": "Verify that a valid View All URL saves and the CTA redirects correctly",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter URL",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "Click CTA on live page",
+    "expected": "Redirects to configured URL"
+   }
+  ]
+ },
+ {
+  "id": 135389,
+  "title": "Verify that an invalid View All URL is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low invalid check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter malformed value",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Please enter a valid URL.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135390,
+  "title": "Verify that View All URL rejects input exceeding 500 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 501-char URL",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; not saved beyond 500 chars"
+   }
+  ]
+ },
+ {
+  "id": 135391,
+  "title": "Verify that leaving View All URL empty is rejected since it is mandatory",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave empty",
+    "expected": "Empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'View All URL is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135392,
+  "title": "Verify that a valid Tab Label (EN) saves and displays on the tab bar",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter label for the Membership tab",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "View live tab bar",
+    "expected": "Tab displays configured label"
+   }
+  ]
+ },
+ {
+  "id": 135393,
+  "title": "Verify that leaving Tab Label (EN) empty is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave empty",
+    "expected": "Empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Tab Label (EN) is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135394,
+  "title": "Verify that Tab Label (EN) rejects input exceeding 50 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 51 chars",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; not saved beyond 50 chars"
+   }
+  ]
+ },
+ {
+  "id": 135395,
+  "title": "Verify that Tab Label (EN) with only whitespace is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low whitespace check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Tab Label (EN) is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135396,
+  "title": "Verify that a valid Tab Label (AR) saves and displays on the tab bar",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter label",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "View live tab bar",
+    "expected": "Tab displays label, RTL"
+   }
+  ]
+ },
+ {
+  "id": 135397,
+  "title": "Verify that leaving Tab Label (AR) empty is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave empty",
+    "expected": "Empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135398,
+  "title": "Verify that Tab Label (AR) rejects input exceeding 50 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 51 chars",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; not saved beyond 50 chars"
+   }
+  ]
+ },
+ {
+  "id": 135399,
+  "title": "Verify that Tab Label (AR) with only whitespace is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low whitespace check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135400,
+  "title": "Verify that a valid Service Card Redirect URL saves and Read More navigates correctly",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter URL on card",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "Click Read More on live card",
+    "expected": "Redirects to configured URL"
+   }
+  ]
+ },
+ {
+  "id": 135401,
+  "title": "Verify that an invalid Service Card Redirect URL is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low invalid check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter malformed value",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Please enter a valid URL.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135402,
+  "title": "Verify that Service Card Redirect URL rejects input exceeding 500 characters",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 501-char URL",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown; not saved beyond 500 chars"
+   }
+  ]
+ },
+ {
+  "id": 135403,
+  "title": "Verify that leaving Service Card Redirect URL empty is rejected since it is mandatory",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave empty",
+    "expected": "Empty"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Redirect URL is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135404,
+  "title": "Verify that a valid positive Display Order saves and controls card sort position",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 1",
+    "expected": "Entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "View card order on live tab",
+    "expected": "Card appears first in its tab's sort order"
+   }
+  ]
+ },
+ {
+  "id": 135405,
+  "title": "Verify that a negative Display Order is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low invalid check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter -1",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Display Order must be a positive number.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135406,
+  "title": "Verify that a Display Order of zero is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low boundary check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 0",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Display Order must be a positive number.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135407,
+  "title": "Verify that a non-numeric Display Order is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low invalid check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter abc",
+    "expected": "Entered"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Validation error shown for non-numeric value; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135408,
+  "title": "Verify that setting a Service Card's Active Status to True displays it on the live page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "Regression",
+   "SVC"
+  ],
+  "description": "Functional-Low state check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Toggle Active Status to True",
+    "expected": "Toggled"
+   },
+   {
+    "action": "Save/publish",
+    "expected": "Success toast"
+   },
+   {
+    "action": "View live section",
+    "expected": "Card is visible in its assigned tab"
+   }
+  ]
+ },
+ {
+  "id": 135409,
+  "title": "Verify that setting a Service Card's Active Status to False hides it from the live page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "Regression",
+   "SVC"
+  ],
+  "description": "Functional-Low state check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Toggle Active Status to False",
+    "expected": "Toggled"
+   },
+   {
+    "action": "Save/publish",
+    "expected": "Success toast"
+   },
+   {
+    "action": "View live section",
+    "expected": "Card no longer appears in its assigned tab or All Services"
+   }
+  ]
+ },
+ {
+  "id": 135410,
+  "title": "Verify that a valid card icon uploads and displays on the card",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload icon",
+    "expected": "Uploaded"
+   },
+   {
+    "action": "Save",
+    "expected": "Success toast"
+   },
+   {
+    "action": "View live card",
+    "expected": "Icon displays on the card next to the title"
+   }
+  ]
+ },
+ {
+  "id": 135411,
+  "title": "Verify that saving a service card with no icon uploaded is rejected since it is mandatory",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low mandatory-field check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave icon field empty",
+    "expected": "No file"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Error 'Service Card Icon is required.' shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135412,
+  "title": "Verify that discarding unsaved changes to the Our Services section restores the last saved values",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low discard/persistence check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Change Section Heading (EN) to a new unsaved value",
+    "expected": "Field shows unsaved value"
+   },
+   {
+    "action": "Click Cancel/Discard (navigate away without saving)",
+    "expected": "Change is discarded"
+   },
+   {
+    "action": "Reopen the management screen",
+    "expected": "Heading (EN) still shows the previously saved value"
+   }
+  ]
+ },
+ {
+  "id": 135413,
+  "title": "Verify that a saved View All URL persists correctly after reload and does not affect the Tab Label fields",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "SVC"
+  ],
+  "description": "Functional-Low field-dependency check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save View All URL",
+    "expected": "Saved"
+   },
+   {
+    "action": "Reload management screen",
+    "expected": "View All URL still shows the saved value"
+   },
+   {
+    "action": "Inspect Tab Label fields",
+    "expected": "Tab Label field values are unchanged by the View All URL save"
+   }
+  ]
+ },
+ {
+  "id": 135414,
+  "title": "Verify that the View All Services CTA does not appear when the Our Services listing page is unpublished",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "SVC",
+   "Web"
+  ],
+  "description": "Edge: CTA suppression check.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Unpublish the Our Services listing page in CMS",
+    "expected": "Listing page unpublished"
+   },
+   {
+    "action": "Open the live Home Page and scroll to the Our Services section",
+    "expected": "The View All Services CTA button is not rendered in the section"
+   }
+  ]
+ },
+ {
+  "id": 135415,
+  "title": "Verify that the service cards display as a carousel when the published card count is large",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Edge",
+   "Manual",
+   "SVC",
+   "Web"
+  ],
+  "description": "Edge: carousel trigger check. Manual — spec states threshold as &quot;if the count is large&quot; with no confirmed numeric trigger to assert against.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Publish a large number of active cards under one tab (e.g., 12)",
+    "expected": "Cards published"
+   },
+   {
+    "action": "Open the live Home Page, select that tab",
+    "expected": "Cards render in a carousel/slider control allowing navigation to additional cards instead of an unbounded grid"
+   }
+  ]
+ }
+]

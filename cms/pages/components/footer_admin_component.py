@@ -369,7 +369,21 @@ class SocialMediaIconAdminPage(ObjectAuthoringPage):
         """Selects one of the 9 real, confirmed-live options via the
         inherited `select_combobox_option()` ("Open Options Menu" trigger +
         `role=option` match) — never free-text entry, per Finding #2."""
-        self.select_combobox_option(FIELD_PLATFORM, option_label)
+        # HEALED 2026-10-15: the form's own validator (`data-qc-oel-invalid`)
+        # clears "Platform is required." only on a typed `input` event — a
+        # bare option click left the field invalid and every save was
+        # refused silently. Type the start of the label first, as a person
+        # does, then pick the option.
+        box = self.page.get_by_role("combobox", name=FIELD_PLATFORM, exact=True)
+        box.click()
+        box.press("Control+a")
+        box.press_sequentially(option_label[:4], delay=60)
+        option = self.page.get_by_role("option", name=option_label, exact=True)
+        try:
+            option.first.wait_for(state="visible", timeout=8000)
+            option.first.click()
+        except Exception:  # noqa: BLE001 — fall back to the options-menu path
+            self.select_combobox_option(FIELD_PLATFORM, option_label)
         return self
 
     def fill_platform_free_text(self, value: str) -> "SocialMediaIconAdminPage":
@@ -442,6 +456,18 @@ class SocialMediaIconAdminPage(ObjectAuthoringPage):
     # ---- Icon Image upload -------------------------------------------------
     def upload_icon_image(self, file_path: str) -> "SocialMediaIconAdminPage":
         self.upload_file(FIELD_SOCIAL_ICON_IMAGE, file_path)
+        # HEALED 2026-10-15 (OPEN QUESTION for the QA lead, not filed): after
+        # a picker upload the file input holds the new file id but keeps the
+        # validator's "Social Icon Image is required." until an input/change
+        # event reaches it, so Save was refused with no visible message. The
+        # event is re-sent here; whether a person hits the same block by hand
+        # is to be confirmed manually before anything is called a bug.
+        self.page.evaluate(
+            """() => document.querySelectorAll('form input').forEach(e => {
+                 if (e.value && e.willValidate && !e.checkValidity()) {
+                   e.dispatchEvent(new Event('input', {bubbles: true}));
+                   e.dispatchEvent(new Event('change', {bubbles: true})); } })"""
+        )
         return self
 
     def upload_icon_image_expect_rejected(self, file_path: str) -> bool:
@@ -664,6 +690,19 @@ class SocialMediaIconAdminPage(ObjectAuthoringPage):
         self._ensure_logged_in()
         self.open_entries_list()
         rows = self.page.locator(self.ENTRIES_TABLE_ROW)
+        # HEALED 2026-10-15: the list pages at 10 rows and QCTEST rows are no
+        # longer deleted (PBI running rules, rule 10), so a fresh entry sits
+        # past page 1. The entries search matches field content: narrow the
+        # list to the alt text first, then verify by reading the field.
+        box = self.page.locator('input[placeholder^="Search entries"]')
+        if box.count():
+            box.fill(expected_alt_text_en)
+            box.press("Enter")
+            try:
+                self.page.wait_for_function(
+                    "n => document.querySelectorAll('table tbody tr').length <= n", arg=3, timeout=20000)
+            except Exception:  # noqa: BLE001 — fall back to scanning what is listed
+                pass
         codes = [rows.nth(i).locator("td").nth(0).inner_text().strip() for i in range(rows.count())]
         for code in codes:
             if code.startswith(_PRODUCTION_ENTRY_CODE_PREFIX):

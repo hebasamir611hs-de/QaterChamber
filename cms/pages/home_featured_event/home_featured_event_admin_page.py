@@ -76,7 +76,13 @@ class HomeFeaturedEventAdminPage(BasePage):
     LIVE_PIN_CODE = "QCDEMO-129382-PIN-001"
     LIVE_PIN_ID = "49205"
 
-    PINNED_EVENT_INPUT = 'input[name$="ObjectField_pinnedEvent"]'
+    # CORRECTED 2026-10-15 (bug 149373 fixed): Pinned Event is now an event
+    # picker — an unnamed combobox labelled "Pinned Event" backed by the hidden
+    # `ObjectField_pinnedEventKey` (+ `-label`). The free-text
+    # `ObjectField_pinnedEvent` input no longer exists. The value compared and
+    # restored is the picked event's title (the `-label` input).
+    PINNED_EVENT_INPUT = 'input[name="ObjectField_pinnedEventKey-label"]'
+    PINNED_EVENT_KEY = 'input[name="ObjectField_pinnedEventKey"]'
     ACTIVE_STATUS_CHECKBOX = 'input[name$="ObjectField_activeStatus"]'
     OBJECT_FIELD_INPUTS = '[name*="ObjectField_"]'
     # A selector "list" would surface as one of these once the field is focused.
@@ -140,7 +146,7 @@ class HomeFeaturedEventAdminPage(BasePage):
         )
 
     def pin_form_editable(self) -> bool:
-        pe = self.page.locator(self.PINNED_EVENT_INPUT).first
+        pe = self.pinned_event_combobox().first
         ac = self.page.locator(self.ACTIVE_STATUS_CHECKBOX).first
         return pe.is_editable() and ac.is_enabled()
 
@@ -200,17 +206,54 @@ class HomeFeaturedEventAdminPage(BasePage):
     def snapshot(self) -> dict:
         return {"pinnedEvent": self.pinned_event_value(), "activeStatus": self.is_active()}
 
+    def pinned_event_combobox(self):
+        return self.page.get_by_role("combobox", name="Pinned Event")
+
     def set_pinned_event(self, value: str) -> "HomeFeaturedEventAdminPage":
-        self.page.locator(self.PINNED_EVENT_INPUT).first.fill(value)
+        """Pick the event titled `value` from the picker ("" clears it), the
+        way an editor does: type the start of the title, click the option."""
+        box = self.pinned_event_combobox().first
+        box.click()
+        box.press("Control+a")
+        box.press("Delete")
+        if value:
+            box.press_sequentially(value[:6], delay=60)
+            option = self.page.get_by_role("option", name=value, exact=True)
+            option.first.wait_for(state="visible", timeout=10000)
+            option.first.click()
+        else:
+            box.press("Tab")
         return self
+
+    def event_options(self) -> list:
+        """Titles the picker offers (opens and closes the list; saves nothing)."""
+        box = self.pinned_event_combobox().first
+        toggle = self.page.locator(f'button[aria-controls="{box.get_attribute("aria-controls")}"]')
+        (toggle.first if toggle.count() else box).click()
+        self.page.locator('[role="option"]').first.wait_for(state="visible", timeout=10000)
+        texts = [" ".join(t.split()) for t in self.page.locator('[role="option"]').all_inner_texts()]
+        self.page.keyboard.press("Escape")
+        return [t for t in texts if t]
 
     def set_active(self, active: bool) -> "HomeFeaturedEventAdminPage":
         self.page.locator(self.ACTIVE_STATUS_CHECKBOX).first.set_checked(active)
         return self
 
+    SAVE_CHANGES_BUTTON = 'button[type="submit"]:text-is("Save Changes")'
+
     def publish(self) -> "HomeFeaturedEventAdminPage":
-        """Editor's submit ("Publish"; SUBMIT_FOR_REVIEW_BUTTON matches both labels)."""
-        self.authoring.submit_for_review()
+        """Editor's submit. On a Published record the button reads "Publish".
+        Read live 2026-10-15: on an Unpublished record it reads "Save Changes"
+        (banner: "Save as Draft or Save Changes updates this record"), which
+        saves without publishing — so the row's Publish action follows."""
+        if self.page.locator(ObjectAuthoringPage.SUBMIT_FOR_REVIEW_BUTTON).count():
+            self.authoring.submit_for_review()
+            return self
+        self.page.locator(self.SAVE_CHANGES_BUTTON).first.click()
+        self.page.wait_for_url("**previewEntry=**", timeout=90000)
+        self.authoring.open_entries_list(locale="en")
+        if normalize_status(self.authoring.row_status_text_by_code(self.LIVE_PIN_CODE)) != "Published":
+            self.authoring.publish_entry(self.LIVE_PIN_CODE)
         return self
 
     def open_for_edit(self) -> "HomeFeaturedEventAdminPage":
@@ -219,7 +262,11 @@ class HomeFeaturedEventAdminPage(BasePage):
         published record — Unpublish to edit as draft, edit, publish again"),
         then reopened so the form reflects the draft. Approval-gated callers only."""
         self.open_live_pin_read_only()
-        if self.page.locator(ObjectAuthoringPage.UNPUBLISH_BUTTON).count():
+        # CORRECTED 2026-10-15: the Published record's fields are editable in
+        # place and its button reads "Publish" (as on every other object this
+        # run). Unpublishing first took the live section down for the whole
+        # test and left the record Unpublished when the next click missed.
+        if not self.pinned_event_combobox().first.is_editable() and                 self.page.locator(ObjectAuthoringPage.UNPUBLISH_BUTTON).count():
             self.authoring.unpublish_to_edit_as_draft()
             self.open_live_pin_read_only()
         return self
@@ -229,4 +276,17 @@ class HomeFeaturedEventAdminPage(BasePage):
         self.open_for_edit()
         self.set_pinned_event(snap["pinnedEvent"]).set_active(snap["activeStatus"]).publish()
         self.open_live_pin_read_only()
+        if self.snapshot() != snap and not snap["pinnedEvent"] and snap["activeStatus"]:
+            # The snapshot (Active on + empty pin, read live 2026-10-15) may be
+            # one the form now refuses (135701). Leave the record Published and
+            # hidden the closest valid way — empty pin, Active off — and say so.
+            self.open_for_edit()
+            self.set_pinned_event("").set_active(False).publish()
+            self.open_live_pin_read_only()
+            got = self.snapshot()
+            self.authoring.open_entries_list(locale="en")
+            status = self.live_pin_status()
+            raise AssertionError(
+                f"49205 restore: exact snapshot {snap} was refused; left as {got} / {status} "
+                "(empty pin, Active off) — tell the QA lead")
         assert self.snapshot() == snap, f"49205 restore did not persist: {self.snapshot()} != {snap}"

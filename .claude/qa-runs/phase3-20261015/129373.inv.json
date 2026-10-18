@@ -1,0 +1,641 @@
+[
+{
+"id": 131133,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Social Media Icons section renders directly after the Latest News section on the Home page"
+},
+{
+"id": 131134,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Social Media Icons section container matches the Figma-verified desktop style"
+},
+{
+"id": 131135,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section heading \"Find us on social media\" matches the Figma-verified desktop typography"
+},
+{
+"id": 131136,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section subtext matches the Figma-verified desktop typography"
+},
+{
+"id": 131137,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section heading matches the Figma-verified mobile typography"
+},
+{
+"id": 131138,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section subtext matches the Figma-verified mobile typography"
+},
+{
+"id": 131139,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the icon row on desktop is right-aligned with no wrap per the Figma spec"
+},
+{
+"id": 131140,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the icon row on mobile is center-aligned and wraps to multiple lines per the Figma spec"
+},
+{
+"id": 131141,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that all active, published social icons are displayed in their configured Display Order"
+},
+{
+"id": 131142,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an icon with Active Status = False is not displayed on the frontend"
+},
+{
+"id": 131143,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking a social media icon opens the configured official URL in a new browser tab"
+},
+{
+"id": 131144,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Social Media Icons section renders correctly in Arabic (RTL)"
+},
+{
+"id": 131145,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Social Media Icons section renders correctly in English (LTR)"
+},
+{
+"id": 131146,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the icon displayed on the frontend matches the icon image uploaded in the CMS"
+},
+{
+"id": 131147,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that hovering over a social icon on desktop shows a visible hover/focus state"
+},
+{
+"id": 131148,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the CMS live preview of the Social Media Icons section matches the published Home page render"
+},
+{
+"id": 131149,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Social Media Icons section renders correctly in Chrome (latest) on desktop"
+},
+{
+"id": 131150,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Social Media Icons section renders correctly in Safari on desktop"
+},
+{
+"id": 131151,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Social Media Icons section renders correctly on a tablet-width viewport"
+},
+{
+"id": 131152,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Social Media Icons section renders correctly under the site's dark mode variant"
+},
+{
+"id": 131153,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Site Content Editor can access and publish the Social Media Icons section directly"
+},
+{
+"id": 131154,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Site Content Author can access the section but cannot publish directly"
+},
+{
+"id": 131155,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a user without Site Content Editor/Author role is denied access to the Social Media Icons section"
+},
+{
+"id": 131156,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an unauthenticated user forced-browsing directly to the CMS Social Media Icons management URL is redirected to login"
+},
+{
+"id": 131157,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an Editor's expired session during editing prompts re-authentication without silently discarding in-progress work"
+},
+{
+"id": 131158,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a public visitor can view and follow Qatar Chamber's social channels from the Home page end-to-end"
+},
+{
+"id": 131159,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that an Editor can add a new social icon and see it appear on the live Home page after publishing"
+},
+{
+"id": 131160,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that an Editor can edit an existing icon's image, URL, and order and see the change reflected live"
+},
+{
+"id": 131161,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that toggling an icon's Active Status to False removes it from the live Home page after publishing"
+},
+{
+"id": 131162,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that toggling a previously inactive icon's Active Status back to True restores it on the live Home page"
+},
+{
+"id": 131163,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that an Author-drafted icon becomes live only after Editor approval and publish"
+},
+{
+"id": 131164,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that an Editor can unpublish an icon and it is removed from the live page while retained in the CMS"
+},
+{
+"id": 131165,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Social Media Icons section is hidden entirely from the Home page when all configured icons are inactive"
+},
+{
+"id": 131166,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a Social Media Icons section load failure does not affect the rest of the Home page"
+},
+{
+"id": 131167,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Blocked",
+"title": "Verify that a CMS user without permission cannot persist changes to a social icon entry even via a direct action"
+},
+{
+"id": 131168,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid English Platform Name saves correctly"
+},
+{
+"id": 131169,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Arabic Platform Name saves correctly"
+},
+{
+"id": 131170,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving the English Platform Name empty blocks save with a mandatory-field error"
+},
+{
+"id": 131171,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving the Arabic Platform Name empty blocks save with a mandatory-field error"
+},
+{
+"id": 131172,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a Platform Name exceeding 50 characters is rejected"
+},
+{
+"id": 131173,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that special/script-injection characters entered in Platform Name are safely handled"
+},
+{
+"id": 131174,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking Cancel on the icon form discards entered Platform Name changes"
+},
+{
+"id": 131175,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a saved Platform Name persists after reload"
+},
+{
+"id": 131176,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a valid PNG icon image within the size limit saves correctly"
+},
+{
+"id": 131177,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that uploading a valid SVG icon image within the size limit saves correctly"
+},
+{
+"id": 131178,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Icon Image empty blocks save with a mandatory-field error"
+},
+{
+"id": 131179,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that uploading an unsupported image format is rejected"
+},
+{
+"id": 131180,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading an icon image exceeding 1 MB is rejected"
+},
+{
+"id": 131181,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a saved icon image persists after reload"
+},
+{
+"id": 131182,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Platform URL saves correctly"
+},
+{
+"id": 131183,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Platform URL empty blocks save with a mandatory-field error"
+},
+{
+"id": 131184,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an invalid URL format is rejected with the configured error message"
+},
+{
+"id": 131185,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Platform URL exceeding 500 characters is rejected"
+},
+{
+"id": 131186,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a saved Platform URL persists after reload"
+},
+{
+"id": 131187,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an icon cannot be published while Active=True but its Platform URL is invalid"
+},
+{
+"id": 131188,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid positive Display Order value saves and reflects the icon's frontend position"
+},
+{
+"id": 131189,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Display Order value of zero is rejected"
+},
+{
+"id": 131190,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a negative Display Order value is rejected"
+},
+{
+"id": 131191,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a non-numeric Display Order value is rejected"
+},
+{
+"id": 131192,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a saved Display Order value persists after reload"
+},
+{
+"id": 131193,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting Active Status = True on a new entry saves correctly"
+},
+{
+"id": 131194,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting Active Status = False on a new entry saves correctly and excludes it once published"
+},
+{
+"id": 131195,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a saved Active Status toggle persists after reload"
+},
+{
+"id": 131196,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Active Status = True has no frontend effect while the entry's workflow status is not Published"
+},
+{
+"id": 131197,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Draft-status icon with Active Status = True is not displayed on the frontend"
+},
+{
+"id": 131198,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that toggling the last remaining active+published icon to Inactive hides the entire section, not just the icon"
+},
+{
+"id": 131199,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that two icons sharing the same Display Order value render without breaking the icon row layout"
+},
+{
+"id": 131200,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that a Rejected icon entry does not appear on the frontend"
+},
+{
+"id": 131201,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that an icon whose external Platform URL is broken still renders and still attempts navigation from QC's side"
+},
+{
+"id": 131202,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that an interrupted publish action does not leave a corrupted or partially-saved icon entry"
+},
+{
+"id": 131203,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that deleting the last active icon entry hides the section gracefully with no layout break"
+}
+]

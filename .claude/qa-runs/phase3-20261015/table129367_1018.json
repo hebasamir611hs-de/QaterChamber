@@ -1,0 +1,1152 @@
+[
+ {
+  "tc": 134988,
+  "point": 35189,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the Hero Banner background image renders below the header on the Home Page"
+ },
+ {
+  "tc": 134989,
+  "point": 35190,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the headline title renders in the correct position and style"
+ },
+ {
+  "tc": 134990,
+  "point": 35191,
+  "p": 3,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the subtitle renders below the headline in correct style"
+ },
+ {
+  "tc": 134991,
+  "point": 35192,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the Achievement Counters row renders with icon, animated number, and text"
+ },
+ {
+  "tc": 134992,
+  "point": 35193,
+  "p": 3,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the slide-progress dot/pill indicator renders and the active pill visually fil"
+ },
+ {
+  "tc": 134993,
+  "point": 35194,
+  "p": 3,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the next/previous arrows render with hover state"
+ },
+ {
+  "tc": 134994,
+  "point": 35195,
+  "p": 3,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the CTA button renders as a solid maroon pill with a diagonal arrow icon"
+ },
+ {
+  "tc": 134995,
+  "point": 35196,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that the Hero Banner Management admin form renders all fields per the field table"
+ },
+ {
+  "tc": 134996,
+  "point": 35197,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that the Achievement Counter admin sub-form renders all counter fields"
+ },
+ {
+  "tc": 134997,
+  "point": 35198,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the Home Page layout mirrors correctly for Arabic (RTL) across nav, headline, "
+ },
+ {
+  "tc": 134998,
+  "point": 35199,
+  "p": 3,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the Hero Banner and Achievement Counters render correctly at desktop viewport "
+ },
+ {
+  "tc": 134999,
+  "point": 35200,
+  "p": 3,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the Hero Banner and Achievement Counters render correctly at tablet viewport w"
+ },
+ {
+  "tc": 135000,
+  "point": 35201,
+  "p": 3,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that the Achievement Counters stack correctly below the banner at mobile viewport w"
+ },
+ {
+  "tc": 135001,
+  "point": 35202,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that an unauthenticated public visitor can view the Hero Banner without login"
+ },
+ {
+  "tc": 135002,
+  "point": 35203,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a Site Content Editor with Hero Banner permission can access Hero Banner Manag"
+ },
+ {
+  "tc": 135003,
+  "point": 35204,
+  "p": 1,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that an admin user without Hero Banner permission is denied access with the exact b"
+ },
+ {
+  "tc": 135004,
+  "point": 35205,
+  "p": 3,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that repeatedly clicking the next arrow cycles through all active slides and loops "
+ },
+ {
+  "tc": 135005,
+  "point": 35206,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that clicking the previous arrow manually goes back to the previous slide"
+ },
+ {
+  "tc": 135006,
+  "point": 35207,
+  "p": 3,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that repeatedly clicking previous arrow cycles backward through all slides and loop"
+ },
+ {
+  "tc": 135007,
+  "point": 35208,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that clicking Button 1 navigates to its configured target URL"
+ },
+ {
+  "tc": 135008,
+  "point": 35209,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that clicking Button 2 navigates to its configured target URL"
+ },
+ {
+  "tc": 135009,
+  "point": 35210,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Failed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a Site Content Editor can create a new Hero Banner slide with all mandatory fi"
+ },
+ {
+  "tc": 135010,
+  "point": 35211,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that uploading a valid Banner Image on a new slide succeeds"
+ },
+ {
+  "tc": 135011,
+  "point": 35212,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that auto-play advances the slider to the next active slide without user interactio"
+ },
+ {
+  "tc": 135012,
+  "point": 35213,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that clicking the next arrow manually advances to the next slide"
+ },
+ {
+  "tc": 135013,
+  "point": 35214,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Failed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-18",
+  "title": "Verify that a Site Content Editor can edit an existing published slide's title"
+ },
+ {
+  "tc": 135014,
+  "point": 35215,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that changing a slide's Display Order updates its position in the frontend slider"
+ },
+ {
+  "tc": 135015,
+  "point": 35216,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that reverting a slide's Display Order restores its original frontend position"
+ },
+ {
+  "tc": 135016,
+  "point": 35217,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that enabling a slide's Active Status makes it eligible to appear on the frontend"
+ },
+ {
+  "tc": 135017,
+  "point": 35218,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that disabling a slide's Active Status removes it from the frontend"
+ },
+ {
+  "tc": 135018,
+  "point": 35219,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that deleting a slide removes it permanently from both CMS and frontend"
+ },
+ {
+  "tc": 135019,
+  "point": 35220,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that saving a slide as Draft does not publish it to the frontend"
+ },
+ {
+  "tc": 135020,
+  "point": 35221,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Failed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that submitting a draft slide for review moves it to Pending Review status"
+ },
+ {
+  "tc": 135021,
+  "point": 35222,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-18",
+  "title": "Verify that Preview shows the slide as it will appear on the frontend before publishing"
+ },
+ {
+  "tc": 135022,
+  "point": 35223,
+  "p": 1,
+  "surface": "CMS",
+  "azure": "Failed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-18",
+  "title": "Verify that publishing a slide makes it visible on the Home Page after cache refresh"
+ },
+ {
+  "tc": 135023,
+  "point": 35224,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that unpublishing a slide removes it from the Home Page"
+ },
+ {
+  "tc": 135024,
+  "point": 35225,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that re-publishing a previously unpublished slide restores it on the Home Page"
+ },
+ {
+  "tc": 135025,
+  "point": 35226,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Failed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that an editor can add a new Achievement Counter item to a slide with valid data"
+ },
+ {
+  "tc": 135026,
+  "point": 35227,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that enabling a Counter's Active Status makes it appear on the frontend"
+ },
+ {
+  "tc": 135027,
+  "point": 35228,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that disabling a Counter's Active Status removes it from the frontend"
+ },
+ {
+  "tc": 135028,
+  "point": 35229,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that changing a Counter's Display Order updates its position in the frontend row"
+ },
+ {
+  "tc": 135029,
+  "point": 35230,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that reverting a Counter's Display Order restores its original frontend position"
+ },
+ {
+  "tc": 135030,
+  "point": 35231,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Passed",
+  "proposed": null,
+  "why": "already Passed in Azure (rule 7)",
+  "title": "Verify that the Liferay generic success toast displays in Arabic when the CMS UI language "
+ },
+ {
+  "tc": 135031,
+  "point": 35232,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that uploading a Banner Image within the size and format limits is accepted"
+ },
+ {
+  "tc": 135032,
+  "point": 35233,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that saving a slide without a Banner Image is rejected with the exact bilingual mes"
+ },
+ {
+  "tc": 135033,
+  "point": 35234,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150515",
+  "title": "Verify that uploading a Banner Image in an unsupported format (e.g. .gif) is rejected"
+ },
+ {
+  "tc": 135034,
+  "point": 35235,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150516",
+  "title": "Verify that uploading a Banner Image exceeding 2MB is rejected"
+ },
+ {
+  "tc": 135035,
+  "point": 35236,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Banner Title (EN) within the 100-char limit is saved"
+ },
+ {
+  "tc": 135036,
+  "point": 35237,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that saving a slide with Banner Title (EN) left empty is rejected"
+ },
+ {
+  "tc": 135037,
+  "point": 35238,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150526",
+  "title": "Verify that Banner Title (EN) at exactly 100 characters is accepted and 101 characters is "
+ },
+ {
+  "tc": 135038,
+  "point": 35239,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a whitespace-only Banner Title (EN) is rejected as effectively empty"
+ },
+ {
+  "tc": 135039,
+  "point": 35240,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Banner Title (AR) within the 100-char limit is saved"
+ },
+ {
+  "tc": 135040,
+  "point": 35241,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that saving a slide with Banner Title (AR) left empty is rejected"
+ },
+ {
+  "tc": 135041,
+  "point": 35242,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150526",
+  "title": "Verify that Banner Title (AR) at exactly 100 characters is accepted and 101 characters is "
+ },
+ {
+  "tc": 135042,
+  "point": 35243,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a whitespace-only Banner Title (AR) is rejected as effectively empty"
+ },
+ {
+  "tc": 135043,
+  "point": 35244,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Subtitle (EN) within the 300-char limit is saved"
+ },
+ {
+  "tc": 135044,
+  "point": 35245,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Low — not run (PBI running rules #2)",
+  "title": "Verify that leaving Subtitle (EN) empty is accepted since the field is optional"
+ },
+ {
+  "tc": 135045,
+  "point": 35246,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150526",
+  "title": "Verify that Subtitle (EN) exceeding 300 characters is rejected"
+ },
+ {
+  "tc": 135046,
+  "point": 35247,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Subtitle (AR) within the 300-char limit is saved"
+ },
+ {
+  "tc": 135047,
+  "point": 35248,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Low — not run (PBI running rules #2)",
+  "title": "Verify that leaving Subtitle (AR) empty is accepted since the field is optional"
+ },
+ {
+  "tc": 135048,
+  "point": 35249,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150526",
+  "title": "Verify that Subtitle (AR) exceeding 300 characters is rejected"
+ },
+ {
+  "tc": 135049,
+  "point": 35250,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Button 1 Label (EN) within the 50-char limit is saved"
+ },
+ {
+  "tc": 135050,
+  "point": 35251,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that saving with Button 1 Label (EN) empty is rejected"
+ },
+ {
+  "tc": 135051,
+  "point": 35252,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150526",
+  "title": "Verify that Button 1 Label (EN) at exactly 50 characters is accepted and 51 is rejected"
+ },
+ {
+  "tc": 135052,
+  "point": 35253,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a whitespace-only Button 1 Label (EN) is rejected"
+ },
+ {
+  "tc": 135053,
+  "point": 35254,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Button 1 Label (AR) within the 50-char limit is saved"
+ },
+ {
+  "tc": 135054,
+  "point": 35255,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that saving with Button 1 Label (AR) empty is rejected"
+ },
+ {
+  "tc": 135055,
+  "point": 35256,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150526",
+  "title": "Verify that Button 1 Label (AR) at exactly 50 characters is accepted and 51 is rejected"
+ },
+ {
+  "tc": 135056,
+  "point": 35257,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a whitespace-only Button 1 Label (AR) is rejected"
+ },
+ {
+  "tc": 135057,
+  "point": 35258,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Button 1 Link URL is saved"
+ },
+ {
+  "tc": 135058,
+  "point": 35259,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that saving with Button 1 Link empty is rejected"
+ },
+ {
+  "tc": 135059,
+  "point": 35260,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that an invalid URL format for Button 1 Link is rejected with the exact bilingual m"
+ },
+ {
+  "tc": 135060,
+  "point": 35261,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that Button 1 Link at exactly 500 characters is accepted and 501 characters is reje"
+ },
+ {
+  "tc": 135061,
+  "point": 35262,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a whitespace-only Button 1 Link is rejected"
+ },
+ {
+  "tc": 135062,
+  "point": 35263,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Button 2 Label (EN) within the 50-char limit is saved"
+ },
+ {
+  "tc": 135063,
+  "point": 35264,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that saving with Button 2 Label (EN) empty is rejected"
+ },
+ {
+  "tc": 135064,
+  "point": 35265,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150526",
+  "title": "Verify that Button 2 Label (EN) at exactly 50 characters is accepted and 51 is rejected"
+ },
+ {
+  "tc": 135065,
+  "point": 35266,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a whitespace-only Button 2 Label (EN) is rejected"
+ },
+ {
+  "tc": 135066,
+  "point": 35267,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Button 2 Label (AR) within the 50-char limit is saved"
+ },
+ {
+  "tc": 135067,
+  "point": 35268,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that saving with Button 2 Label (AR) empty is rejected"
+ },
+ {
+  "tc": 135068,
+  "point": 35269,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150526",
+  "title": "Verify that Button 2 Label (AR) at exactly 50 characters is accepted and 51 is rejected"
+ },
+ {
+  "tc": 135069,
+  "point": 35270,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a whitespace-only Button 2 Label (AR) is rejected"
+ },
+ {
+  "tc": 135070,
+  "point": 35271,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Button 2 Link URL is saved"
+ },
+ {
+  "tc": 135071,
+  "point": 35272,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that saving with Button 2 Link empty is rejected"
+ },
+ {
+  "tc": 135072,
+  "point": 35273,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that an invalid URL format for Button 2 Link is rejected with the exact bilingual m"
+ },
+ {
+  "tc": 135073,
+  "point": 35274,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that Button 2 Link at exactly 500 characters is accepted and 501 is rejected"
+ },
+ {
+  "tc": 135074,
+  "point": 35275,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a whitespace-only Button 2 Link is rejected"
+ },
+ {
+  "tc": 135075,
+  "point": 35276,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid positive Display Order value is saved"
+ },
+ {
+  "tc": 135076,
+  "point": 35277,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that saving with Display Order empty is rejected"
+ },
+ {
+  "tc": 135077,
+  "point": 35278,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a negative or zero Display Order value is rejected"
+ },
+ {
+  "tc": 135078,
+  "point": 35279,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that setting a slide's Active Status to True is saved correctly"
+ },
+ {
+  "tc": 135079,
+  "point": 35280,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that setting a slide's Active Status to False is saved correctly"
+ },
+ {
+  "tc": 135080,
+  "point": 35281,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Counter Title (EN) within the 30-char limit is saved"
+ },
+ {
+  "tc": 135081,
+  "point": 35282,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Low — not run (PBI running rules #2)",
+  "title": "Verify that leaving Counter Title (EN) empty is accepted since the field is optional"
+ },
+ {
+  "tc": 135082,
+  "point": 35283,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150527",
+  "title": "Verify that Counter Title (EN) exceeding 30 characters is rejected"
+ },
+ {
+  "tc": 135083,
+  "point": 35284,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that a valid Counter Title (AR) within the 30-char limit is saved"
+ },
+ {
+  "tc": 135084,
+  "point": 35285,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Low — not run (PBI running rules #2)",
+  "title": "Verify that leaving Counter Title (AR) empty is accepted since the field is optional"
+ },
+ {
+  "tc": 135085,
+  "point": 35286,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150527",
+  "title": "Verify that Counter Title (AR) exceeding 30 characters is rejected"
+ },
+ {
+  "tc": 135086,
+  "point": 35287,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that Counter Value is accepted when Counter Title is set and Value is valid"
+ },
+ {
+  "tc": 135087,
+  "point": 35288,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150518",
+  "title": "Verify that Counter Value is required once Counter Title is set"
+ },
+ {
+  "tc": 135088,
+  "point": 35289,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Failed",
+  "why": "bug 150527",
+  "title": "Verify that Counter Value exceeding 10 characters is rejected"
+ },
+ {
+  "tc": 135089,
+  "point": 35290,
+  "p": 2,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that leaving Counter Title and Counter Value both empty saves successfully"
+ },
+ {
+  "tc": 135090,
+  "point": 35291,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that uploading a valid Counter Icon is accepted"
+ },
+ {
+  "tc": 135091,
+  "point": 35292,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that uploading a Counter Icon in an unsupported format is rejected"
+ },
+ {
+  "tc": 135092,
+  "point": 35293,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that uploading a Counter Icon exceeding 2MB is rejected"
+ },
+ {
+  "tc": 135093,
+  "point": 35294,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Low — not run (PBI running rules #2)",
+  "title": "Verify that leaving Counter Icon empty is accepted since the field is optional"
+ },
+ {
+  "tc": 135094,
+  "point": 35295,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that Counter Display Order is accepted when Counter Title is set and Order is valid"
+ },
+ {
+  "tc": 135095,
+  "point": 35296,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that Counter Display Order is required once Counter Title is set"
+ },
+ {
+  "tc": 135096,
+  "point": 35297,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Low — not run (PBI running rules #2)",
+  "title": "Verify that leaving Counter Title and Counter Display Order both empty saves successfully"
+ },
+ {
+  "tc": 135097,
+  "point": 35298,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that setting a Counter's Active Status to True is saved correctly"
+ },
+ {
+  "tc": 135098,
+  "point": 35299,
+  "p": 3,
+  "surface": "CMS",
+  "azure": "Not Executed",
+  "proposed": "Passed",
+  "why": "automated run 2026-10-15",
+  "title": "Verify that setting a Counter's Active Status to False is saved correctly"
+ },
+ {
+  "tc": 135099,
+  "point": 35300,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that with exactly one active published slide the slider displays statically without"
+ },
+ {
+  "tc": 135100,
+  "point": 35301,
+  "p": 3,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that a CTA button with no URL configured is not rendered on the frontend"
+ },
+ {
+  "tc": 135101,
+  "point": 35302,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that a background image load failure displays a fallback background color instead o"
+ },
+ {
+  "tc": 135102,
+  "point": 35303,
+  "p": 2,
+  "surface": "Web",
+  "azure": "Not Executed",
+  "proposed": null,
+  "why": "Web-only: out of scope (PBI running rules #1, CMS only)",
+  "title": "Verify that Home Page behaves correctly when zero slides are active and published"
+ }
+]

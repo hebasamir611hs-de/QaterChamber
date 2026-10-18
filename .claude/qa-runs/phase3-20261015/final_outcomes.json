@@ -1,0 +1,1490 @@
+[
+[
+"129367",
+134995,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that the Hero Banner Management admin form renders all fields p"
+],
+[
+"129367",
+134996,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that the Achievement Counter admin sub-form renders all counter"
+],
+[
+"129367",
+135002,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a Site Content Editor with Hero Banner permission can acce"
+],
+[
+"129367",
+135003,
+1,
+"Passed",
+"automated run 2026-10-15",
+"Verify that an admin user without Hero Banner permission is denied acc"
+],
+[
+"129367",
+135009,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a Site Content Editor can create a new Hero Banner slide w"
+],
+[
+"129367",
+135013,
+2,
+"?",
+"AssertionError: 'QCTEST-135013-Growth-f3ab35': Editor Publish left it 'Pending R",
+"Verify that a Site Content Editor can edit an existing published slide"
+],
+[
+"129367",
+135020,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that submitting a draft slide for review moves it to Pending Re"
+],
+[
+"129367",
+135021,
+3,
+"Blocked",
+"Hero section not rendering on Home (preview has no slider) — open finding",
+"Verify that Preview shows the slide as it will appear on the frontend "
+],
+[
+"129367",
+135022,
+1,
+"?",
+"AssertionError: published slide 'QCTEST-135022-live-4facdb' is not in the Home P",
+"Verify that publishing a slide makes it visible on the Home Page after"
+],
+[
+"129367",
+135025,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that an editor can add a new Achievement Counter item to a slid"
+],
+[
+"129367",
+135031,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that uploading a Banner Image within the size and format limits"
+],
+[
+"129367",
+135032,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving a slide without a Banner Image is rejected with the"
+],
+[
+"129367",
+135033,
+2,
+"Failed",
+"bug 150515",
+"Verify that uploading a Banner Image in an unsupported format (e.g. .g"
+],
+[
+"129367",
+135034,
+2,
+"Failed",
+"bug 150516",
+"Verify that uploading a Banner Image exceeding 2MB is rejected"
+],
+[
+"129367",
+135035,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Banner Title (EN) within the 100-char limit is sav"
+],
+[
+"129367",
+135036,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving a slide with Banner Title (EN) left empty is reject"
+],
+[
+"129367",
+135037,
+3,
+"Failed",
+"bug 150526",
+"Verify that Banner Title (EN) at exactly 100 characters is accepted an"
+],
+[
+"129367",
+135038,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a whitespace-only Banner Title (EN) is rejected as effecti"
+],
+[
+"129367",
+135039,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Banner Title (AR) within the 100-char limit is sav"
+],
+[
+"129367",
+135040,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving a slide with Banner Title (AR) left empty is reject"
+],
+[
+"129367",
+135041,
+3,
+"Failed",
+"bug 150526",
+"Verify that Banner Title (AR) at exactly 100 characters is accepted an"
+],
+[
+"129367",
+135042,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a whitespace-only Banner Title (AR) is rejected as effecti"
+],
+[
+"129367",
+135043,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Subtitle (EN) within the 300-char limit is saved"
+],
+[
+"129367",
+135044,
+3,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that leaving Subtitle (EN) empty is accepted since the field is"
+],
+[
+"129367",
+135045,
+3,
+"Failed",
+"bug 150526",
+"Verify that Subtitle (EN) exceeding 300 characters is rejected"
+],
+[
+"129367",
+135046,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Subtitle (AR) within the 300-char limit is saved"
+],
+[
+"129367",
+135047,
+3,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that leaving Subtitle (AR) empty is accepted since the field is"
+],
+[
+"129367",
+135048,
+3,
+"Failed",
+"bug 150526",
+"Verify that Subtitle (AR) exceeding 300 characters is rejected"
+],
+[
+"129367",
+135049,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Button 1 Label (EN) within the 50-char limit is sa"
+],
+[
+"129367",
+135050,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving with Button 1 Label (EN) empty is rejected"
+],
+[
+"129367",
+135051,
+3,
+"Failed",
+"bug 150526",
+"Verify that Button 1 Label (EN) at exactly 50 characters is accepted a"
+],
+[
+"129367",
+135052,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a whitespace-only Button 1 Label (EN) is rejected"
+],
+[
+"129367",
+135053,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Button 1 Label (AR) within the 50-char limit is sa"
+],
+[
+"129367",
+135054,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving with Button 1 Label (AR) empty is rejected"
+],
+[
+"129367",
+135055,
+3,
+"Failed",
+"bug 150526",
+"Verify that Button 1 Label (AR) at exactly 50 characters is accepted a"
+],
+[
+"129367",
+135056,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a whitespace-only Button 1 Label (AR) is rejected"
+],
+[
+"129367",
+135057,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Button 1 Link URL is saved"
+],
+[
+"129367",
+135058,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving with Button 1 Link empty is rejected"
+],
+[
+"129367",
+135059,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that an invalid URL format for Button 1 Link is rejected with t"
+],
+[
+"129367",
+135060,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Button 1 Link at exactly 500 characters is accepted and 50"
+],
+[
+"129367",
+135061,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a whitespace-only Button 1 Link is rejected"
+],
+[
+"129367",
+135062,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Button 2 Label (EN) within the 50-char limit is sa"
+],
+[
+"129367",
+135063,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving with Button 2 Label (EN) empty is rejected"
+],
+[
+"129367",
+135064,
+3,
+"Failed",
+"bug 150526",
+"Verify that Button 2 Label (EN) at exactly 50 characters is accepted a"
+],
+[
+"129367",
+135065,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a whitespace-only Button 2 Label (EN) is rejected"
+],
+[
+"129367",
+135066,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Button 2 Label (AR) within the 50-char limit is sa"
+],
+[
+"129367",
+135067,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving with Button 2 Label (AR) empty is rejected"
+],
+[
+"129367",
+135068,
+3,
+"Failed",
+"bug 150526",
+"Verify that Button 2 Label (AR) at exactly 50 characters is accepted a"
+],
+[
+"129367",
+135069,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a whitespace-only Button 2 Label (AR) is rejected"
+],
+[
+"129367",
+135070,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Button 2 Link URL is saved"
+],
+[
+"129367",
+135071,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving with Button 2 Link empty is rejected"
+],
+[
+"129367",
+135072,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that an invalid URL format for Button 2 Link is rejected with t"
+],
+[
+"129367",
+135073,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Button 2 Link at exactly 500 characters is accepted and 50"
+],
+[
+"129367",
+135074,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a whitespace-only Button 2 Link is rejected"
+],
+[
+"129367",
+135075,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid positive Display Order value is saved"
+],
+[
+"129367",
+135076,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving with Display Order empty is rejected"
+],
+[
+"129367",
+135077,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a negative or zero Display Order value is rejected"
+],
+[
+"129367",
+135078,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that setting a slide's Active Status to True is saved correctly"
+],
+[
+"129367",
+135079,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that setting a slide's Active Status to False is saved correctl"
+],
+[
+"129367",
+135080,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Counter Title (EN) within the 30-char limit is sav"
+],
+[
+"129367",
+135081,
+3,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that leaving Counter Title (EN) empty is accepted since the fie"
+],
+[
+"129367",
+135082,
+3,
+"Failed",
+"bug 150527",
+"Verify that Counter Title (EN) exceeding 30 characters is rejected"
+],
+[
+"129367",
+135083,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Counter Title (AR) within the 30-char limit is sav"
+],
+[
+"129367",
+135084,
+3,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that leaving Counter Title (AR) empty is accepted since the fie"
+],
+[
+"129367",
+135085,
+3,
+"Failed",
+"bug 150527",
+"Verify that Counter Title (AR) exceeding 30 characters is rejected"
+],
+[
+"129367",
+135086,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Counter Value is accepted when Counter Title is set and Va"
+],
+[
+"129367",
+135087,
+2,
+"Failed",
+"bug 150518",
+"Verify that Counter Value is required once Counter Title is set"
+],
+[
+"129367",
+135088,
+3,
+"Failed",
+"bug 150527",
+"Verify that Counter Value exceeding 10 characters is rejected"
+],
+[
+"129367",
+135089,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that leaving Counter Title and Counter Value both empty saves s"
+],
+[
+"129367",
+135090,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that uploading a valid Counter Icon is accepted"
+],
+[
+"129367",
+135091,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that uploading a Counter Icon in an unsupported format is rejec"
+],
+[
+"129367",
+135092,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that uploading a Counter Icon exceeding 2MB is rejected"
+],
+[
+"129367",
+135093,
+3,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that leaving Counter Icon empty is accepted since the field is "
+],
+[
+"129367",
+135094,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Counter Display Order is accepted when Counter Title is se"
+],
+[
+"129367",
+135095,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Counter Display Order is required once Counter Title is se"
+],
+[
+"129367",
+135096,
+3,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that leaving Counter Title and Counter Display Order both empty"
+],
+[
+"129367",
+135097,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that setting a Counter's Active Status to True is saved correct"
+],
+[
+"129367",
+135098,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that setting a Counter's Active Status to False is saved correc"
+],
+[
+"129371",
+135333,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a Site Content Editor can access Our Services Section Mana"
+],
+[
+"129371",
+135334,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a user without Site Content Editor rights is denied access"
+],
+[
+"129371",
+135346,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving the section as Draft in CMS keeps it hidden from th"
+],
+[
+"129371",
+135347,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Preview shows the section as it will appear before publish"
+],
+[
+"129371",
+135348,
+1,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Publish makes the configured section live on the Home Page"
+],
+[
+"129371",
+135350,
+2,
+"Passed",
+"unpublish: record content gone, shell stays — not a bug (QA lead 2026-10-14)",
+"Verify that Unpublish removes the section from the live Home Page"
+],
+[
+"129371",
+135351,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that assigning a service card to a filter tab makes it appear u"
+],
+[
+"129371",
+135352,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that reassigning a service card to a different tab moves it out"
+],
+[
+"129371",
+135354,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Section Tag (EN) saves and displays"
+],
+[
+"129371",
+135355,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that leaving Section Tag (EN) empty is rejected"
+],
+[
+"129371",
+135356,
+3,
+"Failed",
+"bug 150529",
+"Verify that Section Tag (EN) rejects input exceeding 20 characters"
+],
+[
+"129371",
+135357,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Section Tag (EN) with only whitespace is rejected"
+],
+[
+"129371",
+135358,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Section Tag (AR) saves and displays"
+],
+[
+"129371",
+135359,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that leaving Section Tag (AR) empty is rejected"
+],
+[
+"129371",
+135360,
+3,
+"Failed",
+"bug 150529",
+"Verify that Section Tag (AR) rejects input exceeding 20 characters"
+],
+[
+"129371",
+135361,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Section Tag (AR) with only whitespace is rejected"
+],
+[
+"129371",
+135362,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Section Heading (EN) saves and displays"
+],
+[
+"129371",
+135363,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that leaving Section Heading (EN) empty is rejected"
+],
+[
+"129371",
+135364,
+3,
+"Failed",
+"bug 150529",
+"Verify that Section Heading (EN) rejects input exceeding 200 character"
+],
+[
+"129371",
+135365,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Section Heading (EN) with only whitespace is rejected"
+],
+[
+"129371",
+135366,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Section Heading (AR) saves and displays"
+],
+[
+"129371",
+135367,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that leaving Section Heading (AR) empty is rejected"
+],
+[
+"129371",
+135368,
+3,
+"Failed",
+"bug 150529",
+"Verify that Section Heading (AR) rejects input exceeding 200 character"
+],
+[
+"129371",
+135369,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Section Heading (AR) with only whitespace is rejected"
+],
+[
+"129371",
+135370,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Section Description (EN) saves and displays"
+],
+[
+"129371",
+135371,
+4,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that Section Description (EN) can be saved empty since it is op"
+],
+[
+"129371",
+135372,
+3,
+"Failed",
+"bug 150529",
+"Verify that Section Description (EN) rejects input exceeding 500 chara"
+],
+[
+"129371",
+135373,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Section Description (AR) saves and displays"
+],
+[
+"129371",
+135374,
+4,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that Section Description (AR) can be saved empty since it is op"
+],
+[
+"129371",
+135375,
+3,
+"Failed",
+"bug 150529",
+"Verify that Section Description (AR) rejects input exceeding 500 chara"
+],
+[
+"129371",
+135376,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid PNG thumbnail under 2MB uploads and displays on th"
+],
+[
+"129371",
+135377,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that an unsupported image format is rejected for the thumbnail"
+],
+[
+"129371",
+135378,
+3,
+"Failed",
+"bug 150517",
+"Verify that a thumbnail exceeding 2MB is rejected"
+],
+[
+"129371",
+135379,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving with no thumbnail uploaded is rejected since it is "
+],
+[
+"129371",
+135380,
+3,
+"Failed",
+"bug 150520",
+"Verify that a valid View All Label (EN) saves and displays on the CTA"
+],
+[
+"129371",
+135381,
+3,
+"Failed",
+"bug 150520",
+"Verify that leaving View All Label (EN) empty is rejected"
+],
+[
+"129371",
+135382,
+3,
+"Failed",
+"bug 150520",
+"Verify that View All Label (EN) rejects input exceeding 50 characters"
+],
+[
+"129371",
+135383,
+3,
+"Failed",
+"bug 150520",
+"Verify that View All Label (EN) with only whitespace is rejected"
+],
+[
+"129371",
+135384,
+3,
+"Failed",
+"bug 150520",
+"Verify that a valid View All Label (AR) saves and displays on the CTA"
+],
+[
+"129371",
+135385,
+3,
+"Failed",
+"bug 150520",
+"Verify that leaving View All Label (AR) empty is rejected"
+],
+[
+"129371",
+135386,
+3,
+"Failed",
+"bug 150520",
+"Verify that View All Label (AR) rejects input exceeding 50 characters"
+],
+[
+"129371",
+135387,
+3,
+"Failed",
+"bug 150520",
+"Verify that View All Label (AR) with only whitespace is rejected"
+],
+[
+"129371",
+135388,
+2,
+"Failed",
+"bug 150520",
+"Verify that a valid View All URL saves and the CTA redirects correctly"
+],
+[
+"129371",
+135389,
+3,
+"Failed",
+"bug 150520",
+"Verify that an invalid View All URL is rejected"
+],
+[
+"129371",
+135390,
+3,
+"Failed",
+"bug 150520",
+"Verify that View All URL rejects input exceeding 500 characters"
+],
+[
+"129371",
+135391,
+3,
+"Failed",
+"bug 150520",
+"Verify that leaving View All URL empty is rejected since it is mandato"
+],
+[
+"129371",
+135392,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Tab Label (EN) saves and displays on the tab bar"
+],
+[
+"129371",
+135393,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that leaving Tab Label (EN) empty is rejected"
+],
+[
+"129371",
+135394,
+3,
+"Failed",
+"bug 150528",
+"Verify that Tab Label (EN) rejects input exceeding 50 characters"
+],
+[
+"129371",
+135395,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Tab Label (EN) with only whitespace is rejected"
+],
+[
+"129371",
+135396,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid Tab Label (AR) saves and displays on the tab bar"
+],
+[
+"129371",
+135397,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that leaving Tab Label (AR) empty is rejected"
+],
+[
+"129371",
+135398,
+3,
+"Failed",
+"bug 150528",
+"Verify that Tab Label (AR) rejects input exceeding 50 characters"
+],
+[
+"129371",
+135399,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Tab Label (AR) with only whitespace is rejected"
+],
+[
+"129371",
+135400,
+2,
+"Failed",
+"bug 150521",
+"Verify that a valid Service Card Redirect URL saves and Read More navi"
+],
+[
+"129371",
+135401,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that an invalid Service Card Redirect URL is rejected"
+],
+[
+"129371",
+135402,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that Service Card Redirect URL rejects input exceeding 500 char"
+],
+[
+"129371",
+135403,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that leaving Service Card Redirect URL empty is rejected since "
+],
+[
+"129371",
+135404,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid positive Display Order saves and controls card sor"
+],
+[
+"129371",
+135405,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a negative Display Order is rejected"
+],
+[
+"129371",
+135406,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a Display Order of zero is rejected"
+],
+[
+"129371",
+135407,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a non-numeric Display Order is rejected"
+],
+[
+"129371",
+135410,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a valid card icon uploads and displays on the card"
+],
+[
+"129371",
+135411,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that saving a service card with no icon uploaded is rejected si"
+],
+[
+"129371",
+135412,
+3,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that discarding unsaved changes to the Our Services section res"
+],
+[
+"129371",
+135413,
+4,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that a saved View All URL persists correctly after reload and d"
+],
+[
+"129373",
+131148,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that the CMS live preview of the Social Media Icons section mat"
+],
+[
+"129373",
+131153,
+1,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a Site Content Editor can access and publish the Social Me"
+],
+[
+"129373",
+131154,
+2,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a Site Content Author can access the section but cannot pu"
+],
+[
+"129373",
+131155,
+1,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a user without Site Content Editor/Author role is denied a"
+],
+[
+"129373",
+131156,
+1,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that an unauthenticated user forced-browsing directly to the CM"
+],
+[
+"129373",
+131157,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that an Editor's expired session during editing prompts re-auth"
+],
+[
+"129373",
+131167,
+1,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a CMS user without permission cannot persist changes to a "
+],
+[
+"129373",
+131168,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a valid English Platform Name saves correctly"
+],
+[
+"129373",
+131169,
+3,
+"Failed",
+"bug 150522",
+"Verify that a valid Arabic Platform Name saves correctly"
+],
+[
+"129373",
+131170,
+2,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that leaving the English Platform Name empty blocks save with a"
+],
+[
+"129373",
+131171,
+2,
+"Failed",
+"bug 150522",
+"Verify that leaving the Arabic Platform Name empty blocks save with a "
+],
+[
+"129373",
+131174,
+4,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that clicking Cancel on the icon form discards entered Platform"
+],
+[
+"129373",
+131175,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a saved Platform Name persists after reload"
+],
+[
+"129373",
+131176,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that uploading a valid PNG icon image within the size limit sav"
+],
+[
+"129373",
+131178,
+2,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that leaving Icon Image empty blocks save with a mandatory-fiel"
+],
+[
+"129373",
+131180,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that uploading an icon image exceeding 1 MB is rejected"
+],
+[
+"129373",
+131181,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a saved icon image persists after reload"
+],
+[
+"129373",
+131182,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a valid Platform URL saves correctly"
+],
+[
+"129373",
+131183,
+2,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that leaving Platform URL empty blocks save with a mandatory-fi"
+],
+[
+"129373",
+131184,
+2,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that an invalid URL format is rejected with the configured erro"
+],
+[
+"129373",
+131185,
+3,
+"Not Executed",
+"not run",
+"Verify that a Platform URL exceeding 500 characters is rejected"
+],
+[
+"129373",
+131187,
+2,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that an icon cannot be published while Active=True but its Plat"
+],
+[
+"129373",
+131188,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a valid positive Display Order value saves and reflects th"
+],
+[
+"129373",
+131189,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a Display Order value of zero is rejected"
+],
+[
+"129373",
+131190,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a negative Display Order value is rejected"
+],
+[
+"129373",
+131192,
+4,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that a saved Display Order value persists after reload"
+],
+[
+"129373",
+131193,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that setting Active Status = True on a new entry saves correctl"
+],
+[
+"129373",
+131194,
+3,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that setting Active Status = False on a new entry saves correct"
+],
+[
+"129373",
+131195,
+4,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that a saved Active Status toggle persists after reload"
+],
+[
+"129373",
+131196,
+2,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that Active Status = True has no frontend effect while the entr"
+],
+[
+"129373",
+131197,
+2,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a Draft-status icon with Active Status = True is not displ"
+],
+[
+"129373",
+131200,
+2,
+"Passed",
+"Marked Passed by QA lead (manual check; automation cannot drive the new form)",
+"Verify that a Rejected icon entry does not appear on the frontend"
+],
+[
+"129382",
+135655,
+3,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that a Liferay generic success toast displays in English after "
+],
+[
+"129382",
+135656,
+3,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that a Liferay generic success toast displays in Arabic after s"
+],
+[
+"129382",
+135657,
+4,
+"Not Executed",
+"Low — not run (PBI running rules #2)",
+"Verify that the Pin Configuration screen renders correctly in RTL when"
+],
+[
+"129382",
+135663,
+1,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a logged-out admin directly accessing the Pin Configuratio"
+],
+[
+"129382",
+135664,
+1,
+"Passed",
+"automated run 2026-10-15",
+"Verify that a Site Content Author without publish rights on Home Page "
+],
+[
+"129382",
+135670,
+2,
+"Failed",
+"bug 150519",
+"Verify that unpinning the currently featured event hides the Upcoming "
+],
+[
+"129382",
+135671,
+3,
+"Passed",
+"automated run 2026-10-15",
+"Verify that pinning a different event replaces the previously featured"
+],
+[
+"129382",
+135673,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that setting Active Status to disabled hides the section even w"
+],
+[
+"129382",
+135689,
+3,
+"Failed",
+"bug 150523",
+"Verify that the Section Heading field saves successfully with a valid "
+],
+[
+"129382",
+135701,
+2,
+"Passed",
+"automated run 2026-10-15",
+"Verify that leaving the Pinned Event field unselected while Active Sta"
+]
+]

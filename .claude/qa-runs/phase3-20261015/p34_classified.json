@@ -1,0 +1,1242 @@
+[
+{
+"pbi": "129367",
+"id": 134995,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that the Hero Banner Management admin form renders all fields per the field table",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 134996,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that the Achievement Counter admin sub-form renders all counter fields",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135020,
+"p": 3,
+"importance": "high",
+"why": "Functional-High lifecycle",
+"title": "Verify that submitting a draft slide for review moves it to Pending Review status",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135021,
+"p": 3,
+"importance": "high",
+"why": "Functional-High lifecycle",
+"title": "Verify that Preview shows the slide as it will appear on the frontend before publishing",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135037,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Banner Title (EN) at exactly 100 characters is accepted and 101 characters is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135038,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a whitespace-only Banner Title (EN) is rejected as effectively empty",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135041,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Banner Title (AR) at exactly 100 characters is accepted and 101 characters is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135042,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a whitespace-only Banner Title (AR) is rejected as effectively empty",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135043,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Subtitle (EN) within the 300-char limit is saved",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135044,
+"p": 3,
+"importance": "low",
+"why": "optional field left empty",
+"title": "Verify that leaving Subtitle (EN) empty is accepted since the field is optional",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135045,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Subtitle (EN) exceeding 300 characters is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135046,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Subtitle (AR) within the 300-char limit is saved",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135047,
+"p": 3,
+"importance": "low",
+"why": "optional field left empty",
+"title": "Verify that leaving Subtitle (AR) empty is accepted since the field is optional",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135048,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Subtitle (AR) exceeding 300 characters is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135051,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Button 1 Label (EN) at exactly 50 characters is accepted and 51 is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135052,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a whitespace-only Button 1 Label (EN) is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135055,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Button 1 Label (AR) at exactly 50 characters is accepted and 51 is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135056,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a whitespace-only Button 1 Label (AR) is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135060,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Button 1 Link at exactly 500 characters is accepted and 501 characters is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135061,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a whitespace-only Button 1 Link is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135064,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Button 2 Label (EN) at exactly 50 characters is accepted and 51 is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135065,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a whitespace-only Button 2 Label (EN) is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135068,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Button 2 Label (AR) at exactly 50 characters is accepted and 51 is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135069,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a whitespace-only Button 2 Label (AR) is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135073,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Button 2 Link at exactly 500 characters is accepted and 501 is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135074,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a whitespace-only Button 2 Link is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135075,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid positive Display Order value is saved",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135076,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that saving with Display Order empty is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135077,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a negative or zero Display Order value is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135080,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Counter Title (EN) within the 30-char limit is saved",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135081,
+"p": 3,
+"importance": "low",
+"why": "optional field left empty",
+"title": "Verify that leaving Counter Title (EN) empty is accepted since the field is optional",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135082,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Counter Title (EN) exceeding 30 characters is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135083,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Counter Title (AR) within the 30-char limit is saved",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135084,
+"p": 3,
+"importance": "low",
+"why": "optional field left empty",
+"title": "Verify that leaving Counter Title (AR) empty is accepted since the field is optional",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135085,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Counter Title (AR) exceeding 30 characters is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135088,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Counter Value exceeding 10 characters is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135090,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that uploading a valid Counter Icon is accepted",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135091,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that uploading a Counter Icon in an unsupported format is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135092,
+"p": 3,
+"importance": "medium",
+"why": "file-size validation (mis-tagged char-limit, fixed)",
+"title": "Verify that uploading a Counter Icon exceeding 2MB is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135093,
+"p": 3,
+"importance": "low",
+"why": "optional field left empty",
+"title": "Verify that leaving Counter Icon empty is accepted since the field is optional",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135094,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that Counter Display Order is accepted when Counter Title is set and Order is valid",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135095,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that Counter Display Order is required once Counter Title is set",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135096,
+"p": 3,
+"importance": "low",
+"why": "optional fields left empty",
+"title": "Verify that leaving Counter Title and Counter Display Order both empty saves successfully",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135097,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that setting a Counter's Active Status to True is saved correctly",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129367",
+"id": 135098,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that setting a Counter's Active Status to False is saved correctly",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135347,
+"p": 3,
+"importance": "high",
+"why": "Functional-High lifecycle",
+"title": "Verify that Preview shows the section as it will appear before publishing",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135354,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Section Tag (EN) saves and displays",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135355,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that leaving Section Tag (EN) empty is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135356,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Section Tag (EN) rejects input exceeding 20 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135357,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that Section Tag (EN) with only whitespace is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135358,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Section Tag (AR) saves and displays",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135359,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that leaving Section Tag (AR) empty is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135360,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Section Tag (AR) rejects input exceeding 20 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135361,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that Section Tag (AR) with only whitespace is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135362,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Section Heading (EN) saves and displays",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135363,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that leaving Section Heading (EN) empty is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135364,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Section Heading (EN) rejects input exceeding 200 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135365,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that Section Heading (EN) with only whitespace is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135366,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Section Heading (AR) saves and displays",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135367,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that leaving Section Heading (AR) empty is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135368,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Section Heading (AR) rejects input exceeding 200 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135369,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that Section Heading (AR) with only whitespace is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135370,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Section Description (EN) saves and displays",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135371,
+"p": 4,
+"importance": "low",
+"why": "P4 optional field left empty",
+"title": "Verify that Section Description (EN) can be saved empty since it is optional",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135372,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Section Description (EN) rejects input exceeding 500 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135373,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Section Description (AR) saves and displays",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135374,
+"p": 4,
+"importance": "low",
+"why": "P4 optional field left empty",
+"title": "Verify that Section Description (AR) can be saved empty since it is optional",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135375,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Section Description (AR) rejects input exceeding 500 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135377,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that an unsupported image format is rejected for the thumbnail",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135378,
+"p": 3,
+"importance": "medium",
+"why": "file-size validation (mis-tagged char-limit, fixed)",
+"title": "Verify that a thumbnail exceeding 2MB is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135379,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that saving with no thumbnail uploaded is rejected since it is mandatory",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135380,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site; NOTE View All field absent live",
+"title": "Verify that a valid View All Label (EN) saves and displays on the CTA",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135381,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site; NOTE View All field absent live",
+"title": "Verify that leaving View All Label (EN) empty is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135382,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that View All Label (EN) rejects input exceeding 50 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135383,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site; NOTE View All field absent live",
+"title": "Verify that View All Label (EN) with only whitespace is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135384,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site; NOTE View All field absent live",
+"title": "Verify that a valid View All Label (AR) saves and displays on the CTA",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135385,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site; NOTE View All field absent live",
+"title": "Verify that leaving View All Label (AR) empty is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135386,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that View All Label (AR) rejects input exceeding 50 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135387,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site; NOTE View All field absent live",
+"title": "Verify that View All Label (AR) with only whitespace is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135389,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site; NOTE View All field absent live",
+"title": "Verify that an invalid View All URL is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135390,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that View All URL rejects input exceeding 500 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135391,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site; NOTE View All field absent live",
+"title": "Verify that leaving View All URL empty is rejected since it is mandatory",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135392,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Tab Label (EN) saves and displays on the tab bar",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135393,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that leaving Tab Label (EN) empty is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135394,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Tab Label (EN) rejects input exceeding 50 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135395,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that Tab Label (EN) with only whitespace is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135396,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Tab Label (AR) saves and displays on the tab bar",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135397,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that leaving Tab Label (AR) empty is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135398,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Tab Label (AR) rejects input exceeding 50 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135399,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that Tab Label (AR) with only whitespace is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135401,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that an invalid Service Card Redirect URL is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135402,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that Service Card Redirect URL rejects input exceeding 500 characters",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135403,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that leaving Service Card Redirect URL empty is rejected since it is mandatory",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135404,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid positive Display Order saves and controls card sort position",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135405,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a negative Display Order is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135406,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a Display Order of zero is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135407,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a non-numeric Display Order is rejected",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135410,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid card icon uploads and displays on the card",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135411,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that saving a service card with no icon uploaded is rejected since it is mandatory",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135412,
+"p": 3,
+"importance": "low",
+"why": "discard unsaved CMS changes, not visitor-facing",
+"title": "Verify that discarding unsaved changes to the Our Services section restores the last saved values",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129371",
+"id": 135413,
+"p": 4,
+"importance": "low",
+"why": "P4; View All URL field does not exist",
+"title": "Verify that a saved View All URL persists correctly after reload and does not affect the Tab Label fields",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131148,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that the CMS live preview of the Social Media Icons section matches the published Home page render",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131157,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that an Editor's expired session during editing prompts re-authentication without silently discarding in-progress work",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131168,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid English Platform Name saves correctly",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131169,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Arabic Platform Name saves correctly",
+"scripted": false,
+"skipped": true
+},
+{
+"pbi": "129373",
+"id": 131174,
+"p": 4,
+"importance": "low",
+"why": "Cancel/discard on CMS form, not visitor-facing",
+"title": "Verify that clicking Cancel on the icon form discards entered Platform Name changes",
+"scripted": false,
+"skipped": true
+},
+{
+"pbi": "129373",
+"id": 131175,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a saved Platform Name persists after reload",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131176,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that uploading a valid PNG icon image within the size limit saves correctly",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131180,
+"p": 3,
+"importance": "medium",
+"why": "file-size validation (mis-tagged char-limit, fixed)",
+"title": "Verify that uploading an icon image exceeding 1 MB is rejected",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131181,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a saved icon image persists after reload",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131182,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid Platform URL saves correctly",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131185,
+"p": 3,
+"importance": "char-limit",
+"why": "char-limit case — not run per PBI running rules #2",
+"title": "Verify that a Platform URL exceeding 500 characters is rejected",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131188,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a valid positive Display Order value saves and reflects the icon's frontend position",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131189,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a Display Order value of zero is rejected",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131190,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that a negative Display Order value is rejected",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131192,
+"p": 4,
+"importance": "low",
+"why": "P4 persistence re-read, covered by save cases",
+"title": "Verify that a saved Display Order value persists after reload",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131193,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that setting Active Status = True on a new entry saves correctly",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131194,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that setting Active Status = False on a new entry saves correctly and excludes it once published",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129373",
+"id": 131195,
+"p": 4,
+"importance": "low",
+"why": "P4 persistence re-read, covered by save cases",
+"title": "Verify that a saved Active Status toggle persists after reload",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129382",
+"id": 135655,
+"p": 3,
+"importance": "low",
+"why": "toast wording/presence — not a bug per rule 17",
+"title": "Verify that a Liferay generic success toast displays in English after saving the Pin Configuration",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129382",
+"id": 135656,
+"p": 3,
+"importance": "low",
+"why": "toast wording/presence — not a bug per rule 17",
+"title": "Verify that a Liferay generic success toast displays in Arabic after saving the Pin Configuration",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129382",
+"id": 135657,
+"p": 4,
+"importance": "low",
+"why": "CMS admin RTL chrome only, not visitor-facing",
+"title": "Verify that the Pin Configuration screen renders correctly in RTL when the CMS language is Arabic",
+"scripted": false,
+"skipped": false
+},
+{
+"pbi": "129382",
+"id": 135671,
+"p": 3,
+"importance": "high",
+"why": "Functional-High lifecycle",
+"title": "Verify that pinning a different event replaces the previously featured event without a duplicate section appearing",
+"scripted": true,
+"skipped": false
+},
+{
+"pbi": "129382",
+"id": 135689,
+"p": 3,
+"importance": "medium",
+"why": "field validation / persistence reaching the CMS or site",
+"title": "Verify that the Section Heading field saves successfully with a valid value within 200 characters in both languages",
+"scripted": false,
+"skipped": false
+}
+]

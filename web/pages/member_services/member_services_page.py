@@ -195,15 +195,12 @@ class MemberServicesPage(BasePage):
     # ── Copy the CASES name, asserted verbatim by the tests ─────────────
     # These are the CASES' expectations, not necessarily this build's copy
     # (several differ — see the test module's docstring table).
-    # DESIGN DRIFT accepted by QA Manager 2026-09-27 (ADO-137662, ADO-137614):
-    # case expected 'Membership Services'; delivered build renders
-    # "Member's Services". Updated to the build.
-    CASE_PAGE_TITLE_EN = "Member's Services"
+    # RESTORED to the case/Figma name 2026-10-18: bug 147182 fixed — the hero
+    # and the 'Our Services' menu entry now read 'Membership Services' (the
+    # 2026-09-27 drift to "Member's Services" no longer matches the build).
+    CASE_PAGE_TITLE_EN = "Membership Services"
     CASE_PAGE_TITLE_AR = "خدمات العضوية"
-    # DESIGN DRIFT accepted by QA Manager 2026-09-27 (ADO-137614):
-    # case expected 'Membership Services' as the 'Our Services' dropdown
-    # entry; delivered build renders "Member's Services". Updated to the build.
-    CASE_MENU_ITEM_LABEL = "Member's Services"
+    CASE_MENU_ITEM_LABEL = "Membership Services"
     CASE_SIDEBAR_TITLE_EN = "All Services"
     # DESIGN DRIFT accepted by QA Manager 2026-09-27 (ADO-137620, ADO-137643):
     # case expected 'كافة الخدمات'; delivered build renders 'جميع الخدمات'.
@@ -306,10 +303,17 @@ class MemberServicesPage(BasePage):
         what this method does; the test records the substitution in its own
         docstring."""
         item = self._our_services_nav_item()
-        item.locator("a.qc-nav-link").first.hover()
-        item.locator(self.NAV_SUBMENU_PANEL).first.wait_for(
-            state="visible", timeout=10000
-        )
+        # The top-level entry is now a <button class="qc-nav-link"> (read live
+        # 2026-10-18), no longer an <a>; hover, and click if hover alone does
+        # not open the panel (a button does not navigate away).
+        top = item.locator(":scope > .qc-nav-link").first
+        top.hover()
+        panel = item.locator(self.NAV_SUBMENU_PANEL).first
+        try:
+            panel.wait_for(state="visible", timeout=3000)
+        except Exception:  # noqa: BLE001 — fall back to the click toggle
+            top.click()
+            panel.wait_for(state="visible", timeout=10000)
         return self
 
     @allure.step("Open Member's Services from the main menu")
@@ -327,8 +331,11 @@ class MemberServicesPage(BasePage):
         return self
 
     def _our_services_nav_item(self):
+        # Located by the submenu link it owns, not by label: the CMS-managed
+        # top-level entry now reads "Services" (read live 2026-10-18), and
+        # the label is the case's business, not the locator's.
         return self.page.locator(self.NAV_ITEM_WITH_SUBMENU).filter(
-            has_text="Our Services"
+            has=self.page.locator(f'a[href*="{PAGE_PATH_MARKER}"]')
         ).first
 
     def _our_services_submenu_link_for_page(self):
@@ -821,22 +828,37 @@ class MemberServicesPage(BasePage):
             self.LIST_VIEW, ("display", "flexDirection", "gap")
         )
 
+    # Test-data rows other QA sessions leave published on the shared page
+    # (seen 2026-10-18: "QCRT-148289-svc-10111450"). They are not product
+    # services, so the card readers skip them.
+    TEST_DATA_PREFIXES = ("QCTEST", "QCRT")
+
+    def _is_test_card(self, name: str) -> bool:
+        return name.strip().upper().startswith(self.TEST_DATA_PREFIXES)
+
     def service_card_count(self) -> int:
-        return self.element_count(self.CARD)
+        return len(self.service_card_names())
 
     def service_card_keys(self) -> list:
         return self.page.locator(self.CARD).evaluate_all(
             "els => els.map(e => e.getAttribute('data-qc-ms-key'))"
         )
 
+    def _product_card_mask(self) -> list:
+        return [not self._is_test_card(n) for n in self.texts_of(self.CARD_NAME)]
+
+    def _product_only(self, values: list) -> list:
+        mask = self._product_card_mask()
+        return [v for v, keep in zip(values, mask) if keep] if len(values) == len(mask) else values
+
     def service_card_names(self) -> list:
-        return self.texts_of(self.CARD_NAME)
+        return [n for n in self.texts_of(self.CARD_NAME) if not self._is_test_card(n)]
 
     def service_card_descriptions(self) -> list:
-        return self.texts_of(self.CARD_DESCRIPTION)
+        return self._product_only(self.texts_of(self.CARD_DESCRIPTION))
 
     def details_button_labels(self) -> list:
-        return self.texts_of(self.CARD_DETAILS_LABEL)
+        return self._product_only(self.texts_of(self.CARD_DETAILS_LABEL))
 
     def cards_container_style(self) -> dict:
         return self.computed_style(self.CARDS, ("display", "gap"))
@@ -865,7 +887,10 @@ class MemberServicesPage(BasePage):
         )
 
     def card_icon_count(self) -> int:
-        return self.element_count(f"{self.CARD_ICON_TILE} .qc-ms-ico")
+        has_icon = self.page.locator(self.CARD).evaluate_all(
+            f"els => els.map(e => !!e.querySelector('{self.CARD_ICON_TILE.split(' ')[-1]} .qc-ms-ico'))"
+        )
+        return sum(self._product_only(has_icon))
 
     def card_name_style(self, index: int = 0) -> dict:
         return self.computed_style(

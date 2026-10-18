@@ -1,0 +1,2150 @@
+{
+"129367": [
+{
+"id": 134995,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the Hero Banner Management admin form renders all fields per the field table",
+"tests": [],
+"skipped": []
+},
+{
+"id": 134996,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the Achievement Counter admin sub-form renders all counter fields",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135002,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that a Site Content Editor with Hero Banner permission can access Hero Banner Management",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135003,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that an admin user without Hero Banner permission is denied access with the exact bilingual message",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135009,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that a Site Content Editor can create a new Hero Banner slide with all mandatory fields",
+"tests": [
+"cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_create_new_slide_with_all_mandatory_fields"
+],
+"skipped": []
+},
+{
+"id": 135013,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that a Site Content Editor can edit an existing published slide's title",
+"tests": [
+"cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_edit_existing_published_slide_title"
+],
+"skipped": []
+},
+{
+"id": 135020,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that submitting a draft slide for review moves it to Pending Review status",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135021,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that Preview shows the slide as it will appear on the frontend before publishing",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135022,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that publishing a slide makes it visible on the Home Page after cache refresh",
+"tests": [
+"cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_publishing_slide_makes_it_visible_after_cache_refresh"
+],
+"skipped": []
+},
+{
+"id": 135025,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that an editor can add a new Achievement Counter item to a slide with valid data",
+"tests": [
+"cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_add_new_achievement_counter_item"
+],
+"skipped": []
+},
+{
+"id": 135031,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a Banner Image within the size and format limits is accepted",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135032,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving a slide without a Banner Image is rejected with the exact bilingual message",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135033,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a Banner Image in an unsupported format (e.g. .gif) is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135034,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a Banner Image exceeding 2MB is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135035,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Banner Title (EN) within the 100-char limit is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135036,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving a slide with Banner Title (EN) left empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135037,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Banner Title (EN) at exactly 100 characters is accepted and 101 characters is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135038,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Banner Title (EN) is rejected as effectively empty",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135039,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Banner Title (AR) within the 100-char limit is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135040,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving a slide with Banner Title (AR) left empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135041,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Banner Title (AR) at exactly 100 characters is accepted and 101 characters is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135042,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Banner Title (AR) is rejected as effectively empty",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135043,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Subtitle (EN) within the 300-char limit is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135044,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Subtitle (EN) empty is accepted since the field is optional",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135045,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Subtitle (EN) exceeding 300 characters is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135046,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Subtitle (AR) within the 300-char limit is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135047,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Subtitle (AR) empty is accepted since the field is optional",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135048,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Subtitle (AR) exceeding 300 characters is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135049,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 1 Label (EN) within the 50-char limit is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135050,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 1 Label (EN) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135051,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 1 Label (EN) at exactly 50 characters is accepted and 51 is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135052,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 1 Label (EN) is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135053,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 1 Label (AR) within the 50-char limit is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135054,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 1 Label (AR) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135055,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 1 Label (AR) at exactly 50 characters is accepted and 51 is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135056,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 1 Label (AR) is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135057,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 1 Link URL is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135058,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 1 Link empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135059,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an invalid URL format for Button 1 Link is rejected with the exact bilingual message",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135060,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 1 Link at exactly 500 characters is accepted and 501 characters is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135061,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 1 Link is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135062,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 2 Label (EN) within the 50-char limit is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135063,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 2 Label (EN) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135064,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 2 Label (EN) at exactly 50 characters is accepted and 51 is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135065,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 2 Label (EN) is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135066,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 2 Label (AR) within the 50-char limit is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135067,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 2 Label (AR) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135068,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 2 Label (AR) at exactly 50 characters is accepted and 51 is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135069,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 2 Label (AR) is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135070,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 2 Link URL is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135071,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 2 Link empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135072,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an invalid URL format for Button 2 Link is rejected with the exact bilingual message",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135073,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 2 Link at exactly 500 characters is accepted and 501 is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135074,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 2 Link is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135075,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid positive Display Order value is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135076,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Display Order empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135077,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a negative or zero Display Order value is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135078,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting a slide's Active Status to True is saved correctly",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135079,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting a slide's Active Status to False is saved correctly",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135080,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Counter Title (EN) within the 30-char limit is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135081,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Counter Title (EN) empty is accepted since the field is optional",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135082,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Title (EN) exceeding 30 characters is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135083,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Counter Title (AR) within the 30-char limit is saved",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135084,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Counter Title (AR) empty is accepted since the field is optional",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135085,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Title (AR) exceeding 30 characters is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135086,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Value is accepted when Counter Title is set and Value is valid",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135087,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Value is required once Counter Title is set",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135088,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Value exceeding 10 characters is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135089,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Counter Title and Counter Value both empty saves successfully",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135090,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a valid Counter Icon is accepted",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135091,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a Counter Icon in an unsupported format is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135092,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a Counter Icon exceeding 2MB is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135093,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Counter Icon empty is accepted since the field is optional",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135094,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Display Order is accepted when Counter Title is set and Order is valid",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135095,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Display Order is required once Counter Title is set",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135096,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Counter Title and Counter Display Order both empty saves successfully",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135097,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting a Counter's Active Status to True is saved correctly",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135098,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting a Counter's Active Status to False is saved correctly",
+"tests": [],
+"skipped": []
+}
+],
+"129371": [
+{
+"id": 135333,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Site Content Editor can access Our Services Section Management in Liferay CMS",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135334,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a user without Site Content Editor rights is denied access to Our Services Section Management",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135346,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving the section as Draft in CMS keeps it hidden from the live Home Page",
+"tests": [],
+"skipped": [
+"cms/tests/home_services/test_home_services_control_panel.py::test_saving_section_as_draft_keeps_it_hidden_from_live_home_page"
+]
+},
+{
+"id": 135347,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Preview shows the section as it will appear before publishing",
+"tests": [
+"cms/tests/home_services/test_home_services_control_panel.py::test_preview_shows_section_before_publishing"
+],
+"skipped": []
+},
+{
+"id": 135348,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that Publish makes the configured section live on the Home Page",
+"tests": [
+"cms/tests/home_services/test_home_services_control_panel.py::test_publish_makes_configured_section_live_on_home_page"
+],
+"skipped": []
+},
+{
+"id": 135350,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Blocked",
+"title": "Verify that Unpublish removes the section from the live Home Page",
+"tests": [],
+"skipped": [
+"cms/tests/home_services/test_home_services_control_panel.py::test_unpublish_removes_section_from_live_home_page"
+]
+},
+{
+"id": 135351,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that assigning a service card to a filter tab makes it appear under that tab",
+"tests": [
+"cms/tests/home_services/test_home_services_control_panel.py::test_assign_service_card_to_filter_tab_shows_under_tab"
+],
+"skipped": []
+},
+{
+"id": 135352,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that reassigning a service card to a different tab moves it out of the original tab",
+"tests": [
+"cms/tests/home_services/test_home_services_control_panel.py::test_reassign_service_card_to_different_tab_moves_it_out_of_original_tab"
+],
+"skipped": []
+},
+{
+"id": 135354,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Tag (EN) saves and displays",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135355,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Section Tag (EN) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135356,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Tag (EN) rejects input exceeding 20 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135357,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Tag (EN) with only whitespace is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135358,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Tag (AR) saves and displays",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135359,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Section Tag (AR) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135360,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Tag (AR) rejects input exceeding 20 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135361,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Tag (AR) with only whitespace is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135362,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Heading (EN) saves and displays",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135363,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Section Heading (EN) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135364,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Heading (EN) rejects input exceeding 200 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135365,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Heading (EN) with only whitespace is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135366,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Heading (AR) saves and displays",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135367,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Section Heading (AR) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135368,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Heading (AR) rejects input exceeding 200 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135369,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Heading (AR) with only whitespace is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135370,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Description (EN) saves and displays",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135371,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Description (EN) can be saved empty since it is optional",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135372,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Description (EN) rejects input exceeding 500 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135373,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Section Description (AR) saves and displays",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135374,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Description (AR) can be saved empty since it is optional",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135375,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Section Description (AR) rejects input exceeding 500 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135376,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid PNG thumbnail under 2MB uploads and displays on the card",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135377,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an unsupported image format is rejected for the thumbnail",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135378,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a thumbnail exceeding 2MB is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135379,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with no thumbnail uploaded is rejected since it is mandatory",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135380,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid View All Label (EN) saves and displays on the CTA",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135381,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving View All Label (EN) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135382,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that View All Label (EN) rejects input exceeding 50 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135383,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that View All Label (EN) with only whitespace is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135384,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid View All Label (AR) saves and displays on the CTA",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135385,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving View All Label (AR) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135386,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that View All Label (AR) rejects input exceeding 50 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135387,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that View All Label (AR) with only whitespace is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135388,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid View All URL saves and the CTA redirects correctly",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135389,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an invalid View All URL is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135390,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that View All URL rejects input exceeding 500 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135391,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving View All URL empty is rejected since it is mandatory",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135392,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Tab Label (EN) saves and displays on the tab bar",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135393,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Tab Label (EN) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135394,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Tab Label (EN) rejects input exceeding 50 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135395,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Tab Label (EN) with only whitespace is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135396,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Tab Label (AR) saves and displays on the tab bar",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135397,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Tab Label (AR) empty is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135398,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Tab Label (AR) rejects input exceeding 50 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135399,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Tab Label (AR) with only whitespace is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135400,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Service Card Redirect URL saves and Read More navigates correctly",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135401,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an invalid Service Card Redirect URL is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135402,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Service Card Redirect URL rejects input exceeding 500 characters",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135403,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Service Card Redirect URL empty is rejected since it is mandatory",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135404,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid positive Display Order saves and controls card sort position",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135405,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a negative Display Order is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135406,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Display Order of zero is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135407,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a non-numeric Display Order is rejected",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135410,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid card icon uploads and displays on the card",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135411,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving a service card with no icon uploaded is rejected since it is mandatory",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135412,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that discarding unsaved changes to the Our Services section restores the last saved values",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135413,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a saved View All URL persists correctly after reload and does not affect the Tab Label fields",
+"tests": [],
+"skipped": []
+}
+],
+"129373": [
+{
+"id": 131148,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the CMS live preview of the Social Media Icons section matches the published Home page render",
+"tests": [],
+"skipped": []
+},
+{
+"id": 131153,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Site Content Editor can access and publish the Social Media Icons section directly",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_site_content_editor_can_access_and_publish_directly"
+],
+"skipped": []
+},
+{
+"id": 131154,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Site Content Author can access the section but cannot publish directly",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_site_content_author_can_access_but_cannot_publish_directly"
+],
+"skipped": []
+},
+{
+"id": 131155,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a user without Site Content Editor/Author role is denied access to the Social Media Icons section",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_role_without_editor_author_assignment_denied_access"
+],
+"skipped": []
+},
+{
+"id": 131156,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an unauthenticated user forced-browsing directly to the CMS Social Media Icons management URL is redirected to login",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_unauthenticated_forced_browsing_redirects_to_login"
+],
+"skipped": []
+},
+{
+"id": 131157,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an Editor's expired session during editing prompts re-authentication without silently discarding in-progress work",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_editor_session_expiry_during_editing_prompts_reauth"
+],
+"skipped": []
+},
+{
+"id": 131167,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Blocked",
+"title": "Verify that a CMS user without permission cannot persist changes to a social icon entry even via a direct action",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_role_without_permission_cannot_persist_change_via_direct_action"
+],
+"skipped": []
+},
+{
+"id": 131168,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid English Platform Name saves correctly",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_valid_platform_name_en_saves"
+],
+"skipped": []
+},
+{
+"id": 131169,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Arabic Platform Name saves correctly",
+"tests": [],
+"skipped": [
+"cms/tests/components/test_footer_control_panel.py::test_valid_platform_name_ar_saves"
+]
+},
+{
+"id": 131170,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving the English Platform Name empty blocks save with a mandatory-field error",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_empty_platform_name_en_blocks_save"
+],
+"skipped": []
+},
+{
+"id": 131171,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving the Arabic Platform Name empty blocks save with a mandatory-field error",
+"tests": [],
+"skipped": [
+"cms/tests/components/test_footer_control_panel.py::test_empty_platform_name_ar_blocks_save"
+]
+},
+{
+"id": 131174,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking Cancel on the icon form discards entered Platform Name changes",
+"tests": [],
+"skipped": [
+"cms/tests/components/test_footer_control_panel.py::test_cancel_discards_platform_name_changes"
+]
+},
+{
+"id": 131175,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a saved Platform Name persists after reload",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_platform_name_persists_after_reload"
+],
+"skipped": []
+},
+{
+"id": 131176,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a valid PNG icon image within the size limit saves correctly",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_valid_png_icon_image_saves"
+],
+"skipped": []
+},
+{
+"id": 131178,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Icon Image empty blocks save with a mandatory-field error",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_empty_icon_image_blocks_save"
+],
+"skipped": []
+},
+{
+"id": 131180,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading an icon image exceeding 1 MB is rejected",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_oversized_icon_image_rejected"
+],
+"skipped": []
+},
+{
+"id": 131181,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a saved icon image persists after reload",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_icon_image_persists_after_reload"
+],
+"skipped": []
+},
+{
+"id": 131182,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Platform URL saves correctly",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_valid_redirect_url_saves"
+],
+"skipped": []
+},
+{
+"id": 131183,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Platform URL empty blocks save with a mandatory-field error",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_empty_redirect_url_blocks_save"
+],
+"skipped": []
+},
+{
+"id": 131184,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an invalid URL format is rejected with the configured error message",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_invalid_url_format_rejected"
+],
+"skipped": []
+},
+{
+"id": 131185,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Platform URL exceeding 500 characters is rejected",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_redirect_url_over_500_chars_rejected"
+],
+"skipped": []
+},
+{
+"id": 131187,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an icon cannot be published while Active=True but its Platform URL is invalid",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_active_true_with_invalid_url_cannot_publish"
+],
+"skipped": []
+},
+{
+"id": 131188,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid positive Display Order value saves and reflects the icon's frontend position",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_valid_display_order_reflects_frontend_position"
+],
+"skipped": []
+},
+{
+"id": 131189,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Display Order value of zero is rejected",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_display_order_zero_rejected"
+],
+"skipped": []
+},
+{
+"id": 131190,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a negative Display Order value is rejected",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_display_order_negative_rejected"
+],
+"skipped": []
+},
+{
+"id": 131192,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a saved Display Order value persists after reload",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_display_order_persists_after_reload"
+],
+"skipped": []
+},
+{
+"id": 131193,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting Active Status = True on a new entry saves correctly",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_active_status_true_saves"
+],
+"skipped": []
+},
+{
+"id": 131194,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting Active Status = False on a new entry saves correctly and excludes it once published",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_active_status_false_excludes_from_public_footer"
+],
+"skipped": []
+},
+{
+"id": 131195,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a saved Active Status toggle persists after reload",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_active_status_persists_after_reload"
+],
+"skipped": []
+},
+{
+"id": 131196,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Active Status = True has no frontend effect while the entry's workflow status is not Published",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_active_true_draft_has_no_frontend_effect"
+],
+"skipped": []
+},
+{
+"id": 131197,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Draft-status icon with Active Status = True is not displayed on the frontend",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_draft_icon_active_true_not_displayed_on_frontend"
+],
+"skipped": []
+},
+{
+"id": 131200,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that a Rejected icon entry does not appear on the frontend",
+"tests": [
+"cms/tests/components/test_footer_control_panel.py::test_rejected_icon_entry_not_on_frontend"
+],
+"skipped": []
+}
+],
+"129382": [
+{
+"id": 135655,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Liferay generic success toast displays in English after saving the Pin Configuration",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135656,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Liferay generic success toast displays in Arabic after saving the Pin Configuration",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135657,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Pin Configuration screen renders correctly in RTL when the CMS language is Arabic",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135663,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a logged-out admin directly accessing the Pin Configuration URL is redirected to the Liferay login page",
+"tests": [
+"cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_logged_out_direct_url_redirects_to_login[page0]"
+],
+"skipped": []
+},
+{
+"id": 135664,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Site Content Author without publish rights on Home Page sees the Access Denied message when attempting to save",
+"tests": [
+"cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_author_cannot_change_live_pin"
+],
+"skipped": []
+},
+{
+"id": 135670,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that unpinning the currently featured event hides the Upcoming Events section on the Home Page",
+"tests": [
+"cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_unpin_hides_section"
+],
+"skipped": []
+},
+{
+"id": 135671,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that pinning a different event replaces the previously featured event without a duplicate section appearing",
+"tests": [
+"cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_repin_replaces_without_duplicate"
+],
+"skipped": []
+},
+{
+"id": 135673,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting Active Status to disabled hides the section even while an event remains pinned",
+"tests": [
+"cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_active_status_off_hides_section"
+],
+"skipped": []
+},
+{
+"id": 135689,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Section Heading field saves successfully with a valid value within 200 characters in both languages",
+"tests": [],
+"skipped": []
+},
+{
+"id": 135701,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving the Pinned Event field unselected while Active Status is enabled displays a conditional-mandatory validation message",
+"tests": [
+"cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_active_without_pinned_event_refused"
+],
+"skipped": []
+}
+]
+}

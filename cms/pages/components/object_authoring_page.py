@@ -1401,10 +1401,24 @@ class ObjectAuthoringPage(BasePage):
         ).inner_text().strip()
 
     # ---- Lifecycle actions --------------------------------------------------
+    def _click_save_once(self, selector: str) -> None:
+        """A save/submit click is NOT idempotent: BasePage.click() retries once
+        after an exception, and a click that already posted the form (the page
+        starts navigating, so Playwright raises) then posts it a second time.
+        Seen 2026-10-18 on manage-hero-banner-slide: one Submit for Review in
+        tc_135023 stored TWO identical QCTEST records 4 s apart; a manual
+        single click stored one. So this clicks exactly once and lets
+        _wait_for_settle() read the outcome."""
+        try:
+            self.page.locator(selector).first.click()
+        except Exception as exc:  # noqa: BLE001 — the save outcome below decides
+            logger.warning("save click raised %r; not retried (non-idempotent)", exc)
+        logger.info("click (once) locator=%r", selector)
+
     def save_as_draft(self) -> "ObjectAuthoringPage":
         start_url = self.page.url
         before = self._pre_save_snapshot()
-        self.click(self.SAVE_AS_DRAFT_BUTTON)
+        self._click_save_once(self.SAVE_AS_DRAFT_BUTTON)
         self._wait_for_settle(start_url, before=before)
         return self
 
@@ -1423,7 +1437,7 @@ class ObjectAuthoringPage(BasePage):
         then `approve_entry()` as an Editor."""
         start_url = self.page.url
         before = self._pre_save_snapshot()
-        self.click(self.SUBMIT_FOR_REVIEW_BUTTON)
+        self._click_save_once(self.SUBMIT_FOR_REVIEW_BUTTON)
         self._wait_for_settle(start_url, before=before)
         return self
 

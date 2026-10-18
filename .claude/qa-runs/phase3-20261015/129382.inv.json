@@ -1,0 +1,776 @@
+[
+{
+"id": 135634,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the \"Upcoming Events\" badge renders with the Figma-specified colors"
+},
+{
+"id": 135635,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section heading \"What's Coming Up\" renders with the Figma-specified typography and color"
+},
+{
+"id": 135636,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section description renders with the exact copy and Figma-specified typography"
+},
+{
+"id": 135637,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the \"View All\" CTA button renders per the Figma pill-button spec"
+},
+{
+"id": 135638,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the event category badges render with the Figma-specified pill style"
+},
+{
+"id": 135639,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the pinned event title renders with the Figma-specified typography"
+},
+{
+"id": 135640,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Date, Time, and Location icon-buttons render as maroon 48px circles per Figma"
+},
+{
+"id": 135641,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Date/Time/Location labels and values render with the Figma-specified colors and fonts"
+},
+{
+"id": 135642,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section layout matches the Figma two-column spacing spec"
+},
+{
+"id": 135643,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the event image renders at the Figma-specified height within a 16px-rounded container"
+},
+{
+"id": 135644,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the divider line between event detail rows renders with the Figma-specified color and thickness"
+},
+{
+"id": 135645,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Upcoming Event section does not render on the Home Page when no event is pinned"
+},
+{
+"id": 135646,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Upcoming Event section renders correctly in Arabic (RTL) layout"
+},
+{
+"id": 135647,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Upcoming Event section renders correctly in English (LTR) layout"
+},
+{
+"id": 135648,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Upcoming Event section is fully responsive at a 375px mobile viewport"
+},
+{
+"id": 135649,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Upcoming Event section is fully responsive at a 768px tablet viewport"
+},
+{
+"id": 135650,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a loading placeholder displays while the pinned event data is being fetched"
+},
+{
+"id": 135651,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that a fallback state displays gracefully if the pinned event's image fails to load"
+},
+{
+"id": 135652,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the pagination indicator below the pinned event shows a single active state when only one event is pinned"
+},
+{
+"id": 135653,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Upcoming Event Pin Configuration screen is accessible from Home Page management in the Liferay CMS"
+},
+{
+"id": 135654,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Event Selector displays a list of all published events"
+},
+{
+"id": 135655,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Liferay generic success toast displays in English after saving the Pin Configuration"
+},
+{
+"id": 135656,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Liferay generic success toast displays in Arabic after saving the Pin Configuration"
+},
+{
+"id": 135657,
+"p": 4,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Pin Configuration screen renders correctly in RTL when the CMS language is Arabic"
+},
+{
+"id": 135658,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Upcoming Event section renders consistently across Chrome, Firefox, and Edge"
+},
+{
+"id": 135659,
+"p": 4,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Upcoming Event section maintains layout integrity at 150% browser zoom"
+},
+{
+"id": 135660,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the section maintains the two-column layout at 1920x1080 and collapses to single-column at mobile widths"
+},
+{
+"id": 135661,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a Site Content Editor with Home Page permission can access the Pin Configuration screen"
+},
+{
+"id": 135662,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a user without Home Page permission is denied access when attempting to pin an event"
+},
+{
+"id": 135663,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a logged-out admin directly accessing the Pin Configuration URL is redirected to the Liferay login page"
+},
+{
+"id": 135664,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a Site Content Author without publish rights on Home Page sees the Access Denied message when attempting to save"
+},
+{
+"id": 135665,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a visitor can view the pinned event details and navigate to its detail page by clicking the event image"
+},
+{
+"id": 135666,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Upcoming Event section does not appear anywhere on the Home Page when no event is pinned"
+},
+{
+"id": 135667,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Upcoming Event section stops appearing when the pinned event is unpublished from the Events module"
+},
+{
+"id": 135668,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the pinned event continues to display after its date has passed until the admin unpins it"
+},
+{
+"id": 135669,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that an admin can pin a published event, enable Active Status, save, and see it appear on the Home Page after cache refresh"
+},
+{
+"id": 135670,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that unpinning the currently featured event hides the Upcoming Events section on the Home Page"
+},
+{
+"id": 135671,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that pinning a different event replaces the previously featured event without a duplicate section appearing"
+},
+{
+"id": 135672,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the pinned event's displayed details are sourced automatically from the Events module record, not re-entered in Pin Configuration"
+},
+{
+"id": 135673,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting Active Status to disabled hides the section even while an event remains pinned"
+},
+{
+"id": 135674,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the pinned event's title displays correctly in English"
+},
+{
+"id": 135675,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the pinned event's title displays correctly in Arabic"
+},
+{
+"id": 135676,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the pinned event's date displays as sourced from the Events module"
+},
+{
+"id": 135677,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the pinned event's time displays as sourced from the Events module"
+},
+{
+"id": 135678,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the pinned event's location displays correctly in English"
+},
+{
+"id": 135679,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the pinned event's location displays correctly in Arabic"
+},
+{
+"id": 135680,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the pinned event's short description displays correctly in English"
+},
+{
+"id": 135681,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the pinned event's short description displays correctly in Arabic"
+},
+{
+"id": 135682,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that only the event image is the clickable navigation target to the event detail page"
+},
+{
+"id": 135683,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Section Tag field saves successfully with a valid value within 50 characters in both languages"
+},
+{
+"id": 135684,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Section Tag field can be saved empty since it is not mandatory"
+},
+{
+"id": 135685,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Applicable",
+"title": "Verify that the Section Tag field rejects input exceeding the 50-character limit"
+},
+{
+"id": 135686,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that entering special/script characters in the Section Tag field is stored as plain text and not executed"
+},
+{
+"id": 135687,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a Section Tag change is discarded when the admin clicks Cancel without saving"
+},
+{
+"id": 135688,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a saved Section Tag value persists after reloading the Pin Configuration screen"
+},
+{
+"id": 135689,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that the Section Heading field saves successfully with a valid value within 200 characters in both languages"
+},
+{
+"id": 135690,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Section Heading field displays a mandatory validation error when left empty on save"
+},
+{
+"id": 135691,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Applicable",
+"title": "Verify that the Section Heading field rejects input exceeding the 200-character limit"
+},
+{
+"id": 135692,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that entering special characters in the Section Heading field is stored and rendered safely"
+},
+{
+"id": 135693,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a saved Section Heading value persists after reloading the Pin Configuration screen"
+},
+{
+"id": 135694,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Section Description field saves successfully with a valid rich-text value within 1000 characters"
+},
+{
+"id": 135695,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Section Description field displays a mandatory validation error when left empty on save"
+},
+{
+"id": 135696,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Section Description field rejects input exceeding the 1000-character limit"
+},
+{
+"id": 135697,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a saved Section Description value persists after reloading the Pin Configuration screen"
+},
+{
+"id": 135698,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that selecting a published event and saving stores the Pinned Event reference successfully"
+},
+{
+"id": 135699,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that selecting an unpublished event in the Pinned Event field displays the exact bilingual validation message"
+},
+{
+"id": 135700,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Pinned Event selector list excludes events that are not Published"
+},
+{
+"id": 135701,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving the Pinned Event field unselected while Active Status is enabled displays a conditional-mandatory validation message"
+},
+{
+"id": 135702,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a change to the Pinned Event selection is discarded when the admin clicks Cancel without saving"
+},
+{
+"id": 135703,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the previously saved Pinned Event selection persists after reloading the Pin Configuration screen"
+},
+{
+"id": 135704,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that setting Active Status to True and saving enables the Upcoming Events section on the Home Page"
+},
+{
+"id": 135705,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that setting Active Status to False and saving disables the Upcoming Events section on the Home Page"
+},
+{
+"id": 135706,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Passed",
+"title": "Verify that the Active Status field displays a mandatory validation error if left unset on save"
+},
+{
+"id": 135707,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the saved Active Status value persists after reloading the Pin Configuration screen"
+},
+{
+"id": 135708,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that toggling Active Status without changing the Pinned Event selection still triggers a successful save"
+},
+{
+"id": 135709,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that selecting an event whose date has passed displays the exact bilingual warning/confirmation message"
+},
+{
+"id": 135710,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that confirming the passed-date warning proceeds to pin the event successfully"
+},
+{
+"id": 135711,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that cancelling the passed-date warning aborts the pin action and retains the previous configuration"
+},
+{
+"id": 135712,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Home Page shows the previously pinned event immediately after a Pin Configuration save, before cache refresh completes"
+},
+{
+"id": 135713,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a pinned event with a date equal to today is still treated as upcoming and displays normally"
+},
+{
+"id": 135714,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Passed",
+"title": "Verify that two admins saving different Pin Configurations in quick succession results in a single consistent final state"
+},
+{
+"id": 135715,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that unpinning an event while a visitor already has the Home Page open does not break their current page view"
+},
+{
+"id": 135716,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that a user lacking permission cannot bypass the Access Denied restriction via a direct configuration save request"
+},
+{
+"id": 135717,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a visitor can view the pinned event details and navigate to its detail page by clicking the event image"
+},
+{
+"id": 135718,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that the Upcoming Events section stops rendering when the pinned event is deleted entirely from the Events module"
+},
+{
+"id": 135719,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that re-publishing a previously unpublished pinned event causes the section to reappear without re-pinning"
+}
+]

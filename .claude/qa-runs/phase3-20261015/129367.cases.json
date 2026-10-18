@@ -1,0 +1,3024 @@
+[
+ {
+  "id": 134988,
+  "title": "Verify that the Hero Banner background image renders below the header on the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "GLOBAL",
+   "Manual",
+   "UI",
+   "Web"
+  ],
+  "description": "Home Page has one published, active slide with image `hero-building.jpg`. Verifies image element renders full-width.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page",
+    "expected": "Hero section visible below global header"
+   },
+   {
+    "action": "Observe banner image",
+    "expected": "Full-width background image `hero-building.jpg` displayed, no broken-image icon, dark overlay gradient visible per Figma"
+   }
+  ]
+ },
+ {
+  "id": 134989,
+  "title": "Verify that the headline title renders in the correct position and style",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "GLOBAL",
+   "Manual",
+   "UI",
+   "Web"
+  ],
+  "description": "Active slide has Title EN &quot;Qatar Chamber Welcomes You&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page (EN)",
+    "expected": "Headline visible, large bold white text, left-aligned, 2-3 line wrap max"
+   }
+  ]
+ },
+ {
+  "id": 134990,
+  "title": "Verify that the subtitle renders below the headline in correct style",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "GLOBAL",
+   "Manual",
+   "UI",
+   "Web"
+  ],
+  "description": "Active slide has Subtitle EN &quot;Driving Qatar's economic growth since 1963.&quot;",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page",
+    "expected": "Subtitle visible below headline, smaller light-gray text, max 4-line wrap"
+   }
+  ]
+ },
+ {
+  "id": 134991,
+  "title": "Verify that the Achievement Counters row renders with icon, animated number, and text",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "GLOBAL",
+   "Manual",
+   "UI",
+   "Web"
+  ],
+  "description": "Three active counters: &quot;50K+ Active Members&quot;, &quot;100+ Countries Served&quot;, &quot;24/7 Support&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page",
+    "expected": "wait for counter section to enter viewport"
+   },
+   {
+    "action": "Observe counters",
+    "expected": "3 items in a horizontal row, each with icon above an animating number that settles at 50K+/100+/24/7 with its label text"
+   }
+  ]
+ },
+ {
+  "id": 134992,
+  "title": "Verify that the slide-progress dot/pill indicator renders and the active pill visually fills during auto-play",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "GLOBAL",
+   "Manual",
+   "UI",
+   "Web"
+  ],
+  "description": "2 active slides configured.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page",
+    "expected": "row of dots + one elongated active pill visible bottom-left of image"
+   },
+   {
+    "action": "Wait through one auto-play cycle",
+    "expected": "active pill visually fills/animates, then indicator shifts to next dot on slide change"
+   }
+  ]
+ },
+ {
+  "id": 134993,
+  "title": "Verify that the next/previous arrows render with hover state",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "GLOBAL",
+   "Manual",
+   "UI",
+   "Web"
+  ],
+  "description": "2 active slides configured, desktop viewport.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page",
+    "expected": "left/right semi-transparent square arrow buttons visible, vertically centered on image"
+   },
+   {
+    "action": "Hover over next arrow",
+    "expected": "visible hover state (background/opacity change) per Figma"
+   }
+  ]
+ },
+ {
+  "id": 134994,
+  "title": "Verify that the CTA button renders as a solid maroon pill with a diagonal arrow icon",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "GLOBAL",
+   "Manual",
+   "UI",
+   "Web"
+  ],
+  "description": "Slide has Button 1 configured &quot;Read More&quot; with a URL.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page (EN)",
+    "expected": "CTA button visible: maroon pill shape, white bold Read More label, diagonal arrow icon to the right of the label"
+   }
+  ]
+ },
+ {
+  "id": 134995,
+  "title": "Verify that the Hero Banner Management admin form renders all fields per the field table",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Control_Panel",
+   "GLOBAL",
+   "Manual",
+   "UI"
+  ],
+  "description": "Site Content Editor opens Hero Banner Management → Add Slide.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Hero Banner Management",
+    "expected": "Hero Banner Management screen loads"
+   },
+   {
+    "action": "Click Add Slide",
+    "expected": "Form displays: Banner Image upload, Title EN/AR, Subtitle EN/AR, Button1 Label/Link EN/AR, Button2 Label/Link EN/AR, Display Order, Active Status toggle, all fields present and labeled"
+   }
+  ]
+ },
+ {
+  "id": 134996,
+  "title": "Verify that the Achievement Counter admin sub-form renders all counter fields",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Control_Panel",
+   "GLOBAL",
+   "Manual",
+   "UI"
+  ],
+  "description": "Site Content Editor opens the counter configuration section of a slide.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open counter configuration on a slide",
+    "expected": "Counter configuration section opens"
+   },
+   {
+    "action": "Observe form",
+    "expected": "Counter Title EN/AR, Counter Value, Counter Icon upload, Counter Display Order, Counter Active Status toggle all present"
+   }
+  ]
+ },
+ {
+  "id": 134997,
+  "title": "Verify that the Home Page layout mirrors correctly for Arabic (RTL) across nav, headline, subtitle, CTA icon, and dot/arrow placement",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Bilingual",
+   "GLOBAL",
+   "Manual",
+   "UI",
+   "Web"
+  ],
+  "description": "Active slide has bilingual content; site language switched to Arabic.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Switch site language to Arabic",
+    "expected": "Language switched to Arabic"
+   },
+   {
+    "action": "Reload Home Page",
+    "expected": "Header logo moves to the right, headline right-aligned, subtitle right-aligned RTL, CTA icon appears left of the Arabic label, dot/pill indicator shifts to bottom-right, arrows mirror position, all consistent RTL mirroring, no LTR leftovers"
+   }
+  ]
+ },
+ {
+  "id": 134998,
+  "title": "Verify that the Hero Banner and Achievement Counters render correctly at desktop viewport width",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Desktop viewport 1920x1080.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Resize browser to 1920x1080",
+    "expected": "Viewport resized"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Banner full-width, counters in a single horizontal row, no overlap/overflow"
+   }
+  ]
+ },
+ {
+  "id": 134999,
+  "title": "Verify that the Hero Banner and Achievement Counters render correctly at tablet viewport width",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Tablet viewport 768x1024.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Resize browser to 768px width",
+    "expected": "Viewport resized"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Banner scales proportionally, headline/subtitle wrap adjusts, counters remain readable without horizontal scroll"
+   }
+  ]
+ },
+ {
+  "id": 135000,
+  "title": "Verify that the Achievement Counters stack correctly below the banner at mobile viewport width",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Mobile viewport 375x667.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Resize browser to 375px width",
+    "expected": "Viewport resized"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Banner content stacks vertically, Achievement Counters render below the hero content in a row of 3, no clipped text/icons"
+   }
+  ]
+ },
+ {
+  "id": 135001,
+  "title": "Verify that an unauthenticated public visitor can view the Hero Banner without login",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "GLOBAL",
+   "Manual",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "No credentials, incognito session.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Home Page as anonymous visitor",
+    "expected": "Home Page loads"
+   },
+   {
+    "action": "Observe Hero Banner",
+    "expected": "Banner and counters render fully; no login prompt shown"
+   }
+  ]
+ },
+ {
+  "id": 135002,
+  "title": "Verify that a Site Content Editor with Hero Banner permission can access Hero Banner Management",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Control_Panel",
+   "GLOBAL",
+   "Manual"
+  ],
+  "description": "Editor logs into Liferay CMS with valid credentials.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into CMS as Site Content Editor",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Navigate to Home Page, Hero Banner Management",
+    "expected": "Management screen loads, Add Slide control enabled"
+   }
+  ]
+ },
+ {
+  "id": 135003,
+  "title": "Verify that an admin user without Hero Banner permission is denied access with the exact bilingual message",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Bilingual",
+   "Control_Panel",
+   "GLOBAL",
+   "Manual"
+  ],
+  "description": "Admin user account exists in Liferay without the Hero Banner Management role/permission.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into CMS as the unauthorized admin",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Attempt to navigate to Hero Banner Management",
+    "expected": "Navigation blocked"
+   },
+   {
+    "action": "Observe result (EN) then switch language and repeat (AR)",
+    "expected": "Access is blocked; message Access Denied. You do not have permission to perform this action. shown in EN, arabic equivalent shown in AR; no management screen rendered"
+   }
+  ]
+ },
+ {
+  "id": 135004,
+  "title": "Verify that repeatedly clicking the next arrow cycles through all active slides and loops back to the first",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "3 active slides A, B, C.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page (Slide A)",
+    "expected": "Slide A shown"
+   },
+   {
+    "action": "Click next arrow 3 times consecutively",
+    "expected": "After 3rd click, slider returns to Slide A (loop); no error/blank slide at any step"
+   }
+  ]
+ },
+ {
+  "id": 135005,
+  "title": "Verify that clicking the previous arrow manually goes back to the previous slide",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "Web"
+  ],
+  "description": "2 active slides, Slide B currently shown.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "On Slide B, click previous arrow",
+    "expected": "Slide A displays"
+   }
+  ]
+ },
+ {
+  "id": 135006,
+  "title": "Verify that repeatedly clicking previous arrow cycles backward through all slides and loops to the last",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "3 active slides A, B, C, Slide A shown.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click previous arrow 3 times",
+    "expected": "After 3rd click, slider is on Slide C (loop backward)"
+   }
+  ]
+ },
+ {
+  "id": 135007,
+  "title": "Verify that clicking Button 1 navigates to its configured target URL",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Slide's Button 1 Link = `/about-us`.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page",
+    "expected": "Home Page loads"
+   },
+   {
+    "action": "Click Button 1 Read More",
+    "expected": "Browser navigates to /about-us"
+   }
+  ]
+ },
+ {
+  "id": 135008,
+  "title": "Verify that clicking Button 2 navigates to its configured target URL",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Slide's Button 2 Link = `/our-services`.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page",
+    "expected": "Home Page loads"
+   },
+   {
+    "action": "Click Button 2 Our Services",
+    "expected": "Browser navigates to /our-services"
+   }
+  ]
+ },
+ {
+  "id": 135009,
+  "title": "Verify that a Site Content Editor can create a new Hero Banner slide with all mandatory fields",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression"
+  ],
+  "description": "Editor logged in; new slide data provided.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to Hero Banner Management, Add Slide",
+    "expected": "Add Slide form opens"
+   },
+   {
+    "action": "Fill all mandatory fields with valid data",
+    "expected": "Fields populated"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Liferay generic success toast displayed; slide saved with entered values"
+   }
+  ]
+ },
+ {
+  "id": 135010,
+  "title": "Verify that uploading a valid Banner Image on a new slide succeeds",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "Editor on Add Slide form; file `banner1.jpg`, 1.2MB.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click upload control",
+    "expected": "Upload dialog opens"
+   },
+   {
+    "action": "Select banner1.jpg (1.2MB)",
+    "expected": "Image uploads successfully, thumbnail preview shown"
+   }
+  ]
+ },
+ {
+  "id": 135011,
+  "title": "Verify that auto-play advances the slider to the next active slide without user interaction",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "2 active published slides: Slide A order=1, Slide B order=2.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page",
+    "expected": "Slide A visible"
+   },
+   {
+    "action": "Wait for one auto-play interval without interacting",
+    "expected": "Slider transitions automatically to Slide B; indicator updates"
+   }
+  ]
+ },
+ {
+  "id": 135012,
+  "title": "Verify that clicking the next arrow manually advances to the next slide",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "Web"
+  ],
+  "description": "2 active slides.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page, Slide A shown",
+    "expected": "Slide A shown"
+   },
+   {
+    "action": "Click next arrow",
+    "expected": "Slide B displays immediately, indicator updates"
+   }
+  ]
+ },
+ {
+  "id": 135013,
+  "title": "Verify that a Site Content Editor can edit an existing published slide's title",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression"
+  ],
+  "description": "Existing published slide, Title EN=&quot;Growth&quot; changed to &quot;Sustainable Growth&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open existing slide for edit",
+    "expected": "Edit form opens"
+   },
+   {
+    "action": "Change Title EN to Sustainable Growth",
+    "expected": "Title field updated"
+   },
+   {
+    "action": "Click Save",
+    "expected": "Liferay generic success toast displayed; slide title updated"
+   }
+  ]
+ },
+ {
+  "id": 135014,
+  "title": "Verify that changing a slide's Display Order updates its position in the frontend slider",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "2 slides: A(order=1), B(order=2).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, edit Slide B's Display Order to 1 and Slide A's to 2, Save",
+    "expected": "Order values saved"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Slide B now displays first"
+   }
+  ]
+ },
+ {
+  "id": 135015,
+  "title": "Verify that reverting a slide's Display Order restores its original frontend position",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "Order changed in TC-027.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Edit Slide B's order back to 2 and Slide A back to 1, Save",
+    "expected": "Order values saved"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Slide A displays first again"
+   }
+  ]
+ },
+ {
+  "id": 135016,
+  "title": "Verify that enabling a slide's Active Status makes it eligible to appear on the frontend",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression"
+  ],
+  "description": "Existing published slide, Active=false.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Toggle Active Status to true, Save",
+    "expected": "Status saved"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Slide now appears in the slider"
+   }
+  ]
+ },
+ {
+  "id": 135017,
+  "title": "Verify that disabling a slide's Active Status removes it from the frontend",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression"
+  ],
+  "description": "Slide from TC-029, Active=true, Published.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Toggle Active Status to false, Save",
+    "expected": "Status saved"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Slide no longer appears in the slider"
+   }
+  ]
+ },
+ {
+  "id": 135018,
+  "title": "Verify that deleting a slide removes it permanently from both CMS and frontend",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "Existing unpublished slide &quot;Test Slide&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Select Test Slide, Delete, Confirm",
+    "expected": "Slide deleted"
+   },
+   {
+    "action": "Refresh slide list, load Home Page",
+    "expected": "Slide no longer listed in CMS or rendered on frontend"
+   }
+  ]
+ },
+ {
+  "id": 135019,
+  "title": "Verify that saving a slide as Draft does not publish it to the frontend",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "New slide data filled, Save as Draft clicked.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Fill mandatory fields",
+    "expected": "Fields populated"
+   },
+   {
+    "action": "Click Save as Draft",
+    "expected": "Liferay success toast shown, slide status = Draft"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Slide not visible"
+   }
+  ]
+ },
+ {
+  "id": 135020,
+  "title": "Verify that submitting a draft slide for review moves it to Pending Review status",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "Draft slide from TC-032.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open draft slide",
+    "expected": "Draft opens"
+   },
+   {
+    "action": "Click Submit for Review",
+    "expected": "Status changes to Pending Review; slide still not visible on frontend"
+   }
+  ]
+ },
+ {
+  "id": 135021,
+  "title": "Verify that Preview shows the slide as it will appear on the frontend before publishing",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Manual"
+  ],
+  "description": "Draft slide with all fields filled.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click Preview on the draft slide",
+    "expected": "Preview pane/tab renders image, title, subtitle, both CTAs matching entered values, without publishing"
+   }
+  ]
+ },
+ {
+  "id": 135022,
+  "title": "Verify that publishing a slide makes it visible on the Home Page after cache refresh",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Slide in Draft, all mandatory fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click Publish",
+    "expected": "Liferay success toast shown; status = Published"
+   },
+   {
+    "action": "Trigger/await cache refresh",
+    "expected": "Cache refreshed"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Published slide now appears in the slider"
+   }
+  ]
+ },
+ {
+  "id": 135023,
+  "title": "Verify that unpublishing a slide removes it from the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression"
+  ],
+  "description": "Slide currently Published and visible.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click Unpublish",
+    "expected": "Liferay success toast shown; status = Unpublished"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Slide no longer appears"
+   }
+  ]
+ },
+ {
+  "id": 135024,
+  "title": "Verify that re-publishing a previously unpublished slide restores it on the Home Page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "Slide from TC-036, currently Unpublished.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Click Publish again",
+    "expected": "Success toast shown; status = Published"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Slide reappears in the slider"
+   }
+  ]
+ },
+ {
+  "id": 135025,
+  "title": "Verify that an editor can add a new Achievement Counter item to a slide with valid data",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression"
+  ],
+  "description": "Slide open for edit; valid counter data.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open counter section, Add Counter",
+    "expected": "Counter form opens"
+   },
+   {
+    "action": "Fill fields",
+    "expected": "Fields populated"
+   },
+   {
+    "action": "Save slide",
+    "expected": "Liferay success toast; counter saved and linked to slide"
+   }
+  ]
+ },
+ {
+  "id": 135026,
+  "title": "Verify that enabling a Counter's Active Status makes it appear on the frontend",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "Existing counter, Active=false, on a published slide.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Toggle Counter Active Status to true, Save",
+    "expected": "Status saved"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Counter now appears in the Achievement Counters row"
+   }
+  ]
+ },
+ {
+  "id": 135027,
+  "title": "Verify that disabling a Counter's Active Status removes it from the frontend",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "Counter from TC-039, Active=true.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Toggle Counter Active Status to false, Save",
+    "expected": "Status saved"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Counter no longer appears in the row"
+   }
+  ]
+ },
+ {
+  "id": 135028,
+  "title": "Verify that changing a Counter's Display Order updates its position in the frontend row",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "3 counters ordered 1,2,3.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Change counter 3's order to 1, Save",
+    "expected": "Order saved"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Counter 3 now displays first in the row"
+   }
+  ]
+ },
+ {
+  "id": 135029,
+  "title": "Verify that reverting a Counter's Display Order restores its original frontend position",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL"
+  ],
+  "description": "Order changed in TC-041.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Revert counter 3's order to 3, Save",
+    "expected": "Order saved"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "Original counter order restored"
+   }
+  ]
+ },
+ {
+  "id": 135030,
+  "title": "Verify that the Liferay generic success toast displays in Arabic when the CMS UI language is Arabic",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Manual"
+  ],
+  "description": "Admin CMS UI set to Arabic; editor publishes a slide.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Switch CMS UI language to Arabic",
+    "expected": "UI language switched"
+   },
+   {
+    "action": "Publish a valid slide",
+    "expected": "Success toast text displays in Arabic per Liferay's generic bilingual message set"
+   }
+  ]
+ },
+ {
+  "id": 135031,
+  "title": "Verify that uploading a Banner Image within the size and format limits is accepted",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "`qc-hero.png`, 1.8MB.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "On Add Slide, upload qc-hero.png (1.8MB)",
+    "expected": "File accepted, preview thumbnail shown, no error"
+   }
+  ]
+ },
+ {
+  "id": 135032,
+  "title": "Verify that saving a slide without a Banner Image is rejected with the exact bilingual message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Add Slide form, all fields filled except image.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Fill all fields except Banner Image",
+    "expected": "Fields populated"
+   },
+   {
+    "action": "Click Save",
+    "expected": "EN message Banner Image is required. shown; save blocked"
+   },
+   {
+    "action": "Switch to Arabic, repeat",
+    "expected": "Arabic equivalent message shown"
+   }
+  ]
+ },
+ {
+  "id": 135033,
+  "title": "Verify that uploading a Banner Image in an unsupported format (e.g. .gif) is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "File `banner.gif`, 500KB.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt to upload banner.gif",
+    "expected": "Upload rejected; format-validation error shown; file not saved"
+   }
+  ]
+ },
+ {
+  "id": 135034,
+  "title": "Verify that uploading a Banner Image exceeding 2MB is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "File `banner-large.jpg`, 3.5MB.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt to upload banner-large.jpg (3.5MB)",
+    "expected": "Upload rejected; max-size error shown; file not saved"
+   }
+  ]
+ },
+ {
+  "id": 135035,
+  "title": "Verify that a valid Banner Title (EN) within the 100-char limit is saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title EN = &quot;Empowering Qatar's Business Future&quot; (35 chars).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter title",
+    "expected": "Title entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Title saved and displayed verbatim on frontend"
+   }
+  ]
+ },
+ {
+  "id": 135036,
+  "title": "Verify that saving a slide with Banner Title (EN) left empty is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title EN field cleared, other fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Title EN",
+    "expected": "Title cleared"
+   },
+   {
+    "action": "Save",
+    "expected": "Banner Title (EN) is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135037,
+  "title": "Verify that Banner Title (EN) at exactly 100 characters is accepted and 101 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title EN = 100-char string, then 101-char string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter a 100-character title, Save",
+    "expected": "Accepted, saved verbatim"
+   },
+   {
+    "action": "Enter a 101-character title, Save",
+    "expected": "Validation error shown, save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135038,
+  "title": "Verify that a whitespace-only Banner Title (EN) is rejected as effectively empty",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title EN = &quot;   &quot; (3 spaces).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 3 spaces into Title EN",
+    "expected": "Whitespace entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Banner Title (EN) is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135039,
+  "title": "Verify that a valid Banner Title (AR) within the 100-char limit is saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title AR = &quot;تمكين مستقبل الأعمال في قطر&quot; (28 chars).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter Arabic title",
+    "expected": "Title entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Title saved and displayed verbatim, RTL, on Arabic frontend"
+   }
+  ]
+ },
+ {
+  "id": 135040,
+  "title": "Verify that saving a slide with Banner Title (AR) left empty is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title AR field cleared, other fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Title AR",
+    "expected": "Title cleared"
+   },
+   {
+    "action": "Save",
+    "expected": "Arabic required message shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135041,
+  "title": "Verify that Banner Title (AR) at exactly 100 characters is accepted and 101 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title AR = 100-char string, then 101-char string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter a 100-character Arabic title, Save",
+    "expected": "Accepted"
+   },
+   {
+    "action": "Enter 101 characters, Save",
+    "expected": "Validation error shown, blocked"
+   }
+  ]
+ },
+ {
+  "id": 135042,
+  "title": "Verify that a whitespace-only Banner Title (AR) is rejected as effectively empty",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title AR = &quot;   &quot; (3 spaces).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 3 spaces into Title AR",
+    "expected": "Whitespace entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Mandatory-field message shown in Arabic; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135043,
+  "title": "Verify that a valid Subtitle (EN) within the 300-char limit is saved",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Subtitle EN = 120-char paragraph.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter subtitle",
+    "expected": "Subtitle entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved and displayed verbatim on frontend"
+   }
+  ]
+ },
+ {
+  "id": 135044,
+  "title": "Verify that leaving Subtitle (EN) empty is accepted since the field is optional",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Subtitle EN field left blank, other mandatory fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave Subtitle EN empty",
+    "expected": "Field left empty"
+   },
+   {
+    "action": "Save",
+    "expected": "Slide saves successfully; frontend renders with no subtitle text/empty region"
+   }
+  ]
+ },
+ {
+  "id": 135045,
+  "title": "Verify that Subtitle (EN) exceeding 300 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Subtitle EN = 301-char string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 301-character subtitle",
+    "expected": "Subtitle entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Max-length validation error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135046,
+  "title": "Verify that a valid Subtitle (AR) within the 300-char limit is saved",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Subtitle AR = 120-char Arabic paragraph.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter Arabic subtitle",
+    "expected": "Subtitle entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved, displayed RTL on Arabic frontend"
+   }
+  ]
+ },
+ {
+  "id": 135047,
+  "title": "Verify that leaving Subtitle (AR) empty is accepted since the field is optional",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Subtitle AR field left blank.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave Subtitle AR empty",
+    "expected": "Field left empty"
+   },
+   {
+    "action": "Save",
+    "expected": "Slide saves successfully"
+   }
+  ]
+ },
+ {
+  "id": 135048,
+  "title": "Verify that Subtitle (AR) exceeding 300 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Subtitle AR = 301-char Arabic string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 301-character Arabic subtitle",
+    "expected": "Subtitle entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Max-length validation error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135049,
+  "title": "Verify that a valid Button 1 Label (EN) within the 50-char limit is saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label EN = &quot;Read More&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter label",
+    "expected": "Label entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved, displayed on the CTA button"
+   }
+  ]
+ },
+ {
+  "id": 135050,
+  "title": "Verify that saving with Button 1 Label (EN) empty is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label EN cleared.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Label EN",
+    "expected": "Label cleared"
+   },
+   {
+    "action": "Save",
+    "expected": "Button 1 Label (EN) is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135051,
+  "title": "Verify that Button 1 Label (EN) at exactly 50 characters is accepted and 51 is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label EN = 50-char string, then 51-char string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 50-char label, Save",
+    "expected": "Accepted"
+   },
+   {
+    "action": "Enter 51-char label, Save",
+    "expected": "Validation error, blocked"
+   }
+  ]
+ },
+ {
+  "id": 135052,
+  "title": "Verify that a whitespace-only Button 1 Label (EN) is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label EN = &quot;   &quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces only",
+    "expected": "Whitespace entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Mandatory-field error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135053,
+  "title": "Verify that a valid Button 1 Label (AR) within the 50-char limit is saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label AR = &quot;إقرأ المزيد&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter label",
+    "expected": "Label entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved, displayed on RTL frontend"
+   }
+  ]
+ },
+ {
+  "id": 135054,
+  "title": "Verify that saving with Button 1 Label (AR) empty is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label AR cleared.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Label AR",
+    "expected": "Label cleared"
+   },
+   {
+    "action": "Save",
+    "expected": "Arabic mandatory-field message shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135055,
+  "title": "Verify that Button 1 Label (AR) at exactly 50 characters is accepted and 51 is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label AR = 50-char, then 51-char Arabic string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 50-char, Save",
+    "expected": "Accepted"
+   },
+   {
+    "action": "Enter 51-char, Save",
+    "expected": "Validation error, blocked"
+   }
+  ]
+ },
+ {
+  "id": 135056,
+  "title": "Verify that a whitespace-only Button 1 Label (AR) is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label AR = &quot;   &quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces only",
+    "expected": "Whitespace entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Arabic mandatory-field error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135057,
+  "title": "Verify that a valid Button 1 Link URL is saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Link = `https://qatarchamber.com/about-us`.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter URL",
+    "expected": "URL entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved; CTA navigates to this URL on frontend"
+   }
+  ]
+ },
+ {
+  "id": 135058,
+  "title": "Verify that saving with Button 1 Link empty is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Link field cleared.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Link",
+    "expected": "Link cleared"
+   },
+   {
+    "action": "Save",
+    "expected": "Button 1 Link is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135059,
+  "title": "Verify that an invalid URL format for Button 1 Link is rejected with the exact bilingual message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Link = &quot;not-a-url&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter not-a-url into Link",
+    "expected": "Invalid URL entered"
+   },
+   {
+    "action": "Save",
+    "expected": "EN Please enter a valid URL. shown"
+   },
+   {
+    "action": "Switch to Arabic, repeat",
+    "expected": "Arabic equivalent shown; save blocked both times"
+   }
+  ]
+ },
+ {
+  "id": 135060,
+  "title": "Verify that Button 1 Link at exactly 500 characters is accepted and 501 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Link = 500-char valid URL, then 501-char URL.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 500-char URL, Save",
+    "expected": "Accepted"
+   },
+   {
+    "action": "Enter 501-char URL, Save",
+    "expected": "Max-length error shown, blocked"
+   }
+  ]
+ },
+ {
+  "id": 135061,
+  "title": "Verify that a whitespace-only Button 1 Link is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Link = &quot;   &quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces only",
+    "expected": "Whitespace entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Button 1 Link is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135062,
+  "title": "Verify that a valid Button 2 Label (EN) within the 50-char limit is saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label EN = &quot;Our Services&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter label",
+    "expected": "Label entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved, displayed on second CTA"
+   }
+  ]
+ },
+ {
+  "id": 135063,
+  "title": "Verify that saving with Button 2 Label (EN) empty is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label EN cleared.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Label EN",
+    "expected": "Label cleared"
+   },
+   {
+    "action": "Save",
+    "expected": "Button 2 Label (EN) is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135064,
+  "title": "Verify that Button 2 Label (EN) at exactly 50 characters is accepted and 51 is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "50-char, then 51-char string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 50-char, Save",
+    "expected": "Accepted"
+   },
+   {
+    "action": "Enter 51-char, Save",
+    "expected": "Error, blocked"
+   }
+  ]
+ },
+ {
+  "id": 135065,
+  "title": "Verify that a whitespace-only Button 2 Label (EN) is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label EN = &quot;   &quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces only",
+    "expected": "Whitespace entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Mandatory-field error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135066,
+  "title": "Verify that a valid Button 2 Label (AR) within the 50-char limit is saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label AR = &quot;خدماتنا&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter label",
+    "expected": "Label entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved, displayed RTL"
+   }
+  ]
+ },
+ {
+  "id": 135067,
+  "title": "Verify that saving with Button 2 Label (AR) empty is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label AR cleared.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Label AR",
+    "expected": "Label cleared"
+   },
+   {
+    "action": "Save",
+    "expected": "Arabic mandatory-field message shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135068,
+  "title": "Verify that Button 2 Label (AR) at exactly 50 characters is accepted and 51 is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "50-char, then 51-char Arabic string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 50-char, Save",
+    "expected": "Accepted"
+   },
+   {
+    "action": "Enter 51-char, Save",
+    "expected": "Error, blocked"
+   }
+  ]
+ },
+ {
+  "id": 135069,
+  "title": "Verify that a whitespace-only Button 2 Label (AR) is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Label AR = &quot;   &quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces only",
+    "expected": "Whitespace entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Arabic mandatory-field error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135070,
+  "title": "Verify that a valid Button 2 Link URL is saved",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Link = `https://qatarchamber.com/our-services`.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter URL",
+    "expected": "URL entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved; CTA navigates correctly"
+   }
+  ]
+ },
+ {
+  "id": 135071,
+  "title": "Verify that saving with Button 2 Link empty is rejected",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Link cleared.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Link",
+    "expected": "Link cleared"
+   },
+   {
+    "action": "Save",
+    "expected": "Button 2 Link is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135072,
+  "title": "Verify that an invalid URL format for Button 2 Link is rejected with the exact bilingual message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Link = &quot;ftp:/badurl&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter invalid URL",
+    "expected": "Invalid URL entered"
+   },
+   {
+    "action": "Save (EN)",
+    "expected": "Please enter a valid URL. shown"
+   },
+   {
+    "action": "Switch to Arabic, repeat",
+    "expected": "Arabic equivalent shown; blocked both times"
+   }
+  ]
+ },
+ {
+  "id": 135073,
+  "title": "Verify that Button 2 Link at exactly 500 characters is accepted and 501 is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "500-char URL, then 501-char URL.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 500-char URL, Save",
+    "expected": "Accepted"
+   },
+   {
+    "action": "Enter 501-char URL, Save",
+    "expected": "Error, blocked"
+   }
+  ]
+ },
+ {
+  "id": 135074,
+  "title": "Verify that a whitespace-only Button 2 Link is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Link = &quot;   &quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter spaces only",
+    "expected": "Whitespace entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Button 2 Link is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135075,
+  "title": "Verify that a valid positive Display Order value is saved",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Display Order = 3.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 3 in Display Order",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved; slide positioned per order 3"
+   }
+  ]
+ },
+ {
+  "id": 135076,
+  "title": "Verify that saving with Display Order empty is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Order field cleared.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Clear Display Order",
+    "expected": "Field cleared"
+   },
+   {
+    "action": "Save",
+    "expected": "Display Order is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135077,
+  "title": "Verify that a negative or zero Display Order value is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Order = -1, then 0.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter -1, Save",
+    "expected": "Positive number required. error shown, blocked"
+   },
+   {
+    "action": "Enter 0, Save",
+    "expected": "Same error shown, blocked"
+   }
+  ]
+ },
+ {
+  "id": 135078,
+  "title": "Verify that setting a slide's Active Status to True is saved correctly",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "New slide, Active toggled true.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set Active Status = True",
+    "expected": "Toggle set"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved as True; reflected in slide list"
+   }
+  ]
+ },
+ {
+  "id": 135079,
+  "title": "Verify that setting a slide's Active Status to False is saved correctly",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Existing slide, Active toggled false.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set Active Status = False",
+    "expected": "Toggle set"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved as False; reflected in slide list"
+   }
+  ]
+ },
+ {
+  "id": 135080,
+  "title": "Verify that a valid Counter Title (EN) within the 30-char limit is saved",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title EN = &quot;Active Members&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter title",
+    "expected": "Title entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved and displayed on frontend counter"
+   }
+  ]
+ },
+ {
+  "id": 135081,
+  "title": "Verify that leaving Counter Title (EN) empty is accepted since the field is optional",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Counter Title EN and all counter fields left blank.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave all counter fields empty",
+    "expected": "Fields left empty"
+   },
+   {
+    "action": "Save slide",
+    "expected": "Slide saves successfully; no counter item created for this row"
+   }
+  ]
+ },
+ {
+  "id": 135082,
+  "title": "Verify that Counter Title (EN) exceeding 30 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title EN = 31-char string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 31 characters",
+    "expected": "Title entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Max-length error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135083,
+  "title": "Verify that a valid Counter Title (AR) within the 30-char limit is saved",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title AR = &quot;أعضاء نشطون&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter title",
+    "expected": "Title entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved, RTL display"
+   }
+  ]
+ },
+ {
+  "id": 135084,
+  "title": "Verify that leaving Counter Title (AR) empty is accepted since the field is optional",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Counter Title AR left blank.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave Counter Title AR empty",
+    "expected": "Field left empty"
+   },
+   {
+    "action": "Save",
+    "expected": "Slide saves successfully"
+   }
+  ]
+ },
+ {
+  "id": 135085,
+  "title": "Verify that Counter Title (AR) exceeding 30 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title AR = 31-char Arabic string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 31 characters",
+    "expected": "Title entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Max-length error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135086,
+  "title": "Verify that Counter Value is accepted when Counter Title is set and Value is valid",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Counter Title EN=&quot;Active Members&quot;, Value=&quot;50K+&quot; (4 chars).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set Title, enter Value 50K+",
+    "expected": "Fields entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved and displayed"
+   }
+  ]
+ },
+ {
+  "id": 135087,
+  "title": "Verify that Counter Value is required once Counter Title is set",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Counter Title EN=&quot;Active Members&quot; set, Value left empty.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set Title, leave Value empty",
+    "expected": "Title set, value empty"
+   },
+   {
+    "action": "Save",
+    "expected": "Counter Value is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135088,
+  "title": "Verify that Counter Value exceeding 10 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Value = &quot;123456789012&quot; (12 chars), Title set.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enter 12-char value",
+    "expected": "Value entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Max-length error shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135089,
+  "title": "Verify that leaving Counter Title and Counter Value both empty saves successfully",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Counter Title and Value both left blank.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave both empty",
+    "expected": "Fields left empty"
+   },
+   {
+    "action": "Save slide",
+    "expected": "Slide saves successfully; no counter validation triggered"
+   }
+  ]
+ },
+ {
+  "id": 135090,
+  "title": "Verify that uploading a valid Counter Icon is accepted",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "`members-icon.svg`, 50KB.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Upload icon",
+    "expected": "Icon uploaded"
+   },
+   {
+    "action": "Save",
+    "expected": "Accepted, preview shown"
+   }
+  ]
+ },
+ {
+  "id": 135091,
+  "title": "Verify that uploading a Counter Icon in an unsupported format is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "`icon.bmp`.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt upload of icon.bmp",
+    "expected": "Rejected; format-validation error shown"
+   }
+  ]
+ },
+ {
+  "id": 135092,
+  "title": "Verify that uploading a Counter Icon exceeding 2MB is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "`icon-large.png`, 2.5MB.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Attempt upload of icon-large.png (2.5MB)",
+    "expected": "Rejected; max-size error shown"
+   }
+  ]
+ },
+ {
+  "id": 135093,
+  "title": "Verify that leaving Counter Icon empty is accepted since the field is optional",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Icon left unattached, other counter fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave Icon empty",
+    "expected": "Field left empty"
+   },
+   {
+    "action": "Save",
+    "expected": "Counter saves; frontend renders without an icon or with default placeholder"
+   }
+  ]
+ },
+ {
+  "id": 135094,
+  "title": "Verify that Counter Display Order is accepted when Counter Title is set and Order is valid",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title set, Order = 1.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set Title, enter Order 1",
+    "expected": "Fields entered"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved; counter positioned first"
+   }
+  ]
+ },
+ {
+  "id": 135095,
+  "title": "Verify that Counter Display Order is required once Counter Title is set",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title set, Order left empty.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set Title, leave Order empty",
+    "expected": "Title set, order empty"
+   },
+   {
+    "action": "Save",
+    "expected": "Counter Display Order is required. shown; save blocked"
+   }
+  ]
+ },
+ {
+  "id": 135096,
+  "title": "Verify that leaving Counter Title and Counter Display Order both empty saves successfully",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Title and Order both blank.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Leave both empty",
+    "expected": "Fields left empty"
+   },
+   {
+    "action": "Save slide",
+    "expected": "Slide saves successfully"
+   }
+  ]
+ },
+ {
+  "id": 135097,
+  "title": "Verify that setting a Counter's Active Status to True is saved correctly",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Counter Active toggled true.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set Active = True",
+    "expected": "Toggle set"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved as True"
+   }
+  ]
+ },
+ {
+  "id": 135098,
+  "title": "Verify that setting a Counter's Active Status to False is saved correctly",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Counter Active toggled false.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set Active = False",
+    "expected": "Toggle set"
+   },
+   {
+    "action": "Save",
+    "expected": "Saved as False"
+   }
+  ]
+ },
+ {
+  "id": 135099,
+  "title": "Verify that with exactly one active published slide the slider displays statically without auto-play, arrows, or dot indicators",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Edge",
+   "GLOBAL",
+   "Manual",
+   "Regression",
+   "Web"
+  ],
+  "description": "Only 1 slide is active+published.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page",
+    "expected": "Single slide displays"
+   },
+   {
+    "action": "Wait through a full auto-play interval",
+    "expected": "No transition occurs"
+   },
+   {
+    "action": "Observe UI",
+    "expected": "No next/previous arrows and no dot/pill indicator rendered"
+   }
+  ]
+ },
+ {
+  "id": 135100,
+  "title": "Verify that a CTA button with no URL configured is not rendered on the frontend",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Edge",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Slide's Button 2 Link left empty at the data layer.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page for this slide",
+    "expected": "Button 2 does not render; layout does not show an empty/broken button slot; Button 1 (if configured) still renders normally"
+   }
+  ]
+ },
+ {
+  "id": 135101,
+  "title": "Verify that a background image load failure displays a fallback background color instead of a broken image",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Edge",
+   "GLOBAL",
+   "Manual",
+   "Regression",
+   "Web"
+  ],
+  "description": "Slide's image asset URL is broken/unreachable.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home Page for the affected slide",
+    "expected": "Slide renders with a solid fallback background color; no broken-image icon shown; headline/subtitle/CTAs still readable over the fallback color"
+   }
+  ]
+ },
+ {
+  "id": 135102,
+  "title": "Verify that Home Page behaves correctly when zero slides are active and published",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Edge",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "All Hero Banner slides are Draft or Unpublished/Inactive.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Ensure no slide is Active+Published",
+    "expected": "Preconditions verified"
+   },
+   {
+    "action": "Load Home Page",
+    "expected": "No slide/broken-layout renders in the banner section (verify against actual system behavior; flag as defect if a blank/broken region appears)"
+   }
+  ]
+ }
+]

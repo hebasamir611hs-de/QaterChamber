@@ -204,7 +204,14 @@ class PublicationsPage(BasePage):
         return [t.strip() for t in self.page.locator(self.CRUMBS).inner_text().split("\n") if t.strip()]
 
     def click_crumb_home(self) -> None:
-        self.page.locator(self.CRUMB_HOME).click()
+        # The server renders href="#"; the page script sets the real target
+        # ("/") after mount (read live 2026-10-18) — click only once it has.
+        self.page.wait_for_function(
+            "s => { const a = document.querySelector(s); return a && a.getAttribute('href') && a.getAttribute('href') !== '#'; }",
+            arg=self.CRUMB_HOME, timeout=15000,
+        )
+        with self.page.expect_navigation(wait_until="domcontentloaded", timeout=30000):
+            self.page.locator(self.CRUMB_HOME).click()
 
     def is_crumb_current_a_link(self) -> bool:
         """CONFIRMED LIVE this element is a plain <span> — see module

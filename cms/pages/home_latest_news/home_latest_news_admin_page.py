@@ -130,10 +130,32 @@ class HomeLatestNewsAdminPage(BasePage):
         except Exception:  # noqa: BLE001
             return False
 
+    # Bug 149489 fix (read live 2026-10-18): "Section Description" EN/AR are
+    # now CKEditor Rich Text fields (object field `sectionBody`); the old plain
+    # textareas are relabelled "Section Description (plain, legacy)". These
+    # two labels are driven through the CKEditor API instead of a textbox.
+    RICH_TEXT_KEYS = {S_DESC: "ObjectField_sectionBody", S_DESC_AR: "qc-ar-sectionBody"}
+    _CKE = "k => CKEDITOR.instances[Object.keys(CKEDITOR.instances).find(n => n.endsWith(k))]"
+
+    def _wait_editor(self, key: str) -> None:
+        self.page.wait_for_function(
+            f"k => window.CKEDITOR && Object.keys(CKEDITOR.instances).some(n => n.endsWith(k)) && ({self._CKE})(k).status === 'ready'",
+            arg=key, timeout=20000,
+        )
+
     def fill(self, label: str, value: str) -> None:
+        key = self.RICH_TEXT_KEYS.get(label)
+        if key:
+            self._wait_editor(key)
+            self.page.evaluate(f"([k, v]) => ({self._CKE})(k).setData(v ? '<p>' + v + '</p>' : '')", [key, value])
+            return
         self.box(label).fill(value)
 
     def value(self, label: str) -> str:
+        key = self.RICH_TEXT_KEYS.get(label)
+        if key:
+            self._wait_editor(key)
+            return self.page.evaluate(f"k => ({self._CKE})(k).editable().getText().trim()", key)
         return self.box(label).input_value()
 
     DATE_PLACEHOLDER_NAME = "dd/mm/yyyy"
@@ -310,6 +332,15 @@ class HomeLatestNewsAdminPage(BasePage):
         own Entry code and returns the one whose `label` reads back `value`."""
         authoring.open_entries_list()
         rows = self.page.locator(authoring.ENTRIES_TABLE_ROW)
+        # Narrow with the list's own search first (2026-10-18): the section
+        # list holds many QCTEST rows, and opening each one blew the 480 s
+        # test budget. The search only narrows; every candidate is still
+        # verified by reading `label` back below.
+        search = self.page.locator('input[placeholder^="Search entries"]').first
+        if search.count():
+            search.fill(value)
+            search.press("Enter")
+            self.page.wait_for_timeout(2500)
         codes = [rows.nth(i).locator("td").nth(0).inner_text().strip() for i in range(rows.count())]
         for code in codes:
             if not code or code == LIVE_SECTION_CODE or code in LIVE_NEWS_CODES:

@@ -1,0 +1,2276 @@
+[
+ {
+  "id": 131133,
+  "title": "Verify that the Social Media Icons section renders directly after the Latest News section on the Home page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "Regression",
+   "SocialMedia",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Home page is published with ≥1 active social icon configured. Verifies the section's position relative to Latest News.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home page (EN).",
+    "expected": "Home page loads successfully."
+   },
+   {
+    "action": "Scroll past the Latest News grid.",
+    "expected": "Latest News grid is fully visible."
+   },
+   {
+    "action": "Observe the next section.",
+    "expected": "Social Media Icons section appears immediately below Latest News with no other section in between."
+   }
+  ]
+ },
+ {
+  "id": 131134,
+  "title": "Verify that the Social Media Icons section container matches the Figma-verified desktop style",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Desktop viewport (≥1280px). Verifies container padding, gap, gradient background, gradient border, and corner radius against the verified Figma tokens.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home page on desktop viewport.",
+    "expected": "Section container is rendered."
+   },
+   {
+    "action": "Inspect the Social Media Icons section container.",
+    "expected": "Container is inspectable via devtools."
+   },
+   {
+    "action": "Measure padding, gap, background, border, and corner radius.",
+    "expected": "Padding = 20px 32px; gap = 24px; background gradient `#FBF6F8`→`#F6F6F6`; 1px gradient border `#E3C5CB`→`#DEDEDD`; corner radius = 12px — matches Figma exactly."
+   }
+  ]
+ },
+ {
+  "id": 131135,
+  "title": "Verify that the section heading \"Find us on social media\" matches the Figma-verified desktop typography",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Desktop viewport. Verifies font, weight, size, line-height, and color of the heading.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home page on desktop viewport.",
+    "expected": "Heading &quot;Find us on social media&quot; is visible."
+   },
+   {
+    "action": "Locate the section heading text.",
+    "expected": "Element is inspectable."
+   },
+   {
+    "action": "Inspect computed font styles.",
+    "expected": "Font = Cairo Bold 700, size 24px, line-height 32px, color `#911731`."
+   }
+  ]
+ },
+ {
+  "id": 131136,
+  "title": "Verify that the section subtext matches the Figma-verified desktop typography",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Desktop viewport. Verifies font, weight, size, line-height, and color of &quot;Stay connected through our official social media channels&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home page on desktop viewport.",
+    "expected": "Subtext is visible below the heading."
+   },
+   {
+    "action": "Locate the subtext.",
+    "expected": "Element is inspectable."
+   },
+   {
+    "action": "Inspect computed font styles.",
+    "expected": "Font = Cairo Regular 400, size 18px, line-height 28px, color `#6C6C6B`."
+   }
+  ]
+ },
+ {
+  "id": 131137,
+  "title": "Verify that the section heading matches the Figma-verified mobile typography",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Mobile viewport (375px). Verifies heading font, weight, size, line-height, and color.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home page on a 375px-wide mobile viewport.",
+    "expected": "Heading visible."
+   },
+   {
+    "action": "Locate the section heading.",
+    "expected": "Element inspectable."
+   },
+   {
+    "action": "Inspect computed font styles.",
+    "expected": "Font = Cairo Bold 700, size 20px, line-height 30px, color `#911731`."
+   }
+  ]
+ },
+ {
+  "id": 131138,
+  "title": "Verify that the section subtext matches the Figma-verified mobile typography",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Mobile viewport (375px). Verifies subtext font, weight, size, line-height, and color.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home page on a 375px-wide mobile viewport.",
+    "expected": "Subtext visible."
+   },
+   {
+    "action": "Locate the subtext.",
+    "expected": "Element inspectable."
+   },
+   {
+    "action": "Inspect computed font styles.",
+    "expected": "Font = Cairo Regular 400, size 14px, line-height 22px, color `#6C6C6B`."
+   }
+  ]
+ },
+ {
+  "id": 131139,
+  "title": "Verify that the icon row on desktop is right-aligned with no wrap per the Figma spec",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Desktop viewport with 8 active icons configured. Verifies flex layout: justify-content flex-end, gap 12px, no wrap.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home page on desktop viewport with 8 active social icons configured.",
+    "expected": "All 8 icons render in a single row."
+   },
+   {
+    "action": "Inspect the icon row container.",
+    "expected": "Row is inspectable."
+   },
+   {
+    "action": "Measure alignment, gap, and wrap behavior.",
+    "expected": "`justify-content: flex-end`, gap = 12px, `flex-wrap: nowrap` — icons are right-aligned in the strip."
+   }
+  ]
+ },
+ {
+  "id": 131140,
+  "title": "Verify that the icon row on mobile is center-aligned and wraps to multiple lines per the Figma spec",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Mobile viewport (375px) with 8 active icons configured. Verifies flex layout: justify-content center, wrap true, gap 12px.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Home page on a 375px-wide mobile viewport with 8 active social icons configured.",
+    "expected": "Icons render center-aligned, wrapping onto multiple lines as needed."
+   },
+   {
+    "action": "Inspect the icon row container.",
+    "expected": "Row is inspectable."
+   },
+   {
+    "action": "Measure alignment, gap, and wrap behavior.",
+    "expected": "`justify-content: center`, gap = 12px, `flex-wrap: wrap` — no icon is clipped or overlapping."
+   }
+  ]
+ },
+ {
+  "id": 131141,
+  "title": "Verify that all active, published social icons are displayed in their configured Display Order",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "SocialMedia",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "5 icons configured: Facebook(1), X/Twitter(2), LinkedIn(3), Instagram(4), YouTube(5) — all Published and Active=True.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Configure and publish 5 icons with Display Order 1–5 as above.",
+    "expected": "All 5 entries save successfully."
+   },
+   {
+    "action": "Load the Home page.",
+    "expected": "Page loads with the section visible."
+   },
+   {
+    "action": "Read the left-to-right (EN) order of rendered icons.",
+    "expected": "Icons render in order Facebook, X/Twitter, LinkedIn, Instagram, YouTube."
+   }
+  ]
+ },
+ {
+  "id": 131142,
+  "title": "Verify that an icon with Active Status = False is not displayed on the frontend",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Snapchat icon is Published but Active Status = False; 4 other icons are Published + Active=True.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Publish Snapchat icon with Active Status = False alongside 4 active icons.",
+    "expected": "Snapchat entry saves as Published/Inactive."
+   },
+   {
+    "action": "Load the Home page.",
+    "expected": "Page loads."
+   },
+   {
+    "action": "Inspect the rendered icon row.",
+    "expected": "Only the 4 active icons render; Snapchat does not appear."
+   }
+  ]
+ },
+ {
+  "id": 131143,
+  "title": "Verify that clicking a social media icon opens the configured official URL in a new browser tab",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "Regression",
+   "SocialMedia",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "LinkedIn icon configured with URL `https://www.linkedin.com/company/qatar-chamber`. Verifies click behavior only (QC-side), not the destination content.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home page.",
+    "expected": "Section renders with the LinkedIn icon visible."
+   },
+   {
+    "action": "Click the LinkedIn icon.",
+    "expected": "Icon is clickable."
+   },
+   {
+    "action": "Observe the browser tab behavior and the target URL.",
+    "expected": "A new browser tab opens navigating to `https://www.linkedin.com/company/qatar-chamber`; the original Home page tab remains open and unchanged."
+   }
+  ]
+ },
+ {
+  "id": 131144,
+  "title": "Verify that the Social Media Icons section renders correctly in Arabic (RTL)",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Home page loaded in Arabic locale. Verifies text direction and icon-row mirroring.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Switch site language to Arabic.",
+    "expected": "Site renders in Arabic."
+   },
+   {
+    "action": "Load the Home page and scroll to the Social Media Icons section.",
+    "expected": "Section is visible with Arabic heading/subtext."
+   },
+   {
+    "action": "Inspect text alignment and icon row direction.",
+    "expected": "Heading and subtext are right-aligned; icon row direction mirrors (desktop row anchors to the left in RTL, i.e. logical `flex-end` per RTL flow); no clipped or overlapping Arabic text."
+   }
+  ]
+ },
+ {
+  "id": 131145,
+  "title": "Verify that the Social Media Icons section renders correctly in English (LTR)",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Home page loaded in English locale (default/baseline direction).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Switch site language to English.",
+    "expected": "Site renders in English."
+   },
+   {
+    "action": "Load the Home page and scroll to the Social Media Icons section.",
+    "expected": "Section is visible with English heading/subtext."
+   },
+   {
+    "action": "Inspect text alignment and icon row direction.",
+    "expected": "Heading and subtext are left-aligned; icon row is right-anchored per the desktop spec; no clipped or overlapping text."
+   }
+  ]
+ },
+ {
+  "id": 131146,
+  "title": "Verify that the icon displayed on the frontend matches the icon image uploaded in the CMS",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "GLOBAL",
+   "Manual",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Facebook icon uploaded in CMS with a specific brand-blue &quot;f&quot; logo asset. Verifies visual fidelity between CMS asset and frontend render.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, upload the QC-approved Facebook icon asset and publish.",
+    "expected": "Icon uploads and saves successfully."
+   },
+   {
+    "action": "Load the Home page.",
+    "expected": "Page loads with the section visible."
+   },
+   {
+    "action": "Compare the rendered Facebook icon to the uploaded source asset.",
+    "expected": "Rendered icon is pixel-identical (same asset, no distortion/cropping/recoloring) to the uploaded source."
+   }
+  ]
+ },
+ {
+  "id": 131147,
+  "title": "Verify that hovering over a social icon on desktop shows a visible hover/focus state",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "SocialMedia",
+   "UI",
+   "Web"
+  ],
+  "description": "Desktop viewport, mouse pointer. Verifies an interaction affordance exists per QC brand theme.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home page on desktop.",
+    "expected": "Section renders."
+   },
+   {
+    "action": "Hover the mouse pointer over any active social icon.",
+    "expected": "Cursor changes to pointer over the icon."
+   },
+   {
+    "action": "Observe the icon's visual state.",
+    "expected": "Icon shows a distinct hover state (e.g., color/opacity/scale change) consistent with QC's brand theme."
+   }
+  ]
+ },
+ {
+  "id": 131148,
+  "title": "Verify that the CMS live preview of the Social Media Icons section matches the published Home page render",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Control_Panel",
+   "GLOBAL",
+   "Manual",
+   "SocialMedia",
+   "UI"
+  ],
+  "description": "Control_Panel. Editor previews the section before publishing. Verifies preview-to-live visual parity.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS as Site Content Editor.",
+    "expected": "CMS opens the Home Page Social Media Icons editor."
+   },
+   {
+    "action": "Configure a new icon entry and click Preview.",
+    "expected": "Preview renders the section exactly as it will appear live (icon, order, styling)."
+   },
+   {
+    "action": "Publish the entry and load the live Home page; compare to the preview.",
+    "expected": "Live Home page render matches the preview with no visual discrepancy."
+   }
+  ]
+ },
+ {
+  "id": 131149,
+  "title": "Verify that the Social Media Icons section renders correctly in Chrome (latest) on desktop",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "GLOBAL",
+   "SocialMedia",
+   "Web"
+  ],
+  "description": "Standard modern-browser check on the primary supported browser.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Home page in the latest Chrome release on desktop.",
+    "expected": "Page loads without errors."
+   },
+   {
+    "action": "Scroll to the Social Media Icons section.",
+    "expected": "Section renders per the desktop spec."
+   },
+   {
+    "action": "Inspect layout and interactivity.",
+    "expected": "Icons are clickable and open new tabs as expected."
+   }
+  ]
+ },
+ {
+  "id": 131150,
+  "title": "Verify that the Social Media Icons section renders correctly in Safari on desktop",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "GLOBAL",
+   "SocialMedia",
+   "Web"
+  ],
+  "description": "Cross-browser check per project's &quot;standard modern browsers&quot; requirement.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Home page in the latest Safari release on desktop.",
+    "expected": "Page loads without errors."
+   },
+   {
+    "action": "Scroll to the Social Media Icons section.",
+    "expected": "Section renders per the desktop spec, no font-fallback or gradient rendering issues."
+   },
+   {
+    "action": "Inspect layout and interactivity.",
+    "expected": "Icons are clickable and open new tabs as expected."
+   }
+  ]
+ },
+ {
+  "id": 131151,
+  "title": "Verify that the Social Media Icons section renders correctly on a tablet-width viewport",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "GLOBAL",
+   "SocialMedia",
+   "Web"
+  ],
+  "description": "768px tablet viewport. No explicit Figma tablet frame exists; assumption is the section follows the mobile (wrap/center) pattern at this breakpoint — flagged in Assumptions.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home page at a 768px-wide viewport.",
+    "expected": "Page loads without errors."
+   },
+   {
+    "action": "Scroll to the Social Media Icons section.",
+    "expected": "Section renders without overlap or clipping."
+   },
+   {
+    "action": "Inspect icon row alignment and wrap behavior.",
+    "expected": "Icon row follows the mobile center/wrap pattern (or a documented intermediate pattern once confirmed)."
+   }
+  ]
+ },
+ {
+  "id": 131152,
+  "title": "Verify that the Social Media Icons section renders correctly under the site's dark mode variant",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "GLOBAL",
+   "SocialMedia",
+   "Web"
+  ],
+  "description": "Figma provides a confirmed dark-mode frame for this section. Verifies the live site honors it if a dark-mode toggle exists — flagged assumption in the Assumptions Note.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home page.",
+    "expected": "Page loads."
+   },
+   {
+    "action": "Enable dark mode (if a site-wide toggle exists).",
+    "expected": "Dark mode activates."
+   },
+   {
+    "action": "Scroll to the Social Media Icons section and inspect colors.",
+    "expected": "Section background, text, and icon colors switch to the Figma-verified dark-mode tokens with no contrast/legibility issues."
+   }
+  ]
+ },
+ {
+  "id": 131153,
+  "title": "Verify that a Site Content Editor can access and publish the Social Media Icons section directly",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "Regression",
+   "SocialMedia",
+   "UAT"
+  ],
+  "description": "User logged in with Site Content Editor role. Verifies full direct-publish rights.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS as Site Content Editor.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Navigate to Home Page → Social Media Icons Section.",
+    "expected": "Section is accessible; add/edit controls are enabled."
+   },
+   {
+    "action": "Configure a new icon entry and click Publish.",
+    "expected": "Entry publishes immediately with no additional approval step required."
+   }
+  ]
+ },
+ {
+  "id": 131154,
+  "title": "Verify that a Site Content Author can access the section but cannot publish directly",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "User logged in with Site Content Author role. Verifies the standard Draft→Pending Review limitation applies (no explicit Editor-equivalent override stated in this PBI).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS as Site Content Author.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Navigate to Home Page → Social Media Icons Section.",
+    "expected": "Section is accessible; add/edit controls are enabled."
+   },
+   {
+    "action": "Configure a new icon entry and attempt to Publish.",
+    "expected": "Only &quot;Submit for Review&quot; is available/effective; direct Publish is not permitted — entry moves to Pending Review, not Published."
+   }
+  ]
+ },
+ {
+  "id": 131155,
+  "title": "Verify that a user without Site Content Editor/Author role is denied access to the Social Media Icons section",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "Regression",
+   "SocialMedia"
+  ],
+  "description": "User logged in with an unrelated role (e.g., Event Organizer). Verifies role-gated access.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS with a role that has no assignment to the Home Page Social Media Icons section.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Attempt to navigate to Home Page → Social Media Icons Section.",
+    "expected": "Navigation attempt is blocked."
+   },
+   {
+    "action": "Observe the response.",
+    "expected": "&quot;Access Denied. You do not have permission to perform this action.&quot; (EN) / &quot;تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.&quot; (AR) is shown; no section content is exposed."
+   }
+  ]
+ },
+ {
+  "id": 131156,
+  "title": "Verify that an unauthenticated user forced-browsing directly to the CMS Social Media Icons management URL is redirected to login",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "No active CMS session. Verifies deep-link protection.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Ensure no active CMS session (log out / clear cookies).",
+    "expected": "Session confirmed inactive."
+   },
+   {
+    "action": "Enter the direct URL to the Home Page Social Media Icons CMS management screen.",
+    "expected": "URL is requested directly."
+   },
+   {
+    "action": "Observe the resulting page.",
+    "expected": "User is redirected to the CMS login page; the management screen is never rendered."
+   }
+  ]
+ },
+ {
+  "id": 131157,
+  "title": "Verify that an Editor's expired session during editing prompts re-authentication without silently discarding in-progress work",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Editor session times out while an icon entry form is open with unsaved changes.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Editor and open the Add Icon form.",
+    "expected": "Form opens with empty/default fields."
+   },
+   {
+    "action": "Enter field values and wait for the session to expire (per configured timeout).",
+    "expected": "Session expires per the configured timeout."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "User is prompted to re-authenticate; the save action does not silently succeed or silently fail with data loss unexplained."
+   }
+  ]
+ },
+ {
+  "id": 131158,
+  "title": "Verify that a public visitor can view and follow Qatar Chamber's social channels from the Home page end-to-end",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "SocialMedia",
+   "UAT",
+   "Web"
+  ],
+  "description": "At least 6 icons configured, Published + Active=True. Full visitor journey from page load to reaching the external channel.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load the Home page as an unauthenticated visitor.",
+    "expected": "Home page loads successfully."
+   },
+   {
+    "action": "Scroll past Latest News to the Social Media Icons section.",
+    "expected": "Section is visible with all 6 active icons rendered."
+   },
+   {
+    "action": "Click one of the displayed icons (e.g., Instagram).",
+    "expected": "A new browser tab opens."
+   },
+   {
+    "action": "Observe the new tab.",
+    "expected": "The new tab navigates to the exact configured Instagram URL; the original Home page tab is unaffected."
+   }
+  ]
+ },
+ {
+  "id": 131159,
+  "title": "Verify that an Editor can add a new social icon and see it appear on the live Home page after publishing",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "SocialMedia",
+   "UAT"
+  ],
+  "description": "Editor adds a new &quot;YouTube&quot; entry (URL `https://youtube.com/QatarChamber`, Display Order 6, Active=True) end-to-end.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS as Site Content Editor.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Navigate to Home Page → Social Media Icons Section and click Add.",
+    "expected": "Add form opens."
+   },
+   {
+    "action": "Fill Platform Name = &quot;YouTube&quot;, upload icon, Platform URL = `https://youtube.com/QatarChamber`, Display Order = 6, Active = True.",
+    "expected": "All fields accept the entered values."
+   },
+   {
+    "action": "Click Publish.",
+    "expected": "Liferay success toast is shown (EN: standard publish confirmation / AR equivalent); entry status becomes Published."
+   },
+   {
+    "action": "Load the live Home page (after standard cache refresh).",
+    "expected": "YouTube icon appears in the Home page section at position 6."
+   }
+  ]
+ },
+ {
+  "id": 131160,
+  "title": "Verify that an Editor can edit an existing icon's image, URL, and order and see the change reflected live",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "SocialMedia"
+  ],
+  "description": "Existing &quot;X/Twitter&quot; entry is edited: new icon image, new URL `https://x.com/QatarChamberQA`, Display Order changed from 2 to 1.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS as Site Content Editor.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Open the existing &quot;X/Twitter&quot; entry for edit.",
+    "expected": "Edit form opens pre-filled with current values."
+   },
+   {
+    "action": "Replace the icon image, change Platform URL to `https://x.com/QatarChamberQA`, change Display Order to 1.",
+    "expected": "New values are accepted."
+   },
+   {
+    "action": "Click Publish.",
+    "expected": "Success toast shown; entry re-published with updated values."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "X/Twitter icon renders at the new first position, uses the new image, and links to the new URL."
+   }
+  ]
+ },
+ {
+  "id": 131161,
+  "title": "Verify that toggling an icon's Active Status to False removes it from the live Home page after publishing",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "SocialMedia"
+  ],
+  "description": "Existing &quot;Snapchat&quot; entry, currently Published + Active=True, is toggled to Active=False.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS as Site Content Editor.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Open the existing &quot;Snapchat&quot; entry.",
+    "expected": "Edit form opens showing Active = True."
+   },
+   {
+    "action": "Toggle Active Status to False and click Publish.",
+    "expected": "Success toast shown; entry saved with Active = False."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "Snapchat icon no longer appears in the Home page section; other active icons remain."
+   }
+  ]
+ },
+ {
+  "id": 131162,
+  "title": "Verify that toggling a previously inactive icon's Active Status back to True restores it on the live Home page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Existing &quot;Snapchat&quot; entry, Published + Active=False, is toggled back to Active=True.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS as Site Content Editor.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Open the existing &quot;Snapchat&quot; entry (Active = False).",
+    "expected": "Edit form opens showing Active = False."
+   },
+   {
+    "action": "Toggle Active Status to True and click Publish.",
+    "expected": "Success toast shown; entry saved with Active = True."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "Snapchat icon reappears in the Home page section at its configured Display Order."
+   }
+  ]
+ },
+ {
+  "id": 131163,
+  "title": "Verify that an Author-drafted icon becomes live only after Editor approval and publish",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "SocialMedia",
+   "UAT"
+  ],
+  "description": "Author drafts a new &quot;Flickr&quot; entry, submits for review; Editor approves and publishes.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in as Site Content Author; add a &quot;Flickr&quot; entry with all required fields and click &quot;Submit for Review&quot;.",
+    "expected": "Entry saves with status Pending Review; no toast implying publish."
+   },
+   {
+    "action": "Log out; log in as Site Content Editor.",
+    "expected": "Editor login succeeds."
+   },
+   {
+    "action": "Locate the Pending Review &quot;Flickr&quot; entry and click Approve, then Publish.",
+    "expected": "Entry moves to Approved then Published with a success toast (EN+AR)."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "Flickr icon now appears on the live Home page."
+   }
+  ]
+ },
+ {
+  "id": 131164,
+  "title": "Verify that an Editor can unpublish an icon and it is removed from the live page while retained in the CMS",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Existing Published &quot;LinkedIn&quot; entry is unpublished (not deleted).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS as Site Content Editor.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Open the existing &quot;LinkedIn&quot; entry.",
+    "expected": "Entry shows status Published."
+   },
+   {
+    "action": "Click Unpublish.",
+    "expected": "Success toast shown; status changes to Unpublished."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "LinkedIn icon no longer appears live."
+   },
+   {
+    "action": "Return to CMS and locate the entry.",
+    "expected": "Entry still exists in the CMS list with status Unpublished (record retained, not deleted)."
+   }
+  ]
+ },
+ {
+  "id": 131165,
+  "title": "Verify that the Social Media Icons section is hidden entirely from the Home page when all configured icons are inactive",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "SocialMedia",
+   "Web"
+  ],
+  "description": "All existing icon entries are set to Active=False (or none are Published+Active). Explicit AC from the PBI's Edge note.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS as Site Content Editor.",
+    "expected": "Login succeeds."
+   },
+   {
+    "action": "Set every existing icon entry's Active Status to False (or Unpublish all) and publish each change.",
+    "expected": "All entries save with no icon both Published and Active."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "The entire Social Media Icons section (heading, subtext, and icon row) is absent from the Home page — not an empty container."
+   }
+  ]
+ },
+ {
+  "id": 131166,
+  "title": "Verify that a Social Media Icons section load failure does not affect the rest of the Home page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "SocialMedia",
+   "Web"
+  ],
+  "description": "Simulated section-level rendering fault (e.g., malformed icon data or a section fragment error). Verifies fault isolation per the PBI's negative scenario.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Introduce a condition that causes the Social Media Icons section fragment to fail rendering (e.g., corrupt/orphaned icon reference).",
+    "expected": "Faulty condition is in place."
+   },
+   {
+    "action": "Load the Home page.",
+    "expected": "Home page loads; the Social Media Icons section is empty/absent (fails gracefully, no page-wide error)."
+   },
+   {
+    "action": "Interact with other Home page sections (e.g., Latest News, header navigation).",
+    "expected": "All other Home page sections render and function normally."
+   }
+  ]
+ },
+ {
+  "id": 131167,
+  "title": "Verify that a CMS user without permission cannot persist changes to a social icon entry even via a direct action",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "SocialMedia"
+  ],
+  "description": "End-to-end permission enforcement check — complements Auth-TC-023 by confirming the backend blocks the write, not just the page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to CMS with a role lacking Social Media Icons permissions.",
+    "expected": "Login succeeds with the restricted role."
+   },
+   {
+    "action": "Attempt to trigger a save/publish action on an icon entry (e.g., via a direct API call or browser dev tools bypassing the hidden UI).",
+    "expected": "The action is rejected with &quot;Access Denied. You do not have permission to perform this action.&quot; (EN) / AR equivalent."
+   },
+   {
+    "action": "Verify the entry's stored state afterward.",
+    "expected": "The icon entry's stored data is unchanged from before the attempt."
+   }
+  ]
+ },
+ {
+  "id": 131168,
+  "title": "Verify that a valid English Platform Name saves correctly",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform Name (EN) = &quot;Facebook&quot; (8 chars, within 50-char limit).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form in CMS.",
+    "expected": "Form opens with empty Platform Name field."
+   },
+   {
+    "action": "Enter Platform Name (EN) = &quot;Facebook&quot;.",
+    "expected": "Value &quot;Facebook&quot; is entered."
+   },
+   {
+    "action": "Complete remaining mandatory fields and click Save.",
+    "expected": "Entry saves successfully with Platform Name (EN) = &quot;Facebook&quot;."
+   }
+  ]
+ },
+ {
+  "id": 131169,
+  "title": "Verify that a valid Arabic Platform Name saves correctly",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform Name (AR) = &quot;فيسبوك&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form in CMS, switch to Arabic language tab.",
+    "expected": "Arabic field is empty and editable."
+   },
+   {
+    "action": "Enter Platform Name (AR) = &quot;فيسبوك&quot;.",
+    "expected": "Value &quot;فيسبوك&quot; is entered and renders RTL."
+   },
+   {
+    "action": "Complete remaining mandatory fields and click Save.",
+    "expected": "Entry saves successfully with Platform Name (AR) = &quot;فيسبوك&quot;."
+   }
+  ]
+ },
+ {
+  "id": 131170,
+  "title": "Verify that leaving the English Platform Name empty blocks save with a mandatory-field error",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform Name (EN) left blank; all other fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Leave Platform Name (EN) empty; complete all other fields.",
+    "expected": "Platform Name (EN) remains empty."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Save is blocked; error &quot;Platform Name is required.&quot; is shown; no entry is created."
+   }
+  ]
+ },
+ {
+  "id": 131171,
+  "title": "Verify that leaving the Arabic Platform Name empty blocks save with a mandatory-field error",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform Name (AR) left blank; all other fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form, switch to Arabic tab.",
+    "expected": "Arabic tab is empty."
+   },
+   {
+    "action": "Leave Platform Name (AR) empty; complete all other fields.",
+    "expected": "Field remains empty."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Save is blocked; error &quot;اسم المنصة مطلوب.&quot; is shown; no entry is created."
+   }
+  ]
+ },
+ {
+  "id": 131172,
+  "title": "Verify that a Platform Name exceeding 50 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform Name (EN) = a 51-character string.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Enter a 51-character Platform Name (EN).",
+    "expected": "Field accepts input up to the UI's max-length behavior."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Save is blocked (or input is capped at 50 chars) with a max-length validation message; entry is not saved with 51 characters."
+   }
+  ]
+ },
+ {
+  "id": 131173,
+  "title": "Verify that special/script-injection characters entered in Platform Name are safely handled",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform Name (EN) = ``.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Enter Platform Name (EN) = ``.",
+    "expected": "Value is entered as text."
+   },
+   {
+    "action": "Click Save and load the Home page.",
+    "expected": "Save either rejects the value or stores/renders it as escaped plain text; no script executes on the CMS or the live Home page."
+   }
+  ]
+ },
+ {
+  "id": 131174,
+  "title": "Verify that clicking Cancel on the icon form discards entered Platform Name changes",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Editing existing &quot;Instagram&quot; entry, Platform Name changed but not saved.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open existing &quot;Instagram&quot; entry for edit.",
+    "expected": "Edit form opens with Platform Name = &quot;Instagram&quot;."
+   },
+   {
+    "action": "Change Platform Name to &quot;InstaQC&quot;.",
+    "expected": "Field shows &quot;InstaQC&quot;."
+   },
+   {
+    "action": "Click Cancel.",
+    "expected": "Form closes without saving."
+   },
+   {
+    "action": "Reopen the entry.",
+    "expected": "Platform Name is still &quot;Instagram&quot; — change was discarded."
+   }
+  ]
+ },
+ {
+  "id": 131175,
+  "title": "Verify that a saved Platform Name persists after reload",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform Name (EN) = &quot;YouTube&quot; saved, then CMS page reloaded.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save an icon entry with Platform Name (EN) = &quot;YouTube&quot;.",
+    "expected": "Save succeeds."
+   },
+   {
+    "action": "Reload the CMS entry list/page.",
+    "expected": "Page reloads."
+   },
+   {
+    "action": "Reopen the entry.",
+    "expected": "Entry still shows Platform Name (EN) = &quot;YouTube&quot;."
+   }
+  ]
+ },
+ {
+  "id": 131176,
+  "title": "Verify that uploading a valid PNG icon image within the size limit saves correctly",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Icon Image = a 500 KB PNG file.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Upload a 500 KB `.png` file.",
+    "expected": "File uploads; thumbnail preview appears."
+   },
+   {
+    "action": "Complete remaining fields and click Save.",
+    "expected": "Entry saves with the PNG image attached."
+   }
+  ]
+ },
+ {
+  "id": 131177,
+  "title": "Verify that uploading a valid SVG icon image within the size limit saves correctly",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Icon Image = a 200 KB SVG file.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Upload a 200 KB `.svg` file.",
+    "expected": "File uploads; thumbnail preview appears."
+   },
+   {
+    "action": "Complete remaining fields and click Save.",
+    "expected": "Entry saves with the SVG image attached."
+   }
+  ]
+ },
+ {
+  "id": 131178,
+  "title": "Verify that leaving Icon Image empty blocks save with a mandatory-field error",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "No file selected; all other fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Leave Icon Image unselected; complete all other fields.",
+    "expected": "No file is attached."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Save is blocked; error &quot;Icon image is required.&quot; / &quot;صورة الأيقونة مطلوبة.&quot; is shown."
+   }
+  ]
+ },
+ {
+  "id": 131179,
+  "title": "Verify that uploading an unsupported image format is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Icon Image = a `.gif` file.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Attempt to upload `icon.gif`.",
+    "expected": "Upload attempt is made."
+   },
+   {
+    "action": "Observe the response.",
+    "expected": "File is rejected with a format-validation error (PNG/SVG only); no file is attached."
+   }
+  ]
+ },
+ {
+  "id": 131180,
+  "title": "Verify that uploading an icon image exceeding 1 MB is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Icon Image = a 1.5 MB PNG file.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Attempt to upload a 1.5 MB `.png` file.",
+    "expected": "Upload attempt is made."
+   },
+   {
+    "action": "Observe the response.",
+    "expected": "File is rejected with a size-limit validation error (&quot;exceeds 1 MB&quot;); no file is attached."
+   }
+  ]
+ },
+ {
+  "id": 131181,
+  "title": "Verify that a saved icon image persists after reload",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Icon Image saved, then CMS page reloaded.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save an icon entry with a valid PNG image.",
+    "expected": "Save succeeds."
+   },
+   {
+    "action": "Reload the CMS entry list/page.",
+    "expected": "Page reloads."
+   },
+   {
+    "action": "Reopen the entry.",
+    "expected": "Entry still shows the same uploaded icon image."
+   }
+  ]
+ },
+ {
+  "id": 131182,
+  "title": "Verify that a valid Platform URL saves correctly",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform URL = `https://twitter.com/QatarChamber`.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Enter Platform URL = `https://twitter.com/QatarChamber`.",
+    "expected": "Value entered."
+   },
+   {
+    "action": "Complete remaining fields and click Save.",
+    "expected": "Entry saves successfully with the URL stored exactly as entered."
+   }
+  ]
+ },
+ {
+  "id": 131183,
+  "title": "Verify that leaving Platform URL empty blocks save with a mandatory-field error",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform URL left blank; all other fields valid.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Leave Platform URL empty; complete all other fields.",
+    "expected": "Field remains empty."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Save is blocked; error &quot;Platform URL is required.&quot; is shown."
+   }
+  ]
+ },
+ {
+  "id": 131184,
+  "title": "Verify that an invalid URL format is rejected with the configured error message",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform URL = &quot;twitterqatarchamber&quot; (not a well-formed URL).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Enter Platform URL = &quot;twitterqatarchamber&quot;.",
+    "expected": "Value entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Save is blocked; error &quot;Please enter a valid URL.&quot; / &quot;يرجى إدخال رابط صالح.&quot; is shown."
+   }
+  ]
+ },
+ {
+  "id": 131185,
+  "title": "Verify that a Platform URL exceeding 500 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform URL = a well-formed URL string of 501 characters.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Enter a 501-character valid-format URL.",
+    "expected": "Value entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Save is blocked with a max-length validation message; entry is not saved."
+   }
+  ]
+ },
+ {
+  "id": 131186,
+  "title": "Verify that a saved Platform URL persists after reload",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Platform URL saved, then CMS page reloaded.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save an icon entry with Platform URL = `https://instagram.com/QatarChamber`.",
+    "expected": "Save succeeds."
+   },
+   {
+    "action": "Reload the CMS entry list/page.",
+    "expected": "Page reloads."
+   },
+   {
+    "action": "Reopen the entry.",
+    "expected": "Entry still shows Platform URL = `https://instagram.com/QatarChamber` exactly."
+   }
+  ]
+ },
+ {
+  "id": 131187,
+  "title": "Verify that an icon cannot be published while Active=True but its Platform URL is invalid",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Field-dependency case — Active Status and Platform URL validity interact at publish time.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Set Active Status = True, but leave Platform URL invalid (e.g., empty or malformed).",
+    "expected": "Active toggle is set to True; URL field shows invalid/empty state."
+   },
+   {
+    "action": "Attempt to click Publish.",
+    "expected": "Publish is blocked with the URL validation error; the entry cannot go live in this state."
+   }
+  ]
+ },
+ {
+  "id": 131188,
+  "title": "Verify that a valid positive Display Order value saves and reflects the icon's frontend position",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Display Order = 1.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Enter Display Order = 1.",
+    "expected": "Value entered."
+   },
+   {
+    "action": "Complete remaining fields, save, and publish.",
+    "expected": "Entry saves with Display Order = 1 and the icon renders first in the row on the live page."
+   }
+  ]
+ },
+ {
+  "id": 131189,
+  "title": "Verify that a Display Order value of zero is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Display Order = 0.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Enter Display Order = 0.",
+    "expected": "Value entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Save is blocked; error &quot;Display Order must be a positive number.&quot; is shown."
+   }
+  ]
+ },
+ {
+  "id": 131190,
+  "title": "Verify that a negative Display Order value is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Display Order = -1.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Enter Display Order = -1.",
+    "expected": "Value entered."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Save is blocked; error &quot;Display Order must be a positive number.&quot; is shown."
+   }
+  ]
+ },
+ {
+  "id": 131191,
+  "title": "Verify that a non-numeric Display Order value is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Display Order = &quot;abc&quot;.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Enter Display Order = &quot;abc&quot;.",
+    "expected": "Field either blocks non-numeric keystrokes or accepts and flags on save."
+   },
+   {
+    "action": "Click Save.",
+    "expected": "Save is blocked; validation error indicates a numeric value is required."
+   }
+  ]
+ },
+ {
+  "id": 131192,
+  "title": "Verify that a saved Display Order value persists after reload",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Display Order = 3 saved, then CMS page reloaded.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save an icon entry with Display Order = 3.",
+    "expected": "Save succeeds."
+   },
+   {
+    "action": "Reload the CMS entry list/page.",
+    "expected": "Page reloads."
+   },
+   {
+    "action": "Reopen the entry.",
+    "expected": "Entry still shows Display Order = 3."
+   }
+  ]
+ },
+ {
+  "id": 131193,
+  "title": "Verify that setting Active Status = True on a new entry saves correctly",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "New entry, Active Status toggled to True.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens with a default Active Status state."
+   },
+   {
+    "action": "Set Active Status = True.",
+    "expected": "Toggle shows True."
+   },
+   {
+    "action": "Complete remaining fields and click Save.",
+    "expected": "Entry saves with Active Status = True."
+   }
+  ]
+ },
+ {
+  "id": 131194,
+  "title": "Verify that setting Active Status = False on a new entry saves correctly and excludes it once published",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "New entry, Active Status toggled to False.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form.",
+    "expected": "Form opens."
+   },
+   {
+    "action": "Set Active Status = False.",
+    "expected": "Toggle shows False."
+   },
+   {
+    "action": "Complete remaining fields, save, and publish.",
+    "expected": "Entry saves and publishes with Active Status = False."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "Icon does not appear in the live Home page section."
+   }
+  ]
+ },
+ {
+  "id": 131195,
+  "title": "Verify that a saved Active Status toggle persists after reload",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Active Status toggled and saved, then CMS page reloaded.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Save an icon entry with Active Status = False.",
+    "expected": "Save succeeds."
+   },
+   {
+    "action": "Reload the CMS entry list/page.",
+    "expected": "Page reloads."
+   },
+   {
+    "action": "Reopen the entry.",
+    "expected": "Entry still shows Active Status = False."
+   }
+  ]
+ },
+ {
+  "id": 131196,
+  "title": "Verify that Active Status = True has no frontend effect while the entry's workflow status is not Published",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Field-dependency case — Active Status and content lifecycle status interact.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Create a new icon entry with Active Status = True but only Save (do not Publish, leaving it in Draft).",
+    "expected": "Entry saves with status Draft, Active = True."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "Icon does not appear on the live Home page."
+   },
+   {
+    "action": "Return to CMS and confirm entry status.",
+    "expected": "Entry is confirmed as Draft — Active Status alone does not surface unpublished content."
+   }
+  ]
+ },
+ {
+  "id": 131197,
+  "title": "Verify that a Draft-status icon with Active Status = True is not displayed on the frontend",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Edge",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Object×status invalid combination — workflow status must gate display, not the Active flag alone.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Create an icon entry, set Active Status = True, and Save only (leave in Draft, do not Publish).",
+    "expected": "Entry saves as Draft."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "Icon is absent from the live page."
+   },
+   {
+    "action": "Confirm the entry's status in CMS.",
+    "expected": "CMS confirms status = Draft, Active = True — no leak to production."
+   }
+  ]
+ },
+ {
+  "id": 131198,
+  "title": "Verify that toggling the last remaining active+published icon to Inactive hides the entire section, not just the icon",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "GLOBAL",
+   "SocialMedia",
+   "Web"
+  ],
+  "description": "Section-level boundary — only one icon is currently live.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Ensure exactly one icon entry is Published + Active=True; unpublish/deactivate all others.",
+    "expected": "Precondition confirmed (1 active icon)."
+   },
+   {
+    "action": "Set that last remaining icon's Active Status to False and publish.",
+    "expected": "Save/publish succeeds."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "The entire Social Media Icons section (heading, subtext, container) is absent from the page, not an empty row."
+   }
+  ]
+ },
+ {
+  "id": 131199,
+  "title": "Verify that two icons sharing the same Display Order value render without breaking the icon row layout",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "GLOBAL",
+   "SocialMedia",
+   "Web"
+  ],
+  "description": "Concurrent/duplicate configuration edge — &quot;Facebook&quot; and &quot;LinkedIn&quot; both set to Display Order = 2.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Configure &quot;Facebook&quot; with Display Order = 2 and publish.",
+    "expected": "Facebook entry saves at order 2."
+   },
+   {
+    "action": "Configure &quot;LinkedIn&quot; with Display Order = 2 and publish.",
+    "expected": "LinkedIn entry saves at order 2 (system allows or flags the duplicate per its own rule)."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "Both icons render in the row in a stable, non-overlapping, non-broken layout regardless of tie-break order."
+   }
+  ]
+ },
+ {
+  "id": 131200,
+  "title": "Verify that a Rejected icon entry does not appear on the frontend",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Edge",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Recovery/negative status edge — Author submits, Editor rejects.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "As Author, submit a new &quot;Telegram&quot; entry for review.",
+    "expected": "Entry saves as Pending Review."
+   },
+   {
+    "action": "As Editor, open the Pending Review entry and click Reject.",
+    "expected": "Entry status changes to Rejected."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "Telegram icon does not appear anywhere on the live Home page."
+   }
+  ]
+ },
+ {
+  "id": 131201,
+  "title": "Verify that an icon whose external Platform URL is broken still renders and still attempts navigation from QC's side",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "GLOBAL",
+   "SocialMedia",
+   "Web"
+  ],
+  "description": "Relation edge between icon config and an unreachable external target — scoped strictly to QC's own behavior per the PBI.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Configure and publish an icon with a Platform URL that no longer resolves on the target platform (e.g., a deleted external page).",
+    "expected": "Entry saves and publishes normally."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "Icon renders identically to any other active icon — no broken-link indicator on QC's page."
+   },
+   {
+    "action": "Click the icon.",
+    "expected": "A new tab opens and navigates to the exact configured URL; whatever the external platform returns (e.g., its own 404) is out of QC's control and not asserted here."
+   }
+  ]
+ },
+ {
+  "id": 131202,
+  "title": "Verify that an interrupted publish action does not leave a corrupted or partially-saved icon entry",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Edge",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Interrupted-transition edge — simulated network drop mid-publish.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Add Icon form and complete all mandatory fields.",
+    "expected": "Form is fully completed."
+   },
+   {
+    "action": "Click Publish and immediately interrupt the network connection before the response returns.",
+    "expected": "Publish request is interrupted; UI shows a failure/timeout state, not a false success."
+   },
+   {
+    "action": "Restore connectivity and check the entry's state in the CMS list.",
+    "expected": "Entry either does not exist, or exists in a consistent pre-publish state (e.g., Draft) — no entry with missing mandatory fields or a corrupted status is present."
+   }
+  ]
+ },
+ {
+  "id": 131203,
+  "title": "Verify that deleting the last active icon entry hides the section gracefully with no layout break",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Edge",
+   "GLOBAL",
+   "SocialMedia"
+  ],
+  "description": "Recovery/boundary edge — deletion instead of deactivation reaching the same section-hidden state.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Ensure exactly one icon entry is Published + Active=True.",
+    "expected": "Precondition confirmed."
+   },
+   {
+    "action": "Delete that entry from the CMS.",
+    "expected": "Entry is removed from the CMS list with a success confirmation."
+   },
+   {
+    "action": "Load the live Home page.",
+    "expected": "The Social Media Icons section is cleanly absent from the Home page; no empty container, broken grid, or layout shift artifact remains."
+   }
+  ]
+ }
+]

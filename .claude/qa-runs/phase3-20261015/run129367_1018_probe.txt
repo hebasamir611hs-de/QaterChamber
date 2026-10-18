@@ -1,0 +1,2 @@
+cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_unpublishing_slide_removes_it_from_home_page
+cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_enabling_counter_active_status_makes_it_appear

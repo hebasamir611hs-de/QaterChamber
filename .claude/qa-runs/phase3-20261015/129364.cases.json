@@ -1,0 +1,2780 @@
+[
+ {
+  "id": 134481,
+  "title": "Verify that the accessibility icon is displayed in the site header on page load",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Confirms OBJ-1/CTL-1 renders in the header utility row on any public page when accessibility tools are CMS-enabled.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Navigate to the QC website homepage (EN locale)",
+    "expected": "Homepage loads successfully"
+   },
+   {
+    "action": "Observe the header utility row",
+    "expected": "Accessibility icon (wheelchair/person-in-circle glyph) is visible in the header, positioned next to the search icon and EN/AR language toggle"
+   }
+  ]
+ },
+ {
+  "id": 134482,
+  "title": "Verify that clicking the accessibility icon opens the accessibility panel",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Confirms CTL-1 opens OBJ-2 with all four controls visible.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "On any public page, click the accessibility icon",
+    "expected": "Panel opens showing High Contrast toggle, Zoom In (+), Zoom Out (-), and Reset/Normal View controls"
+   }
+  ]
+ },
+ {
+  "id": 134483,
+  "title": "Verify that clicking the accessibility icon a second time closes the panel",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Confirms CTL-1 toggles OBJ-2 closed.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Panel opens"
+   },
+   {
+    "action": "Click the accessibility icon again",
+    "expected": "Panel closes and the icon remains visible in the header"
+   }
+  ]
+ },
+ {
+  "id": 134484,
+  "title": "Verify that the accessibility panel does not produce broken UI if it fails to open",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Simulates PBI-stated negative scenario for CTL-1/ST-2.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Simulate a panel-open failure (e.g. blocked script/network stall)",
+    "expected": "Icon click is registered without JS error in console"
+   },
+   {
+    "action": "Click the accessibility icon",
+    "expected": "Icon remains visible and unchanged in the header; no partial/broken panel markup is rendered"
+   }
+  ]
+ },
+ {
+  "id": 134485,
+  "title": "Verify that the accessibility icon is Figma-verified correctly positioned on desktop EN light theme",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "GLOBAL",
+   "Manual",
+   "Regression",
+   "UI",
+   "Web"
+  ],
+  "description": "Pixel-level position/branding check against Figma-verified screenshot.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load homepage on desktop viewport, EN locale, light theme",
+    "expected": "Accessibility icon renders in the exact header position confirmed in the Figma-verified screenshot, with real QC branding (no placeholder content)"
+   }
+  ]
+ },
+ {
+  "id": 134486,
+  "title": "Verify that the High Contrast toggle control renders inside the accessibility panel",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Standard/expected rendering check for CTL-2.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "High Contrast toggle is visible and labeled, in an off/default state"
+   }
+  ]
+ },
+ {
+  "id": 134487,
+  "title": "Verify that the Zoom In (+) and Zoom Out (-) buttons render inside the accessibility panel",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Standard/expected rendering check for CTL-3/CTL-4.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Zoom In (+) and Zoom Out (-) buttons are both visible and enabled"
+   }
+  ]
+ },
+ {
+  "id": 134488,
+  "title": "Verify that the Reset/Normal View control renders inside the accessibility panel",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Standard/expected rendering check for CTL-5.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Reset/Normal View control is visible and enabled"
+   }
+  ]
+ },
+ {
+  "id": 134489,
+  "title": "Verify that the accessibility icon does not render when accessibility tools are disabled in CMS",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "Regression",
+   "UI",
+   "Web"
+  ],
+  "description": "Confirms ST-1 hidden state driven by FLD-1 = False.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, set Accessibility Tools Enabled = False and publish",
+    "expected": "Configuration saves successfully"
+   },
+   {
+    "action": "Load any public page after cache refresh",
+    "expected": "Accessibility icon does not appear anywhere in the header"
+   }
+  ]
+ },
+ {
+  "id": 134490,
+  "title": "Verify that all header interactive elements including the accessibility icon are keyboard-focusable",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "WCAG 2.1 AA Tab-order check for CTL-1.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load homepage",
+    "expected": "Homepage loads"
+   },
+   {
+    "action": "Press Tab repeatedly until focus reaches the accessibility icon",
+    "expected": "Accessibility icon receives a visible focus outline and can be activated with Enter/Space"
+   }
+  ]
+ },
+ {
+  "id": 134491,
+  "title": "Verify that the CMS Accessibility Settings page renders the Accessibility Tools Enabled toggle",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "UI"
+  ],
+  "description": "Standard rendering check for CTL-6/SUR-2.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to Liferay CMS as Site Content Editor",
+    "expected": "Login succeeds"
+   },
+   {
+    "action": "Navigate to Global Components -&gt; Header Management -&gt; Accessibility Settings",
+    "expected": "Page displays the Accessibility Tools Enabled toggle in its current saved state"
+   }
+  ]
+ },
+ {
+  "id": 134492,
+  "title": "Verify that the image upload dialog renders both Alt Text (EN) and Alt Text (AR) input fields",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "UI"
+  ],
+  "description": "Standard rendering check for FLD-2/FLD-3 on SUR-3.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, open any content item's image upload dialog",
+    "expected": "Alt Text (EN) and Alt Text (AR) input fields are both visible and marked mandatory"
+   }
+  ]
+ },
+ {
+  "id": 134493,
+  "title": "Verify that the accessibility icon renders correctly - EN, light theme, desktop",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Regression",
+   "Web"
+  ],
+  "description": "Figma-verified combination 1/8.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load homepage: EN locale, light theme, desktop viewport (1920x1080)",
+    "expected": "Accessibility icon renders in the correct header position with real QC branding, matching the Figma-verified screenshot"
+   }
+  ]
+ },
+ {
+  "id": 134494,
+  "title": "Verify that the accessibility icon renders correctly - EN, dark theme, desktop",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Figma-verified combination 2/8.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load homepage: EN locale, dark theme, desktop viewport",
+    "expected": "Accessibility icon renders correctly against the dark theme header, matching the Figma-verified screenshot"
+   }
+  ]
+ },
+ {
+  "id": 134495,
+  "title": "Verify that the accessibility icon renders correctly - EN, light theme, mobile",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Figma-verified combination 3/8.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load homepage: EN locale, light theme, mobile viewport (375x812)",
+    "expected": "Accessibility icon renders in the correct mobile header position, matching the Figma-verified screenshot"
+   }
+  ]
+ },
+ {
+  "id": 134496,
+  "title": "Verify that the accessibility icon renders correctly - EN, dark theme, mobile",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Figma-verified combination 4/8.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load homepage: EN locale, dark theme, mobile viewport",
+    "expected": "Accessibility icon renders correctly, matching the Figma-verified screenshot"
+   }
+  ]
+ },
+ {
+  "id": 134497,
+  "title": "Verify that the accessibility icon renders correctly (RTL) - AR, light theme, desktop",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Regression",
+   "Web"
+  ],
+  "description": "Figma-verified combination 5/8.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load homepage: AR locale, light theme, desktop viewport",
+    "expected": "Accessibility icon renders mirrored (RTL) in the correct header position, matching the Figma-verified screenshot"
+   }
+  ]
+ },
+ {
+  "id": 134498,
+  "title": "Verify that the accessibility icon renders correctly (RTL) - AR, dark theme, desktop",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Figma-verified combination 6/8.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load homepage: AR locale, dark theme, desktop viewport",
+    "expected": "Accessibility icon renders mirrored (RTL) correctly against the dark theme, matching the Figma-verified screenshot"
+   }
+  ]
+ },
+ {
+  "id": 134499,
+  "title": "Verify that the accessibility icon renders correctly (RTL) - AR, light theme, mobile",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Figma-verified combination 7/8.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load homepage: AR locale, light theme, mobile viewport",
+    "expected": "Accessibility icon renders mirrored (RTL) in the correct mobile position, matching the Figma-verified screenshot"
+   }
+  ]
+ },
+ {
+  "id": 134500,
+  "title": "Verify that the accessibility icon renders correctly (RTL) - AR, dark theme, mobile",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Compatibility",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Figma-verified combination 8/8.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load homepage: AR locale, dark theme, mobile viewport",
+    "expected": "Accessibility icon renders mirrored (RTL) correctly, matching the Figma-verified screenshot"
+   }
+  ]
+ },
+ {
+  "id": 134501,
+  "title": "Verify that a CMS user without header-management permission cannot access Accessibility Settings",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "Regression"
+  ],
+  "description": "Confirms ROL-3 is blocked and MSG-3/MSG-4 are shown (bilingual).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log in to Liferay CMS as a user without accessibility-settings permission",
+    "expected": "Login succeeds with restricted role"
+   },
+   {
+    "action": "Attempt to navigate to Global Components -&gt; Header Management -&gt; Accessibility Settings",
+    "expected": "System blocks access and displays 'Access Denied. You do not have permission to perform this action.'"
+   },
+   {
+    "action": "Switch CMS locale to Arabic and repeat the attempt",
+    "expected": "System displays the Arabic equivalent message in Arabic locale"
+   }
+  ]
+ },
+ {
+  "id": 134502,
+  "title": "Verify that activating High Contrast applies the high-contrast theme site-wide in real time",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Core WCAG-related acceptance path for CTL-2/ST-3, no reload.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Panel opens"
+   },
+   {
+    "action": "Click the High Contrast toggle",
+    "expected": "High-contrast theme (dark background, high-contrast text) applies immediately to the current page"
+   },
+   {
+    "action": "Observe the page and network activity",
+    "expected": "No full page reload/network navigation occurs"
+   }
+  ]
+ },
+ {
+  "id": 134503,
+  "title": "Verify that clicking Zoom In increases page text size by one increment without reload",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Core acceptance path for CTL-3/ST-4.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Panel opens"
+   },
+   {
+    "action": "Note current base font size",
+    "expected": "Base font size recorded (e.g. 16px)"
+   },
+   {
+    "action": "Click Zoom In (+) once",
+    "expected": "Base font size increases by one defined increment (e.g. to 18px) with no page reload"
+   }
+  ]
+ },
+ {
+  "id": 134504,
+  "title": "Verify that clicking Zoom Out decreases page text size by one increment without reload",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Core acceptance path for CTL-4/ST-4.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Panel opens"
+   },
+   {
+    "action": "Note current base font size",
+    "expected": "Base font size recorded (e.g. 16px)"
+   },
+   {
+    "action": "Click Zoom Out (-) once",
+    "expected": "Base font size decreases by one defined increment (e.g. to 14px) with no page reload"
+   }
+  ]
+ },
+ {
+  "id": 134505,
+  "title": "Verify that Reset/Normal View restores default font size and contrast",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Core acceptance path for CTL-5.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Apply High Contrast and click Zoom In twice",
+    "expected": "High-contrast theme applied and font size increased by two increments"
+   },
+   {
+    "action": "Click Reset/Normal View",
+    "expected": "Contrast reverts to default theme and font size reverts to the original base value, with no page reload"
+   }
+  ]
+ },
+ {
+  "id": 134506,
+  "title": "Verify that accessibility settings persist across page navigation within the same browser session",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Core acceptance path for ST-5/OBJ-5.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Enable High Contrast and Zoom In once on the homepage",
+    "expected": "High Contrast and increased font size apply on the homepage"
+   },
+   {
+    "action": "Navigate to a different page (e.g. About Us) without closing the browser",
+    "expected": "The About Us page loads with High Contrast and the increased font size still applied"
+   }
+  ]
+ },
+ {
+  "id": 134507,
+  "title": "Verify that all interactive elements on a page are reachable and operable via Tab-key keyboard navigation (WCAG 2.1 AA)",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Core WCAG acceptance path covering buttons, links, and form inputs including the accessibility panel controls.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load a page containing buttons, links, and a form (e.g. Contact Us)",
+    "expected": "Page loads"
+   },
+   {
+    "action": "Press Tab repeatedly through the entire page",
+    "expected": "Every interactive element (buttons, links, form inputs) receives a visible focus indicator in a logical order, none are skipped or trapped"
+   },
+   {
+    "action": "Open the accessibility panel via keyboard (Enter on the focused icon) and Tab through its controls",
+    "expected": "Panel opens via keyboard and each panel control (High Contrast, Zoom In, Zoom Out, Reset) is individually focusable and activatable with Enter/Space"
+   }
+  ]
+ },
+ {
+  "id": 134508,
+  "title": "Verify that disabling the accessibility widget in CMS removes it from the frontend after cache refresh",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Core admin-to-frontend acceptance path (ST-9 success, SUR-2 -&gt; cache -&gt; SUR-1).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS Accessibility Settings, set Accessibility Tools Enabled = False",
+    "expected": "Toggle set to False"
+   },
+   {
+    "action": "Save and publish",
+    "expected": "Liferay generic success toast is shown"
+   },
+   {
+    "action": "Wait for standard cache refresh interval, then reload the public homepage",
+    "expected": "Accessibility icon no longer appears in the frontend header"
+   }
+  ]
+ },
+ {
+  "id": 134509,
+  "title": "Verify that an image published with valid bilingual alt text renders the correct alt attribute on the EN frontend page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "Web"
+  ],
+  "description": "Confirms WCAG alt-text consumption for FLD-2 on the public EN site.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "In CMS, publish an image with Alt Text (EN) = 'Qatar Chamber headquarters building' and Alt Text (AR) = matching Arabic text",
+    "expected": "Image publishes successfully"
+   },
+   {
+    "action": "Load the corresponding page in EN locale",
+    "expected": "EN page loads with the image visible"
+   },
+   {
+    "action": "Inspect the image element's alt attribute",
+    "expected": "Image alt attribute reads 'Qatar Chamber headquarters building'"
+   }
+  ]
+ },
+ {
+  "id": 134510,
+  "title": "Verify that the same image renders the correct Arabic alt attribute on the AR frontend page",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "Web"
+  ],
+  "description": "Confirms WCAG alt-text consumption for FLD-3 on the public AR site.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Using the image published in the EN alt-text case, load the corresponding page in AR locale",
+    "expected": "AR page loads with RTL layout and the image visible"
+   },
+   {
+    "action": "Inspect the image element's alt attribute",
+    "expected": "Image alt attribute reads the matching Arabic text"
+   }
+  ]
+ },
+ {
+  "id": 134511,
+  "title": "Verify that enabling Accessibility Tools Enabled = True saves and publishes successfully",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Positive case for FLD-1/CTL-6.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open CMS Accessibility Settings",
+    "expected": "Settings page opens with current value"
+   },
+   {
+    "action": "Set Accessibility Tools Enabled = True",
+    "expected": "Toggle set to True"
+   },
+   {
+    "action": "Click Save and Publish",
+    "expected": "Liferay generic success toast displays; configuration saved"
+   }
+  ]
+ },
+ {
+  "id": 134512,
+  "title": "Verify that setting Accessibility Tools Enabled = False saves and publishes successfully",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Negative-state positive case for FLD-1/CTL-6.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open CMS Accessibility Settings",
+    "expected": "Settings page opens"
+   },
+   {
+    "action": "Set Accessibility Tools Enabled = False",
+    "expected": "Toggle set to False"
+   },
+   {
+    "action": "Click Save and Publish",
+    "expected": "Liferay generic success toast displays; configuration saved"
+   }
+  ]
+ },
+ {
+  "id": 134513,
+  "title": "Verify that the Accessibility Tools Enabled value persists after save, page reload, and re-navigation",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Persistence case for FLD-1.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set Accessibility Tools Enabled = True and publish",
+    "expected": "Toggle set and saved"
+   },
+   {
+    "action": "Navigate away to another CMS section",
+    "expected": "Navigation succeeds"
+   },
+   {
+    "action": "Return to Accessibility Settings",
+    "expected": "Accessibility Tools Enabled still shows True"
+   }
+  ]
+ },
+ {
+  "id": 134514,
+  "title": "Verify that changing Accessibility Tools Enabled without saving can be discarded",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Cancel/discard case for FLD-1.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Accessibility Settings (current value = True)",
+    "expected": "Settings page shows True"
+   },
+   {
+    "action": "Toggle to False",
+    "expected": "Toggle visually shows False (unsaved)"
+   },
+   {
+    "action": "Navigate away without clicking Save/Publish, then return",
+    "expected": "Returning to the page shows the original saved value, True (unsaved change discarded)"
+   }
+  ]
+ },
+ {
+  "id": 134515,
+  "title": "Verify that entering valid Alt Text (EN) and Alt Text (AR) allows successful publish",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Positive case for FLD-2/FLD-3 pair, values within 150-char limit.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open image upload dialog",
+    "expected": "Dialog opens"
+   },
+   {
+    "action": "Enter Alt Text (EN) = 'Qatar Chamber annual conference'",
+    "expected": "EN field accepts the value"
+   },
+   {
+    "action": "Enter Alt Text (AR) = matching Arabic text",
+    "expected": "AR field accepts the value"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Image publishes with Liferay generic success toast displayed"
+   }
+  ]
+ },
+ {
+  "id": 134516,
+  "title": "Verify that publishing is blocked when Alt Text (EN) is left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Negative case - empty EN field triggers MSG-7.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open image upload dialog",
+    "expected": "Dialog opens"
+   },
+   {
+    "action": "Leave Alt Text (EN) empty; enter valid Alt Text (AR)",
+    "expected": "EN field remains empty"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish is blocked and message 'Alt text (EN) is required for accessibility compliance.' is displayed"
+   }
+  ]
+ },
+ {
+  "id": 134517,
+  "title": "Verify that publishing is blocked when Alt Text (AR) is left empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL",
+   "Regression"
+  ],
+  "description": "Negative case - empty AR field triggers MSG-5/MSG-6.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open image upload dialog",
+    "expected": "Dialog opens"
+   },
+   {
+    "action": "Enter valid Alt Text (EN); leave Alt Text (AR) empty",
+    "expected": "AR field remains empty"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish is blocked and message 'Alt text (AR) is required before publishing.' is displayed"
+   },
+   {
+    "action": "Switch CMS locale to Arabic and repeat",
+    "expected": "In Arabic locale, the Arabic-equivalent message is displayed"
+   }
+  ]
+ },
+ {
+  "id": 134518,
+  "title": "Verify that publishing is blocked with the generic message when both Alt Text fields are empty",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Negative case - both fields empty triggers the generic MSG-1/MSG-2 path.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open image upload dialog",
+    "expected": "Dialog opens"
+   },
+   {
+    "action": "Leave both Alt Text (EN) and Alt Text (AR) empty",
+    "expected": "Both fields remain empty"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish is blocked and message 'alt text is required before publishing.' is displayed"
+   },
+   {
+    "action": "Switch CMS locale to Arabic and repeat",
+    "expected": "In Arabic locale, the Arabic-equivalent generic message is displayed"
+   }
+  ]
+ },
+ {
+  "id": 134519,
+  "title": "Verify that Alt Text (EN) exceeding 150 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Boundary/negative case for FLD-2 max-length.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open image upload dialog",
+    "expected": "Dialog opens"
+   },
+   {
+    "action": "Enter Alt Text (EN) = a 151-character string",
+    "expected": "Field either truncates input at 150 characters or displays a max-length validation message"
+   },
+   {
+    "action": "Attempt to Publish",
+    "expected": "Publish does not proceed with more than 150 characters saved"
+   }
+  ]
+ },
+ {
+  "id": 134520,
+  "title": "Verify that Alt Text (AR) exceeding 150 characters is rejected",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Boundary/negative case for FLD-3 max-length.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open image upload dialog",
+    "expected": "Dialog opens"
+   },
+   {
+    "action": "Enter Alt Text (AR) = a 151-character Arabic string",
+    "expected": "Field either truncates input at 150 characters or displays a max-length validation message"
+   },
+   {
+    "action": "Attempt to Publish",
+    "expected": "Publish does not proceed with more than 150 characters saved"
+   }
+  ]
+ },
+ {
+  "id": 134521,
+  "title": "Verify that Alt Text (EN) accepts special characters within the length limit",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Negative/edge input case for FLD-2 special-character handling.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open image upload dialog",
+    "expected": "Dialog opens"
+   },
+   {
+    "action": "Enter Alt Text (EN) with special characters and punctuation",
+    "expected": "Field accepts the string without script execution or encoding corruption"
+   },
+   {
+    "action": "Enter valid Alt Text (AR)",
+    "expected": "AR field accepts value"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Image publishes with the special characters stored and rendered as entered (no HTML injection)"
+   }
+  ]
+ },
+ {
+  "id": 134522,
+  "title": "Verify that saved Alt Text (EN/AR) values persist after publish and page reload",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Persistence case for FLD-2/FLD-3.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Publish an image with Alt Text (EN) = 'Doha skyline' and Alt Text (AR) = matching Arabic text",
+    "expected": "Image publishes successfully"
+   },
+   {
+    "action": "Reload the CMS content page and reopen the image's edit dialog",
+    "expected": "Both Alt Text (EN) and Alt Text (AR) fields still show the originally entered values"
+   }
+  ]
+ },
+ {
+  "id": 134523,
+  "title": "Verify that entering only whitespace in Alt Text (EN) is treated as empty and blocks publish",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Field-dependency/edge input case - whitespace-only should not satisfy the mandatory constraint.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open image upload dialog",
+    "expected": "Dialog opens"
+   },
+   {
+    "action": "Enter Alt Text (EN) = spaces only; enter valid Alt Text (AR)",
+    "expected": "EN field accepts the spaces visually"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish is blocked with 'Alt text (EN) is required for accessibility compliance.' (whitespace-only treated as empty)"
+   }
+  ]
+ },
+ {
+  "id": 134524,
+  "title": "Verify that High Contrast can be toggled off after being toggled on (inverse control state)",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-Low",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Field/control dependency case for CTL-2.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Panel opens"
+   },
+   {
+    "action": "Click High Contrast to enable it",
+    "expected": "High-contrast theme applies"
+   },
+   {
+    "action": "Click High Contrast again to disable it",
+    "expected": "Page reverts to the default (normal) theme without needing Reset"
+   }
+  ]
+ },
+ {
+  "id": 134525,
+  "title": "Verify that repeated Zoom In clicks stop increasing font size once the maximum zoom level is reached",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-Low",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Boundary case for CTL-3 upper limit.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Panel opens"
+   },
+   {
+    "action": "Click Zoom In repeatedly (10 times)",
+    "expected": "Font size increases incrementally then plateaus at a maximum readable size with no layout breakage or error"
+   }
+  ]
+ },
+ {
+  "id": 134526,
+  "title": "Verify that High Contrast mode falls back gracefully to the default theme when the browser does not support CSS variable overrides",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Edge",
+   "GLOBAL",
+   "Manual",
+   "Regression",
+   "Web"
+  ],
+  "description": "PBI-stated edge case for ST-6 fallback path.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Using a browser/environment configured to not support CSS variable overrides, load a public page",
+    "expected": "Page loads in default theme"
+   },
+   {
+    "action": "Open the accessibility panel and click High Contrast",
+    "expected": "No JavaScript/console error occurs; the page remains in the default theme (fallback), with no broken styling"
+   }
+  ]
+ },
+ {
+  "id": 134527,
+  "title": "Verify that rapidly double-clicking the High Contrast toggle does not leave the UI in an inconsistent state",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Interaction-timing edge case for CTL-2.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Panel opens"
+   },
+   {
+    "action": "Double-click the High Contrast toggle in rapid succession (within ~200ms)",
+    "expected": "Contrast state settles into a single consistent final state (either on or off, matching the even/odd number of registered clicks) with no flickering, duplicate DOM classes, or console error"
+   }
+  ]
+ },
+ {
+  "id": 134528,
+  "title": "Verify that enabling the keyboard navigation highlight shows a visible focus indicator on interactive elements",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-Low",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Verify the accessibility panel's keyboard-navigation-highlight toggle changes the focus-indicator styling on interactive elements.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Panel displays with toggle in OFF state"
+   },
+   {
+    "action": "Enable the Keyboard Navigation Highlight toggle",
+    "expected": "Toggle switches to ON with a visible confirmation state"
+   },
+   {
+    "action": "Close the panel",
+    "expected": "Panel closes, focus returns to the page"
+   },
+   {
+    "action": "Press Tab to move focus to the first interactive element",
+    "expected": "First element shows an enhanced focus outline distinct from browser default"
+   },
+   {
+    "action": "Continue pressing Tab to the next 2 elements",
+    "expected": "Each subsequent focused element shows the same enhanced outline"
+   }
+  ]
+ },
+ {
+  "id": 134529,
+  "title": "Verify that disabling the keyboard navigation highlight reverts interactive elements to the default browser focus outline",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-Low",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Verify toggling the keyboard-navigation-highlight OFF removes the enhanced focus styling.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel with the highlight toggle ON",
+    "expected": "Panel displays toggle in ON state"
+   },
+   {
+    "action": "Turn the toggle OFF",
+    "expected": "Toggle switches to OFF"
+   },
+   {
+    "action": "Close the panel",
+    "expected": "Panel closes"
+   },
+   {
+    "action": "Press Tab to focus the first interactive element",
+    "expected": "Focused element shows the default browser/site baseline outline, not the enhanced indicator"
+   }
+  ]
+ },
+ {
+  "id": 134530,
+  "title": "Verify that Reset restores contrast and zoom to site defaults and clears the persisted session state",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "Web"
+  ],
+  "description": "Verify the accessibility panel's Reset control reverts customized contrast and zoom values to site defaults and clears any persisted session override.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Set contrast to High and zoom to 150%, confirm values persist",
+    "expected": "Page renders with high-contrast theme and 150% zoom"
+   },
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Panel opens showing High/150% as active selections"
+   },
+   {
+    "action": "Click Reset to Default",
+    "expected": "Contrast and zoom revert to default immediately on the page, panel controls update accordingly"
+   },
+   {
+    "action": "Reload the page",
+    "expected": "Page reloads at default contrast and 100% zoom with no residual override"
+   },
+   {
+    "action": "Reopen the accessibility panel",
+    "expected": "Panel shows default/100% as active, no persisted customization remains"
+   }
+  ]
+ },
+ {
+  "id": 134531,
+  "title": "التحقق من أنه يتم عرض أيقونة إمكانية الوصول بشكل صحيح في الترويسة على الواجهة العربية (RTL)",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "GLOBAL",
+   "Manual",
+   "Regression",
+   "UI",
+   "Web"
+  ],
+  "description": "Figma-verified RTL mirroring check for OBJ-1 on AR locale, desktop, light theme.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "تحميل الصفحة الرئيسية بواجهة اللغة العربية على شاشة سطح المكتب بالسمة الفاتحة",
+    "expected": "يتم تحميل الصفحة بنجاح مع اتجاه RTL"
+   },
+   {
+    "action": "ملاحظة أيقونة إمكانية الوصول في الترويسة",
+    "expected": "تظهر الأيقونة معكوسة الموضع بشكل صحيح بجانب أيقونة البحث ومبدل اللغة، مطابقة للتصميم المعتمد على Figma"
+   }
+  ]
+ },
+ {
+  "id": 134628,
+  "title": "Verify that the accessibility tools icon appears in the site header on desktop",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Accessibility Tools is Enabled in CMS. Verifies the icon renders in the header using the shared generic icon-button container (32x32px, 10px padding, 8px border-radius, background #EDEDED) alongside the language switcher, per Figma node 849:15904.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load any public page on a desktop viewport (1366x768)",
+    "expected": "Page loads and header renders"
+   },
+   {
+    "action": "Locate the site header row containing the language switcher",
+    "expected": "Header row is visible with the language switcher and icon-button row"
+   },
+   {
+    "action": "Observe the accessibility tools icon",
+    "expected": "Accessibility icon is visible in the icon-button container (32x32px, 10px padding, 8px radius, #EDEDED background); position and container style match the shared header frame — exact icon glyph is structurally present but not verified pixel-for-pixel (see Assumptions)"
+   }
+  ]
+ },
+ {
+  "id": 134629,
+  "title": "Verify that the accessibility tools icon renders correctly on a mobile viewport",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Same header as TC-001, resized to a mobile viewport (375x812). Verifies the icon remains visible and correctly sized in the responsive header layout.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load any public page and resize browser to 375x812",
+    "expected": "Page renders in mobile layout"
+   },
+   {
+    "action": "Observe the header row",
+    "expected": "Accessibility icon is visible, not clipped or overlapping the language switcher, still within the 32x32px container"
+   }
+  ]
+ },
+ {
+  "id": 134630,
+  "title": "Verify that clicking the accessibility icon opens a panel with all 4 required controls on desktop",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Accessibility Tools is Enabled. Verifies the panel opens on icon click and displays High Contrast toggle, Zoom In (+), Zoom Out (−), and Reset/Normal View, laid out without overlap on desktop.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load any public page (desktop viewport)",
+    "expected": "Page loads with icon visible"
+   },
+   {
+    "action": "Click the accessibility icon",
+    "expected": "Panel opens showing exactly 4 controls — High Contrast toggle, Zoom In (+), Zoom Out (−), Reset/Normal View — each fully visible with no overlap"
+   }
+  ]
+ },
+ {
+  "id": 134631,
+  "title": "Verify that the accessibility panel layout adapts correctly on a mobile viewport",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Same as TC-003, resized to 375x812. Verifies the 4 controls stack/adjust without clipping or overlap on mobile.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load any public page and resize browser to 375x812",
+    "expected": "Mobile layout renders"
+   },
+   {
+    "action": "Click the accessibility icon",
+    "expected": "Panel opens with all 4 controls visible, stacked/adapted for mobile width, no horizontal scroll or clipped controls"
+   }
+  ]
+ },
+ {
+  "id": 134632,
+  "title": "Verify that the High Contrast theme meets WCAG 2.1 AA color contrast ratios",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies that once High Contrast is active, body text against its background meets the WCAG 2.1 AA minimum contrast ratio of 4.5:1 for normal text (and 3:1 for large text), per an automated contrast-audit tool (e.g. axe-core).",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel",
+    "expected": "Panel visible"
+   },
+   {
+    "action": "Activate High Contrast",
+    "expected": "Page switches to dark background / high-contrast text theme"
+   },
+   {
+    "action": "Run an automated accessibility/contrast audit on the resulting page render",
+    "expected": "Audit reports 0 color-contrast violations; all text/background pairs meet or exceed 4.5:1 (normal text) / 3:1 (large text)"
+   }
+  ]
+ },
+ {
+  "id": 134633,
+  "title": "Verify that the accessibility icon shows a visible focus indicator when reached via keyboard Tab",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies a visible focus ring/outline appears on the accessibility icon when it receives keyboard focus, supporting WCAG 2.1 AA keyboard-navigability.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load any public page",
+    "expected": "Page loads"
+   },
+   {
+    "action": "Press Tab repeatedly until focus reaches the accessibility icon",
+    "expected": "Focus moves through header elements in order"
+   },
+   {
+    "action": "Observe the icon's visual state",
+    "expected": "Icon shows a visible focus outline/indicator distinguishable from its unfocused state"
+   }
+  ]
+ },
+ {
+  "id": 134634,
+  "title": "Verify that Zoom In (+) and Zoom Out (−) buttons render enabled with correct icons/labels by default",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the panel's Zoom In and Zoom Out buttons are both enabled (not greyed out) and display recognizable +/− icons when the panel first opens, before any zoom action.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel on a fresh page load",
+    "expected": "Panel shows Zoom In (+) and Zoom Out (−) buttons, both in an enabled/clickable visual state, each with a distinct +/− icon"
+   }
+  ]
+ },
+ {
+  "id": 134635,
+  "title": "Verify that the Reset/Normal View button renders enabled regardless of current contrast/zoom state",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the Reset/Normal View control is visible and enabled both when the site is already at default state and when High Contrast/zoom have been changed.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel at default state",
+    "expected": "Panel open at default state"
+   },
+   {
+    "action": "Observe Reset/Normal View button",
+    "expected": "Reset/Normal View button visible and enabled"
+   },
+   {
+    "action": "Activate High Contrast and Zoom In once",
+    "expected": "High Contrast and one zoom increment applied"
+   },
+   {
+    "action": "Re-open the panel and observe Reset/Normal View button",
+    "expected": "Reset/Normal View button remains visible and enabled"
+   }
+  ]
+ },
+ {
+  "id": 134636,
+  "title": "Verify that the header icon-button row mirrors correctly in Arabic (RTL) layout",
+  "state": "Design",
+  "priority": 4,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Site is viewed in Arabic. Verifies the accessibility icon's position relative to the language switcher mirrors correctly for RTL, consistent with the site's global bilingual rendering rules (per standards.md Default Scope), even though the PBI itself does not state bilingual copy for the panel.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Switch site language to Arabic",
+    "expected": "Site renders in Arabic (RTL)"
+   },
+   {
+    "action": "Load any public page",
+    "expected": "Page loads with RTL header layout"
+   },
+   {
+    "action": "Observe the header icon-button row order and alignment",
+    "expected": "Icon-button row (accessibility icon + language switcher) is mirrored consistently with the rest of the RTL header — no LTR-leftover alignment"
+   }
+  ]
+ },
+ {
+  "id": 134637,
+  "title": "Verify that a visitor can open the accessibility panel, apply High Contrast, zoom in, zoom out, and reset — all in real time without a page reload",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Accessibility Tools is Enabled. Full happy-path journey: open panel → enable High Contrast → Zoom In once → Zoom Out once → Reset. Verifies each change applies instantly with no full page reload.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load a public page and note the page's current DOM load timestamp/marker",
+    "expected": "Page loads, marker recorded"
+   },
+   {
+    "action": "Click the accessibility icon",
+    "expected": "Panel opens with all 4 controls, no page reload occurs"
+   },
+   {
+    "action": "Click High Contrast",
+    "expected": "Site switches to high-contrast theme (dark background, high-contrast text) instantly; no page reload (DOM marker unchanged)"
+   },
+   {
+    "action": "Click Zoom In (+) once",
+    "expected": "Base font size increases by one zoom increment instantly; no page reload"
+   },
+   {
+    "action": "Click Zoom Out (−) once",
+    "expected": "Base font size decreases by one zoom increment back toward default instantly; no page reload"
+   },
+   {
+    "action": "Click Reset/Normal View",
+    "expected": "Font size and contrast both revert to default instantly; no page reload throughout the entire journey"
+   }
+  ]
+ },
+ {
+  "id": 134638,
+  "title": "Verify that accessibility settings persist across page navigation within the same browser session",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "Web"
+  ],
+  "description": "Visitor enables High Contrast and zooms in once on Page A, then navigates to Page B within the same browser session (no new tab/session). Verifies both settings remain applied without needing to re-apply them.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load Page A",
+    "expected": "Page A loads at default state"
+   },
+   {
+    "action": "Open panel and activate High Contrast",
+    "expected": "High Contrast is applied on Page A"
+   },
+   {
+    "action": "Click Zoom In (+) once",
+    "expected": "Font size increased by one increment on Page A"
+   },
+   {
+    "action": "Navigate to Page B via a header link (same browser session)",
+    "expected": "Page B loads already showing High Contrast active and the same increased font size, with no need to reopen the panel"
+   }
+  ]
+ },
+ {
+  "id": 134639,
+  "title": "Verify that a keyboard-only visitor can operate the entire accessibility panel using only Tab, Enter and Space",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-High",
+   "GLOBAL",
+   "UAT",
+   "Web"
+  ],
+  "description": "Simulates a visitor with disabilities who cannot use a mouse. Verifies the icon and all 4 panel controls are reachable and operable via Tab (to move focus) and Enter/Space (to activate), per WCAG 2.1 AA keyboard-navigability requirements.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load a public page using only the keyboard",
+    "expected": "Page loads"
+   },
+   {
+    "action": "Press Tab until focus reaches the accessibility icon, then press Enter",
+    "expected": "Icon receives focus and Enter opens the panel"
+   },
+   {
+    "action": "Press Tab to move focus to High Contrast toggle, then press Space/Enter to activate it",
+    "expected": "Focus moves to High Contrast toggle; activation switches the theme to high-contrast"
+   },
+   {
+    "action": "Press Tab to move focus to Zoom In (+), then press Enter",
+    "expected": "Focus moves to Zoom In; activation increases font size by one increment"
+   },
+   {
+    "action": "Press Tab to move focus to Reset/Normal View, then press Enter",
+    "expected": "Focus moves to Reset; activation restores font size and contrast to default — the entire flow completed with zero mouse interaction"
+   }
+  ]
+ },
+ {
+  "id": 134640,
+  "title": "Verify that enabling the Accessibility Tools widget in CMS makes the icon appear on the frontend after cache refresh",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT",
+   "Web"
+  ],
+  "description": "Site Content Editor (authorized role) navigates to Global Components → Header Management → Accessibility Settings, sets Accessibility Tools Enabled = True, saves and publishes. Verifies the CMS success toast and the frontend icon appearing after the standard cache refresh.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as Site Content Editor",
+    "expected": "Login successful, CMS home visible"
+   },
+   {
+    "action": "Navigate to Global Components → Header Management → Accessibility Settings",
+    "expected": "Accessibility Settings page opens showing the current toggle state"
+   },
+   {
+    "action": "Toggle Accessibility Tools Enabled to True",
+    "expected": "Toggle switches to True (visually enabled)"
+   },
+   {
+    "action": "Click Save and Publish",
+    "expected": "Liferay generic success toast is displayed confirming save"
+   },
+   {
+    "action": "Wait for standard cache refresh, then load any public page",
+    "expected": "Public page loads showing the accessibility icon in the header"
+   }
+  ]
+ },
+ {
+  "id": 134641,
+  "title": "Verify that disabling the Accessibility Tools widget in CMS hides the icon from the frontend after cache refresh",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "Web"
+  ],
+  "description": "Starting from Accessibility Tools Enabled = True, Site Content Editor sets it to False, saves and publishes. Verifies the icon disappears from the frontend header after the standard cache refresh.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as Site Content Editor with Accessibility Tools Enabled currently True",
+    "expected": "Login successful; setting confirmed True beforehand"
+   },
+   {
+    "action": "Navigate to Accessibility Settings",
+    "expected": "Settings page opens showing True"
+   },
+   {
+    "action": "Toggle Accessibility Tools Enabled to False",
+    "expected": "Toggle switches to False"
+   },
+   {
+    "action": "Click Save and Publish",
+    "expected": "Liferay generic success toast displayed"
+   },
+   {
+    "action": "Wait for standard cache refresh, then load any public page",
+    "expected": "Public page loads with NO accessibility icon present in the header"
+   }
+  ]
+ },
+ {
+  "id": 134642,
+  "title": "Verify that publishing an image is blocked when both English and Arabic alt text are missing",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-High",
+   "GLOBAL",
+   "Regression",
+   "UAT"
+  ],
+  "description": "Site Content Editor uploads a new image in the CMS and attempts to publish without entering either Alt Text (EN) or Alt Text (AR). Verifies publish is blocked and the site's mandatory bilingual alt-text rule holds end-to-end.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS as Site Content Editor",
+    "expected": "Login successful"
+   },
+   {
+    "action": "Upload a new image with both Alt Text (EN) and Alt Text (AR) left empty",
+    "expected": "Image uploaded to the media library, both alt-text fields blank"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish is blocked; the EN mandatory message &quot;Alt text (EN) is required for accessibility compliance.&quot; is shown for the empty EN field; the image is not published"
+   }
+  ]
+ },
+ {
+  "id": 134643,
+  "title": "Verify that setting Accessibility Tools Enabled to True saves correctly with a success toast",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Isolated CMS field check (not verifying frontend reflection). Accessibility Tools Enabled is currently False. Verifies setting it True, saving, and reloading the settings page shows it persisted as True with the Liferay success toast shown.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Accessibility Settings with Enabled = False",
+    "expected": "Settings page shows Enabled = False"
+   },
+   {
+    "action": "Toggle Enabled to True",
+    "expected": "Toggle now shows True"
+   },
+   {
+    "action": "Click Save and Publish",
+    "expected": "Liferay generic success toast displayed"
+   },
+   {
+    "action": "Reload the Accessibility Settings page",
+    "expected": "Page reloads and Enabled still shows True"
+   }
+  ]
+ },
+ {
+  "id": 134644,
+  "title": "Verify that setting Accessibility Tools Enabled to False saves correctly with a success toast",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Reverse of TC-016. Accessibility Tools Enabled is currently True. Verifies setting it False, saving, and reloading shows it persisted as False with the success toast shown.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open Accessibility Settings with Enabled = True",
+    "expected": "Settings page shows Enabled = True"
+   },
+   {
+    "action": "Toggle Enabled to False",
+    "expected": "Toggle now shows False"
+   },
+   {
+    "action": "Click Save and Publish",
+    "expected": "Liferay generic success toast displayed"
+   },
+   {
+    "action": "Reload the Accessibility Settings page",
+    "expected": "Page reloads and Enabled still shows False"
+   }
+  ]
+ },
+ {
+  "id": 134645,
+  "title": "Verify that a valid English alt text value saves and publishes successfully",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Alt Text (AR) is already populated. Verifies entering Alt Text (EN) = &quot;Qatar Chamber headquarters building exterior view&quot; (51 characters) allows successful publish.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an image with Alt Text (AR) populated and Alt Text (EN) empty",
+    "expected": "Image editor open, AR populated, EN empty"
+   },
+   {
+    "action": "Enter &quot;Qatar Chamber headquarters building exterior view&quot; in Alt Text (EN)",
+    "expected": "EN field shows the entered 51-character value"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Image publishes successfully; Liferay generic success toast displayed"
+   }
+  ]
+ },
+ {
+  "id": 134646,
+  "title": "Verify that publish is blocked when the English alt text is left empty",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Alt Text (AR) is populated; Alt Text (EN) left blank. Verifies publish is blocked with the field-specific EN message.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an image with Alt Text (AR) populated and Alt Text (EN) left empty",
+    "expected": "Image editor open, AR populated, EN blank"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish blocked; message &quot;Alt text (EN) is required for accessibility compliance.&quot; displayed; image not published"
+   }
+  ]
+ },
+ {
+  "id": 134647,
+  "title": "Verify that the English alt text field accepts exactly 150 characters and rejects 151",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Boundary test for the stated 150-character max on Alt Text (EN). Verifies a 150-character value is accepted and a 151-character value is rejected/blocked.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an image's Alt Text (EN) field",
+    "expected": "Field is empty and editable"
+   },
+   {
+    "action": "Enter a value exactly 150 characters long and attempt to publish",
+    "expected": "150-character value is accepted; image publishes successfully"
+   },
+   {
+    "action": "Clear the field, enter a value 151 characters long, and attempt to publish",
+    "expected": "151-character value is rejected — either input is stopped at 150 characters or publish is blocked with a length-validation message; image not published with 151 characters"
+   }
+  ]
+ },
+ {
+  "id": 134648,
+  "title": "Verify that whitespace-only English alt text is treated as empty and blocks publish",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Alt Text (EN) filled with spaces only (e.g. 10 space characters). Verifies the system treats this as effectively empty and blocks publish with the mandatory-field message, not silently accepting blank-looking content.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an image's Alt Text (EN) field",
+    "expected": "Field is empty and editable"
+   },
+   {
+    "action": "Enter 10 space characters only",
+    "expected": "Field shows whitespace (visually blank)"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish blocked; message &quot;Alt text (EN) is required for accessibility compliance.&quot; displayed; image not published"
+   }
+  ]
+ },
+ {
+  "id": 134649,
+  "title": "Verify that a valid Arabic alt text value saves and publishes successfully",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Alt Text (EN) is already populated. Verifies entering Alt Text (AR) = &quot;منظر خارجي لمبنى غرفة قطر&quot; allows successful publish, rendered correctly RTL.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an image with Alt Text (EN) populated and Alt Text (AR) empty",
+    "expected": "Image editor open, EN populated, AR empty"
+   },
+   {
+    "action": "Enter &quot;منظر خارجي لمبنى غرفة قطر&quot; in Alt Text (AR)",
+    "expected": "AR field shows the entered value rendered right-to-left"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Image publishes successfully; Liferay generic success toast displayed"
+   }
+  ]
+ },
+ {
+  "id": 134650,
+  "title": "Verify that publish is blocked when the Arabic alt text is left empty",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Alt Text (EN) is populated; Alt Text (AR) left blank. Verifies publish is blocked with the AR-specific bilingual message.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an image with Alt Text (EN) populated and Alt Text (AR) left empty",
+    "expected": "Image editor open, EN populated, AR blank"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish blocked; EN message &quot;Alt text (AR) is required before publishing.&quot; and AR message &quot;النص البديل (عربي) مطلوب قبل النشر.&quot; displayed; image not published"
+   }
+  ]
+ },
+ {
+  "id": 134651,
+  "title": "Verify that the Arabic alt text field accepts exactly 150 characters and rejects 151",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Boundary test for the stated 150-character max on Alt Text (AR). Verifies a 150-character value is accepted and 151 characters is rejected/blocked.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an image's Alt Text (AR) field",
+    "expected": "Field is empty and editable"
+   },
+   {
+    "action": "Enter a value exactly 150 characters long and attempt to publish",
+    "expected": "150-character AR value accepted; image publishes successfully"
+   },
+   {
+    "action": "Clear the field, enter a value 151 characters long, and attempt to publish",
+    "expected": "151-character AR value rejected — input stopped at 150 characters or publish blocked with a length-validation message; image not published with 151 characters"
+   }
+  ]
+ },
+ {
+  "id": 134652,
+  "title": "Verify that whitespace-only Arabic alt text is treated as empty and blocks publish",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Control_Panel",
+   "Functional-Low",
+   "GLOBAL"
+  ],
+  "description": "Alt Text (AR) filled with spaces only. Verifies the system treats this as effectively empty and blocks publish with the AR-specific mandatory message.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open an image's Alt Text (AR) field",
+    "expected": "Field is empty and editable"
+   },
+   {
+    "action": "Enter 10 space characters only",
+    "expected": "Field shows whitespace (visually blank)"
+   },
+   {
+    "action": "Click Publish",
+    "expected": "Publish blocked; message &quot;Alt text (AR) is required before publishing.&quot; / &quot;النص البديل (عربي) مطلوب قبل النشر.&quot; displayed; image not published"
+   }
+  ]
+ },
+ {
+  "id": 134653,
+  "title": "Verify that clicking the accessibility icon again while the panel is open closes the panel",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-Low",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Isolated control check for CTL-1's reverse action. Panel is currently open. Verifies clicking the icon again (or clicking outside the panel) closes it.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the accessibility panel by clicking the icon",
+    "expected": "Panel is open showing all 4 controls"
+   },
+   {
+    "action": "Click the accessibility icon a second time",
+    "expected": "Panel closes; page returns to its pre-click layout with no residual overlay"
+   }
+  ]
+ },
+ {
+  "id": 134654,
+  "title": "Verify that clicking High Contrast again while active reverts the site to the default theme",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-Low",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Isolated control check for CTL-2's reverse action. High Contrast is currently ON. Verifies clicking the toggle again reverts to the default theme in real time.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Activate High Contrast so the theme is currently applied",
+    "expected": "Site shows the high-contrast (dark background, high-contrast text) theme"
+   },
+   {
+    "action": "Click the High Contrast toggle again",
+    "expected": "Site reverts instantly to the default color theme; no page reload"
+   }
+  ]
+ },
+ {
+  "id": 134655,
+  "title": "Verify that clicking Zoom In (+) three times consecutively increases font size cumulatively by three increments",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-Low",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Isolated control check for CTL-3's repeat action. Verifies repeated clicks accumulate rather than reset, since no maximum limit is stated in the PBI.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the panel at default zoom level (Level 0)",
+    "expected": "Font size at default (Level 0)"
+   },
+   {
+    "action": "Click Zoom In (+) once",
+    "expected": "Font size increases to Level 1"
+   },
+   {
+    "action": "Click Zoom In (+) a second time",
+    "expected": "Font size increases to Level 2 (larger than after the first click)"
+   },
+   {
+    "action": "Click Zoom In (+) a third time",
+    "expected": "Font size increases to Level 3 (larger than after the second click); each click applies without page reload"
+   }
+  ]
+ },
+ {
+  "id": 134656,
+  "title": "Verify that clicking Zoom Out (−) three times consecutively decreases font size cumulatively by three increments",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-Low",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Isolated control check for CTL-4's repeat action, mirroring TC-028.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the panel at default zoom level (Level 0)",
+    "expected": "Font size at default (Level 0)"
+   },
+   {
+    "action": "Click Zoom Out (−) once",
+    "expected": "Font size decreases to Level −1"
+   },
+   {
+    "action": "Click Zoom Out (−) a second time",
+    "expected": "Font size decreases to Level −2 (smaller than after the first click)"
+   },
+   {
+    "action": "Click Zoom Out (−) a third time",
+    "expected": "Font size decreases to Level −3 (smaller than after the second click); each click applies without page reload"
+   }
+  ]
+ },
+ {
+  "id": 134657,
+  "title": "Verify that Reset/Normal View reverts a combined High Contrast + multi-increment zoom state to default in a single click",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Functional-Low",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Isolated control check for CTL-5, using a compound starting state (High Contrast ON + Zoom Level 2) that TC-010's simpler single-increment flow does not exercise.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Activate High Contrast",
+    "expected": "High-contrast theme applied"
+   },
+   {
+    "action": "Click Zoom In (+) twice (reaching Level 2)",
+    "expected": "Font size at Level 2"
+   },
+   {
+    "action": "Click Reset/Normal View",
+    "expected": "Both contrast and font size revert to default (Level 0, default theme) in a single action; no page reload"
+   }
+  ]
+ },
+ {
+  "id": 134658,
+  "title": "Verify that a CMS user without Header Management permission is denied access when attempting to change Accessibility Settings",
+  "state": "Design",
+  "priority": 1,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Auth",
+   "Automation",
+   "Control_Panel",
+   "GLOBAL",
+   "Regression",
+   "UAT"
+  ],
+  "description": "A CMS user assigned a role without the Header Management permission (e.g. &quot;Marketing Viewer&quot;) attempts to open/save Accessibility Settings. Verifies access is denied with the bilingual Access Denied message.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Log into Liferay CMS with a role lacking Header Management permission",
+    "expected": "Login succeeds with the restricted role"
+   },
+   {
+    "action": "Attempt to navigate to Global Components → Header Management → Accessibility Settings",
+    "expected": "Access Denied message shown: EN &quot;Access Denied. You do not have permission to perform this action.&quot; / AR &quot;تم رفض الوصول. ليس لديك صلاحية لتنفيذ هذا الإجراء.&quot;; settings page does not load"
+   },
+   {
+    "action": "Attempt to toggle Accessibility Tools Enabled and Save",
+    "expected": "Toggle/save action is blocked entirely; no change is persisted"
+   }
+  ]
+ },
+ {
+  "id": 134659,
+  "title": "Verify that High Contrast falls back gracefully to the default theme on a browser without CSS variable override support",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Edge",
+   "GLOBAL",
+   "Manual",
+   "Web"
+  ],
+  "description": "Simulates a browser/environment that does not support CSS custom-property (variable) overrides. Verifies clicking High Contrast does not throw a JS error and leaves the site on the default theme instead of a half-applied broken state.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load a public page in an environment with CSS variable override support disabled/unsupported (e.g. via a feature-flag/polyfill-disabled test build)",
+    "expected": "Page loads without errors"
+   },
+   {
+    "action": "Click the accessibility icon to open the panel",
+    "expected": "Panel opens normally"
+   },
+   {
+    "action": "Click High Contrast",
+    "expected": "No JavaScript error is thrown; the site remains on (or falls back to) the default theme with no partially-applied/broken styling"
+   }
+  ]
+ },
+ {
+  "id": 134660,
+  "title": "Verify that the accessibility icon remains visible with no broken UI if the panel fails to open",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Simulates the accessibility panel failing to render on click (e.g. a script error in the panel component). Verifies the icon itself remains visible and unaffected, with no broken UI shown to the visitor.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Load a public page with the panel-rendering component forced to fail (test harness simulation)",
+    "expected": "Page and header load normally with the icon visible"
+   },
+   {
+    "action": "Click the accessibility icon",
+    "expected": "Panel does not open; no error message, blank overlay, or broken layout is shown; the icon itself remains visible and clickable"
+   }
+  ]
+ },
+ {
+  "id": 134661,
+  "title": "Verify that the English site renders correctly while High Contrast is active",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "High Contrast is switched on from the accessibility panel and left on. Verifies the whole English page renders in the high-contrast theme with every element still present and legible — not just that the toggle fired.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Qatar Chamber homepage in English at a 1366x768 desktop viewport",
+    "expected": "Homepage loads in English in the default theme"
+   },
+   {
+    "action": "Open the accessibility panel and activate High Contrast",
+    "expected": "High Contrast is applied site-wide in real time with no page reload"
+   },
+   {
+    "action": "Inspect the header, hero, body content, links, buttons and footer",
+    "expected": "Every element remains present and legible in the high-contrast palette - header, hero, body text, links, buttons and footer all render with a dark background and high-contrast text, no element becomes invisible, and no text renders in the same tone as its own background"
+   },
+   {
+    "action": "Navigate to a second content page without turning High Contrast off",
+    "expected": "The second page also renders in High Contrast with the same fidelity - the theme is a persistent configuration, not a one-page effect"
+   }
+  ]
+ },
+ {
+  "id": 134662,
+  "title": "Verify that the Arabic site renders correctly while High Contrast is active",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "GLOBAL",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "High Contrast is applied on the Arabic site. Verifies the theme applies fully while RTL mirroring is preserved.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Qatar Chamber homepage in Arabic at a 1366x768 desktop viewport",
+    "expected": "Homepage loads in Arabic with RTL direction in the default theme"
+   },
+   {
+    "action": "Open the accessibility panel and activate High Contrast",
+    "expected": "High Contrast is applied site-wide in real time with no page reload"
+   },
+   {
+    "action": "Inspect the header widget row, body content and footer",
+    "expected": "All Arabic text and every control render legibly in the high-contrast palette with no element lost against its background"
+   },
+   {
+    "action": "Confirm the RTL layout is unchanged",
+    "expected": "The layout is still mirrored - the header icon row, text alignment and page direction are identical to the Arabic default-theme rendering; enabling the theme does not reset direction to LTR"
+   }
+  ]
+ },
+ {
+  "id": 134663,
+  "title": "Verify that High Contrast changes colour only and does not alter page layout at desktop width",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Compatibility",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Compares the same page rendered with and without High Contrast at desktop width. Verifies the theme is purely a colour configuration - no reflow, no shifted or clipped elements.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open a content-rich page in English at a 1366x768 desktop viewport in the default theme and note the position and order of the header, main columns and footer",
+    "expected": "The page renders in the default theme with its layout noted"
+   },
+   {
+    "action": "Activate High Contrast on the same page",
+    "expected": "High Contrast is applied"
+   },
+   {
+    "action": "Compare element positions, column order and spacing against the default-theme rendering",
+    "expected": "Element positions, column order and spacing are unchanged from the default theme - the theme alters colour only, with no reflow, no shifted controls and nothing clipped or overlapping"
+   },
+   {
+    "action": "Check the page for horizontal overflow",
+    "expected": "The page has no horizontal scrollbar in High Contrast"
+   }
+  ]
+ },
+ {
+  "id": 134664,
+  "title": "Verify that High Contrast renders correctly at mobile viewport width in both languages",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Compatibility",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Verifies the high-contrast theme holds at mobile width, where the layout stacks and the accessibility panel adapts, in English and Arabic.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Qatar Chamber homepage in English and resize the browser to a 390x844 mobile viewport",
+    "expected": "The page loads in English at mobile width in the default theme"
+   },
+   {
+    "action": "Activate High Contrast and inspect the stacked content, the accessibility panel and the footer",
+    "expected": "High Contrast applies to the stacked mobile layout with all content, the open accessibility panel and the footer legible against the high-contrast background"
+   },
+   {
+    "action": "Repeat in Arabic",
+    "expected": "The Arabic mobile view renders in High Contrast with the same legibility and keeps its right-aligned RTL layout"
+   },
+   {
+    "action": "Check both languages for horizontal overflow",
+    "expected": "Neither language shows a horizontal scrollbar while High Contrast is active"
+   }
+  ]
+ },
+ {
+  "id": 134665,
+  "title": "Verify that the accessibility tools icon and panel render correctly in dark mode in English",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "GLOBAL",
+   "UAT",
+   "UI",
+   "Web"
+  ],
+  "description": "Dark mode is confirmed in scope project-wide. Verifies the accessibility widget itself - icon and panel - stays visible and operable when the site theme is dark, since the widget sits on every page.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Qatar Chamber homepage in English at a desktop viewport",
+    "expected": "Homepage loads in English in light mode with the accessibility icon visible"
+   },
+   {
+    "action": "Switch the site to dark mode",
+    "expected": "Dark mode is applied without a page reload"
+   },
+   {
+    "action": "Inspect the accessibility tools icon in the header",
+    "expected": "The accessibility icon remains visible and distinguishable against the dark header - it does not disappear into the background or lose its container"
+   },
+   {
+    "action": "Open the accessibility panel and inspect its four controls",
+    "expected": "The panel opens showing all four controls - High Contrast, Zoom In, Zoom Out and Reset - each with a legible label or icon against the dark panel background"
+   }
+  ]
+ },
+ {
+  "id": 134666,
+  "title": "Verify that the accessibility tools icon and panel render correctly in dark mode in Arabic",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "GLOBAL",
+   "UI",
+   "Web"
+  ],
+  "description": "Verifies the accessibility widget in dark mode on the Arabic site, with RTL mirroring preserved.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Qatar Chamber homepage in Arabic at a desktop viewport",
+    "expected": "Homepage loads in Arabic with RTL direction in light mode"
+   },
+   {
+    "action": "Switch the site to dark mode",
+    "expected": "Dark mode is applied without a page reload"
+   },
+   {
+    "action": "Inspect the accessibility icon's position in the mirrored header row",
+    "expected": "The accessibility icon remains visible against the dark header and stays in its mirrored RTL position within the header icon row"
+   },
+   {
+    "action": "Open the accessibility panel and inspect its controls",
+    "expected": "The panel opens with all four controls legible against the dark background and the panel itself aligned per the RTL layout"
+   }
+  ]
+ },
+ {
+  "id": 134667,
+  "title": "Verify that the accessibility panel remains operable in dark mode at mobile viewport width",
+  "state": "Design",
+  "priority": 3,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Bilingual",
+   "Compatibility",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Verifies dark mode combined with the mobile panel layout keeps every control reachable and legible in both languages.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Qatar Chamber homepage in English, resize to a 390x844 mobile viewport and switch to dark mode",
+    "expected": "The page renders in English at mobile width in dark mode with the accessibility icon visible"
+   },
+   {
+    "action": "Open the accessibility panel and inspect all four controls",
+    "expected": "The panel opens at mobile width with all four controls legible against the dark background and none clipped or overlapping"
+   },
+   {
+    "action": "Tap Zoom In and then Reset",
+    "expected": "Zoom In increases the base font size and Reset restores it, both operating normally while dark mode is active"
+   },
+   {
+    "action": "Repeat the whole check in Arabic",
+    "expected": "The Arabic mobile dark view behaves identically with the panel mirrored for RTL"
+   }
+  ]
+ },
+ {
+  "id": 134668,
+  "title": "Verify that requesting High Contrast while dark mode is active produces one deterministic, legible theme",
+  "state": "Design",
+  "priority": 2,
+  "tags": [
+   "Accessibility",
+   "Ai_MCP_Injected",
+   "Automation",
+   "Edge",
+   "GLOBAL",
+   "Web"
+  ],
+  "description": "Two independent theme configurations can be requested at once. Neither the PBI nor the design states which wins. This case asserts the properties that must hold either way - one coherent theme, nothing illegible, and a clean return to default - rather than asserting a winner.",
+  "area_path": "Qatar Chamber Website Revamp",
+  "iteration_path": "Qatar Chamber Website Revamp\\Sprint 1",
+  "steps": [
+   {
+    "action": "Open the Qatar Chamber homepage in English at a desktop viewport and switch the site to dark mode",
+    "expected": "The page renders in dark mode"
+   },
+   {
+    "action": "Open the accessibility panel and activate High Contrast while dark mode is still on",
+    "expected": "One coherent theme is applied - the page does not render a half-dark, half-high-contrast mix, and no element is left with a background and foreground in the same tone"
+   },
+   {
+    "action": "Inspect the page background, body text, links, buttons and the accessibility panel itself",
+    "expected": "Every element remains legible - body text, links, buttons and the panel controls all readable against their backgrounds, with no element invisible"
+   },
+   {
+    "action": "Reload the page without changing either setting",
+    "expected": "After reload the same combined state renders identically - the resolution between the two themes is deterministic, not random per load"
+   },
+   {
+    "action": "Click Reset / Normal View",
+    "expected": "Reset returns the site to its default theme in a single click, clearing both High Contrast and any zoom, with dark mode left in whatever state the site-level control dictates"
+   }
+  ]
+ }
+]

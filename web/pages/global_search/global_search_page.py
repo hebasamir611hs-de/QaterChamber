@@ -89,6 +89,8 @@ a locator timeout.
 
 from urllib.parse import quote
 
+import allure
+
 from config.settings import web_url
 from core.web.base_page import NAV_TIMEOUT_MS, BasePage
 from core.web.license_gate import clear_license_gate
@@ -118,18 +120,22 @@ class GlobalSearchPage(BasePage):
     # ══════════════════════════════════════════════════════════════════
     # Locators — results page
     # ══════════════════════════════════════════════════════════════════
-    RESULTS_PORTLET = ".portlet-search-results"
-    RESULTS_BODY = ".portlet-search-results .portlet-body"
-    RESULTS_LIST = "#search-results-display-list"
-    RESULT_ITEMS = "#search-results-display-list > li"
-    TOTAL_LABEL = ".search-total-label"
+    # RE-POINTED 2026-10-18 (bug 147178 fixed): /search is now rendered by the
+    # `qc-global-search-page` fragment (`.qc-gs`). The stock Liferay results
+    # portlet is still in the layout but hidden, so every locator below reads
+    # the fragment. Structure read live on qcdev 2026-10-18.
+    RESULTS_PORTLET = ".qc-gs"
+    RESULTS_BODY = ".qc-gs__main"
+    RESULTS_LIST = ".qc-gs__list"
+    RESULT_ITEMS = ".qc-gs__list > .qc-gs__card"
+    TOTAL_LABEL = ".qc-gs__count"
 
-    # Relative selectors, resolved against ONE result `<li>` — never on their
+    # Relative selectors, resolved against ONE result card — never on their
     # own (every card shares these classes).
-    RESULT_TITLE_LINK = ".list-group-title a"
-    RESULT_SUBTEXT = "p.list-group-subtext"
-    RESULT_TYPE_LABEL = "p.list-group-subtext .subtext-item strong"
-    RESULT_THUMBNAIL = ".sticker img"
+    RESULT_TITLE_LINK = ".qc-gs__card-title a"
+    RESULT_SUBTEXT = ".qc-gs__meta"
+    RESULT_TYPE_LABEL = ".qc-gs__tag span"
+    RESULT_THUMBNAIL = ".qc-gs__card img"
 
     # The results page's own (Liferay stock) search bar — distinct from the
     # header overlay input, which belongs to HeaderComponent.
@@ -158,60 +164,25 @@ class GlobalSearchPage(BasePage):
     # honest 0 rather than raising, and so the same tests start passing
     # unchanged the day the filter UI ships.
     # ══════════════════════════════════════════════════════════════════
-    FILTERS_PANEL = (
-        '[data-qc-search-filters], .search-filters, aside[class*="filter" i], '
-        '[class*="search-facet" i], .portlet-search-facet'
-    )
-    CONTENT_TYPE_FILTER = (
-        '[data-qc-filter="content-type"], select[name*="contentType" i], '
-        '[aria-label*="content type" i], [class*="content-type-filter" i]'
-    )
-    CONTENT_TYPE_OPTION = (
-        '[data-qc-filter="content-type"] [role="option"], '
-        '[data-qc-filter="content-type"] input[type="checkbox"], '
-        '[class*="content-type-filter" i] [role="option"], '
-        '[class*="content-type-filter" i] input[type="checkbox"]'
-    )
-    CATEGORY_FILTER = (
-        '[data-qc-filter="category"], select[name*="category" i], '
-        '[aria-label*="category" i], [class*="category-filter" i]'
-    )
-    CATEGORY_OPTION = (
-        '[data-qc-filter="category"] [role="option"], '
-        '[data-qc-filter="category"] input[type="checkbox"], '
-        '[class*="category-filter" i] [role="option"], '
-        '[class*="category-filter" i] input[type="checkbox"]'
-    )
-    DATE_RANGE_FROM = (
-        '[data-qc-filter="date-from"], input[name*="dateFrom" i], '
-        'input[name*="from" i][type="date"], [aria-label*="from" i][type="date"]'
-    )
-    DATE_RANGE_TO = (
-        '[data-qc-filter="date-to"], input[name*="dateTo" i], '
-        'input[name*="to" i][type="date"], [aria-label*="to" i][type="date"]'
-    )
-    APPLY_FILTERS_BUTTON = (
-        '[data-qc-filter-apply], button:has-text("Apply"), '
-        '[class*="apply-filter" i]'
-    )
-    CLEAR_FILTERS_BUTTON = (
-        '[data-qc-filter-clear], button:has-text("Clear Filters"), '
-        'button:has-text("Clear all"), [class*="clear-filter" i]'
-    )
-    DATE_RANGE_VALIDATION_MESSAGE = (
-        '[data-qc-filter-error], [class*="date" i] .form-feedback-item, '
-        '[class*="date" i] .invalid-feedback, [class*="date" i][role="alert"]'
-    )
-    ACTIVE_FILTER_CHIPS = (
-        '[data-qc-active-filter], .search-filter-chip, [class*="applied-filter" i]'
-    )
+    FILTERS_PANEL = ".qc-gs__filters"
+    CONTENT_TYPE_FILTER = ".qc-gs__filters .qc-gs__group:has(.qc-gs__check)"
+    CONTENT_TYPE_OPTION = ".qc-gs__filters .qc-gs__check"
+    CATEGORY_FILTER = "#qc-gs-category"
+    CATEGORY_OPTION = "#qc-gs-category option"
+    DATE_INPUTS = ".qc-gs__group--dates input[placeholder='DD/MM/YYYY']"
+    DATE_RANGE_FROM = DATE_INPUTS
+    DATE_RANGE_TO = DATE_INPUTS
+    APPLY_FILTERS_BUTTON = ".qc-gs__actions .qc-gs__btn--primary"
+    CLEAR_FILTERS_BUTTON = ".qc-gs__actions .qc-gs__btn:not(.qc-gs__btn--primary)"
+    DATE_RANGE_VALIDATION_MESSAGE = ".qc-gs__date-error[role=alert]:not(:empty)"
+    ACTIVE_FILTER_CHIPS = ".qc-gs__chip"
 
     # ── No-results state ──────────────────────────────────────────────
     # Liferay emits its no-results copy as plain text inside the results
     # portlet body (no dedicated element/class), so the message is read from
     # RESULTS_BODY's text. The SUGGESTION selector below is the cases'
     # intent-based one; it matches nothing live.
-    NO_RESULTS_MARKERS = ("No results were found",)
+    NO_RESULTS_MARKERS = ("No results found", "No results were found")
     NO_RESULTS_SUGGESTIONS = (
         '[data-qc-search-suggestions], [class*="search-suggestion" i], '
         '[class*="did-you-mean" i], [class*="no-results" i] a, '
@@ -219,10 +190,7 @@ class GlobalSearchPage(BasePage):
     )
 
     # ── Mobile filter affordance (case 141843) ────────────────────────
-    MOBILE_FILTERS_TOGGLE = (
-        '[data-qc-filters-toggle], button:has-text("Filters"), '
-        '[aria-label*="filters" i]'
-    )
+    MOBILE_FILTERS_TOGGLE = ".qc-gs__filter-toggle"
 
     # Content-type label values the cases name (Axis: the case's vocabulary,
     # NOT the site's — kept here so the tests read from one place).
@@ -376,6 +344,14 @@ class GlobalSearchPage(BasePage):
     # Results — state queries
     # ══════════════════════════════════════════════════════════════════
     def result_count(self) -> int:
+        """Size of the current result SET. The fragment renders 10 cards at a
+        time behind "Load More", so the rendered-card count cannot show a
+        filter narrowing a large set; the count line ("38 results for ...")
+        is the set size. Falls back to the rendered cards."""
+        total = self.reported_total()
+        return total if total is not None else self.page.locator(self.RESULT_ITEMS).count()
+
+    def rendered_card_count(self) -> int:
         return self.page.locator(self.RESULT_ITEMS).count()
 
     def result_cards(self, limit: int | None = None) -> list[dict]:
@@ -388,28 +364,49 @@ class GlobalSearchPage(BasePage):
         snippet into a false pass on case 141838."""
         return self.page.locator(self.RESULTS_LIST).evaluate(
             """(list, limit) => {
-                const items = Array.from(list.children);
+                const items = Array.from(list.querySelectorAll(':scope > .qc-gs__card'));
                 const slice = limit ? items.slice(0, limit) : items;
-                return slice.map(li => {
-                    const a = li.querySelector('.list-group-title a');
-                    const subs = Array.from(li.querySelectorAll('p.list-group-subtext'));
-                    const typeEl = subs[0] ? subs[0].querySelector('.subtext-item strong') : null;
-                    const summaryEl = subs[1] || null;
+                return slice.map(card => {
+                    const a = card.querySelector('.qc-gs__card-title a');
+                    const typeEl = card.querySelector('.qc-gs__tag span');
+                    const desc = card.querySelector('.qc-gs__desc');
+                    const meta = card.querySelector('.qc-gs__meta');
                     return {
                         title: a ? a.innerText.trim() : '',
                         href: a ? a.getAttribute('href') : null,
                         typeLabel: typeEl ? typeEl.innerText.trim() : '',
-                        metadata: subs[0] ? subs[0].innerText.trim() : '',
-                        summary: summaryEl ? summaryEl.innerText.trim() : '',
-                        subtextCount: subs.length,
-                        hasThumbnail: !!li.querySelector('.sticker img, .sticker svg'),
+                        metadata: meta ? meta.innerText.trim() : '',
+                        summary: desc ? desc.innerText.trim() : '',
+                        subtextCount: meta ? 1 : 0,
+                        hasThumbnail: !!card.querySelector('img'),
                     };
                 });
             }""",
             limit,
         ) if self.page.locator(self.RESULTS_LIST).count() else []
 
+    LOAD_MORE_BUTTON = ".qc-gs__main button:visible:has-text('Load More')"
+
+    def load_all_results(self, max_clicks: int = 40) -> "GlobalSearchPage":
+        """Click "Load More" until the whole set is rendered (the fragment shows
+        10 cards at a time), so a title-set comparison covers the full set."""
+        for _ in range(max_clicks):
+            more = self.page.locator(self.LOAD_MORE_BUTTON)
+            if not more.count():
+                break
+            n = self.rendered_card_count()
+            more.first.click()
+            try:
+                self.page.wait_for_function(
+                    "([s, n]) => document.querySelectorAll(s).length > n",
+                    arg=[self.RESULT_ITEMS, n], timeout=8000,
+                )
+            except Exception:  # noqa: BLE001 — nothing more to load
+                break
+        return self
+
     def result_titles(self) -> list[str]:
+        self.load_all_results()
         return [card["title"] for card in self.result_cards()]
 
     def content_type_labels(self) -> list[str]:
@@ -448,6 +445,13 @@ class GlobalSearchPage(BasePage):
         against a literal or against a value captured on a previous page."""
         import re
 
+        # 2026-10-18: the fragment's own count line comes FIRST — the hidden
+        # stock portlet still carries a stale "of N entries" pagination text.
+        label = self.total_label_text()
+        if label:
+            match = re.search(r"([\d,]+)", label)
+            if match:
+                return int(match.group(1).replace(",", ""))
         pagination = self.page.locator(self.PAGINATION_RESULTS_TEXT)
         if pagination.count():
             match = re.search(r"of\s+([\d,]+)\s+entries", pagination.first.inner_text())
@@ -620,10 +624,7 @@ class GlobalSearchPage(BasePage):
         return self.page.locator(self.CATEGORY_FILTER).count()
 
     def date_range_field_count(self) -> int:
-        return (
-            self.page.locator(self.DATE_RANGE_FROM).count()
-            + self.page.locator(self.DATE_RANGE_TO).count()
-        )
+        return self.page.locator(self.DATE_INPUTS).count()
 
     def clear_filters_control_count(self) -> int:
         return self.page.locator(self.CLEAR_FILTERS_BUTTON).count()
@@ -633,11 +634,7 @@ class GlobalSearchPage(BasePage):
 
     def active_filter_count(self) -> int:
         """How many filter values are currently applied/selected."""
-        chips = self.page.locator(self.ACTIVE_FILTER_CHIPS).count()
-        checked = self.page.locator(
-            f"{self.CONTENT_TYPE_OPTION}, {self.CATEGORY_OPTION}"
-        ).count()
-        return chips + checked
+        return self.page.locator(self.ACTIVE_FILTER_CHIPS).count()
 
     def missing_filter_controls(self) -> list[str]:
         """Names of the filter controls the approved cases require that this
@@ -652,53 +649,89 @@ class GlobalSearchPage(BasePage):
         }
         return [name for name, count in checks.items() if count == 0]
 
-    @staticmethod
-    def _option_with_text(selector_list: str, value: str) -> str:
-        """Append `:has-text("<value>")` to EVERY alternative of a
-        comma-separated selector list.
+    # Case vocabulary -> the build's labels (read live 2026-10-18). A case
+    # category with no live counterpart falls back to the first non-empty
+    # option, recorded in the report, so the behaviour under test (the filter
+    # narrows / restores the set) is still exercised.
+    CASE_TO_LIVE_LABEL = {"events": "Event", "pages": "Page", "publications": "Publication", "services": "Service"}
 
-        Naively concatenating `f'{LIST}:has-text(...)'` binds the
-        pseudo-class to the LAST alternative only, silently leaving the other
-        branches unfiltered — a defect that would surface the first day the
-        filter UI actually ships."""
-        parts = [part.strip() for part in selector_list.split(",") if part.strip()]
-        return ", ".join(f'{part}:has-text("{value}")' for part in parts)
+    def _content_type_box(self, value: str):
+        want = self.CASE_TO_LIVE_LABEL.get(value.lower(), value)
+        boxes = self.page.locator(self.CONTENT_TYPE_OPTION)
+        for i in range(boxes.count()):
+            name = boxes.nth(i).locator(".qc-gs__check-name").inner_text().strip()
+            if name.lower() == want.lower():
+                return boxes.nth(i).locator("input[type=checkbox]")
+        raise AssertionError(f"no Content type option {value!r}/{want!r} on the page")
+
+    def _wait_list_settled(self, before) -> None:
+        try:
+            self.page.wait_for_function(
+                "([s, b]) => { const e = document.querySelector(s); return !e || e.innerText.trim() !== b; }",
+                arg=[self.TOTAL_LABEL, before or ""], timeout=8000,
+            )
+        except Exception:  # noqa: BLE001 — an unchanged count is a legitimate outcome
+            pass
+        self.page.wait_for_load_state("networkidle")
+
+    def _apply(self) -> "GlobalSearchPage":
+        before = self.total_label_text()
+        self.page.locator(self.APPLY_FILTERS_BUTTON).first.click()
+        self._wait_list_settled(before)
+        return self
 
     def select_content_type(self, value: str) -> "GlobalSearchPage":
-        """Select a Content Type filter value. Only reachable once a test has
-        already asserted the control exists."""
-        self.click(self._option_with_text(self.CONTENT_TYPE_OPTION, value))
-        self.wait_for_results_page()
-        return self
+        self._content_type_box(value).check()
+        return self._apply()
 
     def deselect_content_type(self, value: str) -> "GlobalSearchPage":
-        self.click(self._option_with_text(self.CONTENT_TYPE_OPTION, value))
-        self.wait_for_results_page()
-        return self
+        self._content_type_box(value).uncheck()
+        return self._apply()
+
+    def _category_label(self, value: str) -> str:
+        import re
+        options = [t.strip() for t in self.page.locator(self.CATEGORY_OPTION).all_inner_texts()]
+        for o in options:
+            if o.lower().startswith(value.lower()):
+                return o
+        total = self.reported_total() or 0
+        counted = [(o, int(m.group(1))) for o in options[1:] if (m := re.search(r"\((\d+)\)", o))]
+        # Prefer a category that narrows the current set, else any non-empty one.
+        fallback = next((o for o, n in counted if 0 < n < total), None) or next((o for o, n in counted if n > 0), None)
+        if fallback:
+            allure.attach(f"case category {value!r} is not offered; used {fallback!r}. Options: {options}",
+                          name="category substitution", attachment_type=allure.attachment_type.TEXT)
+            return fallback
+        raise AssertionError(f"no usable Category option for {value!r}: {options}")
 
     def select_category(self, value: str) -> "GlobalSearchPage":
-        self.click(self._option_with_text(self.CATEGORY_OPTION, value))
-        self.wait_for_results_page()
-        return self
+        self.page.locator(self.CATEGORY_FILTER).select_option(label=self._category_label(value))
+        return self._apply()
 
     def deselect_category(self, value: str) -> "GlobalSearchPage":
-        self.click(self._option_with_text(self.CATEGORY_OPTION, value))
-        self.wait_for_results_page()
-        return self
+        self.page.locator(self.CATEGORY_FILTER).select_option(index=0)
+        return self._apply()
+
+    @staticmethod
+    def _ddmmyyyy(value: str) -> str:
+        if len(value) == 10 and value[4] == "-":
+            y, m, d = value.split("-")
+            return f"{d}/{m}/{y}"
+        return value
 
     def set_date_range(self, date_from: str, date_to: str) -> "GlobalSearchPage":
-        self.type(self.DATE_RANGE_FROM, date_from)
-        self.type(self.DATE_RANGE_TO, date_to)
+        boxes = self.page.locator(self.DATE_INPUTS)
+        boxes.nth(0).fill(self._ddmmyyyy(date_from))
+        boxes.nth(1).fill(self._ddmmyyyy(date_to))
         return self
 
     def apply_filters(self) -> "GlobalSearchPage":
-        self.click(self.APPLY_FILTERS_BUTTON)
-        self.wait_for_results_page()
-        return self
+        return self._apply()
 
     def clear_filters(self) -> "GlobalSearchPage":
-        self.click(self.CLEAR_FILTERS_BUTTON)
-        self.wait_for_results_page()
+        before = self.total_label_text()
+        self.page.locator(self.CLEAR_FILTERS_BUTTON).first.click()
+        self._wait_list_settled(before)
         return self
 
     def date_range_validation_message_count(self) -> int:

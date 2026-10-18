@@ -1,0 +1,2 @@
+cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_pin_save_toast_ar
+cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_pin_screen_rtl_arabic

@@ -199,16 +199,18 @@ DATE_FIELDS = {"proposed_date"}
 # over-limit values are NOT truncated by the control (still fit under the
 # real cap), so the test must assert the CASE's real expected result (a
 # validation error) and is expected to genuinely fail, not be narrowed.
-LOOSE_MAXLENGTH_FIELDS = {
-    "media_organization": 200,   # cases state 150
-    "journalist_name": 150,      # case states 100
-    "reporter_name": 150,        # case states 100
-    "full_name": 150,            # case states 100
-}
+# EMPTIED 2026-10-18 (bug 145384 fixed, read live on all 3 modals): the name
+# fields now carry maxlength 100 and Media Organization 150, i.e. exactly the
+# cases' limits, so they moved to EXACT_MAXLENGTH_FIELDS below.
+LOOSE_MAXLENGTH_FIELDS: dict = {}
 # field-keys whose real live maxlength EXACTLY matches the case's stated
 # limit — the "exceeds limit" state is unreachable via the UI (the control
 # truncates on fill()); these are asserted as truncation-enforcement instead.
 EXACT_MAXLENGTH_FIELDS = {
+    "media_organization": 150,
+    "journalist_name": 100,
+    "reporter_name": 100,
+    "full_name": 100,
     "interview_subject": 1000,
     "equipment_and_access_needs": 1000,
     "message": 1000,

@@ -1,0 +1,1480 @@
+[
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_republishing_previously_unpublished_slide_restores_it",
+"tcs": [
+"135024"
+],
+"skip": false,
+"xg": [
+"hero_banner_slide_45560"
+]
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_enabling_counter_active_status_makes_it_appear",
+"tcs": [
+"135026"
+],
+"skip": false,
+"xg": [
+"achievement_counter_45659"
+]
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_disabling_counter_active_status_removes_it",
+"tcs": [
+"135027"
+],
+"skip": false,
+"xg": [
+"achievement_counter_45659"
+]
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_changing_counter_display_order_updates_frontend_position",
+"tcs": [
+"135028"
+],
+"skip": false,
+"xg": [
+"achievement_counter_45659"
+]
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_reverting_counter_display_order_restores_frontend_position",
+"tcs": [
+"135029"
+],
+"skip": false,
+"xg": [
+"achievement_counter_45659"
+]
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_uploading_valid_banner_image_on_new_slide_succeeds",
+"tcs": [
+"135010"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_changing_slide_display_order_updates_frontend_position",
+"tcs": [
+"135014"
+],
+"skip": false,
+"xg": [
+"hero_banner_slide_45560"
+]
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_reverting_slide_display_order_restores_frontend_position",
+"tcs": [
+"135015"
+],
+"skip": false,
+"xg": [
+"hero_banner_slide_45560"
+]
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_delete_slide_removes_from_cms_and_public_site",
+"tcs": [
+"135018"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_save_as_draft_does_not_publish_to_frontend",
+"tcs": [
+"135019"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_enabling_slide_active_status_makes_it_eligible",
+"tcs": [
+"135016"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_disabling_slide_active_status_removes_it",
+"tcs": [
+"135017"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_control_panel.py::test_unpublishing_slide_removes_it_from_home_page",
+"tcs": [
+"135023"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_editor_can_access_hero_banner_management",
+"tcs": [
+"135002"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_user_without_permission_denied_hero_banner",
+"tcs": [
+"135003"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_banner_image_valid_upload_accepted",
+"tcs": [
+"135031"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_banner_image_missing_refused",
+"tcs": [
+"135032"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_banner_image_gif_refused",
+"tcs": [
+"135033"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_banner_image_over_size_refused",
+"tcs": [
+"135034"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_valid_field_value_saved[135035]",
+"tcs": [
+"135035"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_valid_field_value_saved[135039]",
+"tcs": [
+"135039"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_valid_field_value_saved[135049]",
+"tcs": [
+"135049"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_valid_field_value_saved[135053]",
+"tcs": [
+"135053"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_valid_field_value_saved[135057]",
+"tcs": [
+"135057"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_valid_field_value_saved[135062]",
+"tcs": [
+"135062"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_valid_field_value_saved[135066]",
+"tcs": [
+"135066"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_valid_field_value_saved[135070]",
+"tcs": [
+"135070"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_empty_mandatory_field_refused[135036]",
+"tcs": [
+"135036"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_empty_mandatory_field_refused[135040]",
+"tcs": [
+"135040"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_empty_mandatory_field_refused[135050]",
+"tcs": [
+"135050"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_empty_mandatory_field_refused[135054]",
+"tcs": [
+"135054"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_empty_mandatory_field_refused[135058]",
+"tcs": [
+"135058"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_empty_mandatory_field_refused[135063]",
+"tcs": [
+"135063"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_empty_mandatory_field_refused[135067]",
+"tcs": [
+"135067"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_empty_mandatory_field_refused[135071]",
+"tcs": [
+"135071"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_invalid_button_link_refused[135059]",
+"tcs": [
+"135059"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_invalid_button_link_refused[135072]",
+"tcs": [
+"135072"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_active_status_true_saved",
+"tcs": [
+"135078"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_active_status_false_saved",
+"tcs": [
+"135079"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_counter_value_accepted_with_title",
+"tcs": [
+"135086"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_counter_value_required_with_title",
+"tcs": [
+"135087"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_slide_without_counters_saves",
+"tcs": [
+"135089"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_create_slide_with_mandatory_fields",
+"tcs": [
+"135009"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_edit_published_slide_title",
+"tcs": [
+"135013"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_published_slide_visible_on_home",
+"tcs": [
+"135022"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_fields_control_panel.py::test_add_achievement_counter_item",
+"tcs": [
+"135025"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_slide_form_renders_all_fields",
+"tcs": [
+"134995"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_counter_form_renders_all_fields",
+"tcs": [
+"134996"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_author_submit_draft_slide_pending_review",
+"tcs": [
+"135020"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_preview_draft_slide",
+"tcs": [
+"135021"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_whitespace_only_refused[135038]",
+"tcs": [
+"135038"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_whitespace_only_refused[135042]",
+"tcs": [
+"135042"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_whitespace_only_refused[135052]",
+"tcs": [
+"135052"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_whitespace_only_refused[135056]",
+"tcs": [
+"135056"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_whitespace_only_refused[135061]",
+"tcs": [
+"135061"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_whitespace_only_refused[135065]",
+"tcs": [
+"135065"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_whitespace_only_refused[135069]",
+"tcs": [
+"135069"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_whitespace_only_refused[135074]",
+"tcs": [
+"135074"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_valid_subtitle_saved[135043]",
+"tcs": [
+"135043"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_valid_subtitle_saved[135046]",
+"tcs": [
+"135046"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_valid_display_order_saved",
+"tcs": [
+"135075"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_empty_display_order_refused",
+"tcs": [
+"135076"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_negative_or_zero_display_order_refused[-1]",
+"tcs": [
+"135077"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_negative_or_zero_display_order_refused[0]",
+"tcs": [
+"135077"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_valid_counter_title_en_saved",
+"tcs": [
+"135080"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_valid_counter_title_ar_saved",
+"tcs": [
+"135083"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_valid_counter_icon_accepted",
+"tcs": [
+"135090"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_counter_icon_unsupported_refused",
+"tcs": [
+"135091"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_counter_icon_over_size_refused",
+"tcs": [
+"135092"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_counter_display_order_accepted",
+"tcs": [
+"135094"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_counter_display_order_required_with_title",
+"tcs": [
+"135095"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_counter_active_true_saved",
+"tcs": [
+"135097"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_hero_banner/test_home_hero_banner_p34_control_panel.py::test_counter_active_false_saved",
+"tcs": [
+"135098"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p12_control_panel.py::test_editor_can_access_our_services_management",
+"tcs": [
+"135333"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p12_control_panel.py::test_member_denied_our_services_management",
+"tcs": [
+"135334"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p12_control_panel.py::test_section_draft_hidden_from_live_home",
+"tcs": [
+"135346"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p12_control_panel.py::test_section_publish_goes_live",
+"tcs": [
+"135348"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p12_control_panel.py::test_section_unpublish_hides_section",
+"tcs": [
+"135350"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p12_control_panel.py::test_card_assigned_to_tab_shows_under_tab",
+"tcs": [
+"135351"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p12_control_panel.py::test_card_reassigned_moves_tabs",
+"tcs": [
+"135352"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p12_control_panel.py::test_valid_png_thumbnail_shows_on_card",
+"tcs": [
+"135376"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p12_control_panel.py::test_card_redirect_url_read_more",
+"tcs": [
+"135400"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p12_control_panel.py::test_view_all_url_field_present",
+"tcs": [
+"135388"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_preview",
+"tcs": [
+"135347"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_valid_value_saved[135354]",
+"tcs": [
+"135354"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_valid_value_saved[135358]",
+"tcs": [
+"135358"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_valid_value_saved[135362]",
+"tcs": [
+"135362"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_valid_value_saved[135366]",
+"tcs": [
+"135366"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_valid_value_saved[135370]",
+"tcs": [
+"135370"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_valid_value_saved[135373]",
+"tcs": [
+"135373"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_empty_value_refused[135355]",
+"tcs": [
+"135355"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_empty_value_refused[135357]",
+"tcs": [
+"135357"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_empty_value_refused[135359]",
+"tcs": [
+"135359"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_empty_value_refused[135361]",
+"tcs": [
+"135361"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_empty_value_refused[135363]",
+"tcs": [
+"135363"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_empty_value_refused[135365]",
+"tcs": [
+"135365"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_empty_value_refused[135367]",
+"tcs": [
+"135367"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_section_empty_value_refused[135369]",
+"tcs": [
+"135369"
+],
+"skip": false,
+"xg": [
+"our_services_section"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_thumbnail_unsupported_format_refused",
+"tcs": [
+"135377"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_thumbnail_over_size_refused",
+"tcs": [
+"135378"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_card_without_thumbnail_refused",
+"tcs": [
+"135379"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_invalid_redirect_url_refused",
+"tcs": [
+"135401"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_empty_redirect_url_refused",
+"tcs": [
+"135403"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_display_order_controls_sort",
+"tcs": [
+"135404"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_invalid_display_order_refused[135405]",
+"tcs": [
+"135405"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_invalid_display_order_refused[135406]",
+"tcs": [
+"135406"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_invalid_display_order_refused[135407]",
+"tcs": [
+"135407"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_card_icon_displays",
+"tcs": [
+"135410"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_card_without_icon_refused",
+"tcs": [
+"135411"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_tab_label_en_shows_live",
+"tcs": [
+"135392"
+],
+"skip": false,
+"xg": [
+"filter_tab_membership"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_tab_label_ar_shows_live",
+"tcs": [
+"135396"
+],
+"skip": false,
+"xg": [
+"filter_tab_membership"
+]
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_tab_label_refused[135393]",
+"tcs": [
+"135393"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_tab_label_refused[135395]",
+"tcs": [
+"135395"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_tab_label_refused[135397]",
+"tcs": [
+"135397"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_services/test_our_services_p34_control_panel.py::test_tab_label_refused[135399]",
+"tcs": [
+"135399"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_pin_configuration_reachable_from_authoring",
+"tcs": [
+"135653"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_editor_has_read_write_access",
+"tcs": [
+"135661"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_site_member_denied_pin_configuration",
+"tcs": [
+"135662"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_logged_out_direct_url_redirects_to_login[page0]",
+"tcs": [
+"135663"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_author_cannot_change_live_pin",
+"tcs": [
+"135664"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_pin_configuration_has_no_manual_event_detail_fields",
+"tcs": [
+"135672"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_event_selector_lists_published_events",
+"tcs": [
+"135654"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_pin_published_event_shows_on_home",
+"tcs": [
+"135669"
+],
+"skip": false,
+"xg": [
+"pin_event_49205"
+]
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_unpin_hides_section",
+"tcs": [
+"135670"
+],
+"skip": false,
+"xg": [
+"pin_event_49205"
+]
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_repin_replaces_without_duplicate",
+"tcs": [
+"135671"
+],
+"skip": false,
+"xg": [
+"pin_event_49205"
+]
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_active_status_off_hides_section",
+"tcs": [
+"135705",
+"135673"
+],
+"skip": false,
+"xg": [
+"pin_event_49205"
+]
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_active_status_on_stores_pin_and_shows_section",
+"tcs": [
+"135698",
+"135704"
+],
+"skip": false,
+"xg": [
+"pin_event_49205"
+]
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_pinned_event_details_sourced_from_events_module",
+"tcs": [
+"135672"
+],
+"skip": false,
+"xg": [
+"pin_event_49205"
+]
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_active_without_pinned_event_refused",
+"tcs": [
+"135701"
+],
+"skip": false,
+"xg": [
+"pin_event_49205"
+]
+},
+{
+"nodeid": "cms/tests/home_featured_event/test_home_featured_event_control_panel.py::test_direct_save_request_rejected",
+"tcs": [
+"135716"
+],
+"skip": false,
+"xg": [
+"pin_event_49205"
+]
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_valid_platform_name_en_saves",
+"tcs": [
+"131168"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_valid_platform_name_ar_saves",
+"tcs": [
+"131169"
+],
+"skip": true,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_empty_platform_name_en_blocks_save",
+"tcs": [
+"131170"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_empty_platform_name_ar_blocks_save",
+"tcs": [
+"131171"
+],
+"skip": true,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_platform_name_over_50_chars_rejected",
+"tcs": [
+"131172"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_platform_name_script_characters_handled_safely",
+"tcs": [
+"131173"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_cancel_discards_platform_name_changes",
+"tcs": [
+"131174"
+],
+"skip": true,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_platform_name_persists_after_reload",
+"tcs": [
+"131175"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_valid_png_icon_image_saves",
+"tcs": [
+"131176"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_valid_svg_icon_image_saves",
+"tcs": [
+"131177"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_empty_icon_image_blocks_save",
+"tcs": [
+"131178"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_unsupported_icon_image_format_rejected",
+"tcs": [
+"131179"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_oversized_icon_image_rejected",
+"tcs": [
+"131180"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_icon_image_persists_after_reload",
+"tcs": [
+"131181"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_valid_redirect_url_saves",
+"tcs": [
+"131182"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_empty_redirect_url_blocks_save",
+"tcs": [
+"131183"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_invalid_url_format_rejected",
+"tcs": [
+"131184"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_redirect_url_over_500_chars_rejected",
+"tcs": [
+"131185"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_redirect_url_persists_after_reload",
+"tcs": [
+"131186"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_active_true_with_invalid_url_cannot_publish",
+"tcs": [
+"131187"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_valid_display_order_reflects_frontend_position",
+"tcs": [
+"131188"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_display_order_zero_rejected",
+"tcs": [
+"131189"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_display_order_negative_rejected",
+"tcs": [
+"131190"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_display_order_non_numeric_rejected",
+"tcs": [
+"131191"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_display_order_persists_after_reload",
+"tcs": [
+"131192"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_active_status_true_saves",
+"tcs": [
+"131193"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_active_status_false_excludes_from_public_footer",
+"tcs": [
+"131194"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_active_status_persists_after_reload",
+"tcs": [
+"131195"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_active_true_draft_has_no_frontend_effect",
+"tcs": [
+"131196"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_site_content_editor_can_access_and_publish_directly",
+"tcs": [
+"131153"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_site_content_author_can_access_but_cannot_publish_directly",
+"tcs": [
+"131154"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_role_without_editor_author_assignment_denied_access",
+"tcs": [
+"131155"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_unauthenticated_forced_browsing_redirects_to_login",
+"tcs": [
+"131156"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_editor_session_expiry_during_editing_prompts_reauth",
+"tcs": [
+"131157"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_editor_adds_new_icon_appears_live_after_publish",
+"tcs": [
+"131159"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_editor_edits_existing_icon_image_url_order",
+"tcs": [
+"131160"
+],
+"skip": false,
+"xg": [
+"smi_production_rows"
+]
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_editor_toggles_existing_icon_inactive_removes_from_live",
+"tcs": [
+"131161"
+],
+"skip": false,
+"xg": [
+"smi_production_rows"
+]
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_editor_toggles_existing_inactive_icon_active_restores_on_live",
+"tcs": [
+"131162"
+],
+"skip": false,
+"xg": [
+"smi_production_rows"
+]
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_author_drafted_icon_live_only_after_editor_approval",
+"tcs": [
+"131163"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_editor_unpublishes_icon_removed_live_retained_in_cms",
+"tcs": [
+"131164"
+],
+"skip": false,
+"xg": [
+"smi_production_rows"
+]
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_role_without_permission_cannot_persist_change_via_direct_action",
+"tcs": [
+"131167"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_draft_icon_active_true_not_displayed_on_frontend",
+"tcs": [
+"131197"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_rejected_icon_entry_not_on_frontend",
+"tcs": [
+"131200"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_interrupted_publish_does_not_leave_corrupted_entry",
+"tcs": [
+"131202"
+],
+"skip": false,
+"xg": []
+},
+{
+"nodeid": "cms/tests/components/test_footer_control_panel.py::test_deleting_last_active_icon_hides_section_gracefully",
+"tcs": [
+"131203"
+],
+"skip": true,
+"xg": []
+}
+]

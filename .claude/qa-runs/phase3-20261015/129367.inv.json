@@ -1,0 +1,1037 @@
+[
+{
+"id": 134988,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the Hero Banner background image renders below the header on the Home Page"
+},
+{
+"id": 134989,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the headline title renders in the correct position and style"
+},
+{
+"id": 134990,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the subtitle renders below the headline in correct style"
+},
+{
+"id": 134991,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the Achievement Counters row renders with icon, animated number, and text"
+},
+{
+"id": 134992,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the slide-progress dot/pill indicator renders and the active pill visually fills during auto-play"
+},
+{
+"id": 134993,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the next/previous arrows render with hover state"
+},
+{
+"id": 134994,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the CTA button renders as a solid maroon pill with a diagonal arrow icon"
+},
+{
+"id": 134995,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the Hero Banner Management admin form renders all fields per the field table"
+},
+{
+"id": 134996,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the Achievement Counter admin sub-form renders all counter fields"
+},
+{
+"id": 134997,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the Home Page layout mirrors correctly for Arabic (RTL) across nav, headline, subtitle, CTA icon, and dot/arrow placement"
+},
+{
+"id": 134998,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the Hero Banner and Achievement Counters render correctly at desktop viewport width"
+},
+{
+"id": 134999,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the Hero Banner and Achievement Counters render correctly at tablet viewport width"
+},
+{
+"id": 135000,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that the Achievement Counters stack correctly below the banner at mobile viewport width"
+},
+{
+"id": 135001,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that an unauthenticated public visitor can view the Hero Banner without login"
+},
+{
+"id": 135002,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that a Site Content Editor with Hero Banner permission can access Hero Banner Management"
+},
+{
+"id": 135003,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that an admin user without Hero Banner permission is denied access with the exact bilingual message"
+},
+{
+"id": 135004,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that repeatedly clicking the next arrow cycles through all active slides and loops back to the first"
+},
+{
+"id": 135005,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking the previous arrow manually goes back to the previous slide"
+},
+{
+"id": 135006,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that repeatedly clicking previous arrow cycles backward through all slides and loops to the last"
+},
+{
+"id": 135007,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking Button 1 navigates to its configured target URL"
+},
+{
+"id": 135008,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking Button 2 navigates to its configured target URL"
+},
+{
+"id": 135009,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that a Site Content Editor can create a new Hero Banner slide with all mandatory fields"
+},
+{
+"id": 135010,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that uploading a valid Banner Image on a new slide succeeds"
+},
+{
+"id": 135011,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that auto-play advances the slider to the next active slide without user interaction"
+},
+{
+"id": 135012,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that clicking the next arrow manually advances to the next slide"
+},
+{
+"id": 135013,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that a Site Content Editor can edit an existing published slide's title"
+},
+{
+"id": 135014,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that changing a slide's Display Order updates its position in the frontend slider"
+},
+{
+"id": 135015,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that reverting a slide's Display Order restores its original frontend position"
+},
+{
+"id": 135016,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that enabling a slide's Active Status makes it eligible to appear on the frontend"
+},
+{
+"id": 135017,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that disabling a slide's Active Status removes it from the frontend"
+},
+{
+"id": 135018,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that deleting a slide removes it permanently from both CMS and frontend"
+},
+{
+"id": 135019,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that saving a slide as Draft does not publish it to the frontend"
+},
+{
+"id": 135020,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that submitting a draft slide for review moves it to Pending Review status"
+},
+{
+"id": 135021,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that Preview shows the slide as it will appear on the frontend before publishing"
+},
+{
+"id": 135022,
+"p": 1,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that publishing a slide makes it visible on the Home Page after cache refresh"
+},
+{
+"id": 135023,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that unpublishing a slide removes it from the Home Page"
+},
+{
+"id": 135024,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that re-publishing a previously unpublished slide restores it on the Home Page"
+},
+{
+"id": 135025,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Failed",
+"title": "Verify that an editor can add a new Achievement Counter item to a slide with valid data"
+},
+{
+"id": 135026,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that enabling a Counter's Active Status makes it appear on the frontend"
+},
+{
+"id": 135027,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that disabling a Counter's Active Status removes it from the frontend"
+},
+{
+"id": 135028,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that changing a Counter's Display Order updates its position in the frontend row"
+},
+{
+"id": 135029,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Passed",
+"title": "Verify that reverting a Counter's Display Order restores its original frontend position"
+},
+{
+"id": 135030,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": true,
+"outcome": "Passed",
+"title": "Verify that the Liferay generic success toast displays in Arabic when the CMS UI language is Arabic"
+},
+{
+"id": 135031,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a Banner Image within the size and format limits is accepted"
+},
+{
+"id": 135032,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving a slide without a Banner Image is rejected with the exact bilingual message"
+},
+{
+"id": 135033,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a Banner Image in an unsupported format (e.g. .gif) is rejected"
+},
+{
+"id": 135034,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a Banner Image exceeding 2MB is rejected"
+},
+{
+"id": 135035,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Banner Title (EN) within the 100-char limit is saved"
+},
+{
+"id": 135036,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving a slide with Banner Title (EN) left empty is rejected"
+},
+{
+"id": 135037,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Banner Title (EN) at exactly 100 characters is accepted and 101 characters is rejected"
+},
+{
+"id": 135038,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Banner Title (EN) is rejected as effectively empty"
+},
+{
+"id": 135039,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Banner Title (AR) within the 100-char limit is saved"
+},
+{
+"id": 135040,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving a slide with Banner Title (AR) left empty is rejected"
+},
+{
+"id": 135041,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Banner Title (AR) at exactly 100 characters is accepted and 101 characters is rejected"
+},
+{
+"id": 135042,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Banner Title (AR) is rejected as effectively empty"
+},
+{
+"id": 135043,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Subtitle (EN) within the 300-char limit is saved"
+},
+{
+"id": 135044,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Subtitle (EN) empty is accepted since the field is optional"
+},
+{
+"id": 135045,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Subtitle (EN) exceeding 300 characters is rejected"
+},
+{
+"id": 135046,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Subtitle (AR) within the 300-char limit is saved"
+},
+{
+"id": 135047,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Subtitle (AR) empty is accepted since the field is optional"
+},
+{
+"id": 135048,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Subtitle (AR) exceeding 300 characters is rejected"
+},
+{
+"id": 135049,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 1 Label (EN) within the 50-char limit is saved"
+},
+{
+"id": 135050,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 1 Label (EN) empty is rejected"
+},
+{
+"id": 135051,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 1 Label (EN) at exactly 50 characters is accepted and 51 is rejected"
+},
+{
+"id": 135052,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 1 Label (EN) is rejected"
+},
+{
+"id": 135053,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 1 Label (AR) within the 50-char limit is saved"
+},
+{
+"id": 135054,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 1 Label (AR) empty is rejected"
+},
+{
+"id": 135055,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 1 Label (AR) at exactly 50 characters is accepted and 51 is rejected"
+},
+{
+"id": 135056,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 1 Label (AR) is rejected"
+},
+{
+"id": 135057,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 1 Link URL is saved"
+},
+{
+"id": 135058,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 1 Link empty is rejected"
+},
+{
+"id": 135059,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an invalid URL format for Button 1 Link is rejected with the exact bilingual message"
+},
+{
+"id": 135060,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 1 Link at exactly 500 characters is accepted and 501 characters is rejected"
+},
+{
+"id": 135061,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 1 Link is rejected"
+},
+{
+"id": 135062,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 2 Label (EN) within the 50-char limit is saved"
+},
+{
+"id": 135063,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 2 Label (EN) empty is rejected"
+},
+{
+"id": 135064,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 2 Label (EN) at exactly 50 characters is accepted and 51 is rejected"
+},
+{
+"id": 135065,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 2 Label (EN) is rejected"
+},
+{
+"id": 135066,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 2 Label (AR) within the 50-char limit is saved"
+},
+{
+"id": 135067,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 2 Label (AR) empty is rejected"
+},
+{
+"id": 135068,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 2 Label (AR) at exactly 50 characters is accepted and 51 is rejected"
+},
+{
+"id": 135069,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 2 Label (AR) is rejected"
+},
+{
+"id": 135070,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Button 2 Link URL is saved"
+},
+{
+"id": 135071,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Button 2 Link empty is rejected"
+},
+{
+"id": 135072,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that an invalid URL format for Button 2 Link is rejected with the exact bilingual message"
+},
+{
+"id": 135073,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Button 2 Link at exactly 500 characters is accepted and 501 is rejected"
+},
+{
+"id": 135074,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a whitespace-only Button 2 Link is rejected"
+},
+{
+"id": 135075,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid positive Display Order value is saved"
+},
+{
+"id": 135076,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that saving with Display Order empty is rejected"
+},
+{
+"id": 135077,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a negative or zero Display Order value is rejected"
+},
+{
+"id": 135078,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting a slide's Active Status to True is saved correctly"
+},
+{
+"id": 135079,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting a slide's Active Status to False is saved correctly"
+},
+{
+"id": 135080,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Counter Title (EN) within the 30-char limit is saved"
+},
+{
+"id": 135081,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Counter Title (EN) empty is accepted since the field is optional"
+},
+{
+"id": 135082,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Title (EN) exceeding 30 characters is rejected"
+},
+{
+"id": 135083,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that a valid Counter Title (AR) within the 30-char limit is saved"
+},
+{
+"id": 135084,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Counter Title (AR) empty is accepted since the field is optional"
+},
+{
+"id": 135085,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Title (AR) exceeding 30 characters is rejected"
+},
+{
+"id": 135086,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Value is accepted when Counter Title is set and Value is valid"
+},
+{
+"id": 135087,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Value is required once Counter Title is set"
+},
+{
+"id": 135088,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Value exceeding 10 characters is rejected"
+},
+{
+"id": 135089,
+"p": 2,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Counter Title and Counter Value both empty saves successfully"
+},
+{
+"id": 135090,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a valid Counter Icon is accepted"
+},
+{
+"id": 135091,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a Counter Icon in an unsupported format is rejected"
+},
+{
+"id": 135092,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that uploading a Counter Icon exceeding 2MB is rejected"
+},
+{
+"id": 135093,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Counter Icon empty is accepted since the field is optional"
+},
+{
+"id": 135094,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Display Order is accepted when Counter Title is set and Order is valid"
+},
+{
+"id": 135095,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that Counter Display Order is required once Counter Title is set"
+},
+{
+"id": 135096,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that leaving Counter Title and Counter Display Order both empty saves successfully"
+},
+{
+"id": 135097,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting a Counter's Active Status to True is saved correctly"
+},
+{
+"id": 135098,
+"p": 3,
+"cp": true,
+"web": false,
+"manual": false,
+"outcome": "Not Executed",
+"title": "Verify that setting a Counter's Active Status to False is saved correctly"
+},
+{
+"id": 135099,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that with exactly one active published slide the slider displays statically without auto-play, arrows, or dot indicators"
+},
+{
+"id": 135100,
+"p": 3,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that a CTA button with no URL configured is not rendered on the frontend"
+},
+{
+"id": 135101,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that a background image load failure displays a fallback background color instead of a broken image"
+},
+{
+"id": 135102,
+"p": 2,
+"cp": false,
+"web": true,
+"manual": true,
+"outcome": "Not Executed",
+"title": "Verify that Home Page behaves correctly when zero slides are active and published"
+}
+]

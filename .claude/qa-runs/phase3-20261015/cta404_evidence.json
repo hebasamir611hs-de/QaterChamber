@@ -1,0 +1,403 @@
+{
+ "cms": [
+  {
+   "code": "QCDEMO-129367-HERO_BANNER_SLIDE-01",
+   "title_en": "Qatar Chamber is among the oldest chambers of commerce in the GCC.",
+   "b1_label": "Read More",
+   "b1_link": "/web/qatar-chamber/about-us",
+   "b2_label": "Our Services",
+   "b2_link": "/web/qatar-chamber/services"
+  },
+  {
+   "code": "QCDEMO-129367-HERO_BANNER_SLIDE-02",
+   "title_en": "Qatar Chamber is among the oldest chambers of commerce in the GCC.",
+   "b1_label": "Read More",
+   "b1_link": "/web/qatar-chamber/about-us",
+   "b2_label": "Our Services",
+   "b2_link": "/web/qatar-chamber/services"
+  },
+  {
+   "code": "dcec133b-0cae-a689-d72e-554a97ae4665",
+   "title_en": "Qatar Chamber Enhances Trade Relations with Malaysia’s Malacca State",
+   "b1_label": "Read More",
+   "b1_link": "/web/qatar-chamber/qatar-malaysia-trade-relations",
+   "b2_label": "Our Services",
+   "b2_link": "/web/qatar-chamber/services"
+  },
+  {
+   "code": "c5f0718a-15fc-9723-6bc8-6c8af62ef106",
+   "title_en": "Al-Mansori Highlights Qatar’s Investment Strengths at AIM 2026",
+   "b1_label": "Read More",
+   "b1_link": "/web/qatar-chamber/qatar-investment-opportunities-at-aim-2026",
+   "b2_label": "Our Services",
+   "b2_link": "/web/qatar-chamber/services"
+  },
+  {
+   "code": "c96bde36-2ff6-012b-b2bf-8130b1d4a483",
+   "title_en": "Qatar Chamber Participates in AIM Congress 2026 in Dubai",
+   "b1_label": "Read More",
+   "b1_link": "/web/qatar-chamber/qatar-chamber-at-aim-congress-2026",
+   "b2_label": "Our Services",
+   "b2_link": "/web/qatar-chamber/services"
+  },
+  {
+   "code": "e3db10f0-7c70-ae06-d89c-a3ec0018a3e2",
+   "title_en": "The Ethiopian president discussed economic relations with the Qatar Chamber",
+   "b1_label": "Read More",
+   "b1_link": "/web/qatar-chamber/qatar-ethiopia-economic-relations",
+   "b2_label": "Our Services",
+   "b2_link": "/web/qatar-chamber/services"
+  },
+  {
+   "code": "5fa3277c-b7e9-9d2b-ba90-6e79bdf0a34b",
+   "title_en": "6th World Conference on International Arbitration to kick off on November 3",
+   "b1_label": "Read More",
+   "b1_link": "/web/qatar-chamber/6th-world-conference-on-international-arbitration",
+   "b2_label": "Our Services",
+   "b2_link": "/web/qatar-chamber/services"
+  },
+  {
+   "code": "addb3c87-34a5-ddbb-8774-c129151cc80d",
+   "title_en": "Sheikh Khalifa bin Jassim: Arab Private Sector Key Driver of Investment and Job Creation",
+   "b1_label": "Read More",
+   "b1_link": "/web/qatar-chamber/arab-private-sector-investment-and-job-creation",
+   "b2_label": "Our Services",
+   "b2_link": "/web/qatar-chamber/services"
+  },
+  {
+   "code": "1efe5520-552f-95a8-dffb-51e320f1d3e6",
+   "title_en": "Third Environmental, Social and Governance Conference to Kick Off on October 6",
+   "b1_label": "Read More",
+   "b1_link": "/web/qatar-chamber/third-esg-qatar-conference",
+   "b2_label": "Our Services",
+   "b2_link": "/web/qatar-chamber/services"
+  }
+ ],
+ "public": {
+  "en": {
+   "hero_panels": [
+    {
+     "title": "Qatar Chamber is among the oldest chambers of commerce in the GCC.",
+     "b1": [
+      [
+       "Read More",
+       "/en/about-us"
+      ],
+      [
+       "Our Services",
+       "/en/services"
+      ]
+     ]
+    },
+    {
+     "title": "Qatar Chamber is among the oldest chambers of commerce in the GCC.",
+     "b1": [
+      [
+       "",
+       "/en/about-us"
+      ],
+      [
+       "",
+       "/en/services"
+      ]
+     ]
+    },
+    {
+     "title": "Qatar Chamber Enhances Trade Relations with Malaysia’s Malacca State",
+     "b1": [
+      [
+       "",
+       "/en/qatar-malaysia-trade-relations"
+      ],
+      [
+       "",
+       "/en/services"
+      ]
+     ]
+    },
+    {
+     "title": "Al-Mansori Highlights Qatar’s Investment Strengths at AIM 2026",
+     "b1": [
+      [
+       "",
+       "/en/qatar-investment-opportunities-at-aim-2026"
+      ],
+      [
+       "",
+       "/en/services"
+      ]
+     ]
+    },
+    {
+     "title": "Qatar Chamber Participates in AIM Congress 2026 in Dubai",
+     "b1": [
+      [
+       "",
+       "/en/qatar-chamber-at-aim-congress-2026"
+      ],
+      [
+       "",
+       "/en/services"
+      ]
+     ]
+    },
+    {
+     "title": "The Ethiopian president discussed economic relations with the Qatar Chamber",
+     "b1": [
+      [
+       "",
+       "/en/qatar-ethiopia-economic-relations"
+      ],
+      [
+       "",
+       "/en/services"
+      ]
+     ]
+    },
+    {
+     "title": "6th World Conference on International Arbitration to kick off on November 3",
+     "b1": [
+      [
+       "",
+       "/en/6th-world-conference-on-international-arbitration"
+      ],
+      [
+       "",
+       "/en/services"
+      ]
+     ]
+    },
+    {
+     "title": "Sheikh Khalifa bin Jassim: Arab Private Sector Key Driver of Investment and Job Creation",
+     "b1": [
+      [
+       "",
+       "/en/arab-private-sector-investment-and-job-creation"
+      ],
+      [
+       "",
+       "/en/services"
+      ]
+     ]
+    },
+    {
+     "title": "Third Environmental, Social and Governance Conference to Kick Off on October 6",
+     "b1": [
+      [
+       "",
+       "/en/third-esg-qatar-conference"
+      ],
+      [
+       "",
+       "/en/services"
+      ]
+     ]
+    }
+   ],
+   "services_links": [
+    " -> /en/services",
+    "ATA Carnet -> /en/our-services/ata-carnet",
+    "ATA Carnets -> /en/our-services/ata-carnet",
+    "Brochure Arbitration Best Practices 13 M -> /documents/37246/145826/publication-sample.pdf/2c669f46-c021-d4d7-ea52-fddafb5a94f6?version=1.0&t=1789165854190&download=true&groupExternalReferenceCode=QCDEMO-SITE-qatar-chamber&objectDefinitionExternalReferenceCode=QCDEMO-129386-publication&objectEntryExternalReferenceCode=QCDEMO-129386-PUB-008",
+    "Certificate of Origin -> /en/our-services/certificate-of-origin-online",
+    "Certificate of Origin Online -> /en/our-services/certificate-of-origin-online",
+    "Economic Consultancy -> /en/our-services/economic-consultancy",
+    "Economic Research -> /en/our-services/economic-research",
+    "Legal Consultation -> /en/our-services/legal-consultation",
+    "Manuals Green Business Framework 14 May  -> /documents/37246/145826/publication-sample.pdf/2c669f46-c021-d4d7-ea52-fddafb5a94f6?version=1.0&t=1789165854190&download=true&groupExternalReferenceCode=QCDEMO-SITE-qatar-chamber&objectDefinitionExternalReferenceCode=QCDEMO-129386-publication&objectEntryExternalReferenceCode=QCDEMO-129386-PUB-007",
+    "Mediation -> /en/our-services/mediation",
+    "Membership -> /en/our-services/member-services",
+    "Membership Services -> /en/our-services/member-services",
+    "Our Services -> /en/services",
+    "Proposal for Research -> /en/our-services/proposal-for-research",
+    "Read More -> /en/our-services/certificate-of-origin-online",
+    "Read More -> /en/our-services/economic-research",
+    "Read More -> /en/our-services/member-services",
+    "Read More -> https://qatarchamber.com/en/services/qctest-135400",
+    "Services Booklet & Brochure -> /en/services-booklet-brochure",
+    "TIR Carnet -> /en/our-services/tir-carnet",
+    "TIR Carnets -> /en/our-services/tir-carnet",
+    "Terms of Service -> /en/terms-and-conditions",
+    "View All Services -> /en/services"
+   ]
+  },
+  "ar": {
+   "hero_panels": [
+    {
+     "title": "تُعد غرفة قطر من أقدم غرف التجارة في دول مجلس التعاون الخليجي.",
+     "b1": [
+      [
+       "إقرأ المزيد",
+       "/ar/about-us"
+      ],
+      [
+       "خدماتنا",
+       "/ar/services"
+      ]
+     ]
+    },
+    {
+     "title": "تُعد غرفة قطر من أقدم غرف التجارة في دول مجلس التعاون الخليجي.",
+     "b1": [
+      [
+       "",
+       "/ar/about-us"
+      ],
+      [
+       "",
+       "/ar/services"
+      ]
+     ]
+    },
+    {
+     "title": "غرفة قطر تبحث تعزيز التعاون التجاري مع ولاية ملقا الماليزية",
+     "b1": [
+      [
+       "",
+       "/ar/qatar-malaysia-trade-relations"
+      ],
+      [
+       "",
+       "/ar/services"
+      ]
+     ]
+    },
+    {
+     "title": "المنصوري يستعرض مقومات البيئة الاستثمارية في دولة قطر",
+     "b1": [
+      [
+       "",
+       "/ar/qatar-investment-opportunities-at-aim-2026"
+      ],
+      [
+       "",
+       "/ar/services"
+      ]
+     ]
+    },
+    {
+     "title": "غرفة قطر تشارك في قمة AIM للاستثمار في دبي",
+     "b1": [
+      [
+       "",
+       "/ar/qatar-chamber-at-aim-congress-2026"
+      ],
+      [
+       "",
+       "/ar/services"
+      ]
+     ]
+    },
+    {
+     "title": "الرئيس الاثيوبي يبحث العلاقات الاقتصادية مع غرفة قطر",
+     "b1": [
+      [
+       "",
+       "/ar/qatar-ethiopia-economic-relations"
+      ],
+      [
+       "",
+       "/ar/services"
+      ]
+     ]
+    },
+    {
+     "title": "المؤتمر العالمي السادس للتحكيم الدولي ينطلق 3 نوفمبر المقبل",
+     "b1": [
+      [
+       "",
+       "/ar/6th-world-conference-on-international-arbitration"
+      ],
+      [
+       "",
+       "/ar/services"
+      ]
+     ]
+    },
+    {
+     "title": "الشيخ خليفة بن جاسم: القطاع الخاص العربي محرك رئيسي للاستثمار وخلق فرص العمل",
+     "b1": [
+      [
+       "",
+       "/ar/arab-private-sector-investment-and-job-creation"
+      ],
+      [
+       "",
+       "/ar/services"
+      ]
+     ]
+    },
+    {
+     "title": "المؤتمر الثالث للحوكمة البيئية والاجتماعية والمؤسسية ينطلق 6 اكتوبر",
+     "b1": [
+      [
+       "",
+       "/ar/third-esg-qatar-conference"
+      ],
+      [
+       "",
+       "/ar/services"
+      ]
+     ]
+    }
+   ],
+   "services_links": [
+    " -> /ar/services",
+    "اقرأ المزيد -> /ar/our-services/certificate-of-origin-online",
+    "اقرأ المزيد -> /ar/our-services/economic-research",
+    "اقرأ المزيد -> /ar/our-services/member-services",
+    "اقرأ المزيد -> https://qatarchamber.com/en/services/qctest-135400",
+    "الاستشارات الاقتصادية -> /ar/our-services/economic-consultancy",
+    "الاستشارات القانونية -> /ar/our-services/legal-consultation",
+    "البحوث الاقتصادية -> /ar/our-services/economic-research",
+    "العضوية -> /ar/our-services/member-services",
+    "الوساطة -> /ar/our-services/mediation",
+    "خدمات الأعضاء -> /ar/our-services/member-services",
+    "خدماتنا -> /ar/services",
+    "دفاتر الإدخال المؤقت -> /ar/our-services/ata-carnet",
+    "دفاتر النقل البري الدولي -> /ar/our-services/tir-carnet",
+    "دفتر ATA -> /ar/our-services/ata-carnet",
+    "دفتر TIR -> /ar/our-services/tir-carnet",
+    "شهادة المنشأ -> /ar/our-services/certificate-of-origin-online",
+    "شهادة المنشأ الإلكترونية -> /ar/our-services/certificate-of-origin-online",
+    "عرض الكل -> /ar/services",
+    "فعاليات دولية معرض التجارة الدولية والخد -> /ar/events/event?id=115828",
+    "كتيب الخدمات والنشرة التعريفية -> /ar/services-booklet-brochure",
+    "كتيب تعريفي أفضل ممارسات التحكيم 13 مايو -> /documents/37246/145826/publication-sample.pdf/2c669f46-c021-d4d7-ea52-fddafb5a94f6?version=1.0&t=1789165854190&download=true&groupExternalReferenceCode=QCDEMO-SITE-qatar-chamber&objectDefinitionExternalReferenceCode=QCDEMO-129386-publication&objectEntryExternalReferenceCode=QCDEMO-129386-PUB-008",
+    "كتيبات إطار الأعمال الخضراء 14 مايو 2026 -> /documents/37246/145826/publication-sample.pdf/2c669f46-c021-d4d7-ea52-fddafb5a94f6?version=1.0&t=1789165854190&download=true&groupExternalReferenceCode=QCDEMO-SITE-qatar-chamber&objectDefinitionExternalReferenceCode=QCDEMO-129386-publication&objectEntryExternalReferenceCode=QCDEMO-129386-PUB-007",
+    "مقترح بحث -> /ar/our-services/proposal-for-research"
+   ]
+  }
+ },
+ "probe": {
+  "/en/services": {
+   "status": 404,
+   "final": "https://qcdev.ihorizons.com/en/services",
+   "title": "Page Not Found - Qatar Chamber"
+  },
+  "/services": {
+   "status": 404,
+   "final": "https://qcdev.ihorizons.com/services",
+   "title": "Page Not Found - Qatar Chamber"
+  },
+  "/ar/services": {
+   "status": 404,
+   "final": "https://qcdev.ihorizons.com/ar/services",
+   "title": "الصفحة غير موجودة - غرفة قطر"
+  },
+  "/en/our-services": {
+   "status": 200,
+   "final": "https://qcdev.ihorizons.com/en/our-services",
+   "title": "Our Services - Qatar Chamber"
+  },
+  "/en/about-us": {
+   "status": 200,
+   "final": "https://qcdev.ihorizons.com/en/about-us",
+   "title": "About Us - Qatar Chamber"
+  },
+  "click_button2_slide1": {
+   "final": "https://qcdev.ihorizons.com/en/home",
+   "title": "Home - Qatar Chamber"
+  }
+ }
+}

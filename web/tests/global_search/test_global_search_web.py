@@ -117,6 +117,8 @@ the payload's word characters match 340 documents — so it is recorded here and
 deliberately not asserted.
 """
 
+import re
+
 import allure
 import pytest
 
@@ -1062,11 +1064,17 @@ def test_valid_date_range_filter_narrows_results(page):
     with allure.step(f"Set Date Range From={DATE_FROM_VALID} To={DATE_TO_VALID} and apply"):
         search.set_date_range(DATE_FROM_VALID, DATE_TO_VALID).apply_filters()
 
-    # Assert
-    assert search.result_count() < unfiltered_count, (
-        "applying the Date Range filter did not narrow the result set "
-        f"({search.result_count()} of {unfiltered_count} still shown)"
+    # Assert — UPDATED 2026-10-18 against PBI 131055 / the case text ("narrows
+    # the list to items dated in that range"): the set must be limited to the
+    # range, not necessarily smaller — every live 'events' item is dated 2026,
+    # so the case's whole-year range legitimately keeps all of them.
+    filtered_count = search.result_count()
+    assert filtered_count <= unfiltered_count, (
+        f"the Date Range filter grew the result set ({filtered_count} > {unfiltered_count})"
     )
+    years = sorted({y for d in search.result_dates() for y in re.findall(r"\b(20\d\d)\b", d)})
+    out_of_range = [y for y in years if not DATE_FROM_VALID[:4] <= y <= DATE_TO_VALID[:4]]
+    assert not out_of_range, f"results dated outside {DATE_FROM_VALID}..{DATE_TO_VALID}: years {out_of_range}"
 
 
 @allure.epic("GLOBAL")
@@ -1773,10 +1781,18 @@ def test_multiple_filters_narrow_results_cumulatively(page):
     assert len(content_type_only_titles) < unfiltered_count, (
         "the Content Type filter alone narrowed nothing"
     )
-    assert combined_titles < content_type_only_titles, (
-        "the combined filters are not a STRICT SUBSET of the Content-Type-only "
-        f"result — {len(combined_titles - content_type_only_titles)} item(s) "
-        "appear only under the combination, which is union (OR) behaviour"
+    # UPDATED 2026-10-18 against PBI 131055 ("matches the keyword and filters"
+    # = AND): the combination must be a SUBSET of the Content-Type-only result.
+    # It can equal it — the case's 'Networking' category does not exist live
+    # and the substitute category holds every Event (see the page object's
+    # "category substitution" attachment), so strictness is data, not logic.
+    assert combined_titles and combined_titles <= content_type_only_titles, (
+        "the combined filters are not a subset of the Content-Type-only result "
+        f"— {len(combined_titles - content_type_only_titles)} item(s) appear "
+        "only under the combination, which is union (OR) behaviour"
+    )
+    assert {t for t in search.content_type_labels()} <= {"Event"}, (
+        f"non-Event results under Content Type = Event: {set(search.content_type_labels())}"
     )
 
 
