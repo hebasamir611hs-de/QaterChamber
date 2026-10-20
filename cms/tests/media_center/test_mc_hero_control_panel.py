@@ -30,7 +30,6 @@ from cms.pages.media_center.mc_hero_admin_page import (
     MSG_ARABIC_REQUIRED,
     MSG_FILE_INVALID_AR,
     MSG_FILE_INVALID_EN,
-    MSG_SAVED_AND_PUBLISHED,
     ROLE_MEMBER,
     MCHeroAdminPage,
 )
@@ -82,7 +81,7 @@ def _positive_text(browser, tc: str, key: str, en: str, ar: str):
         result["screenshot"] = d.evidence(f"{tc}_after_publish")
         attach(result, f"{tc} publish")
         assert result["went_through"], f"Publish did not go through: {result['messages']}"
-        assert any(MSG_SAVED_AND_PUBLISHED in t for t in result["editbar"]), f"no success message: {result['editbar']}"
+        assert d.shows_publish_success(result["editbar"]), f"no success message: {result['editbar']}"
         stored = d.api_get()
         assert _api_text(stored, key, "en") == en and _api_text(stored, key, "ar") == ar, \
             f"stored values differ: {stored.get(f'{key}_i18n')}"

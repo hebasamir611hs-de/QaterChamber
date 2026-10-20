@@ -80,11 +80,25 @@ K_IMAGE = "heroBackgroundImage"
 K_SEARCH = "searchPlaceholder"
 IMAGE_LABEL = "Hero Background Image"
 TEXT_KEYS = (K_LABEL, K_HEADLINE, K_SEARCH)
+# Subscription Band fields — moved onto the hero singleton by the fix of bug
+# 149354 (live 2026-10-19): plain text with counters heading 150,
+# description 300, email placeholder 60, button label 30; icon upload
+# ".svg,.png no larger than 2 MB".
+K_SUB_ICON = "subscriptionIcon"
+K_SUB_HEADING = "subscriptionHeading"
+K_SUB_DESC = "subscriptionDescription"
+K_SUB_EMAIL = "emailFieldPlaceholder"
+K_SUB_BUTTON = "subscribeButtonLabel"
+SUB_ICON_LABEL = "Subscription Icon"
 
 ROLE_EDITOR = "Site Content Editor"
 ROLE_MEMBER = "Site Member"
 EDITOR_USER_ID = "156488"
 MSG_SAVED_AND_PUBLISHED = "Saved and published."
+# Live 2026-10-19 the Publish confirmation reads Liferay's generic text instead;
+# the user confirmed (2026-10) that this message is correct on qcdev.
+MSG_REQUEST_COMPLETED = "Your request completed successfully."
+PUBLISH_SUCCESS_MESSAGES = (MSG_SAVED_AND_PUBLISHED, MSG_REQUEST_COMPLETED)
 MSG_REQUIRED_BLOCK = "Please complete the required fields"
 MSG_ACCESS_DENIED = "Access Denied. You do not have permission to perform this action."
 MSG_FILE_INVALID_EN = "Unsupported file type or size."
@@ -99,7 +113,11 @@ _PUT_KEYS = ("defaultLanguageId", "externalReferenceCode", "friendlyUrlPath", "f
              "keywords", "objectEntryFolderExternalReferenceCode", "objectEntryFolderId", "scopeId", "scopeKey",
              "systemProperties", "taxonomyCategoryBriefs", "heroDescription", "searchPlaceholder", "pageStatus",
              "activeStatus", "heroHeadline", "pageLabel_i18n", "heroDescription_i18n", "heroBackgroundImage",
-             "searchPlaceholder_i18n", "heroHeadline_i18n", "pageLabel")
+             "searchPlaceholder_i18n", "heroHeadline_i18n", "pageLabel",
+             # Subscription Band fields (on the hero since the bug 149354 fix, 2026-10-19)
+             "subscriptionIcon", "subscriptionHeading", "subscriptionHeading_i18n", "subscriptionDescription",
+             "subscriptionDescription_i18n", "emailFieldPlaceholder", "emailFieldPlaceholder_i18n",
+             "subscribeButtonLabel", "subscribeButtonLabel_i18n")
 # Volatile keys never compared (they change on any save by design).
 VOLATILE_KEYS = ("dateModified", "actions", "creator", "dateCreated")
 
@@ -433,7 +451,7 @@ class MCHeroAdminPage(TenderWorkflowAdminPage):
             """(el, label) => { let c = el.parentElement;
                 for (let i = 0; i < 8 && c && !(c.innerText || '').includes(label); i++) c = c.parentElement;
                 return ((c ? c.innerText : '') + ' ' + (el.value || '') + ' ' + (el.placeholder || ''))
-                    .replace(/\\s+/g, ' ').trim(); }""", IMAGE_LABEL)
+                    .replace(/\\s+/g, ' ').trim(); }""", {K_SUB_ICON: SUB_ICON_LABEL}.get(key, IMAGE_LABEL))
 
     def _open_picker(self, key: str) -> None:  # type: ignore[override]
         """The field's own Select File button (locale-independent: the only
@@ -449,10 +467,14 @@ class MCHeroAdminPage(TenderWorkflowAdminPage):
         self._guard_form()
         return self.attempt_upload(K_IMAGE, file_path, stem)
 
-    def remove_image(self) -> dict:
-        """Clicks "Remove file" in the image block; returns {clicked, block}."""
+    def try_upload(self, key: str, file_path: str, stem: str) -> dict:
         self._guard_form()
-        node = self._form().locator(f'input[name="ObjectField_{K_IMAGE}"]').first
+        return self.attempt_upload(key, file_path, stem)
+
+    def remove_image(self, key: str = K_IMAGE) -> dict:
+        """Clicks "Remove file" in the attachment block; returns {clicked, block}."""
+        self._guard_form()
+        node = self._form().locator(f'input[name="ObjectField_{key}"]').first
         container = node.locator("xpath=ancestor::*[.//button[normalize-space()='Remove file']][1]")
         button = container.get_by_role("button", name=self.REMOVE_FILE_BUTTON)
         clicked = False
@@ -462,7 +484,7 @@ class MCHeroAdminPage(TenderWorkflowAdminPage):
                 clicked = True
             except Exception as exc:  # noqa: BLE001 — reported to the caller
                 logger.warning("Remove file click failed: %r", exc)
-        return {"clicked": clicked, "block": self.upload_block_text()}
+        return {"clicked": clicked, "block": self.upload_block_text(key)}
 
     # ---- save ------------------------------------------------------------------
     def publish(self) -> dict:
@@ -470,11 +492,37 @@ class MCHeroAdminPage(TenderWorkflowAdminPage):
         self._guard_form()
         self.click_publish()
         went = self.save_went_through()
-        return {"went_through": went, "refused": self.save_was_refused(),
-                "evidence": self.refusal_evidence(), "messages": self.all_messages_text(),
-                "editbar": self.success_messages(MSG_SAVED_AND_PUBLISHED, 10.0) if went else self.editbar_texts(),
-                "requests": list(getattr(self, "last_save_requests", [])),
-                "responses": list(getattr(self, "last_save_responses", []))}
+        out = {"went_through": went, "refused": self.save_was_refused(),
+               "evidence": self.refusal_evidence(), "messages": self.all_messages_text(),
+               "editbar": self.publish_success_texts() if went else self.editbar_texts(),
+               "requests": list(getattr(self, "last_save_requests", [])),
+               "responses": list(getattr(self, "last_save_responses", []))}
+        if went or any(c < 400 for c in out["responses"]):
+            # Remember exactly what THIS test wrote (concurrency guard, rule 4b):
+            # wait until the workflow settles the status, then keep the record.
+            seen = {"rec": {}}
+
+            def _settled() -> bool:
+                seen["rec"] = self.api_get()
+                return seen["rec"].get("status", {}).get("code") == 0
+
+            try:
+                wait_until(_settled, timeout=120.0, poll=4.0)
+            except WaitTimeoutError:
+                logger.warning("status did not settle to approved after Publish")
+            self.last_written = seen["rec"]
+        return out
+
+    def publish_success_texts(self, timeout: float = 10.0) -> list[str]:
+        try:
+            wait_until(lambda: any(m in t for t in self.editbar_texts() for m in PUBLISH_SUCCESS_MESSAGES),
+                       timeout=timeout, poll=0.5)
+        except WaitTimeoutError:
+            pass
+        return self.editbar_texts()
+
+    def shows_publish_success(self, texts: list[str]) -> bool:
+        return any(m in t for t in texts for m in PUBLISH_SUCCESS_MESSAGES)
 
     def body_text(self) -> str:
         return self.page.locator("body").inner_text()
@@ -517,6 +565,23 @@ _HERO_STATE_JS = """() => {
               return c.measureText(input.placeholder || '').width + parseFloat(cs.paddingLeft || 0)
                      + parseFloat(cs.paddingRight || 0); })() : null,
           bg_style: bg ? (bg.style.backgroundImage || '') : null,
+          band: (() => { const b = q('section.qc-mc-sub'); if (!b) return null;
+              const inp = b.querySelector('input[data-qc-mcsub-input]');
+              const badge = b.querySelector('[data-qc-mcsub-badge]');
+              const pw = (el) => { if (!el) return null; const cs = getComputedStyle(el);
+                  const c = document.createElement('canvas').getContext('2d');
+                  c.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+                  return c.measureText(el.placeholder || '').width + parseFloat(cs.paddingLeft || 0)
+                         + parseFloat(cs.paddingRight || 0); };
+              return {ready: b.getAttribute('data-qc-mcsub-ready'), dir: b.getAttribute('dir'),
+                      heading: m(b.querySelector('[data-qc-mcsub-heading]')),
+                      desc: m(b.querySelector('[data-qc-mcsub-desc]')),
+                      placeholder: inp ? inp.placeholder : null, input: m(inp), placeholder_text_width: pw(inp),
+                      button: m(b.querySelector('[data-qc-mcsub-btn-label]')),
+                      button_box: m(b.querySelector('button[data-qc-mcsub-btn]')),
+                      input_enabled: inp ? !inp.disabled : null,
+                      button_enabled: (() => { const x = b.querySelector('button[data-qc-mcsub-btn]'); return x ? !x.disabled : null; })(),
+                      icon_html: badge ? badge.innerHTML : null}; })(),
           viewport: window.innerWidth, doc_scroll_width: document.documentElement.scrollWidth,
           doc_client_width: document.documentElement.clientWidth};
 }"""
@@ -525,6 +590,7 @@ _HERO_STATE_JS = """() => {
 class MCHeroPublicView(BasePage):
     READY = 'section.qc-mc-hero[data-qc-mch-ready="true"]'
     BG_SETTLED = '.qc-mc-hero-bg[data-qc-mch-bg-loaded]'
+    BAND_READY = 'section.qc-mc-sub[data-qc-mcsub-ready="true"]'
 
     def open_page(self, locale: str = "en") -> "MCHeroPublicView":
         self.open(web_url(PUBLIC_PATH, locale=locale))
@@ -541,6 +607,10 @@ class MCHeroPublicView(BasePage):
             self.page.locator(self.BG_SETTLED).first.wait_for(state="attached", timeout=15000)
         except Exception:  # noqa: BLE001 — state() reports bg_file=""
             logger.warning("public hero background did not settle in 15 s (%s)", locale)
+        try:
+            self.page.locator(self.BAND_READY).first.wait_for(state="attached", timeout=20000)
+        except Exception:  # noqa: BLE001 — state() reports band.ready
+            logger.warning("subscription band did not report ready in 20 s (%s)", locale)
         return self
 
     def state(self) -> dict:
@@ -562,6 +632,13 @@ class MCHeroPublicView(BasePage):
             if time.monotonic() - started > timeout:
                 return last, time.monotonic() - started, False
             self.page.wait_for_timeout(int(poll * 1000))
+
+    def scroll_to_band(self) -> "MCHeroPublicView":
+        try:
+            self.page.locator("section.qc-mc-sub").first.scroll_into_view_if_needed(timeout=10000)
+        except Exception:  # noqa: BLE001 — evidence only
+            pass
+        return self
 
     def evidence(self, name: str) -> str:
         os.makedirs(EVIDENCE_ROOT, exist_ok=True)

@@ -19,6 +19,7 @@ HERO RULE (user decision 2026-10-07): the live hero is edited ONLY inside
 from __future__ import annotations
 
 import contextlib
+import hashlib
 import json
 import os
 import re
@@ -45,7 +46,7 @@ SCRATCH = os.getenv(
     r"C:\Users\HP\AppData\Local\Temp\claude\d--Qatar-Chamber-QaterChamber-main"
     r"\de2eae66-6f02-4a22-8869-a22476b25d22\scratchpad",
 )
-BASELINE_PATH = os.path.join(SCRATCH, "hero", "baseline_snapshot.json")
+BASELINE_PATH = os.path.join(SCRATCH, "hero", "baseline_2026-10-19.json")  # re-baselined after the bug 149354 fix
 HALT_FILE = os.path.join(SCRATCH, "hero", "HERO_HALT.json")
 FINDINGS_LOG = os.path.join(EVIDENCE_ROOT, "findings.jsonl")
 FIXTURES = os.path.join(os.path.dirname(__file__), "fixtures", "hero")
@@ -87,13 +88,22 @@ def public_flat(state: dict) -> dict:
     def _t(key):
         node = state.get(key) or {}
         return " ".join((node.get("text") or "").split()) if node else None
+    band = state.get("band") or {}
+
+    def _b(key):
+        node = band.get(key) or {}
+        return " ".join((node.get("text") or "").split()) if node else None
+
     return {"label": _t("label"), "headline": _t("headline"), "desc": _t("desc"),
             "placeholder": state.get("placeholder"), "bg_file": state.get("bg_file"),
-            "section_dir": state.get("section_dir")}
+            "section_dir": state.get("section_dir"),
+            "band_heading": _b("heading"), "band_desc": _b("desc"), "band_placeholder": band.get("placeholder"),
+            "band_button": _b("button"), "band_dir": band.get("dir"),
+            "band_icon_sha": hashlib.sha256((band.get("icon_html") or "").encode()).hexdigest()[:16]}
 
 
 def public_read(browser, locale: str, predicate=None, timeout: float = PUBLIC_TIMEOUT_S,
-                shot: str | None = None) -> dict:
+                shot: str | None = None, band: bool = False) -> dict:
     """Opens the public Media Center page in a fresh anonymous context; polls
     with fresh reloads until predicate(state) (if given). Returns
     {state, flat, seconds, ok, screenshot}."""
@@ -107,6 +117,8 @@ def public_read(browser, locale: str, predicate=None, timeout: float = PUBLIC_TI
             state, secs, ok = view.poll(predicate, locale, timeout=timeout)
         out = {"state": state, "flat": public_flat(state), "seconds": round(secs, 1), "ok": ok, "screenshot": ""}
         if shot:
+            if band:
+                view.scroll_to_band()
             out["screenshot"] = view.evidence(shot)
         return out
     finally:
@@ -164,8 +176,12 @@ def login_editor(driver: MCHeroAdminPage) -> None:
         pytest.skip(f"PRECONDITION: Editor credentials sign in as userId {user_id!r}, not {EDITOR_USER_ID}")
 
 
-def _baseline() -> dict:
-    with open(BASELINE_PATH, encoding="utf-8") as handle:
+class NeedsDecision(AssertionError):
+    """Concurrency guard (rules 4b): someone else changed the hero during our window."""
+
+
+def _baseline(path: str | None = None) -> dict:
+    with open(path or BASELINE_PATH, encoding="utf-8") as handle:
         return json.load(handle)
 
 
@@ -190,6 +206,7 @@ class HeroSession:
         self.snapshot = snapshot
         self.public = public  # {"en": flat, "ar": flat}
         self.tc = tc
+        self.baseline_path = BASELINE_PATH
 
 
 def restore(session: HeroSession, browser) -> dict:
@@ -216,7 +233,7 @@ def restore(session: HeroSession, browser) -> dict:
         pass
     after = seen["after"]
     report["diff_after_restore"] = record_diff(snap, after)
-    report["diff_vs_run_baseline"] = record_diff(_baseline(), after)
+    report["diff_vs_run_baseline"] = record_diff(_baseline(session.baseline_path), after)
     driver.open_list()
     report["row_status"] = driver.row_status()
     report["row_count"] = driver.row_count()
@@ -245,7 +262,7 @@ def restore(session: HeroSession, browser) -> dict:
 
 
 @contextlib.contextmanager
-def hero_session(browser, tc: str, locale: str = "en"):
+def hero_session(browser, tc: str, locale: str = "en", baseline_path: str | None = None):
     """lock -> login -> baseline check -> snapshot -> yield -> restore + diff."""
     reason = halted()
     if reason:
@@ -257,13 +274,20 @@ def hero_session(browser, tc: str, locale: str = "en"):
             login_editor(driver)
             driver.open_list()
             snapshot = driver.api_get()
-            pre = record_diff(_baseline(), snapshot)
+            pre = record_diff(_baseline(baseline_path), snapshot)
             if pre:
                 _halt(tc, [f"hero differs from the run baseline BEFORE {tc} edits"] + pre)
             if str(snapshot.get("id")) != HERO_ID:
                 pytest.fail("hero record id mismatch")
             public = {loc: public_read(browser, loc)["flat"] for loc in ("en", "ar")}
             session = HeroSession(driver, snapshot, public, tc)
+            session.baseline_path = baseline_path or BASELINE_PATH
+            # Concurrency guard (rules 4b) #1: re-read right before editing.
+            again = driver.api_get()
+            moved = record_diff(snapshot, again)
+            if moved:
+                attach({"moved": moved}, f"{tc} CONCURRENT CHANGE before edit")
+                raise NeedsDecision(f"NEEDS-DECISION: hero changed by someone else right before {tc} edits: {moved}")
             attach({"record": snapshot, "public": public}, f"{tc} hero snapshot")
             body_error = None
             try:
@@ -272,11 +296,25 @@ def hero_session(browser, tc: str, locale: str = "en"):
             except BaseException as exc:  # noqa: BLE001 — re-raised after the restore
                 body_error = exc
             try:
+                # Concurrency guard (rules 4b) #2: before restoring, the record must
+                # still hold exactly what THIS test wrote (or the snapshot if nothing
+                # was written); otherwise do not overwrite someone else's change.
+                driver.open_hero()
+                expected = getattr(driver, "last_written", None) or snapshot
+                current = driver.api_get()
+                foreign = [d for d in record_diff(expected, current) if not d.startswith("status:")]
+                if foreign:
+                    path = attach({"expected_written": expected, "current": current, "diff": foreign},
+                                  f"{tc} CONCURRENT CHANGE before restore")
+                    raise NeedsDecision(f"NEEDS-DECISION: hero changed by someone else during {tc}; NOT restored. "
+                                        f"diff vs what this test wrote: {foreign} ({path})")
                 if locale != "en":
                     from config.settings import control_panel_url  # noqa: PLC0415
                     driver.open(control_panel_url("/c/portal/update_language?languageId=en_US&redirect=%2Fhome"))
                 report = restore(session, browser)
                 problems = report["problems"]
+            except NeedsDecision:
+                raise
             except Exception as exc:  # noqa: BLE001
                 problems = [f"restore raised {exc!r}"]
             if problems:
