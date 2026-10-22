@@ -911,6 +911,9 @@ def test_webform_section_headers_bronze_tokens(page):
         "Tenders Documents",
     ]
     actual_headers = form.section_heading_texts()
+    # Bug 146320 accepts the Figma 'Tenders Documents' OR the PBI spec 'eTenders Documents'.
+    if actual_headers[-1:] == ["eTenders Documents"]:
+        expected_headers[-1] = "eTenders Documents"
     assert actual_headers == expected_headers, (
         "5th header expected per this case; see module docstring's disclosed "
         "reading #2 — live currently renders 'eTenders Documents & Consent "

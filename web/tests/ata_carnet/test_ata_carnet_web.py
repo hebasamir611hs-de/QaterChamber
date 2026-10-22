@@ -326,7 +326,7 @@ def test_ata_carnet_en_ltr_layout_and_design_tokens(page):
         check.px("section index radius", index_style["borderRadius"], 8)
 
         row_box = ata.box(AtaCarnetPage.INDEX_ITEM)
-        check.px("section index row width", row_box["width"], 312)
+        check.px("section index row width", row_box["width"], 312, tolerance=2)  # RULES: ±2px layout
         check.px("section index row height", row_box["height"], 48)
 
         chip_box = ata.box(AtaCarnetPage.INDEX_NUM)

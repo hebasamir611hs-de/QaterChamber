@@ -80,6 +80,9 @@ FIGMA_MOBILE = {  # 4964:222630
 }
 
 
+_COUNTRY_SHORT = {"United Arab Emirates": "UAE"}  # card short form per Figma 4964:222584
+
+
 def _hex(css: str) -> str:
     m = re.match(r"rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)", css or "")
     if not m:
@@ -662,7 +665,8 @@ def test_trending_chips_render_and_click(page):
     before = lp.card_ercs()
     lp.click_trending_chip("Energy")
     d.true("click updates the grid", lp.card_ercs() != before)
-    d.eq("chip keyword applied", lp.search_input_value(), "Energy")
+    # Bug 149697 fix: a chip now applies the Sector filter (not a keyword search).
+    d.eq("chip applies Sector filter", lp.selected_filter_value("sector"), "Energy")
     d.check()
 
 
@@ -721,7 +725,8 @@ def test_card_country_with_pin(page):
     items = {i["externalReferenceCode"]: i for i in lp.api_opportunities()}
     d = Diff()
     for idx, erc in enumerate(lp.card_ercs()):
-        d.eq(f"{erc} country", lp.card_cells(idx)[0], items[erc]["country"])
+        # Bug 149705 fix: long names use the design's short form (Figma: 'UAE').
+        d.eq(f"{erc} country", lp.card_cells(idx)[0], _COUNTRY_SHORT.get(items[erc]["country"], items[erc]["country"]))
         icon = page.locator(lp.CARD).nth(idx).locator(f"{lp.CARD_CELL} svg").first.bounding_box()
         txt = page.locator(lp.CARD).nth(idx).locator(lp.CARD_CELL_TEXT).first.bounding_box()
         d.true(f"{erc} pin icon before text", icon and icon["x"] + icon["width"] <= txt["x"])

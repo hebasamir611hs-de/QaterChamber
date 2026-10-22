@@ -859,6 +859,8 @@ class MemberServicesPage(BasePage):
                 "boxShadow",
                 "border",
                 "borderImageSource",
+                "backgroundImage",
+                "backgroundClip",
                 "display",
             ),
             index=index,

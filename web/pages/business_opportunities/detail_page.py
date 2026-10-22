@@ -438,7 +438,7 @@ class BusinessOpportunityDetailPage(BasePage):
         Qatar flag + '+974' country-code block inside the input)."""
         wrap = self.page.locator(f"{self.INQUIRY_FIELD_WRAP}:has([name='mobileNumber'])")
         return wrap.evaluate("""(w) => ({text: w.innerText.replace(/\\s+/g, ' ').trim(),
-            graphics: w.querySelectorAll('img, svg').length, has974: /\\+974/.test(w.innerText),
+            graphics: w.querySelectorAll('img, svg, .qc-bod-flag').length, has974: /\\+974/.test(w.innerText),
             value: w.querySelector('input').value})""")
 
     def fill_inquiry_field(self, field_key: str, value: str) -> None:
@@ -538,9 +538,16 @@ class BusinessOpportunityDetailPage(BasePage):
 
     def inquiry_success_texts(self) -> dict:
         p = self.page
-        return {"title": p.locator(self.INQUIRY_SUCCESS_TITLE).inner_text().strip(),
-                "body": p.locator(self.INQUIRY_SUCCESS_BODY).inner_text().strip(),
-                "ref": p.locator(self.INQUIRY_SUCCESS_REF).inner_text().strip(),
+        p.locator(self.INQUIRY_SUCCESS_BODY).first.wait_for(state="visible")
+
+        def _txt(sel: str) -> str:   # the success title was removed by the copy fix (bug 149695)
+            loc = p.locator(sel)
+            return loc.first.inner_text().strip() if loc.count() and loc.first.is_visible() else ""
+
+        ref_value = "[data-qc-bod-modal-panel] .qc-bod-done-ref-value"
+        return {"title": _txt(self.INQUIRY_SUCCESS_TITLE),
+                "body": _txt(self.INQUIRY_SUCCESS_BODY),
+                "ref": _txt(ref_value) or _txt(self.INQUIRY_SUCCESS_REF),
                 "all": re.sub(r"\s+", " ", p.locator(self.INQUIRY_SUCCESS).inner_text()).strip()}
 
     def inquiry_success_message_text(self) -> str:

@@ -235,6 +235,9 @@ class SubmitBusinessOpportunityPage(BasePage):
 
     # ---- read ---------------------------------------------------------------
     def field_value(self, key: str) -> str:
+        loc = self.page.locator(self.field(key))
+        if loc.get_attribute("contenteditable") == "true":   # rich-text editor (fix for bug 149679)
+            return loc.inner_text()
         return self.page.input_value(self.field(key))
 
     def errors(self) -> dict:

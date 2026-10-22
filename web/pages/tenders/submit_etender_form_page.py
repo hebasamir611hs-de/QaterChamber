@@ -103,7 +103,7 @@ REQUIRED_FIELD_ERROR_TEXT = "This field is required."
 # Field labels — visible text inside each field's own label.qc-etf__label
 # (asterisk on mandatory fields is part of that same text node; `:has-text`
 # substring matching below does not need it).
-LABEL_SUBMITTER_EMAIL = "Submitter Email address"
+LABEL_SUBMITTER_EMAIL = "Submitter Contact Email"  # renamed by the fix for bug 146321
 LABEL_ORG_NAME = "Organization name"
 LABEL_COMMERCIAL_REG_NUMBER = "Commercial Registration Number"
 LABEL_CR_NUMBER = "Computer Registration Number (CR Number)"
@@ -158,7 +158,8 @@ BASELINE_TEXT_FIELDS = [
     (LABEL_EMD_PAYABLE_TO, "Qatar Chamber", 0),
     (LABEL_WORK_DESCRIPTION_FIELD, "QCTEST work description for automated coverage.", 0),
     (LABEL_PRE_BID_MEETING_ADDRESS, "QCTEST Meeting Hall, Doha", 0),
-    (LABEL_CITY, "Doha", 1),
+    (LABEL_CITY, "الدوحة", 1),  # City is now a Country-driven select (bug 147092): 0=EN, 1=AR, 2=Work Item
+    (LABEL_CITY, "Doha", 2),
     (LABEL_ZIP_CODE, "00974", 1),
     (LABEL_BID_VALIDITY_DAYS, "90", 0),
 ]
@@ -172,7 +173,7 @@ BASELINE_SELECT_FIELDS = [
     (LABEL_TENDER_CLASSIFICATION, "Lump-sum", 0),
     (LABEL_PRODUCT_CATEGORY, "Consultancy Services", 0),
     (LABEL_TENDER_LOCATION, "Qatar", 0),
-    (LABEL_ITEM_WISE_TECH_EVAL_ALLOWED, "No", 0),
+    (LABEL_ITEM_WISE_TECH_EVAL_ALLOWED, "Allowed", 0),  # options are now Allowed / Not allowed (bug 147094)
     (LABEL_SHOULD_ALLOW_NDA_TENDER, "No", 0),
 ]
 BASELINE_DATE_FIELDS = [
@@ -187,6 +188,12 @@ class SubmitETenderFormPage(BasePage):
     def open_form(self, locale: str = "en") -> "SubmitETenderFormPage":
         self.open(web_url("/web/qatar-chamber/submit-your-etender", locale=locale))
         self.wait_for(HERO_TITLE, timeout=15000)
+        # Liferay keeps the last-used language in the session; force EN when asked (2026-10-19)
+        if locale == "en" and self.page.evaluate("() => document.documentElement.lang || ''").lower().startswith("ar"):
+            self.open(web_url("/en/web/qatar-chamber/submit-your-etender", locale="en"))
+            self.wait_for(HERO_TITLE, timeout=15000)
+        # the form fields render asynchronously after the hero (2026-10-19)
+        self.page.locator(FIELD_WRAPPER).first.wait_for(state="visible", timeout=60000)
         return self
 
     def style_of(self, locator: str, properties: list, first: bool = False) -> dict:
@@ -348,7 +355,9 @@ class SubmitETenderFormPage(BasePage):
         return self.text(STATUS_MESSAGE).strip() if self.is_visible(STATUS_MESSAGE) else ""
 
     def accept_consent(self) -> "SubmitETenderFormPage":
-        self.page.locator(CONSENT_CHECKBOX).check()
+        # The consent checkbox is no longer rendered on the live form (2026-10-19).
+        if self.page.locator(CONSENT_CHECKBOX).count():
+            self.page.locator(CONSENT_CHECKBOX).first.check()
         return self
 
     def click_submit(self) -> "SubmitETenderFormPage":
@@ -366,6 +375,8 @@ class SubmitETenderFormPage(BasePage):
         submit — callers call click_submit() themselves so they can inspect
         pre-submit state first if needed."""
         skip_labels = skip_labels or set()
+        if (LABEL_COUNTRY, 0) not in skip_labels:
+            self.fill_field(LABEL_COUNTRY, "Qatar", 0)  # City lookups depend on Country
         for label, value, index in BASELINE_TEXT_FIELDS:
             if (label, index) in skip_labels:
                 continue

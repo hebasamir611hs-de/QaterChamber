@@ -62,7 +62,7 @@ FEATURE = "Express Your Interest - Inquiry Modal"
 
 HOST_ERC = "QC-BIZOPP-130697-04"       # real Published + Active record (read only)
 ARCHIVED_ERC = "QC-BIZOPP-130697-05"   # real Published + Archived record (read only)
-W2_PREFIX = "QCTEST-130697-W2-"
+W2_PREFIX = os.environ.get("QC_W2_PREFIX", "QCTEST-130697-W2-")
 W2_EMAIL = "qctest.130697.w2@example.com"
 PROTECTED_INQUIRY_ID = "633573"        # a real inquiry: never touched
 
@@ -162,7 +162,7 @@ def _open_modal(page, locale: str = "en", erc: str = HOST_ERC) -> BusinessOpport
 
 
 def _valid_values(**overrides) -> dict:
-    values = {"your_name": f"{W2_PREFIX}Ahmed Al-Sayed", "email": W2_EMAIL, "mobile": "+974 5512 3456",
+    values = {"your_name": f"{W2_PREFIX}Ahmed Al-Sayed", "email": W2_EMAIL, "mobile": "5512 3456",  # +974 is now a fixed prefix in the control
               "company": f"{W2_PREFIX}Al-Sayed Trading LLC",
               "message": f"{W2_PREFIX}Interested in co-investment opportunities."}
     values.update(overrides)
@@ -689,7 +689,7 @@ def test_inquiry_mobile_defaults_to_qatar_code_and_accepts_valid(page, en_inquir
     meta = dp.inquiry_field_meta("mobile")
     _attach_json("mobile control", {"prefix": prefix, "meta": meta, "stored": stored_mobile})
     _evidence(page, "143323_mobile_default")
-    assert stored_mobile == "+974 5512 3456"
+    assert stored_mobile == "+974 5512 3456", stored_mobile
     assert prefix["has974"] and prefix["graphics"] >= 1, \
         f"no default Qatar flag / '+974' in the Mobile Number control: {prefix}"
 

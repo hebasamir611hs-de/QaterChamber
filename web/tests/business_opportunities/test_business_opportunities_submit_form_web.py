@@ -64,6 +64,22 @@ from web.pages.business_opportunities.submit_opportunity_page import (
     SubmitBusinessOpportunityPage,
 )
 
+import web.pages.business_opportunities.submit_opportunity_page as _sop
+
+# Heal 2026-10-19 (bugs 149687 / 149688 fixed on qcdev): Country and Currency are
+# now CMS-lookup <select>s (the free-text fallback is hidden), and the
+# validation copy now matches the approved case wording.
+_sop.LOOKUP_TEXT_KEYS = ()
+_sop.SELECT_FIELD_KEYS = tuple(_sop.SELECT_FIELD_KEYS) + ("country", "currency")
+CASE_MSG = {
+    "sector": "Please select a Sector", "country": "Please select a Country",
+    "currency": "Please select a Currency", "investment_type": "Please select an Investment Type",
+    "timeline": "Please select a Timeline", "risk_profile": "Please select a Risk Profile",
+    "image_type": "Only PNG or JPG files are allowed", "image_2mb": "File size must not exceed 2MB",
+    "image_5mb": "File size must not exceed 5MB", "pdf_type": "Only PDF files are allowed",
+    "pdf_5mb": "File size must not exceed 5MB", "invalid_url": "Please enter a valid URL",
+}
+
 EPIC = "Business Opportunities"
 FEATURE = "Submit a Business Opportunity — Webform"
 PREFIX = "QCTEST-130697-W1-"
@@ -170,13 +186,13 @@ def valid_values(fx: dict, **overrides) -> dict:
         "name_en": f"{PREFIX}Probe Opportunity",
         "name_ar": f"{PREFIX}فرصة اختبار",
         "sector": SAMPLE_SELECT_VALUES["sector"],
-        "country": "Qatar",
+        "country": "qatar",
         "company_name": f"{PREFIX}Company",
         "investment_brief_en": "QCTEST investment brief (EN). " * 5,
         "investment_brief_ar": "ملخص استثماري تجريبي. " * 6,
         "key_highlights": "QCTEST key highlights.",
         "investment_amount": "5000000",
-        "currency": "QAR",
+        "currency": "qar",
         "investment_type": SAMPLE_SELECT_VALUES["investment_type"],
         "timeline": SAMPLE_SELECT_VALUES["timeline"],
         "risk_profile": SAMPLE_SELECT_VALUES["risk_profile"],
@@ -493,7 +509,7 @@ def test_website_malformed_rejected_blank_allowed(page, fx, real_submissions):
         sp.fill_field("contact_website", bad)
         sp.click_submit()
         # Case wording "Please enter a valid URL"; live copy below (wording finding, behaviour correct).
-        assert_blocked(sp, "contact_website", MSG["en"]["invalid_url"])
+        assert_blocked(sp, "contact_website", CASE_MSG["invalid_url"])
     # Blank optional Website: the AR real submission left it empty and was stored.
     item = real_submissions["ar"]
     _require_stored(item)
@@ -644,7 +660,7 @@ def test_sector_required(page, fx):
     sp = guarded_form(page)
     sp.fill_valid(valid_values(fx), skip=("sector",)).click_submit()
     # Case wording "Please select a Sector"; live copy is the generic required message.
-    assert_blocked(sp, "sector", MSG["en"]["required"])
+    assert_blocked(sp, "sector", CASE_MSG["sector"])
 
 
 @case("143335", title="Optional Sub-Sector accepts a valid selection and allows a blank submission", story="Basic Information", prio=3)
@@ -670,13 +686,15 @@ def test_country_selection(page, fx):
         pytest.skip("BLOCKED — the Country CMS lookup is empty on qcdev, so the form renders a free-text input "
                     "(placeholder 'Qatar') instead of the dropdown; 'Qatar' typed is accepted.")
     assert "Qatar" in sp.page.locator("#qc-bos-country option").all_inner_texts()
+    sp.fill_field("country", "qatar")
+    assert sp.selected_label("country") == "Qatar"
 
 
 @case("143337", title="Submission is blocked when Country is left empty", story="Basic Information", prio=2)
 def test_country_required(page, fx):
     sp = guarded_form(page)
     sp.fill_valid(valid_values(fx), skip=("country",)).click_submit()
-    assert_blocked(sp, "country", MSG["en"]["required"])
+    assert_blocked(sp, "country", CASE_MSG["country"])
 
 
 @case("143338", title="Company/Organization Name accepts a valid value", story="Basic Information", prio=2)
@@ -775,14 +793,16 @@ def test_currency_selection(page, fx):
         assert sp.field_value("currency") == "QAR"
         pytest.skip("BLOCKED — the Currency CMS lookup is empty on qcdev, so the form renders a free-text input "
                     "(placeholder 'e.g. QAR') instead of the dropdown; 'QAR' typed is accepted.")
-    assert "QAR" in sp.page.locator("#qc-bos-currency option").all_inner_texts()
+    assert any("(QAR)" in o for o in sp.page.locator("#qc-bos-currency option").all_inner_texts())
+    sp.fill_field("currency", "qar")
+    assert sp.selected_label("currency") == "Qatari Riyal (QAR)"
 
 
 @case("143347", title="Submission is blocked when Currency is left empty", story="Opportunity Details", prio=2)
 def test_currency_required(page, fx):
     sp = guarded_form(page)
     sp.fill_valid(valid_values(fx), skip=("currency",)).click_submit()
-    assert_blocked(sp, "currency", MSG["en"]["required"])
+    assert_blocked(sp, "currency", CASE_MSG["currency"])
 
 
 @case("143348", title="Investment Type dropdown lists the lookup values and accepts Joint Venture", story="Opportunity Details", prio=2)
@@ -790,14 +810,14 @@ def test_investment_type_selection(page, fx):
     _, options = _lookup_selection(page, "investment_type", "jointVenture", "Joint Venture")
     attach_json("Investment Type options", options)
     # Case: Equity, Debt, Joint Venture, PPP, Grant, Other — live labels PPP as "Public-Private Partnership".
-    assert options == ["Equity", "Debt", "Joint Venture", "Public-Private Partnership", "Grant", "Other"]
+    assert options == ["Equity", "Debt", "Joint Venture", "PPP", "Grant", "Other"]
 
 
 @case("143349", title="Submission is blocked when Investment Type is left unselected", story="Opportunity Details", prio=2)
 def test_investment_type_required(page, fx):
     sp = guarded_form(page)
     sp.fill_valid(valid_values(fx), skip=("investment_type",)).click_submit()
-    assert_blocked(sp, "investment_type", MSG["en"]["required"])
+    assert_blocked(sp, "investment_type", CASE_MSG["investment_type"])
 
 
 @case("143350", title="Timeline dropdown accepts a valid selection and blocks submission when unselected", story="Opportunity Details", prio=2)
@@ -806,7 +826,7 @@ def test_timeline_selection_and_required(page, fx):
                       ["Immediate", "1–3 months", "3–6 months", "6–12 months", "12+ months"])
     sp = guarded_form(page)
     sp.fill_valid(valid_values(fx), skip=("timeline",)).click_submit()
-    assert_blocked(sp, "timeline", MSG["en"]["required"])
+    assert_blocked(sp, "timeline", CASE_MSG["timeline"])
 
 
 @case("143351", title="Risk Profile dropdown accepts a valid selection and blocks submission when unselected", story="Opportunity Details", prio=2)
@@ -814,7 +834,7 @@ def test_risk_profile_selection_and_required(page, fx):
     _lookup_selection(page, "risk_profile", "medium", "Medium", ["Low", "Medium", "High"])
     sp = guarded_form(page)
     sp.fill_valid(valid_values(fx), skip=("risk_profile",)).click_submit()
-    assert_blocked(sp, "risk_profile", MSG["en"]["required"])
+    assert_blocked(sp, "risk_profile", CASE_MSG["risk_profile"])
 
 
 @case("143352", title="Industry Pool multi-select accepts several values and blocks submission when none is selected",
@@ -846,7 +866,7 @@ def _upload_rejected(sp, key: str, file_path: str, expected_suffix: str) -> None
     name = os.path.basename(file_path)
     sp.fill_field(key, file_path)
     err = sp.field_error_text(key)
-    assert err == f"{name} — {expected_suffix}", f"{key} / {name}: {err!r}"
+    assert err == expected_suffix, f"{key} / {name}: {err!r}"
     assert sp.selected_file_names(key) == [] and sp.uploaded_file_label(key) == "", f"{name} kept after rejection"
 
 
@@ -862,8 +882,8 @@ def test_banner_accepts_valid(page, fx):
 @case("143361", title="Banner Image rejects a GIF and a 3.2MB JPG", story="Media & Documents", prio=2)
 def test_banner_rejects_type_and_size(page, fx):
     sp = guarded_form(page)
-    _upload_rejected(sp, "banner_image", fx["banner.gif"], MSG["en"]["bad_type"])
-    _upload_rejected(sp, "banner_image", fx["banner-large.jpg"], MSG["en"]["too_large"])
+    _upload_rejected(sp, "banner_image", fx["banner.gif"], CASE_MSG["image_type"])
+    _upload_rejected(sp, "banner_image", fx["banner-large.jpg"], CASE_MSG["image_2mb"])
 
 
 @case("143362", title="Opportunity Logo accepts an 800KB PNG and shows a thumbnail preview", story="Media & Documents", prio=2)
@@ -877,8 +897,8 @@ def test_logo_accepts_valid(page, fx):
 @case("143363", title="Opportunity Logo rejects a BMP and a 2.8MB PNG", story="Media & Documents", prio=2)
 def test_logo_rejects_type_and_size(page, fx):
     sp = guarded_form(page)
-    _upload_rejected(sp, "opportunity_logo", fx["logo.bmp"], MSG["en"]["bad_type"])
-    _upload_rejected(sp, "opportunity_logo", fx["logo-large.png"], MSG["en"]["too_large"])
+    _upload_rejected(sp, "opportunity_logo", fx["logo.bmp"], CASE_MSG["image_type"])
+    _upload_rejected(sp, "opportunity_logo", fx["logo-large.png"], CASE_MSG["image_2mb"])
 
 
 @case("143364", title="Gallery Images accepts 2MB and 3MB JPGs together (5MB per image)", story="Media & Documents", prio=2)
@@ -894,8 +914,8 @@ def test_gallery_accepts_multiple(page, fx):
 @case("143365", title="Gallery Images rejects a WEBP and a 6.4MB JPG", story="Media & Documents", prio=2)
 def test_gallery_rejects_type_and_size(page, fx):
     sp = guarded_form(page)
-    _upload_rejected(sp, "gallery_images", fx["gallery.webp"], MSG["en"]["bad_type"])
-    _upload_rejected(sp, "gallery_images", fx["gallery-large.jpg"], MSG["en"]["too_large"])
+    _upload_rejected(sp, "gallery_images", fx["gallery.webp"], CASE_MSG["image_type"])
+    _upload_rejected(sp, "gallery_images", fx["gallery-large.jpg"], CASE_MSG["image_5mb"])
 
 
 @case("143366", title="Supporting Documents accepts a 3MB PDF as an attached file row", story="Media & Documents", prio=2)
@@ -908,8 +928,8 @@ def test_supporting_document_accepts(page, fx):
 @case("143367", title="Supporting Documents rejects a DOCX and a 6MB PDF", story="Media & Documents", prio=2)
 def test_supporting_document_rejects(page, fx):
     sp = guarded_form(page)
-    _upload_rejected(sp, "supporting_documents", fx["investment-brief.docx"], MSG["en"]["bad_type"])
-    _upload_rejected(sp, "supporting_documents", fx["investment-brief-large.pdf"], MSG["en"]["too_large"])
+    _upload_rejected(sp, "supporting_documents", fx["investment-brief.docx"], CASE_MSG["pdf_type"])
+    _upload_rejected(sp, "supporting_documents", fx["investment-brief-large.pdf"], CASE_MSG["pdf_5mb"])
 
 
 # ===========================================================================
