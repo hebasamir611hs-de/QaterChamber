@@ -38,6 +38,7 @@ from core.web.browser import new_context
 from web.pages.home_community_partners.home_community_partners_page import (
     CommunityPartnersPage,
 )
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 TEST_PARTNER_NAME_EN = "QCTEST-135829 Test Partner Co"
 TEST_PARTNER_NAME_AR = "شركة اختبار QCTEST-135829"
@@ -119,7 +120,7 @@ def test_create_preview_and_publish_new_community_partner(page, browser):
             admin.submit_for_publishing()
 
         admin.open_entries_list()
-        assert admin.row_status_text(TEST_PARTNER_NAME_EN) == "Approved", (
+        assert admin.row_status_text(TEST_PARTNER_NAME_EN) == STATUS_PUBLISHED, (
             f"expected {TEST_PARTNER_NAME_EN!r} to be Approved after Submit for "
             f"Publishing, got {admin.row_status_text(TEST_PARTNER_NAME_EN)!r}"
         )
@@ -242,7 +243,7 @@ def test_deactivating_partner_removes_it_from_carousel(page, browser):
     admin.open_entry_by_edit_link(QATAR_AIRWAYS_NAME)
     baseline_active = admin.is_active()
     baseline_status = admin.current_status()
-    assert baseline_active is True and baseline_status == "Approved", (
+    assert baseline_active is True and baseline_status == STATUS_PUBLISHED, (
         f"expected Qatar Airways' baseline to be Active=True/Approved, got "
         f"Active={baseline_active!r}/Status={baseline_status!r} — confirm "
         "the real baseline before running this test"
@@ -257,7 +258,7 @@ def test_deactivating_partner_removes_it_from_carousel(page, browser):
         admin.open_entries_list()
         admin.open_entry_by_edit_link(QATAR_AIRWAYS_NAME)
         assert admin.is_active() is False, "Active Status did not persist as False after Save"
-        assert admin.current_status() == "Approved", (
+        assert admin.current_status() == STATUS_PUBLISHED, (
             f"expected Qatar Airways to remain Approved after deactivation, "
             f"got {admin.current_status()!r}"
         )

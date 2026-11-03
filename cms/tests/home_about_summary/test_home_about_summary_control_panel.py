@@ -64,6 +64,7 @@ from cms.pages.control_panel.login_page import CmsLoginPage
 from config.settings import cms_role_credentials
 from core.web.browser import new_context
 from web.pages.home_about_summary.home_about_summary_page import HomeAboutSummaryPage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 ABOUT_US_XDIST_GROUP = pytest.mark.xdist_group("about_us_section_52157")
 
@@ -312,7 +313,7 @@ def test_about_us_section_full_admin_configuration_flow_136103(page):
     try:
         with allure.step("Step 1: Navigate to About Us Section Management — screen loads editable"):
             section.open_section_entry()
-            assert section.current_status() in ("Approved", "Draft")
+            assert section.current_status() in (STATUS_PUBLISHED, "Draft")
 
         with allure.step("Step 2: Enter Section Tag, Heading, Description (EN/AR)"):
             section.fill_text("Section Tag (EN)", qctest_tag_en)
@@ -348,7 +349,7 @@ def test_about_us_section_full_admin_configuration_flow_136103(page):
             "edits do not survive navigating away to configure the Counters)"
         ):
             section.submit_for_publishing()
-            assert section.current_status() == "Approved"
+            assert section.current_status() == STATUS_PUBLISHED
 
         with allure.step("Step 6: Add 4 counters with Title/Value/Icon/Display Order/Active=True"):
             for i, code in enumerate(COUNTER_ENTRY_CODES):
@@ -359,7 +360,7 @@ def test_about_us_section_full_admin_configuration_flow_136103(page):
                 counter.set_display_order(str((i + 1) * 100))
                 counter.set_active(True)
                 counter.submit_for_publishing()
-                assert counter.current_status() == "Approved"
+                assert counter.current_status() == STATUS_PUBLISHED
 
             for i, code in enumerate(COUNTER_ENTRY_CODES):
                 counter.open_counter(code)
@@ -372,7 +373,7 @@ def test_about_us_section_full_admin_configuration_flow_136103(page):
             section.submit_for_publishing()
 
         section.open_section_entry()
-        assert section.current_status() == "Approved"
+        assert section.current_status() == STATUS_PUBLISHED
         assert section.field_value("Section Heading (EN)") == qctest_heading_en
         assert section.description_en_value().strip() == qctest_desc_en
     finally:
@@ -435,7 +436,7 @@ def test_published_about_us_configuration_reflects_on_home_page_136106(page, bro
             section.open_section_entry()
             section.fill_text("Section Heading (EN)", qctest_heading_en)
             section.submit_for_publishing()
-            assert section.current_status() == "Approved"
+            assert section.current_status() == STATUS_PUBLISHED
 
         with allure.step("Step 2: Trigger/await cache refresh — poll the public Home Page"):
             reflected = home.reload_until_heading_matches(qctest_heading_en)
@@ -499,7 +500,7 @@ def test_about_us_section_field_values_persist_after_save_and_reload_136136(page
             admin.fill_text("Read More Label (EN)", qctest_read_more_label_en)
             admin.submit_for_publishing()
 
-        assert admin.current_status() == "Approved"
+        assert admin.current_status() == STATUS_PUBLISHED
 
         with allure.step("Fill the one counter set (row 01) and Submit for Publishing"):
             counter.open_counter(COUNTER_ENTRY_CODES[0])
@@ -507,7 +508,7 @@ def test_about_us_section_field_values_persist_after_save_and_reload_136136(page
             counter.set_value(qctest_counter_value)
             counter.submit_for_publishing()
 
-        assert counter.current_status() == "Approved"
+        assert counter.current_status() == STATUS_PUBLISHED
 
         with allure.step("Log out and log back in as the CMS content-authoring test account"):
             admin.logout_and_return()
@@ -592,7 +593,7 @@ def test_site_content_editor_can_access_about_us_section_management_136101(page)
 
     # Assert
     with allure.step("Management screen loads with fields editable"):
-        assert admin.current_status() in ("Approved", "Draft")
+        assert admin.current_status() in (STATUS_PUBLISHED, "Draft")
         # Editable == reachable, focusable, and fillable — a denied/read-only
         # screen would raise or leave the value unset, not silently no-op.
         probe_value = "QCTEST-136101 editable-probe"
@@ -730,7 +731,7 @@ def test_admin_can_edit_published_section_and_republish_136107(section_edit, bro
     # Act
     with allure.step("Open the existing published section for edit"):
         admin.open_section_entry()
-        assert admin.current_status() == "Approved"
+        assert admin.current_status() == STATUS_PUBLISHED
 
     with allure.step("Change Section Description EN to revised text"):
         admin.fill_description_en(qctest_desc_en)
@@ -741,7 +742,7 @@ def test_admin_can_edit_published_section_and_republish_136107(section_edit, bro
 
     # Assert
     with allure.step("Home Page reflects the revised description"):
-        assert admin.current_status() == "Approved"
+        assert admin.current_status() == STATUS_PUBLISHED
         anon_ctx = new_context(browser, use_auth_state=False)
         anon_page = anon_ctx.new_page()
         home = HomeAboutSummaryPage(anon_page)
@@ -773,14 +774,14 @@ def test_publish_blocked_when_section_heading_empty_136108(section_edit):
 
     with allure.step("Click Publish — blocked for empty EN Heading"):
         admin.submit_for_publishing()
-        assert admin.current_status() != "Approved"
+        assert admin.current_status() != STATUS_PUBLISHED
 
     with allure.step("Fill Heading EN, clear Heading AR, click Publish — blocked for empty AR Heading"):
         admin.open_section_entry()
         admin.fill_text(FIELD_SECTION_HEADING_EN, "QCTEST-136108 Qatar Chamber")
         admin.fill_text(FIELD_SECTION_HEADING_AR, "")
         admin.submit_for_publishing()
-        assert admin.current_status() != "Approved"
+        assert admin.current_status() != STATUS_PUBLISHED
 
 
 @allure.epic("Home Page")
@@ -816,7 +817,7 @@ def test_admin_can_add_counters_up_to_max_of_4_136109(page):
                 counter.open_counter(code)
                 _fill_counter_fields(counter, f"QCTEST-136109-{i + 1}")
                 counter.submit_for_publishing()
-                assert counter.current_status() == "Approved"
+                assert counter.current_status() == STATUS_PUBLISHED
 
         with allure.step("After the 4th counter, the Add control is disabled/hidden"):
             counter.open_counter_list()
@@ -856,14 +857,14 @@ def test_publish_blocked_when_section_description_empty_136110(section_edit):
 
     with allure.step("Click Publish — blocked for empty EN Description"):
         admin.submit_for_publishing()
-        assert admin.current_status() != "Approved"
+        assert admin.current_status() != STATUS_PUBLISHED
 
     with allure.step("Fill Description EN, clear Description AR, click Publish — blocked for empty AR Description"):
         admin.open_section_entry()
         admin.fill_description_en("QCTEST-136110 valid description")
         admin.fill_description_ar("")
         admin.submit_for_publishing()
-        assert admin.current_status() != "Approved"
+        assert admin.current_status() != STATUS_PUBLISHED
 
 
 @allure.epic("Home Page")
@@ -1250,14 +1251,14 @@ def test_publish_blocked_when_read_more_label_empty_136123(section_edit):
 
     with allure.step("Click Publish — blocked for empty EN Label"):
         admin.submit_for_publishing()
-        assert admin.current_status() != "Approved"
+        assert admin.current_status() != STATUS_PUBLISHED
 
     with allure.step("Fill Label EN, clear Label AR, click Publish — blocked for empty AR Label"):
         admin.open_section_entry()
         admin.fill_text(FIELD_READ_MORE_LABEL_EN, "QCTEST-136123 Read More")
         admin.fill_text(FIELD_READ_MORE_LABEL_AR, "")
         admin.submit_for_publishing()
-        assert admin.current_status() != "Approved"
+        assert admin.current_status() != STATUS_PUBLISHED
 
 
 @allure.epic("Home Page")
@@ -1312,7 +1313,7 @@ def test_publish_blocked_when_read_more_url_empty_136125(section_edit):
 
     with allure.step("Click Publish — blocked"):
         admin.submit_for_publishing()
-        assert admin.current_status() != "Approved"
+        assert admin.current_status() != STATUS_PUBLISHED
 
 
 @allure.epic("Home Page")
@@ -1342,7 +1343,7 @@ def test_read_more_url_rejects_invalid_format_136126(section_edit):
 
     with allure.step("Click Publish — blocked"):
         admin.submit_for_publishing()
-        assert admin.current_status() != "Approved"
+        assert admin.current_status() != STATUS_PUBLISHED
 
 
 @allure.epic("Home Page")
@@ -1400,14 +1401,14 @@ def test_publish_blocked_when_counter_title_empty_136128(counter_edit):
 
     with allure.step("Click Publish — blocked for empty EN Title"):
         counter.submit_for_publishing()
-        assert counter.current_status() != "Approved"
+        assert counter.current_status() != STATUS_PUBLISHED
 
     with allure.step("Fill Title EN, clear Title AR, click Publish — blocked for empty AR Title"):
         counter.open_counter(COUNTER_ENTRY_CODES[0])
         counter.set_title_en("QCTEST-136128 E-Services")
         counter.set_title_ar("")
         counter.submit_for_publishing()
-        assert counter.current_status() != "Approved"
+        assert counter.current_status() != STATUS_PUBLISHED
 
 
 @allure.epic("Home Page")
@@ -1462,7 +1463,7 @@ def test_publish_blocked_when_counter_value_empty_136130(counter_edit):
 
     with allure.step("Click Publish — blocked"):
         counter.submit_for_publishing()
-        assert counter.current_status() != "Approved"
+        assert counter.current_status() != STATUS_PUBLISHED
 
 
 @allure.epic("Home Page")
@@ -1566,7 +1567,7 @@ def test_counter_display_order_accepts_valid_positive_integer_136134(counter_edi
 
     with allure.step("Click Publish"):
         counter.submit_for_publishing()
-        assert counter.current_status() == "Approved"
+        assert counter.current_status() == STATUS_PUBLISHED
 
     with allure.step("Reload the CMS management screen"):
         counter.open_counter(COUNTER_ENTRY_CODES[0])
@@ -1599,7 +1600,7 @@ def test_counter_display_order_rejects_invalid_values_136135(counter_edit):
             except Exception:
                 pass  # a native <input type=number> may itself refuse non-numeric keystrokes
             counter.submit_for_publishing()
-            assert counter.current_status() != "Approved", f"Display Order accepted an invalid value: {bad_value!r}"
+            assert counter.current_status() != STATUS_PUBLISHED, f"Display Order accepted an invalid value: {bad_value!r}"
 
 
 @allure.epic("Home Page")
@@ -1636,12 +1637,12 @@ def test_toggling_counter_active_status_controls_visibility_136137(page, browser
             counter_a.open_counter(code_a)
             counter_a.set_active(True)
             counter_a.submit_for_publishing()
-            assert counter_a.current_status() == "Approved"
+            assert counter_a.current_status() == STATUS_PUBLISHED
 
             counter_b.open_counter(code_b)
             counter_b.set_active(False)
             counter_b.submit_for_publishing()
-            assert counter_b.current_status() == "Approved"
+            assert counter_b.current_status() == STATUS_PUBLISHED
 
         with allure.step("Home Page shows Counter A, not Counter B"):
             label_a, label_b = baseline_a["title_en"], baseline_b["title_en"]

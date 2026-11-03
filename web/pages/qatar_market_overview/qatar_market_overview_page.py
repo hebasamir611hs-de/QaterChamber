@@ -724,14 +724,27 @@ class QatarMarketOverviewPage(BasePage):
 
     # ---- Theme / High Contrast — composes AccessibilityToolsComponent -----------------
     def set_theme_dark(self, enabled: bool) -> "QatarMarketOverviewPage":
-        AccessibilityToolsComponent(self.page).set_dark_mode(enabled)
+        a11y = AccessibilityToolsComponent(self.page)
+        if enabled:
+            a11y.enable_dark_mode()
+        elif self.current_theme() == "dark":
+            a11y.open_panel()
+            a11y.switch_to_dark_mode()
+            self.page.wait_for_function(
+                "() => document.documentElement.getAttribute('data-theme') !== 'dark'"
+            )
+            a11y.close_panel()
         return self
 
     def current_theme(self) -> str:
-        return AccessibilityToolsComponent(self.page).current_theme()
+        return self.page.evaluate(
+            "() => document.documentElement.getAttribute('data-theme') || 'light'"
+        )
 
     def set_high_contrast(self, enabled: bool) -> "QatarMarketOverviewPage":
-        AccessibilityToolsComponent(self.page).set_high_contrast(enabled)
+        a11y = AccessibilityToolsComponent(self.page)
+        if enabled:
+            a11y.enable_high_contrast()
         return self
 
     def is_high_contrast_active(self) -> bool:

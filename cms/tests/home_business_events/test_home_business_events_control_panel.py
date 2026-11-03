@@ -173,7 +173,7 @@ def test_published_event_appears_in_business_events_section(page, browser):
             admin.publish()
 
 
-        assert admin.wait_for_workflow_status(qctest_title, "Approved") == "Approved", (
+        assert admin.wait_for_workflow_status(qctest_title, STATUS_PUBLISHED) == STATUS_PUBLISHED, (
             f"Expected {qctest_title!r} to show workflow Status 'Approved' "
             f"in the entries list immediately after Submit for Publishing."
         )
@@ -242,7 +242,7 @@ def test_unpublished_event_removed_from_business_events_section(page, browser):
             _fill_mandatory_fields(admin, qctest_title, "Trade Facilitation")
             admin.publish()
 
-        assert admin.wait_for_workflow_status(qctest_title, "Approved") == "Approved", (
+        assert admin.wait_for_workflow_status(qctest_title, STATUS_PUBLISHED) == STATUS_PUBLISHED, (
             f"Expected {qctest_title!r} to show workflow Status 'Approved' "
             f"in the entries list immediately after Submit for Publishing."
         )

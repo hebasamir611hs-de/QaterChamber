@@ -110,7 +110,15 @@ SUBMIT_BUTTON = (
 # cms/pages/control_panel/login_page.py's STATUS UPDATE (2026-08-25) for the
 # live evidence: both render together after a real login, ORing only guards
 # against a render-order race between the two nav elements.
-LOGIN_SUCCESS_INDICATOR = 'nav[aria-label="Control Menu"], [data-qa-id="productMenu"]'
+#
+# SUPERSEDED 2026-09-30 — mirrors CmsLoginPage.LOGIN_SUCCESS_INDICATOR, which
+# moved to `body.signed-in`. The toolbar pair only renders for admin-level
+# users, so with the old value is_dead_session() read every signed-in
+# NON-admin role (Site Content Author, Content Contributor, Site Member) on a
+# manage-<slug> URL as a dead session, and reauthenticate() then silently
+# signed the test back in as TEST_USER — every role test ran as admin from
+# its first navigation on.
+LOGIN_SUCCESS_INDICATOR = "body.signed-in"
 
 # Path markers for URLs that ONLY exist inside the Control Panel / Object
 # Authoring surface (never on the public-facing site) — used to scope
@@ -160,7 +168,7 @@ def _force_english_locale(page) -> None:
             f"{UPDATE_LANGUAGE_PATH}?languageId={ENGLISH_LANGUAGE_ID}&redirect={redirect_url}"
         )
     )
-    page.locator(LOGIN_SUCCESS_INDICATOR).first.wait_for(state="visible", timeout=10000)
+    page.locator(LOGIN_SUCCESS_INDICATOR).first.wait_for(state="attached", timeout=10000)
 
 
 def is_login_form_showing(page) -> bool:
@@ -186,6 +194,14 @@ def is_dead_session(page) -> bool:
         if not _is_control_panel_url(page.url):
             return False
         if is_login_form_showing(page):
+            return False
+        # Roles without Control Panel access (Author, Contributor, …) never
+        # render the Control Menu; a signed-in ThemeDisplay means the session
+        # is alive, and re-logging in as TEST_USER would swap the account.
+        if page.evaluate(
+            "() => !!(window.Liferay && Liferay.ThemeDisplay"
+            " && Liferay.ThemeDisplay.isSignedIn())"
+        ):
             return False
         return page.locator(LOGIN_SUCCESS_INDICATOR).count() == 0
     except Exception:  # noqa: BLE001 — detection must never mask a real failure
@@ -257,7 +273,7 @@ def reauthenticate(page, target_url: str = None, max_attempts: int = 3) -> bool:
             # logged in (confirmed live 2026-08-25) — Playwright strict
             # mode rejects a 2-element match on a bare .wait_for(), which
             # was silently failing every re-authentication attempt.
-            page.locator(LOGIN_SUCCESS_INDICATOR).first.wait_for(state="visible", timeout=15000)
+            page.locator(LOGIN_SUCCESS_INDICATOR).first.wait_for(state="attached", timeout=15000)
             # HEALED 2026-09-15 (see module docstring) — the exact parity
             # gap that let a mid-run session drop silently leave the shared
             # TEST_USER account un-forced to English. Runs AFTER the

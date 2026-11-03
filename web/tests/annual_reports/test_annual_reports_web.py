@@ -47,9 +47,11 @@ finding, mobile tap-target finding). This module's own additions:
     several sibling PBIs' batches, THIS session has real, working CMS write
     access (confirmed live via cms/pages/annual_reports/annual_report_admin_page.py) —
     so tc_143612/143794 are built using the project's DISPOSABLE test-data
-    policy (cms-profile.md): each creates its own `QCTEST-`-prefixed Annual
-    Report entry, asserts, then deletes it in a `finally` block, never
-    touching the 6 real reports. tc_143830 is SKIPPED instead: this
+    policy (cms-profile.md): each creates its own
+    `QCTEST-130712-<tc>-<stamp>` Annual Report entry (entry id captured at
+    creation), asserts, and the `disposable` fixture's teardown deletes ONLY
+    that captured entry via the guarded `delete_disposable_entry` (exact
+    title + id), never touching the 6 real reports. tc_143830 is SKIPPED instead: this
     object's own AR fields are themselves marked REQUIRED (confirmed live —
     "Report Title — العربية *"/"Report Description — العربية *" both carry
     the required-field asterisk on their own accessible name, and
@@ -68,20 +70,38 @@ finding, mobile tap-target finding). This module's own additions:
 """
 
 import re
+from urllib.parse import urljoin
 
 import allure
 import pytest
 
 from cms.pages.annual_reports.annual_report_admin_page import (
-    AnnualReportAdminPage,
     FIELD_COVER_IMAGE,
-    FIELD_PAGE_COUNT,
     FIELD_PDF_ATTACHMENT,
-    FIELD_PUBLICATION_YEAR,
-    FIELD_REPORT_DESCRIPTION_EN,
     FIELD_REPORT_TITLE_EN,
+    ROLE_EDITOR,
 )
 from cms.pages.annual_reports.annual_reports_page_admin_page import AnnualReportsPageAdminPage
+from cms.pages.components.object_authoring_page import STATUS_DRAFT, STATUS_UNPUBLISHED
+# Disposable-record handling is shared with the Control_Panel module (single
+# source of truth): `QCTEST-130712-<tc>-<stamp>` titles, creation with entry-id
+# capture (id-diff + title read-back), and the `disposable` fixture whose
+# teardown deletes ONLY the captured records through the guarded
+# `delete_disposable_entry` (exact title + id + code, re-verified pre-click).
+from cms.tests.annual_reports.test_annual_reports_control_panel import (  # noqa: F401 — fixtures
+    AUTH_FREE_PAGE,
+    _assert_published,
+    _create,
+    _data,
+    _editor,
+    _pinned,
+    _register,
+    _require_active_status,
+    _title,
+    _wait_status,
+    anon_pages,
+    disposable,
+)
 from web.pages.annual_reports.annual_reports_page import AnnualReportsPage
 from web.pages.components.accessibility_tools_component import AccessibilityToolsComponent
 
@@ -104,6 +124,27 @@ TITLE_2022 = "Annual Report 2022"
 TITLE_2021 = "Annual Report 2021"
 TITLE_2020 = "Annual Report 2020"
 DESCENDING_TITLES = [TITLE_2025, TITLE_2024, TITLE_2023, TITLE_2022, TITLE_2021, TITLE_2020]
+
+
+def _year_data(title: str, year: str, **overrides) -> dict:
+    """Default disposable report data with Publication Year/Date on `year`."""
+    return _data(title, publication_year=year, publication_date=f"01/03/{year}", **overrides)
+
+
+def _publish_disposable(admin, disposable, data: dict):
+    """Creates + publishes (Site Content Editor), registers the captured entry
+    for guarded teardown, waits for Published and requires Active Status
+    stored before any public check (qcdev rule)."""
+    entry = _create(admin, disposable, data, publish=True)
+    _assert_published(admin, entry)
+    _require_active_status(admin, entry)
+    return entry
+
+
+def _public(anon_pages):
+    """(AnnualReportsPage, raw page) in a fresh logged-out context."""
+    pub = anon_pages()
+    return AnnualReportsPage(pub), pub
 
 
 # ---------------------------------------------------------------------------
@@ -797,33 +838,31 @@ def test_published_reports_descending_order(page):
 @pytest.mark.regression
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143612
-def test_draft_record_not_on_live_page(page):
+@ANNUAL_REPORTS_CMS_XDIST_GROUP
+@AUTH_FREE_PAGE
+def test_draft_record_not_on_live_page(page, disposable, anon_pages):
     # Azure TC 143612 | PBI 130712 — DISPOSABLE per cms-profile.md: creates
-    # its own QCTEST-prefixed Draft-only entry (never published), asserts
-    # absence, deletes it in `finally`. Never touches the 6 real reports.
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143612 Annual Report 2026 Draft"
+    # its own QCTEST-130712- Draft-only entry (never published) as the Site
+    # Content Editor, asserts absence; the `disposable` teardown deletes ONLY
+    # that captured entry (exact title + id). Never touches the 6 real reports.
+    admin = _editor(page)
+    title = _title("143612", "Annual Report 2026 Draft")
 
-    try:
-        with allure.step("Create a Draft-only QCTEST Annual Report entry for year 2026"):
-            admin.create_disposable_entry("143612", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2026")
-            admin.save_as_draft()
-            assert admin.status_for(title) == "Draft"
-
-        ar = AnnualReportsPage(page)
-        with allure.step("In a fresh logged-out context, load the Annual Reports page"):
-            ar.open_annual_reports()
-            assert ar.card_titles() == DESCENDING_TITLES  # only the 6 real published cards
-
-        with allure.step('Search for "143612"'):
-            ar.search("143612")
-
-        # Assert
-        assert ar.card_count() == 0
-    finally:
+    with allure.step("Create a Draft-only QCTEST Annual Report entry for year 2026"):
+        entry = _create(admin, disposable, _year_data(title, "2026"), publish=False)
         admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        assert admin.row_status(entry) == STATUS_DRAFT
+
+    ar, _ = _public(anon_pages)
+    with allure.step("In a fresh logged-out context, load the Annual Reports page"):
+        ar.open_annual_reports()
+        assert ar.card_titles() == DESCENDING_TITLES  # only the 6 real published cards
+
+    with allure.step('Search for "143612"'):
+        ar.search("143612")
+
+    # Assert
+    assert ar.card_count() == 0
 
 
 # ---------------------------------------------------------------------------
@@ -1097,36 +1136,30 @@ def test_double_click_load_more_no_duplicates(page):
 @pytest.mark.edge
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143794
-def test_two_reports_same_year_both_display(page):
-    # Azure TC 143794 | PBI 130712 — DISPOSABLE: creates 2 QCTEST-prefixed
+@ANNUAL_REPORTS_CMS_XDIST_GROUP
+@AUTH_FREE_PAGE
+def test_two_reports_same_year_both_display(page, disposable, anon_pages):
+    # Azure TC 143794 | PBI 130712 — DISPOSABLE: creates 2 QCTEST-130712-
     # entries, both Publication Year=2028 (a year with no real report, no
-    # collision), publishes both, then deletes both in `finally`.
-    admin = AnnualReportAdminPage(page)
-    title_a = "QCTEST-143794-A Annual Report 2028"
-    title_b = "QCTEST-143794-B Annual Report 2028"
+    # collision), publishes both; the `disposable` teardown deletes both by
+    # their captured title + id.
+    admin = _editor(page)
+    title_a = _title("143794", "A Annual Report 2028")
+    title_b = _title("143794", "B Annual Report 2028")
 
-    try:
-        for title in (title_a, title_b):
-            with allure.step(f"Create and publish disposable entry {title!r} for year 2028"):
-                admin.create_disposable_entry(title.split(" ", 1)[0].replace("QCTEST-", ""),
-                                               **{FIELD_REPORT_TITLE_EN: title})
-                admin.fill_number(FIELD_PUBLICATION_YEAR, "2028")
-                admin.submit_for_review()
+    for title in (title_a, title_b):
+        with allure.step(f"Create and publish disposable entry {title!r} for year 2028"):
+            _publish_disposable(admin, disposable, _year_data(title, "2028"))
 
-        ar = AnnualReportsPage(page)
-        with allure.step("Load the live Annual Reports page"):
-            ar.open_annual_reports()
-            ar.search("143794")
+    ar, _ = _public(anon_pages)
+    with allure.step("Load the live Annual Reports page"):
+        ar.open_annual_reports()
+        ar.search("143794")
 
-        # Assert: both entries appear, no data corruption/overwrite
-        titles = ar.card_titles()
-        assert title_a in titles
-        assert title_b in titles
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title_a)
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title_b)
+    # Assert: both entries appear, no data corruption/overwrite
+    titles = ar.card_titles()
+    assert title_a in titles
+    assert title_b in titles
 
 
 # ---------------------------------------------------------------------------
@@ -1392,43 +1425,43 @@ def test_archive_description_rich_text_unstripped_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143616
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_new_report_created_published_appears_live_web(page):
-    # Azure TC 143616 | PBI 130712 — DISPOSABLE: creates its own QCTEST-
-    # prefixed entry for year 2027 (a year with no real report), publishes,
-    # polls the live page (5s/0.5s per cms-profile.md's measured-~0s/5s
-    # safety-margin propagation budget), deletes in `finally`.
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143616 Annual Report 2027"
+@AUTH_FREE_PAGE
+def test_new_report_created_published_appears_live_web(page, disposable, anon_pages):
+    # Azure TC 143616 | PBI 130712 — DISPOSABLE: creates its own QCTEST-130712-
+    # entry for year 2027 (a year with no real report), publishes, polls the
+    # live page (5s/0.5s per cms-profile.md's measured-~0s/5s safety-margin
+    # propagation budget); the `disposable` teardown deletes the captured entry.
+    admin = _editor(page)
+    title = _title("143616", "Annual Report 2027")
 
-    try:
-        with allure.step("Create the record via Object Authoring; Save as Draft"):
-            admin.create_disposable_entry("143616", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2027")
-            admin.save_as_draft()
-            assert admin.status_for(title) == "Draft"
-
-        with allure.step("Publish"):
-            admin.submit_for_review()
-            assert admin.status_for(title) == "Published"
-
-        ar = AnnualReportsPage(page)
-        with allure.step("Poll the live Annual Reports page for the new record (5s budget)"):
-            import time
-            deadline = time.monotonic() + 5
-            titles = []
-            while time.monotonic() < deadline:
-                ar.open_annual_reports()
-                titles = ar.card_titles()
-                if title in titles:
-                    break
-                page.wait_for_timeout(500)
-
-        # Assert: appears, listed above 2025 (descending order)
-        assert title in titles
-        assert titles.index(title) < titles.index(TITLE_2025)
-    finally:
+    with allure.step("Create the record via Object Authoring; Save as Draft"):
+        entry = _create(admin, disposable, _year_data(title, "2027"), publish=False)
         admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        assert admin.row_status(entry) == STATUS_DRAFT
+
+    with allure.step("Publish"):
+        admin.open_entry(entry)
+        _pinned(admin, ROLE_EDITOR)
+        admin.publish()
+        assert admin.save_redirected(), f"Publish was refused: {admin.refusal_evidence()}"
+        _assert_published(admin, entry)
+        _require_active_status(admin, entry)
+
+    ar, pub = _public(anon_pages)
+    with allure.step("Poll the live Annual Reports page for the new record (5s budget)"):
+        import time
+        deadline = time.monotonic() + 5
+        titles = []
+        while time.monotonic() < deadline:
+            ar.open_annual_reports()
+            titles = ar.card_titles()
+            if title in titles:
+                break
+            pub.wait_for_timeout(500)
+
+    # Assert: appears, listed above 2025 (descending order)
+    assert title in titles
+    assert titles.index(title) < titles.index(TITLE_2025)
 
 
 # ---------------------------------------------------------------------------
@@ -1445,47 +1478,47 @@ def test_new_report_created_published_appears_live_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143641
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_edit_published_title_shows_new_value_live_web(page):
+@AUTH_FREE_PAGE
+def test_edit_published_title_shows_new_value_live_web(page, disposable, anon_pages):
     # Azure TC 143641 | PBI 130712 — DISPOSABLE: own entry, never the 6 real
     # reports (mirrors this project's "never edit real shared content for a
-    # QCTEST- lifecycle case when CMS write works" guidance).
-    admin = AnnualReportAdminPage(page)
-    original_title = "QCTEST-143641 Annual Report 2029"
-    revised_title = "QCTEST-143641 Annual Report 2029 (Revised)"
+    # QCTEST- lifecycle case when CMS write works" guidance). After the rename
+    # the registry is re-pointed at the stored title, so teardown deletes the
+    # same captured id under its CURRENT title.
+    admin = _editor(page)
+    original_title = _title("143641", "Annual Report 2029")
+    revised_title = f"{original_title} (Revised)"
 
-    try:
-        with allure.step("Create and publish the disposable record"):
-            admin.create_disposable_entry("143641", **{FIELD_REPORT_TITLE_EN: original_title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2029")
-            admin.submit_for_review()
+    with allure.step("Create and publish the disposable record"):
+        entry = _publish_disposable(admin, disposable, _year_data(original_title, "2029"))
 
-        with allure.step("Change the Title and republish"):
-            admin.open_entries_list()
-            admin.open_entry_by_edit_link(original_title)
-            admin.unpublish_to_edit_as_draft()
-            admin.fill_text(FIELD_REPORT_TITLE_EN, revised_title)
-            admin.submit_for_review()
+    with allure.step("Change the Title and republish"):
+        admin.open_entry(entry)
+        admin.fill_text(FIELD_REPORT_TITLE_EN, revised_title)
+        _pinned(admin, ROLE_EDITOR)
+        admin.publish()
+        went_through = admin.save_redirected()
+        admin.open_entry(entry)
+        if admin.field_value(FIELD_REPORT_TITLE_EN) == revised_title:
+            entry = disposable.track(entry.retitled(revised_title))
+        assert went_through, f"the republish was refused: {admin.refusal_evidence()}"
+        _assert_published(admin, entry)
 
-        ar = AnnualReportsPage(page)
-        with allure.step("Poll the live page (5s/0.5s) for the new title"):
-            import time
-            deadline = time.monotonic() + 5
-            titles = []
-            while time.monotonic() < deadline:
-                ar.open_annual_reports()
-                titles = ar.card_titles()
-                if revised_title in titles:
-                    break
-                page.wait_for_timeout(500)
+    ar, pub = _public(anon_pages)
+    with allure.step("Poll the live page (5s/0.5s) for the new title"):
+        import time
+        deadline = time.monotonic() + 5
+        titles = []
+        while time.monotonic() < deadline:
+            ar.open_annual_reports()
+            titles = ar.card_titles()
+            if revised_title in titles:
+                break
+            pub.wait_for_timeout(500)
 
-        # Assert: new title shown, old title gone
-        assert revised_title in titles
-        assert original_title not in titles
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(revised_title)
-        admin.open_entries_list()
-        admin.delete_entry_by_title(original_title)
+    # Assert: new title shown, old title gone
+    assert revised_title in titles
+    assert original_title not in titles
 
 
 # ---------------------------------------------------------------------------
@@ -1503,45 +1536,42 @@ def test_edit_published_title_shows_new_value_live_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143642
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_unpublish_report_removes_from_live_web(page):
-    # Azure TC 143642 | PBI 130712 — DISPOSABLE own entry.
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143642 Annual Report 2030"
+@AUTH_FREE_PAGE
+def test_unpublish_report_removes_from_live_web(page, disposable, anon_pages):
+    # Azure TC 143642 | PBI 130712 — DISPOSABLE own entry (captured id; the
+    # unpublish is the id-scoped row action, never a title lookup).
+    admin = _editor(page)
+    title = _title("143642", "Annual Report 2030")
 
-    try:
-        with allure.step("Create and publish the disposable record"):
-            admin.create_disposable_entry("143642", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2030")
-            admin.submit_for_review()
+    with allure.step("Create and publish the disposable record"):
+        entry = _publish_disposable(admin, disposable, _year_data(title, "2030"))
 
-        ar = AnnualReportsPage(page)
-        with allure.step("Confirm it is live first"):
+    ar, pub = _public(anon_pages)
+    with allure.step("Confirm it is live first"):
+        ar.open_annual_reports()
+        ar.search(title)
+        assert ar.card_count() == 1
+
+    with allure.step("Unpublish it"):
+        admin.open_entries_list()
+        _pinned(admin, ROLE_EDITOR)
+        admin.run_row_action(entry, "unpublish")
+        _wait_status(admin, entry, STATUS_UNPUBLISHED, 60.0)
+
+    with allure.step("Poll the live page (5s/0.5s) confirming the card is gone"):
+        import time
+        deadline = time.monotonic() + 5
+        count = -1
+        while time.monotonic() < deadline:
             ar.open_annual_reports()
             ar.search(title)
-            assert ar.card_count() == 1
+            count = ar.card_count()
+            if count == 0:
+                break
+            pub.wait_for_timeout(500)
 
-        with allure.step("Unpublish it"):
-            admin.open_entries_list()
-            admin.open_entry_by_edit_link(title)
-            admin.unpublish_to_edit_as_draft()
-
-        with allure.step("Poll the live page (5s/0.5s) confirming the card is gone"):
-            import time
-            deadline = time.monotonic() + 5
-            count = -1
-            while time.monotonic() < deadline:
-                ar.open_annual_reports()
-                ar.search(title)
-                count = ar.card_count()
-                if count == 0:
-                    break
-                page.wait_for_timeout(500)
-
-        # Assert
-        assert count == 0
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    # Assert
+    assert count == 0
 
 
 # ---------------------------------------------------------------------------
@@ -1558,35 +1588,39 @@ def test_unpublish_report_removes_from_live_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143643
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_delete_report_removes_from_live_web(page):
+@AUTH_FREE_PAGE
+def test_delete_report_removes_from_live_web(page, disposable, anon_pages):
     # Azure TC 143643 | PBI 130712 — DISPOSABLE own entry; the case's own
     # wording ("delete the QCTEST- report record") already names this as
-    # test-owned/disposable data, per cms-profile.md.
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143643 Annual Report 2031"
+    # test-owned/disposable data, per cms-profile.md. The delete under test is
+    # the guarded `delete_disposable_entry` on the captured title + id; if it
+    # does not go through, the `disposable` teardown retries the same record.
+    admin = _editor(page)
+    title = _title("143643", "Annual Report 2031")
 
     with allure.step("Create and publish the disposable record"):
-        admin.create_disposable_entry("143643", **{FIELD_REPORT_TITLE_EN: title})
-        admin.fill_number(FIELD_PUBLICATION_YEAR, "2031")
-        admin.submit_for_review()
+        entry = _publish_disposable(admin, disposable, _year_data(title, "2031"))
 
-    ar = AnnualReportsPage(page)
+    ar, pub = _public(anon_pages)
     with allure.step("Confirm it is live, capture its PDF URL"):
         ar.open_annual_reports()
         ar.search(title)
         assert ar.card_count() == 1
-        pdf_url = ar.card_download_href(0)
+        # The card's href is relative; resolve it against the public page URL.
+        pdf_url = urljoin(pub.url, ar.card_download_href(0))
 
     with allure.step("Delete the record via Object Authoring"):
-        admin.open_entries_list()
-        deleted = admin.delete_entry_by_title(title)
+        _pinned(admin, ROLE_EDITOR)
+        deleted = admin.delete_disposable_entry(entry, await_message=True)
+        if deleted:
+            disposable.mark_removed(entry)
         assert deleted
 
     with allure.step("Confirm the card is gone from the live grid"):
         ar.open_annual_reports()
         ar.search(title)
 
-    response = page.context.request.get(pdf_url)
+    response = pub.context.request.get(pdf_url)
 
     # Assert: card gone, old PDF URL no longer resolves to content
     assert ar.card_count() == 0
@@ -1772,27 +1806,22 @@ def test_section_description_saved_and_displayed_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143719
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_report_title_saved_and_displayed_on_card_web(page):
-    # Azure TC 143719 | PBI 130712
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143719 Annual Report Title Check"
+@AUTH_FREE_PAGE
+def test_report_title_saved_and_displayed_on_card_web(page, disposable, anon_pages):
+    # Azure TC 143719 | PBI 130712 — DISPOSABLE own entry (guarded teardown).
+    admin = _editor(page)
+    title = _title("143719", "Annual Report Title Check")
 
-    try:
-        with allure.step("Create and publish a disposable entry with this Report Title"):
-            admin.create_disposable_entry("143719", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2032")
-            admin.submit_for_review()
+    with allure.step("Create and publish a disposable entry with this Report Title"):
+        _publish_disposable(admin, disposable, _year_data(title, "2032"))
 
-        ar = AnnualReportsPage(page)
-        with allure.step("Load the live page"):
-            ar.open_annual_reports()
-            ar.search(title)
+    ar, _ = _public(anon_pages)
+    with allure.step("Load the live page"):
+        ar.open_annual_reports()
+        ar.search(title)
 
-        # Assert
-        assert ar.card_titles() == [title]
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    # Assert
+    assert ar.card_titles() == [title]
 
 
 @allure.epic("Insights & Media")
@@ -1806,31 +1835,23 @@ def test_report_title_saved_and_displayed_on_card_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143723
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_report_description_saved_and_displayed_on_card_web(page):
-    # Azure TC 143723 | PBI 130712
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143723 Annual Report Desc Check"
-    description = "QCTEST-143723 disposable description for automated card-display verification."
+@AUTH_FREE_PAGE
+def test_report_description_saved_and_displayed_on_card_web(page, disposable, anon_pages):
+    # Azure TC 143723 | PBI 130712 — DISPOSABLE own entry (guarded teardown).
+    admin = _editor(page)
+    title = _title("143723", "Annual Report Desc Check")
+    description = f"{_title('143723')} disposable description for automated card-display verification."
 
-    try:
-        with allure.step("Create and publish a disposable entry with this Report Description"):
-            admin.create_disposable_entry(
-                "143723",
-                **{FIELD_REPORT_TITLE_EN: title, FIELD_REPORT_DESCRIPTION_EN: description},
-            )
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2033")
-            admin.submit_for_review()
+    with allure.step("Create and publish a disposable entry with this Report Description"):
+        _publish_disposable(admin, disposable, _year_data(title, "2033", description=description))
 
-        ar = AnnualReportsPage(page)
-        with allure.step("Load the live page"):
-            ar.open_annual_reports()
-            ar.search(title)
+    ar, _ = _public(anon_pages)
+    with allure.step("Load the live page"):
+        ar.open_annual_reports()
+        ar.search(title)
 
-        # Assert
-        assert ar.card_desc(0) == description
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    # Assert
+    assert ar.card_desc(0) == description
 
 
 @allure.epic("Insights & Media")
@@ -1844,28 +1865,23 @@ def test_report_description_saved_and_displayed_on_card_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143727
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_cover_image_uploaded_and_displayed_web(page):
-    # Azure TC 143727 | PBI 130712
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143727 Annual Report Cover Check"
+@AUTH_FREE_PAGE
+def test_cover_image_uploaded_and_displayed_web(page, disposable, anon_pages):
+    # Azure TC 143727 | PBI 130712 — DISPOSABLE own entry (guarded teardown).
+    admin = _editor(page)
+    title = _title("143727", "Annual Report Cover Check")
 
-    try:
-        with allure.step("Create a disposable entry, upload a JPG cover image, publish"):
-            admin.create_disposable_entry("143727", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2034")
-            admin.upload_file(FIELD_COVER_IMAGE, f"{FIXTURES}/valid_cover_1_5mb.jpg")
-            admin.submit_for_review()
+    with allure.step("Create a disposable entry, upload a JPG cover image, publish"):
+        _publish_disposable(admin, disposable, _year_data(
+            title, "2034", cover_path=f"{FIXTURES}/valid_cover_1_5mb.jpg", cover_stem="cover_143727"))
 
-        ar = AnnualReportsPage(page)
-        with allure.step("Load the live page"):
-            ar.open_annual_reports()
-            ar.search(title)
+    ar, _ = _public(anon_pages)
+    with allure.step("Load the live page"):
+        ar.open_annual_reports()
+        ar.search(title)
 
-        # Assert: card displays the uploaded cover image
-        assert ar.card_thumb_src(0) != ""
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    # Assert: card displays the uploaded cover image
+    assert ar.card_thumb_src(0) != ""
 
 
 @allure.epic("Insights & Media")
@@ -1879,29 +1895,25 @@ def test_cover_image_uploaded_and_displayed_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143730
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_publication_year_drives_sort_position_web(page):
+@AUTH_FREE_PAGE
+def test_publication_year_drives_sort_position_web(page, disposable, anon_pages):
     # Azure TC 143730 | PBI 130712 — uses year 2035 (a real substitution:
     # the case's own example year 2025 already belongs to a real report; a
     # distinct future year avoids any ambiguity about which card is which).
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143730 Annual Report Year Check"
+    # DISPOSABLE own entry (guarded teardown).
+    admin = _editor(page)
+    title = _title("143730", "Annual Report Year Check")
 
-    try:
-        with allure.step("Create and publish a disposable entry for year 2035"):
-            admin.create_disposable_entry("143730", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2035")
-            admin.submit_for_review()
+    with allure.step("Create and publish a disposable entry for year 2035"):
+        _publish_disposable(admin, disposable, _year_data(title, "2035"))
 
-        ar = AnnualReportsPage(page)
-        with allure.step("Load the live page"):
-            ar.open_annual_reports()
+    ar, _ = _public(anon_pages)
+    with allure.step("Load the live page"):
+        ar.open_annual_reports()
 
-        # Assert: highest year sorts first (descending order)
-        titles = ar.card_titles()
-        assert titles[0] == title
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    # Assert: highest year sorts first (descending order)
+    titles = ar.card_titles()
+    assert titles[0] == title
 
 
 @allure.epic("Insights & Media")
@@ -1915,28 +1927,22 @@ def test_publication_year_drives_sort_position_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143735
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_page_count_saved_and_displayed_web(page):
-    # Azure TC 143735 | PBI 130712
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143735 Annual Report Page Count Check"
+@AUTH_FREE_PAGE
+def test_page_count_saved_and_displayed_web(page, disposable, anon_pages):
+    # Azure TC 143735 | PBI 130712 — DISPOSABLE own entry (guarded teardown).
+    admin = _editor(page)
+    title = _title("143735", "Annual Report Page Count Check")
 
-    try:
-        with allure.step("Create a disposable entry, Page Count=20, publish"):
-            admin.create_disposable_entry("143735", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2036")
-            admin.fill_number(FIELD_PAGE_COUNT, "20")
-            admin.submit_for_review()
+    with allure.step("Create a disposable entry, Page Count=20, publish"):
+        _publish_disposable(admin, disposable, _year_data(title, "2036", page_count="20"))
 
-        ar = AnnualReportsPage(page)
-        with allure.step("Load the live page"):
-            ar.open_annual_reports()
-            ar.search(title)
+    ar, _ = _public(anon_pages)
+    with allure.step("Load the live page"):
+        ar.open_annual_reports()
+        ar.search(title)
 
-        # Assert
-        assert "20 Pages" in ar.card_meta(0)
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    # Assert
+    assert "20 Pages" in ar.card_meta(0)
 
 
 @allure.epic("Insights & Media")
@@ -1950,32 +1956,27 @@ def test_page_count_saved_and_displayed_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143740
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_valid_pdf_uploaded_and_publishes_web(page):
-    # Azure TC 143740 | PBI 130712
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143740 Annual Report PDF Check"
+@AUTH_FREE_PAGE
+def test_valid_pdf_uploaded_and_publishes_web(page, disposable, anon_pages):
+    # Azure TC 143740 | PBI 130712 — DISPOSABLE own entry (guarded teardown);
+    # `_publish_disposable` asserts the record reaches Published.
+    admin = _editor(page)
+    title = _title("143740", "Annual Report PDF Check")
 
-    try:
-        with allure.step("Create a disposable entry, upload a 4MB PDF, publish"):
-            admin.create_disposable_entry("143740", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2037")
-            admin.upload_file(FIELD_PDF_ATTACHMENT, f"{FIXTURES}/valid_pdf_4mb.pdf")
-            admin.submit_for_review()
-            assert admin.status_for(title) == "Published"
+    with allure.step("Create a disposable entry, upload a 4MB PDF, publish"):
+        _publish_disposable(admin, disposable, _year_data(
+            title, "2037", pdf_path=f"{FIXTURES}/valid_pdf_4mb.pdf", pdf_stem="report_143740"))
 
-        ar = AnnualReportsPage(page)
-        with allure.step("Click Download on the live card"):
-            ar.open_annual_reports()
-            ar.search(title)
-            with page.expect_download() as download_info:
-                ar.card_download_link(0).click()
-            download = download_info.value
+    ar, pub = _public(anon_pages)
+    with allure.step("Click Download on the live card"):
+        ar.open_annual_reports()
+        ar.search(title)
+        with pub.expect_download() as download_info:
+            ar.card_download_link(0).click()
+        download = download_info.value
 
-        # Assert: downloaded file matches the uploaded PDF
-        assert download.suggested_filename.lower().endswith(".pdf")
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    # Assert: downloaded file matches the uploaded PDF
+    assert download.suggested_filename.lower().endswith(".pdf")
 
 
 @allure.epic("Insights & Media")
@@ -1989,27 +1990,22 @@ def test_valid_pdf_uploaded_and_publishes_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143785
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_active_status_published_appears_live_web(page):
-    # Azure TC 143785 | PBI 130712
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143785 Annual Report Status Check"
+@AUTH_FREE_PAGE
+def test_active_status_published_appears_live_web(page, disposable, anon_pages):
+    # Azure TC 143785 | PBI 130712 — DISPOSABLE own entry (guarded teardown).
+    admin = _editor(page)
+    title = _title("143785", "Annual Report Status Check")
 
-    try:
-        with allure.step("Create a fully-valid disposable entry, Active Status=Published"):
-            admin.create_disposable_entry("143785", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2038")
-            admin.submit_for_review()
+    with allure.step("Create a fully-valid disposable entry, Active Status=Published"):
+        _publish_disposable(admin, disposable, _year_data(title, "2038", active_status=True))
 
-        ar = AnnualReportsPage(page)
-        with allure.step("Load the live page"):
-            ar.open_annual_reports()
-            ar.search(title)
+    ar, _ = _public(anon_pages)
+    with allure.step("Load the live page"):
+        ar.open_annual_reports()
+        ar.search(title)
 
-        # Assert
-        assert ar.card_count() == 1
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    # Assert
+    assert ar.card_count() == 1
 
 
 # ---------------------------------------------------------------------------
@@ -2026,40 +2022,40 @@ def test_active_status_published_appears_live_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143793
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_replace_cover_image_removes_old_reference_web(page):
-    # Azure TC 143793 | PBI 130712 — own disposable entry.
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143793 Annual Report Cover Replace"
+@AUTH_FREE_PAGE
+def test_replace_cover_image_removes_old_reference_web(page, disposable, anon_pages):
+    # Azure TC 143793 | PBI 130712 — own disposable entry (captured id; the
+    # edit opens the entry by its captured code, never a title lookup).
+    # The replacement is a uniquely-named copy of the valid JPG (as the
+    # Control_Panel twin does): the former 2.5 MB PNG fixture is over the
+    # cover-size limit and would be rejected before the republish.
+    admin = _editor(page)
+    title = _title("143793", "Annual Report Cover Replace")
 
-    try:
-        with allure.step("Create, publish with the first cover image"):
-            admin.create_disposable_entry("143793", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2039")
-            admin.upload_file(FIELD_COVER_IMAGE, f"{FIXTURES}/valid_cover_1_5mb.jpg")
-            admin.submit_for_review()
+    with allure.step("Create, publish with the first cover image"):
+        entry = _publish_disposable(admin, disposable, _year_data(
+            title, "2039", cover_path=f"{FIXTURES}/valid_cover_1_5mb.jpg", cover_stem="cover_143793_old"))
 
-        ar = AnnualReportsPage(page)
-        ar.open_annual_reports()
-        ar.search(title)
-        old_src = ar.card_thumb_src(0)
+    ar, _ = _public(anon_pages)
+    ar.open_annual_reports()
+    ar.search(title)
+    old_src = ar.card_thumb_src(0)
 
-        with allure.step("Replace the Cover Image with a new file, republish"):
-            admin.open_entries_list()
-            admin.open_entry_by_edit_link(title)
-            admin.unpublish_to_edit_as_draft()
-            admin.upload_file(FIELD_COVER_IMAGE, f"{FIXTURES}/oversized_cover_2_5mb.png")
-            admin.submit_for_review()
+    with allure.step("Replace the Cover Image with a new file, republish"):
+        admin.open_entry(entry)
+        admin.upload_file(FIELD_COVER_IMAGE, f"{FIXTURES}/valid_cover_1_5mb.jpg", "cover_143793_new")
+        _pinned(admin, ROLE_EDITOR)
+        admin.publish()
+        assert admin.save_redirected(), f"the replacement save was refused: {admin.refusal_evidence()}"
+        _assert_published(admin, entry)
 
-        ar.open_annual_reports()
-        ar.search(title)
-        new_src = ar.card_thumb_src(0)
+    ar.open_annual_reports()
+    ar.search(title)
+    new_src = ar.card_thumb_src(0)
 
-        # Assert: card shows a different image reference than before
-        assert new_src != ""
-        assert new_src != old_src
-    finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+    # Assert: card shows a different image reference than before
+    assert new_src != ""
+    assert new_src != old_src
 
 
 # ---------------------------------------------------------------------------
@@ -2076,31 +2072,40 @@ def test_replace_cover_image_removes_old_reference_web(page):
 @pytest.mark.pbi_130712
 @pytest.mark.tc_143797
 @ANNUAL_REPORTS_CMS_XDIST_GROUP
-def test_publish_blocked_then_succeeds_after_pdf_added_web(page):
+@AUTH_FREE_PAGE
+def test_publish_blocked_then_succeeds_after_pdf_added_web(page, disposable, anon_pages):
     # Azure TC 143797 | PBI 130712 — own disposable entry (mirrors tc_143781's
-    # own precondition, referenced by this case as "per TC-098").
-    admin = AnnualReportAdminPage(page)
-    title = "QCTEST-143797 Annual Report Retry Check"
+    # own precondition, referenced by this case as "per TC-098"). Whatever the
+    # two attempts create is captured by id-diff + title read-back in
+    # `finally` and removed by the guarded `disposable` teardown.
+    admin = _editor(page)
+    title = _title("143797", "Annual Report Retry Check")
+    ids_before = admin.snapshot_ids()
+    entry = None
 
     try:
         with allure.step("Attempt to publish a record with no PDF attached"):
-            admin.create_disposable_entry("143797", **{FIELD_REPORT_TITLE_EN: title})
-            admin.fill_number(FIELD_PUBLICATION_YEAR, "2040")
-            admin.submit_for_review()
+            admin.open_new_entry_form()
+            admin.fill_report(_year_data(title, "2040", pdf_path=None))
+            _pinned(admin, ROLE_EDITOR)
+            admin.publish()
             assert admin.submit_blocked()
 
         with allure.step("Attach a valid PDF and retry Publish"):
-            admin.upload_file(FIELD_PDF_ATTACHMENT, f"{FIXTURES}/valid_pdf_4mb.pdf")
-            admin.submit_for_review()
-            assert admin.status_for(title) == "Published"
-
-        ar = AnnualReportsPage(page)
-        with allure.step("Confirm it appears on the live page"):
-            ar.open_annual_reports()
-            ar.search(title)
-
-        # Assert
-        assert ar.card_count() == 1
+            admin.upload_file(FIELD_PDF_ATTACHMENT, f"{FIXTURES}/valid_pdf_4mb.pdf", "report_143797")
+            _pinned(admin, ROLE_EDITOR)
+            admin.publish()
+            assert admin.save_redirected(), f"the retry with a PDF attached was refused: {admin.refusal_evidence()}"
     finally:
-        admin.open_entries_list()
-        admin.delete_entry_by_title(title)
+        entry = _register(admin, disposable, title, ids_before)
+    assert entry is not None, f"{title!r} is not identifiable as exactly one NEW record"
+    _assert_published(admin, entry)
+    _require_active_status(admin, entry)
+
+    ar, _ = _public(anon_pages)
+    with allure.step("Confirm it appears on the live page"):
+        ar.open_annual_reports()
+        ar.search(title)
+
+    # Assert
+    assert ar.card_count() == 1

@@ -92,6 +92,7 @@ module docstring as real, confirmed-live results.
 
 from cms.pages.components.object_authoring_page import ObjectAuthoringPage
 from config.settings import control_panel_url
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 SECTION_SLUG = "about-us-section"
 COUNTER_SLUG = "about-us-counter"
@@ -168,7 +169,7 @@ class HomeAboutSummaryAdminPage(ObjectAuthoringPage):
         if len(read().strip()) <= limit:
             return True
         self.submit_for_publishing()
-        return self.current_status() != "Approved"
+        return self.current_status() != STATUS_PUBLISHED
 
     def upload_building_image_primary(self, file_path: str) -> "HomeAboutSummaryAdminPage":
         self.upload_file(FIELD_BUILDING_IMAGE_PRIMARY, file_path)
@@ -212,7 +213,7 @@ class HomeAboutSummaryAdminPage(ObjectAuthoringPage):
         Approved-by-default singleton, where Save as Draft is disabled
         until unpublished (see this module's REWRITTEN docstring above).
         No-op if already Draft. Must be called on an already-open entry."""
-        if self.current_status() == "Approved":
+        if self.current_status() == STATUS_PUBLISHED:
             self.unpublish_to_edit_as_draft()
             self.open_section_entry()
         return self
@@ -273,7 +274,7 @@ class HomeAboutCounterAdminPage(ObjectAuthoringPage):
         """Counter-row counterpart to HomeAboutSummaryAdminPage.ensure_draft()
         — same unpublish-if-Approved no-op-if-Draft shape, for "Save Draft"
         cases exercised against a counter row."""
-        if self.current_status() == "Approved":
+        if self.current_status() == STATUS_PUBLISHED:
             self.unpublish_to_edit_as_draft()
         return self
 

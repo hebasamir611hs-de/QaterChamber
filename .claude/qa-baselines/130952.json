@@ -1,0 +1,1830 @@
+{
+  "pbi": "130952",
+  "analysed": "2026-09-23",
+  "mode": "Normal",
+  "budget": 229,
+  "delivered": 229,
+  "categories": {
+    "UI": 34,
+    "Compatibility": 3,
+    "Auth": 6,
+    "Functional-High": 28,
+    "Functional-Low": 148,
+    "Edge": 10
+  },
+  "inventory": {
+    "OBJ": 9,
+    "FLD": 47,
+    "CTL": 20,
+    "ST": 12,
+    "ROL": 3,
+    "MSG": 9,
+    "SUR": 2,
+    "LNG": 2,
+    "ENV": 3
+  },
+  "case_ids": [
+    "INVEST-TENDERS-TC-001",
+    "INVEST-TENDERS-TC-002",
+    "INVEST-TENDERS-TC-003",
+    "INVEST-TENDERS-TC-004",
+    "INVEST-TENDERS-TC-005",
+    "INVEST-TENDERS-TC-006",
+    "INVEST-TENDERS-TC-007",
+    "INVEST-TENDERS-TC-008",
+    "INVEST-TENDERS-TC-009",
+    "INVEST-TENDERS-TC-010",
+    "INVEST-TENDERS-TC-011",
+    "INVEST-TENDERS-TC-012",
+    "INVEST-TENDERS-TC-013",
+    "INVEST-TENDERS-TC-014",
+    "INVEST-TENDERS-TC-015",
+    "INVEST-TENDERS-TC-016",
+    "INVEST-TENDERS-TC-017",
+    "INVEST-TENDERS-TC-018",
+    "INVEST-TENDERS-TC-019",
+    "INVEST-TENDERS-TC-020",
+    "INVEST-TENDERS-TC-021",
+    "INVEST-TENDERS-TC-022",
+    "INVEST-TENDERS-TC-023",
+    "INVEST-TENDERS-TC-024",
+    "INVEST-TENDERS-TC-025",
+    "INVEST-TENDERS-TC-026",
+    "INVEST-TENDERS-TC-027",
+    "INVEST-TENDERS-TC-028",
+    "INVEST-TENDERS-TC-029",
+    "INVEST-TENDERS-TC-030",
+    "INVEST-TENDERS-TC-031",
+    "INVEST-TENDERS-TC-032",
+    "INVEST-TENDERS-TC-033",
+    "INVEST-TENDERS-TC-034",
+    "INVEST-TENDERS-TC-035",
+    "INVEST-TENDERS-TC-036",
+    "INVEST-TENDERS-TC-037",
+    "INVEST-TENDERS-TC-038",
+    "INVEST-TENDERS-TC-039",
+    "INVEST-TENDERS-TC-040",
+    "INVEST-TENDERS-TC-041",
+    "INVEST-TENDERS-TC-042",
+    "INVEST-TENDERS-TC-043",
+    "INVEST-TENDERS-TC-044",
+    "INVEST-TENDERS-TC-045",
+    "INVEST-TENDERS-TC-046",
+    "INVEST-TENDERS-TC-047",
+    "INVEST-TENDERS-TC-048",
+    "INVEST-TENDERS-TC-049",
+    "INVEST-TENDERS-TC-050",
+    "INVEST-TENDERS-TC-051",
+    "INVEST-TENDERS-TC-052",
+    "INVEST-TENDERS-TC-053",
+    "INVEST-TENDERS-TC-054",
+    "INVEST-TENDERS-TC-055",
+    "INVEST-TENDERS-TC-056",
+    "INVEST-TENDERS-TC-057",
+    "INVEST-TENDERS-TC-058",
+    "INVEST-TENDERS-TC-059",
+    "INVEST-TENDERS-TC-060",
+    "INVEST-TENDERS-TC-061",
+    "INVEST-TENDERS-TC-062",
+    "INVEST-TENDERS-TC-063",
+    "INVEST-TENDERS-TC-064",
+    "INVEST-TENDERS-TC-065",
+    "INVEST-TENDERS-TC-066",
+    "INVEST-TENDERS-TC-067",
+    "INVEST-TENDERS-TC-068",
+    "INVEST-TENDERS-TC-069",
+    "INVEST-TENDERS-TC-070",
+    "INVEST-TENDERS-TC-071",
+    "INVEST-TENDERS-TC-072",
+    "INVEST-TENDERS-TC-073",
+    "INVEST-TENDERS-TC-074",
+    "INVEST-TENDERS-TC-075",
+    "INVEST-TENDERS-TC-076",
+    "INVEST-TENDERS-TC-077",
+    "INVEST-TENDERS-TC-078",
+    "INVEST-TENDERS-TC-079",
+    "INVEST-TENDERS-TC-080",
+    "INVEST-TENDERS-TC-081",
+    "INVEST-TENDERS-TC-082",
+    "INVEST-TENDERS-TC-083",
+    "INVEST-TENDERS-TC-084",
+    "INVEST-TENDERS-TC-085",
+    "INVEST-TENDERS-TC-086",
+    "INVEST-TENDERS-TC-087",
+    "INVEST-TENDERS-TC-088",
+    "INVEST-TENDERS-TC-089",
+    "INVEST-TENDERS-TC-090",
+    "INVEST-TENDERS-TC-091",
+    "INVEST-TENDERS-TC-092",
+    "INVEST-TENDERS-TC-093",
+    "INVEST-TENDERS-TC-094",
+    "INVEST-TENDERS-TC-095",
+    "INVEST-TENDERS-TC-096",
+    "INVEST-TENDERS-TC-097",
+    "INVEST-TENDERS-TC-098",
+    "INVEST-TENDERS-TC-099",
+    "INVEST-TENDERS-TC-100",
+    "INVEST-TENDERS-TC-101",
+    "INVEST-TENDERS-TC-102",
+    "INVEST-TENDERS-TC-103",
+    "INVEST-TENDERS-TC-104",
+    "INVEST-TENDERS-TC-105",
+    "INVEST-TENDERS-TC-106",
+    "INVEST-TENDERS-TC-107",
+    "INVEST-TENDERS-TC-108",
+    "INVEST-TENDERS-TC-109",
+    "INVEST-TENDERS-TC-110",
+    "INVEST-TENDERS-TC-111",
+    "INVEST-TENDERS-TC-112",
+    "INVEST-TENDERS-TC-113",
+    "INVEST-TENDERS-TC-114",
+    "INVEST-TENDERS-TC-115",
+    "INVEST-TENDERS-TC-116",
+    "INVEST-TENDERS-TC-117",
+    "INVEST-TENDERS-TC-118",
+    "INVEST-TENDERS-TC-119",
+    "INVEST-TENDERS-TC-120",
+    "INVEST-TENDERS-TC-121",
+    "INVEST-TENDERS-TC-122",
+    "INVEST-TENDERS-TC-123",
+    "INVEST-TENDERS-TC-124",
+    "INVEST-TENDERS-TC-125",
+    "INVEST-TENDERS-TC-126",
+    "INVEST-TENDERS-TC-127",
+    "INVEST-TENDERS-TC-128",
+    "INVEST-TENDERS-TC-129",
+    "INVEST-TENDERS-TC-130",
+    "INVEST-TENDERS-TC-131",
+    "INVEST-TENDERS-TC-132",
+    "INVEST-TENDERS-TC-133",
+    "INVEST-TENDERS-TC-134",
+    "INVEST-TENDERS-TC-135",
+    "INVEST-TENDERS-TC-136",
+    "INVEST-TENDERS-TC-137",
+    "INVEST-TENDERS-TC-138",
+    "INVEST-TENDERS-TC-139",
+    "INVEST-TENDERS-TC-140",
+    "INVEST-TENDERS-TC-141",
+    "INVEST-TENDERS-TC-142",
+    "INVEST-TENDERS-TC-143",
+    "INVEST-TENDERS-TC-144",
+    "INVEST-TENDERS-TC-145",
+    "INVEST-TENDERS-TC-146",
+    "INVEST-TENDERS-TC-147",
+    "INVEST-TENDERS-TC-148",
+    "INVEST-TENDERS-TC-149",
+    "INVEST-TENDERS-TC-150",
+    "INVEST-TENDERS-TC-151",
+    "INVEST-TENDERS-TC-152",
+    "INVEST-TENDERS-TC-153",
+    "INVEST-TENDERS-TC-154",
+    "INVEST-TENDERS-TC-155",
+    "INVEST-TENDERS-TC-156",
+    "INVEST-TENDERS-TC-157",
+    "INVEST-TENDERS-TC-158",
+    "INVEST-TENDERS-TC-159",
+    "INVEST-TENDERS-TC-160",
+    "INVEST-TENDERS-TC-161",
+    "INVEST-TENDERS-TC-162",
+    "INVEST-TENDERS-TC-163",
+    "INVEST-TENDERS-TC-164",
+    "INVEST-TENDERS-TC-165",
+    "INVEST-TENDERS-TC-166",
+    "INVEST-TENDERS-TC-167",
+    "INVEST-TENDERS-TC-168",
+    "INVEST-TENDERS-TC-169",
+    "INVEST-TENDERS-TC-170",
+    "INVEST-TENDERS-TC-171",
+    "INVEST-TENDERS-TC-172",
+    "INVEST-TENDERS-TC-173",
+    "INVEST-TENDERS-TC-174",
+    "INVEST-TENDERS-TC-175",
+    "INVEST-TENDERS-TC-176",
+    "INVEST-TENDERS-TC-177",
+    "INVEST-TENDERS-TC-178",
+    "INVEST-TENDERS-TC-179",
+    "INVEST-TENDERS-TC-180",
+    "INVEST-TENDERS-TC-181",
+    "INVEST-TENDERS-TC-182",
+    "INVEST-TENDERS-TC-183",
+    "INVEST-TENDERS-TC-184",
+    "INVEST-TENDERS-TC-185",
+    "INVEST-TENDERS-TC-186",
+    "INVEST-TENDERS-TC-187",
+    "INVEST-TENDERS-TC-188",
+    "INVEST-TENDERS-TC-189",
+    "INVEST-TENDERS-TC-190",
+    "INVEST-TENDERS-TC-191",
+    "INVEST-TENDERS-TC-192",
+    "INVEST-TENDERS-TC-193",
+    "INVEST-TENDERS-TC-194",
+    "INVEST-TENDERS-TC-195",
+    "INVEST-TENDERS-TC-196",
+    "INVEST-TENDERS-TC-197",
+    "INVEST-TENDERS-TC-198",
+    "INVEST-TENDERS-TC-199",
+    "INVEST-TENDERS-TC-200",
+    "INVEST-TENDERS-TC-201",
+    "INVEST-TENDERS-TC-202",
+    "INVEST-TENDERS-TC-203",
+    "INVEST-TENDERS-TC-204",
+    "INVEST-TENDERS-TC-205",
+    "INVEST-TENDERS-TC-206",
+    "INVEST-TENDERS-TC-207",
+    "INVEST-TENDERS-TC-208",
+    "INVEST-TENDERS-TC-209",
+    "INVEST-TENDERS-TC-210",
+    "INVEST-TENDERS-TC-211",
+    "INVEST-TENDERS-TC-212",
+    "INVEST-TENDERS-TC-213",
+    "INVEST-TENDERS-TC-214",
+    "INVEST-TENDERS-TC-215",
+    "INVEST-TENDERS-TC-216",
+    "INVEST-TENDERS-TC-217",
+    "INVEST-TENDERS-TC-218",
+    "INVEST-TENDERS-TC-219",
+    "INVEST-TENDERS-TC-220",
+    "INVEST-TENDERS-TC-221",
+    "INVEST-TENDERS-TC-222",
+    "INVEST-TENDERS-TC-223",
+    "INVEST-TENDERS-TC-224",
+    "INVEST-TENDERS-TC-225",
+    "INVEST-TENDERS-TC-226",
+    "INVEST-TENDERS-TC-227",
+    "INVEST-TENDERS-TC-228",
+    "INVEST-TENDERS-TC-229"
+  ],
+  "cases": {
+    "INVEST-TENDERS-TC-001": {
+      "category": "UI",
+      "traceability": [
+        "CTL-1",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-002": {
+      "category": "UI",
+      "traceability": [
+        "CTL-1",
+        "CTL-2",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-003": {
+      "category": "UI",
+      "traceability": [
+        "FLD-1",
+        "FLD-2",
+        "CTL-3",
+        "CTL-4",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-004": {
+      "category": "UI",
+      "traceability": [
+        "FLD-1",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-005": {
+      "category": "UI",
+      "traceability": [
+        "FLD-2",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-006": {
+      "category": "UI",
+      "traceability": [
+        "CTL-4",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-007": {
+      "category": "UI",
+      "traceability": [
+        "CTL-3",
+        "FLD-2",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-008": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "FLD-30",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-009": {
+      "category": "UI",
+      "traceability": [
+        "FLD-3",
+        "FLD-4",
+        "FLD-5",
+        "OBJ-1",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-010": {
+      "category": "UI",
+      "traceability": [
+        "FLD-6",
+        "FLD-7",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-011": {
+      "category": "UI",
+      "traceability": [
+        "CTL-6",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-012": {
+      "category": "UI",
+      "traceability": [
+        "CTL-5",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-013": {
+      "category": "UI",
+      "traceability": [
+        "ST-7",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-014": {
+      "category": "UI",
+      "traceability": [
+        "CTL-7",
+        "OBJ-1",
+        "FLD-3",
+        "FLD-8",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-015": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-1",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-016": {
+      "category": "UI",
+      "traceability": [
+        "FLD-36",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-017": {
+      "category": "UI",
+      "traceability": [
+        "FLD-24",
+        "FLD-25",
+        "FLD-26",
+        "FLD-27",
+        "FLD-28",
+        "FLD-29",
+        "FLD-35",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-018": {
+      "category": "UI",
+      "traceability": [
+        "FLD-37",
+        "FLD-38",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-019": {
+      "category": "UI",
+      "traceability": [
+        "CTL-8",
+        "CTL-9",
+        "OBJ-5",
+        "OBJ-6",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-020": {
+      "category": "UI",
+      "traceability": [
+        "FLD-7",
+        "FLD-21",
+        "FLD-37",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-021": {
+      "category": "UI",
+      "traceability": [
+        "CTL-10",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-022": {
+      "category": "UI",
+      "traceability": [
+        "CTL-1",
+        "CTL-2",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-023": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-024": {
+      "category": "UI",
+      "traceability": [
+        "OBJ-2",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-025": {
+      "category": "UI",
+      "traceability": [
+        "FLD-11",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-026": {
+      "category": "UI",
+      "traceability": [
+        "FLD-12",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-027": {
+      "category": "UI",
+      "traceability": [
+        "FLD-36",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-028": {
+      "category": "UI",
+      "traceability": [
+        "FLD-44",
+        "CTL-13",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-029": {
+      "category": "UI",
+      "traceability": [
+        "CTL-12",
+        "FLD-46",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-030": {
+      "category": "UI",
+      "traceability": [
+        "CTL-11",
+        "SUR-1",
+        "LNG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-031": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1",
+        "LNG-2",
+        "SUR-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-032": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1",
+        "LNG-2",
+        "SUR-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-033": {
+      "category": "UI",
+      "traceability": [
+        "LNG-1",
+        "LNG-2",
+        "SUR-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-034": {
+      "category": "UI",
+      "traceability": [
+        "ENV-1",
+        "ENV-2",
+        "ENV-3",
+        "SUR-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-035": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-1",
+        "SUR-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-036": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-2",
+        "SUR-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-037": {
+      "category": "Compatibility",
+      "traceability": [
+        "ENV-3",
+        "SUR-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-038": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1",
+        "SUR-1",
+        "SUR-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-039": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-1",
+        "SUR-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-040": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2",
+        "SUR-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-041": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3",
+        "SUR-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-042": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-3",
+        "SUR-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-043": {
+      "category": "Auth",
+      "traceability": [
+        "ROL-2",
+        "OBJ-2",
+        "SUR-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-044": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-7",
+        "OBJ-1",
+        "SUR-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-045": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-8",
+        "FLD-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-046": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-8",
+        "FLD-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-047": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-8",
+        "FLD-1",
+        "FLD-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-048": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-4",
+        "ST-7"
+      ]
+    },
+    "INVEST-TENDERS-TC-049": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-5",
+        "ST-9"
+      ]
+    },
+    "INVEST-TENDERS-TC-050": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-5",
+        "ST-9"
+      ]
+    },
+    "INVEST-TENDERS-TC-051": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-10",
+        "FLD-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-052": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-6",
+        "FLD-7",
+        "OBJ-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-053": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-6",
+        "OBJ-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-054": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "LNG-1",
+        "LNG-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-055": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-8",
+        "OBJ-5"
+      ]
+    },
+    "INVEST-TENDERS-TC-056": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-9",
+        "OBJ-6"
+      ]
+    },
+    "INVEST-TENDERS-TC-057": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-10"
+      ]
+    },
+    "INVEST-TENDERS-TC-058": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "CTL-11",
+        "FLD-44",
+        "FLD-46",
+        "ST-11",
+        "MSG-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-059": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-2",
+        "OBJ-3",
+        "OBJ-4",
+        "MSG-4",
+        "MSG-6",
+        "MSG-7",
+        "ST-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-060": {
+      "category": "Functional-High",
+      "traceability": [
+        "MSG-2",
+        "MSG-5",
+        "LNG-2",
+        "ST-11"
+      ]
+    },
+    "INVEST-TENDERS-TC-061": {
+      "category": "Functional-High",
+      "traceability": [
+        "FLD-15",
+        "ST-12",
+        "OBJ-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-062": {
+      "category": "Functional-High",
+      "traceability": [
+        "FLD-46"
+      ]
+    },
+    "INVEST-TENDERS-TC-063": {
+      "category": "Functional-High",
+      "traceability": [
+        "FLD-44"
+      ]
+    },
+    "INVEST-TENDERS-TC-064": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-2",
+        "ST-3",
+        "CTL-15",
+        "MSG-3"
+      ]
+    },
+    "INVEST-TENDERS-TC-065": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-3",
+        "ST-5",
+        "CTL-17",
+        "OBJ-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-066": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-2",
+        "ST-4",
+        "CTL-16",
+        "FLD-47"
+      ]
+    },
+    "INVEST-TENDERS-TC-067": {
+      "category": "Functional-High",
+      "traceability": [
+        "ST-1",
+        "ST-5",
+        "CTL-19",
+        "CTL-20",
+        "CTL-17",
+        "FLD-9",
+        "FLD-10"
+      ]
+    },
+    "INVEST-TENDERS-TC-068": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-9",
+        "OBJ-8"
+      ]
+    },
+    "INVEST-TENDERS-TC-069": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-18",
+        "ST-5",
+        "ST-6"
+      ]
+    },
+    "INVEST-TENDERS-TC-070": {
+      "category": "Functional-High",
+      "traceability": [
+        "OBJ-1",
+        "ST-5",
+        "SUR-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-071": {
+      "category": "Functional-High",
+      "traceability": [
+        "CTL-15",
+        "CTL-16",
+        "OBJ-6",
+        "OBJ-7"
+      ]
+    },
+    "INVEST-TENDERS-TC-072": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-073": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-074": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-075": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-076": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "INVEST-TENDERS-TC-077": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "INVEST-TENDERS-TC-078": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3"
+      ]
+    },
+    "INVEST-TENDERS-TC-079": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "INVEST-TENDERS-TC-080": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "INVEST-TENDERS-TC-081": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-4"
+      ]
+    },
+    "INVEST-TENDERS-TC-082": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "INVEST-TENDERS-TC-083": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "INVEST-TENDERS-TC-084": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-5"
+      ]
+    },
+    "INVEST-TENDERS-TC-085": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "INVEST-TENDERS-TC-086": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "INVEST-TENDERS-TC-087": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-6"
+      ]
+    },
+    "INVEST-TENDERS-TC-088": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "INVEST-TENDERS-TC-089": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "INVEST-TENDERS-TC-090": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "INVEST-TENDERS-TC-091": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-7"
+      ]
+    },
+    "INVEST-TENDERS-TC-092": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8",
+        "ST-7"
+      ]
+    },
+    "INVEST-TENDERS-TC-093": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-8"
+      ]
+    },
+    "INVEST-TENDERS-TC-094": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "INVEST-TENDERS-TC-095": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "INVEST-TENDERS-TC-096": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "INVEST-TENDERS-TC-097": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-9"
+      ]
+    },
+    "INVEST-TENDERS-TC-098": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10",
+        "OBJ-6"
+      ]
+    },
+    "INVEST-TENDERS-TC-099": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "INVEST-TENDERS-TC-100": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "INVEST-TENDERS-TC-101": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-10"
+      ]
+    },
+    "INVEST-TENDERS-TC-102": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "INVEST-TENDERS-TC-103": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "INVEST-TENDERS-TC-104": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-11"
+      ]
+    },
+    "INVEST-TENDERS-TC-105": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "INVEST-TENDERS-TC-106": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "INVEST-TENDERS-TC-107": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "INVEST-TENDERS-TC-108": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-12"
+      ]
+    },
+    "INVEST-TENDERS-TC-109": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "INVEST-TENDERS-TC-110": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "INVEST-TENDERS-TC-111": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "INVEST-TENDERS-TC-112": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-13"
+      ]
+    },
+    "INVEST-TENDERS-TC-113": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "INVEST-TENDERS-TC-114": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "INVEST-TENDERS-TC-115": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "INVEST-TENDERS-TC-116": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-14"
+      ]
+    },
+    "INVEST-TENDERS-TC-117": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-15"
+      ]
+    },
+    "INVEST-TENDERS-TC-118": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-15"
+      ]
+    },
+    "INVEST-TENDERS-TC-119": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-15"
+      ]
+    },
+    "INVEST-TENDERS-TC-120": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-15"
+      ]
+    },
+    "INVEST-TENDERS-TC-121": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    "INVEST-TENDERS-TC-122": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    "INVEST-TENDERS-TC-123": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    "INVEST-TENDERS-TC-124": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-16"
+      ]
+    },
+    "INVEST-TENDERS-TC-125": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    "INVEST-TENDERS-TC-126": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    "INVEST-TENDERS-TC-127": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    "INVEST-TENDERS-TC-128": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-17"
+      ]
+    },
+    "INVEST-TENDERS-TC-129": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    "INVEST-TENDERS-TC-130": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    "INVEST-TENDERS-TC-131": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    "INVEST-TENDERS-TC-132": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-18"
+      ]
+    },
+    "INVEST-TENDERS-TC-133": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    "INVEST-TENDERS-TC-134": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    "INVEST-TENDERS-TC-135": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-19"
+      ]
+    },
+    "INVEST-TENDERS-TC-136": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20",
+        "OBJ-8"
+      ]
+    },
+    "INVEST-TENDERS-TC-137": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20"
+      ]
+    },
+    "INVEST-TENDERS-TC-138": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    "INVEST-TENDERS-TC-139": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    "INVEST-TENDERS-TC-140": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-21"
+      ]
+    },
+    "INVEST-TENDERS-TC-141": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    "INVEST-TENDERS-TC-142": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    "INVEST-TENDERS-TC-143": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    "INVEST-TENDERS-TC-144": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-22"
+      ]
+    },
+    "INVEST-TENDERS-TC-145": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-23"
+      ]
+    },
+    "INVEST-TENDERS-TC-146": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-23"
+      ]
+    },
+    "INVEST-TENDERS-TC-147": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-24"
+      ]
+    },
+    "INVEST-TENDERS-TC-148": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-24"
+      ]
+    },
+    "INVEST-TENDERS-TC-149": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-24"
+      ]
+    },
+    "INVEST-TENDERS-TC-150": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-24"
+      ]
+    },
+    "INVEST-TENDERS-TC-151": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-24"
+      ]
+    },
+    "INVEST-TENDERS-TC-152": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-25"
+      ]
+    },
+    "INVEST-TENDERS-TC-153": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-25"
+      ]
+    },
+    "INVEST-TENDERS-TC-154": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-25"
+      ]
+    },
+    "INVEST-TENDERS-TC-155": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-25"
+      ]
+    },
+    "INVEST-TENDERS-TC-156": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-26"
+      ]
+    },
+    "INVEST-TENDERS-TC-157": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-26"
+      ]
+    },
+    "INVEST-TENDERS-TC-158": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-27"
+      ]
+    },
+    "INVEST-TENDERS-TC-159": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-27"
+      ]
+    },
+    "INVEST-TENDERS-TC-160": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-27"
+      ]
+    },
+    "INVEST-TENDERS-TC-161": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-27"
+      ]
+    },
+    "INVEST-TENDERS-TC-162": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-28"
+      ]
+    },
+    "INVEST-TENDERS-TC-163": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-28"
+      ]
+    },
+    "INVEST-TENDERS-TC-164": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-28"
+      ]
+    },
+    "INVEST-TENDERS-TC-165": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-28"
+      ]
+    },
+    "INVEST-TENDERS-TC-166": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-29"
+      ]
+    },
+    "INVEST-TENDERS-TC-167": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-29"
+      ]
+    },
+    "INVEST-TENDERS-TC-168": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-30"
+      ]
+    },
+    "INVEST-TENDERS-TC-169": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-30"
+      ]
+    },
+    "INVEST-TENDERS-TC-170": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-31",
+        "OBJ-8"
+      ]
+    },
+    "INVEST-TENDERS-TC-171": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-31"
+      ]
+    },
+    "INVEST-TENDERS-TC-172": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-32",
+        "OBJ-8"
+      ]
+    },
+    "INVEST-TENDERS-TC-173": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-32"
+      ]
+    },
+    "INVEST-TENDERS-TC-174": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-33",
+        "OBJ-8"
+      ]
+    },
+    "INVEST-TENDERS-TC-175": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-33"
+      ]
+    },
+    "INVEST-TENDERS-TC-176": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-34",
+        "OBJ-8"
+      ]
+    },
+    "INVEST-TENDERS-TC-177": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-34"
+      ]
+    },
+    "INVEST-TENDERS-TC-178": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-35"
+      ]
+    },
+    "INVEST-TENDERS-TC-179": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-35"
+      ]
+    },
+    "INVEST-TENDERS-TC-180": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-36"
+      ]
+    },
+    "INVEST-TENDERS-TC-181": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-36"
+      ]
+    },
+    "INVEST-TENDERS-TC-182": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-36"
+      ]
+    },
+    "INVEST-TENDERS-TC-183": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-36"
+      ]
+    },
+    "INVEST-TENDERS-TC-184": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-37"
+      ]
+    },
+    "INVEST-TENDERS-TC-185": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-37"
+      ]
+    },
+    "INVEST-TENDERS-TC-186": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-37"
+      ]
+    },
+    "INVEST-TENDERS-TC-187": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-38"
+      ]
+    },
+    "INVEST-TENDERS-TC-188": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-38"
+      ]
+    },
+    "INVEST-TENDERS-TC-189": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-38"
+      ]
+    },
+    "INVEST-TENDERS-TC-190": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-39"
+      ]
+    },
+    "INVEST-TENDERS-TC-191": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-39"
+      ]
+    },
+    "INVEST-TENDERS-TC-192": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-39"
+      ]
+    },
+    "INVEST-TENDERS-TC-193": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-40"
+      ]
+    },
+    "INVEST-TENDERS-TC-194": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-40"
+      ]
+    },
+    "INVEST-TENDERS-TC-195": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-40"
+      ]
+    },
+    "INVEST-TENDERS-TC-196": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-41"
+      ]
+    },
+    "INVEST-TENDERS-TC-197": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-41"
+      ]
+    },
+    "INVEST-TENDERS-TC-198": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-42"
+      ]
+    },
+    "INVEST-TENDERS-TC-199": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-42"
+      ]
+    },
+    "INVEST-TENDERS-TC-200": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-43"
+      ]
+    },
+    "INVEST-TENDERS-TC-201": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-43"
+      ]
+    },
+    "INVEST-TENDERS-TC-202": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-43"
+      ]
+    },
+    "INVEST-TENDERS-TC-203": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-43"
+      ]
+    },
+    "INVEST-TENDERS-TC-204": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-43"
+      ]
+    },
+    "INVEST-TENDERS-TC-205": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-44"
+      ]
+    },
+    "INVEST-TENDERS-TC-206": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-44"
+      ]
+    },
+    "INVEST-TENDERS-TC-207": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-44"
+      ]
+    },
+    "INVEST-TENDERS-TC-208": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-44"
+      ]
+    },
+    "INVEST-TENDERS-TC-209": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-45",
+        "OBJ-7"
+      ]
+    },
+    "INVEST-TENDERS-TC-210": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-45"
+      ]
+    },
+    "INVEST-TENDERS-TC-211": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-45"
+      ]
+    },
+    "INVEST-TENDERS-TC-212": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-46"
+      ]
+    },
+    "INVEST-TENDERS-TC-213": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-46"
+      ]
+    },
+    "INVEST-TENDERS-TC-214": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-47"
+      ]
+    },
+    "INVEST-TENDERS-TC-215": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-47"
+      ]
+    },
+    "INVEST-TENDERS-TC-216": {
+      "category": "Functional-Low",
+      "traceability": [
+        "CTL-11",
+        "OBJ-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-217": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-3",
+        "FLD-4",
+        "FLD-5",
+        "FLD-6",
+        "FLD-7",
+        "FLD-9",
+        "FLD-10",
+        "OBJ-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-218": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-20",
+        "FLD-18",
+        "OBJ-8"
+      ]
+    },
+    "INVEST-TENDERS-TC-219": {
+      "category": "Functional-Low",
+      "traceability": [
+        "FLD-30",
+        "OBJ-8"
+      ]
+    },
+    "INVEST-TENDERS-TC-220": {
+      "category": "Edge",
+      "traceability": [
+        "ST-6",
+        "FLD-7"
+      ]
+    },
+    "INVEST-TENDERS-TC-221": {
+      "category": "Edge",
+      "traceability": [
+        "CTL-11",
+        "OBJ-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-222": {
+      "category": "Edge",
+      "traceability": [
+        "CTL-5",
+        "ST-9"
+      ]
+    },
+    "INVEST-TENDERS-TC-223": {
+      "category": "Edge",
+      "traceability": [
+        "ST-6",
+        "ST-9",
+        "OBJ-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-224": {
+      "category": "Edge",
+      "traceability": [
+        "FLD-44",
+        "OBJ-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-225": {
+      "category": "Edge",
+      "traceability": [
+        "CTL-15",
+        "ST-2",
+        "ROL-2"
+      ]
+    },
+    "INVEST-TENDERS-TC-226": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-8",
+        "OBJ-1",
+        "FLD-30"
+      ]
+    },
+    "INVEST-TENDERS-TC-227": {
+      "category": "Edge",
+      "traceability": [
+        "FLD-3",
+        "OBJ-1"
+      ]
+    },
+    "INVEST-TENDERS-TC-228": {
+      "category": "Edge",
+      "traceability": [
+        "OBJ-5",
+        "OBJ-6"
+      ]
+    },
+    "INVEST-TENDERS-TC-229": {
+      "category": "Edge",
+      "traceability": [
+        "FLD-7",
+        "FLD-22"
+      ]
+    }
+  },
+  "basis": "description + embedded GWT sub-sections (has_ac=False, no top-level AC) + Figma-verified design tokens (3 frames, EN Desktop Light variant)"
+}

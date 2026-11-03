@@ -152,6 +152,7 @@ from web.pages.chambers_law.chambers_law_page import ChambersLawPage
 from core.web.browser import new_context
 from core.utils.logger import get_logger
 from core.utils.waits import wait_until
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 logger = get_logger("test_chambers_law_control_panel")
 
@@ -280,7 +281,7 @@ def _same_target_url(actual: str, expected: str) -> bool:
 def _unpublish_and_confirm(authoring):
     """Takes the record off the live site and PROVES it landed in Draft.
     Idempotent: a record already in Draft is left alone."""
-    if authoring.current_status() == "Approved":
+    if authoring.current_status() == STATUS_PUBLISHED:
         authoring.unpublish_to_edit_as_draft()
     authoring.wait_for_status("Draft", timeout=UNPUBLISH_CONFIRM_TIMEOUT)
     return authoring
@@ -291,7 +292,7 @@ def _publish_and_confirm(authoring):
     Approved -- re-reading it from a fresh navigation, because the publish
     takes 27-30s live while the form's own settle is ~2.5s."""
     authoring.submit_for_publishing()
-    authoring.wait_for_status("Approved", timeout=PUBLISH_CONFIRM_TIMEOUT)
+    authoring.wait_for_status(STATUS_PUBLISHED, timeout=PUBLISH_CONFIRM_TIMEOUT)
     return authoring
 
 
@@ -319,15 +320,15 @@ def _restore_record(open_record, baseline_status, apply_fields=None, verify=None
     if apply_fields is not None:
         _unpublish_and_confirm(authoring)
         apply_fields(authoring)
-        if baseline_status == "Approved":
+        if baseline_status == STATUS_PUBLISHED:
             _publish_and_confirm(authoring)
         else:
             _save_draft_and_confirm(authoring)
     else:
         # Status-only restore.
-        if baseline_status == "Approved" and authoring.current_status() != "Approved":
+        if baseline_status == STATUS_PUBLISHED and authoring.current_status() != STATUS_PUBLISHED:
             _publish_and_confirm(authoring)
-        elif baseline_status == "Draft" and authoring.current_status() == "Approved":
+        elif baseline_status == "Draft" and authoring.current_status() == STATUS_PUBLISHED:
             _unpublish_and_confirm(authoring)
 
     # PROVE it committed -- re-read from a fresh navigation, never assume.
@@ -440,7 +441,7 @@ def _restore_content_image(
     _unpublish_and_confirm(authoring)
     if download_path:
         authoring.upload_file(admin.CONTENT_IMAGE_UPLOAD_LABEL, download_path)
-    if baseline_status == "Approved":
+    if baseline_status == STATUS_PUBLISHED:
         _publish_and_confirm(authoring)
     else:
         _save_draft_and_confirm(authoring)
@@ -675,7 +676,7 @@ def test_chambers_law_cp_134871_publishing_the_chamber_s_law_page_makes_the_cont
             public_image_src = cl.intro_image_src()
 
         # Assert -- the page-level content this record owns is now live
-        assert status_after_publish == "Approved"
+        assert status_after_publish == STATUS_PUBLISHED
         assert public_hero_title == baseline["page_title"], (
             "expected the published Page Title to render as the page's <h1>"
         )
@@ -758,9 +759,9 @@ def test_chambers_law_cp_134873_unpublishing_the_chamber_s_law_page_removes_it_f
             baseline_title = authoring.field_value(admin.PAGE_TITLE_LABEL)
 
         with allure.step("Ensure the record starts Approved/published (this case's own precondition)"):
-            if authoring.current_status() != "Approved":
+            if authoring.current_status() != STATUS_PUBLISHED:
                 _publish_and_confirm(authoring)
-            assert authoring.current_status() == "Approved", (
+            assert authoring.current_status() == STATUS_PUBLISHED, (
                 "precondition failed: the Chamber Laws Page record is not in the "
                 "Approved/published state this case starts from"
             )
@@ -1187,7 +1188,7 @@ def test_chambers_law_cp_134877_law_title_external_link_url_can_be_configured_an
             public_target = cl.card_title_target(LAW_1990_NUMBER)
 
         # Assert
-        assert authoring.current_status() == "Approved"
+        assert authoring.current_status() == STATUS_PUBLISHED
         # CMS side: verbatim -- a wrong stored value must still fail.
         assert authoring.field_value(admin.EXTERNAL_LINK_URL_LABEL) == target_url
         # Public side: same destination, allowing the front end's own
@@ -1338,7 +1339,7 @@ def test_chambers_law_cp_134882_uploading_a_content_image_for_the_first_time_pub
             public_image_visible = cl.is_intro_image_visible()
 
         # Assert
-        assert authoring.current_status() == "Approved"
+        assert authoring.current_status() == STATUS_PUBLISHED
         assert target_image_file in authoring.current_file_name(
             admin.CONTENT_IMAGE_UPLOAD_LABEL
         )
@@ -1457,7 +1458,7 @@ def test_chambers_law_cp_134883_replacing_the_content_image_updates_the_image_sh
             image_src_after = cl.intro_image_src()
 
         # Assert
-        assert authoring.current_status() == "Approved"
+        assert authoring.current_status() == STATUS_PUBLISHED
         assert expected_stem in image_src_after, (
             f"expected the page to serve {replacement_file!r}; got {image_src_after!r}"
         )
@@ -1608,7 +1609,7 @@ def test_chambers_law_cp_134884_creating_a_law_entry_publishes_a_new_card_to_the
             # Title), which also gives the new record's code to
             # wait_for_status()/reopen().
             created_entry = entries.open_entry_by_edit_link(qc_title)
-            created_entry.wait_for_status("Approved", timeout=PUBLISH_CONFIRM_TIMEOUT)
+            created_entry.wait_for_status(STATUS_PUBLISHED, timeout=PUBLISH_CONFIRM_TIMEOUT)
 
         with allure.step("Open the public Chamber's Law page after the standard cache refresh"):
             cl = ChambersLawPage(anon_page)
@@ -1627,7 +1628,7 @@ def test_chambers_law_cp_134884_creating_a_law_entry_publishes_a_new_card_to_the
 
         # Assert
         assert row_listed, "expected the new entry to appear in the CMS Law Entry list"
-        assert created_entry.current_status() == "Approved", (
+        assert created_entry.current_status() == STATUS_PUBLISHED, (
             "expected the newly-created law entry to reach the published/Approved state"
         )
         assert new_card_visible, (
@@ -1736,7 +1737,7 @@ def test_chambers_law_cp_134885_editing_a_law_entry_updates_its_card_on_the_webs
             desc_after = cl.card_desc_text(LAW_1990_NUMBER)
 
         # Assert
-        assert authoring.current_status() == "Approved"
+        assert authoring.current_status() == STATUS_PUBLISHED
         assert marker in desc_after
         assert desc_after != desc_before, (
             "expected the card description to change from its previous text"

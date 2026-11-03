@@ -207,8 +207,10 @@ CALLOUT_INFO = ".qc-fh-callout.is-infoAmber"
 class FoodHandlersCertificationPage(BasePage):
     # ---- Page chrome / hero -------------------------------------------
     CRUMBS_NAV = "[data-qc-fh-crumbs]"
-    CRUMB_HOME = ".qc-fh-crumb:not(.is-current)"
-    CRUMB_CURRENT = ".qc-fh-crumb.is-current"
+    CRUMB_HOME = ".qc-fh-crumb:not(.is-current) >> nth=0"
+    # 2026-10-15: the Training crumb is no longer `.is-current` (that class
+    # moved to the page-title crumb); it is the 2nd crumb, a real link.
+    CRUMB_CURRENT = ".qc-fh-crumb:not(.is-current) >> nth=1"
     EYEBROW = "[data-qc-fh-eyebrow]"
     TITLE = "[data-qc-fh-title]"
     HERO_DESC = "[data-qc-fh-desc]"
@@ -384,6 +386,13 @@ class FoodHandlersCertificationPage(BasePage):
         tc_140194's test can assert the case's real expected behavior and
         fail visibly against this confirmed gap."""
         item = self.page.locator(self.INDEX_ITEM).nth(position)
+        try:  # scroll-spy updates after the smooth scroll settles
+            self.page.wait_for_function(
+                "([s,i]) => { const e = document.querySelectorAll(s)[i]; return !!e && "
+                "(e.classList.contains('is-active') || e.getAttribute('aria-current') === 'true'); }",
+                arg=[self.INDEX_ITEM, position], timeout=3000)
+        except Exception:
+            pass
         classes = item.get_attribute("class") or ""
         aria_current = item.get_attribute("aria-current") or ""
         return "is-active" in classes or aria_current == "true"
@@ -509,7 +518,9 @@ class FoodHandlersCertificationPage(BasePage):
         return self.page.locator(self.CHANNEL_ITEM).nth(position).locator(self.CHANNEL_VALUE)
 
     def channel_value_text(self, position: int) -> str:
-        return self.channel_value_locator(position).inner_text()
+        # Phone channel now renders one .qc-fh-channel-value per number
+        # (plus a separator span) — join them all.
+        return " ".join(self.channel_value_locator(position).all_inner_texts())
 
     def channel_href(self, position: int) -> str:
         return self.channel_value_locator(position).get_attribute("href") or ""
@@ -567,11 +578,14 @@ class FoodHandlersCertificationPage(BasePage):
 
     # ---- Theme (Light/Dark) — composes AccessibilityToolsComponent -----------
     def set_theme_dark(self, enabled: bool) -> "FoodHandlersCertificationPage":
-        AccessibilityToolsComponent(self.page).set_dark_mode(enabled)
+        if enabled:
+            AccessibilityToolsComponent(self.page).enable_dark_mode()
         return self
 
     def current_theme(self) -> str:
-        return AccessibilityToolsComponent(self.page).current_theme()
+        return self.page.evaluate(
+            "() => document.documentElement.getAttribute('data-theme') || 'light'"
+        )
 
     # ---- Layout-health primitives (compatibility-matrix cases) -----------------
     def has_horizontal_overflow(self) -> bool:

@@ -179,6 +179,7 @@ from cms.pages.home_strategic_direction.home_strategic_direction_admin_page impo
 from web.pages.home_strategic_direction.home_strategic_direction_page import (
     HomeStrategicDirectionPage,
 )
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 QCTEST_TITLE = "QCTEST-Pillar-Card-135556"
 QCTEST_DESCRIPTION = (
@@ -290,7 +291,7 @@ def test_create_publish_and_verify_new_pillar_card_on_home_page(page, browser):
         authoring.submit_for_publishing()
 
         authoring.open_entry_by_code(entry_code)
-        assert authoring.current_status() == "Approved", (
+        assert authoring.current_status() == STATUS_PUBLISHED, (
             f"fixture card {QCTEST_TITLE!r} did not reach Approved/Published status after "
             f"Submit for Publishing"
         )
@@ -387,7 +388,7 @@ def test_edit_existing_mission_pillar_card_reflects_on_home_page(page, browser):
 
         # Assert: admin reload shows the new description, still Approved.
         authoring.open_entry_by_code(mission_code)
-        assert authoring.current_status() == "Approved"
+        assert authoring.current_status() == STATUS_PUBLISHED
         assert authoring.rich_text_value() == updated_description
 
         # Assert: the public Home Page carousel reflects it after a
@@ -407,7 +408,7 @@ def test_edit_existing_mission_pillar_card_reflects_on_home_page(page, browser):
             current = authoring.rich_text_value()
             if current != baseline_description:
                 authoring.fill_rich_text(baseline_description)
-            if baseline_status == "Approved":
+            if baseline_status == STATUS_PUBLISHED:
                 authoring.submit_for_publishing()
             else:
                 authoring.save_as_draft()
@@ -518,7 +519,7 @@ def test_publish_blocked_when_pillar_title_left_empty(page):
             current = authoring.field_value("Pillar Title")
             if current != baseline_title:
                 authoring.fill_text("Pillar Title", baseline_title)
-            if baseline_status == "Approved":
+            if baseline_status == STATUS_PUBLISHED:
                 authoring.submit_for_publishing()
             else:
                 authoring.save_as_draft()
@@ -786,7 +787,7 @@ def test_unpublishing_strategic_direction_section_removes_it_from_home_page(page
         entry_code = authoring.find_entry_code_by_field("Pillar Title", title)
         assert entry_code, f"could not verify an entry whose Pillar Title reads {title!r}"
 
-        assert authoring.row_status_text_by_code(entry_code) == "Approved", (
+        assert authoring.row_status_text_by_code(entry_code) == STATUS_PUBLISHED, (
             f"fixture card {title!r} did not reach Approved/Published status after "
             f"Submit for Publishing"
         )
@@ -797,7 +798,7 @@ def test_unpublishing_strategic_direction_section_removes_it_from_home_page(page
 
         authoring.open_entry_by_code(entry_code)
         authoring.unpublish_to_edit_as_draft()
-        assert authoring.row_status_text_by_code(entry_code) != "Approved", (
+        assert authoring.row_status_text_by_code(entry_code) != STATUS_PUBLISHED, (
             f"fixture card {title!r} still reads Approved/Published after Unpublish"
         )
 

@@ -148,7 +148,7 @@ from web.pages.components.header_component import HeaderComponent
 from web.pages.faq.faq_page import FAQ_PATH, FaqPage
 
 # ── Site paths (joined onto WEB_BASE_URL via config.settings.web_url) ─────
-HOME_PATH = "/home"
+HOME_PATH = "/web/qatar-chamber"
 CONTACT_US_PATH = "/web/qatar-chamber/contact-us"
 # NOTE: `FAQ_PATH` is IMPORTED above from web/pages/faq/faq_page.py (PBI
 # 131052's own Page Object, which owns the FAQ page's path and its full
@@ -188,6 +188,22 @@ class KeyboardNavigationPage(BasePage):
     # `#qc-skip-link` by id: the page also renders Liferay's own
     # `a.sr-only-focusable` link with the SAME href="#main-content" and
     # near-identical text, so a text-based locator is ambiguous.
+    # Healed 2026-10-19: BasePage.active_element() reads self._ACTIVE_ELEMENT_JS,
+    # which no longer exists on BasePage; define the descriptor here.
+    _ACTIVE_ELEMENT_JS = """() => {
+      const el = document.activeElement;
+      if (!el) return null;
+      const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
+      const ow = parseFloat(cs.outlineWidth) || 0;
+      const vis = (cs.outlineStyle !== 'none' && ow > 0) || (cs.boxShadow && cs.boxShadow !== 'none');
+      const tag = el.tagName.toLowerCase();
+      const text = (el.innerText || el.getAttribute('aria-label') || '').trim().slice(0, 60);
+      return {tag, id: el.id || '', cls: el.className && el.className.baseVal === undefined ? el.className : '',
+              text, key: el === document.body ? null : tag + '#' + (el.id || '') + '|' + text + '|' + (el.getAttribute('href') || ''),
+              x: r.x, y: r.y, width: r.width, height: r.height,
+              outlineStyle: cs.outlineStyle, outlineWidth: cs.outlineWidth, boxShadow: cs.boxShadow,
+              hasVisibleFocusIndicator: !!vis};
+    }"""
     SKIP_LINK = "a#qc-skip-link"
     MAIN_CONTENT = "#main-content"
     # Liferay's own screen-reader-only controls — tab stops 2 and 3. The

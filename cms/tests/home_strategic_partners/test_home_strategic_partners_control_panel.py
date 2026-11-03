@@ -32,6 +32,7 @@ from core.web.browser import new_context
 from web.pages.home_strategic_partners.home_strategic_partners_page import (
     StrategicPartnersPage,
 )
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 TEST_PARTNER_NAME_EN = "QCTEST-136232 Qatar Foundation"
 TEST_PARTNER_NAME_AR = "مؤسسة قطر QCTEST-136232"
@@ -101,7 +102,7 @@ def test_create_and_publish_strategic_partner(page, browser):
             admin.submit_for_publishing()
 
         admin.open_entries_list()
-        assert admin.row_status_text(TEST_PARTNER_NAME_EN) == "Approved", (
+        assert admin.row_status_text(TEST_PARTNER_NAME_EN) == STATUS_PUBLISHED, (
             f"expected {TEST_PARTNER_NAME_EN!r} to be Approved after Submit for "
             f"Publishing, got {admin.row_status_text(TEST_PARTNER_NAME_EN)!r}"
         )

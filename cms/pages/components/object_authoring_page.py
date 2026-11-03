@@ -188,6 +188,8 @@ probes on manage-promotional-banner:
         record, exactly as visitors see it."
 """
 
+import re
+
 from core.utils.logger import get_logger
 from core.utils.waits import WaitTimeoutError, wait_until
 from core.web.base_page import BasePage
@@ -225,6 +227,21 @@ WORKFLOW_STATUSES = (
     STATUS_ARCHIVED,
     STATUS_SCHEDULED,
 )
+
+# ── Publish success message ─────────────────────────────────────────────
+# The Editor's Publish now shows Liferay's standard toast instead of the
+# custom "Saved and published."; confirmed as the correct message by the
+# QA owner 2026-10-13. Either one proves the publish succeeded.
+MSG_SAVED_AND_PUBLISHED_CUSTOM = "Saved and published."
+MSG_LIFERAY_REQUEST_SUCCESS = "Your request completed successfully."
+
+
+def shows_message(text: str, expected: str) -> bool:
+    """`expected in text`, also accepting Liferay's standard toast where the
+    expected message is the publish success message."""
+    if expected in text:
+        return True
+    return expected == MSG_SAVED_AND_PUBLISHED_CUSTOM and MSG_LIFERAY_REQUEST_SUCCESS in text
 
 # Only this one is visible to an anonymous visitor, and only while the
 # record's own `Active Status` field is ticked — that checkbox is a second,
@@ -277,7 +294,18 @@ class ObjectAuthoringPage(BasePage):
     # "Submit for Publishing" string matches NOTHING on the current build;
     # SUBMIT_FOR_PUBLISHING_BUTTON is kept only as a deprecated alias so
     # existing callers keep resolving, and points at the same real button.
-    SUBMIT_FOR_REVIEW_BUTTON = 'button:has-text("Submit for Review")'
+    #
+    # CORRECTED 2026-09-30 — the label is not fixed. Read live on
+    # manage-business-event as TEST_USER: the submit button reads "Publish",
+    # with the helper text "As an Editor, what you publish here goes live
+    # straight away." The 2026-09-28 walk above saw "Submit for Review" for
+    # Author and Editor on manage-law-entry. Matching only "Submit for Review"
+    # timed out on the TEST_USER form, so both labels are matched; `text-is`
+    # keeps "Unpublish" out, and the form renders one of the two.
+    SUBMIT_FOR_REVIEW_BUTTON = (
+        'button[type="submit"]:text-is("Submit for Review"), '
+        'button[type="submit"]:text-is("Publish")'
+    )
     SUBMIT_FOR_PUBLISHING_BUTTON = SUBMIT_FOR_REVIEW_BUTTON
     # Row-level workflow actions carry a stable `data-qc-oel-<action>="<entryId>"`
     # attribute (confirmed live 2026-09-28 on manage-publication /
@@ -409,7 +437,11 @@ class ObjectAuthoringPage(BasePage):
         finding as `open_new_entry_form()`'s own note."""
         self._locale = locale
         self.open(self._manage_url(locale=locale))
-        self.wait_for("a[data-qc-oel-delete]", first=True, timeout=35000)
+        # Wait for any entries row, not a Delete link (CORRECTED 2026-10-01):
+        # a Site Content Author sees Delete only on rows it owns — live, its
+        # first page rendered 10 rows and zero `a[data-qc-oel-delete]`, so
+        # this timed out for every non-admin account.
+        self.wait_for(self.ENTRIES_TABLE_ROW, first=True, timeout=35000)
         return self
 
     def open_entry_by_edit_link(self, title: str) -> "ObjectAuthoringPage":
@@ -838,12 +870,23 @@ class ObjectAuthoringPage(BasePage):
              current_status() does not become "Approved" afterward.
         Returns True if either signal fired. Callers must NOT loosen this
         further or treat a False return as anything but a real, honestly-
-        reported "the over-limit value was accepted" finding."""
+        reported "the over-limit value was accepted" finding.
+
+        KNOWN WEAKNESS (2026-09-30). Until today branch 2 compared with
+        "Approved", which the normalized status never equals, so this always
+        returned True once truncation failed. It now compares with
+        STATUS_PUBLISHED. Branch 2 is still only trustworthy on an entry that
+        was OPEN for edit (the editing banner is what current_status() reads).
+        On a create-new form a successful submit can land back on an empty
+        form with no banner — current_status() is then "Unknown", which also
+        reads as "rejected". Callers on create forms should confirm through
+        the entries list (row status by title/code) until this has a
+        positive "accepted" signal."""
         self.fill_text(field_label, attempted)
         if len(self.field_value(field_label)) <= limit:
             return True
         self.submit_for_publishing()
-        return self.current_status() != "Approved"
+        return self.current_status() != STATUS_PUBLISHED
 
     def select_existing_file_from_library(
         self, field_label: str, folder_name: str, file_name: str

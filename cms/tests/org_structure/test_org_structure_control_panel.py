@@ -401,6 +401,7 @@ from cms.pages.org_structure.org_structure_admin_page import (
     OrgStructurePageAdminPage,
 )
 from web.pages.org_structure.org_structure_page import OrgStructurePage
+from cms.pages.components.object_authoring_page import STATUS_PUBLISHED
 
 FIXTURES = os.path.join(os.path.dirname(__file__), "fixtures")
 
@@ -875,7 +876,7 @@ def test_valid_hero_banner_en_uploads(page):
     with allure.step("Submit for Publishing — the entry reaches Approved"):
         hero.save()
         hero.open_entries_list()
-        assert hero.row_status_text(page_key) == "Approved"
+        assert hero.row_status_text(page_key) == STATUS_PUBLISHED
     hero.delete_entry_by_title(page_key)
 
 

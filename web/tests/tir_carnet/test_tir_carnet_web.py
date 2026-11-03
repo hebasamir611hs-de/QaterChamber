@@ -6,6 +6,15 @@ suite and handed off by the QA Manager (batch of 4 UI cases).
 Scripted here: 138028, 138031, 138033 (delivered on the Web surface) and
 138029 (scripted and complete, but BLOCKED — see below).
 
+Batch 2 (2026-09-24, suite 138215) extends this module with 138007/138008
+(EN<->AR language switch), 138035/138036 (light/dark mode) and
+138037/138038/138039 (desktop/tablet/mobile). Every batch-2 test, plus the
+existing 138028/138031/138033, runs in a fresh UNAUTHENTICATED context
+(`{"auth": False}`) so a cached CMS storageState carrying
+GUEST_LANGUAGE_ID=ar_SA cannot flip the English page under xdist; those
+three existing tests also gained the `svc` selector marker. Their
+assertions are unchanged. 138029 is untouched.
+
 138029 — scripted, complete, and NOT VERIFIABLE IN THIS BATCH (blocked).
 The case carries both `Web` and `Control_Panel` tags: its step 1 is a Liferay
 authoring write (give an FAQ answer a heading, a two-item bullet list and an
@@ -48,6 +57,8 @@ filing, and are deliberately NOT softened here:
     layer's.
 """
 
+import re
+
 import allure
 import pytest
 
@@ -84,6 +95,15 @@ HEADING_COLOR = hex_to_rgb("#1D1D1B")
 
 FONT_FAMILY = "Cairo"
 
+# Numbered-step ("How it works") titles and descriptions are CENTRED in both
+# locales — QA Manager ruling 2026-09-24 from the design source: Figma file
+# J3e1thav8NIu6a3XhC6Wcl, frame 2878:98459 "Lang=EN, View=Desktop", instance
+# "How it works" #2878:98488 is a horizontal stepper whose step-title text
+# style "Text-md/Semibold" (8715:150715) has textAlignHorizontal: CENTER, with
+# each step centred under its number tile. The cases' blanket "all text
+# left/right-aligned" wording does not override the design for this component.
+STEP_TEXT_ALIGN = "center"
+
 
 def _rgb_channels(color: str) -> str:
     """'rgba(255, 255, 255, 0.65)' -> 'rgb(255, 255, 255)'.
@@ -119,6 +139,8 @@ def _attach(name: str, lines: list) -> None:
 @pytest.mark.pbi_129403
 @pytest.mark.tc_138028
 @pytest.mark.traceability("138028")
+@pytest.mark.svc
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 @allure.label("pbi", "129403")
 @allure.label("testcase", "138028")
 def test_tir_carnet_faq_answers_collapsed_by_default(page):
@@ -290,6 +312,8 @@ def test_tir_carnet_expanded_faq_answer_renders_rich_text(page):
 @pytest.mark.pbi_129403
 @pytest.mark.tc_138031
 @pytest.mark.traceability("138031")
+@pytest.mark.svc
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 @allure.label("pbi", "129403")
 @allure.label("testcase", "138031")
 def test_tir_carnet_english_ltr_design_tokens(page):
@@ -331,12 +355,21 @@ def test_tir_carnet_english_ltr_design_tokens(page):
                 deviations.append(
                     f"{name} font-family is {style['fontFamily']!r}, expected {FONT_FAMILY}"
                 )
+            if name == "step title":
+                continue  # centred per the Figma stepper — asserted below with STEP_TEXT_ALIGN
             # 'start' resolves to left under dir=ltr — the same reading used
             # by the sibling GM Message / VMO token tests.
             if style["textAlign"] not in ("left", "start"):
                 deviations.append(
                     f"{name} text-align is {style['textAlign']!r}, expected left-aligned"
                 )
+        # Numbered steps: centred (Figma 2878:98488, see STEP_TEXT_ALIGN).
+        for name, locator in (("step title", tir.STEP_TITLE), ("step description", tir.STEP_DESC)):
+            for style in tir.computed_styles_all(locator, ["textAlign"]):
+                if style["textAlign"] != STEP_TEXT_ALIGN:
+                    deviations.append(
+                        f"{name} text-align is {style['textAlign']!r}, expected {STEP_TEXT_ALIGN!r} (Figma 2878:98488)"
+                    )
 
     with allure.step("Inspect the hero"):
         gradient = tir.hero_gradient_parts()
@@ -512,6 +545,8 @@ def test_tir_carnet_english_ltr_design_tokens(page):
 @pytest.mark.pbi_129403
 @pytest.mark.tc_138033
 @pytest.mark.traceability("138033")
+@pytest.mark.svc
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
 @allure.label("pbi", "129403")
 @allure.label("testcase", "138033")
 def test_tir_carnet_arabic_rtl_mirrored(page):
@@ -540,11 +575,19 @@ def test_tir_carnet_arabic_rtl_mirrored(page):
             assert style["direction"] == "rtl", (
                 f"{name} renders with direction {style['direction']!r}, expected rtl"
             )
+            if name == "step title":
+                continue  # centred per the Figma stepper — asserted below with STEP_TEXT_ALIGN
             # 'start' resolves to right under dir=rtl — same reading as the
             # sibling GM Message RTL token test.
             assert style["textAlign"] in ("right", "start"), (
                 f"{name} text-align is {style['textAlign']!r}, expected right-aligned"
             )
+        # Numbered steps: centred in AR too (Figma 2878:98488, see STEP_TEXT_ALIGN).
+        for name, locator in (("step title", tir.STEP_TITLE), ("step description", tir.STEP_DESC)):
+            for style in tir.computed_styles_all(locator, ["textAlign"]):
+                assert style["textAlign"] == STEP_TEXT_ALIGN, (
+                    f"{name} text-align is {style['textAlign']!r}, expected {STEP_TEXT_ALIGN!r} (Figma 2878:98488)"
+                )
 
     with allure.step("Inspect the page direction and text alignment"):
         arabic_fields = {
@@ -618,3 +661,529 @@ def test_tir_carnet_arabic_rtl_mirrored(page):
             f"(mark x={mark['x']}, question spans "
             f"{question['x']}-{question['x'] + question['width']})"
         )
+
+
+# ===========================================================================
+# Batch 2 (2026-09-24, suite 138215): language switch, light/dark theme and
+# desktop/tablet/mobile viewports. Each test collects every expected-vs-actual
+# deviation in `_Check` and fails once with the full list.
+# ===========================================================================
+ANON = {"auth": False}
+anonymous = pytest.mark.parametrize("page", [ANON], indirect=True)
+
+EN_INDEX_ITEMS = ["01 Overview", "02 Eligibility & Prerequisites", "03 How it works",
+                  "04 Frequently asked questions"]
+HEADER_NAV_LIGHT = hex_to_rgb("#1D1D1B")
+PAGE_BG_LIGHT = hex_to_rgb("#FFFFFF")
+# WCAG 2.x AA — "remains legible" states no number; the published minimum is
+# the measurable floor (4.5:1 normal text, 3:1 large text).
+AA_NORMAL, AA_LARGE = 4.5, 3.0
+# Leftover qcdev authoring/probe records look like this; a non-Arabic value
+# matching it is labelled TEST DATA in the deviation text (triage aid only —
+# it still fails).
+_TEST_DATA_RE = re.compile(r"\b(test|probe|lorem|dummy|qa|editor\d*)\b", re.I)
+
+
+class _Check:
+    """Soft-assert collector: every comparison is recorded, the test ends with
+    `assert not check.deviations, check.report()`."""
+
+    def __init__(self):
+        self.deviations = []
+        self._step = ""
+
+    def step(self, name: str) -> None:
+        self._step = name
+
+    def truthy(self, label: str, condition: bool, expected, actual) -> None:
+        if not condition:
+            self.deviations.append(f"[{self._step}] {label}: expected {expected!r}, got {actual!r}")
+
+    def equals(self, label: str, actual, expected) -> None:
+        self.truthy(label, actual == expected, expected, actual)
+
+    def px(self, label: str, actual: float, expected: float, tol: float = 1.0) -> None:
+        self.truthy(label, actual is not None and abs(actual - expected) <= tol, f"{expected}px", actual)
+
+    def report(self) -> str:
+        return "\n".join([f"{len(self.deviations)} deviation(s):", *(f"  - {d}" for d in self.deviations)])
+
+
+def _overlap(a, b) -> bool:
+    if not a or not b:
+        return False
+    return (a["x"] < b["x"] + b["width"] - 1 and b["x"] < a["x"] + a["width"] - 1
+            and a["y"] < b["y"] + b["height"] - 1 and b["y"] < a["y"] + a["height"] - 1)
+
+
+def _arabic_or_flag(check: _Check, name: str, value: str) -> None:
+    if TirCarnetPage.contains_arabic(value):
+        return
+    tag = " [TEST DATA? leftover qcdev record]" if _TEST_DATA_RE.search(value or "") else ""
+    check.truthy(f"{name} is Arabic{tag}", False, "Arabic text", value)
+
+
+def _check_no_overflow(check: _Check, tir: TirCarnetPage) -> None:
+    overflow = tir.horizontal_overflow_px()
+    check.truthy("no horizontal scrollbar", overflow <= 0, "0px", f"{overflow}px {tir.overflowing_elements()}")
+    clipped = tir.clipped_text_elements()
+    check.truthy("no clipped content", not clipped, "no clipped text", clipped)
+
+
+def _check_top_no_overlap(check: _Check, tir: TirCarnetPage) -> None:
+    regions = {"hero copy": tir.HERO_COPY, "hero image": tir.HERO_ART, "quick-facts strip": tir.FACTS,
+               "content column": tir.CONTENT}
+    if tir.is_displayed(tir.INDEX_COL):
+        regions["section index"] = tir.INDEX_COL
+    boxes = {n: tir.box(l) for n, l in regions.items()}
+    names = list(boxes)
+    for i in range(len(names)):
+        for j in range(i + 1, len(names)):
+            check.truthy(f"{names[i]} / {names[j]} do not overlap", not _overlap(boxes[names[i]], boxes[names[j]]),
+                         "no overlap", f"{boxes[names[i]]} vs {boxes[names[j]]}")
+
+
+def _check_index_on_narrow(check: _Check, tir: TirCarnetPage) -> None:
+    """The index must collapse (compact control) or reposition without
+    overlapping content; removed entirely with no collapsed control is
+    recorded as a deviation (same reading as the ATA Carnet batch)."""
+    if tir.is_displayed(tir.INDEX_COL):
+        check.truthy("section index repositioned without overlapping content",
+                     not _overlap(tir.box(tir.INDEX_COL), tir.box(tir.CONTENT)), "no overlap",
+                     f"index={tir.box(tir.INDEX_COL)} content={tir.box(tir.CONTENT)}")
+    else:
+        shown = sum(1 for i in range(tir.index_item_count()) if tir.is_displayed(tir.INDEX_ITEM, i))
+        display = tir.computed_style(tir.INDEX_COL, ["display"])["display"]
+        check.truthy("section index collapses or repositions", shown > 0,
+                     "a collapsed or repositioned section index still offering section navigation",
+                     f"index column display={display!r}; 0 of {tir.index_item_count()} index entries rendered "
+                     f"and no collapsed control present (index removed entirely)")
+
+
+def _check_sections(check: _Check, tir: TirCarnetPage) -> None:
+    n = tir.count(tir.SECTION_BLOCK)
+    check.truthy("four sections plus the resources block render", n == 5, 5, n)
+    for i in range(n):
+        check.truthy(f"section block {i + 1} rendered", tir.is_displayed(tir.SECTION_BLOCK, i), "visible", "hidden")
+
+
+# ---------------------------------------------------------------------------
+# 138007 — EN -> AR
+# ---------------------------------------------------------------------------
+@allure.epic("Services")
+@allure.feature("TIR Carnet")
+@allure.story("Language toggle")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Switching the site language from English to Arabic renders the TIR Carnet page in Arabic")
+@allure.label("pbi", "129403")
+@allure.label("testcase", "138007")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.bilingual
+@pytest.mark.arabic
+@pytest.mark.rtl
+@pytest.mark.pbi_129403
+@pytest.mark.tc_138007
+@anonymous
+def test_tir_carnet_language_switch_en_to_ar(page):
+    """Azure TC 138007 | PBI 129403 — EN page (four-entry index) -> header 'AR'
+    toggle -> Arabic RTL, toggle offers 'EN'; index labels, section content,
+    statistics labels, benefit card text, criteria, steps, FAQ questions AND
+    answers (read via textContent while collapsed) and resource titles are
+    Arabic and right-aligned."""
+    tir = TirCarnetPage(page)
+    check = _Check()
+
+    with allure.step("Open the English page with the four-entry index"):
+        tir.open_tir_carnet(locale="en")
+        check.step("step 1")
+        check.equals("index entries", [f"{n} {l}" for n, l in zip(tir.index_numbers(), tir.index_labels())],
+                     EN_INDEX_ITEMS)
+
+    with allure.step("Click the 'AR' toggle"):
+        check.equals("toggle label before switch", tir.language_toggle_label(), "AR")
+        tir.toggle_language()
+
+    with allure.step("Arabic RTL; toggle offers 'EN'"):
+        check.step("step 3")
+        check.equals("document dir", tir.document_direction(), "rtl")
+        check.equals("toggle label after switch", tir.language_toggle_label(), "EN")
+
+    with allure.step("All content slots Arabic and right-aligned"):
+        check.step("step 4")
+        slots = {
+            "index label": tir.INDEX_LABEL, "section title": tir.SECTION_TITLE, "section content": tir.SECTION_PROSE,
+            "statistics label": tir.STAT_LABEL, "benefit card title": tir.CARD_TITLE,
+            "benefit card text": tir.CARD_DESC, "criterion": tir.CRITERION, "step title": tir.STEP_TITLE,
+            "step text": tir.STEP_DESC, "FAQ question": tir.FAQ_QUESTION, "FAQ answer": tir.FAQ_ANSWER,
+            "resource title": tir.FILE_TITLE,
+        }
+        for name, loc in slots.items():
+            values = tir.text_contents(loc)
+            check.truthy(f"{name}s rendered", len(values) > 0, "at least one", values)
+            for v in values:
+                _arabic_or_flag(check, name, v)
+            # Numbered steps are centred per Figma 2878:98488 (STEP_TEXT_ALIGN);
+            # every other slot must be right-aligned.
+            expected_align = STEP_TEXT_ALIGN if loc in (tir.STEP_TITLE, tir.STEP_DESC) else "right"
+            for i in range(len(values)):
+                align = tir.resolved_text_align(loc, i)
+                check.truthy(f"{name} {i + 1} aligned {expected_align}", align == expected_align, expected_align, align)
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 138008 — AR -> EN
+# ---------------------------------------------------------------------------
+@allure.epic("Services")
+@allure.feature("TIR Carnet")
+@allure.story("Language toggle")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Switching the site language from Arabic back to English restores English content and LTR")
+@allure.label("pbi", "129403")
+@allure.label("testcase", "138008")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.functional_high
+@pytest.mark.regression
+@pytest.mark.pbi_129403
+@pytest.mark.tc_138008
+@anonymous
+def test_tir_carnet_language_switch_ar_to_en(page):
+    """Azure TC 138008 | PBI 129403 — AR page -> 'EN' toggle -> English LTR, index
+    on the left reading 01 Overview ... 04 Frequently asked questions. The
+    step-2 "section in view" is recorded (Allure), not asserted — the
+    expected result makes no claim about it."""
+    tir = TirCarnetPage(page)
+    check = _Check()
+
+    with allure.step("Open the Arabic page"):
+        tir.open_tir_carnet(locale="ar")
+        check.step("step 1")
+        check.equals("document dir", tir.document_direction(), "rtl")
+        allure.attach(str(tir.section_in_view()), "section in view before switch", allure.attachment_type.TEXT)
+
+    with allure.step("Click the 'EN' toggle"):
+        tir.toggle_language()
+
+    with allure.step("English LTR, index on the left with the four English entries"):
+        check.step("step 4")
+        check.equals("document dir", tir.document_direction(), "ltr")
+        idx, content = tir.index_box(), tir.content_box()
+        check.truthy("index on the left of the content column",
+                     idx is not None and content is not None and idx["x"] + idx["width"] <= content["x"] + 1,
+                     "index right edge <= content left edge", f"index={idx} content={content}")
+        entries = [f"{n} {l}" for n, l in zip(tir.index_numbers(), tir.index_labels())]
+        check.equals("index entries", entries, EN_INDEX_ITEMS)
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 138035 — light mode
+# ---------------------------------------------------------------------------
+@allure.epic("Services")
+@allure.feature("TIR Carnet")
+@allure.story("Theme")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("TIR Carnet page renders correctly in light mode")
+@allure.label("pbi", "129403")
+@allure.label("testcase", "138035")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.compatibility
+@pytest.mark.pbi_129403
+@pytest.mark.tc_138035
+@anonymous
+def test_tir_carnet_light_mode(page):
+    """Azure TC 138035 | PBI 129403 — ST-13 light mode (site default), frame
+    2878:98459. "Light surface" = effective background #FFFFFF; "legible" =
+    WCAG AA contrast (see AA_NORMAL/AA_LARGE)."""
+    tir = TirCarnetPage(page)
+    check = _Check()
+    tir.open_tir_carnet(locale="en")
+    check.step("step 1")
+    check.truthy("light theme active", tir.theme() in (None, "light"), "light", tir.theme())
+
+    with allure.step("Page, header and sticky index"):
+        check.step("step 3")
+        check.equals("page background", tir.computed_style(tir.PAGE_BODY, ["backgroundColor"])["backgroundColor"],
+                     PAGE_BG_LIGHT)
+        check.equals("header background", tir.computed_style(tir.HEADER, ["backgroundColor"])["backgroundColor"],
+                     PAGE_BG_LIGHT)
+        for colour in sorted({s["color"] for s in tir.computed_styles_all(tir.HEADER_NAV_LINK, ["color"])}):
+            check.equals("header navigation label colour", colour, HEADER_NAV_LIGHT)
+        idx = tir.computed_style(tir.INDEX, ["backgroundColor", "borderTopWidth", "borderTopStyle", "borderTopColor"])
+        check.equals("index surface", idx["backgroundColor"], INDEX_PANEL_BG)
+        check.equals("index border", f"{idx['borderTopWidth']} {idx['borderTopStyle']}", "1px solid")
+        check.equals("index border colour", idx["borderTopColor"], INDEX_PANEL_BORDER)
+        for colour in sorted({s["color"] for s in tir.computed_styles_all(tir.INDEX_LABEL, ["color"])}):
+            check.equals("index label colour", colour, INDEX_LABEL_COLOR)
+
+    with allure.step("Benefit cards, criteria list and resource cards"):
+        check.step("step 4")
+        for name, loc, text_loc in (("benefit card", tir.CARD, tir.CARD_TITLE),
+                                    ("criteria row", tir.CRITERION, tir.CRITERION),
+                                    ("resource card", tir.FILE, tir.FILE_TITLE)):
+            styles = tir.computed_styles_all(loc, ["borderTopWidth", "borderTopStyle", "borderTopColor"])
+            check.truthy(f"{name}s rendered", len(styles) > 0, "at least one", 0)
+            check.equals(f"{name} surface", tir.effective_background(loc), SURFACE_BG)
+            for i, s in enumerate(styles):
+                check.equals(f"{name} {i + 1} border", f"{s['borderTopWidth']} {s['borderTopStyle']}", "1px solid")
+                check.equals(f"{name} {i + 1} border colour", s["borderTopColor"], SURFACE_BORDER)
+            for i in range(tir.count(text_loc)):
+                c = tir.text_contrast(text_loc, i)
+                need = AA_LARGE if c["fontSize"] >= 24 or (c["fontSize"] >= 18.66 and c["fontWeight"] >= 700) else AA_NORMAL
+                check.truthy(f"{name} {i + 1} legible", c["ratio"] is not None and c["ratio"] >= need,
+                             f">= {need}:1", f"{c['ratio']}:1 ({c['color']} on {c['background']})")
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 138036 — dark mode
+# ---------------------------------------------------------------------------
+@allure.epic("Services")
+@allure.feature("TIR Carnet")
+@allure.story("Theme")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("TIR Carnet page renders correctly in dark mode")
+@allure.label("pbi", "129403")
+@allure.label("testcase", "138036")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.compatibility
+@pytest.mark.pbi_129403
+@pytest.mark.tc_138036
+@anonymous
+def test_tir_carnet_dark_mode(page):
+    """Azure TC 138036 | PBI 129403 — ST-14 dark mode via the Accessibility tools
+    widget. No dark hex tokens are stated, so: page/header backgrounds dark
+    (relative luminance < 0.2); index labels, section headings and section
+    body text meet WCAG AA against their real background; benefit cards, the
+    video frame, the FAQ accordion items and resource cards render on a dark
+    effective surface; the hero gradient is unchanged from light mode."""
+    tir = TirCarnetPage(page)
+    check = _Check()
+    tir.open_tir_carnet(locale="en")
+    tir.wait_for_fonts()
+    light_hero = tir.hero_gradient_raw()
+
+    with allure.step("Turn dark mode on"):
+        tir.enable_dark_mode()
+        check.step("step 1")
+        check.equals("dark theme active", tir.theme(), "dark")
+
+    with allure.step("Page/header dark; index labels, headings and body text legible"):
+        check.step("step 3")
+        for name, loc in (("page", tir.PAGE_BODY), ("header", tir.HEADER)):
+            bg = tir.computed_style(loc, ["backgroundColor"])["backgroundColor"]
+            check.truthy(f"{name} background is dark", tir.relative_luminance(bg) < 0.2, "luminance < 0.2", bg)
+        for name, loc in (("index label", tir.INDEX_LABEL), ("section heading", tir.SECTION_TITLE),
+                          ("section body text", tir.SECTION_RT)):
+            for i in range(tir.count(loc)):
+                c = tir.text_contrast(loc, i)
+                if c["ratio"] is None:
+                    allure.attach(str(c), f"{name} {i + 1}: contrast not measurable", allure.attachment_type.TEXT)
+                    continue
+                need = AA_LARGE if c["fontSize"] >= 24 or (c["fontSize"] >= 18.66 and c["fontWeight"] >= 700) else AA_NORMAL
+                check.truthy(f"{name} {i + 1} contrast", c["ratio"] >= need, f">= {need}:1",
+                             f"{c['ratio']}:1 ({c['color']} on {c['background']}, '{c['text']}')")
+
+    with allure.step("Cards, video frame, accordion and resource cards dark; hero gradient unchanged"):
+        check.step("step 4")
+        for name, loc in (("benefit card", tir.CARD), ("video player frame", tir.VIDEO),
+                          ("FAQ accordion item", tir.FAQ_ITEM), ("resource card", tir.FILE)):
+            bg = tir.effective_background(loc)
+            check.truthy(f"{name} surface is dark", bg != "none" and tir.relative_luminance(bg) < 0.2,
+                         "luminance < 0.2", bg)
+        check.equals("hero gradient unchanged", tir.hero_gradient_raw(), light_hero)
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 138037 — desktop
+# ---------------------------------------------------------------------------
+@allure.epic("Services")
+@allure.feature("TIR Carnet")
+@allure.story("Responsive layout")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("TIR Carnet page renders correctly at desktop viewport width (1920x1080)")
+@allure.label("pbi", "129403")
+@allure.label("testcase", "138037")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.compatibility
+@pytest.mark.regression
+@pytest.mark.pbi_129403
+@pytest.mark.tc_138037
+@pytest.mark.parametrize("page", [{"viewport": (1920, 1080), "auth": False}], indirect=True)
+def test_tir_carnet_desktop_viewport(page):
+    """Azure TC 138037 | PBI 129403 — ENV-1 at 1920x1080. "Video at its designed
+    width" has no number in the case; it is read as the video spanning its
+    content section's full width at a 16:9 ratio (disclosed)."""
+    tir = TirCarnetPage(page)
+    check = _Check()
+    tir.open_tir_carnet(locale="en")
+
+    with allure.step("No horizontal scrollbar, clipping or overlap"):
+        check.step("steps 2-3")
+        _check_no_overflow(check, tir)
+        _check_top_no_overlap(check, tir)
+
+    with allure.step("Sticky index left; facts, statistics and cards in rows; video width"):
+        check.step("step 4")
+        _check_sections(check, tir)
+        idx, content = tir.index_box(), tir.content_box()
+        check.truthy("sticky index on the left with the content beside it",
+                     idx is not None and idx["x"] + idx["width"] <= content["x"] + 1,
+                     "index right edge <= content left edge", f"index={idx} content={content}")
+        for name, loc, n in (("quick-facts tile", tir.FACT, 4), ("statistic", tir.STAT, None),
+                             ("benefit card", tir.CARD, None)):
+            tir.scroll_to(loc)
+            boxes = tir.boxes(loc)
+            if n is not None:
+                check.equals(f"{name} count", len(boxes), n)
+            check.truthy(f"{name}s in one row", len({round(b['y']) for b in boxes if b}) == 1,
+                         "same row", [b["y"] if b else None for b in boxes])
+        tir.scroll_to(tir.VIDEO)
+        video, section = tir.box(tir.VIDEO), tir.box(tir.SECTION_BLOCK)
+        check.px("video width (full section width)", video["width"] if video else None,
+                 section["width"] if section else 0)
+        if video:
+            check.truthy("video 16:9", abs(video["width"] / video["height"] - 16 / 9) < 0.02, "16:9",
+                         f"{video['width']}x{video['height']}")
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 138038 — tablet
+# ---------------------------------------------------------------------------
+@allure.epic("Services")
+@allure.feature("TIR Carnet")
+@allure.story("Responsive layout")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("TIR Carnet page renders correctly at tablet viewport width (768x1024)")
+@allure.label("pbi", "129403")
+@allure.label("testcase", "138038")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.compatibility
+@pytest.mark.regression
+@pytest.mark.pbi_129403
+@pytest.mark.tc_138038
+@pytest.mark.parametrize("page", [{"viewport": (768, 1024), "auth": False}], indirect=True)
+def test_tir_carnet_tablet_viewport(page):
+    """Azure TC 138038 | PBI 129403 — ENV-2 responsive integrity at 768x1024
+    (no tablet frame, Assumption A-4). Index reading as in
+    _check_index_on_narrow."""
+    tir = TirCarnetPage(page)
+    check = _Check()
+    tir.open_tir_carnet(locale="en")
+
+    with allure.step("No horizontal scrollbar, clipping or overlap"):
+        check.step("steps 2-3")
+        _check_no_overflow(check, tir)
+        _check_top_no_overlap(check, tir)
+
+    with allure.step("Sections, index, video scaling, legible accordion/criteria/resources"):
+        check.step("step 4")
+        _check_sections(check, tir)
+        _check_index_on_narrow(check, tir)
+        tir.scroll_to(tir.VIDEO)
+        video, section = tir.box(tir.VIDEO), tir.box(tir.SECTION_BLOCK)
+        check.truthy("video scales to the narrower column", video is not None and section is not None
+                     and abs(video["width"] - section["width"]) <= 1 and video["x"] + video["width"] <= 769,
+                     "video width == column width, inside viewport", f"video={video} column={section}")
+        tir.scroll_to(tir.FILES)
+        for i in range(tir.count(tir.FILE)):
+            a, b = tir.child_box(tir.FILE, tir.FILE_TITLE, i), tir.child_box(tir.FILE, tir.FILE_BUTTON, i)
+            check.truthy(f"resource card {i + 1} title/button no overlap", not _overlap(a, b), "no overlap", f"{a} vs {b}")
+        tir.scroll_to(tir.CRITERIA)
+        crit = [b for b in tir.criterion_boxes() if b]
+        for i in range(len(crit) - 1):
+            check.truthy(f"criteria rows {i + 1}/{i + 2} no overlap", not _overlap(crit[i], crit[i + 1]),
+                         "no overlap", f"{crit[i]} vs {crit[i + 1]}")
+        tir.scroll_to(tir.FAQ)
+        faq = [b for b in tir.boxes(tir.FAQ_ITEM) if b]
+        for i in range(len(faq) - 1):
+            check.truthy(f"FAQ items {i + 1}/{i + 2} no overlap", not _overlap(faq[i], faq[i + 1]),
+                         "no overlap", f"{faq[i]} vs {faq[i + 1]}")
+
+    assert not check.deviations, check.report()
+
+
+# ---------------------------------------------------------------------------
+# 138039 — mobile
+# ---------------------------------------------------------------------------
+@allure.epic("Services")
+@allure.feature("TIR Carnet")
+@allure.story("Responsive layout")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("TIR Carnet page renders correctly at mobile viewport width (375x812)")
+@allure.label("pbi", "129403")
+@allure.label("testcase", "138039")
+@pytest.mark.web
+@pytest.mark.svc
+@pytest.mark.eserv
+@pytest.mark.compatibility
+@pytest.mark.regression
+@pytest.mark.uat
+@pytest.mark.pbi_129403
+@pytest.mark.tc_138039
+@pytest.mark.parametrize("page", [{"viewport": (375, 812), "auth": False}], indirect=True)
+def test_tir_carnet_mobile_viewport(page):
+    """Azure TC 138039 | PBI 129403 — ENV-3 at 375x812. Every listed block is
+    checked for horizontal overflow; one-per-row stacking is asserted for the
+    quick-facts, benefit cards, steps, accordion and resource cards. The
+    statistics grid is checked for overflow only (it may wrap 2-up on a
+    phone — same disclosed reading as the ATA country grid)."""
+    tir = TirCarnetPage(page)
+    check = _Check()
+    tir.open_tir_carnet(locale="en")
+
+    with allure.step("No horizontal scrollbar, clipping or overlap"):
+        check.step("steps 2-3")
+        _check_no_overflow(check, tir)
+        _check_top_no_overlap(check, tir)
+
+    with allure.step("Single column; index; video; blocks stack without overflow"):
+        check.step("step 4")
+        _check_sections(check, tir)
+        content = tir.content_box()
+        for i, s in enumerate(tir.boxes(tir.SECTION_BLOCK)):
+            check.truthy(f"section block {i + 1} in the single column",
+                         s is not None and s["x"] >= content["x"] - 1 and s["x"] + s["width"] <= content["x"] + content["width"] + 1,
+                         "inside the single content column", f"{s} vs {content}")
+        _check_index_on_narrow(check, tir)
+        tir.scroll_to(tir.VIDEO)
+        video = tir.box(tir.VIDEO)
+        check.truthy("video scales to the viewport without overflowing",
+                     video is not None and video["x"] >= 0 and video["x"] + video["width"] <= 376,
+                     "inside the 375px viewport", video)
+        for name, loc, stack in (("quick-facts tile", tir.FACT, True), ("statistic", tir.STAT, False),
+                                 ("benefit card", tir.CARD, True), ("step", tir.STEP, True),
+                                 ("FAQ item", tir.FAQ_ITEM, True), ("resource card", tir.FILE, True)):
+            tir.scroll_to(loc)
+            boxes = [b for b in tir.boxes(loc) if b]
+            check.truthy(f"{name}s rendered", len(boxes) > 0, "at least one", 0)
+            for i, b in enumerate(boxes):
+                check.truthy(f"{name} {i + 1} within viewport", b["x"] >= -1 and b["x"] + b["width"] <= 376,
+                             "no horizontal overflow", b)
+            if stack:
+                ok = all(boxes[i]["y"] + boxes[i]["height"] <= boxes[i + 1]["y"] + 1 for i in range(len(boxes) - 1))
+                check.truthy(f"{name}s stacked", ok, "one per row", [round(b["y"]) for b in boxes])
+
+    assert not check.deviations, check.report()

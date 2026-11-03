@@ -194,5 +194,33 @@ decides:
 - The user's item "any reported bug with #number 1 to be deleted". Nothing is
   deleted or closed under it.
 - Whether old cases with the US limit in their expected result get edited.
-- Who Alaa and the FE assignee are in Azure.
 - When FE counts as "unable to fix".
+
+## Rule 6 — Bug Assignee by Layer
+
+The user set this rule on 2026-10-11. **This mapping is specific to the Qatar
+Chamber project.** The qa-engine plugin only carries the assignee field; each
+project defines its own assignees in its own bug rules.
+
+Every bug filed on this project is assigned by the layer the root cause sits in:
+
+| Root cause | Assign to |
+|---|---|
+| CMS (Liferay control panel, Object Authoring, workflow, permissions) | **Alaa** |
+| Back end (API, data, validation, persistence, email/integration) | **Alaa** |
+| Front end (public-site UI, layout, styling, RTL/LTR, client-side behaviour) | **Hussein Al-wesi** |
+
+- The layer is decided from the confirmed root cause (Rule 3), not from the
+  surface the failing test ran on. A CMS change that fails to reach the public
+  page is back end unless the data reaches the page and only its rendering is
+  wrong.
+- Unsure which layer → ask the user before filing.
+- Show the chosen assignee in the pre-filing evidence the user approves (Rule 3,
+  step 5).
+- Rule 5's "UI bug for FE" means Hussein Al-wesi, and "Alaa" there is the same
+  Alaa as here.
+- **Tooling:** pass the assignee as `create_bug(assigned_to=…)` when filing,
+  and as `update_bug(new_assignee=…)` when reassigning (e.g. Rule 5's FE →
+  Alaa). Reassigning goes through the normal two-call preview and confirm.
+  Use the person's Azure identity (email preferred). If Azure rejects the name,
+  the create is refused, so ask the user for the exact identity.
