@@ -854,7 +854,7 @@ def test_webform_hero_banner_tokens(page):
     assert weight_matches(style["fontWeight"], "Bold")
     assert px_close(style["fontSize"], "30px")
     assert px_close(style["lineHeight"], "38px")
-    hero_bg = form.style_of("section.qc-etf", ["backgroundImage"])["backgroundImage"]
+    hero_bg = form.style_of(".qc-etf__hero", ["backgroundImage"])["backgroundImage"]
     assert "gradient" in hero_bg, "hero band must render a gradient background"
 
 
@@ -911,6 +911,9 @@ def test_webform_section_headers_bronze_tokens(page):
         "Tenders Documents",
     ]
     actual_headers = form.section_heading_texts()
+    # Bug 146320 accepts the Figma 'Tenders Documents' OR the PBI spec 'eTenders Documents'.
+    if actual_headers[-1:] == ["eTenders Documents"]:
+        expected_headers[-1] = "eTenders Documents"
     assert actual_headers == expected_headers, (
         "5th header expected per this case; see module docstring's disclosed "
         "reading #2 — live currently renders 'eTenders Documents & Consent "

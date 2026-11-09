@@ -38,7 +38,9 @@ PATH = "/web/qatar-chamber/sectoral-committees-and-business-councils"
 class SectoralCommitteesPage(BasePage):
     PAGE_BODY = "body"
     HEADER = "header.qc-global-site-header"
-    NAV_PARENT = "header.qc-global-site-header a.qc-nav-link[href*='/committee']"
+    # Top-level menu trigger is now a <button> (no href); anchor it to the item that owns this page's link.
+    NAV_PARENT = ("header.qc-global-site-header li.qc-nav-item-1:has(a.qc-nav-link[href*='sectoral-committees-and-business-councils'])"
+                  " > :is(a, button).qc-nav-link")
     NAV_PAGE_LINK = "header.qc-global-site-header a.qc-nav-link[href*='sectoral-committees-and-business-councils']"
     FOOTER = ".qc-global-site-footer"
 

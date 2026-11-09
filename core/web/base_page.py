@@ -88,7 +88,7 @@ class BasePage:
         dismiss_overlays(self.page, grace_ms=MOUNT_GRACE_MS)
         log_action(logger, "open_anonymous", url)
 
-    def click(self, locator: str) -> None:
+    def click(self, locator: str, position: dict | None = None) -> None:
         # The session can drop between two calls on this page (open_x() then
         # click(), no wait_for() in between) — check before spending the
         # click's own timeout on a page that's actually the license gate or
@@ -104,7 +104,7 @@ class BasePage:
         if not on_login_flow and is_login_form_showing(self.page):
             reauthenticate(self.page)
         try:
-            self.page.locator(locator).click()
+            self.page.locator(locator).click(**({"position": position} if position else {}))
         except Exception:
             # An overlay that mounted late (or reappeared after a click-driven
             # navigation) intercepts the click, OR the session dropped mid-
@@ -116,7 +116,7 @@ class BasePage:
                 recovered = reauthenticate(self.page) or recovered
             if not recovered:
                 raise
-            self.page.locator(locator).click()
+            self.page.locator(locator).click(**({"position": position} if position else {}))
         log_action(logger, "click", locator)
 
     def type(self, locator: str, text: str) -> None:

@@ -145,6 +145,10 @@ _APPROVED_ALLOW = {
     "cms/pages/tenders/eoi_submission_admin_page.py",
     # A public-site B2B company badge, not a CMS status.
     "web/tests/b2b_matchmaking/test_b2b_matchmaking_web.py",
+    # Liferay History-trail ACTION labels ("Approved" is the workflow event
+    # an Editor's publish records), matched against the History cell, not
+    # the status badge.
+    "cms/tests/visas_immigration/test_visas_workflow_control_panel.py",
 }
 
 _CONTENT_DATA_ALLOW = {

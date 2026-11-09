@@ -82,6 +82,7 @@ Light/Dark state, and the key structural blocks (hero, sections, sticky
 index where applicable) render without being empty/absent.
 """
 
+import re
 import allure
 import pytest
 
@@ -964,7 +965,7 @@ def test_fh_reachable_from_main_menu(page):
 @allure.feature("Food Handlers Certification")
 @allure.story("Breadcrumb navigation")
 @allure.severity(allure.severity_level.MINOR)
-@allure.title("Breadcrumb Training link returns the visitor to a real Services-area landing page")
+@allure.title("Breadcrumb Training link returns the visitor to the Training landing page")
 @allure.label("pbi", "129696")
 @allure.label("testcase", "140179")
 @pytest.mark.web
@@ -990,17 +991,23 @@ def test_fh_breadcrumb_training_link_navigates(page):
     assert "Home" in breadcrumb
     assert "Training" in breadcrumb
 
+    fh_href = page.locator(".qc-fh-crumb", has_text="Training").first.get_attribute("href")
     with allure.step("Activate the 'Training' breadcrumb crumb"):
         fh_page.click_breadcrumb_current()
 
-    assert SERVICES_URL_MARKER in page.url
+    # HEALED 2026-10-19 (bug 142396 fix): the Training crumb now targets the
+    # Training landing page (/en/training-courses), as the case expects.
+    _tc = re.compile(r"^(/en)?/training-courses/?$")  # /en depends on the locale cookie
+    assert _tc.match(fh_href or "") and _tc.match(page.url.split("ihorizons.com", 1)[-1].split("?")[0]), f"Training crumb href {fh_href!r} landed on {page.url}"
     assert not page.url.rstrip("/").endswith(FOOD_HANDLERS_PATH)
 
     with allure.step("Navigate back and activate the 'Home' breadcrumb crumb"):
         fh_page.open_food_handlers(locale="en")
         fh_page.click_breadcrumb_home()
 
-    assert page.url.rstrip("/").endswith(HOME_PATH)
+    # HEALED 2026-10-19: the Home crumb now links to the site root "/en/".
+    path = page.url.split("ihorizons.com", 1)[-1].rstrip("/")
+    assert path in ("", "/en") or path.endswith(HOME_PATH), f"Home crumb landed on {page.url}"
 
 
 @allure.epic("Our Services")

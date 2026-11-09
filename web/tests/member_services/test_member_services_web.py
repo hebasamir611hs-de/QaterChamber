@@ -156,6 +156,7 @@ the case text itself, so each is asserted through that readable value. No
 Figma file was opened and no opaque token id was resolved or guessed.
 """
 
+import re
 import allure
 import pytest
 
@@ -202,7 +203,7 @@ DIVIDER_FAINT = "#F6F6F6"   # sidebar row dividers
 # DESIGN DRIFT accepted by QA Manager 2026-09-27 (ADO-137651):
 # case expected #D0D0D0; delivered build renders rgb(168, 168, 167) = #A8A8A7.
 # Updated to the build.
-DARK_SUBTEXT = "#A8A8A7"    # dark-mode intro + short description
+DARK_SUBTEXT = "#D0D0D0"  # RESTORED 2026-10-19 to the Azure case / Figma value (drift fixed)    # dark-mode intro + short description
 DARK_CHIP_FILL = "#4A4A49"  # dark-mode language chip fill
 DARK_CHIP_TEXT = "#DEDEDD"  # dark-mode language chip text
 DARK_TILE = "#422C1B"       # dark-mode icon tile
@@ -212,7 +213,7 @@ LIGHT_CHIP_FILL = "#EDEDED"
 # DESIGN DRIFT accepted by QA Manager 2026-09-27 (ADO-137650):
 # case expected #6C6C6B; delivered build renders rgb(107, 108, 126) = #6B6C7E.
 # Updated to the build.
-LIGHT_CHIP_TEXT = "#6B6C7E"
+LIGHT_CHIP_TEXT = "#6C6C6B"  # RESTORED 2026-10-19 to the Azure case / Figma value (drift fixed)
 
 # ── Exact values the cases state ─────────────────────────────────────────
 CASE_HERO_HEIGHT_PX = 140
@@ -224,11 +225,11 @@ CASE_HERO_GRADIENT_TO_STOP = "84%"
 # DESIGN DRIFT accepted by QA Manager 2026-09-27 (ADO-137641):
 # case expected '40px 300px'; delivered build renders '28px 40px'.
 # Updated to the build.
-CASE_HERO_PADDING = "28px 40px"
+CASE_HERO_PADDING = "40px 300px"  # RESTORED 2026-10-19 to the Azure case / Figma value (drift fixed)
 # DESIGN DRIFT accepted by QA Manager 2026-09-27 (ADO-137647):
 # case expected '64px 300px'; delivered build renders '64px 40px'.
 # Updated to the build. (Also consumed by ADO-137641's content-padding read.)
-CASE_CONTENT_PADDING = "64px 40px"
+CASE_CONTENT_PADDING = "64px 300px"  # RESTORED 2026-10-19 to the Azure case / Figma value (drift fixed)
 CASE_CONTENT_GAP = "40px"
 CASE_HEADROW_GAP = "40px"
 CASE_INTRO_WIDTH_PX = 536
@@ -390,6 +391,17 @@ def _typography_is(style: dict, size: str, line: str, weight: int, hex_color: st
     if not _matches_hex(style.get("color"), hex_color):
         problems.append(f"color {style.get('color')!r} != {hex_color}")
     return problems
+
+
+def _gradient_border_ok(card: dict, frm: str, to: str) -> bool:
+    """HEALED 2026-10-19: the 1px 135deg gradient border may be painted via
+    border-image OR via a transparent border + background layers clipped to
+    border-box (same visual result). Angle and both colours stay exact."""
+    want = f"linear-gradient({CASE_CARD_BORDER_GRADIENT_ANGLE}, {frm}, {to})"
+    norm = lambda v: re.sub(r"\s+", " ", (v or "").replace(", ", ","))
+    if norm(want) in norm(card.get("borderImageSource")):
+        return True
+    return norm(want) in norm(card.get("backgroundImage")) and "border-box" in (card.get("backgroundClip") or "")
 
 
 def _border_width_px(border_value) -> float | None:
@@ -2429,7 +2441,7 @@ def test_english_page_matches_the_approved_figma_tokens(page):
         f"the card shadow is {card.get('boxShadow')!r}; the case requires "
         f"0px 5px {CASE_CARD_SHADOW_BLUR} rgba(29,29,27,0.1)"
     )
-    assert CASE_CARD_BORDER_GRADIENT_ANGLE in (card.get("borderImageSource") or ""), (
+    assert _gradient_border_ok(card, "rgb(246, 246, 246)", "rgb(233, 219, 208)"), (
         f"the card border-image is {card.get('borderImageSource')!r}; the case "
         f"requires a 1px {CASE_CARD_BORDER_GRADIENT_ANGLE} gradient border "
         f"from rgba(246,246,246,1) to rgba(233,219,208,1). This build paints a "
@@ -3043,7 +3055,7 @@ def test_page_renders_correctly_in_light_mode(page):
         f"the language chip text is {chip.get('color')!r}; the case requires "
         f"{LIGHT_CHIP_TEXT}"
     )
-    assert CASE_CARD_BORDER_GRADIENT_ANGLE in (card.get("borderImageSource") or ""), (
+    assert _gradient_border_ok(card, "rgb(246, 246, 246)", "rgb(233, 219, 208)"), (
         f"the card border-image is {card.get('borderImageSource')!r}; the case "
         f"requires a {CASE_CARD_BORDER_GRADIENT_ANGLE} gradient border from "
         f"rgba(246,246,246,1) to rgba(233,219,208,1)"
@@ -3136,7 +3148,7 @@ def test_page_renders_correctly_in_dark_mode(page):
         f"the dark-mode card fill is {card.get('backgroundColor')!r}; the case "
         f"requires {INK}"
     )
-    assert CASE_CARD_BORDER_GRADIENT_ANGLE in (card.get("borderImageSource") or ""), (
+    assert _gradient_border_ok(card, "rgb(52, 52, 50)", "rgb(83, 56, 34)"), (
         f"the dark-mode card border-image is {card.get('borderImageSource')!r}; "
         f"the case requires a {CASE_CARD_BORDER_GRADIENT_ANGLE} gradient from "
         f"rgba(52,52,50,1) to rgba(83,56,34,1)"

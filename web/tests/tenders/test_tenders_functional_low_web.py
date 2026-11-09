@@ -120,9 +120,9 @@ def test_tc102_verify_that_a_valid_submitter_contact_email_is_accepted(page):
     form = SubmitETenderFormPage(page).open_form()
     form.fill_valid_form(VALID_PDF)
     form.click_submit()
-    assert not form.field_has_visible_error('Submitter Email address', 0), (
-        f"{'Submitter Email address'} should accept a valid value; got error "
-        f"{form.field_error_text('Submitter Email address', 0)!r}"
+    assert not form.field_has_visible_error('Submitter Contact Email', 0), (
+        f"{'Submitter Contact Email'} should accept a valid value; got error "
+        f"{form.field_error_text('Submitter Contact Email', 0)!r}"
     )
 
 
@@ -142,10 +142,10 @@ def test_tc102_verify_that_a_valid_submitter_contact_email_is_accepted(page):
 def test_tc103_verify_that_an_empty_submitter_contact_email_is_rejected(page):
     """INVEST-TENDERS-TC-103 — Azure TC 146169. See module docstring's disclosed reading choices for any live gap/discrepancy noted for this case."""
     form = SubmitETenderFormPage(page).open_form()
-    form.fill_valid_form(VALID_PDF, skip_labels={('Submitter Email address', 0)})
+    form.fill_valid_form(VALID_PDF, skip_labels={('Submitter Contact Email', 0)})
     form.click_submit()
-    assert form.field_has_visible_error('Submitter Email address', 0), (
-        f"leaving {'Submitter Email address'} empty must be rejected with a visible inline error"
+    assert form.field_has_visible_error('Submitter Contact Email', 0), (
+        f"leaving {'Submitter Contact Email'} empty must be rejected with a visible inline error"
     )
 
 
@@ -166,10 +166,10 @@ def test_tc104_verify_that_an_invalid_format_submitter_contact_email_is_rejected
     """INVEST-TENDERS-TC-104 — Azure TC 146170. See module docstring's disclosed reading choices for any live gap/discrepancy noted for this case."""
     form = SubmitETenderFormPage(page).open_form()
     form.fill_valid_form(VALID_PDF)
-    form.fill_field('Submitter Email address', 'not-an-email', 0)
+    form.fill_field('Submitter Contact Email', 'not-an-email', 0)
     form.click_submit()
-    assert form.field_has_visible_error('Submitter Email address', 0), (
-        f"{'not-an-email'} must be rejected for {'Submitter Email address'} with a visible inline error"
+    assert form.field_has_visible_error('Submitter Contact Email', 0), (
+        f"{'not-an-email'} must be rejected for {'Submitter Contact Email'} with a visible inline error"
     )
 
 
@@ -307,12 +307,16 @@ def test_tc109_verify_that_a_valid_commercial_registration_number_50_alphanumeri
 @pytest.mark.tc_146176
 @pytest.mark.traceability("INVEST-TENDERS-TC-110")
 def test_tc110_verify_that_commercial_registration_number_can_be_left_blank_when_the_(page):
-    """INVEST-TENDERS-TC-110 — Azure TC 146176. See module docstring's disclosed reading choices for any live gap/discrepancy noted for this case."""
+    """INVEST-TENDERS-TC-110 — Azure TC 146176. Healed 2026-10-19 (bug 147091 fix): the form now has an
+    "Is the organization a registered company / QC member?" toggle; choosing No must let
+    Commercial Registration Number be left blank (the field is hidden / not enforced)."""
     form = SubmitETenderFormPage(page).open_form()
-    form.fill_valid_form(VALID_PDF, skip_labels={('Computer Registration Number (CR Number)', 0)})
+    form.fill_valid_form(VALID_PDF, skip_labels={('Commercial Registration Number', 0)})
+    form.fill_field('registered company', 'No', 0)
     form.click_submit()
-    assert not form.field_has_visible_error('Computer Registration Number (CR Number)', 0), (
-        f"{'Computer Registration Number (CR Number)'} is optional and must accept being left blank"
+    cr = page.locator('.qc-etf__field').filter(has=page.locator('label', has_text='Commercial Registration Number'))
+    assert cr.count() == 0 or not cr.first.is_visible() or not form.field_has_visible_error('Commercial Registration Number', 0), (
+        "with 'registered company / QC member' = No, Commercial Registration Number must not be enforced"
     )
 
 
@@ -1927,6 +1931,7 @@ def test_tc178_verify_that_selecting_not_allowed_for_item_wise_technical_evaluat
     """INVEST-TENDERS-TC-178 — Azure TC 146244. See module docstring's disclosed reading choices for any live gap/discrepancy noted for this case."""
     form = SubmitETenderFormPage(page).open_form()
     form.fill_valid_form(VALID_PDF)
+    form.fill_field('Item Wise Technical Evaluation Allowed', 'Not allowed', 0)  # healed: option now exists (bug 147094)
     form.click_submit()
     assert not form.field_has_visible_error('Item Wise Technical Evaluation Allowed', 0), (
         f"{'Item Wise Technical Evaluation Allowed'} should accept a valid value; got error "
@@ -2867,7 +2872,12 @@ def test_tc216_cancel_discards_entered_data(page):
     gap, not invented as a button that does not exist."""
     form = SubmitETenderFormPage(page).open_form()
     form.fill_field("Organization name", "QCTEST should be discarded", 0)
-    form.open_form()
+    # Healed 2026-10-19: the fix for bug 147093 added a real Cancel control.
+    page.locator(".qc-etf").get_by_role("button", name="Cancel").or_(
+        page.locator(".qc-etf").get_by_role("link", name="Cancel")).first.click()
+    page.wait_for_timeout(2000)
+    if page.locator(".qc-etf__field").count() == 0:
+        form.open_form()
     assert form.field_input_value("Organization name", 0) == "", (
         "re-opening the webform must not retain previously entered data"
     )
@@ -2901,4 +2911,14 @@ def test_tc218_country_drives_city_lookup_values(page):
     assert tag_before == "SELECT", (
         "City must be a lookup/select whose options depend on the chosen Country per this "
         f"case's premise; the live control is a {tag_before}, not a dependent lookup"
+    )
+    opts = lambda: form._control_for("City", 0).evaluate("s => [...s.options].map(o => o.text).join('|')")
+    form.fill_field("Country", "Qatar", 0)
+    page.wait_for_timeout(1000)
+    qatar = opts()
+    form.fill_field("Country", "France", 0)
+    page.wait_for_timeout(1500)
+    france = opts()
+    assert "Doha" in qatar and qatar != france and "Doha" not in france, (
+        f"City options must follow Country: Qatar={qatar!r} France={france!r}"
     )

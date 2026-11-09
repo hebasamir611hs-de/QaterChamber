@@ -60,6 +60,17 @@ Playwright MCP was NOT needed for this investigation):
     shape (never a bare `sleep()`) other Home Page sections in this project
     already use (e.g. HomeSocialIconsPage.reload_until()), with the same
     conservative default budget until a real measurement is recorded here.
+
+ADDED 2026-09-27 (31-case batch, ADO 134370-134401 — Publication Title/
+Type/Date/Cover Image/File Attachment/Active Status): `card_badge_text()`/
+`card_href()`/`is_card_visible()`/`click_type_tab()` support the dual
+Control_Panel+Web Publication Type (134379-134381) and Active Status
+(134399-134401) cases. CONFIRMED LIVE this session: the type-filter
+tablist (`TYPE_TABLIST`) exposes exactly 6 non-"all" tabs — "Bulletin" and
+"Study" (2 of the admin's 8 real `PUBLICATION_TYPE_*` options) have NO
+corresponding public tab (see `TYPE_TO_TAB_FILTER`'s own note) — a real,
+disclosed scope gap this batch works around by only exercising a type that
+DOES have a tab ("Report"/"Guides"), never by inventing one.
 """
 
 import time
@@ -70,18 +81,47 @@ from config.settings import web_url
 
 class HomePublicationsPage(BasePage):
     HOME_PATH = "/en/home"
+    HOME_PATH_LOCALE_NEUTRAL = "/home"
 
     SECTION = "section.qc-home-publications"
     CARD = f"{SECTION} a.qc-pub-card"
     CARD_TITLE = "h3.qc-pub-card-title"
+    CARD_BADGE = "span.qc-pub-badge"
+    TYPE_TABLIST = f'{SECTION} [role="tablist"][aria-label="Publication type filter"] [role="tab"]'
+
+    # Control_Panel "Publication Type " combobox option label -> this
+    # section's own `data-qc-pub-filter` tab value — CONFIRMED LIVE
+    # 2026-09-27 (31-case batch investigation, ADO 134379-134401): the
+    # public tablist exposes exactly 6 non-"all" tabs (researchPaper/
+    # guides/report/whitePaper/manuals/brochure) for the admin's 8-option
+    # Publication Type enum — "Bulletin" and "Study" have NO corresponding
+    # public filter tab (a real, disclosed scope gap, not a mapping bug);
+    # every case in this batch that needs a real tab uses "Report"/"Guides"
+    # only, both of which DO have one.
+    TYPE_TO_TAB_FILTER = {
+        "Research Paper": "researchPaper",
+        "Guides": "guides",
+        "Report": "report",
+        "White Paper": "whitePaper",
+        "Manuals": "manuals",
+        "Brochure": "brochure",
+    }
 
     # No measured propagation figure exists for this object yet (see module
     # docstring) — conservative default, still a real condition-based poll.
     RELOAD_POLL_TIMEOUT_MS = 15000
     RELOAD_POLL_INTERVAL_MS = 1000
 
-    def open_home(self) -> "HomePublicationsPage":
-        self.open(web_url(self.HOME_PATH))
+    def open_home(self, locale: str = "en") -> "HomePublicationsPage":
+        """`locale="ar"` navigates `/ar/home` (see `web_url()`'s own
+        locale-prefix contract) — `HOME_PATH`'s own literal `/en/home` is
+        EN-specific, so the AR variant uses the locale-neutral `/home` path
+        instead, letting `web_url()` apply the `/ar` prefix itself (ADDED
+        2026-09-27 for the bilingual Title AR/RTL cases, ADO 134375-134378)."""
+        if locale == "ar":
+            self.open(web_url(self.HOME_PATH_LOCALE_NEUTRAL, locale="ar"))
+        else:
+            self.open(web_url(self.HOME_PATH))
         self.wait_for(self.SECTION)
         return self
 
@@ -99,15 +139,52 @@ class HomePublicationsPage(BasePage):
     def has_card_with_title(self, title: str) -> bool:
         return title in self.card_titles()
 
-    def reload_until(self, predicate, timeout_ms: int | None = None, interval_ms: int | None = None) -> bool:
-        """Poll open_home() + predicate(self) until True or the timeout
-        elapses — mirrors HomeSocialIconsPage.reload_until()'s identical,
-        established shape (a real condition-based poll, never sleep())."""
+    def has_card_with_title_containing(self, substring: str) -> bool:
+        return any(substring in t for t in self.card_titles())
+
+    def _card_by_title(self, title: str):
+        return self.page.locator(self.CARD).filter(has=self.page.locator(f'{self.CARD_TITLE}:text-is("{title}")'))
+
+    def card_badge_text(self, title: str) -> str:
+        """The Publication Type badge text rendered on the card matching
+        `title` exactly — "" if no such card is present."""
+        card = self._card_by_title(title)
+        if card.count() == 0:
+            return ""
+        return card.first.locator(self.CARD_BADGE).inner_text().strip()
+
+    def card_href(self, title: str) -> str:
+        card = self._card_by_title(title)
+        if card.count() == 0:
+            return ""
+        return card.first.get_attribute("href") or ""
+
+    def card_image_src(self, title: str) -> str:
+        card = self._card_by_title(title)
+        if card.count() == 0:
+            return ""
+        img = card.first.locator("img.qc-pub-card-img")
+        return img.get_attribute("src") or "" if img.count() > 0 else ""
+
+    def is_card_visible(self, title: str) -> bool:
+        card = self._card_by_title(title)
+        return card.count() > 0 and card.first.is_visible()
+
+    def click_type_tab(self, filter_value: str) -> "HomePublicationsPage":
+        self.page.locator(f'{self.TYPE_TABLIST}[data-qc-pub-filter="{filter_value}"]').click()
+        self.page.wait_for_timeout(800)
+        return self
+
+    def reload_until(self, predicate, timeout_ms: int | None = None, interval_ms: int | None = None, locale: str = "en") -> bool:
+        """Poll open_home(locale) + predicate(self) until True or the
+        timeout elapses — mirrors HomeSocialIconsPage.reload_until()'s
+        identical, established shape (a real condition-based poll, never
+        sleep())."""
         timeout_ms = timeout_ms if timeout_ms is not None else self.RELOAD_POLL_TIMEOUT_MS
         interval_ms = interval_ms if interval_ms is not None else self.RELOAD_POLL_INTERVAL_MS
         deadline = time.monotonic() + (timeout_ms / 1000)
         while True:
-            self.open_home()
+            self.open_home(locale=locale)
             if predicate(self):
                 return True
             if time.monotonic() >= deadline:

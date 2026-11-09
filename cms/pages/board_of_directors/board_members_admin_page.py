@@ -607,9 +607,13 @@ class BoardMembersAdminPage(ObjectAuthoringPage):
         if detailed_biography_ar is not None:
             self.fill_rich_text_ar(detailed_biography_ar)
         if professional_experience_entries is not None:
-            self.fill_text(FIELD_PROFESSIONAL_EXPERIENCE_ENTRIES, professional_experience_entries)
+            self.fill_experience_entries("ObjectField_professionalExperienceEntries",
+                                         professional_experience_entries,
+                                         lambda v: self.fill_text(FIELD_PROFESSIONAL_EXPERIENCE_ENTRIES, v))
         if professional_experience_entries_ar is not None:
-            self.type(self.PROFESSIONAL_EXPERIENCE_ENTRIES_AR, professional_experience_entries_ar)
+            self.fill_experience_entries("professionalExperienceEntries",
+                                         professional_experience_entries_ar,
+                                         lambda v: self.type(self.PROFESSIONAL_EXPERIENCE_ENTRIES_AR, v))
         if display_order is not None:
             self.fill_number(FIELD_DISPLAY_ORDER, display_order)
         if active_status is not None:
@@ -623,6 +627,7 @@ class BoardMembersAdminPage(ObjectAuthoringPage):
         full_name_ar: str = "اسم اختبار للعضو",
         position_label_ar: str = "منصب اختباري",
         short_bio_ar: str = "سيرة قصيرة اختبارية للعضو.",
+        photo_alt_text_ar: str = "نص بديل اختباري للصورة",
     ) -> "BoardMembersAdminPage":
         """Fills the THREE AR twin fields CONFIRMED LIVE 2026-09-17 to be
         natively `required` on this surface (Full Name AR, Position Label
@@ -638,6 +643,9 @@ class BoardMembersAdminPage(ObjectAuthoringPage):
         self.type(self.FULL_NAME_AR, full_name_ar)
         self.type(self.POSITION_LABEL_AR, position_label_ar)
         self.type(self.SHORT_BIO_AR, short_bio_ar)
+        # HEALED 2026-10-17: Photo Alt Text AR is now required on qcdev
+        # ("Photo Alt Text (العربية): Arabic content is required.").
+        self.type(self.PHOTO_ALT_TEXT_AR, photo_alt_text_ar)
         return self
 
     def attempt_member_photo_upload_expect_rejection(
@@ -735,6 +743,41 @@ class BoardMembersAdminPage(ObjectAuthoringPage):
         self.set_checkbox(FIELD_ACTIVE_STATUS, True)
         self.submit_for_publishing()
         return self
+
+    def fill_experience_entries(self, list_for: str, value: str, legacy_fill) -> None:
+        """HEALED 2026-10-17 (bugs 142304/142305 fix, com.qc.object.status 1.48.86):
+        Professional Experience Entries (EN/AR) is now a rows editor
+        (`.qc-oel-entry-list[data-qc-entry-list-for=...]`, one row per entry with
+        `input[data-part=role]` / `input[data-part=org]`, "+ Add entry" button); the
+        backing textarea is hidden. A JSON list value is entered row by row; any other
+        text (or the old free-text form, if the rows editor is absent) goes to the textarea."""
+        import json
+        rows_list = self.page.locator(f'.qc-oel-entry-list[data-qc-entry-list-for="{list_for}"]')
+        try:
+            entries = json.loads(value)
+        except ValueError:
+            entries = None
+        if rows_list.count() == 0 or not isinstance(entries, list):
+            legacy_fill(value)
+            return
+        for entry in entries:
+            rows_list.locator(":scope > button").click()
+            row = rows_list.locator(".qc-oel-entry-row").last
+            row.locator('input[data-part="role"]').fill(entry.get("role", ""))
+            row.locator('input[data-part="org"]').fill(entry.get("org", ""))
+
+    def row_status_text(self, title: str) -> str:  # type: ignore[override]
+        """HEALED 2026-10-17: the Board Member list has an extra MEMBER CATEGORY column
+        (ENTRY | MEMBER CATEGORY | STATUS | ...), so the shared reader's fixed `td` index 1
+        returns the category ("Board Member" -> Unknown). Read the cell under the STATUS
+        header instead; same normalization, same "" when no row matches."""
+        from cms.pages.components.object_authoring_page import normalize_status
+        row = self.page.locator(f'{self.ENTRIES_TABLE_ROW}:has-text("{title}")')
+        if row.count() == 0:
+            return ""
+        headers = [h.strip().lower() for h in self.page.locator("table thead th").all_inner_texts()]
+        idx = headers.index("status") if "status" in headers else 1
+        return normalize_status(row.first.locator("td").nth(idx).inner_text())
 
     # ---- State queries --------------------------------------------------------
     def is_save_error_shown(self) -> bool:
