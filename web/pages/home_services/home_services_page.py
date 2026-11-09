@@ -40,7 +40,7 @@ behavior, and read hrefs/bounding boxes/computed styles.
 
 Real, CLI-verified structure (EN, https://qcdev.ihorizons.com/home, 1920x1080):
 
-    section.qc-home-our-services[data-qc-view-all-url="/web/qatar-chamber/services"]
+    section.qc-home-our-services[data-qc-view-all-url="/web/qatar-chamber/our-services"]  (2026-10-21)
                                  [data-qc-detail-base="/web/qatar-chamber/service-detail?id="]
                                  [data-qc-default-tab="allServices"]
       div.qc-os-inner
@@ -49,7 +49,7 @@ Real, CLI-verified structure (EN, https://qcdev.ihorizons.com/home, 1920x1080):
             span.qc-os-tag           "Our Services"                    (TAG)
             h2.qc-os-heading         "Services We Provide"              (HEADING)
             p.qc-os-desc             (description copy)                 (DESCRIPTION)
-          a.qc-os-viewall.qc-os-viewall--top  [href="/web/qatar-chamber/services"]
+          a.qc-os-viewall.qc-os-viewall--top  [href="/our-services"]  (2026-10-21)
             span "View All Services"                                    (CTA_TOP)
         div.qc-os-tabs[role=tablist][aria-label="Service categories"]    (TABLIST)
           button.qc-os-tab[data-key="allservices"][role=tab][aria-selected] "All Services" (TAB_ALL)
@@ -70,77 +70,39 @@ Real, CLI-verified structure (EN, https://qcdev.ihorizons.com/home, 1920x1080):
                   p.qc-os-card-desc                                     (CARD_DESC)
                   a.qc-os-readmore [href="/web/qatar-chamber/service-detail?id=<N>"]
                     span "Read More"                                    (CARD_READMORE)
-        div.qc-os-dots[role=tablist][aria-label="Select service"][hidden]  (8 cards fit in
-                                                                             one scrollable
-                                                                             track — no
-                                                                             pagination live)
+        div.qc-os-dots[role=tablist][aria-label="Select service"]  (2026-10-21: visible,
+                                                             5 "Services page N" dots
+                                                             page the 17-card carousel)
         a.qc-os-viewall.qc-os-viewall--bottom [not visible at 1920x1080]  (CTA_BOTTOM)
         p.qc-os-empty[hidden]  "" (empty-state text — no live filter produces 0 cards)
 
-Real, CLI-verified data (All Services tab, 8 cards, EN):
-    id=48209 "New Membership"        | id=48239 "Membership Renewal"
-    id=48269 "Signatory Editing"     | id=48299 "Signature Attestation"
-    id=48329 "Certificate of Origin" | id=48359 "Document Attestation"
-    id=48389 "Business Directory"    | id=48419 "Economic Reports"
-
-Real, CLI-verified per-tab filter results (clicking a tab RE-RENDERS
-`.qc-os-card` — the DOM only ever contains the cards for the active tab,
-confirmed by clicking each tab and re-counting/re-reading `.qc-os-card-title`):
-    Membership (2):  "New Membership", "Membership Renewal"
-    Legal (2):       "Signatory Editing", "Signature Attestation"
-    E-Services (2):  "Certificate of Origin", "Document Attestation"
-    Information (2): "Business Directory", "Economic Reports"
-    All Services (8): all of the above, track re-renders back to the full set
-
-Real, CLI-verified Arabic (AR/RTL, https://qcdev.ihorizons.com/ar/home):
-    html[dir="rtl"], section direction: rtl
-    tag: "خدماتنا" | heading: "الخدمات التي نقدمها"
-    desc: "نقدم مجموعة متكاملة من الخدمات لدعم الشركات ورواد الأعمال
-           والمستثمرين، تشمل خدمات العضوية والشهادات الدولية وغيرها من
-           الحلول التي تسهّل ممارسة الأعمال."
-    tabs (in DOM order, unchanged from EN — RTL mirroring is purely visual/
-          CSS direction, the tab ORDER in the accessible tree does not flip):
-        "جميع الخدمات" (All Services), "العضوية" (Membership),
-        "الخدمات القانونية" (Legal), "الخدمات الإلكترونية" (E-Services),
-        "المعلومات" (Information)
-    CTA: "عرض الكل" | first card title: "عضوية جديدة" | its Read More: "اقرأ المزيد"
-
-Real, CLI-verified layout findings (reported to the QA Manager, not silently
-corrected here — the case's stated expectation is kept as the asserted
-target throughout; a live mismatch is scripted to FAIL HONESTLY, never
-quietly re-targeted at the observed value):
-  - TC 135329/135341 ("standard grid" / "standard desktop layout"): the live
-    card list is a horizontally-scrollable FLEX row (`display: flex` on
-    `.qc-os-track`, `grid-template-columns: none`) inside a fixed-width
-    `.qc-os-viewport`, not a CSS grid. At 1920x1080 the heading/description
-    block and the top "View All Services" CTA sit on the SAME row (both at
-    y=232.9), the tab bar sits in its own full-width row below (y=397.98),
-    and the card row sits below that (y=469.98) — a genuine, confirmed
-    top-to-bottom/left-aligned desktop layout, just implemented as a flex
-    carousel rather than a literal CSS grid.
-  - TC 135337 ("Locate the Legal Consulting card"): no card titled "Legal
-    Consulting" exists on this live instance under ANY tab (confirmed: Legal
-    tab's real 2 cards are "Signatory Editing" and "Signature Attestation").
-    Scripted against the real first Legal-tab card ("Signatory Editing")
-    instead — the case's own assertion (Read More redirects to the
-    configured detail page) is still exercised and still fails honestly if
-    the real redirect breaks; only the example card's NAME differs from the
-    case's stated example.
-  - TC 135345 ("Information Services tab"): the tab's real accessible name
-    is "Information" (not "Information Services") — `TAB_INFORMATION`/
-    `tab_texts()` are scripted against the real live label.
-  - Pagination: `.qc-os-dots` exists in the DOM but carries `hidden` at
-    1920x1080 with all 8 cards — this instance's Our Services carousel does
-    not need a second "page" the way home_business_events_page.py's did;
-    unlike that section there is no live multi-page state to assert here.
-
-Data-setup note (TC 135353/135414): both cases' OWN Arrange step is a
-Control_Panel/CMS action ("Set every service card's Active Status to False" /
-"Unpublish the Our Services listing page in CMS") — out of reach without an
-authenticated Site Content Editor session. See home_services_admin_page.py
-and the test module's `_UNRESOLVED_SKIP`/credential-gating (same convention
-as home_strategic_partners_web.py's TC 136289 chain; TEST_USER/TEST_PASSWORD
-are blank in this machine's .env, a known project-wide blocker).
+RE-VERIFIED 2026-10-21 (anonymous context, CLI extractor + scoped probe
+scripts — the 2026-08-26 snapshot below this line was stale and has been
+replaced):
+  - 17 active service cards (was 8), carousel paginated by 5 dots
+    (`.qc-os-dots` role=tablist "Select service", buttons "Services page N")
+    — off-screen cards are paged into view by clicking a dot.
+  - Card data is NOT hardcoded any more. The section renders from the public,
+    anonymous JSON the page itself fetches:
+        /o/c/servicecards/scopes/<site>?filter=activeStatus eq true...
+    each item carries `assignedTab.key` (membership | legal | eServices |
+    information | allServices) and `redirectUrl`. `open_home_with_oracle()`
+    captures that response during navigation; the expected card set for a
+    tab = items whose assignedTab.key matches the tab's `data-key`
+    (case-insensitive). Cards assigned to `allServices` (e.g. "Legal
+    Consulting", "Private Sector Export Reports") appear only under the All
+    Services tab.
+  - View All CTA href is now "/our-services"; the section's configured
+    target is `data-qc-view-all-url="/web/qatar-chamber/our-services"`.
+  - "Legal Consulting" now exists (assignedTab=allServices); its Read More
+    points at the external https://www.qatarchamber.com/legal-consulting/
+    (same tab, no target=_blank).
+  - Information tab's label is "Information" (case says "Information
+    Services") — reported as an observation, the tab is selected by data-key.
+  - AR: html[dir=rtl]; tab boxes run right-to-left (All Services right-most).
+  - A leftover `QCTEST-135400-redirect` card (another run's test data) is
+    live under Information — the oracle includes it, so it does not break
+    the filter assertions.
 """
 
 from core.web.base_page import BasePage
@@ -247,9 +209,164 @@ class HomeServicesPage(BasePage):
         return self.page.locator(self._tab_locator(which)).get_attribute("aria-selected") == "true"
 
     def click_tab(self, which: str) -> "HomeServicesPage":
+        """Click a filter tab and wait on real signals only: the tab becomes
+        aria-selected, then (when the oracle was captured) the re-rendered
+        card count settles on the oracle's count. A count that never settles
+        is left for the test's own set assertion to report — never masked."""
         self.click(self._tab_locator(which))
-        self.page.wait_for_timeout(300)  # client-side re-render of .qc-os-track, no network round-trip to await
+        self.wait_for(f'{self._tab_locator(which)}[aria-selected="true"]', state="attached")
+        if self.service_cards is not None:
+            try:
+                self.wait_for_condition(
+                    "([sel, n]) => document.querySelectorAll(sel).length === n",
+                    arg=[f"{self.SECTION} {self.CARD}", len(self.expected_titles_for_tab(which))],
+                )
+            except Exception:  # noqa: BLE001 — mismatch is asserted by the test
+                pass
         return self
+
+    def tab_x(self, which: str) -> float:
+        return self.tab_box(which).get("x", 0.0)
+
+    # ── Anonymous navigation + public data oracle (2026-10-21) ────────────
+    service_cards = None
+    SERVICE_CARDS_API = "/o/c/servicecards/"
+
+    def open_home_with_oracle(self, locale: str = "en") -> "HomeServicesPage":
+        """Logged-out navigation to the Home Page that also captures the
+        public, anonymous service-cards JSON the section itself renders from.
+        Read-only; never reauthenticates."""
+        with self.page.expect_response(
+            lambda r: self.SERVICE_CARDS_API in r.url and r.status == 200, timeout=30000
+        ) as info:
+            self.open_anonymous(web_url("/home", locale=locale))
+        self.service_cards = info.value.json().get("items", [])
+        self._locale = locale
+        return self
+
+    def open_home_settled(self, locale: str = "en") -> "HomeServicesPage":
+        """Logged-out Home load for TC 135353 (section absent). Unlike
+        `open_home_with_oracle()` it does not wait for the service-cards
+        response, which need not fire when the section is correctly absent:
+        it waits on the global footer, then a bounded network-idle."""
+        self.open_anonymous(web_url("/home", locale=locale))
+        self.page.locator("footer.qc-global-site-footer").first.wait_for(state="attached", timeout=30000)
+        try:
+            self.page.wait_for_load_state("networkidle", timeout=20000)
+        except Exception:  # noqa: BLE001 -- upper bound only; footer is the settle anchor
+            pass
+        return self
+
+    def _oracle_title(self, item: dict) -> str:
+        if getattr(self, "_locale", "en") == "ar":
+            return (item.get("title_i18n") or {}).get("ar_SA") or item.get("title", "")
+        return item.get("title", "")
+
+    def expected_titles_for_tab(self, which: str) -> set:
+        """Configured card titles for a tab, from the captured oracle.
+        `which` is a _TAB_LOCATORS key ('all', 'membership', 'legal',
+        'eservices', 'information')."""
+        items = self.service_cards or []
+        if which == "all":
+            return {self._oracle_title(i).strip() for i in items}
+        return {
+            self._oracle_title(i).strip()
+            for i in items
+            if str((i.get("assignedTab") or {}).get("key", "")).lower() == which
+        }
+
+    def configured_redirect_url(self, title: str) -> str:
+        for item in self.service_cards or []:
+            if item.get("title") == title:
+                return item.get("redirectUrl", "")
+        return ""
+
+    def configured_view_all_url(self) -> str:
+        return self.page.locator(self.SECTION).get_attribute("data-qc-view-all-url") or ""
+
+    # ── Card lookup by title / carousel paging ────────────────────────────
+    def _card_by_title(self, title: str):
+        return self.page.locator(self.CARD).filter(
+            has=self.page.locator(f'{self.CARD_TITLE}:text-is("{title}")')
+        )
+
+    def is_card_present(self, title: str) -> bool:
+        return self._card_by_title(title).count() > 0
+
+    def card_has_parts(self, title: str) -> dict:
+        card = self._card_by_title(title).first
+        return {
+            "icon": card.locator(".qc-os-card-icon img").count() > 0,
+            "title": card.locator(self.CARD_TITLE).inner_text().strip(),
+            "description": card.locator(self.CARD_DESC).inner_text().strip(),
+            "read_more": card.locator(self.CARD_READMORE).count() > 0,
+        }
+
+    def card_readmore_href_by_title(self, title: str) -> str:
+        return self._card_by_title(title).first.locator(self.CARD_READMORE).get_attribute("href") or ""
+
+    def bring_card_into_view(self, title: str) -> "HomeServicesPage":
+        """Page the carousel with its 'Services page N' dots until the card
+        sits fully inside the viewport (off-screen Read More links carry
+        tabindex=-1). Waits on the card's own box, never a fixed delay."""
+        card = self._card_by_title(title).first
+        js = (
+            "([sel, t]) => { const c = [...document.querySelectorAll(sel)].find("
+            "e => e.querySelector('.qc-os-card-title')?.innerText.trim() === t);"
+            " if (!c) return false; const r = c.getBoundingClientRect();"
+            " return r.left >= 0 && r.right <= window.innerWidth; }"
+        )
+        dots = self.page.locator(".qc-os-dots .qc-os-dot")
+        if self.page.evaluate(js, [self.CARD, title]):
+            return self
+        for i in range(dots.count()):
+            dots.nth(i).click()
+            try:
+                self.wait_for_condition(js, arg=[self.CARD, title], timeout=3000)
+                return self
+            except Exception:  # noqa: BLE001 — not on this page, try the next dot
+                continue
+        card.scroll_into_view_if_needed()
+        return self
+
+    def click_card_readmore_by_title(self, title: str) -> None:
+        self._card_by_title(title).first.locator(self.CARD_READMORE).click()
+
+    def landed_status(self) -> int:
+        """HTTP status of the page the browser landed on — a read-only GET
+        from the same (anonymous) context, redirects followed. Catches a
+        link that 'navigates' to a 404.
+
+        Sends a regular desktop-Chrome User-Agent: the external
+        www.qatarchamber.com WAF answers 403 to any 'HeadlessChrome' UA
+        (confirmed 2026-10-21: headless 403, desktop UA 200 for the same
+        URL), which says nothing about what a visitor gets."""
+        return self.page.request.get(self.page.url, headers={"User-Agent": self.DESKTOP_UA}).status
+
+    DESKTOP_UA = (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+    )
+
+    def tab_visual_style(self, which: str) -> dict:
+        return self.computed_style(
+            self._tab_locator(which),
+            ["backgroundColor", "color", "borderBottomColor", "borderBottomWidth", "fontWeight", "boxShadow"],
+        )
+
+    def clamped_card_descriptions(self) -> list:
+        """Descriptions whose content is cut off vertically by more than half
+        a line (line-clamp) — sub-line slack is line-height, not truncation."""
+        return self.page.locator(self.CARD_DESC).evaluate_all(
+            "els => els.filter(e => { const lh = parseFloat(getComputedStyle(e).lineHeight) || 20;"
+            " return e.scrollHeight - e.clientHeight > lh / 2; }).map(e => e.innerText)"
+        )
+
+    def truncated_card_titles(self) -> list:
+        """Card titles whose text overflows their box horizontally (clipped)."""
+        return self.page.locator(self.CARD_TITLE).evaluate_all(
+            "els => els.filter(e => e.scrollWidth > e.clientWidth + 1).map(e => e.innerText)"
+        )
 
     # ── "View All Services" CTA ──────────────────────────────────────────
     def is_cta_top_visible(self) -> bool:

@@ -282,6 +282,28 @@ class AccessibilityToolsComponent(BasePage):
         self.header.open_home()
         return self
 
+    def open_home_anonymous(self, locale: str = "en") -> "AccessibilityToolsComponent":
+        """Logged-out Home load for the CMS-disable cases (134489, 134508):
+        never `open()`, which could sign an anonymous context back in.
+        Settles on the header AND the language switcher (a sibling in the
+        same utility cluster that stays whatever the setting) plus the page
+        `load` event, so an "icon absent" read is never a not-yet-rendered
+        read."""
+        self.open_anonymous(web_url("/home", locale=locale))
+        self.wait_for(self.header.HEADER)
+        self.wait_for(self.header.LANGUAGE_SWITCHER)
+        self.page.wait_for_load_state("load")
+        return self
+
+    def wait_accessibility_button_visible(self, timeout_ms: int = 15000) -> bool:
+        """Positive read with a real wait (baseline before a disable)."""
+        try:
+            self.page.locator(self.header.ACCESSIBILITY_BUTTON).first.wait_for(
+                state="visible", timeout=timeout_ms)
+            return True
+        except Exception:  # noqa: BLE001 -- caller asserts
+            return False
+
     def open_home_arabic(self) -> "AccessibilityToolsComponent":
         """Loads the homepage directly on the Arabic locale
         (`web_url("/home", locale="ar")` -> `/ar/home`) -- mirrors
@@ -439,9 +461,8 @@ class AccessibilityToolsComponent(BasePage):
         open_home(), then console_error_count_since(baseline) after the
         click, to measure errors the CLICK ITSELF introduces -- separately
         from the load-time errors this simulation deliberately causes."""
-        self._console_messages = []
         self._blocked_request_count = 0
-        self.page.on("console", lambda msg: self._console_messages.append((msg.type, msg.text)))
+        self.start_console_capture()
 
         def _abort(route):
             self._blocked_request_count += 1
@@ -449,6 +470,16 @@ class AccessibilityToolsComponent(BasePage):
 
         for pattern in self.A11Y_SCRIPT_BUNDLE_PATTERNS:
             self.page.route(pattern, _abort)
+        return self
+
+    def start_console_capture(self) -> "AccessibilityToolsComponent":
+        """Records every console message from here on, WITHOUT blocking
+        anything -- the capture half of start_open_failure_simulation(),
+        usable on its own by cases that only need "no console error" from an
+        interaction (ADO #134525, #134527). Pair with console_message_count()
+        / console_error_count_since() exactly as #134484 does."""
+        self._console_messages = []
+        self.page.on("console", lambda msg: self._console_messages.append((msg.type, msg.text)))
         return self
 
     def console_message_count(self) -> int:
@@ -586,10 +617,13 @@ class AccessibilityToolsComponent(BasePage):
     def page_background_color(self) -> str:
         return self.page.evaluate("() => getComputedStyle(document.body).backgroundColor")
 
-    def run_color_contrast_audit(self) -> list:
+    def run_color_contrast_audit(self, context=None) -> list:
         """Runs a REAL axe-core accessibility audit (axe-playwright-python),
         scoped to the `color-contrast` rule only, against the page's CURRENT
-        state -- call after activate_high_contrast() for ADO #134632. Returns
+        state -- call after activate_high_contrast() for ADO #134632.
+        `context` (optional axe context: a plain CSS selector or an
+        {"include": [...], "exclude": [...]} dict) narrows the audit to one
+        region; None = whole page. Returns
         the raw list of violation dicts (each carries 'id'/'impact'/'nodes');
         an empty list is a genuine, observed 0-violations result, never
         assumed (confirmed live: 0 violations on the EN homepage with High
@@ -600,8 +634,22 @@ class AccessibilityToolsComponent(BasePage):
         from axe_playwright_python.sync_playwright import Axe
 
         axe = Axe()
-        results = axe.run(self.page, options={"runOnly": {"type": "rule", "values": ["color-contrast"]}})
+        results = axe.run(self.page, context=context,
+                          options={"runOnly": {"type": "rule", "values": ["color-contrast"]}})
         return results.response["violations"]
+
+    # Plain-CSS forms for axe-core contexts (axe cannot parse Playwright's
+    # `>>` chaining used by the locator constants above).
+    _DONE_BUTTON_CSS = ".qc-a11y-panel button.qc-a11y-done"
+
+    def run_panel_named_controls_contrast_audit(self) -> list:
+        """axe `color-contrast` over the open panel EXCLUDING the "Done"
+        button -- the cases that speak of the panel's "four controls" (High
+        Contrast, Zoom In, Zoom Out, Reset) do not name Done (see #134630
+        note). Live 2026-10-21: in dark mode Done renders #1d1d1b on #911731
+        (1.9:1) -- a separate observation, not part of those cases' oracle."""
+        return self.run_color_contrast_audit(
+            context={"include": [[self.PANEL]], "exclude": [[self._DONE_BUTTON_CSS]]})
 
     # ── Zoom In / Zoom Out labels (ADO #134634) ──────────────────────────
     def zoom_in_label(self) -> str:
@@ -728,3 +776,250 @@ class AccessibilityToolsComponent(BasePage):
             if style["color"] == effective_bg:
                 return False
         return True
+
+    # ── Batch C (2026-10-21) ══════════════════════════════════════════════
+    # ADO #134502-#134530, #134637-#134668 (28 cases, Web only). Live
+    # measurements behind these methods (anonymous context, 1920x1080 unless
+    # stated), all read from the public site -- no CMS access:
+    #   - Zoom is the inline CSS variable `--qc-a11y-zoom-scale` on <html>
+    #     (1 at load), applied to the root font-size: 16px base, +/-0.1 per
+    #     click (16 -> 17.6 -> 19.2 ...). Range 0.8 .. 1.4 (80%..140%):
+    #     Zoom In plateaus after 4 clicks at 22.4px, Zoom Out after 2 at
+    #     12.8px; both buttons stay enabled at the limit (clicks are no-ops).
+    #   - State lives in sessionStorage (`qcA11yZoomStep`, `qcA11yContrast`)
+    #     plus the `qcTheme` cookie for dark mode -- so it survives a reload
+    #     and a navigation in the same tab. Reset clears zoom AND contrast,
+    #     and ALSO switches dark mode back to light (`qcTheme=light`).
+    #   - Dark mode + High Contrast together: <html data-theme="dark"> AND
+    #     class `qc-a11y-contrast`; body renders black/white either way, and
+    #     the combination survives a reload identically.
+    #   - The header "Contact Us" link is a Senna soft-navigation (window
+    #     object survives) -- hence is_same_document_since_mark() checks the
+    #     URL as well as a window marker. HeaderComponent.NAV_LINK_ABOUT_US is
+    #     stale (About Us is now a mega-menu BUTTON, extractor:
+    #     get_by_role("button", name="About Us")) -- About Us is therefore
+    #     opened by its direct path here, not via that locator.
+    #   - The panel's rows are "Dark mode", "High contrast", "Zoom" -- there
+    #     is NO "Keyboard Navigation Highlight" row; the focus ring comes
+    #     from the always-on qc-a11y-keyboard CSS bundle.
+    #   - Contact Us form inputs render no outline/box-shadow of their own:
+    #     their focus ring is drawn on the wrapping `div.qc-input`
+    #     (:focus-within) -- focus_audit_walk() credits a wrapper only when
+    #     its focused style differs from its pre-walk unfocused style.
+    ABOUT_US_PATH = "/web/qatar-chamber/about-us"
+    MAIN_CONTENT = "#main-content"  # div[role=main] -- keyboard-nav bundle's landmark
+    MAIN_CONTENT_SECTIONS = f"{MAIN_CONTENT} section"
+    PANEL_ROW_LABELS = f"{PANEL} >> .qc-a11y-row-label"
+    # Intent-anchored on the English row label the case names. Resolves to
+    # 0 nodes on the live panel today (see note above) -- it is the honest
+    # locator for the control ADO #134528/#134529 require, not a guess at
+    # some other element.
+    KEYBOARD_HIGHLIGHT_SWITCH = (
+        f'{PANEL} >> div.qc-a11y-row:has(.qc-a11y-row-label:text-matches("keyboard navigation highlight", "i"))'
+        " >> [role=switch]"
+    )
+
+    # ── Navigation / reload ─────────────────────────────────────────────
+    def open_about_us(self, locale: str = "en") -> "AccessibilityToolsComponent":
+        self.open(web_url(self.ABOUT_US_PATH, locale=locale))
+        self.wait_for(self.header.HEADER)
+        return self
+
+    def reload(self) -> "AccessibilityToolsComponent":
+        """Full reload of the current URL through BasePage.open() (license
+        gate / overlay guards included)."""
+        self.open(self.page.url)
+        self.wait_for(self.header.HEADER)
+        return self
+
+    # ── No-reload detection ─────────────────────────────────────────────
+    _MARKER = "__qcA11yNoReloadMarker"
+
+    def mark_document(self) -> "AccessibilityToolsComponent":
+        """Plants a window marker and remembers the URL. A full reload wipes
+        the marker; a soft (Senna) navigation keeps the window but changes
+        the URL -- is_same_document_since_mark() catches both."""
+        self.page.evaluate(f"() => {{ window.{self._MARKER} = true; }}")
+        self._marked_url = self.page.url
+        return self
+
+    def is_same_document_since_mark(self) -> bool:
+        marker = self.page.evaluate(f"() => window.{self._MARKER} === true")
+        return bool(marker) and self.page.url == getattr(self, "_marked_url", None)
+
+    # ── Zoom state ──────────────────────────────────────────────────────
+    def root_font_size_px(self) -> float:
+        """Computed <html> font-size in px -- the base size every rem on the
+        site scales from (16.0 at default zoom)."""
+        return float(self.page.evaluate(
+            "() => parseFloat(getComputedStyle(document.documentElement).fontSize)"))
+
+    def zoom_scale(self) -> float:
+        """Current `--qc-a11y-zoom-scale` value on <html> (1.0 = default)."""
+        raw = self.page.evaluate(
+            "() => getComputedStyle(document.documentElement).getPropertyValue('--qc-a11y-zoom-scale')")
+        raw = (raw or "").strip()
+        return round(float(raw), 2) if raw else 1.0
+
+    def click_zoom_out(self) -> "AccessibilityToolsComponent":
+        self.click(self.ZOOM_OUT_BUTTON)
+        return self
+
+    def click_reset(self) -> "AccessibilityToolsComponent":
+        self.click(self.RESET_BUTTON)
+        return self
+
+    def has_persisted_customization(self) -> bool:
+        """True if the widget's own sessionStorage keys still hold a zoom or
+        contrast override (`qcA11yZoomStep`, `qcA11yContrast`)."""
+        return self.page.evaluate(
+            "() => ['qcA11yZoomStep', 'qcA11yContrast'].some(k => sessionStorage.getItem(k) !== null)")
+
+    # ── Contrast / theme state ──────────────────────────────────────────
+    def double_click_high_contrast(self) -> "AccessibilityToolsComponent":
+        self.double_click(self.HIGH_CONTRAST_SWITCH)
+        return self
+
+    def high_contrast_class_token_count(self) -> int:
+        """How many times `qc-a11y-contrast` appears in <html>'s raw class
+        attribute -- >1 would be a duplicated class (ADO #134527)."""
+        return self.page.evaluate(
+            "() => (document.documentElement.getAttribute('class') || '')"
+            ".split(/\\s+/).filter(c => c === 'qc-a11y-contrast').length")
+
+    def is_dark_mode_active(self) -> bool:
+        """Authoritative dark-mode signal: <html data-theme="dark">
+        (standards.md, Theme & Contrast Coverage Matrix)."""
+        return self.page.evaluate("() => document.documentElement.getAttribute('data-theme')") == "dark"
+
+    def body_text_color(self) -> str:
+        return self.page.evaluate("() => getComputedStyle(document.body).color")
+
+    def document_direction(self) -> str:
+        return self.page.evaluate("() => document.documentElement.dir")
+
+    def is_panel_open_class_present(self) -> bool:
+        """`html.qc-a11y-panel-open` -- the open-state class the widget adds
+        while the panel is shown (ADO #134653's "no residual overlay")."""
+        return self.page.evaluate(
+            "() => document.documentElement.classList.contains('qc-a11y-panel-open')")
+
+    # ── Layout geometry (ADO #134663) ───────────────────────────────────
+    def layout_snapshot(self) -> dict:
+        """Document-coordinate boxes {x, y, width, height} of the header,
+        the main-content landmark, every rendered section inside it (in DOM
+        order -- so section ORDER is part of the comparison), and the
+        footer."""
+        from web.pages.components.footer_component import FooterComponent
+
+        return self.page.evaluate(
+            "(sel) => { const box = e => { const r = e.getBoundingClientRect(); "
+            "return {x: r.x + scrollX, y: r.y + scrollY, width: r.width, height: r.height}; }; "
+            "const one = s => { const e = document.querySelector(s); return e ? box(e) : null; }; "
+            "return {header: one(sel.header), main: one(sel.main), footer: one(sel.footer), "
+            "sections: Array.from(document.querySelectorAll(sel.sections))"
+            ".filter(e => e.getBoundingClientRect().height > 0)"
+            ".map(e => ({cls: (e.getAttribute('class') || '').split(' ')[0], ...box(e)}))}; }",
+            {"header": self.header.HEADER, "main": self.MAIN_CONTENT,
+             "footer": FooterComponent.FOOTER, "sections": self.MAIN_CONTENT_SECTIONS},
+        )
+
+    # ── Panel rows / Keyboard Navigation Highlight (ADO #134528, #134529) ──
+    def panel_row_labels(self) -> list:
+        return [t.strip() for t in self.page.locator(self.PANEL_ROW_LABELS).all_inner_texts()]
+
+    def is_keyboard_highlight_toggle_present(self) -> bool:
+        return self.page.locator(self.KEYBOARD_HIGHLIGHT_SWITCH).count() > 0
+
+    def keyboard_highlight_toggle_state(self) -> str:
+        return self.page.locator(self.KEYBOARD_HIGHLIGHT_SWITCH).get_attribute("aria-checked")
+
+    def click_keyboard_highlight_toggle(self) -> "AccessibilityToolsComponent":
+        self.click(self.KEYBOARD_HIGHLIGHT_SWITCH)
+        return self
+
+    # ── Keyboard operation of the panel (ADO #134507, #134639) ──────────
+    def focus_panel_control_via_tab(self, locator: str, max_presses: int = 8) -> bool:
+        """Tab (bounded) until `locator` -- one of this panel's own control
+        constants -- holds focus. The panel traps focus in the order Close,
+        Dark mode, High contrast, Zoom out, Zoom in, Reset, Done (measured
+        live), so 8 presses always cover one full lap."""
+        return self.press_tab_until_focused(locator, max_presses=max_presses)
+
+    # ── Whole-page focus audit (ADO #134507) ────────────────────────────
+    _PICK_WRAPPERS_JS = r"""
+      const __pick = e => { if (!e) return null; const cs = getComputedStyle(e);
+        return {outline: cs.outlineStyle + ' ' + cs.outlineWidth + ' ' + cs.outlineColor,
+                shadow: cs.boxShadow, cls: (e.getAttribute('class') || '')}; };
+      const __wrappers = el => [__pick(el.parentElement),
+                                __pick(el.parentElement && el.parentElement.parentElement)];
+    """
+    _UNFOCUSED_WRAPPERS_JS = r"""() => {
+      __KEY_FN__ __PICK__
+      const SEL = 'a[href],button,input,select,textarea,summary,[tabindex]:not([tabindex="-1"]),[role=switch]';
+      const out = {};
+      document.querySelectorAll(SEL).forEach(el => { out[__key(el)] = __wrappers(el); });
+      return out;
+    }"""
+    _FOCUSED_WRAPPERS_JS = r"""() => { __PICK__
+      const el = document.activeElement;
+      return (!el || el === document.body) ? null : __wrappers(el); }"""
+    _REGION_JS = r"""(sel) => { const el = document.activeElement;
+      if (!el || el === document.body) return null;
+      if (el.closest(sel.header)) return 'header';
+      if (el.closest(sel.main)) return 'main';
+      if (el.closest(sel.footer)) return 'footer';
+      return 'other'; }"""
+
+    def focus_audit_walk(self, max_presses: int) -> dict:
+        """Tab through the whole page (same ring-closure contract as
+        BasePage.focus_walk -- `completed` False means a truncated walk) and
+        judge every stop's focus indicator:
+
+          - own outline / box-shadow visible (BasePage descriptor), OR
+          - its parent/grandparent wrapper's style while focused DIFFERS from
+            that wrapper's style captured BEFORE the walk (nothing focused,
+            no validation yet) and renders a visible outline/box-shadow --
+            the :focus-within ring Contact Us draws on `div.qc-input`. A
+            wrapper carrying a validation class (`--invalid`) is never
+            credited, so validation styling is not mistaken for focus.
+
+        Each recorded stop gets `indicated` (bool) and `region`
+        (header/main/footer/other)."""
+        unfocused = self.page.evaluate(
+            self._UNFOCUSED_WRAPPERS_JS.replace("__KEY_FN__", self._ELEMENT_KEY_FN)
+            .replace("__PICK__", self._PICK_WRAPPERS_JS))
+        from web.pages.components.footer_component import FooterComponent
+
+        regions = {"header": self.header.HEADER, "main": self.MAIN_CONTENT, "footer": FooterComponent.FOOTER}
+        focused_js = self._FOCUSED_WRAPPERS_JS.replace("__PICK__", self._PICK_WRAPPERS_JS)
+        stops = []
+        first = None
+        completed = False
+        for _ in range(max_presses):
+            self.press_key("Tab")
+            d = self.active_element()
+            stops.append(d)
+            if d is None or d.get("key") is None:
+                continue
+            d["region"] = self.page.evaluate(self._REGION_JS, regions)
+            d["indicated"] = bool(d["hasVisibleFocusIndicator"]) or self._wrapper_ring_changed(
+                unfocused.get(d["key"]), self.page.evaluate(focused_js))
+            if first is None:
+                first = d["key"]
+            elif d["key"] == first:
+                completed = True
+                break
+        return {"stops": stops, "completed": completed, "presses": len(stops), "max_presses": max_presses}
+
+    @staticmethod
+    def _wrapper_ring_changed(before, now) -> bool:
+        if not (before and now):
+            return False
+        for was, cur in zip(before, now):
+            if not (was and cur) or "--invalid" in cur["cls"]:
+                continue
+            visible_now = cur["shadow"] not in ("none", "") or not cur["outline"].startswith("none")
+            if visible_now and (cur["shadow"] != was["shadow"] or cur["outline"] != was["outline"]):
+                return True
+        return False

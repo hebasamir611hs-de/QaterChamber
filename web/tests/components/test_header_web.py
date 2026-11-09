@@ -37,6 +37,8 @@ color do not (#134239). All scripted per each case's exact stated values —
 a mismatch is a legitimate, honestly-reported failure, not silently adjusted.
 """
 
+import json
+
 import allure
 import pytest
 
@@ -365,3 +367,58 @@ def test_header_nav_dropdown_remains_collapsed_until_interaction(page):
     # Assert
     assert submenu_collapsed, "the dropdown panel should not be rendered/visible before interaction"
     assert chevron_visible, "the chevron affordance should still show before interaction"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Site Header")
+@allure.story("Nav dropdown expands on hover")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Hovering a nav item with a sub-menu expands the dropdown showing its child items")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134258")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.navigation
+@pytest.mark.pbi_129363
+@pytest.mark.tc_134258
+@pytest.mark.traceability("ADO-134258")
+@pytest.mark.parametrize("locale", ["en", "ar"])
+@pytest.mark.parametrize("page", [{"auth": False, "viewport": (1920, 1080)}], indirect=True)
+def test_header_nav_hover_expands_submenu_with_child_items(page, locale):
+    """ADO-134258 | PBI 129363. Every top-level item with a sub-menu, not only
+    the first: closed before, opens on hover with visible, linked child items
+    inside the window, closes when the cursor leaves. Logged out (a visitor's
+    view), EN and AR. Each opened panel is attached for the side-by-side with
+    the Figma "Menu item / Mega menu, Status=Hover" variants (Figma Page 1 /
+    Components) — qa-engine ui-design-oracle.md §2."""
+    from config.settings import web_url
+
+    header = HeaderComponent(page)
+    with allure.step(f"Open Home ({locale}) logged out"):
+        header.open_anonymous(web_url("/home", locale=locale))
+        header.wait_for(header.HEADER)
+    with allure.step("Hover each nav item that has a sub-menu"):
+        results = header.hover_each_submenu()
+    for r in results:
+        shot = r.pop("screenshot", None)
+        if shot:
+            allure.attach(shot, name=f"{locale} submenu: {r['item']}", attachment_type=allure.attachment_type.PNG)
+    allure.attach(json.dumps(results, ensure_ascii=False, indent=1, default=str), name=f"{locale} submenus",
+                  attachment_type=allure.attachment_type.JSON)
+
+    assert results, "no nav item with a sub-menu was found in the header"
+    problems = []
+    for r in results:
+        if not r["closed_before"]:
+            problems.append(f"{r['item']}: open before any hover")
+        if not r["opened"]:
+            problems.append(f"{r['item']}: did not expand on hover")
+            continue
+        named = [c for c in r["children"] if c[0] and c[1]]
+        if not named:
+            problems.append(f"{r['item']}: expanded with no visible linked child items")
+        if not r["inside_window"]:
+            problems.append(f"{r['item']}: dropdown extends outside the window {r['panel']}")
+        if not r["closed_after"]:
+            problems.append(f"{r['item']}: stays open after the cursor leaves")
+    assert not problems, f"[{locale}] " + "; ".join(problems)

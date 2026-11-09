@@ -49,6 +49,23 @@ anyone calls it a bug.
   in-tolerance differences add up to a visibly broken layout (overlap,
   clipping, wrapping, horizontal scroll), the broken layout itself is the
   finding.
+- **Bug vs priority (user decision, 2026-10-25).** These tolerances decide
+  *whether* a difference is a bug. How visible it is decides only its
+  **priority**: a difference "not visible to the eye" but beyond tolerance is
+  still a finding, at P4. Any rule saying an invisible difference is not a bug is
+  superseded by this line.
+- **Side-by-side before Passed (2026-10-25).** A Figma-backed UI case is recorded
+  Passed only with the Figma render of the frame next to a live screenshot at the
+  same viewport, language and theme. "Matches Figma" with no picture is not a
+  verdict. One finding per element, never one for a whole frame.
+- **Arrangement first.** Check presence, order, side, alignment, RTL mirroring,
+  grid, grouping and layering before tokens (qa-engine `ui-design-oracle.md` §1).
+- **Figma values, element by element (2026-10-25).** A UI case is asserted with
+  the values in the Figma file, not with its own wording: "maroon button with an
+  arrow" means the button's fill, radius, padding, label font and the arrow's
+  colour. If the case's wording and Figma disagree, Figma wins and the case is
+  flagged for correction. Hover/click states (open menu, hovered row, modal) are
+  compared with their Figma **prototype** destination, not only "it opens".
 
 ## Rule 2 — One Bug per Root Cause, Not per Test
 
@@ -224,3 +241,54 @@ Every bug filed on this project is assigned by the layer the root cause sits in:
   Alaa). Reassigning goes through the normal two-call preview and confirm.
   Use the person's Azure identity (email preferred). If Azure rejects the name,
   the create is refused, so ask the user for the exact identity.
+
+## Rule 7 — UI Findings When Figma Is Silent, and the Sprint Sweep
+
+The user set this rule on 2026-10-25, after a manual Sprint-2 UI pass filed 39
+bugs the automated runs had not. The full contract is qa-engine
+`context/ui-design-oracle.md`; this rule fixes the project's choices.
+
+1. **Search before "no design".** When the PBI describes a view or state that no
+   linked frame shows (calendar, modal, open dropdown, hover), search the whole
+   Figma file, components and "Page 1" included
+   (`extract_figma_design(search=...)`). Nothing found → the view goes on a
+   **design-gap list** for the designer. A gap is never Not Applicable.
+2. **Figma-silent conventions.** Where the design is silent, the expected result
+   is the convention: RTL mirrors and directional icons (prev/next, chevrons)
+   flip; prev/next sit together at the toolbar's end; hover/focus/disabled follow
+   the design-system component; dark and high contrast keep text legible (WCAG
+   AA); long text wraps cleanly; empty states say so.
+3. **A violation is a finding tagged `Figma-silent – designer to confirm`.** It
+   goes into the proposal table with its evidence and the user decides. It is
+   never auto-excluded as N/A and never filed without the user's yes (Rule 3,
+   step 5). This narrows the earlier "missing UI is a bug only if the PBI or
+   Figma requires it": that still holds for a missing **control**; a broken
+   **state or arrangement** of a control that exists is judged by the
+   conventions.
+4. **Content stays content.** A record's own English text on an AR page, or an
+   editor's long title, is a content issue, not a UI bug, unless the UI breaks
+   on it (overflow, overlap), which is a UI bug.
+5. **Figma changed after the run.** Compare the design's `last_modified` with the
+   run date. A design edited after the run is a new requirement for a new story,
+   not a bug against the PBI that ran.
+6. **One bug list.** Before filing, read the PBI's open bugs
+   (`get_bugs_under_backlog`), not only the Test Case's: a manual tester's bug on
+   the same element and root cause gets an occurrence, not a twin. A bug closed
+   Not a Bug is not re-filed without new evidence and the user's yes.
+7. **Sprint sweep.** Once per sprint, `pytest -m sprint_sweep -n 0` with its own
+   `--alluredir` runs `web/tests/frontend_quality/` across the public pages:
+   dir/lang and sideways overflow at 1920/768/390, English UI text on AR pages,
+   console errors and failed requests, contrast in dark and high contrast, layout
+   jump after the language switch, and the forms on Firefox/WebKit. Its failures
+   are findings for Rule 3. The same sweep includes a manual **cross-page
+   consistency** pass (the same component compared on every page that uses it) and
+   a headed **interaction sweep** on every form (real clicks and keyboard on
+   dropdowns, native selects, date pickers, modals, toasts). Bugs closed Done in
+   the last sprints get their linked test re-run (regression watch).
+8. **Element-by-element Figma audit.** In the same sweep, `tools/figma_live_diff.py`
+   compares every Figma text of each in-scope frame (and the button/icon around
+   it) with the live page, at the frame's width, language and theme, plus each
+   hover/click prototype state. Cases already recorded Passed are NOT re-run or
+   re-recorded (PBI running rule 7); the audit's differences are new findings.
+   Tools: `tools/cross_page_consistency.py`, `tools/interaction_sweep.py`,
+   `tools/figma_live_diff.py`.

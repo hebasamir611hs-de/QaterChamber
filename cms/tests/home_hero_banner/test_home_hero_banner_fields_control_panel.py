@@ -226,7 +226,9 @@ def test_active_status_false_saved(page):
 def test_counter_value_accepted_with_title(page):
     """Counter Title (EN) carries the QCTEST name; Value = 50K+."""
     admin = Counter(page)
-    title = ac.run_title(135086, "Active-Members")
+    # Counter Title is capped at 30 characters on the form ("is 35 characters;
+    # the maximum is 30", read live 2026-10-18), so the QCTEST name is kept short.
+    title = ac.run_title(135086, "AM")
     try:
         admin.open_form(ROLE_EDITOR)
         admin.fill("title_en", title)

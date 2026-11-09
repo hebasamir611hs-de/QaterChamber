@@ -61,13 +61,42 @@ independent content observation is also recorded in each: production's own
 real order/active-set does not match the case's stated example values
 either, which the QA Manager may want to fold back into a CMS-authoring
 batch instead.
+
+UPDATE 2026-10-21 (QA lead decision): 131142 now RUNS on a disposable
+`QCTEST-131142-snap-*` record (web/tests/conftest.py `qctest_records`,
+cms/pages/components/qctest_record_admin.py), with a positive control -- see
+that test's docstring. 131141 is unchanged.
 """
+
+import json
+import uuid
 
 import allure
 import pytest
 
+from cms.pages.components.qctest_record_admin import PNG_FIXTURE as QCTEST_PNG, SocialIconQctest
 from core.web.browser import launch_webkit_browser, new_context
+from core.web.design_tokens import px_close
 from web.pages.home_social_icons.home_social_icons_page import HomeSocialIconsPage
+
+# Real Social Media Icon rows for the 2026-10-21 reversible-write cases (131141, 131198).
+_SMI_OBJ = {"slug": "social-media-icon", "plural": "socialmediaicons"}
+_SMI_ACTIVE = {**_SMI_OBJ, "label": "Active Status", "api_field": "activeStatus"}
+
+
+def _poll_public(predicate, timeout: float = 180.0, poll: float = 10.0) -> bool:
+    """Public propagation poll (QA lead: a change landing within 3 min is fine)."""
+    from core.utils.waits import WaitTimeoutError, wait_until
+
+    try:
+        wait_until(predicate, timeout=timeout, poll=poll)
+        return True
+    except WaitTimeoutError:
+        return False
+
+# bug-rules.md Rule 1: layout (non-image, non-text) geometry is compared at
+# ±2 px against Figma; text properties (font size, line height) stay exact.
+LAYOUT_TOLERANCE_PX = 2
 
 
 # ── TC 131133 — Section position relative to Latest News ──────────────────
@@ -117,32 +146,42 @@ def test_social_icons_section_renders_directly_after_latest_news_131133(page):
 @pytest.mark.tc_131134
 def test_container_matches_figma_desktop_style_131134(page):
     """ADO-131134. Asserted against the literal Figma values the case states.
-    Confirmed live this session (see HomeSocialIconsPage's EXTENDED module
-    docstring): none of the 4 values match the container currently rendered
-    on qcdev (padding 40px 16px vs 20px 32px stated; solid white background,
-    no gradient; no border at all, not the stated 1px gradient border;
-    border-radius 0px vs the stated 12px) — a genuine design/implementation
-    gap on the confirmed, already-established section container, not a
-    locator problem. Scripted and expected to FAIL honestly rather than
-    loosened to match live rendering."""
+
+    RETARGETED 2026-10-21: the Figma container is the INNER card
+    (`div.qc-social-panel` — rounded, tinted 1px border, gradient fill), not
+    the full-width outer wrapper `div.qc-home-social` this test previously
+    measured (its 40px 16px padding is the page band, not the card). Layout
+    values (padding, border width, corner radius) use the project's ±2 px
+    layout tolerance (bug-rules.md Rule 1); the expected Figma values are
+    unchanged."""
     home = HomeSocialIconsPage(page)
 
     with allure.step("Load Home page on desktop viewport (1920x1080)"):
         home.open_home()
         home.scroll_to_section()
 
-    with allure.step("Measure the section container's padding, gap, background, border, and corner radius"):
-        style = home.container_style()
+    with allure.step("Measure the section card's padding, background, border, and corner radius"):
+        style = home.card_style()
 
-    with allure.step("Compare against the Figma-verified values: padding 20px 32px; gradient background "
-                      "#FBF6F8->#F6F6F6; 1px gradient border #E3C5CB->#DEDEDD; corner radius 12px"):
-        assert style["padding"] == "20px 32px", f"padding: expected '20px 32px', got {style['padding']!r}"
+    with allure.step("Compare against the Figma-verified values (±2 px layout tolerance): padding 20px 32px; "
+                      "gradient background #FBF6F8->#F6F6F6; 1px gradient border #E3C5CB->#DEDEDD; "
+                      "corner radius 12px"):
+        padding = (style["paddingTop"], style["paddingRight"], style["paddingBottom"], style["paddingLeft"])
+        for side, actual, expected in zip(("top", "right", "bottom", "left"), padding,
+                                          ("20px", "32px", "20px", "32px")):
+            assert px_close(actual, expected, tolerance=LAYOUT_TOLERANCE_PX), (
+                f"padding-{side}: expected {expected} (±{LAYOUT_TOLERANCE_PX}px), got {actual!r}"
+            )
         assert "gradient" in style["backgroundImage"], (
             f"background: expected a gradient (#FBF6F8->#F6F6F6), got backgroundImage={style['backgroundImage']!r}, "
             f"backgroundColor={style['backgroundColor']!r}"
         )
-        assert style["borderWidth"] == "1px", f"border width: expected '1px', got {style['borderWidth']!r}"
-        assert style["borderRadius"] == "12px", f"corner radius: expected '12px', got {style['borderRadius']!r}"
+        assert px_close(style["borderTopWidth"], "1px", tolerance=LAYOUT_TOLERANCE_PX), (
+            f"border width: expected '1px' (±{LAYOUT_TOLERANCE_PX}px), got {style['borderTopWidth']!r}"
+        )
+        assert px_close(style["borderRadius"], "12px", tolerance=LAYOUT_TOLERANCE_PX), (
+            f"corner radius: expected '12px' (±{LAYOUT_TOLERANCE_PX}px), got {style['borderRadius']!r}"
+        )
 
 
 # ── TC 131135 — Heading typography ──────────────────────────────────────────
@@ -232,27 +271,44 @@ def test_subtext_matches_figma_desktop_typography_131136(page):
 @pytest.mark.pbi_129373
 @pytest.mark.tc_131139
 def test_icon_row_right_aligned_no_wrap_131139(page):
-    """ADO-131139. `justify-content`/`gap` are confirmed live to match; the
-    case's own "8 active social icons configured" precondition does not
-    hold (qcdev currently renders 9 real production icons) — these 3 row-
-    level CSS properties are count-independent, so the case's own literal
-    assertion is scripted regardless (see HomeSocialIconsPage's EXTENDED
-    module docstring). `flex-wrap` is confirmed live as `wrap`, not the
-    stated `nowrap` — asserted literally, expected to FAIL honestly."""
+    """ADO-131139. The case's behaviour is "icons on one row, right-aligned,
+    no wrap". REWORKED 2026-10-21: asserted as rendered behaviour, not the
+    `flex-wrap` CSS property (the row declares `flex-wrap: wrap`, which is
+    an implementation choice — whether icons actually wrap is what the case
+    is about). One row = every icon's top within ±2 px of the first icon's;
+    right-aligned = the last icon's right edge within ±2 px of the card's
+    content right edge (bug-rules.md Rule 1 layout tolerance).
+    `justify-content`/`gap` are kept as stated Figma values. The case's
+    "8 active social icons" precondition does not hold (qcdev renders 9
+    real icons); the checks are count-independent."""
     home = HomeSocialIconsPage(page)
 
     with allure.step("Load Home page on desktop viewport with the real published social icons"):
         home.open_home()
         home.scroll_to_section()
 
-    with allure.step("All active icons render in a single row"):
-        assert len(home.social_icon_hrefs()) > 0
+    with allure.step("All active icons render in a single row (no wrap)"):
+        boxes = home.icon_bounding_boxes()
+        assert boxes and all(boxes), f"expected rendered icon boxes, got {boxes!r}"
+        first_top = boxes[0]["y"]
+        tops = [round(b["y"], 1) for b in boxes]
+        assert all(abs(b["y"] - first_top) <= LAYOUT_TOLERANCE_PX for b in boxes), (
+            f"expected all {len(boxes)} icons on one row (tops within ±{LAYOUT_TOLERANCE_PX}px), got tops={tops}"
+        )
 
-    with allure.step("Measure alignment, gap, and wrap behavior: justify-content flex-end, gap 12px, flex-wrap nowrap"):
+    with allure.step("The icon row is right-aligned within the card"):
+        last = max(boxes, key=lambda b: b["x"] + b["width"])
+        icons_right = last["x"] + last["width"]
+        card_right = home.card_content_right_edge()
+        assert abs(icons_right - card_right) <= LAYOUT_TOLERANCE_PX, (
+            f"expected the last icon's right edge at the card's content edge {card_right:.1f}px "
+            f"(±{LAYOUT_TOLERANCE_PX}px), got {icons_right:.1f}px"
+        )
+
+    with allure.step("Row alignment and gap: justify-content flex-end, gap 12px"):
         style = home.row_style()
         assert style["justifyContent"] == "flex-end"
         assert style["gap"] == "12px"
-        assert style["flexWrap"] == "nowrap", f"flex-wrap: expected 'nowrap', got {style['flexWrap']!r}"
 
 
 # ── TC 131141 — Display Order (SKIPPED — unestablishable precondition) ─────
@@ -269,21 +325,64 @@ def test_icon_row_right_aligned_no_wrap_131139(page):
 @pytest.mark.uat
 @pytest.mark.pbi_129373
 @pytest.mark.tc_131141
-@pytest.mark.skip(
-    reason="ROUTING MISMATCH — TC 131141's own Step 1 is a CMS authoring action "
-    "(configure/publish exactly 5 icons at Display Order 1-5), out of scope for this "
-    "no-CMS-write 'Frontend UI/Figma rendering' batch. The precondition does not hold on "
-    "qcdev's real production data either: 9 icons are live (not 5), and their confirmed "
-    "left-to-right order is Facebook, X, LinkedIn, YouTube, Instagram, Snapchat, Flickr, "
-    "Telegram, WhatsApp — positions 4/5 (YouTube, Instagram) are swapped versus the case's "
-    "stated Facebook/X/LinkedIn/Instagram/YouTube. See test module docstring."
-)
-def test_icons_display_in_configured_order_131141(page):
-    # ADO-131141 — not executed; see the skip reason above.
-    pass
+@pytest.mark.xdist_group("smi_production_rows")
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_icons_display_in_configured_order_131141(page, real_records):
+    """ADO-131141 | PBI 129373.
+
+    Precondition (QA lead instruction 2026-10-21, reversible real writes):
+    "exactly 5 active icons at Display Order 1-5". qcdev holds 9 real
+    Published + Active icons whose Home Display Order is 1..8 and 700, so
+    the minimum change is to untick Active Status on every active icon
+    OUTSIDE Home Display Order 1-5 (4 on 2026-10-21: WhatsApp 46165,
+    Telegram 46181, Snapchat 46197, Flickr 135360) -- no order is edited,
+    no QCTEST record is needed. Saved TEST_USER session (admin; the Editor
+    login was locked that day; a content precondition, not a workflow
+    case). Snapshot + screenshot first; `real_records` re-ticks and verifies
+    each in teardown. Public reads: fresh logged-out `page`."""
+    home = HomeSocialIconsPage(page)
+
+    with allure.step("Baseline (logged out): the Home social section renders"):
+        home.open_home_settled()
+        assert home.is_section_displayed(), "baseline: Home social section not rendered before the change"
+
+    with allure.step("CMS: leave exactly 5 active icons, at Home Display Order 1-5, published"):
+        items = real_records.items(**_SMI_OBJ)
+        keep = sorted((i for i in items if i.get("activeStatus") and i.get("homeDisplayOrder") in (1, 2, 3, 4, 5)),
+                      key=lambda i: i["homeDisplayOrder"])
+        assert [i["homeDisplayOrder"] for i in keep] == [1, 2, 3, 4, 5], (
+            f"precondition: active icons at Home Display Order 1-5 are "
+            f"{[(i['platformName'], i['homeDisplayOrder']) for i in keep]}")
+        assert all(i.get("showOnHome") for i in keep), "precondition: an order 1-5 icon is not Show on Home"
+        keep_codes = [i["externalReferenceCode"] for i in keep]
+        extra = [i["externalReferenceCode"] for i in items
+                 if i.get("activeStatus") and i["externalReferenceCode"] not in keep_codes]
+        for code in extra:
+            real_records.change(code=code, value=False, **_SMI_ACTIVE)
+        still = real_records.codes_where(_SMI_OBJ["slug"], _SMI_OBJ["plural"], "activeStatus", True)
+        assert sorted(still) == sorted(keep_codes), f"precondition not reached: {still}"
+        expected = [i["redirectUrl"] for i in keep]
+        configured = [(i["platformName"], i["homeDisplayOrder"]) for i in keep]
+
+    with allure.step("Navigate to the Home page (logged out), polled up to 3 min"):
+        seen = {"hrefs": []}
+
+        def _five_rendered() -> bool:
+            home.open_home_settled()
+            seen["hrefs"] = home.social_icon_hrefs() if home.is_section_displayed() else []
+            return len(seen["hrefs"]) == 5
+
+        _poll_public(_five_rendered)
+        allure.attach(json.dumps({"configured": configured, "expected_hrefs": expected,
+                                  "rendered_hrefs": seen["hrefs"]}, ensure_ascii=False, indent=1),
+                      name="131141 order evidence", attachment_type=allure.attachment_type.JSON)
+
+    # Assert
+    assert seen["hrefs"] == expected, (
+        f"expected the 5 icons in Display Order {configured} -> {expected}; rendered {seen['hrefs']}")
 
 
-# ── TC 131142 — Active Status = False exclusion (SKIPPED) ──────────────────
+# ── TC 131142 — Active Status = False exclusion (QCTEST record, 2026-10-21) ──────────────────
 @allure.epic("Home Page")
 @allure.feature("Social Media Icons Section")
 @allure.story("Active Status exclusion")
@@ -296,16 +395,66 @@ def test_icons_display_in_configured_order_131141(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129373
 @pytest.mark.tc_131142
-@pytest.mark.skip(
-    reason="ROUTING MISMATCH — TC 131142's own Step 1 is a CMS authoring action (publish "
-    "Snapchat with Active Status = False), out of scope for this no-CMS-write batch. The "
-    "precondition does not hold on qcdev's real production data either: Snapchat is "
-    "confirmed live as one of the 9 currently ACTIVE production icons. See test module "
-    "docstring."
-)
-def test_inactive_icon_not_displayed_131142(page):
-    # ADO-131142 — not executed; see the skip reason above.
-    pass
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_inactive_icon_not_displayed_131142(page, qctest_records):
+    """ADO-131142 | PBI 129373.
+
+    Precondition (QA lead decision 2026-10-21): a disposable Snapchat icon
+    record (`QCTEST-131142-snap-*`, Show on Home ticked, Active Status
+    UNticked) Published through Object Authoring as TEST_USER (admin; Publish
+    goes live directly -- the Editor login was refused that day), deleted in
+    teardown. DATA ADAPTATION: qcdev has 9 real Published + Active icons (the
+    real Snapchat among them), not the case's "4 active + Snapchat" -- so
+    "Snapchat does not appear" is asserted for THIS record (its unique
+    redirect href), and the real icons are the "active icons still render"
+    half. POSITIVE CONTROL: the same record is then ticked Active and must
+    appear, proving the absence was the Active gate and not a record the
+    Home strip could never render. Public reads: fresh logged-out `page`."""
+    tag = uuid.uuid4().hex[:6]
+    marker = f"QCTEST-131142-snap-{tag}"
+    href_marker = f"qctest-131142-{tag}"
+    href = f"https://snapchat.com/add/{href_marker}"
+    admin = SocialIconQctest(qctest_records.page)
+    home = HomeSocialIconsPage(page)
+
+    with allure.step("Publish Snapchat icon with Active Status = False alongside the active icons"):
+        code = qctest_records.create(admin, {
+            "platform": "Snapchat",
+            "image": QCTEST_PNG,
+            "alt": (marker, f"{marker} سناب"),
+            "url": (href, href),
+            "new_tab": True,
+            "order": "9900",
+            "show_on_home": True,
+            "home_order": "9900",
+            "active": False,
+            "platform_name": ("QCTEST Snapchat", "QCTEST سناب شات"),
+        }, marker)
+        active_saved = admin.active_of(code)
+        show_on_home_saved = admin.flag("show_on_home")
+        badge = admin.row_badge(code)
+
+    with allure.step("Load the Home page (logged out) and inspect the rendered icon row"):
+        home.open_home()
+        hrefs_inactive = home.social_icon_hrefs()
+
+    with allure.step("Positive control: tick Active on the same record, the icon must now render"):
+        qctest_records.set_active(admin, code, marker, True)
+        appeared = home.reload_until(lambda p: p.has_icon_with_href_marker(href_marker), timeout_ms=180000)
+        hrefs_active = home.social_icon_hrefs()
+
+    allure.attach(f"record={code} badge={badge} active_saved={active_saved} show_on_home={show_on_home_saved}\n"
+                  f"inactive hrefs={hrefs_inactive}\nafter-activation hrefs={hrefs_active}",
+                  name="131142 evidence", attachment_type=allure.attachment_type.TEXT)
+
+    # Assert
+    assert active_saved is False and show_on_home_saved is True, (active_saved, show_on_home_saved)
+    assert badge in ("INACTIVE", "PUBLISHED"), f"expected the entry saved as Published/Inactive, badge {badge!r}"
+    assert any("wa.me/97444559111" in h for h in hrefs_inactive), "positive control: real active icons not rendered"
+    assert not any(href_marker in h for h in hrefs_inactive), (
+        f"the Active Status = False QCTEST Snapchat icon rendered on the Home page: {hrefs_inactive}")
+    assert appeared, ("inconclusive: the same QCTEST icon never rendered even after Active was ticked "
+                      f"(3 min), so its absence above cannot be attributed to Active Status: {hrefs_active}")
 
 
 # ── TC 131143 — Click opens configured URL in a new tab ────────────────────
@@ -895,17 +1044,59 @@ def test_section_load_failure_does_not_affect_rest_of_home_page_131166(page):
 @pytest.mark.edge
 @pytest.mark.pbi_129373
 @pytest.mark.tc_131198
-@pytest.mark.skip(
-    reason="Same destructive-operations gap as tc_131165/tc_131203: this case's own "
-    "precondition requires first deactivating/unpublishing 8 of the 9 real production "
-    "icons (down to exactly one), then deactivating that last one too — on the CMS "
-    "object CONFIRMED SHARED with the real public <footer>, taking it down site-wide. "
-    "Requires explicit, ID-based human confirmation before any such irreversible change "
-    "to real qcdev content — flagged to the QA Manager, not invented around."
-)
-def test_toggling_last_active_icon_hides_section_131198(page):
-    # ADO-131198 — not executed; see the skip reason above.
-    pass
+@pytest.mark.xdist_group("smi_production_rows")
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_toggling_last_active_icon_hides_section_131198(page, real_records):
+    """ADO-131198 | PBI 129373.
+
+    Precondition (QA lead instruction 2026-10-21, reversible real writes):
+    exactly ONE active + published icon. Every other active real icon (8 on
+    2026-10-21) gets Active Status unticked; Facebook (46085) is kept as the
+    last one and is then unticked too -- the case's own action. The Social
+    Media Icon object also feeds the global footer, so its icons are gone
+    site-wide for the short window this test holds. Saved TEST_USER session
+    (the Editor login was locked that day; a content precondition, not a
+    workflow case). Snapshot + screenshot first; `real_records` re-ticks and
+    verifies every icon in teardown. Public reads: fresh logged-out `page`."""
+    home = HomeSocialIconsPage(page)
+
+    with allure.step("Baseline (logged out): the Home social section renders"):
+        home.open_home_settled()
+        assert home.is_section_displayed(), "baseline: Home social section not rendered before the change"
+
+    with allure.step("Precondition: only ONE icon remains active + published"):
+        active = real_records.codes_where(_SMI_OBJ["slug"], _SMI_OBJ["plural"], "activeStatus", True, status="approved")
+        last = "QC-SMI-facebook" if "QC-SMI-facebook" in active else active[0]
+        for code in [c for c in active if c != last]:
+            real_records.change(code=code, value=False, **_SMI_ACTIVE)
+        last_href = next(i["redirectUrl"] for i in real_records.items(**_SMI_OBJ)
+                         if i["externalReferenceCode"] == last)
+        seen = {"hrefs": []}
+
+        def _only_last() -> bool:
+            home.open_home_settled()
+            seen["hrefs"] = home.social_icon_hrefs() if home.is_section_displayed() else []
+            return seen["hrefs"] == [last_href]
+
+        assert _poll_public(_only_last), (
+            f"precondition: expected only {last_href} on the Home section, rendered {seen['hrefs']}")
+
+    with allure.step(f"In CMS, set the last active icon ({last}) to Inactive and publish"):
+        real_records.change(code=last, value=False, **_SMI_ACTIVE)
+
+    with allure.step("Reload the Home page (logged out), polled up to 3 min"):
+        def _hidden() -> bool:
+            home.open_home_settled()
+            return not home.is_section_displayed()
+
+        hidden = _poll_public(_hidden)
+        allure.attach(json.dumps({"section_nodes": home.section_node_count(),
+                                  "rendered_hrefs": home.social_icon_hrefs()}),
+                      name="131198 evidence", attachment_type=allure.attachment_type.JSON)
+
+    # Assert
+    assert hidden, (f"expected the whole social section hidden with zero active icons; "
+                    f"section nodes={home.section_node_count()}, icons={home.social_icon_hrefs()}")
 
 
 # ── TC 131199 — Duplicate Display Order renders without breaking layout ────

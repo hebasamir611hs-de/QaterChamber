@@ -27,6 +27,11 @@ adjusted). Headline findings that shape the tests here:
     a concrete reason per automation-standards.md's Result-integrity rule
     (only the CMS-side SETUP step is gated, per the task's own instruction —
     the frontend read methods these would use are real, not TODO).
+    UPDATE 2026-10-21 (QA lead decision): 130975/130992/130976 now run on
+    disposable QCTEST records (web/tests/conftest.py `qctest_records`).
+    130976 runs fully (copyright excepted, see its docstring); 130975/130992
+    skip at runtime with the observed reason when the CMS cannot store a
+    missing Arabic translation; 130966 stays skipped (needs real records).
   - ADO 130971/130994 (newsletter backend-error message) found the LIVE
     error text reads "Service temporarily unavailable. Please try again
     later." (EN) / "الخدمة غير متاحة مؤقتاً. يرجى المحاولة لاحقاً." (AR) — NOT
@@ -42,9 +47,19 @@ adjusted). Headline findings that shape the tests here:
     automation-standards.md's redundancy rule.
 """
 
+import json
+import uuid
+
 import allure
 import pytest
 
+from cms.pages.components.qctest_record_admin import (
+    PNG_FIXTURE as QCTEST_PNG,
+    BottomBarLinkQctest,
+    FooterNavLinkQctest,
+    QuickLinkQctest,
+    SocialIconQctest,
+)
 from web.pages.components.footer_component import FooterComponent
 from web.pages.components.newsletter_subscription_component import NewsletterSubscriptionComponent
 
@@ -115,7 +130,7 @@ def test_footer_logo_click_redirects_to_home_page(page):
 
     # Assert
     assert logo_visible, "expected the footer logo visible on a non-home page"
-    assert footer.current_url().rstrip("/").endswith("/web/qatar-chamber/home"), (
+    assert footer.current_url().rstrip("/").endswith("/home"), (
         f"expected redirect to the Home Page, got {footer.current_url()}"
     )
 
@@ -146,7 +161,7 @@ def test_internal_footer_nav_link_opens_in_same_tab(page):
 
     # Assert
     assert not result["opened_new_tab"], "expected the internal link to open in the SAME tab"
-    assert result["url"].rstrip("/").endswith("/web/qatar-chamber/about-us"), (
+    assert result["url"].rstrip("/").endswith("/about-us"), (
         f"expected navigation to the configured target, got {result['url']}"
     )
 
@@ -233,29 +248,59 @@ def test_quick_links_column_renders_heading_and_active_links(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129366
 @pytest.mark.traceability("ADO-130966")
-@pytest.mark.skip(
-    reason=(
-        "Requires a CMS precondition (zero active Quick Links configured) that this "
-        "session cannot arrange — TEST_USER/TEST_PASSWORD are blank in .env (see "
-        "footer_admin_component.py's docstring) and no Playwright MCP fallback is "
-        "available either. FooterComponent.is_quick_links_column_visible() is real "
-        "and ready to assert against once a real zero-active-links state exists; "
-        "only the CMS-side setup step is gated, per this task's own instruction."
-    )
-)
-def test_quick_links_column_hidden_when_no_active_quick_links(page):
-    # ADO-130966 | PBI 129366 — see skip reason above.
-    # Arrange
-    footer = FooterComponent(page)
+@pytest.mark.tc_130966
+@pytest.mark.xdist_group("quick_link_real_rows")
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_quick_links_column_hidden_when_no_active_quick_links(page, real_records):
+    """ADO-130966 | PBI 129366.
 
-    # Act — TODO(CMS precondition): configure zero active quick links as a
-    # Site Content Editor before this line, once real credentials exist.
-    footer.open_home()
-    footer.scroll_to_footer()
-    column_visible = footer.is_quick_links_column_visible()
+    Precondition (QA lead instruction 2026-10-21, reversible real writes):
+    zero ACTIVE Quick Links cannot be reached with a QCTEST record (it can
+    only add one), so EVERY Quick Link record that is Active right now (read
+    off the stored list at run time -- 8 on 2026-10-21: QC-QL-1, -2, -7..-11
+    and "Partners") gets Active Status unticked and is submitted in place on
+    the saved TEST_USER session (admin; the Editor login was locked that
+    day; a content precondition, not a workflow case). Each record is
+    snapshotted (JSON + form screenshot) first; `real_records` re-ticks and
+    verifies every one in teardown. Public reads: fresh logged-out `page`."""
+    footer = FooterComponent(page)
+    ql = {"slug": "quick-link", "plural": "quicklinks", "label": "Active Status", "api_field": "activeStatus"}
+
+    with allure.step("Baseline (logged out): the Quick Links column renders"):
+        footer.open_home_settled_anonymous()
+        assert footer.is_quick_links_column_visible(), "baseline: Quick Links column not rendered before the change"
+
+    with allure.step("CMS: set Active Status = False on every active Quick Link and publish"):
+        active = real_records.codes_where(ql["slug"], ql["plural"], "activeStatus", True, status="approved")
+        allure.attach(json.dumps(active), name="active quick links before", attachment_type=allure.attachment_type.JSON)
+        assert active, "precondition: no active Quick Link to deactivate"
+        for code in active:
+            real_records.change(code=code, value=False, **ql)
+        still = real_records.codes_where(ql["slug"], ql["plural"], "activeStatus", True, status="approved")
+        assert still == [], f"precondition not reached: still active {still}"
+
+    with allure.step("Load any public page and inspect the footer (logged out, polled up to 3 min)"):
+        def _hidden() -> bool:
+            footer.open_home_settled_anonymous()
+            return not footer.is_quick_links_column_visible()
+
+        hidden = _poll_public(_hidden)
+        allure.attach(page.screenshot(full_page=True), name="public footer, zero active quick links",
+                      attachment_type=allure.attachment_type.PNG)
 
     # Assert
-    assert not column_visible, "expected the Quick Links column hidden when no quick links are active"
+    assert hidden, "expected the Quick Links column hidden when no quick links are active (3 min poll)"
+
+
+def _poll_public(predicate, timeout: float = 180.0, poll: float = 10.0) -> bool:
+    """Public propagation poll (QA lead: a change landing within 3 min is fine)."""
+    from core.utils.waits import WaitTimeoutError, wait_until
+
+    try:
+        wait_until(predicate, timeout=timeout, poll=poll)
+        return True
+    except WaitTimeoutError:
+        return False
 
 
 @allure.epic("GLOBAL")
@@ -284,7 +329,7 @@ def test_clicking_quick_link_redirects_to_configured_url(page):
 
     # Assert
     assert not result["opened_new_tab"], "expected this quick link configured to open in the same tab"
-    assert result["url"].rstrip("/").endswith("/web/qatar-chamber/contact-us"), (
+    assert result["url"].rstrip("/").endswith("/contact-us"), (
         f"expected redirect to the configured URL, got {result['url']}"
     )
 
@@ -515,23 +560,41 @@ def test_back_to_top_scrolls_page_to_the_top(page):
 @pytest.mark.bilingual
 @pytest.mark.pbi_129366
 @pytest.mark.traceability("ADO-130975")
-@pytest.mark.skip(
-    reason=(
-        "Requires a CMS precondition (a footer field, e.g. a nav link title, "
-        "configured with no Arabic translation) that this session cannot arrange — "
-        "no Site Content Editor credentials available (see footer_admin_component.py's "
-        "docstring). Real, live finding: every footer field/label/link on the current "
-        "AR homepage IS genuinely translated (confirmed via a full text dump — see "
-        "footer_component.py's docstring), so there is no reachable missing-translation "
-        "state to honestly assert against this session; only the CMS-side setup step is "
-        "gated, per this task's own instruction."
-    )
-)
-def test_footer_falls_back_to_default_language_when_translation_missing(page):
-    # ADO-130975 | PBI 129366 — see skip reason above; intentionally no
-    # assertion is executed (never fabricate a pass against a fully
-    # translated footer, which would not honestly exercise this case).
-    pass
+@pytest.mark.tc_130975
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_footer_falls_back_to_default_language_when_translation_missing(page, qctest_records):
+    """ADO-130975 | PBI 129366.
+
+    Precondition (QA lead decision 2026-10-21): a disposable QCTEST footer
+    record Published + Active through Object Authoring as TEST_USER (admin;
+    Publish goes live directly -- the Editor login was refused that day),
+    deleted in teardown. The case's own example -- a nav-link title with no
+    Arabic -- is tried first; when the CMS refuses it (every footer TITLE's
+    Arabic twin is required), the bottom-bar link URL, the one footer field
+    whose Arabic is optional, carries the missing translation instead.
+    Public reads: fresh logged-out `page`, EN then AR."""
+    footer = FooterComponent(page)
+
+    with allure.step("Configure a footer field with no Arabic translation while other fields are translated"):
+        ev = _missing_translation_evidence(footer, qctest_records, "130975", with_en=True)
+    with allure.step("Switch the site language to Arabic and scroll to the footer"):
+        allure.attach(json.dumps(ev, ensure_ascii=False, indent=1), name="130975 evidence",
+                      attachment_type=allure.attachment_type.JSON)
+
+    # Assert
+    if ev["route"].startswith("nav-link"):
+        assert ev["en"] and ev["en"][0][0] == ev["expected_text"], f"EN footer: {ev.get('en')}"
+        assert ev["ar"], "the nav link with no Arabic title did not render on the AR footer (3 min)"
+        assert ev["ar"][0][0] == ev["expected_text"], (
+            f"AR footer shows {ev['ar'][0][0]!r} for a title with no Arabic; expected the default "
+            f"(English) text {ev['expected_text']!r}")
+    else:
+        _skip_unless_arabic_missing(ev)
+        assert ev["en"] and ev["en"][0][1] == ev["expected_href_part"], f"EN footer link: {ev.get('en')}"
+        assert ev["ar"], "the QCTEST bottom-bar link did not render on the AR footer (3 min)"
+        assert ev["ar"][0][1] == ev["expected_href_part"], (
+            f"AR footer link href is {ev['ar'][0][1]!r}; expected the default-language URL "
+            f"{ev['expected_href_part']!r} instead of a blank or broken value")
 
 
 @allure.epic("GLOBAL")
@@ -545,34 +608,79 @@ def test_footer_falls_back_to_default_language_when_translation_missing(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129366
 @pytest.mark.traceability("ADO-130976")
-@pytest.mark.skip(
-    reason=(
-        "Requires a CMS precondition (setting one nav link, one quick link, one "
-        "social icon, the copyright text, and one bottom bar link inactive and "
-        "publishing) that this session cannot arrange — no Site Content Editor "
-        "credentials available (see footer_admin_component.py's docstring). "
-        "FooterComponent.is_nav_link_present() / is_social_icon_present() / "
-        "is_legal_link_present() / is_copyright_text_present() are real and ready to "
-        "assert with once a real disabled-element state exists; only the CMS-side "
-        "toggle step is gated, per this task's own instruction."
-    )
-)
-def test_disabling_individual_footer_element_hides_only_that_element(page):
-    # ADO-130976 | PBI 129366 — see skip reason above.
-    # Arrange
+@pytest.mark.tc_130976
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_disabling_individual_footer_element_hides_only_that_element(page, qctest_records):
+    """ADO-130976 | PBI 129366.
+
+    Precondition (QA lead decision 2026-10-21): ONE disposable QCTEST record
+    per footer element type -- nav link (About Qatar Chamber column), quick
+    link (carrying the real column heading), social icon (Show on Home off)
+    and bottom-bar link -- Published + Active through Object Authoring as
+    TEST_USER (admin; Publish goes live directly), deleted in teardown. Each
+    carries one shared href marker. POSITIVE CONTROL: all four must first
+    render for a logged-out visitor; then each is set inactive and published,
+    and the whole rest of the footer must be unchanged.
+    NOT EXERCISED: the copyright text. CopyrightBar holds ONE real record
+    (QC-CR-1); a second QCTEST copyright record could displace the real text
+    on the live footer, and the real one may not be touched -- only its
+    continued presence is asserted."""
+    tag = uuid.uuid4().hex[:6]
+    shared = f"qctest-130976-{tag}"
+    ledger = qctest_records
     footer = FooterComponent(page)
+    nav = FooterNavLinkQctest(ledger.page)
+    quick = QuickLinkQctest(ledger.page)
+    social = SocialIconQctest(ledger.page)
+    bottom = BottomBarLinkQctest(ledger.page)
+    created = []
 
-    # Act — TODO(CMS precondition): disable one nav link, one quick link, one
-    # social icon, the copyright text, and one bottom bar link as a Site
-    # Content Editor before this line, once real credentials exist.
-    footer.open_home()
-    footer.scroll_to_footer()
+    def _mk(kind: str) -> str:
+        return f"QCTEST-130976-{kind}-{tag}"
 
-    # Assert — each disabled element hidden, all other active elements remain
-    # visible/functional (concrete element names filled in once the CMS-side
-    # setup step names which ones were disabled).
-    assert not footer.is_nav_link_present("About Qatar Chamber", "About Us")
-    assert footer.is_quick_links_column_visible(), "expected other active elements to remain visible"
+    with allure.step("In the CMS, create one QCTEST nav link, quick link, social icon and bottom bar link (Active)"):
+        for admin, kind, values in (
+            (nav, "nav", {"title": (_mk("nav"), f"{_mk('nav')} عربي"), "url": (f"https://example.com/{shared}-nav",) * 2,
+                          "column": "About Qatar Chamber", "column_number": "1", "order": "9900",
+                          "active": True}),
+            (quick, "quick", {"heading": QuickLinkQctest.REAL_HEADING,
+                              "title": (_mk("quick"), f"{_mk('quick')} عربي"),
+                              "url": (f"https://example.com/{shared}-quick",) * 2, "order": "9900", "active": True}),
+            (bottom, "bottom", {"title": (_mk("bottom"), f"{_mk('bottom')} عربي"),
+                                "url": (f"https://example.com/{shared}-bottom",) * 2, "order": "9900", "active": True}),
+            (social, "social", {"platform": "Flickr", "image": QCTEST_PNG,
+                                "alt": (_mk("social"), f"{_mk('social')} عربي"),
+                                "url": (f"https://example.com/{shared}-social",) * 2, "new_tab": True,
+                                # Home Display Order must be >= 1 even with Show on Home off
+                                # (live refusal 2026-10-21 when left blank).
+                                "order": "9900", "show_on_home": False, "home_order": "9900", "active": True,
+                                "platform_name": ("QCTEST Flickr", "QCTEST فليكر")}),
+        ):
+            created.append((admin, ledger.create(admin, values, _mk(kind)), _mk(kind)))
+
+    with allure.step("Positive control: all four QCTEST elements render for a logged-out visitor"):
+        shown_all, snap_on = footer.poll_public("en", lambda s: len(footer.links_with_marker(s, shared)) == 4)
+        shown = footer.links_with_marker(snap_on, shared)
+        baseline = footer.without_marker(snap_on, shared)
+
+    with allure.step("Set each QCTEST element to inactive and publish"):
+        for admin, code, marker in created:
+            ledger.set_active(admin, code, marker, False)
+
+    with allure.step("Load any page and scroll to the footer"):
+        hidden_all, snap_off = footer.poll_public("en", lambda s: not footer.links_with_marker(s, shared))
+        still = footer.links_with_marker(snap_off, shared)
+        rest = footer.without_marker(snap_off, shared)
+
+    allure.attach(json.dumps({"shown": shown, "still_shown_after_inactive": still, "baseline": baseline,
+                              "after": rest}, ensure_ascii=False, indent=1),
+                  name="130976 evidence", attachment_type=allure.attachment_type.JSON)
+
+    # Assert
+    assert shown_all, f"positive control: not all 4 QCTEST elements rendered while Active (3 min): {shown}"
+    assert hidden_all, f"disabled QCTEST elements still shown on the footer: {still}"
+    assert rest == baseline, "other (active) footer elements changed after disabling the QCTEST ones"
+    assert rest["copyright"], "the copyright text is no longer shown"
 
 
 @allure.epic("GLOBAL")
@@ -587,16 +695,30 @@ def test_disabling_individual_footer_element_hides_only_that_element(page):
 @pytest.mark.bilingual
 @pytest.mark.pbi_129366
 @pytest.mark.traceability("ADO-130992")
-@pytest.mark.skip(
-    reason=(
-        "Arabic duplicate of ADO-130975 — same unreachable CMS precondition (see that "
-        "test's skip reason above and footer_component.py's docstring for the live "
-        "AR-translation-completeness finding)."
-    )
-)
-def test_footer_displays_default_language_when_no_arabic_translation_available(page):
-    # ADO-130992 | PBI 129366 — see skip reason above.
-    pass
+@pytest.mark.tc_130992
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_footer_displays_default_language_when_no_arabic_translation_available(page, qctest_records):
+    """ADO-130992 | PBI 129366 -- Arabic duplicate of ADO-130975, its own
+    QCTEST record, same precondition route and account (see 130975)."""
+    footer = FooterComponent(page)
+
+    with allure.step("إعداد أحد حقول التذييل بدون ترجمة عربية (QCTEST)"):
+        ev = _missing_translation_evidence(footer, qctest_records, "130992", with_en=False)
+    with allure.step("تبديل لغة الموقع إلى العربية والتمرير إلى التذييل"):
+        allure.attach(json.dumps(ev, ensure_ascii=False, indent=1), name="130992 evidence",
+                      attachment_type=allure.attachment_type.JSON)
+
+    # Assert
+    assert ev["ar_dir"] == "rtl", f"expected the Arabic site (RTL), html dir={ev['ar_dir']!r}"
+    assert ev["ar"], "the QCTEST footer element did not render on the AR footer (3 min)"
+    if ev["route"].startswith("nav-link"):
+        assert ev["ar"][0][0] == ev["expected_text"], (
+            f"AR footer shows {ev['ar'][0][0]!r}; expected the default (English) text {ev['expected_text']!r}")
+    else:
+        _skip_unless_arabic_missing(ev)
+        assert ev["ar"][0][1] == ev["expected_href_part"], (
+            f"AR footer link href is {ev['ar'][0][1]!r}; expected the default-language URL "
+            f"{ev['expected_href_part']!r} instead of a blank or broken value")
 
 
 @allure.epic("GLOBAL")
@@ -680,3 +802,101 @@ def test_newsletter_backend_error_displays_error_message_in_arabic(page):
     assert direction == "rtl", "expected the Arabic UI language active"
     assert newsletter.is_message_error_state()
     assert newsletter.message_text() == "الخدمة غير متاحة مؤقتاً. يرجى المحاولة لاحقاً."
+
+
+# ── Disposable-record helpers for ADO 130975 / 130992 (QA lead, 2026-10-21) ──
+# Footer link URLs must start with https:// or / (live refusal 2026-10-21:
+# "Bottom Link URL is not a valid URL — start it with https:// for another
+# site, or with / for a page on this one."), so QCTEST links point at
+# https://example.com/qctest-<tc>-<tag>-<kind>, which also serves as the marker.
+def _nav_link_without_arabic(ledger, tc: str, tag: str) -> dict:
+    """Try the case's own example first: a QCTEST footer nav link whose
+    Arabic title is left empty, Published (TEST_USER) and Active. Returns
+    {"code", "marker", "href", "blocked", "messages"}; "code" is "" when the
+    CMS refused the save."""
+    admin = FooterNavLinkQctest(ledger.page)
+    marker = f"QCTEST-{tc}-nav-noar-{tag}"
+    href = f"https://example.com/qctest-{tc}-{tag}-nav"
+    before = set(admin.codes_listed())
+    admin.open_create_form()
+    admin.fill_values({"title": (marker, None), "url": (href, href), "column": "About Qatar Chamber",
+                       "column_number": "1", "order": "9900", "active": True})
+    ledger.log_attempt(admin, marker, "nav link with EMPTY Arabic title -- Publish may be refused")
+    blocked = admin.publish_reading_validity()
+    messages = list(getattr(admin, "last_click_messages", []))
+    code = admin.resolve_new_code(before, marker, timeout=20)
+    if code:
+        ledger.register(admin, code, marker)
+    return {"code": code, "marker": marker, "href": href, "blocked": blocked, "messages": messages}
+
+
+def _bottom_link_without_arabic_url(ledger, tc: str, tag: str) -> dict:
+    """The one footer field whose Arabic twin the CMS does not require
+    ("Bottom Link URL — العربية", read live 2026-10-21): a QCTEST bottom-bar
+    link with EN + AR titles, the EN URL only, Published + Active."""
+    admin = BottomBarLinkQctest(ledger.page)
+    marker = f"QCTEST-{tc}-bottom-noar-{tag}"
+    title_ar = f"QCTEST-{tc} رابط سفلي {tag}"
+    href = f"https://example.com/qctest-{tc}-{tag}-bottom"
+    code = ledger.create(admin, {"title": (marker, title_ar), "url": (href, None), "order": "9900",
+                                 "active": True}, marker)
+    admin.open_code(code)
+    return {"code": code, "marker": marker, "title_ar": title_ar, "href": href,
+            "form_url_ar": admin.value("url", locale="ar"),
+            "stored_url_i18n": admin.stored_i18n(code, "url")}
+
+
+def _legal_link(snapshot: dict, text: str) -> list:
+    return [link for link in snapshot.get("legal", []) if link[0] == text]
+
+
+def _missing_translation_evidence(footer, ledger, tc: str, with_en: bool) -> dict:
+    """Builds the case's precondition on disposable data and reads the public
+    footer (logged out). Route 1 is the case's own example (a nav-link title
+    left without Arabic); when the CMS refuses that save, route 2 uses the
+    only footer field whose Arabic is optional (the bottom-bar link URL).
+    Returns everything the test asserts on; asserts nothing itself."""
+    tag = uuid.uuid4().hex[:6]
+    ev = {"tc": tc}
+    attempt = _nav_link_without_arabic(ledger, tc, tag)
+    ev["nav_attempt"] = {k: attempt[k] for k in ("code", "marker", "blocked", "messages")}
+    if attempt["code"]:
+        ev["route"] = "nav-link title (no Arabic)"
+        ev["expected_text"] = attempt["marker"]
+        ev["expected_href_part"] = attempt["href"]
+        find = lambda snap: footer.links_with_marker(snap, attempt["href"])  # noqa: E731
+        if with_en:
+            ok, snap = footer.poll_public("en", lambda s: bool(find(s)))
+            ev["en"] = [link[1:] for link in find(snap)]
+        ok, snap = footer.poll_public("ar", lambda s: bool(find(s)))
+        ev["ar"] = [link[1:] for link in find(snap)]
+        ev["ar_dir"] = snap.get("dir", "")
+        return ev
+    bottom = _bottom_link_without_arabic_url(ledger, tc, tag)
+    ev["route"] = "bottom-bar link URL (no Arabic) -- the nav-link title route was refused by the CMS"
+    ev["record"] = bottom
+    ev["expected_href_part"] = bottom["href"]
+    if with_en:
+        ok, snap = footer.poll_public("en", lambda s: bool(_legal_link(s, bottom["marker"])))
+        ev["en"] = _legal_link(snap, bottom["marker"])
+    ok, snap = footer.poll_public("ar", lambda s: bool(_legal_link(s, bottom["title_ar"])))
+    ev["ar"] = _legal_link(snap, bottom["title_ar"])
+    ev["ar_dir"] = snap.get("dir", "")
+    return ev
+
+
+def _skip_unless_arabic_missing(ev: dict) -> None:
+    """The precondition "a footer field missing its Arabic translation" holds
+    only if the STORED record has no Arabic value for it. When the CMS stored
+    one anyway, the case cannot be set up with test data: skip, quoting what
+    was stored and what the public footer showed."""
+    stored = ev["record"].get("stored_url_i18n") or {}
+    if stored.get("ar_SA"):
+        pytest.skip(
+            "Precondition not achievable through Object Authoring (2026-10-21): the nav-link "
+            f"title route is refused ({ev['nav_attempt']['messages'] or ev['nav_attempt']['blocked']}); "
+            "the only optional Arabic footer field (Bottom Link URL) was saved EMPTY but the CMS "
+            f"stored an Arabic value anyway (url_i18n={stored}). Public footer read for the record: "
+            f"EN={ev.get('en')} AR={ev.get('ar')}."
+        )
+    assert stored, f"could not read the stored record to confirm the missing translation: {ev['record']}"

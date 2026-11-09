@@ -559,3 +559,77 @@ class HomeFeaturedEventPage(BasePage):
 
     def body_text(self) -> str:
         return " ".join(self.page.locator("body").inner_text().split())
+
+    # ── Compatibility / lifecycle (TC 135658-135660, 135668) ─────────────
+    # Added 2026-10-21. No new locators — every element below is one of the
+    # CLI-verified constants above.
+    def set_viewport(self, width: int, height: int) -> "HomeFeaturedEventPage":
+        """In-test viewport resize (TC 135660's "resize down to 375px" step).
+        The next layout read forces a reflow, so no wait is needed."""
+        self.page.set_viewport_size({"width": width, "height": height})
+        return self
+
+    def grid_column_count(self) -> int:
+        """Number of resolved grid tracks on `.qc-ue-card` (2 at desktop, 1
+        when stacked)."""
+        return len(self.card_grid_template_columns().split())
+
+    def layout_snapshot(self) -> dict:
+        """Text + geometry of the card, normalised so it can be compared
+        across browser engines (whitespace collapsed — Gecko's inner_text
+        differs on line breaks; boxes relative to the card's own origin)."""
+        card = {k: " ".join(v.split()) for k, v in self.card_snapshot().items()}
+        card["tags"] = [" ".join(self.category_tag_text(i).split()) for i in range(self.category_tag_count())]
+        card["heading"] = " ".join(self.heading_text().split())
+        origin = self.page.locator(self.CARD).bounding_box()
+        media, details = self.media_box(), self.details_box()
+
+        def rel(box):
+            if not box or not origin:
+                return None
+            return {"x": box["x"] - origin["x"], "y": box["y"] - origin["y"],
+                    "width": box["width"], "height": box["height"]}
+
+        card["columns"] = self.grid_column_count()
+        card["gap"] = self.column_gap()
+        card["media"] = rel(media)
+        card["details"] = rel(details)
+        return card
+
+    def clipped_text_elements(self) -> list:
+        """Names of section text elements whose content overflows their own
+        box (scrollWidth/scrollHeight beyond clientWidth/clientHeight) —
+        i.e. clipped or cut-off text."""
+        targets = {
+            "heading": self.HEADING, "description": self.DESCRIPTION,
+            "title": self.TITLE, "summary": self.SUMMARY,
+            "date": self.DATE_VALUE, "time": self.TIME_VALUE, "location": self.LOCATION_VALUE,
+        }
+        clipped = []
+        for name, sel in targets.items():
+            loc = self.page.locator(sel).first
+            if loc.count() == 0:
+                continue
+            over = loc.evaluate(
+                "el => el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1"
+            )
+            if over:
+                clipped.append(name)
+        return clipped
+
+    def is_image_rendered(self) -> bool:
+        """The event image is loaded (non-zero natural width) and visible."""
+        return self.is_visible(self.IMAGE) and self.page.locator(self.IMAGE).first.evaluate(
+            "img => img.complete && img.naturalWidth > 0"
+        )
+
+    def pinned_event_date(self):
+        """The card's Date value parsed as a `datetime.date`, or None when it
+        does not match the live '19 November 2025' format."""
+        from datetime import datetime
+
+        raw = " ".join(self.date_value_text().split())
+        try:
+            return datetime.strptime(raw, "%d %B %Y").date()
+        except ValueError:
+            return None

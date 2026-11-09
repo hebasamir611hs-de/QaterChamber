@@ -113,12 +113,20 @@ actual run observes, never assume it mirrors the logo's consistently-blocked
 behaviour.
 """
 
+import uuid
+
 import allure
 import pytest
 
+from cms.pages.components.qctest_record_admin import PNG_FIXTURE as QCTEST_PNG, StrategicPartnerQctest
 from web.pages.components.accessibility_tools_component import AccessibilityToolsComponent
+from web.pages.home_strategic_partners.home_strategic_partners_page import StrategicPartnersPage
 
 PBI = "129364"
+
+# ADO-134509 / 134510 -- the case's own EN alt text and its Arabic counterpart.
+IMAGE_ALT_EN = "Qatar Chamber headquarters building"
+IMAGE_ALT_AR = "مبنى المقر الرئيسي لغرفة قطر"
 
 
 @allure.epic("GLOBAL")
@@ -381,6 +389,53 @@ def test_reset_normal_view_control_renders_in_panel(page):
     assert is_enabled
 
 
+# ── CMS-disable cases (134489, 134508) — reversible write on record 45370 ──
+A11Y_SETTING_GROUP = "accessibility_header_config_singleton"
+A11Y_SETTING = {
+    "slug": "accessibility-header-configuration",
+    "plural": "accessibilityheaderconfigurations",
+    "code": "8f47e8e3-fcc8-a55f-845a-87b59c92c88f",  # entry 45370, the one live setting
+    "label": "Accessibility Tools Enabled",
+    "api_field": "accessibilityToolsEnabled",
+}
+PUBLIC_PROPAGATION_S = 180  # poll budget before a finding (QA lead, 2026-10)
+
+
+def _poll_public(predicate, timeout: float = PUBLIC_PROPAGATION_S, poll: float = 10.0) -> bool:
+    from core.utils.waits import WaitTimeoutError, wait_until
+
+    try:
+        wait_until(predicate, timeout=timeout, poll=poll)
+        return True
+    except WaitTimeoutError:
+        return False
+
+
+def _assert_icon_removed_after_cms_disable(page, real_records) -> None:
+    a11y = AccessibilityToolsComponent(page)
+
+    with allure.step("Baseline (logged out): the accessibility icon renders in the header"):
+        a11y.open_home_anonymous()
+        assert a11y.wait_accessibility_button_visible(), (
+            "baseline failed: the icon is not on the public header before the CMS change")
+
+    with allure.step("CMS: Accessibility Settings -> Accessibility Tools Enabled = False -> Publish"):
+        item = real_records.change(**A11Y_SETTING, value=False)
+        assert item["before"] is True, f"precondition: stored value was {item['before']!r}, expected True"
+        assert item["workflow_status"] == "approved", item["workflow_status"]
+
+    with allure.step("Clear cache / refresh the public site (logged out), polled up to 3 min"):
+        def _icon_gone() -> bool:
+            a11y.open_home_anonymous()
+            return not a11y.is_accessibility_button_visible()
+
+        gone = _poll_public(_icon_gone)
+        allure.attach(page.screenshot(full_page=False), name="public header after disable",
+                      attachment_type=allure.attachment_type.PNG)
+
+    assert gone, "the accessibility icon still renders on the public header 3 min after disabling it in CMS"
+
+
 @allure.epic("GLOBAL")
 @allure.feature("Accessibility Tools")
 @allure.story("Accessibility icon hidden when disabled in CMS")
@@ -393,22 +448,21 @@ def test_reset_normal_view_control_renders_in_panel(page):
 @pytest.mark.ui
 @pytest.mark.pbi_129364
 @pytest.mark.traceability("ADO-134489")
-@pytest.mark.skip(
-    reason=(
-        "Control_Panel precondition (Accessibility Tools Enabled=False, then publish) cannot be "
-        "produced this pass: no CMS credentials are configured (TEST_USER/TEST_PASSWORD empty in "
-        ".env), and the live public site currently has the icon ENABLED (see ADO-134481, passing) "
-        "-- the opposite of the precondition this case requires. Asserting 'icon not visible' "
-        "against the current, enabled state would not honestly test the CMS-disable behaviour. "
-        "Pending Control_Panel credentials / a CMS-disable pass -- not scripted as a fabricated "
-        "pass or a false negative."
-    )
-)
-def test_accessibility_icon_hidden_when_disabled_in_cms(page):
-    # ADO-134489 | PBI 129364 — see skip reason above; intentionally no
-    # assertion is executed (automation-standards.md: skip, never a
-    # weakened/fabricated assertion, for a genuinely unproducible precondition).
-    pass
+@pytest.mark.tc_134489
+@pytest.mark.xdist_group(A11Y_SETTING_GROUP)
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_accessibility_icon_hidden_when_disabled_in_cms(page, real_records):
+    """ADO-134489 | PBI 129364.
+
+    Precondition (QA lead instruction 2026-10-21, reversible real write):
+    the ONE site-wide AccessibilityHeaderConfiguration record (id 45370,
+    `8f47e8e3-...`) gets Accessibility Tools Enabled = False, submitted in
+    place on the saved TEST_USER session (admin; its Publish goes live
+    directly -- the Site Content Editor login was locked that day; this is a
+    config precondition, not a workflow-role case). Snapshot + screenshot
+    first; `real_records` restores True and verifies it in teardown. The
+    public read is a fresh logged-out context (`page`)."""
+    _assert_icon_removed_after_cms_disable(page, real_records)
 
 
 @allure.epic("GLOBAL")
@@ -1008,3 +1062,1472 @@ def test_accessibility_icon_and_panel_render_correctly_in_dark_mode_arabic(page)
     assert header_bg_dark != "rgb(255, 255, 255)", "expected the header background to genuinely darken"
     assert panel_direction == "rtl", "expected the panel aligned per RTL"
     assert controls_legible, "expected the panel's controls legible against the dark background"
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Batch C (2026-10-21) — ADO #134502-#134510, #134524-#134530, #134637-#134639,
+# #134653-#134657, #134660, #134663, #134664, #134667, #134668 (28 cases,
+# Web only). Every test runs in an ANONYMOUS context ({"auth": False}) — a
+# public visitor, never the cached CMS session. Live mechanics these tests
+# rely on are logged in the Page Object's "Batch C" block (zoom = the
+# `--qc-a11y-zoom-scale` CSS variable, 0.1 per click, 80%..140%; state in
+# sessionStorage + the `qcTheme` cookie; Reset also returns dark mode to
+# light). Theme/contrast are asserted on the document (`data-theme`,
+# `qc-a11y-contrast`), never on a switch's aria-checked alone.
+# ═══════════════════════════════════════════════════════════════════════════
+
+ANON = {"auth": False}
+ANON_DESKTOP_1366 = {"auth": False, "viewport": (1366, 768)}
+ANON_MOBILE_390 = {"auth": False, "viewport": (390, 844)}
+
+DEFAULT_ROOT_FONT_PX = 16.0     # <html> font-size at default zoom (measured live)
+DEFAULT_ZOOM_SCALE = 1.0
+ZOOM_STEP = 0.1                 # one product zoom increment (100% -> 110%)
+HIGH_CONTRAST_BACKGROUND = "rgb(0, 0, 0)"
+DEFAULT_BACKGROUND = "rgb(255, 255, 255)"
+LAYOUT_TOLERANCE_PX = 2         # bug-rules.md Rule 1 — layout (non-image) tolerance
+FULL_WALK_MAX_PRESSES = 300     # Contact Us ring measured at 77 presses
+KEYBOARD_HIGHLIGHT_LABEL = "Keyboard Navigation Highlight"
+
+
+def _step(scale: float, steps: int) -> float:
+    return round(scale + steps * ZOOM_STEP, 2)
+
+
+def _axe_summary(violations: list) -> list:
+    """Failing node selector + axe's own contrast message, for the report."""
+    return [f"{n['target']}: {(n.get('any') or [{}])[0].get('message', '')[:120]}"
+            for v in violations for n in v["nodes"]]
+
+
+def _boxes_shifted(before: dict, after: dict, tol: int) -> list:
+    """Names of layout boxes whose x/y/width/height moved by more than `tol`."""
+    shifted = []
+    pairs = [("header", before["header"], after["header"]), ("main", before["main"], after["main"]),
+             ("footer", before["footer"], after["footer"])]
+    pairs += [(f"section[{i}].{b['cls']}", b, a)
+              for i, (b, a) in enumerate(zip(before["sections"], after["sections"]))]
+    for name, b, a in pairs:
+        if b is None or a is None:
+            shifted.append(f"{name} (missing)")
+            continue
+        if any(abs(b[k] - a[k]) > tol for k in ("x", "y", "width", "height")):
+            shifted.append(f"{name}: {b} -> {a}")
+    return shifted
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("High Contrast applies in real time")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Verify that activating High Contrast applies the high-contrast theme site-wide in real time")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134502")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.uat
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134502
+@pytest.mark.traceability("ADO-134502")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_high_contrast_applies_site_wide_in_real_time_without_reload(page):
+    # ADO-134502 | PBI 129364
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+    a11y.mark_document()
+
+    # Act
+    with allure.step("Open the accessibility panel"):
+        a11y.open_panel()
+        panel_open = a11y.is_panel_open()
+
+    with allure.step("Click the High Contrast toggle"):
+        a11y.activate_high_contrast()
+        contrast_active = a11y.is_high_contrast_active()
+        background = a11y.page_background_color()
+        text_color = a11y.body_text_color()
+
+    with allure.step("Observe that no page reload / navigation occurred"):
+        same_document = a11y.is_same_document_since_mark()
+
+    # Assert
+    assert panel_open, "expected the accessibility panel to open"
+    assert contrast_active, "expected <html> to carry qc-a11y-contrast immediately after the click"
+    assert background == HIGH_CONTRAST_BACKGROUND, f"expected a dark background, got {background}"
+    assert text_color != background, f"expected high-contrast text against the background, got {text_color}"
+    assert same_document, "expected no page reload / navigation when toggling High Contrast"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Zoom In increases text size")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Verify that clicking Zoom In increases page text size by one increment without reload")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134503")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.uat
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134503
+@pytest.mark.traceability("ADO-134503")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_zoom_in_increases_text_size_by_one_increment_without_reload(page):
+    # ADO-134503 | PBI 129364 — the case's 16px -> 18px is an "e.g."; the
+    # oracle is "one defined increment" = one product zoom step (live: +10%,
+    # 16px -> 17.6px).
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Open the accessibility panel"):
+        a11y.open_panel()
+        a11y.mark_document()
+
+    with allure.step("Note the current base font size"):
+        font_before = a11y.root_font_size_px()
+        scale_before = a11y.zoom_scale()
+
+    with allure.step("Click Zoom In (+) once"):
+        a11y.click_zoom_in()
+        font_after = a11y.root_font_size_px()
+        scale_after = a11y.zoom_scale()
+        same_document = a11y.is_same_document_since_mark()
+
+    # Assert
+    assert font_after > font_before, f"expected the base font size to grow, {font_before}px -> {font_after}px"
+    assert scale_after == _step(scale_before, 1), (
+        f"expected exactly one zoom increment, scale {scale_before} -> {scale_after}"
+    )
+    assert same_document, "expected no page reload on Zoom In"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Zoom Out decreases text size")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Verify that clicking Zoom Out decreases page text size by one increment without reload")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134504")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.uat
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134504
+@pytest.mark.traceability("ADO-134504")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_zoom_out_decreases_text_size_by_one_increment_without_reload(page):
+    # ADO-134504 | PBI 129364 — "e.g. 14px" in the case; live one step is
+    # -10% (16px -> 14.4px).
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Open the accessibility panel"):
+        a11y.open_panel()
+        a11y.mark_document()
+
+    with allure.step("Note the current base font size"):
+        font_before = a11y.root_font_size_px()
+        scale_before = a11y.zoom_scale()
+
+    with allure.step("Click Zoom Out (-) once"):
+        a11y.click_zoom_out()
+        font_after = a11y.root_font_size_px()
+        scale_after = a11y.zoom_scale()
+        same_document = a11y.is_same_document_since_mark()
+
+    # Assert
+    assert font_after < font_before, f"expected the base font size to shrink, {font_before}px -> {font_after}px"
+    assert scale_after == _step(scale_before, -1), (
+        f"expected exactly one zoom decrement, scale {scale_before} -> {scale_after}"
+    )
+    assert same_document, "expected no page reload on Zoom Out"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Reset restores defaults")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Verify that Reset/Normal View restores default font size and contrast")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134505")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.uat
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134505
+@pytest.mark.traceability("ADO-134505")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_reset_restores_default_font_size_and_contrast(page):
+    # ADO-134505 | PBI 129364
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+    font_default = a11y.root_font_size_px()
+
+    # Act
+    with allure.step("Apply High Contrast and click Zoom In twice"):
+        a11y.open_panel()
+        a11y.mark_document()
+        a11y.activate_high_contrast()
+        a11y.click_zoom_in()
+        a11y.click_zoom_in()
+        contrast_applied = a11y.is_high_contrast_active()
+        scale_zoomed = a11y.zoom_scale()
+
+    with allure.step("Click Reset/Normal View"):
+        a11y.click_reset()
+        contrast_after_reset = a11y.is_high_contrast_active()
+        font_after_reset = a11y.root_font_size_px()
+        scale_after_reset = a11y.zoom_scale()
+        same_document = a11y.is_same_document_since_mark()
+
+    # Assert
+    assert contrast_applied, "precondition: High Contrast must be applied"
+    assert scale_zoomed == _step(DEFAULT_ZOOM_SCALE, 2), f"expected two zoom increments, got scale {scale_zoomed}"
+    assert not contrast_after_reset, "expected Reset to revert to the default (non-high-contrast) theme"
+    assert font_after_reset == font_default, f"expected base font {font_default}px after Reset, got {font_after_reset}px"
+    assert scale_after_reset == DEFAULT_ZOOM_SCALE
+    assert same_document, "expected no page reload on Reset"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Settings persist across navigation")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that accessibility settings persist across page navigation within the same browser session")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134506")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.uat
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134506
+@pytest.mark.traceability("ADO-134506")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_accessibility_settings_persist_to_about_us_in_same_session(page):
+    # ADO-134506 | PBI 129364 — About Us opened by its direct path (a real
+    # full navigation): HeaderComponent.NAV_LINK_ABOUT_US is stale, "About
+    # Us" is now a mega-menu button (see Page-Object Batch C note).
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Enable High Contrast and Zoom In once on the homepage"):
+        a11y.enable_high_contrast()
+        a11y.open_panel()
+        a11y.click_zoom_in()
+        a11y.close_panel()
+        contrast_home = a11y.is_high_contrast_active()
+        font_home = a11y.root_font_size_px()
+
+    with allure.step("Navigate to About Us without closing the browser"):
+        a11y.open_about_us()
+        url_about = a11y.current_url()
+        contrast_about = a11y.is_high_contrast_active()
+        font_about = a11y.root_font_size_px()
+
+    # Assert
+    assert contrast_home, "expected High Contrast applied on the homepage"
+    assert font_home > DEFAULT_ROOT_FONT_PX, f"expected an increased font size on the homepage, got {font_home}px"
+    assert "about-us" in url_about, f"expected the About Us page, got {url_about}"
+    assert contrast_about, "expected High Contrast still applied on About Us"
+    assert font_about == font_home, f"expected the increased font size ({font_home}px) on About Us, got {font_about}px"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Keyboard reachability (WCAG 2.1 AA)")
+@allure.severity(allure.severity_level.BLOCKER)
+@allure.title("Verify that all interactive elements on a page are reachable and operable via Tab-key keyboard navigation (WCAG 2.1 AA)")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134507")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.uat
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134507
+@pytest.mark.traceability("ADO-134507")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_all_interactive_elements_reachable_and_operable_via_tab_on_contact_us(page):
+    """ADO-134507 | PBI 129364 — Contact Us (buttons, links, form). The walk
+    must CLOSE the focus ring (no trap, no truncated prefix) before any
+    "every element" assertion means anything. Form inputs draw their focus
+    ring on the wrapping div (:focus-within) — credited by
+    focus_audit_walk() only when the wrapper's style actually changes on
+    focus. Note: the footer newsletter input is the subject of existing
+    Azure bug #147180 (no focus indicator) — if it is the only offender,
+    that is the known bug, not a new finding."""
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_second_content_page(locale="en")
+    clickable_before = a11y.clickable_element_keys()
+
+    # Act
+    with allure.step("Press Tab repeatedly through the entire page"):
+        walk = a11y.focus_audit_walk(FULL_WALK_MAX_PRESSES)
+        clickable_after = a11y.clickable_element_keys()
+
+    with allure.step("Open the accessibility panel via keyboard and Tab through its controls"):
+        a11y.blur_active_element()
+        icon_reached = a11y.focus_accessibility_button_via_tab()
+        panel_opened = a11y.activate_focused_accessibility_button_via_keyboard() if icon_reached else False
+        hc_focused = a11y.focus_panel_control_via_tab(a11y.HIGH_CONTRAST_SWITCH) if panel_opened else False
+        if hc_focused:
+            a11y.press_key("Space")
+        hc_activated = a11y.is_high_contrast_active()
+        zoom_in_focused = a11y.focus_panel_control_via_tab(a11y.ZOOM_IN_BUTTON) if panel_opened else False
+        if zoom_in_focused:
+            a11y.press_key("Enter")
+        scale_after_zoom_in = a11y.zoom_scale()
+        zoom_out_focused = a11y.focus_panel_control_via_tab(a11y.ZOOM_OUT_BUTTON) if panel_opened else False
+        if zoom_out_focused:
+            a11y.press_key("Enter")
+        scale_after_zoom_out = a11y.zoom_scale()
+        reset_focused = a11y.focus_panel_control_via_tab(a11y.RESET_BUTTON) if panel_opened else False
+        if reset_focused:
+            a11y.press_key("Enter")
+        contrast_after_reset = a11y.is_high_contrast_active()
+        scale_after_reset = a11y.zoom_scale()
+
+    # Assert
+    stops = [s for s in walk["stops"] if s and not s["isBody"]]
+    assert walk["completed"], (
+        f"focus ring never closed in {walk['presses']} presses — focus trapped or walk truncated"
+    )
+    focus_keys = {s["key"] for s in stops}
+    stable_clickable = [k for k in clickable_before if k in clickable_after]
+    skipped = [k for k in stable_clickable if k not in focus_keys]
+    assert not skipped, f"{len(skipped)} interactive element(s) never reached by Tab: {skipped[:10]}"
+    no_indicator = [f"{s['tag']}.{s['className'][:40]} '{s['text'][:20]}'"
+                    for s in stops if s["tag"] != "iframe" and not s.get("indicated")]
+    assert not no_indicator, f"{len(no_indicator)} focus stop(s) show no visible focus indicator: {no_indicator}"
+    order = {"header": 0, "main": 1, "footer": 2}
+    regions = [order[s["region"]] for s in stops[:-1] if s.get("region") in order]
+    assert regions == sorted(regions), "expected a logical Tab order: header -> main content -> footer"
+    assert icon_reached, "keyboard Tab never reached the accessibility icon"
+    assert panel_opened, "expected Enter on the focused icon to open the panel"
+    assert hc_focused and hc_activated, "expected High Contrast focusable and activatable with Space"
+    assert zoom_in_focused and scale_after_zoom_in == _step(DEFAULT_ZOOM_SCALE, 1), (
+        f"expected Zoom In focusable and activatable with Enter (scale {scale_after_zoom_in})"
+    )
+    assert zoom_out_focused and scale_after_zoom_out == DEFAULT_ZOOM_SCALE, (
+        f"expected Zoom Out focusable and activatable with Enter (scale {scale_after_zoom_out})"
+    )
+    assert reset_focused and not contrast_after_reset and scale_after_reset == DEFAULT_ZOOM_SCALE, (
+        "expected Reset focusable and activatable with Enter, restoring default contrast and zoom"
+    )
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Accessibility icon hidden when disabled in CMS")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that disabling the accessibility widget in CMS removes it from the frontend after cache refresh")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134508")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.uat
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134508
+@pytest.mark.traceability("ADO-134508")
+@pytest.mark.xdist_group(A11Y_SETTING_GROUP)
+@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+def test_disabling_widget_in_cms_removes_icon_from_frontend(page, real_records):
+    """ADO-134508 | PBI 129364. Same reversible real write on record 45370
+    as 134489 (see that test): set Enabled = False, publish, then reload
+    the public site logged out until the cache refreshes (<= 3 min)."""
+    _assert_icon_removed_after_cms_disable(page, real_records)
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Image alt text (EN)")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that an image published with valid bilingual alt text renders the correct alt attribute on the EN frontend page")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134509")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134509
+@pytest.mark.traceability("ADO-134509")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_image_alt_text_renders_on_english_page(page, qctest_records):
+    """ADO-134509 | PBI 129364.
+
+    Precondition (QA lead decision 2026-10-21): the image is a disposable
+    `QCTEST-134509-partner-*` Strategic Partner record (the Home carousel
+    renders its logo with the record's own Logo Alt Text), created and
+    Published + Active through Object Authoring as TEST_USER (admin; Publish
+    goes live directly -- the Editor login was refused that day) and deleted
+    in teardown. The public read is a fresh logged-out context (`page`). The
+    logo is matched by its record code in `src`, never by alt alone."""
+    marker = f"QCTEST-134509-partner-{uuid.uuid4().hex[:6]}"
+    admin = StrategicPartnerQctest(qctest_records.page)
+    partners = StrategicPartnersPage(page)
+
+    with allure.step("In CMS, publish an image with Alt Text (EN/AR) -- QCTEST partner, Active"):
+        code = qctest_records.create(admin, {
+            "name": (marker, f"{marker} شريك"),
+            "alt": (IMAGE_ALT_EN, IMAGE_ALT_AR),
+            "order": "9900",
+            "active": True,
+            "logo_en": QCTEST_PNG,
+            "logo_ar": QCTEST_PNG,
+        }, marker)
+        admin.open_code(code)
+        stored = {"alt_en": admin.value("alt"), "alt_ar": admin.value("alt", locale="ar"),
+                  "active": admin.flag("active")}
+        badge = admin.row_badge(code)
+
+    with allure.step("Load the corresponding page (Home) in EN locale, logged out"):
+        alts = partners.poll_record_logo(code, locale="en")
+
+    with allure.step("Inspect the image element's alt attribute"):
+        allure.attach(f"record={code} stored={stored} badge={badge} rendered_alts={alts}",
+                      name="134509 evidence", attachment_type=allure.attachment_type.TEXT)
+
+    # Assert
+    assert stored == {"alt_en": IMAGE_ALT_EN, "alt_ar": IMAGE_ALT_AR, "active": True}, stored
+    assert badge == "PUBLISHED", f"expected the QCTEST image record Published, list badge reads {badge!r}"
+    assert alts, f"the QCTEST image (record {code}) never rendered on the EN Home page within 3 min"
+    assert alts == [IMAGE_ALT_EN], f"EN alt attribute(s) rendered: {alts!r}"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Image alt text (AR)")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that the same image renders the correct Arabic alt attribute on the AR frontend page")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134510")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134510
+@pytest.mark.traceability("ADO-134510")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_image_alt_text_renders_on_arabic_page(page, qctest_records):
+    """ADO-134510 | PBI 129364. Same disposable-record precondition as
+    ADO-134509 (its own `QCTEST-134510-partner-*` record, so the case runs on
+    its own); read on the AR Home page, logged out."""
+    marker = f"QCTEST-134510-partner-{uuid.uuid4().hex[:6]}"
+    admin = StrategicPartnerQctest(qctest_records.page)
+    partners = StrategicPartnersPage(page)
+
+    with allure.step("Precondition: the image published with EN + AR alt text (QCTEST partner, Active)"):
+        code = qctest_records.create(admin, {
+            "name": (marker, f"{marker} شريك"),
+            "alt": (IMAGE_ALT_EN, IMAGE_ALT_AR),
+            "order": "9900",
+            "active": True,
+            "logo_en": QCTEST_PNG,
+            "logo_ar": QCTEST_PNG,
+        }, marker)
+        admin.open_code(code)
+        stored_ar = admin.value("alt", locale="ar")
+
+    with allure.step("Load the corresponding page in AR locale, logged out"):
+        alts = partners.poll_record_logo(code, locale="ar")
+        direction = partners.page_direction()
+
+    with allure.step("Inspect the image element's alt attribute"):
+        allure.attach(f"record={code} stored_ar={stored_ar!r} dir={direction} rendered_alts={alts}",
+                      name="134510 evidence", attachment_type=allure.attachment_type.TEXT)
+
+    # Assert
+    assert stored_ar == IMAGE_ALT_AR, f"Arabic alt text stored as {stored_ar!r}"
+    assert direction == "rtl", f"expected the AR page in RTL, html dir={direction!r}"
+    assert alts, f"the QCTEST image (record {code}) never rendered on the AR Home page within 3 min"
+    assert alts == [IMAGE_ALT_AR], f"AR alt attribute(s) rendered: {alts!r}"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("High Contrast toggles off")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that High Contrast can be toggled off after being toggled on (inverse control state)")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134524")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_low
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134524
+@pytest.mark.traceability("ADO-134524")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_high_contrast_can_be_toggled_off_after_on(page):
+    # ADO-134524 | PBI 129364
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Open the accessibility panel"):
+        a11y.open_panel()
+        panel_open = a11y.is_panel_open()
+
+    with allure.step("Click High Contrast to enable it"):
+        a11y.activate_high_contrast()
+        contrast_on = a11y.is_high_contrast_active()
+
+    with allure.step("Click High Contrast again to disable it"):
+        a11y.activate_high_contrast()
+        contrast_after_second_click = a11y.is_high_contrast_active()
+        background = a11y.page_background_color()
+
+    # Assert
+    assert panel_open
+    assert contrast_on, "expected the high-contrast theme to apply"
+    assert not contrast_after_second_click, "expected the page to revert to the default theme without Reset"
+    assert background == DEFAULT_BACKGROUND, f"expected the default background, got {background}"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Zoom In upper limit")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that repeated Zoom In clicks stop increasing font size once the maximum zoom level is reached")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134525")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_low
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134525
+@pytest.mark.traceability("ADO-134525")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_repeated_zoom_in_plateaus_at_maximum(page):
+    # ADO-134525 | PBI 129364 — live maximum is 140% (22.4px) after 4 clicks.
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+    a11y.open_panel()
+    a11y.start_console_capture()
+    console_baseline = a11y.console_message_count()
+
+    # Act
+    with allure.step("Click Zoom In repeatedly (10 times)"):
+        sizes = [a11y.root_font_size_px()]
+        for _ in range(10):
+            a11y.click_zoom_in()
+            sizes.append(a11y.root_font_size_px())
+        overflow = a11y.has_page_horizontal_overflow()
+        console_errors = a11y.console_error_count_since(console_baseline)
+
+    # Assert
+    assert all(b >= a for a, b in zip(sizes, sizes[1:])), f"font size must never shrink while zooming in: {sizes}"
+    assert sizes[-1] > sizes[0], f"expected the font size to increase incrementally: {sizes}"
+    assert sizes[-1] == sizes[-2] == sizes[-3], f"expected the font size to plateau at a maximum: {sizes}"
+    assert not overflow, "expected no layout breakage (horizontal overflow) at maximum zoom"
+    assert console_errors == 0, f"expected no console error while zooming, got {console_errors}"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("High Contrast rapid double-click")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that rapidly double-clicking the High Contrast toggle does not leave the UI in an inconsistent state")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134527")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.edge
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134527
+@pytest.mark.traceability("ADO-134527")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_high_contrast_rapid_double_click_settles_consistently(page):
+    # ADO-134527 | PBI 129364 — a double-click registers two clicks, so the
+    # consistent final state is OFF; the document state must agree with the
+    # switch and with itself (one class token, no console error).
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+    a11y.open_panel()
+    a11y.start_console_capture()
+    console_baseline = a11y.console_message_count()
+
+    # Act
+    with allure.step("Double-click the High Contrast toggle in rapid succession"):
+        a11y.double_click_high_contrast()
+        contrast_active = a11y.is_high_contrast_active()
+        switch_checked = a11y.is_high_contrast_switch_checked()
+        class_tokens = a11y.high_contrast_class_token_count()
+        console_errors = a11y.console_error_count_since(console_baseline)
+
+    # Assert
+    assert contrast_active == switch_checked, (
+        f"inconsistent state: document high-contrast={contrast_active}, switch checked={switch_checked}"
+    )
+    assert not contrast_active, "expected an even number of registered clicks (2) to leave High Contrast off"
+    assert class_tokens <= 1, f"expected no duplicate qc-a11y-contrast class, found {class_tokens}"
+    assert console_errors == 0, f"expected no console error, got {console_errors}"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Keyboard Navigation Highlight ON")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that enabling the keyboard navigation highlight shows a visible focus indicator on interactive elements")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134528")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_low
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134528
+@pytest.mark.traceability("ADO-134528")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_keyboard_navigation_highlight_on_shows_enhanced_focus(page):
+    # ADO-134528 | PBI 129364 — the live panel's rows are "Dark mode",
+    # "High contrast", "Zoom"; no Keyboard Navigation Highlight toggle was
+    # found at extraction. Asserted per the case; the remaining steps cannot
+    # run without the toggle, so its presence is checked first.
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Open the accessibility panel"):
+        a11y.open_panel()
+        row_labels = a11y.panel_row_labels()
+        toggle_present = a11y.is_keyboard_highlight_toggle_present()
+
+    assert toggle_present, (
+        f"expected a '{KEYBOARD_HIGHLIGHT_LABEL}' toggle in the panel; rows found: {row_labels}"
+    )
+    initial_state = a11y.keyboard_highlight_toggle_state()
+
+    with allure.step("Enable the Keyboard Navigation Highlight toggle"):
+        a11y.click_keyboard_highlight_toggle()
+        state_after_enable = a11y.keyboard_highlight_toggle_state()
+
+    with allure.step("Close the panel and Tab to the first 3 interactive elements"):
+        a11y.close_panel()
+        a11y.blur_active_element()
+        focused = a11y.tab_sequence(3)
+
+    # Assert
+    assert initial_state == "false", "expected the toggle OFF by default"
+    assert state_after_enable == "true", "expected the toggle ON after enabling"
+    assert all(d and d["hasVisibleFocusIndicator"] for d in focused), (
+        f"expected an enhanced focus outline on each of the first 3 elements: {focused}"
+    )
+    outlines = {(d["outlineStyle"], d["outlineWidth"], d["outlineColor"], d["boxShadow"]) for d in focused}
+    assert len(outlines) == 1, f"expected the same enhanced outline on every element, got {outlines}"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Keyboard Navigation Highlight OFF")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that disabling the keyboard navigation highlight reverts interactive elements to the default browser focus outline")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134529")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_low
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134529
+@pytest.mark.traceability("ADO-134529")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_keyboard_navigation_highlight_off_reverts_to_default_focus(page):
+    # ADO-134529 | PBI 129364 — same missing-toggle note as ADO-134528.
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Open the accessibility panel with the highlight toggle ON"):
+        a11y.open_panel()
+        row_labels = a11y.panel_row_labels()
+        toggle_present = a11y.is_keyboard_highlight_toggle_present()
+
+    assert toggle_present, (
+        f"expected a '{KEYBOARD_HIGHLIGHT_LABEL}' toggle in the panel; rows found: {row_labels}"
+    )
+
+    with allure.step("Record the enhanced focus style with the toggle ON"):
+        if a11y.keyboard_highlight_toggle_state() != "true":
+            a11y.click_keyboard_highlight_toggle()
+        a11y.close_panel()
+        a11y.blur_active_element()
+        style_on = a11y.tab_sequence(1)[0]
+
+    with allure.step("Turn the toggle OFF, close the panel and Tab to the first element"):
+        a11y.open_panel()
+        a11y.click_keyboard_highlight_toggle()
+        state_off = a11y.keyboard_highlight_toggle_state()
+        a11y.close_panel()
+        a11y.blur_active_element()
+        style_off = a11y.tab_sequence(1)[0]
+
+    # Assert
+    assert state_off == "false", "expected the toggle to switch OFF"
+    assert style_on["key"] == style_off["key"], "expected the same first element to be focused both times"
+    assert (style_off["outlineStyle"], style_off["outlineWidth"], style_off["boxShadow"]) != (
+        style_on["outlineStyle"], style_on["outlineWidth"], style_on["boxShadow"]
+    ), "expected the baseline focus outline, not the enhanced indicator, with the toggle OFF"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Reset clears persisted state")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that Reset restores contrast and zoom to site defaults and clears the persisted session state")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134530")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134530
+@pytest.mark.traceability("ADO-134530")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_reset_restores_defaults_and_clears_persisted_session_state(page):
+    # ADO-134530 | PBI 129364 — the case's 150% needs 5 Zoom In clicks at
+    # the live 10% step; the live maximum measured at extraction is 140%.
+    # The whole flow still runs at whatever zoom is reached, and the 150%
+    # expectation is asserted LAST so the Reset/reload checks are reported
+    # on their own merits.
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Set contrast to High and zoom to 150%, confirm values persist"):
+        a11y.enable_high_contrast()
+        a11y.open_panel()
+        for _ in range(5):
+            a11y.click_zoom_in()
+        a11y.close_panel()
+        a11y.reload()
+        contrast_persisted = a11y.is_high_contrast_active()
+        scale_persisted = a11y.zoom_scale()
+
+    with allure.step("Open the accessibility panel"):
+        a11y.open_panel()
+        panel_contrast_checked = a11y.is_high_contrast_switch_checked()
+        panel_zoom_text = a11y.zoom_value_text()
+
+    with allure.step("Click Reset to Default"):
+        a11y.click_reset()
+        contrast_after_reset = a11y.is_high_contrast_active()
+        scale_after_reset = a11y.zoom_scale()
+        panel_contrast_after_reset = a11y.is_high_contrast_switch_checked()
+        panel_zoom_after_reset = a11y.zoom_value_text()
+
+    with allure.step("Reload the page"):
+        a11y.reload()
+        contrast_after_reload = a11y.is_high_contrast_active()
+        scale_after_reload = a11y.zoom_scale()
+        persisted_after_reload = a11y.has_persisted_customization()
+
+    with allure.step("Reopen the accessibility panel"):
+        a11y.open_panel()
+        panel_contrast_reopened = a11y.is_high_contrast_switch_checked()
+        panel_zoom_reopened = a11y.zoom_value_text()
+
+    # Assert
+    assert contrast_persisted, "expected High Contrast to persist across a reload"
+    assert panel_contrast_checked, "expected the panel to show High Contrast active"
+    assert not contrast_after_reset and scale_after_reset == DEFAULT_ZOOM_SCALE, (
+        "expected Reset to revert contrast and zoom immediately"
+    )
+    assert not panel_contrast_after_reset and panel_zoom_after_reset == "100%", (
+        f"expected the panel controls to update to default, got contrast="
+        f"{panel_contrast_after_reset}, zoom={panel_zoom_after_reset}"
+    )
+    assert not contrast_after_reload and scale_after_reload == DEFAULT_ZOOM_SCALE, (
+        "expected default contrast and 100% zoom after reload"
+    )
+    assert not persisted_after_reload, "expected no residual persisted override after Reset + reload"
+    assert not panel_contrast_reopened and panel_zoom_reopened == "100%", (
+        "expected the reopened panel to show default / 100%"
+    )
+    assert panel_zoom_text == "150%" and scale_persisted == 1.5, (
+        f"expected 150% zoom to be settable and persist, observed {panel_zoom_text} (scale {scale_persisted})"
+    )
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Full happy-path journey without reload")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that a visitor can open the accessibility panel, apply High Contrast, zoom in, zoom out, and reset — all in real time without a page reload")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134637")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.accessibility
+@pytest.mark.uat
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134637
+@pytest.mark.traceability("ADO-134637")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_full_accessibility_journey_applies_in_real_time_without_reload(page):
+    # ADO-134637 | PBI 129364 — "all 4 controls" checked as the 4 NAMED
+    # controls being visible (the panel renders 6; see #134630 note).
+    # Arrange
+    a11y = AccessibilityToolsComponent(page)
+
+    # Act
+    with allure.step("Load a public page and note the DOM load marker"):
+        a11y.open_home()
+        a11y.mark_document()
+        font_default = a11y.root_font_size_px()
+
+    with allure.step("Click the accessibility icon"):
+        a11y.open_panel()
+        controls = a11y.are_named_controls_visible()
+        same_doc_open = a11y.is_same_document_since_mark()
+
+    with allure.step("Click High Contrast"):
+        a11y.activate_high_contrast()
+        contrast_on = a11y.is_high_contrast_active()
+        background_on = a11y.page_background_color()
+        same_doc_contrast = a11y.is_same_document_since_mark()
+
+    with allure.step("Click Zoom In (+) once"):
+        a11y.click_zoom_in()
+        font_zoom_in = a11y.root_font_size_px()
+        same_doc_zoom_in = a11y.is_same_document_since_mark()
+
+    with allure.step("Click Zoom Out (-) once"):
+        a11y.click_zoom_out()
+        font_zoom_out = a11y.root_font_size_px()
+        same_doc_zoom_out = a11y.is_same_document_since_mark()
+
+    with allure.step("Click Reset/Normal View"):
+        a11y.click_reset()
+        contrast_after_reset = a11y.is_high_contrast_active()
+        font_after_reset = a11y.root_font_size_px()
+        same_doc_reset = a11y.is_same_document_since_mark()
+
+    # Assert
+    assert all(controls.values()), f"expected all 4 named controls visible: {controls}"
+    assert same_doc_open, "no page reload expected on opening the panel"
+    assert contrast_on and background_on == HIGH_CONTRAST_BACKGROUND, "expected the high-contrast theme instantly"
+    assert same_doc_contrast, "no page reload expected on High Contrast"
+    assert font_zoom_in > font_default, f"expected Zoom In to grow the font ({font_default} -> {font_zoom_in})"
+    assert same_doc_zoom_in, "no page reload expected on Zoom In"
+    assert font_zoom_out < font_zoom_in and font_zoom_out == font_default, (
+        f"expected Zoom Out to step back to default ({font_zoom_in} -> {font_zoom_out})"
+    )
+    assert same_doc_zoom_out, "no page reload expected on Zoom Out"
+    assert not contrast_after_reset and font_after_reset == font_default, "expected Reset to restore defaults"
+    assert same_doc_reset, "no page reload expected anywhere in the journey"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Settings persist across header-link navigation")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that accessibility settings persist across page navigation within the same browser session")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134638")
+@pytest.mark.regression
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.accessibility
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134638
+@pytest.mark.traceability("ADO-134638")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_accessibility_settings_persist_via_header_link_navigation(page):
+    # ADO-134638 | PBI 129364 — Page A = homepage, Page B = Contact Us via
+    # the header's own "Contact Us" link.
+    # Arrange
+    a11y = AccessibilityToolsComponent(page)
+
+    # Act
+    with allure.step("Load Page A"):
+        a11y.open_home()
+        contrast_default = a11y.is_high_contrast_active()
+        scale_default = a11y.zoom_scale()
+
+    with allure.step("Open panel and activate High Contrast"):
+        a11y.open_panel()
+        a11y.activate_high_contrast()
+        contrast_a = a11y.is_high_contrast_active()
+
+    with allure.step("Click Zoom In (+) once"):
+        a11y.click_zoom_in()
+        font_a = a11y.root_font_size_px()
+        a11y.close_panel()
+
+    with allure.step("Navigate to Page B via a header link"):
+        a11y.header.open_contact_us_via_nav()
+        url_b = a11y.current_url()
+        contrast_b = a11y.is_high_contrast_active()
+        font_b = a11y.root_font_size_px()
+        panel_open_b = a11y.is_panel_open()
+
+    # Assert
+    assert not contrast_default and scale_default == DEFAULT_ZOOM_SCALE, "expected Page A at default state"
+    assert contrast_a, "expected High Contrast applied on Page A"
+    assert font_a > DEFAULT_ROOT_FONT_PX, f"expected an increased font on Page A, got {font_a}px"
+    assert "contact-us" in url_b, f"expected Page B (Contact Us), got {url_b}"
+    assert contrast_b, "expected Page B to show High Contrast already active"
+    assert font_b == font_a, f"expected the same increased font on Page B ({font_a}px), got {font_b}px"
+    assert not panel_open_b, "expected no need to reopen the panel (settings applied without it)"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Keyboard-only operation of the panel")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that a keyboard-only visitor can operate the entire accessibility panel using only Tab, Enter and Space")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134639")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_high
+@pytest.mark.accessibility
+@pytest.mark.uat
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134639
+@pytest.mark.traceability("ADO-134639")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_keyboard_only_visitor_operates_entire_panel(page):
+    # ADO-134639 | PBI 129364 — zero mouse interaction after page load. The
+    # header Tab path can hit the reCAPTCHA-badge trap documented on
+    # ADO-134490; no programmatic-focus fallback is used.
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Press Tab until focus reaches the accessibility icon, then press Enter"):
+        icon_reached = a11y.focus_accessibility_button_via_tab()
+        panel_opened = a11y.activate_focused_accessibility_button_via_keyboard() if icon_reached else False
+
+    with allure.step("Tab to High Contrast and press Space"):
+        hc_focused = a11y.focus_panel_control_via_tab(a11y.HIGH_CONTRAST_SWITCH) if panel_opened else False
+        if hc_focused:
+            a11y.press_key("Space")
+        contrast_on = a11y.is_high_contrast_active()
+
+    with allure.step("Tab to Zoom In (+) and press Enter"):
+        zoom_in_focused = a11y.focus_panel_control_via_tab(a11y.ZOOM_IN_BUTTON) if panel_opened else False
+        if zoom_in_focused:
+            a11y.press_key("Enter")
+        scale_zoomed = a11y.zoom_scale()
+
+    with allure.step("Tab to Reset/Normal View and press Enter"):
+        reset_focused = a11y.focus_panel_control_via_tab(a11y.RESET_BUTTON) if panel_opened else False
+        if reset_focused:
+            a11y.press_key("Enter")
+        contrast_after_reset = a11y.is_high_contrast_active()
+        scale_after_reset = a11y.zoom_scale()
+
+    # Assert
+    assert icon_reached, "keyboard Tab never reached the accessibility icon"
+    assert panel_opened, "expected Enter on the focused icon to open the panel"
+    assert hc_focused, "expected Tab to move focus to the High Contrast toggle"
+    assert contrast_on, "expected Space on High Contrast to switch the theme to high-contrast"
+    assert zoom_in_focused, "expected Tab to move focus to Zoom In"
+    assert scale_zoomed == _step(DEFAULT_ZOOM_SCALE, 1), f"expected one zoom increment, got scale {scale_zoomed}"
+    assert reset_focused, "expected Tab to move focus to Reset"
+    assert not contrast_after_reset and scale_after_reset == DEFAULT_ZOOM_SCALE, (
+        "expected Reset (Enter) to restore font size and contrast to default"
+    )
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Closing the panel via the icon")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that clicking the accessibility icon again while the panel is open closes the panel")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134653")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_low
+@pytest.mark.accessibility
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134653
+@pytest.mark.traceability("ADO-134653")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_clicking_icon_again_closes_panel_with_no_residual_overlay(page):
+    # ADO-134653 | PBI 129364
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Open the accessibility panel by clicking the icon"):
+        a11y.open_panel()
+        controls = a11y.are_named_controls_visible()
+
+    with allure.step("Click the accessibility icon a second time"):
+        a11y.click_accessibility_button()
+        panel_open = a11y.is_panel_open()
+        open_class_present = a11y.is_panel_open_class_present()
+        icon_visible = a11y.is_accessibility_button_visible()
+
+    # Assert
+    assert all(controls.values()), f"expected the panel open with all 4 named controls: {controls}"
+    assert not panel_open, "expected the panel to close on the second icon click"
+    assert not open_class_present, "expected no residual open-panel overlay state on <html>"
+    assert icon_visible
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("High Contrast reverse action")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that clicking High Contrast again while active reverts the site to the default theme")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134654")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_low
+@pytest.mark.accessibility
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134654
+@pytest.mark.traceability("ADO-134654")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_clicking_high_contrast_again_reverts_to_default_theme(page):
+    # ADO-134654 | PBI 129364
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Activate High Contrast"):
+        a11y.open_panel()
+        a11y.activate_high_contrast()
+        contrast_on = a11y.is_high_contrast_active()
+        background_on = a11y.page_background_color()
+        a11y.mark_document()
+
+    with allure.step("Click the High Contrast toggle again"):
+        a11y.activate_high_contrast()
+        contrast_off = a11y.is_high_contrast_active()
+        background_off = a11y.page_background_color()
+        same_document = a11y.is_same_document_since_mark()
+
+    # Assert
+    assert contrast_on and background_on == HIGH_CONTRAST_BACKGROUND, "expected the high-contrast theme applied"
+    assert not contrast_off, "expected the site to revert to the default theme"
+    assert background_off == DEFAULT_BACKGROUND, f"expected the default background, got {background_off}"
+    assert same_document, "expected no page reload"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Zoom In accumulates")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that clicking Zoom In (+) three times consecutively increases font size cumulatively by three increments")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134655")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_low
+@pytest.mark.accessibility
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134655
+@pytest.mark.traceability("ADO-134655")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_zoom_in_three_times_accumulates_three_increments(page):
+    # ADO-134655 | PBI 129364
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Open the panel at default zoom level (Level 0)"):
+        a11y.open_panel()
+        a11y.mark_document()
+        sizes = [a11y.root_font_size_px()]
+        scales = [a11y.zoom_scale()]
+
+    with allure.step("Click Zoom In (+) three times"):
+        for _ in range(3):
+            a11y.click_zoom_in()
+            sizes.append(a11y.root_font_size_px())
+            scales.append(a11y.zoom_scale())
+        same_document = a11y.is_same_document_since_mark()
+
+    # Assert
+    assert scales[0] == DEFAULT_ZOOM_SCALE, f"expected Level 0 at start, got scale {scales[0]}"
+    assert sizes[1] > sizes[0] and sizes[2] > sizes[1] and sizes[3] > sizes[2], (
+        f"expected each click to increase the font size: {sizes}"
+    )
+    assert scales == [_step(DEFAULT_ZOOM_SCALE, i) for i in range(4)], f"expected Levels 0..3, got {scales}"
+    assert same_document, "expected each click to apply without a page reload"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Zoom Out accumulates")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that clicking Zoom Out (−) three times consecutively decreases font size cumulatively by three increments")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134656")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_low
+@pytest.mark.accessibility
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134656
+@pytest.mark.traceability("ADO-134656")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_zoom_out_three_times_accumulates_three_decrements(page):
+    # ADO-134656 | PBI 129364 — live minimum measured at extraction is 80%
+    # (reached after 2 clicks); asserted per the case's Level -3.
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Open the panel at default zoom level (Level 0)"):
+        a11y.open_panel()
+        a11y.mark_document()
+        sizes = [a11y.root_font_size_px()]
+        scales = [a11y.zoom_scale()]
+
+    with allure.step("Click Zoom Out (−) three times"):
+        for _ in range(3):
+            a11y.click_zoom_out()
+            sizes.append(a11y.root_font_size_px())
+            scales.append(a11y.zoom_scale())
+        same_document = a11y.is_same_document_since_mark()
+
+    # Assert
+    assert scales[0] == DEFAULT_ZOOM_SCALE, f"expected Level 0 at start, got scale {scales[0]}"
+    assert same_document, "expected each click to apply without a page reload"
+    assert sizes[1] < sizes[0] and sizes[2] < sizes[1] and sizes[3] < sizes[2], (
+        f"expected each click to decrease the font size (Levels -1, -2, -3): {sizes}px, scales {scales}"
+    )
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Reset reverts a compound state")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that Reset/Normal View reverts a combined High Contrast + multi-increment zoom state to default in a single click")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134657")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.functional_low
+@pytest.mark.accessibility
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134657
+@pytest.mark.traceability("ADO-134657")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_reset_reverts_high_contrast_and_level_2_zoom_in_one_click(page):
+    # ADO-134657 | PBI 129364
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+    font_default = a11y.root_font_size_px()
+
+    # Act
+    with allure.step("Activate High Contrast"):
+        a11y.open_panel()
+        a11y.activate_high_contrast()
+        contrast_on = a11y.is_high_contrast_active()
+
+    with allure.step("Click Zoom In (+) twice (reaching Level 2)"):
+        a11y.click_zoom_in()
+        a11y.click_zoom_in()
+        scale_level_2 = a11y.zoom_scale()
+        a11y.mark_document()
+
+    with allure.step("Click Reset/Normal View"):
+        a11y.click_reset()
+        contrast_after = a11y.is_high_contrast_active()
+        scale_after = a11y.zoom_scale()
+        font_after = a11y.root_font_size_px()
+        same_document = a11y.is_same_document_since_mark()
+
+    # Assert
+    assert contrast_on, "expected High Contrast applied"
+    assert scale_level_2 == _step(DEFAULT_ZOOM_SCALE, 2), f"expected Level 2, got scale {scale_level_2}"
+    assert not contrast_after, "expected the default theme after a single Reset"
+    assert scale_after == DEFAULT_ZOOM_SCALE and font_after == font_default, (
+        f"expected Level 0 after a single Reset (scale {scale_after}, font {font_after}px)"
+    )
+    assert same_document, "expected no page reload"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Resilience if the panel fails to open")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that the accessibility icon remains visible with no broken UI if the panel fails to open")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134660")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.edge
+@pytest.mark.accessibility
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134660
+@pytest.mark.traceability("ADO-134660")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_icon_stays_visible_with_no_broken_ui_when_panel_fails(page):
+    # ADO-134660 | PBI 129364 — same real harness as ADO-134484: the two
+    # live accessibility bundles are blocked before load, so the panel
+    # component genuinely fails to render.
+    # Arrange
+    a11y = AccessibilityToolsComponent(page)
+    a11y.start_open_failure_simulation()
+
+    # Act
+    with allure.step("Load a public page with the panel-rendering component forced to fail"):
+        a11y.open_home()
+        header_visible = a11y.header.is_header_visible()
+        icon_visible_before = a11y.is_accessibility_button_visible()
+        console_baseline = a11y.console_message_count()
+
+    with allure.step("Click the accessibility icon"):
+        a11y.click_accessibility_button()
+        panel_open = a11y.is_panel_open()
+        panel_nodes = a11y.panel_dom_instance_count()
+        open_class_present = a11y.is_panel_open_class_present()
+        overflow = a11y.has_page_horizontal_overflow()
+        console_errors_from_click = a11y.console_error_count_since(console_baseline)
+        icon_visible_after = a11y.is_accessibility_button_visible()
+
+    # Assert
+    assert a11y.blocked_request_count() > 0, "the failure harness must genuinely block the panel bundles"
+    assert header_visible and icon_visible_before, "expected the page and header to load with the icon visible"
+    assert not panel_open and panel_nodes == 0, "expected the panel not to open, with no partial panel markup"
+    assert not open_class_present, "expected no blank overlay / open-panel state"
+    assert not overflow, "expected no broken layout"
+    assert console_errors_from_click == 0, "expected no error surfaced by the click itself"
+    assert icon_visible_after, "expected the icon to remain visible and clickable"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("High Contrast does not alter layout")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that High Contrast changes colour only and does not alter page layout at desktop width")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134663")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.compatibility
+@pytest.mark.accessibility
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134663
+@pytest.mark.traceability("ADO-134663")
+@pytest.mark.parametrize("page", [ANON_DESKTOP_1366], indirect=True)
+def test_high_contrast_changes_colour_only_not_layout_at_desktop(page):
+    # ADO-134663 | PBI 129364 — content-rich page = EN homepage at 1366x768.
+    # Geometry compared within the bug-rules.md layout tolerance (±2 px).
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Note header, main sections and footer positions in the default theme"):
+        layout_default = a11y.layout_snapshot()
+
+    with allure.step("Activate High Contrast on the same page"):
+        a11y.enable_high_contrast()
+        contrast_on = a11y.is_high_contrast_active()
+
+    with allure.step("Re-measure positions, order and spacing, and check horizontal overflow"):
+        layout_contrast = a11y.layout_snapshot()
+        overflow = a11y.has_page_horizontal_overflow()
+
+    # Assert
+    assert contrast_on, "expected High Contrast applied"
+    assert layout_default["sections"], "expected the main content to expose measurable sections"
+    assert [s["cls"] for s in layout_contrast["sections"]] == [s["cls"] for s in layout_default["sections"]], (
+        "expected the same section/column order under High Contrast"
+    )
+    shifted = _boxes_shifted(layout_default, layout_contrast, LAYOUT_TOLERANCE_PX)
+    assert not shifted, f"expected no reflow under High Contrast (±{LAYOUT_TOLERANCE_PX}px): {shifted}"
+    assert not overflow, "expected no horizontal scrollbar under High Contrast"
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("High Contrast at mobile width, EN + AR")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that High Contrast renders correctly at mobile viewport width in both languages")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134664")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.compatibility
+@pytest.mark.accessibility
+@pytest.mark.bilingual
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134664
+@pytest.mark.traceability("ADO-134664")
+@pytest.mark.parametrize("page", [ANON_MOBILE_390], indirect=True)
+def test_high_contrast_renders_at_mobile_width_in_both_languages(page):
+    # ADO-134664 | PBI 129364 — legibility judged by a real axe-core
+    # color-contrast audit of the whole page with the panel open.
+    # Arrange
+    a11y = AccessibilityToolsComponent(page)
+
+    # Act
+    with allure.step("Open the homepage in English at 390x844 and activate High Contrast"):
+        a11y.open_home()
+        a11y.enable_high_contrast()
+        a11y.open_panel()
+        en_contrast = a11y.is_high_contrast_active()
+        en_violations = a11y.run_color_contrast_audit()
+        en_overflow = a11y.has_page_horizontal_overflow()
+
+    with allure.step("Repeat in Arabic"):
+        a11y.open_home_arabic()
+        a11y.enable_high_contrast()
+        a11y.open_panel()
+        ar_contrast = a11y.is_high_contrast_active()
+        ar_direction = a11y.document_direction()
+        ar_panel_direction = a11y.panel_direction()
+        ar_violations = a11y.run_color_contrast_audit()
+        ar_overflow = a11y.has_page_horizontal_overflow()
+
+    # Assert
+    assert en_contrast, "expected High Contrast on the English mobile layout"
+    assert en_violations == [], f"EN: illegible content under High Contrast: {_axe_summary(en_violations)}"
+    assert ar_contrast, "expected High Contrast on the Arabic mobile layout"
+    assert ar_direction == "rtl" and ar_panel_direction == "rtl", "expected the Arabic view to keep RTL"
+    assert ar_violations == [], f"AR: illegible content under High Contrast: {_axe_summary(ar_violations)}"
+    assert not en_overflow and not ar_overflow, (
+        f"expected no horizontal scrollbar (EN={en_overflow}, AR={ar_overflow})"
+    )
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("Panel operable in dark mode at mobile width, EN + AR")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that the accessibility panel remains operable in dark mode at mobile viewport width")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134667")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.compatibility
+@pytest.mark.accessibility
+@pytest.mark.bilingual
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134667
+@pytest.mark.traceability("ADO-134667")
+@pytest.mark.parametrize("page", [ANON_MOBILE_390], indirect=True)
+def test_panel_operable_in_dark_mode_at_mobile_width_both_languages(page):
+    # ADO-134667 | PBI 129364 — Reset also returns dark mode to light (live
+    # behaviour), so dark mode is re-enabled for the Arabic pass.
+    # Arrange
+    a11y = AccessibilityToolsComponent(page)
+    results = {}
+
+    # Act
+    for locale in ("en", "ar"):
+        with allure.step(f"[{locale.upper()}] Open the homepage at 390x844 in dark mode"):
+            a11y.open_home() if locale == "en" else a11y.open_home_arabic()
+            a11y.enable_dark_mode()
+            dark_active = a11y.is_dark_mode_active()
+            icon_visible = a11y.is_accessibility_button_visible()
+
+        with allure.step(f"[{locale.upper()}] Open the panel and inspect all four controls"):
+            a11y.open_panel()
+            controls = a11y.are_named_controls_visible()
+            fit = a11y.panel_controls_fit_within_viewport()
+            no_overlap = a11y.named_controls_have_no_overlap()
+            violations = a11y.run_panel_named_controls_contrast_audit()
+            panel_direction = a11y.panel_direction()
+
+        with allure.step(f"[{locale.upper()}] Tap Zoom In and then Reset"):
+            font_before = a11y.root_font_size_px()
+            a11y.click_zoom_in()
+            font_zoomed = a11y.root_font_size_px()
+            a11y.click_reset()
+            font_reset = a11y.root_font_size_px()
+
+        results[locale] = {
+            "dark": dark_active, "icon": icon_visible, "controls": all(controls.values()), "fit": fit,
+            "no_overlap": no_overlap, "violations": _axe_summary(violations),
+            "direction": panel_direction, "zoomed": font_zoomed > font_before, "reset": font_reset == font_before,
+        }
+
+    # Assert
+    for locale, r in results.items():
+        assert r["dark"] and r["icon"], f"{locale}: expected dark mode with the icon visible: {r}"
+        assert r["controls"] and r["fit"] and r["no_overlap"], f"{locale}: expected 4 unclipped, non-overlapping controls: {r}"
+        assert r["violations"] == [], f"{locale}: panel controls not legible against the dark background: {r}"
+        assert r["zoomed"] and r["reset"], f"{locale}: expected Zoom In then Reset to operate in dark mode: {r}"
+    assert results["en"]["direction"] == "ltr" and results["ar"]["direction"] == "rtl", (
+        f"expected the Arabic panel mirrored for RTL: {results}"
+    )
+
+
+@allure.epic("GLOBAL")
+@allure.feature("Accessibility Tools")
+@allure.story("High Contrast requested while dark mode is on")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that requesting High Contrast while dark mode is active produces one deterministic, legible theme")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "134668")
+@pytest.mark.web
+@pytest.mark.global_
+@pytest.mark.edge
+@pytest.mark.accessibility
+@pytest.mark.pbi_129364
+@pytest.mark.tc_134668
+@pytest.mark.traceability("ADO-134668")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_high_contrast_over_dark_mode_is_deterministic_and_legible(page):
+    # ADO-134668 | PBI 129364 — no winner is asserted; coherence, legibility
+    # (axe color-contrast, whole page incl. the open panel), determinism
+    # across a reload, and a single-click Reset of contrast + zoom. Dark
+    # mode's state after Reset is left to the site (case wording).
+    # Arrange
+    a11y = AccessibilityToolsComponent(page).open_home()
+
+    # Act
+    with allure.step("Switch the site to dark mode"):
+        a11y.enable_dark_mode()
+        dark_on = a11y.is_dark_mode_active()
+
+    with allure.step("Open the panel and activate High Contrast while dark mode is on"):
+        a11y.enable_high_contrast()
+        a11y.open_panel()
+        state_1 = (a11y.is_dark_mode_active(), a11y.is_high_contrast_active(),
+                   a11y.page_background_color(), a11y.body_text_color())
+
+    with allure.step("Inspect background, text, links, buttons and the panel for legibility"):
+        violations = a11y.run_color_contrast_audit()
+
+    with allure.step("Reload without changing either setting"):
+        a11y.reload()
+        state_2 = (a11y.is_dark_mode_active(), a11y.is_high_contrast_active(),
+                   a11y.page_background_color(), a11y.body_text_color())
+
+    with allure.step("Click Reset / Normal View"):
+        a11y.open_panel()
+        a11y.click_reset()
+        contrast_after_reset = a11y.is_high_contrast_active()
+        scale_after_reset = a11y.zoom_scale()
+
+    # Assert
+    assert dark_on, "expected dark mode on (<html data-theme='dark'>)"
+    assert state_1[1], "expected High Contrast applied on top of dark mode"
+    assert state_1[2] != state_1[3], f"expected one coherent theme, background {state_1[2]} vs text {state_1[3]}"
+    assert violations == [], f"expected every element legible, axe violations: {_axe_summary(violations)}"
+    assert state_2 == state_1, f"expected the combined state to render identically after reload: {state_1} vs {state_2}"
+    assert not contrast_after_reset and scale_after_reset == DEFAULT_ZOOM_SCALE, (
+        "expected a single Reset to clear High Contrast and any zoom"
+    )

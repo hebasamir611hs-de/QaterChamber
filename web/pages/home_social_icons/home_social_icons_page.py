@@ -185,6 +185,13 @@ LATEST_NEWS_SECTION = "section.qc-home-latest-news"
 HOME_SOCIAL_HEADING = f"{HOME_SOCIAL_CONTAINER} h2.qc-social-title"
 HOME_SOCIAL_SUBTEXT = f"{HOME_SOCIAL_CONTAINER} p.qc-social-subtitle"
 HOME_SOCIAL_ICON_ROW = f"{HOME_SOCIAL_CONTAINER} ul.qc-social-list"
+# The visible Figma "card" (rounded, tinted 1px border, gradient fill) is the
+# INNER panel, not the full-width outer wrapper `div.qc-home-social` (which is
+# a plain white 1920px band with 40px 16px padding). Confirmed live
+# 2026-10-21 by a scripted computed-style walk of the section subtree:
+# div.qc-home-social > div.qc-social-inner > div.qc-social-panel
+# (padding 20px 32px, 1px solid border, linear-gradient background).
+HOME_SOCIAL_CARD = f"{HOME_SOCIAL_CONTAINER} div.qc-social-panel"
 
 
 def rgb_to_hex(rgb: str) -> str:
@@ -237,6 +244,28 @@ class HomeSocialIconsPage(BasePage):
         # short/empty link list and fail every test's own positive control.
         self._social_icon_links().first.wait_for(state="visible", timeout=10000)
         return self
+
+    def open_home_settled(self, locale: str = "en") -> "HomeSocialIconsPage":
+        """Logged-out Home load for the CMS-precondition cases 131141 /
+        131198. Unlike `open_home()` it waits on nothing the section's own
+        records control (it must work when the section is correctly hidden):
+        the global footer, then a bounded network-idle so the client-side
+        icon fetch has completed before any presence/order read."""
+        self.open_anonymous(web_url("/", locale=locale))
+        self.page.locator("footer.qc-global-site-footer").first.wait_for(state="attached", timeout=30000)
+        try:
+            self.page.wait_for_load_state("networkidle", timeout=20000)
+        except Exception:  # noqa: BLE001 -- upper bound only; footer is the settle anchor
+            pass
+        return self
+
+    def is_section_displayed(self) -> bool:
+        """True when the Home social section is in the DOM AND visible."""
+        return self.is_visible(HOME_SOCIAL_CONTAINER)
+
+    def section_node_count(self) -> int:
+        """Raw DOM count, to tell 'absent' from 'present but hidden' in a report."""
+        return self.page.locator(HOME_SOCIAL_CONTAINER).count()
 
     def _social_icon_links(self):
         return self.page.locator(HOME_SOCIAL_CONTAINER).get_by_role("link")
@@ -346,6 +375,28 @@ class HomeSocialIconsPage(BasePage):
         return self.computed_style(
             HOME_SOCIAL_CONTAINER,
             ["padding", "backgroundImage", "backgroundColor", "borderWidth", "borderRadius"],
+        )
+
+    def card_style(self) -> dict:
+        """Computed style of the inner Figma card (TC 131134) — padding is
+        returned per side so a caller can apply the ±2 px layout tolerance
+        (bug-rules.md Rule 1) instead of comparing a shorthand string."""
+        return self.computed_style(
+            HOME_SOCIAL_CARD,
+            ["paddingTop", "paddingRight", "paddingBottom", "paddingLeft",
+             "backgroundImage", "backgroundColor", "borderTopWidth", "borderRadius"],
+        )
+
+    def card_content_right_edge(self) -> float:
+        """x-coordinate of the card's inner (content-box) right edge: the
+        border-box right minus right border and right padding (TC 131139's
+        "right-aligned" reference line)."""
+        return self.page.locator(HOME_SOCIAL_CARD).evaluate(
+            """el => {
+                const r = el.getBoundingClientRect();
+                const s = getComputedStyle(el);
+                return r.right - parseFloat(s.borderRightWidth) - parseFloat(s.paddingRight);
+            }"""
         )
 
     def heading_style(self) -> dict:

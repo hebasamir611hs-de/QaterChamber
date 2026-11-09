@@ -235,31 +235,38 @@ optional, and neither is a gap just because the BRD text is silent on Dark mode.
 A per-feature case **asserts rendering under a state; it never re-tests the
 switch**. Without this split, 40 features each re-verify the same toggle.
 
-### Per-feature default — 4 cases, one per axis
+### Per-PBI coverage — what each feature's run checks *(QA lead decision 2026-10-25)*
 
-For a feature's UI-rendering coverage, derive:
+> Replaces the 2026-09-30 "4 cases, one per axis" default and its 2 × 2 × 2
+> cross-product rule. Why: per-axis cases with no side-by-side kept passing
+> pages a manual pass failed, while HC and tablet have no Figma frames to
+> compare against per feature anyway.
 
-1. **EN · Light · Normal** — the baseline pass every UI case already does.
-2. **AR · Light · Normal** — RTL (already required by the Bilingual rules).
-3. **EN · Dark · Normal**
-4. **EN · Light · High Contrast**
+For each in-scope Figma frame of the PBI, every case is checked **side by side**
+(Figma render next to the live page, same viewport, language and theme —
+bug-rules.md Rule 1):
 
-Each axis is represented once. This is the default, **not a ceiling** — and per
-the tiered-derivation rule, the **last remaining case of any language, theme or
-contrast axis is never folded**.
+1. **EN · Light · Desktop** and **AR · Light · Desktop** (RTL).
+2. **EN · Light · Mobile** and **AR · Light · Mobile**.
+3. **Dark — per PBI when the PBI links dark frames** (EN and AR, desktop and
+   mobile, as linked), side by side like the light ones. Dark stays core: a PBI
+   that links dark frames is not covered without them.
+4. **Text over an image, overlay or gradient** (hero banners, badge overlays,
+   card collages) keeps one **High Contrast** legibility case per PBI — legibility
+   there is state-dependent and has produced findings before.
 
-### When the full cross-product IS required
+The last remaining case of any language or breakpoint is never folded.
 
-Derive the full 2 × 2 × 2 (8 combinations) when **either** holds — these are the
-cases where the axes genuinely interact rather than compose:
+### Per-sprint sweep — what moves out of the PBI run
 
-1. **The feature's cases assert Figma colour or design-token values** (the case
-   carries the `figma` marker, or uses `core/web/design_tokens.py`). A token that
-   is correct in Light can fail contrast in Dark or be overridden in High
-   Contrast.
-2. **The feature renders text over an image, overlay or gradient** — hero
-   banners, badge overlays, card collages. Legibility here is state-dependent
-   and has already produced findings on this project.
+Covered once per sprint, component by component, by `pytest -m sprint_sweep`
+(`web/tests/frontend_quality/`) plus its manual passes (bug-rules.md Rule 7):
+
+- **High Contrast** — no frames; judged by legibility and the axe contrast audit.
+- **Tablet (768)** — no frames; judged on layout integrity (no overflow, overlap
+  or broken wrap).
+- **Dark on PBIs with no dark frames** — the same contrast audit.
+- **Cross-page consistency** and the **headed interaction sweep**.
 
 ### How to drive it — route through the shared component
 

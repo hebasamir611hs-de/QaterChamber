@@ -1208,13 +1208,19 @@ def test_rtl_arrow_direction(page):
     sd = HomeStrategicDirectionPage(page)
     sd.open_home_arabic()
     sd.scroll_to_section()
-    assert sd.active_card_title_text() == AR_VISION_TITLE
+    # Autoplay can advance once before pause_autoplay's hover lands on a slow
+    # load (live 2026-11-01: الرسالة on arrival), so "forward" is read from the
+    # card active now, not assumed to start at الرؤية.
+    titles = sd.card_titles_all()
+    before = sd.active_card_title_text()
+    assert AR_VISION_TITLE in titles and before in titles, (before, titles)
+    expected = titles[(titles.index(before) + 1) % len(titles)]
     next_x, prev_x = sd.arrow_x_position("next"), sd.arrow_x_position("prev")
     left_arrow = sd.ARROW_NEXT if next_x < prev_x else sd.ARROW_PREV
-    allure.attach(f"next x={next_x}, prev x={prev_x}; left arrow={left_arrow}", "arrow positions", allure.attachment_type.TEXT)
+    allure.attach(f"next x={next_x}, prev x={prev_x}; left arrow={left_arrow}; {before} -> {expected}", "arrow positions", allure.attachment_type.TEXT)
     assert next_x < prev_x, f"forward arrow is not on the left in RTL (next x={next_x}, prev x={prev_x})"
     sd._click_arrow_and_wait_for_change(left_arrow)
-    assert sd.active_card_title_text() == "الرسالة", f"left (forward) arrow went to {sd.active_card_title_text()!r}"
+    assert sd.active_card_title_text() == expected, f"left (forward) arrow went {before!r} -> {sd.active_card_title_text()!r}, expected {expected!r}"
 
 
 @allure.label("pbi", PBI)

@@ -43,7 +43,7 @@ Real, CLI-verified structure (footer.qc-global-site-footer):
     footer.qc-global-site-footer[data-show-newsletter=true][data-show-social=true]
       div.qc-footer-inner > div.qc-footer-grid
         div.qc-footer-col.qc-footer-brand
-          a.qc-footer-logo[href="/web/qatar-chamber/home"]  (LOGO, same tab)
+          a.qc-footer-logo[href="/home"]                    (LOGO, same tab)
             img.qc-footer-logo-img
           p.qc-footer-about                                  (ABOUT_TEXT)
           div.qc-footer-social-wrap
@@ -73,13 +73,15 @@ Quick Links) — not a hardcoded English-only assumption.
 
 Real, CLI-verified findings from this extraction pass (reported, not
 silently adjusted):
-  - Footer logo: `href="/web/qatar-chamber/home"`, no `target` attribute
-    (same-tab). Confirmed LIVE end-to-end from a non-home page
-    (`/web/qatar-chamber/contact-us`): clicking the footer logo there lands
-    on `/web/qatar-chamber/home` — matches ADO 130962 exactly.
+  - Footer logo: no `target` attribute (same-tab). Clicking it from a
+    non-home page lands on the Home page. URL UPDATE 2026-10-21: the site
+    now serves short friendly URLs — the logo lands on `/home` (was
+    `/web/qatar-chamber/home`); the long `/web/qatar-chamber/...` paths
+    still resolve when navigated to directly.
   - ALL 18 real footer nav-column links (6 per column x 3 columns) carry
-    `target=null` (same-tab) and a same-origin `/web/qatar-chamber/...`
-    `href` — ZERO are configured with `target="_blank"` or an absolute
+    `target=null` (same-tab) and a same-origin `href` (short form since
+    2026-10-21, e.g. `/about-us`; originally `/web/qatar-chamber/...`) — ZERO are configured with
+    `target="_blank"` or an absolute
     external URL anywhere in the 3 nav columns, confirmed via a full
     attribute dump of every `<a>` in `ul.qc-footer-links`. This is a real,
     disclosed CONTENT-CONFIGURATION gap on this dev instance, not a locator
@@ -92,7 +94,7 @@ silently adjusted):
     `Training Programs`, `Useful Links`, `Help Center`, `Career
     Opportunities`, `Tenders`, `Accessibility`/`Privacy Policy`/`Terms of
     Service` bottom-bar links) resolve to the placeholder
-    `/web/qatar-chamber/home` rather than a distinct page — another real,
+    Home page (`/home`) rather than a distinct page — another real,
     disclosed content gap (unpublished target pages), not fabricated.
   - Social icons: confirmed 8 real entries (Facebook, X, LinkedIn,
     Instagram, YouTube, WhatsApp, Telegram, Snapchat), each with a real
@@ -106,15 +108,15 @@ silently adjusted):
     "Tenders", "FAQ's"). End-to-end confirmed LIVE: clicking "Contact Us"
     inside this column (isolated from any other interaction in the same
     browser context — see module docstring's flakiness note below) lands on
-    `/web/qatar-chamber/contact-us`, same tab — matches ADO 130965/130967.
+    `/contact-us` (short URL, 2026-10-21), same tab — matches ADO 130965/130967.
   - FLAKINESS FOUND live while extracting: clicking a footer nav link
     immediately after a `context.expect_page()` block (i.e., right after
     opening a social-icon popup in the SAME script/session) intermittently
     misrouted to `/home` instead of the clicked link's real target — a
     focus/layout-shift artifact of the just-opened popup tab, not a defect
     in the footer's own routing (re-run in isolation, with no prior popup
-    interaction in the same context, correctly landed on `/web/qatar-
-    chamber/contact-us` every time). click_nav_link()/click_quick_link()
+    interaction in the same context, correctly landed on `/contact-us`
+    every time). click_nav_link()/click_quick_link()
     below therefore always operate on the CURRENT page in the SAME
     Playwright context without a preceding popup step polluting focus;
     social-icon tests use their own fresh page/context per the framework's
@@ -125,7 +127,7 @@ silently adjusted):
     `ul.qc-footer-legal` has exactly 3 links (Accessibility, Privacy Policy,
     Terms of Service) — matches ADO 130972's described layout (copyright
     left, links right) structurally, though all 3 hrefs are the
-    `/web/qatar-chamber/home` placeholder (same content-gap note as above).
+    Home-page placeholder (same content-gap note as above).
   - Back to Top (`button.qc-footer-backtop`): NOT reliably reachable via
     Playwright's `scroll_into_view_if_needed()` from a fresh page load (it
     timed out live — the page's lazy-loaded sections keep growing
@@ -165,7 +167,8 @@ from config.settings import web_url
 HOME_URL = web_url("/home")
 CONTACT_US_URL = web_url("/web/qatar-chamber/contact-us")
 
-
+
+
 # ── Shared with main's Social Media Icons work (PBI 129366 / 129373) ──────
 # Kept at module level because `web/pages/home_social_icons/home_social_icons_page.py`
 # and `web/pages/keyboard_navigation/keyboard_navigation_page.py` import them
@@ -426,6 +429,24 @@ class FooterComponent(BasePage):
         self._social_icon_links().first.wait_for(state="visible", timeout=10000)
         return self
 
+    def open_home_settled_anonymous(self, locale: str = "en") -> "FooterComponent":
+        """Logged-out Home load for the "column hidden" case (130966). Unlike
+        `open_home_anonymous()` it waits on nothing the CMS change could
+        remove: the footer, a NON-Quick-Links nav column and the copyright
+        line, then a bounded network-idle, so an "absent" read is never a
+        not-yet-rendered read."""
+        self.open_anonymous(web_url("/home", locale=locale))
+        self.wait_for(self.FOOTER)
+        self.scroll_to_footer()
+        self.page.locator(f'{self.NAV_COLUMNS}:not([aria-label="Quick Links"])').first.wait_for(
+            state="visible", timeout=15000)
+        self.wait_for(self.COPYRIGHT_TEXT)
+        try:
+            self.page.wait_for_load_state("networkidle", timeout=15000)
+        except Exception:  # noqa: BLE001 -- upper bound only; the anchors above are the settle signal
+            pass
+        return self
+
     def _social_icon_links(self):
         return self.page.locator(FOOTER_SOCIAL_CONTAINER).get_by_role("link")
 
@@ -458,3 +479,83 @@ class FooterComponent(BasePage):
             if PRODUCTION_WHATSAPP_HREF in href:
                 return i
         return -1
+
+    # ── Public snapshot for disposable-record cases (2026-10-21) ─────────
+    # ADO 130975/130992/130976 publish QCTEST footer records and read the
+    # footer as a logged-out visitor, in EN and AR. Elements are matched by
+    # a QCTEST marker in their href (the visible text is localised), and the
+    # rest of the footer is compared as a whole before/after.
+    _SNAPSHOT_JS = """(sel) => {
+      const f = document.querySelector(sel);
+      if (!f) return null;
+      const pairs = (root, css) => Array.from(root.querySelectorAll(css))
+        .map(a => [a.innerText.trim(), a.getAttribute('href') || '']);
+      return {
+        nav: Array.from(f.querySelectorAll('nav.qc-footer-col')).map(n => [
+          (n.querySelector('.qc-footer-col-title') || {innerText: ''}).innerText.trim(),
+          pairs(n, 'ul.qc-footer-links > li > a')]),
+        social: Array.from(f.querySelectorAll('ul.qc-footer-social > li > a'))
+          .map(a => [a.getAttribute('aria-label') || '', a.getAttribute('href') || '']),
+        copyright: (f.querySelector('p.qc-footer-copyright') || {innerText: ''}).innerText.trim(),
+        legal: pairs(f, 'ul.qc-footer-legal > li > a'),
+        dir: document.documentElement.getAttribute('dir') || ''
+      };
+    }"""
+    PUBLIC_POLL_TIMEOUT_S = 180
+    PUBLIC_POLL_INTERVAL_MS = 5000
+
+    def open_public(self, locale: str = "en") -> "FooterComponent":
+        """Home page as a logged-out visitor (open_anonymous never signs the
+        context in), any locale — waits on the footer's first social link,
+        which is locale-independent (open_home_anonymous waits on the English
+        heading and so cannot serve /ar)."""
+        self.open_anonymous(web_url("/home", locale=locale))
+        self.page.locator(self.FOOTER).wait_for(state="attached", timeout=30000)
+        self._social_icon_links().first.wait_for(state="attached", timeout=15000)
+        return self
+
+    def public_snapshot(self) -> dict:
+        """{nav: [[heading, [[text, href]...]]...], social: [[label, href]],
+        copyright: str, legal: [[text, href]], dir: str} of the rendered footer."""
+        return self.page.evaluate(self._SNAPSHOT_JS, self.FOOTER) or {}
+
+    @staticmethod
+    def snapshot_links(snapshot: dict) -> list:
+        """Every [area, text, href] link in a snapshot, in rendered order."""
+        out = []
+        for heading, links in snapshot.get("nav", []):
+            out += [[f"nav:{heading}", t, h] for t, h in links]
+        out += [["social", t, h] for t, h in snapshot.get("social", [])]
+        out += [["legal", t, h] for t, h in snapshot.get("legal", [])]
+        return out
+
+    @classmethod
+    def links_with_marker(cls, snapshot: dict, marker: str) -> list:
+        return [link for link in cls.snapshot_links(snapshot) if marker in link[2]]
+
+    @classmethod
+    def without_marker(cls, snapshot: dict, marker: str) -> dict:
+        """The snapshot with every link whose href carries `marker` removed."""
+        return {
+            "nav": [[h, [l for l in links if marker not in l[1]]] for h, links in snapshot.get("nav", [])],
+            "social": [l for l in snapshot.get("social", []) if marker not in l[1]],
+            "legal": [l for l in snapshot.get("legal", []) if marker not in l[1]],
+            "copyright": snapshot.get("copyright", ""),
+        }
+
+    def poll_public(self, locale: str, predicate, timeout_s: float = None) -> tuple:
+        """Reload the public Home page (logged out) until `predicate(snapshot)`
+        holds or the budget runs out (standards: up to 3 min propagation).
+        Returns (held, last_snapshot)."""
+        import time
+
+        timeout_s = self.PUBLIC_POLL_TIMEOUT_S if timeout_s is None else timeout_s
+        end = time.monotonic() + timeout_s
+        while True:
+            self.open_public(locale)
+            snap = self.public_snapshot()
+            if predicate(snap):
+                return True, snap
+            if time.monotonic() >= end:
+                return False, snap
+            self.page.wait_for_timeout(self.PUBLIC_POLL_INTERVAL_MS)

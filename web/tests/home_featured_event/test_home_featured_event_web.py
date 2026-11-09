@@ -939,3 +939,242 @@ def test_pinned_event_location_en_matches_events_module(page):
 def test_pinned_event_location_ar_matches_events_module(page):
     """ADO-135679. Logged-out visitor; read-only."""
     _field_matches_detail(page, "location", "ar")
+
+
+# ═════════════════════════════════════════════════════════════════════════
+# 2026-10-21 — Compatibility (135658-135660) and lifecycle (135667/135668)
+# cases. All read-only, logged-out visitor. The pinned event comes from the
+# live singleton 49205, which is never written here.
+# ═════════════════════════════════════════════════════════════════════════
+from datetime import date as _date
+
+_NO_PIN_MSG = (
+    "Precondition not met: the Upcoming Event section is not visible on the "
+    "public Home Page (rendered display:none), so no pinned event is live."
+)
+
+
+def _boxes_overlap(a: dict, b: dict) -> bool:
+    return not (a["x"] + a["width"] <= b["x"] + 1 or b["x"] + b["width"] <= a["x"] + 1
+                or a["y"] + a["height"] <= b["y"] + 1 or b["y"] + b["height"] <= a["y"] + 1)
+
+
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.story("Cross-browser rendering")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that the Upcoming Event section renders consistently across Chrome, Firefox, and Edge")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "135658")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.compatibility
+@pytest.mark.pbi_129382
+@pytest.mark.traceability("ADO-135658")
+@pytest.mark.tc_135658
+@ANON
+def test_section_renders_consistently_across_chrome_firefox_edge(page, alt_engine_browser):
+    """ADO-135658 | PBI 129382. Chromium is the `page` fixture; Firefox and
+    Edge are fresh logged-out contexts on the session-cached alt engines.
+    Text must be identical; geometry agrees within bug-rules' +-2 px."""
+    from core.web.browser import new_context
+
+    snapshots = {}
+    contexts = []
+    try:
+        for name, engine in (("chrome", None), ("firefox", "firefox"), ("edge", "msedge")):
+            if engine is None:
+                pg = page
+            else:
+                ctx = new_context(alt_engine_browser(engine), use_auth_state=False)
+                contexts.append(ctx)
+                pg = ctx.new_page()
+            featured_event = HomeFeaturedEventPage(pg)
+            with allure.step(f"Load the Home Page with a pinned event in {name.title()}"):
+                featured_event.open_home()
+                assert featured_event.is_section_visible(), f"{name}: {_NO_PIN_MSG}"
+                featured_event.scroll_to_section()
+                snapshots[name] = featured_event.layout_snapshot()
+                allure.attach(str(snapshots[name]), name=f"layout-{name}",
+                              attachment_type=allure.attachment_type.TEXT)
+    finally:
+        for ctx in contexts:
+            ctx.close()
+
+    # Assert
+    with allure.step("Compare layout and content across all three browsers"):
+        base = snapshots["chrome"]
+        assert base["columns"] == 2, f"chrome: expected the two-column card, got {base['columns']}"
+        for name in ("firefox", "edge"):
+            snap = snapshots[name]
+            for key in ("heading", "title", "date", "time", "location", "summary", "href", "tags"):
+                assert snap[key] == base[key], f"{name} {key} {snap[key]!r} != chrome {base[key]!r}"
+            assert snap["columns"] == base["columns"], f"{name} columns {snap['columns']} != chrome {base['columns']}"
+            assert _near(snap["gap"], float(base["gap"].replace("px", "")), LAYOUT_TOL), (
+                f"{name} column gap {snap['gap']} != chrome {base['gap']}")
+            for box in ("media", "details"):
+                for dim in ("x", "y", "width", "height"):
+                    assert _near(snap[box][dim], base[box][dim], LAYOUT_TOL), (
+                        f"{name} {box}.{dim} {snap[box][dim]:.1f} != chrome {base[box][dim]:.1f} (+-{LAYOUT_TOL}px)")
+
+
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.story("150% browser zoom")
+@allure.severity(allure.severity_level.MINOR)
+@allure.title("Verify that the Upcoming Event section maintains layout integrity at 150% browser zoom")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "135659")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.compatibility
+@pytest.mark.pbi_129382
+@pytest.mark.traceability("ADO-135659")
+@pytest.mark.tc_135659
+@pytest.mark.parametrize("page", [{"viewport": (1280, 720), "auth": False}], indirect=True)
+def test_section_layout_integrity_at_150_percent_zoom(page):
+    """ADO-135659 | PBI 129382. Playwright cannot drive the browser's own zoom
+    control; 150% browser zoom on the framework's 1920x1080 window gives a
+    1280x720 CSS viewport, which is the layout the browser actually lays out
+    (this is browser zoom, not the site's accessibility Zoom In widget)."""
+    featured_event = HomeFeaturedEventPage(page)
+
+    with allure.step("Load the Home Page with a pinned event at 150% zoom (1280x720 CSS viewport)"):
+        featured_event.open_home()
+        assert featured_event.is_section_visible(), _NO_PIN_MSG
+        featured_event.scroll_to_section()
+
+    with allure.step("Inspect the section layout"):
+        media, details = featured_event.media_box(), featured_event.details_box()
+        clipped = featured_event.clipped_text_elements()
+        image_ok = featured_event.is_image_rendered()
+        overflow = featured_event.has_page_horizontal_overflow()
+
+    # Assert
+    assert media and details, "expected both the image and details columns to render"
+    assert not _boxes_overlap(media, details), f"image {media} overlaps details {details} at 150% zoom"
+    assert image_ok, "expected the event image to remain rendered at 150% zoom"
+    assert not clipped, f"expected all text readable at 150% zoom; clipped: {clipped}"
+    assert not overflow, "expected no horizontal page overflow at 150% zoom"
+
+
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.story("Desktop-to-mobile breakpoint")
+@allure.severity(allure.severity_level.NORMAL)
+@allure.title("Verify that the section maintains the two-column layout at 1920x1080 and collapses to single-column at mobile widths")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "135660")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.compatibility
+@pytest.mark.pbi_129382
+@pytest.mark.traceability("ADO-135660")
+@pytest.mark.tc_135660
+@pytest.mark.parametrize("page", [{"viewport": (1920, 1080), "auth": False}], indirect=True)
+def test_two_column_at_desktop_collapses_to_single_column_at_mobile(page):
+    """ADO-135660 | PBI 129382. One page, resized in-test from 1920x1080 to
+    375px wide — the breakpoint transition end to end."""
+    featured_event = HomeFeaturedEventPage(page)
+
+    with allure.step("Load the Home Page at 1920x1080 resolution"):
+        featured_event.open_home()
+        assert featured_event.is_section_visible(), _NO_PIN_MSG
+        featured_event.scroll_to_section()
+
+    with allure.step("Inspect the column layout at desktop"):
+        desktop_columns = featured_event.grid_column_count()
+        desktop_gap = featured_event.column_gap()
+        desktop_stacked = featured_event.is_stacked_vertically()
+
+    with allure.step("Resize the viewport down to 375px width"):
+        featured_event.set_viewport(375, 812)
+        featured_event.scroll_to_section()
+
+    with allure.step("Inspect the column layout again"):
+        mobile_columns = featured_event.grid_column_count()
+        mobile_stacked = featured_event.is_stacked_vertically()
+        media, details = featured_event.media_box(), featured_event.details_box()
+        mobile_overflow = featured_event.has_page_horizontal_overflow()
+
+    # Assert
+    assert desktop_columns == 2, f"expected two columns at 1920x1080, got {desktop_columns}"
+    assert not desktop_stacked, "expected image and details side by side at 1920x1080"
+    assert _near(desktop_gap, 48, LAYOUT_TOL), f"expected a 48px column gap, got {desktop_gap}"
+    assert mobile_columns == 1, f"expected a single column at 375px, got {mobile_columns}"
+    assert mobile_stacked, "expected the image and details to stack vertically at 375px"
+    assert media and details and not _boxes_overlap(media, details), "expected no overlap at 375px"
+    assert not mobile_overflow, "expected no horizontal page overflow at 375px"
+
+
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.story("Pinned event unpublished in the Events module")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that the Upcoming Event section stops appearing when the pinned event is unpublished from the Events module")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "135667")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.functional_high
+@pytest.mark.uat
+@pytest.mark.pbi_129382
+@pytest.mark.traceability("ADO-135667")
+@pytest.mark.tc_135667
+@pytest.mark.skip(reason="needs live CMS write — forbidden")
+@ANON
+def test_section_hidden_when_pinned_event_unpublished(page):
+    """ADO-135667 | PBI 129382. Steps 1-2 pin an event and unpublish it in
+    the Events module — writes to the live pin singleton 49205 and a real
+    event record, which this run is not authorised to make."""
+    featured_event = HomeFeaturedEventPage(page)
+    with allure.step("Reload the Home Page after the pinned event is unpublished"):
+        featured_event.open_home()
+    assert not featured_event.is_section_visible(), (
+        "expected the Upcoming Event section to no longer appear on the Home Page")
+
+
+@allure.epic("EVENT")
+@allure.feature("Upcoming Featured Event")
+@allure.story("Past-dated pinned event stays until unpinned")
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title("Verify that the pinned event continues to display after its date has passed until the admin unpins it")
+@allure.label("pbi", PBI)
+@allure.label("testcase", "135668")
+@pytest.mark.web
+@pytest.mark.event
+@pytest.mark.functional_high
+@pytest.mark.uat
+@pytest.mark.pbi_129382
+@pytest.mark.traceability("ADO-135668")
+@pytest.mark.tc_135668
+@ANON
+def test_past_dated_pinned_event_still_displays(page):
+    """ADO-135668 | PBI 129382. Uses the case's own alternative for step 2
+    ("use an event whose date has since passed"): the live pinned event,
+    read-only. If its date is not yet past, the state cannot be reached
+    without a CMS write, so the test skips with that reason."""
+    featured_event = HomeFeaturedEventPage(page)
+
+    with allure.step("Load the Home Page and confirm the pinned event displays"):
+        featured_event.open_home()
+        assert featured_event.is_section_visible(), _NO_PIN_MSG
+        featured_event.scroll_to_section()
+        before = featured_event.card_snapshot()
+        event_date = featured_event.pinned_event_date()
+
+    with allure.step("Confirm the pinned event's date is in the past"):
+        assert event_date is not None, f"card date not parseable as a date: {before['date']!r}"
+        if event_date >= _date.today():
+            pytest.skip(f"precondition: pinned event date {event_date} not yet past; "
+                        "reaching it needs a live CMS write — forbidden")
+
+    with allure.step("Reload the Home Page"):
+        featured_event.open_home()
+        visible_after = featured_event.is_section_visible()
+        after = featured_event.card_snapshot() if visible_after else {}
+
+    # Assert
+    assert visible_after, f"expected the past-dated pinned event ({event_date}) to still display"
+    for key in ("title", "date", "time", "location", "href"):
+        assert after[key] == before[key], f"{key} changed on reload: {before[key]!r} -> {after[key]!r}"

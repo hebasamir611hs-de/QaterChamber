@@ -322,8 +322,10 @@ def test_weather_loading_placeholder_135943(page):
 def test_three_widgets_in_order_english_135955(page):
     dw = home(page)
     items = dw.row_items()
-    assert [i["kind"] for i in items] == ["weather", "card", "card"], items
-    assert [i["erc"] for i in items[1:]] == [MARHABA, B2B], items
+    # More image widgets may be active in the CMS (live 2026-11-01: 4); they wrap
+    # to a second row after the three this case names, which must lead in order.
+    assert items[0]["kind"] == "weather" and all(i["kind"] == "card" for i in items[1:]), items
+    assert [i["erc"] for i in items[1:3]] == [MARHABA, B2B], items
     assert dw.widget_title_text() == "Weather" and re.search(r"\d", dw.temp_text())
     for erc in (MARHABA, B2B):
         info = dw.card_img_info_for_erc(erc)
@@ -336,9 +338,11 @@ def test_three_widgets_arabic_rtl_135956(page):
     en_src = {e: home(page).card_img_info_for_erc(e)["src"] for e in (MARHABA, B2B)}
     dw = home(page, "ar")
     items = dw.row_items()
-    assert [i["kind"] for i in items].count("card") == 2 and items[0]["kind"] == "weather"
-    xs = [i["x"] for i in items]
-    assert xs == sorted(xs, reverse=True), f"row not mirrored RTL: {xs}"
+    assert items[0]["kind"] == "weather" and [i["erc"] for i in items[1:3]] == [MARHABA, B2B], items
+    # Extra active widgets wrap to a second row; mirroring is read on the first row.
+    first_row = [i for i in items if abs(i["y"] - items[0]["y"]) < 2]
+    xs = [i["x"] for i in first_row]
+    assert len(first_row) == 3 and xs == sorted(xs, reverse=True), f"row not mirrored RTL: {xs}"
     assert dw.widget_title_text() == "الطقس"
     for e in (MARHABA, B2B):
         info = dw.card_img_info_for_erc(e)

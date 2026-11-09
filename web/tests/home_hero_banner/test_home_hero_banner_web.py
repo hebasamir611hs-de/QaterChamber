@@ -356,12 +356,14 @@ def test_cta_navigates(page, which):
         page.locator(sel).first.click()
     target = re.sub(r"^/(en|ar)(?=/)", "", href).rstrip("/")
     assert page.url.split("?")[0].rstrip("/").endswith(target), f"landed on {page.url}, configured {href}"
-    # The case asserts navigation to the CONFIGURED target. Whether that page
-    # exists is content (PBI running rules #17), so a 404 is noted, not failed.
-    if "404" in page.title() or page.locator("text=/page not found/i").count():
-        allure.attach(f"configured target {href} renders 'Page Not Found' ({page.url})",
-                      name="content note: target is a 404", attachment_type=allure.attachment_type.TEXT)
+    # QA lead decision 2026-10-18: PBI 129367 asks for "CTAs functional" and
+    # nowhere allows a 404, so a CTA that lands on "Page Not Found" FAILS
+    # (bug #150820 for Button 2). Rule 17 covers malformed URLs the CMS accepts,
+    # not a live CTA that opens a missing page.
+    is_404 = "404" in page.title() or page.locator("text=/page not found/i").count() > 0
+    if is_404:
         page.screenshot(path=f"reports/manual-exec-129367-{which}-cta-target-404.png")
+    assert not is_404, f"the {which} CTA ({href}) opens a 'Page Not Found' page ({page.url})"
 
 
 @allure.title("Auto-play advances to the next slide without interaction")

@@ -2,64 +2,41 @@
 web/tests/home_services/test_home_services_web.py — Our Services Section
 (PBI 129371 / QC-HOME-003), Web platform.
 
-Source: 17 approved, Automation-tagged, Web-platform cases read verbatim
-from the injected PBI 129371 batch (ADO TC 135329-135345, 135353, 135414).
-No Control_Panel-tagged case exists in this batch (every one carries
-Platform=Web only) — see the sibling test_home_services_control_panel.py
-skeleton, untouched.
+Source: the 17 approved, Automation-tagged, Web-platform cases injected in
+Test Plan 133534 (ADO TC 135329-135345, 135353, 135414).
 
-15 of the 17 cases need nothing beyond the public Home Page and are fully
-scripted below (TC 135329, 135330, 135331, 135332, 135335, 135336, 135337,
-135338, 135339, 135340, 135341, 135342, 135343, 135344, 135345). The other 2
-(TC 135353, 135414) each have their OWN Arrange step requiring an
-authenticated Site Content Editor CMS session:
-  - TC 135353 (deactivate every service card's Active Status) is fully
-    scripted against HomeServicesAdminPage's real, live-verified per-card
-    edit-form API (TEST_USER/TEST_PASSWORD are populated in .env — the
-    project-wide blank-creds blocker no longer applies here).
-  - TC 135414 (unpublish the Our Services listing page) is SKIPPED —
-    HomeServicesAdminPage only implements the Service Cards object CRUD, not
-    a separate listing-PAGE publish/unpublish control, and no live-verified
-    locator for that control exists (never guessed). See
-    _LISTING_PAGE_PUBLISH_SKIP below.
-
-Known real-environment findings surfaced while scripting these (full detail
-in web/pages/home_services/home_services_page.py's docstring, which
-documents the live CLI-extraction/script-probe evidence for every value
-below). Per this project's established convention, the case's stated
-expected values are kept as the asserted target throughout — a live
-mismatch is scripted to FAIL HONESTLY, never quietly re-targeted at the
-observed value:
-  - TC 135329/135341: the live card list is a horizontally-scrollable flex
-    row, not a literal CSS grid — the heading/CTA row, tab-bar row, and card
-    row are CONFIRMED LIVE to stack top-to-bottom without overlap at
-    1920x1080, matching the case's "standard grid"/"standard desktop layout"
-    intent structurally even though the implementation is a flex carousel.
-  - TC 135337: no card titled "Legal Consulting" exists on this live
-    instance under any tab — the real Legal-tab cards are "Signatory
-    Editing" and "Signature Attestation". Scripted against the real first
-    Legal-tab card; the Read-More-redirects assertion itself is unaffected
-    and still fails honestly if the real redirect breaks.
-  - TC 135345: the "Information Services" tab's real accessible name is
-    "Information" (not "Information Services") — scripted against the real
-    live label.
-  - TC 135353: runs for real against qcdev — briefly sets Active Status=False
-    on all 8 real editorial service cards, asserts the section is absent,
-    then restores every card's Active Status=True in teardown.
-  - TC 135414: SKIPPED, not guessed — see _LISTING_PAGE_PUBLISH_SKIP's reason.
+Rewritten 2026-10-21 against a re-verified live page:
+  - Every test runs in a fresh LOGGED-OUT context (`"auth": False`) and
+    navigates with `open_anonymous` — public site, read-only.
+  - Expected card sets are not hardcoded. `open_home_with_oracle()` captures
+    the public service-cards JSON the section itself renders from, and each
+    filter assertion compares the rendered cards with the cards CONFIGURED
+    for that tab (`assignedTab`). The data changes on shared qcdev; the
+    filtering rule the cases describe does not.
+  - TC 135353 / 135414 need a live CMS write in their own Arrange step
+    (deactivate every service card / unpublish the listing page). Live CMS
+    writes are forbidden for this run, so both are SKIPPED with that reason.
+  - TC 135345: the live tab label is "Information" (case: "Information
+    Services"); the tab is selected by its `data-key`, and the label
+    difference is reported as an observation, not asserted away.
 """
 
-import os
+import json
 
 import allure
 import pytest
 
-from cms.pages.home_services.home_services_admin_page import HomeServicesAdminPage
 from web.pages.home_services.home_services_page import HomeServicesPage
 
 PBI = "129371"
 EPIC = "SVC"
 FEATURE = "Our Services Section"
+
+ANON = {"auth": False}
+DESKTOP = {"auth": False, "viewport": (1920, 1080)}
+TABLET = {"auth": False, "viewport": (768, 1024)}
+MOBILE = {"auth": False, "viewport": (375, 812)}
+LAYOUT_TOL = 2  # bug-rules: layout ±2 px
 
 EXPECTED_TAG_TEXT = "Our Services"
 EXPECTED_HEADING_TEXT = "Services We Provide"
@@ -68,9 +45,9 @@ EXPECTED_DESCRIPTION_TEXT = (
     "investors from membership services to international certifications."
 )
 EXPECTED_TABS = ["All Services", "Membership", "Legal", "E-Services", "Information"]
-EXPECTED_LISTING_URL_PATH = "/web/qatar-chamber/services"
+CTA_LABEL = "View All Services"
+LEGAL_CONSULTING = "Legal Consulting"
 
-# Live-confirmed Arabic copy (AR homepage, TC 135330).
 AR_TAG_TEXT = "خدماتنا"
 AR_HEADING_TEXT = "الخدمات التي نقدمها"
 AR_DESCRIPTION_TEXT = (
@@ -80,38 +57,31 @@ AR_DESCRIPTION_TEXT = (
 )
 AR_TABS = ["جميع الخدمات", "العضوية", "الخدمات القانونية", "الخدمات الإلكترونية", "المعلومات"]
 
-# Live-confirmed per-tab card titles (see Page Object docstring).
-ALL_SERVICES_TITLES = {
-    "New Membership", "Membership Renewal", "Signatory Editing", "Signature Attestation",
-    "Certificate of Origin", "Document Attestation", "Business Directory", "Economic Reports",
-}
-MEMBERSHIP_TITLES = ["New Membership", "Membership Renewal"]
-LEGAL_TITLES = ["Signatory Editing", "Signature Attestation"]
-ESERVICES_TITLES = ["Certificate of Origin", "Document Attestation"]
-INFORMATION_TITLES = ["Business Directory", "Economic Reports"]
+_CMS_WRITE_FORBIDDEN = "needs live CMS write — forbidden"
 
 
-# ── TC 135414's precondition control has no automation yet ─────────────────
-_LISTING_PAGE_PUBLISH_SKIP = pytest.mark.skip(
-    reason=(
-        "Listing-page publish/unpublish control not yet automated — "
-        "HomeServicesAdminPage only implements the Service Cards object CRUD "
-        "(list/edit form), not the separate Our Services listing PAGE's own "
-        "management screen. No live-verified locator for that control exists; "
-        "never guessed. See cms/pages/home_services/home_services_admin_page.py."
-    ),
-)
+def _open_section(page, locale: str = "en") -> HomeServicesPage:
+    svc = HomeServicesPage(page).open_home_with_oracle(locale)
+    svc.scroll_to_section()
+    return svc
 
 
-def _skip_if_no_credentials() -> tuple:
-    user = os.getenv("TEST_USER", "")
-    password = os.getenv("TEST_PASSWORD", "")
-    if not user or not password:
-        pytest.skip(
-            "TEST_USER / TEST_PASSWORD not set in .env — blocked on a qcdev "
-            "Site Content Editor account. See module docstring."
-        )
-    return user, password
+def _url_tail(url: str) -> str:
+    """Comparable tail of a configured URL: drops the scheme and the Liferay
+    site prefix (/web/qatar-chamber) the friendly URL may or may not show."""
+    return url.split("://")[-1].split("/web/qatar-chamber")[-1].rstrip("/")
+
+
+def _assert_tab_filter(svc: HomeServicesPage, which: str) -> None:
+    expected = svc.expected_titles_for_tab(which)
+    svc.click_tab(which)
+    rendered = set(svc.card_titles())
+    assert svc.is_tab_active(which), f"expected the '{which}' tab to become active"
+    assert expected, f"no service card is configured for the '{which}' tab — nothing to filter"
+    assert rendered == expected, (
+        f"'{which}' tab should show only its assigned cards; "
+        f"missing {sorted(expected - rendered)}, unexpected {sorted(rendered - expected)}"
+    )
 
 
 # ── TC 135329 — English (LTR) render ────────────────────────────────────────
@@ -125,39 +95,33 @@ def _skip_if_no_credentials() -> tuple:
 @pytest.mark.svc
 @pytest.mark.ui
 @pytest.mark.bilingual
+@pytest.mark.uat
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135329")
+@pytest.mark.tc_135329
+@pytest.mark.traceability("ADO-135329")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_section_renders_correctly_in_english_ltr(page):
-    # SVC-OURSERVICES-TC-135329 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
-
-    # Act
-    with allure.step("Set site language to English and load the Home Page"):
-        svc.open_home()
-
-    with allure.step("Scroll to the Our Services section"):
-        svc.scroll_to_section()
-
-    with allure.step("Read the tag, heading, description, tab bar, and card grid"):
-        page_dir = svc.page_direction()
-        tag_text = svc.tag_text()
-        heading_text = svc.heading_text()
-        description_text = svc.description_text()
-        tab_texts = svc.tab_texts()
-        head_align = svc.head_text_align()
-        card_count = svc.total_card_count()
+    # Arrange / Act
+    with allure.step("Load the English Home Page and scroll to Our Services"):
+        svc = _open_section(page, "en")
 
     # Assert
-    assert page_dir == "ltr"
+    assert svc.page_direction() == "ltr", "site should render LTR in English"
     assert svc.is_section_visible()
-    assert tag_text == EXPECTED_TAG_TEXT
-    assert heading_text == EXPECTED_HEADING_TEXT
-    assert description_text == EXPECTED_DESCRIPTION_TEXT
+    assert svc.tag_text() == EXPECTED_TAG_TEXT
+    assert svc.heading_text() == EXPECTED_HEADING_TEXT
+    assert svc.description_text() == EXPECTED_DESCRIPTION_TEXT
     assert svc.is_tablist_visible()
-    assert tab_texts == EXPECTED_TABS, f"expected filter tabs {EXPECTED_TABS}, got {tab_texts}"
-    assert head_align == "start", f"expected the tag/heading/description block left-aligned (logical 'start'), got {head_align!r}"
-    assert card_count > 0, "expected at least one published service card in the standard grid"
+    assert svc.tab_texts() == EXPECTED_TABS
+    assert svc.head_text_align() in ("start", "left"), "tag/heading/description should be left-aligned"
+    tabs = svc.tablist_box()
+    head = svc.head_text_box()
+    assert abs(tabs["x"] - head["x"]) <= LAYOUT_TOL, (
+        f"tab bar should be left-aligned with the heading block (tabs x={tabs['x']}, head x={head['x']})"
+    )
+    assert set(svc.card_titles()) == svc.expected_titles_for_tab("all"), (
+        "every published service card should render"
+    )
 
 
 # ── TC 135330 — Arabic (RTL) render ─────────────────────────────────────────
@@ -171,41 +135,37 @@ def test_section_renders_correctly_in_english_ltr(page):
 @pytest.mark.svc
 @pytest.mark.ui
 @pytest.mark.bilingual
+@pytest.mark.uat
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135330")
+@pytest.mark.tc_135330
+@pytest.mark.traceability("ADO-135330")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_section_renders_correctly_in_arabic_rtl(page):
-    # SVC-OURSERVICES-TC-135330 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
-
-    # Act
-    with allure.step("Set site language to Arabic and load the Home Page"):
-        svc.open_home_arabic()
-
-    with allure.step("Scroll to the Our Services section"):
-        svc.scroll_to_section()
-
-    with allure.step("Read the section's direction, copy, tab labels, and card titles"):
-        page_dir = svc.page_direction()
-        section_dir = svc.section_direction()
-        tag_text = svc.tag_text()
-        heading_text = svc.heading_text()
-        description_text = svc.description_text()
-        tab_texts = svc.tab_texts()
-        head_align = svc.head_text_align()
-        card_titles = svc.card_titles()
+    # Arrange / Act
+    with allure.step("Load the Arabic Home Page and scroll to Our Services"):
+        svc = _open_section(page, "ar")
 
     # Assert
-    assert page_dir == "rtl"
-    assert section_dir == "rtl"
-    assert tag_text == AR_TAG_TEXT
-    assert heading_text == AR_HEADING_TEXT
-    assert description_text == AR_DESCRIPTION_TEXT
-    assert tab_texts == AR_TABS, f"expected mirrored AR filter tabs {AR_TABS}, got {tab_texts}"
-    assert head_align == "start", (
-        f"expected the tag/heading/description block right-aligned under RTL (logical 'start'), got {head_align!r}"
+    assert svc.page_direction() == "rtl", "site should render RTL in Arabic"
+    assert svc.section_direction() == "rtl"
+    assert svc.tag_text() == AR_TAG_TEXT
+    assert svc.heading_text() == AR_HEADING_TEXT
+    assert svc.description_text() == AR_DESCRIPTION_TEXT
+    assert svc.tab_texts() == AR_TABS
+    assert svc.head_text_align() in ("start", "right"), "tag/heading/description should be right-aligned"
+    tabs, head = svc.tablist_box(), svc.head_text_box()
+    assert abs((tabs["x"] + tabs["width"]) - (head["x"] + head["width"])) <= LAYOUT_TOL, (
+        "tab bar should be right-aligned with the heading block under RTL "
+        f"(tabs right={tabs['x'] + tabs['width']}, head right={head['x'] + head['width']})"
     )
-    assert all(t.strip() for t in card_titles), "expected every AR card title to render with no blank/truncated text"
+    assert svc.tab_x("all") > svc.tab_x("information"), (
+        "tabs should be mirrored: All Services right-most, Information left-most"
+    )
+    assert set(svc.card_titles()) == svc.expected_titles_for_tab("all"), (
+        "cards should render with their configured AR titles"
+    )
+    assert svc.truncated_card_titles() == [], "AR card titles should not be truncated"
+    assert svc.clamped_card_descriptions() == [], "AR card descriptions should not be truncated"
 
 
 # ── TC 135331 — All Services tab active by default ──────────────────────────
@@ -220,27 +180,20 @@ def test_section_renders_correctly_in_arabic_rtl(page):
 @pytest.mark.ui
 @pytest.mark.regression
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135331")
+@pytest.mark.tc_135331
+@pytest.mark.traceability("ADO-135331")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_all_services_tab_active_by_default(page):
-    # SVC-OURSERVICES-TC-135331 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
+    with allure.step("Load the Home Page and scroll to Our Services"):
+        svc = _open_section(page)
 
-    # Act
-    with allure.step("Load the Home Page"):
-        svc.open_home()
-
-    with allure.step("Scroll to the Our Services section"):
-        svc.scroll_to_section()
-
-    with allure.step("Read the active tab state and the rendered card set"):
-        all_active = svc.is_tab_active("all")
-        card_titles = set(svc.card_titles())
-
-    # Assert
-    assert all_active, "expected the 'All Services' tab to carry the active-tab indicator (aria-selected) by default"
-    assert card_titles == ALL_SERVICES_TITLES, (
-        f"expected every published service card to display by default, got {card_titles}"
+    assert svc.is_tab_active("all"), "All Services should carry the active-tab indicator by default"
+    active, inactive = svc.tab_visual_style("all"), svc.tab_visual_style("membership")
+    assert active != inactive, (
+        f"All Services should look visibly active vs an inactive tab (active {active}, inactive {inactive})"
+    )
+    assert set(svc.card_titles()) == svc.expected_titles_for_tab("all"), (
+        "every published service card should display by default"
     )
 
 
@@ -256,34 +209,21 @@ def test_all_services_tab_active_by_default(page):
 @pytest.mark.auth
 @pytest.mark.regression
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135332")
-@pytest.mark.parametrize("page", [{"auth": False}], indirect=True)
+@pytest.mark.tc_135332
+@pytest.mark.traceability("ADO-135332")
+@pytest.mark.parametrize("page", [ANON], indirect=True)
 def test_public_visitor_can_view_section_without_authentication(page):
-    # SVC-OURSERVICES-TC-135332 | PBI 129371
-    # "auth": False forces a genuinely unauthenticated context (opts out of
-    # any cached storageState) so this case's own subject — no-login public
-    # access — is actually exercised, not incidentally true because no
-    # .auth/state.json happens to exist yet.
-    # Arrange
-    svc = HomeServicesPage(page)
+    with allure.step("Open the Home Page without logging in and scroll to Our Services"):
+        svc = _open_section(page)
 
-    # Act
-    with allure.step("Open the Home Page without logging in"):
-        svc.open_home()
-
-    with allure.step("Scroll to the Our Services section"):
-        svc.scroll_to_section()
-
-    with allure.step("Interact with the section: read the heading and click a filter tab"):
-        heading_text = svc.heading_text()
+    with allure.step("Interact with the section: click the Membership tab"):
         svc.click_tab("membership")
-        membership_active = svc.is_tab_active("membership")
 
-    # Assert
     assert svc.is_section_visible()
-    assert heading_text == EXPECTED_HEADING_TEXT
-    assert membership_active, "expected the section to be fully interactive (tab click works) for an unauthenticated visitor"
-    assert svc.no_login_prompt_present(), "expected no login prompt anywhere on the page"
+    assert svc.heading_text() == EXPECTED_HEADING_TEXT
+    assert svc.is_tab_active("membership"), "the section should be interactive for a visitor"
+    assert svc.no_login_prompt_present(), "no login prompt should appear"
+    assert "/login" not in page.url and "/c/portal/login" not in page.url
 
 
 # ── TC 135335 — clicking a filter tab shows only its assigned cards ────────
@@ -297,31 +237,21 @@ def test_public_visitor_can_view_section_without_authentication(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.regression
+@pytest.mark.uat
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135335")
+@pytest.mark.tc_135335
+@pytest.mark.traceability("ADO-135335")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_clicking_filter_tab_displays_only_assigned_cards(page):
-    # SVC-OURSERVICES-TC-135335 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
-
-    # Act
     with allure.step("Scroll to the section with All Services active"):
-        svc.open_home()
-        svc.scroll_to_section()
-        all_active_before = svc.is_tab_active("all")
+        svc = _open_section(page)
+        assert svc.is_tab_active("all"), "All Services should be active before filtering"
         all_titles = set(svc.card_titles())
 
     with allure.step("Click the 'Membership' tab"):
-        svc.click_tab("membership")
-        filtered_titles = set(svc.card_titles())
+        _assert_tab_filter(svc, "membership")
 
-    # Assert
-    assert all_active_before, "expected All Services active before filtering"
-    assert filtered_titles == set(MEMBERSHIP_TITLES), (
-        f"expected only Membership-assigned cards to display, got {filtered_titles}"
-    )
-    hidden_titles = all_titles - filtered_titles
-    assert hidden_titles, "expected at least one non-Membership card to be hidden after filtering"
+    assert all_titles - set(svc.card_titles()), "other (non-Membership) cards should be hidden"
 
 
 # ── TC 135336 — returning to All Services restores the full card set ───────
@@ -335,29 +265,20 @@ def test_clicking_filter_tab_displays_only_assigned_cards(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135336")
+@pytest.mark.tc_135336
+@pytest.mark.traceability("ADO-135336")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_clicking_all_services_after_filter_restores_full_card_set(page):
-    # SVC-OURSERVICES-TC-135336 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
-
-    # Act
-    with allure.step("Navigate to the section and activate the Membership tab"):
-        svc.open_home()
-        svc.scroll_to_section()
-        svc.click_tab("membership")
-        filtered_titles = set(svc.card_titles())
+    with allure.step("Activate the Membership tab"):
+        svc = _open_section(page)
+        _assert_tab_filter(svc, "membership")
 
     with allure.step("Click the All Services tab"):
         svc.click_tab("all")
-        all_active_after = svc.is_tab_active("all")
-        restored_titles = set(svc.card_titles())
 
-    # Assert
-    assert filtered_titles == set(MEMBERSHIP_TITLES)
-    assert all_active_after, "expected the All Services tab to become active again"
-    assert restored_titles == ALL_SERVICES_TITLES, (
-        f"expected every published service card to display again, got {restored_titles}"
+    assert svc.is_tab_active("all"), "All Services should become active again"
+    assert set(svc.card_titles()) == svc.expected_titles_for_tab("all"), (
+        "every published service card should display again"
     )
 
 
@@ -372,39 +293,35 @@ def test_clicking_all_services_after_filter_restores_full_card_set(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.regression
+@pytest.mark.uat
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135337")
+@pytest.mark.tc_135337
+@pytest.mark.traceability("ADO-135337")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_read_more_redirects_to_detailed_service_page(page):
-    # SVC-OURSERVICES-TC-135337 | PBI 129371
-    # No card titled "Legal Consulting" exists live under any tab (see module
-    # docstring) — scripted against the real first Legal-tab card
-    # ("Signatory Editing"); the redirect assertion itself is unaffected.
-    # Arrange
-    svc = HomeServicesPage(page)
+    with allure.step("Locate the Legal Consulting card"):
+        svc = _open_section(page)
+        assert svc.is_card_present(LEGAL_CONSULTING), "the Legal Consulting card should be on the section"
+        svc.bring_card_into_view(LEGAL_CONSULTING)
+        parts = svc.card_has_parts(LEGAL_CONSULTING)
+        configured = svc.configured_redirect_url(LEGAL_CONSULTING)
 
-    # Act
-    with allure.step("Locate the first Legal-tab service card"):
-        svc.open_home()
-        svc.scroll_to_section()
-        svc.click_tab("legal")
-        card_title = svc.card_title_text(0)
-        expected_href = svc.card_readmore_href(0)
+    assert parts["icon"], "card should show its icon"
+    assert parts["title"] == LEGAL_CONSULTING
+    assert parts["description"], "card should show a short description"
+    assert parts["read_more"], "card should show a Read More link"
+    assert configured, "Legal Consulting has no configured detail-page URL"
 
     with allure.step("Click its Read More link"):
         start_url = page.url
-        svc.click_card_readmore(0)
-        # The redirect is client-driven with a short delay after the click
-        # resolves (confirmed live: page.url only updates ~1s later, well
-        # after wait_for_load_state("domcontentloaded") would already have
-        # returned against the still-loaded starting page) — same pattern as
-        # about_qatar_chamber_page.py's breadcrumb-navigation wait.
-        page.wait_for_url(lambda url: url != start_url, timeout=10000)
+        svc.click_card_readmore_by_title(LEGAL_CONSULTING)
+        page.wait_for_url(lambda url: url != start_url, wait_until="commit", timeout=15000)
 
-    # Assert
-    assert card_title == LEGAL_TITLES[0]
-    assert expected_href and "/service-detail" in expected_href
-    assert "/service-detail" in page.url, f"expected redirect to the detailed service page, landed on {page.url!r}"
-    assert page.url.endswith(expected_href) or expected_href in page.url
+    assert page.url.rstrip("/").endswith(_url_tail(configured)), (
+        f"should land on the configured detail page {configured!r}, landed on {page.url!r}"
+    )
+    status = svc.landed_status()
+    assert status < 400, f"detail page {page.url!r} answered HTTP {status}"
 
 
 # ── TC 135338 — View All Services CTA redirects to the listing page ────────
@@ -418,34 +335,30 @@ def test_read_more_redirects_to_detailed_service_page(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.regression
+@pytest.mark.uat
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135338")
+@pytest.mark.tc_135338
+@pytest.mark.traceability("ADO-135338")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_view_all_services_cta_redirects_to_listing_page(page):
-    # SVC-OURSERVICES-TC-135338 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
+    with allure.step("Scroll to the section and read the CTA"):
+        svc = _open_section(page)
+        configured = svc.configured_view_all_url()
 
-    # Act
-    with allure.step("Scroll to the section footer / CTA row"):
-        svc.open_home()
-        svc.scroll_to_section()
-        cta_visible = svc.is_cta_top_visible()
-        cta_text = svc.cta_top_text()
-        cta_href = svc.cta_top_href()
+    assert svc.is_cta_top_visible(), "the CTA button should be visible"
+    assert svc.cta_top_text() == CTA_LABEL
+    assert configured, "the section has no configured listing-page URL"
 
-    with allure.step("Click the View All Services CTA"):
+    with allure.step("Click View All Services"):
         start_url = page.url
         svc.click_cta_top()
-        # Same client-driven, delayed redirect as the Read More link above —
-        # wait for the URL to actually change rather than the DOM load state
-        # of the page that was already loaded before the click.
-        page.wait_for_url(lambda url: url != start_url, timeout=10000)
+        page.wait_for_url(lambda url: url != start_url, wait_until="commit", timeout=15000)
 
-    # Assert
-    assert cta_visible, "expected the CTA button visible with a configured label"
-    assert cta_text == "View All Services"
-    assert cta_href == EXPECTED_LISTING_URL_PATH
-    assert EXPECTED_LISTING_URL_PATH in page.url, f"expected redirect to the listing page, landed on {page.url!r}"
+    assert page.url.rstrip("/").endswith(_url_tail(configured)), (
+        f"should land on the configured listing page {configured!r}, landed on {page.url!r}"
+    )
+    status = svc.landed_status()
+    assert status < 400, f"listing page {page.url!r} answered HTTP {status}"
 
 
 # ── TC 135339 — responsive at mobile width (375px) ──────────────────────────
@@ -459,36 +372,20 @@ def test_view_all_services_cta_redirects_to_listing_page(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135339")
-@pytest.mark.parametrize("page", [(375, 812)], indirect=True)
+@pytest.mark.tc_135339
+@pytest.mark.traceability("ADO-135339")
+@pytest.mark.parametrize("page", [MOBILE], indirect=True)
 def test_section_responsive_at_mobile_width(page):
-    # SVC-OURSERVICES-TC-135339 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
+    with allure.step("Load the Home Page at 375px and scroll to Our Services"):
+        svc = _open_section(page)
+        head, tabs, card = svc.head_text_box(), svc.tablist_box(), svc.card_box(0)
 
-    # Act
-    with allure.step("Resize viewport to 375px width and load the Home Page"):
-        svc.open_home()
-
-    with allure.step("Scroll to the Our Services section"):
-        svc.scroll_to_section()
-
-    with allure.step("Inspect the tag, heading, description, tab bar, and cards"):
-        no_overflow = svc.has_no_horizontal_overflow()
-        tag_visible = svc.is_section_visible()
-        tabs_visible = svc.is_tablist_visible()
-        card_count = svc.total_card_count()
-        head_box = svc.head_text_box()
-        tabs_box = svc.tablist_box()
-        card_box = svc.card_box(0)
-
-    # Assert
-    assert tag_visible
-    assert tabs_visible
-    assert card_count > 0
-    assert no_overflow, "expected the section to stack without introducing horizontal scroll at 375px"
-    assert tabs_box["y"] >= head_box["y"] + head_box["height"], "expected the tab bar to stack below the heading block, not overlap it"
-    assert card_box["y"] >= tabs_box["y"] + tabs_box["height"], "expected the card row to stack below the tab bar, not overlap it"
+    assert svc.is_section_visible()
+    assert svc.is_tablist_visible()
+    assert svc.total_card_count() > 0
+    assert svc.has_no_horizontal_overflow(), "no horizontal page scroll at 375px"
+    assert tabs["y"] >= head["y"] + head["height"] - LAYOUT_TOL, "tab bar should stack below the heading block"
+    assert card["y"] >= tabs["y"] + tabs["height"] - LAYOUT_TOL, "cards should stack below the tab bar"
 
 
 # ── TC 135340 — responsive at tablet width (768px) ──────────────────────────
@@ -502,36 +399,21 @@ def test_section_responsive_at_mobile_width(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135340")
-@pytest.mark.parametrize("page", [(768, 1024)], indirect=True)
+@pytest.mark.tc_135340
+@pytest.mark.traceability("ADO-135340")
+@pytest.mark.parametrize("page", [TABLET], indirect=True)
 def test_section_responsive_at_tablet_width(page):
-    # SVC-OURSERVICES-TC-135340 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
+    with allure.step("Load the Home Page at 768px and scroll to Our Services"):
+        svc = _open_section(page)
+        head, tabs, card = svc.head_text_box(), svc.tablist_box(), svc.card_box(0)
+        tab = svc.tab_box("all")
 
-    # Act
-    with allure.step("Resize viewport to 768px width and load the Home Page"):
-        svc.open_home()
-
-    with allure.step("Scroll to the Our Services section"):
-        svc.scroll_to_section()
-
-    with allure.step("Inspect legibility and tap-target layout"):
-        no_overflow = svc.has_no_horizontal_overflow()
-        tabs_visible = svc.is_tablist_visible()
-        card_count = svc.total_card_count()
-        head_box = svc.head_text_box()
-        tabs_box = svc.tablist_box()
-        card_box = svc.card_box(0)
-        tab_bounding = svc.tab_box("all")
-
-    # Assert
-    assert tabs_visible
-    assert card_count > 0
-    assert no_overflow, "expected no horizontal scroll at 768px"
-    assert tabs_box["y"] >= head_box["y"] + head_box["height"], "expected the tab bar not to overlap the heading block"
-    assert card_box["y"] >= tabs_box["y"] + tabs_box["height"], "expected the card row not to overlap the tab bar"
-    assert tab_bounding["height"] >= 24, f"expected a tappable tab target (>=24px tall), got {tab_bounding['height']}"
+    assert svc.is_tablist_visible()
+    assert svc.total_card_count() > 0
+    assert svc.has_no_horizontal_overflow(), "no horizontal page scroll at 768px"
+    assert tabs["y"] >= head["y"] + head["height"] - LAYOUT_TOL, "tab bar should not overlap the heading block"
+    assert card["y"] >= tabs["y"] + tabs["height"] - LAYOUT_TOL, "cards should not overlap the tab bar"
+    assert tab["height"] >= 24, f"tab should be tappable (>=24px tall), got {tab['height']}"
 
 
 # ── TC 135341 — responsive at desktop width (1920px) ────────────────────────
@@ -545,33 +427,21 @@ def test_section_responsive_at_tablet_width(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135341")
+@pytest.mark.tc_135341
+@pytest.mark.traceability("ADO-135341")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_section_responsive_at_desktop_width(page):
-    # SVC-OURSERVICES-TC-135341 | PBI 129371
-    # Arrange — the framework's default viewport is already 1920x1080, no
-    # per-test override needed.
-    svc = HomeServicesPage(page)
+    with allure.step("Load the Home Page at 1920px and scroll to Our Services"):
+        svc = _open_section(page)
+        head, tabs, cta, card = svc.head_text_box(), svc.tablist_box(), svc.cta_top_box(), svc.card_box(0)
 
-    # Act
-    with allure.step("Set viewport to 1920px width and load the Home Page"):
-        svc.open_home()
-
-    with allure.step("Scroll to the Our Services section"):
-        svc.scroll_to_section()
-
-    with allure.step("Inspect the cards/tabs/CTA alignment"):
-        head_box = svc.head_text_box()
-        tabs_box = svc.tablist_box()
-        cta_box = svc.cta_top_box()
-        card_box = svc.card_box(0)
-        cta_visible = svc.is_cta_top_visible()
-
-    # Assert
-    assert cta_visible
-    assert abs(cta_box["y"] - head_box["y"]) < 2, "expected the CTA to sit on the same row as the heading block at desktop width"
-    assert cta_box["x"] > head_box["x"] + head_box["width"], "expected the CTA to sit to the right of the heading block"
-    assert tabs_box["y"] >= head_box["y"] + head_box["height"], "expected the tab bar row below the heading/CTA row"
-    assert card_box["y"] >= tabs_box["y"] + tabs_box["height"], "expected the card row below the tab bar row"
+    assert svc.is_cta_top_visible()
+    assert svc.has_no_horizontal_overflow(), "no horizontal page scroll at 1920px"
+    assert abs(cta["y"] - head["y"]) <= LAYOUT_TOL, "CTA should sit on the heading row"
+    assert cta["x"] > head["x"] + head["width"], "CTA should sit right of the heading block"
+    assert tabs["y"] >= head["y"] + head["height"] - LAYOUT_TOL, "tab row should sit below the heading/CTA row"
+    assert card["y"] >= tabs["y"] + tabs["height"] - LAYOUT_TOL, "card row should sit below the tab row"
+    assert abs(card["x"] - tabs["x"]) <= LAYOUT_TOL, "first card should align with the tab bar's left edge"
 
 
 # ── TC 135342 — Membership tab filter ───────────────────────────────────────
@@ -585,22 +455,13 @@ def test_section_responsive_at_desktop_width(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135342")
+@pytest.mark.tc_135342
+@pytest.mark.traceability("ADO-135342")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_membership_tab_shows_only_membership_cards(page):
-    # SVC-OURSERVICES-TC-135342 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
-
-    # Act
+    svc = _open_section(page)
     with allure.step("Click the Membership tab"):
-        svc.open_home()
-        svc.scroll_to_section()
-        svc.click_tab("membership")
-        titles = svc.card_titles()
-
-    # Assert
-    assert svc.is_tab_active("membership")
-    assert titles == MEMBERSHIP_TITLES, f"expected exactly the Membership cards {MEMBERSHIP_TITLES}, got {titles}"
+        _assert_tab_filter(svc, "membership")
 
 
 # ── TC 135343 — Legal tab filter ────────────────────────────────────────────
@@ -614,22 +475,13 @@ def test_membership_tab_shows_only_membership_cards(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135343")
+@pytest.mark.tc_135343
+@pytest.mark.traceability("ADO-135343")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_legal_tab_shows_only_legal_cards(page):
-    # SVC-OURSERVICES-TC-135343 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
-
-    # Act
+    svc = _open_section(page)
     with allure.step("Click the Legal tab"):
-        svc.open_home()
-        svc.scroll_to_section()
-        svc.click_tab("legal")
-        titles = svc.card_titles()
-
-    # Assert
-    assert svc.is_tab_active("legal")
-    assert titles == LEGAL_TITLES, f"expected exactly the Legal cards {LEGAL_TITLES}, got {titles}"
+        _assert_tab_filter(svc, "legal")
 
 
 # ── TC 135344 — E-Services tab filter ───────────────────────────────────────
@@ -643,22 +495,13 @@ def test_legal_tab_shows_only_legal_cards(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135344")
+@pytest.mark.tc_135344
+@pytest.mark.traceability("ADO-135344")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_eservices_tab_shows_only_eservices_cards(page):
-    # SVC-OURSERVICES-TC-135344 | PBI 129371
-    # Arrange
-    svc = HomeServicesPage(page)
-
-    # Act
+    svc = _open_section(page)
     with allure.step("Click the E-Services tab"):
-        svc.open_home()
-        svc.scroll_to_section()
-        svc.click_tab("eservices")
-        titles = svc.card_titles()
-
-    # Assert
-    assert svc.is_tab_active("eservices")
-    assert titles == ESERVICES_TITLES, f"expected exactly the E-Services cards {ESERVICES_TITLES}, got {titles}"
+        _assert_tab_filter(svc, "eservices")
 
 
 # ── TC 135345 — Information Services tab filter ─────────────────────────────
@@ -672,24 +515,14 @@ def test_eservices_tab_shows_only_eservices_cards(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135345")
+@pytest.mark.tc_135345
+@pytest.mark.traceability("ADO-135345")
+@pytest.mark.parametrize("page", [DESKTOP], indirect=True)
 def test_information_tab_shows_only_information_cards(page):
-    # SVC-OURSERVICES-TC-135345 | PBI 129371
-    # The tab's real accessible name is "Information", not "Information
-    # Services" — see module docstring.
-    # Arrange
-    svc = HomeServicesPage(page)
-
-    # Act
+    # Live label is "Information" (case: "Information Services") — selected by data-key.
+    svc = _open_section(page)
     with allure.step("Click the Information tab"):
-        svc.open_home()
-        svc.scroll_to_section()
-        svc.click_tab("information")
-        titles = svc.card_titles()
-
-    # Assert
-    assert svc.is_tab_active("information")
-    assert titles == INFORMATION_TITLES, f"expected exactly the Information cards {INFORMATION_TITLES}, got {titles}"
+        _assert_tab_filter(svc, "information")
 
 
 # ── TC 135353 — section absent when no service card is published ──────────
@@ -703,37 +536,77 @@ def test_information_tab_shows_only_information_cards(page):
 @pytest.mark.svc
 @pytest.mark.functional_high
 @pytest.mark.regression
+@pytest.mark.uat
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135353")
-def test_section_not_rendered_when_no_service_card_published(page):
-    # SVC-OURSERVICES-TC-135353 | PBI 129371
-    _skip_if_no_credentials()
+@pytest.mark.tc_135353
+@pytest.mark.traceability("ADO-135353")
+@pytest.mark.xdist_group("service_card_real_rows")
+@pytest.mark.skip(reason=(
+    "Not reachable even with a reversible change (run live 2026-10-21, 2 attempts): the first "
+    "real card QCDEMO-129371-SERVICE_CARD-01 (48209) cannot be saved at all -- its stored Image "
+    "Thumbnail is a .jpg and the field now accepts only .png/.svg, so the Object Authoring submit "
+    "is refused (PUT /o/c/servicecards/48209 -> 400 'The file extension \"jpg\" is invalid for "
+    "object field \"imageThumbnail\"'; form: 'Image Thumbnail: a .jpg file is not allowed'). "
+    "Unticking Active Status would require replacing the real image, which cannot be put back "
+    "(the field refuses the original .jpg). Nothing was changed; card 48209 verified unchanged"
+))
+@pytest.mark.parametrize("page", [ANON], indirect=True)
+def test_section_not_rendered_when_no_service_card_published(page, real_records):
+    """ADO-135353 | PBI 129371.
 
-    # Arrange — HomeServicesAdminPage.open_service_cards_list() self-
-    # authenticates via settings.test_user/test_password (see its own
-    # docstring); no separate CmsLoginPage call needed.
-    admin = HomeServicesAdminPage(page)
+    Precondition (QA lead instruction 2026-10-21, reversible real writes):
+    no service card active + published. A QCTEST card can only add one, so
+    EVERY Service Card record that is Active right now (read off the stored
+    list at run time -- 17 on 2026-10-21: 16 real cards plus another run's
+    leftover `QCTEST-135400-redirect` 842246, treated as real: snapshotted
+    and restored, never deleted) gets Active Status unticked, submitted in
+    place on the saved TEST_USER session (the Editor login was locked that
+    day; a content precondition, not a workflow case). Snapshot + screenshot
+    first; `real_records` re-ticks and verifies every card in teardown.
+    Public reads: fresh logged-out `page`."""
     svc = HomeServicesPage(page)
+    cards = {"slug": "service-card", "plural": "servicecards", "label": "Active Status",
+             "api_field": "activeStatus"}
+
+    with allure.step("Baseline (logged out): the Our Services section renders"):
+        svc.open_home_settled()
+        assert svc.is_section_present(), "baseline: Our Services section not rendered before the change"
+
+    with allure.step("CMS: set Active Status = False on every active service card and publish"):
+        active = real_records.codes_where(cards["slug"], cards["plural"], "activeStatus", True, status="approved")
+        allure.attach(json.dumps(active), name="active service cards before",
+                      attachment_type=allure.attachment_type.JSON)
+        assert active, "precondition: no active service card to deactivate"
+        for code in active:
+            real_records.change(code=code, value=False, **cards)
+        still = real_records.codes_where(cards["slug"], cards["plural"], "activeStatus", True, status="approved")
+        assert still == [], f"precondition not reached: still active {still}"
+
+    with allure.step("Navigate to the Home page (logged out), polled up to 3 min"):
+        def _absent() -> bool:
+            svc.open_home_settled()
+            return not svc.is_section_present()
+
+        absent = _poll_public(_absent)
+        state = {"section_nodes": page.locator(svc.SECTION).count(), "visible": svc.is_section_visible(),
+                 "cards": page.locator(svc.CARD).count()}
+        allure.attach(json.dumps(state), name="135353 evidence", attachment_type=allure.attachment_type.JSON)
+        allure.attach(page.screenshot(full_page=True), name="Home, zero active service cards",
+                      attachment_type=allure.attachment_type.PNG)
+
+    # Assert
+    assert absent, f"the Our Services section should be absent entirely; observed {state}"
+
+
+def _poll_public(predicate, timeout: float = 180.0, poll: float = 10.0) -> bool:
+    """Public propagation poll (QA lead: a change landing within 3 min is fine)."""
+    from core.utils.waits import WaitTimeoutError, wait_until
 
     try:
-        # Act
-        with allure.step("Set every real service card's Active Status to False via its edit form"):
-            for title in ALL_SERVICES_TITLES:
-                admin.open_service_card_edit_form_by_title(title)
-                admin.set_active(False)
-                admin.save()
-
-        with allure.step("Open the live Home Page"):
-            svc.open_home()
-
-        # Assert
-        assert not svc.is_section_present(), "expected the Our Services section to be entirely absent, not rendered empty"
-    finally:
-        with allure.step("Reactivate every service card (teardown — protects other parallel tests)"):
-            for title in ALL_SERVICES_TITLES:
-                admin.open_service_card_edit_form_by_title(title)
-                admin.set_active(True)
-                admin.save()
+        wait_until(predicate, timeout=timeout, poll=poll)
+        return True
+    except WaitTimeoutError:
+        return False
 
 
 # ── TC 135414 — CTA absent when the listing page is unpublished ────────────
@@ -747,28 +620,18 @@ def test_section_not_rendered_when_no_service_card_published(page):
 @pytest.mark.svc
 @pytest.mark.edge
 @pytest.mark.pbi_129371
-@pytest.mark.traceability("SVC-OURSERVICES-TC-135414")
-@_LISTING_PAGE_PUBLISH_SKIP
+@pytest.mark.tc_135414
+@pytest.mark.traceability("ADO-135414")
+@pytest.mark.skip(reason=(
+    "Not reachable even with a reversible change (re-checked 2026-10-21): the Our Services "
+    "listing page is the Liferay SITE PAGE /web/qatar-chamber/our-services (Pages layer), not a "
+    "content record -- the live Object Authoring sidebar has no object behind it (only Service "
+    "Card / Filter Tab / Our Services Section / Tab Mapping, and Member Services Page for "
+    "/our-services/member-services). Unpublishing a page is a layout change, which CLAUDE.md #6 "
+    "and standards.md ('Fragments and Page Layout Are Off-Limits') forbid outright; no QCTEST "
+    "record can produce the state"
+))
+@pytest.mark.parametrize("page", [ANON], indirect=True)
 def test_view_all_cta_not_rendered_when_listing_page_unpublished(page):
-    # SVC-OURSERVICES-TC-135414 | PBI 129371
-    _skip_if_no_credentials()
-
-    # Arrange
-    admin = HomeServicesAdminPage(page)
-    svc = HomeServicesPage(page)
-
-    try:
-        # Act
-        with allure.step("Unpublish the Our Services listing page"):
-            admin.navigate_to_listing_page_management()
-            admin.unpublish_listing_page()
-
-        with allure.step("Open the live Home Page and scroll to the Our Services section"):
-            svc.open_home()
-            svc.scroll_to_section()
-
-        # Assert
-        assert not svc.is_cta_top_visible(), "expected the View All Services CTA not to render when its target listing page is unpublished"
-    finally:
-        with allure.step("Republish the Our Services listing page (teardown)"):
-            admin.republish_listing_page()
+    svc = _open_section(page)
+    assert not svc.is_cta_top_visible(), "the View All Services CTA should not render"

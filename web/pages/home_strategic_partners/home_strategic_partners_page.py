@@ -51,3 +51,45 @@ class StrategicPartnersPage(BasePage):
             if time.monotonic() >= deadline:
                 return self.is_logo_visible_by_alt(alt_text) == expected_visible
             self.page.wait_for_timeout(interval_ms)
+
+    # ── Logged-out, any-locale reads (2026-10-21, ADO 134509/134510) ──────
+    # A QCTEST partner's logo is identified by its own record code, which the
+    # public `src` carries as `objectEntryExternalReferenceCode=<code>` (read
+    # live 2026-10-21) -- the alt text alone could also match a leftover.
+    LOGO = "img.qc-sp-logo"
+    PUBLIC_POLL_TIMEOUT_S = 180
+    PUBLIC_POLL_INTERVAL_MS = 5000
+
+    def open_home_anonymous(self, locale: str = "en") -> "StrategicPartnersPage":
+        self.open_anonymous(web_url("/home", locale=locale))
+        self.page.locator(self.LOGO).first.wait_for(state="attached", timeout=30000)
+        return self
+
+    def page_direction(self) -> str:
+        return self.page.evaluate("() => document.documentElement.getAttribute('dir') || ''")
+
+    def logo_alts_for_record(self, record_code: str) -> list:
+        """Distinct `alt` values of every carousel logo rendered for the
+        record whose code is `record_code` ([] when none renders)."""
+        alts = self.page.locator(self.LOGO).evaluate_all(
+            "(imgs, code) => imgs.filter(i => (i.getAttribute('src') || '')"
+            ".includes('objectEntryExternalReferenceCode=' + code)).map(i => i.getAttribute('alt'))",
+            record_code)
+        return list(dict.fromkeys(alts))
+
+    def logo_count_with_alt(self, alt_text: str) -> int:
+        return self.page.locator(self.LOGO_BY_ALT.format(alt=alt_text)).count()
+
+    def poll_record_logo(self, record_code: str, locale: str = "en", timeout_s: float = None) -> list:
+        """Reload logged out until the record's logo renders (up to 3 min).
+        Returns its alt values ([] if it never rendered)."""
+        import time
+
+        timeout_s = self.PUBLIC_POLL_TIMEOUT_S if timeout_s is None else timeout_s
+        end = time.monotonic() + timeout_s
+        while True:
+            self.open_home_anonymous(locale)
+            alts = self.logo_alts_for_record(record_code)
+            if alts or time.monotonic() >= end:
+                return alts
+            self.page.wait_for_timeout(self.PUBLIC_POLL_INTERVAL_MS)

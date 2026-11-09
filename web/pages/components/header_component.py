@@ -437,6 +437,47 @@ class HeaderComponent(BasePage):
         submenu = item.locator(self.NAV_ITEM_SUBMENU_PANEL)
         return submenu.count() > 0 and not submenu.first.is_visible()
 
+    # ── Hover expands every sub-menu (ADO #134258) ──────────────────────
+    def hover_each_submenu(self) -> list:
+        """For EVERY top-level nav item with a sub-menu: park the cursor away,
+        confirm the panel is closed, hover the item's link, then read the
+        opened panel — visible, its visible child links (text + href), its box
+        against the item and the window — and confirm it closes again once the
+        cursor leaves. Returns one dict per item; asserts nothing."""
+        out = []
+        items = self.page.locator(self.NAV_ITEM_WITH_SUBMENU)
+        for i in range(items.count()):
+            item = items.nth(i)
+            # The top-level control is a <button class="qc-nav-link"> (direct
+            # child); the sub-menu's own links also carry .qc-nav-link.
+            link = item.locator(":scope > .qc-nav-link").first
+            panel = item.locator(self.NAV_ITEM_SUBMENU_PANEL).first
+            self.page.mouse.move(960, 900)
+            self.page.wait_for_timeout(300)
+            closed_before = not panel.is_visible()
+            link.hover()
+            try:
+                panel.wait_for(state="visible", timeout=3000)
+            except Exception:  # noqa: BLE001 — "did not open" is the finding
+                pass
+            opened = panel.is_visible()
+            info = {"item": link.inner_text().strip(), "closed_before": closed_before, "opened": opened}
+            if opened:
+                info.update(panel.evaluate(
+                    """(p) => { const r = p.getBoundingClientRect();
+                      const kids = [...p.querySelectorAll('a')].filter(a => {
+                        const b = a.getBoundingClientRect(); return b.width > 0 && b.height > 0; });
+                      return {children: kids.map(a => [a.innerText.trim(), a.getAttribute('href') || '']),
+                              panel: [r.left|0, r.top|0, r.right|0, r.bottom|0],
+                              inside_window: r.left >= 0 && r.right <= innerWidth && r.bottom <= innerHeight}; }"""))
+                info["item_box"] = link.bounding_box()
+                info["screenshot"] = panel.screenshot()
+            self.page.mouse.move(960, 900)
+            self.page.wait_for_timeout(500)
+            info["closed_after"] = not panel.is_visible()
+            out.append(info)
+        return out
+
     # ── Logo size/alt per language (ADO #134237) ────────────────────────
     def logo_alt_text(self) -> str:
         return self.page.locator(self.LOGO_IMAGE).get_attribute("alt")
